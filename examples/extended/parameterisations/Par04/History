@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-11-08 D. Salamani (expar04-V11-00-05)
+- Add updated version of the training code (PEP 8 style guide, formatting with YAPF, 
+annotation with types, code upgrade to TF2.9, logic for GPU usage management)
+
+## 2022-11-08 A. Zaborowska (expar04-V11-00-04)
+- Add support of LibTorch for inference
+
+## 2022-10-25 I. Hrivnacova (expar04-V11-00-03)
+- Fixes in Doxygen documentation (links, formatting)
+
 ## 2022-02-28 Dalila Salamani (expar04-V11-00-02)
 - Add python training scripts
 - Add model conversion to ONNX and LWTNN to the train script and update README

@@ -7,10 +7,10 @@
                             TestEm17
                             --------
         This example is intended to check implementation of the processes 
-        of muon interactions: ionization, direct (e+,e-) production,
-	bremsstrahlung, mu-nuclear interaction.
+        of muon interactions: ionization, direct (e+,e-) production, mu+mu- 
+	pair production, bremsstrahlung, and mu-nuclear interaction.
 	It allows to compute differential cross sections (as function of the
-	energy transfered to secondaries), total cross sections and to compare
+	energy transfered to secondaries), total cross sections, and to compare
 	with analytic calculations.
 	
  1- GEOMETRY DEFINITION
@@ -27,10 +27,9 @@
  2- PHYSICS LIST
  
  	The Physics List of the example uses the main physics constructor
-        (builder) called "emstandard_opt0". As an alternative "local" 
-        constructor is provided in which only a limited set 
-        of physics processes are defined for muons, pions and proton:
-        ionisation, bremsstrahlung and e+e- pair production. 
+        (builder) called "local", which includes only muon, pion, and proton
+        processes under study. As an alternative standard "emstandard_opt0"
+        and "emstandard_opt4" constructors may be used.
 
         Default energy range for EM processes in this example 
         is from 100*eV to 1000*PeV.
@@ -56,9 +55,9 @@
 	The total number of interactions is recorded, and the total cross 
         section computed from this.  
 
-        At EndOfRun, the above results are compared with analytic calculations.
-	The functions which compute the theoretical cross sections have been
-	provided by the G4 MEPhI group, and grouped in MuCrossSections class.
+        At RunAction::EndOfRun(..), the above results are compared with analytical
+        calculations. The functions computing the theoretical cross sections have been
+	provided by the G4 MEPhI group, and implemented in MuCrossSections class.
 
  5- HISTOGRAMS
          
@@ -74,13 +73,14 @@
         5  ionistion for hadrons
         6  (e+,e-) pair production by hadrons
         7  bremsstrahlung by hadrons
+	8  direct mu+,mu- pair production by muons
 
 	The histos can be activated individually with the command :
 	/testem/histo/setHisto id nbBins  valMin valMax : 
           min and max values of log10(eps/Emu kin).
 	
 	At EndOfRun the corresponding histos for analytic calculations are
-	automatically created and filled (histo 11 to 14).
+	automatically created and filled (histo 11 to 14, and 18).
 							  
  	One can control the name and the type of the histograms file with 
 	the command:

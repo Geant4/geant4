@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+/// \file VG01SteppingVerboseWithDir.hh
+/// \brief Definition of the VG01SteppingVerboseWithDir class
+//
 // Alternative Stepping Verbose method that prints out:
 //   - momentum direction
 //   - safety  ( distance to nearest boundary at pre-step point )

@@ -49,7 +49,7 @@ public:
   ~Run();
     
   virtual void Merge(const G4Run*);
-  void EndOfRun(double binLength);   
+  void EndOfRun(G4double binLength);
 
   void FillHisto(G4int id, G4double x, G4double weight = 1.0);
            

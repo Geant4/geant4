@@ -134,8 +134,8 @@ class G4Region
            GetMaterialIterator() const;
       // Return iterators to lists of root logical volumes and materials.
 
-    inline size_t GetNumberOfMaterials() const;
-    inline size_t GetNumberOfRootVolumes() const;
+    inline std::size_t GetNumberOfMaterials() const;
+    inline std::size_t GetNumberOfRootVolumes() const;
       // Return the number of elements in the lists of materials and
       // root logical volumes.
 

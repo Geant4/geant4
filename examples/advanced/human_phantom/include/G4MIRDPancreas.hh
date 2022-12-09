@@ -41,10 +41,9 @@ class G4MIRDPancreas: public G4VOrgan
 {
 public:
 
-  G4MIRDPancreas();
-  ~G4MIRDPancreas();
+  G4MIRDPancreas() = default;
+  ~G4MIRDPancreas() override = default;
   G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*, 
-                               const G4String&, G4bool, G4bool);
-private:
+                               const G4String&, G4bool, G4bool) override;
 };
 #endif

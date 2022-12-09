@@ -93,13 +93,25 @@ struct G4Number<0>{
      return G4Number<init_value>();     \
    }
 
-#define G4CT_COUNT(flagName)                   \
-  static constexpr const int flagName =        \
-   decltype(Counter(G4Number<255>{}) )::value; \
-  static constexpr G4Number<flagName + 1>      \
-   Counter(G4Number<flagName + 1>){            \
-     return G4Number<flagName +1 >{};          \
-   }
+// Allow overridable maximum enum depth by setting G4CT_MAX_COUNT
+#ifndef G4CT_MAX_COUNT
+#ifndef __NVCOMPILER
+// Maximum in Geant4 V11.0.0 is hardcoded to 255
+#define G4CT_MAX_COUNT 255
+#else
+// NVC++ compiler default template instantiation recursion limit is 64.
+// This can be changed by setting, e.g., "-Wc,--pending_instantiations=256"
+#define G4CT_MAX_COUNT 63
+#endif
+#endif
+
+#define G4CT_COUNT(flagName)                                                                  \
+  static constexpr const int flagName = decltype(Counter(G4Number<G4CT_MAX_COUNT>{}))::value; \
+  static constexpr G4Number<flagName + 1> Counter(G4Number<flagName + 1>)                     \
+  {                                                                                           \
+    static_assert(flagName + 1 < G4CT_MAX_COUNT, "Maximum enumeration count exeeded");        \
+    return G4Number<flagName + 1>{};                                                          \
+  }
 
 //------------------------------------------------------------------------------
 // On Win platforms, static functions must not be inlined, use the following
@@ -118,7 +130,7 @@ struct G4Number<0>{
 
 #define G4CT_COUNT_DEF(flagName) \
   static constexpr const int flagName = \
-   decltype(Counter(G4Number<255>{}))::value; \
+   decltype(Counter(G4Number<G4CT_MAX_COUNT>{}))::value; \
   static constexpr G4Number<flagName + 1> \
    Counter(G4Number<flagName + 1>);
 

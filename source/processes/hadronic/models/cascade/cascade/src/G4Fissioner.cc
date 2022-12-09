@@ -144,7 +144,7 @@ void G4Fissioner::deExcite(const G4Fragment& target,
     };
   };
   
-  G4int store_size = fissionStore.size();
+  std::size_t store_size = fissionStore.size();
   if (store_size == 0) return;		// No fission products
 
   G4FissionConfiguration config = 

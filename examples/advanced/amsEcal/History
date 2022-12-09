@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-09-09 Susanna Guatelli (amsEcal-V11-00-02)
+- Ranecu engine removed. Default engine used now
+
 ## 2022-01-18 Jonas Hahnfeld (amsEcal-V11-00-01)
 - Prefer pointer to `const G4Material` if possible
 

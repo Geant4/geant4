@@ -81,7 +81,7 @@ void GIDI_settings_flux_order::print( int valuesPerLine ) const {
     for( int iE = 0; iE < nE; ++iE ) {
         if( printIndent ) std::cout << "    ";
         printIndent = false;
-        sprintf( buffer, "   %15.8e %15.8e", mEnergies[iE], mFluxes[iE] );
+        snprintf( buffer, sizeof buffer, "   %15.8e %15.8e", mEnergies[iE], mFluxes[iE] );
         std::cout << buffer;
         if( ( ( iE + 1 ) % valuesPerLine ) == 0 ) {
             std::cout << std::endl;
@@ -209,7 +209,7 @@ void GIDI_settings_fluxes_from_bdfls::initialize2( cbdfls_file const *bdfls, dou
 
     nf = cbdflsFIDs( (cbdfls_file *) bdfls, &fids );
     for( int if1 = 0; if1 < nf; ++if1 ) {
-        sprintf( label, "LLNL_fid_%.3d", fids[if1] );
+        snprintf( label, sizeof label, "LLNL_fid_%.3d", fids[if1] );
         GIDI_settings_flux flux = GIDI_settings_flux( label, temperature_MeV );
         order = cbdflsGetFluxOrder( (cbdfls_file *) bdfls, fids[if1] );
         for( int io = 0; io <= order; ++io ) {
@@ -234,7 +234,7 @@ GIDI_settings_flux GIDI_settings_fluxes_from_bdfls::getViaFID( int fid ) {
 
     char label[100];
 
-    sprintf( label, "LLNL_fid_%.3d", fid );
+    snprintf( label, sizeof label, "LLNL_fid_%.3d", fid );
     for( int if1 = 0; if1 < (int) mFluxes.size( ); ++if1 ) {
         if( mFluxes[if1].isLabel( label ) ) return( mFluxes[if1] );
     }

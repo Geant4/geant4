@@ -1,0 +1,95 @@
+-------------------------------------------------------------------
+
+     =========================================================
+ 		    Geant4 - Jet Counter nanodosemeter example
+     =========================================================
+
+                            README file
+                      ----------------------
+
+Authors: M. Pietrzak, M. Mietelska, A. Bancer, A. Rucinski and B. Brzozowska
+For any question, please contact the developer:
+marcin.pietrzak@fuw.edu.pl or marcin.pietrzak@ncbj.gov.pl
+
+This example is provided by the Geant4-DNA collaboration
+Any report or published results obtained using the Geant4-DNA software  
+shall cite the following Geant4-DNA collaboration publications:
+[1] Med. Phys. 37 (2010) 4692-4708
+[2] Phys. Med. 31 (2015) 861-874
+In addition, for this example, please cite:
+[3] M. Pietrzak et al 2021 Phys. Med. Biol. 66 225008 (doi: 10.1088/1361-6560/ac33eb).
+
+----> 0. INTRODUCTION
+
+The jetcounter example provides a setup for simulation of a typical experiment with the Jet Counter nanodosemeter.
+
+This example allows the calculation of the ionisation cluster size distribution (ICSD) (the number of ionisations per projectile)
+in a real sized cylindrical interaction volume (IV) of the Jet Counter device.
+
+The results of each of the simulation are provided in the plain text format.
+Each thread produces its own output file.
+
+Each row in the output file consist information from a single event, where single primary particle (projectile) was generated.
+Each row contains 4 numbers (columns):
+    1. Ionisation cluster size.
+    2. Initial energy of the projectile.
+    3. Interaction energy of the projectile.
+    4. Final energy of the projectile.
+
+Geometry visualization is available through vis.mac file.
+
+Script written in Python is provided for visualization of the results.
+
+
+----> 1. GEOMETRY SET-UP
+
+- The height of the interaction volume (IV) is equal to 20 mm and its diameter is equal to 10 mm.
+- The beam axis enters the IV perpendicularly to its axis of rotation, 5 mm from the top.
+- The IV is filled with liquid water material (G4_WATER), but its density is set to 0.45 µg/cm³,
+which corresponds to the nitrogen gas density in real experimental conditions. For details see [3].
+- The beam divergence is restricted by a cylindrical collimator (3 mm in diameter, 23 mm in length) adjacent to the source.
+- There is a wall around the IV in the form of a cylinder opened on both ends. The wall thickness is 0.98 mg/cm² (7 µm).
+- The wall is composed of two layers:
+    * outer layer is made of Mylar, 0.96 mg/cm² in thickness;
+    * inner layer is made of liquid water (G4_WATER), 0.02 mg/cm² in thickness.
+- There is a silicon (trigger) detector in the form of a thin disk placed behind the IV.
+
+
+----> 2. PRIMARY PARTICLES
+
+If the beam energy is set to any positive value, the beam is mono-energetic with the given energy.
+If the beam energy is set to -1 (default value), the energy spectrum file is used.
+The energy spectrum of the beam is based on experimental data. Its mean energy is 4.6 MeV,
+which is the energy of alpha particles from gold-plated americium (241-Am) source.
+This source is chosen in the primaries.in macro file.
+
+
+----> 3. PHYSICS LIST
+
+The PhysicsList used in this example show how to combine Geant4-DNA physics and standard physics in different regions
+using the G4EmDNAPhysicsActivator.
+1. G4EmDNAPhysics is active in the IV and inner layer of the wall (both made of G4_WATER).
+2. G4EmLivermorePhysics is active in other parts of the setup.
+
+The G4DNAPhysics_option is chosen in the init_phys.in macro file. Hence, it can be changed without the need of recompilation.
+
+
+---->4. SET UP
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+---->5. HOW TO RUN THE EXAMPLE
+
+ For the visualization:
+    ./jetcounter vis
+
+ For the complete simulation:
+    ./jetcounter run
+
+ In run.mac macro file will read init_phys.in and primaries.in.
+
+ However, it is recommended to first increase the number of simulated events in the run.mac file to at least 4000.
+
+ To produce figures from simulation results
+ (requires numpy and matplotlib Python libraries):
+    python3 plot.py

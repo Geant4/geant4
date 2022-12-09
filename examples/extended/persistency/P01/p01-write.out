@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -32,6 +32,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -145,6 +147,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -172,7 +175,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -223,8 +226,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -703,6 +706,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -2196,15 +2204,15 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0    136 um     56 um  -2.44 m     192 keV     0 eV      0 fm      0 fm       Target    initStep
-    1    181 um  -58.5 um  -2.44 m       0 eV     88 keV   156 um    156 um       Target        phot
+    1    181 um  -58.4 um  -2.44 m       0 eV     88 keV   156 um    156 um       Target        phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 129,   Parent ID = 128
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    181 um  -58.5 um  -2.44 m     104 keV     0 eV      0 fm      0 fm       Target    initStep
-    1    183 um  -58.9 um  -2.44 m       0 eV    104 keV  29.3 um   29.3 um       Target       eIoni
+    0    181 um  -58.4 um  -2.44 m     104 keV     0 eV      0 fm      0 fm       Target    initStep
+    1    183 um  -58.8 um  -2.44 m       0 eV    104 keV  29.3 um   29.3 um       Target       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
@@ -2222,15 +2230,15 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -1.67 um  -25.2 um  -2.45 m     105 keV     0 eV      0 fm      0 fm       Target    initStep
-    1   6.87 um   12.1 um  -2.45 m       0 eV     88 keV  38.3 um   38.3 um       Target        phot
+    1   6.87 um     12 um  -2.45 m       0 eV     88 keV  38.2 um   38.2 um       Target        phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 131,   Parent ID = 130
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   6.87 um   12.1 um  -2.45 m    17.1 keV     0 eV      0 fm      0 fm       Target    initStep
-    1   6.94 um   12.2 um  -2.45 m       0 eV   17.1 keV  1.59 um   1.59 um       Target       eIoni
+    0   6.87 um     12 um  -2.45 m    17.1 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   6.93 um   12.2 um  -2.45 m       0 eV   17.1 keV  1.59 um   1.59 um       Target       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
@@ -2390,7 +2398,7 @@ writing Event_1
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.380000s Real=6.376710s Sys=0.390000s
+  User=0.370000s Real=2.370489s Sys=0.440000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -2786,7 +2794,7 @@ writing Event_4
  Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.000000s Real=0.006888s Sys=0.000000s
+  User=0.000000s Real=0.008648s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

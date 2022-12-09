@@ -64,7 +64,7 @@ G4PhononLong*  G4PhononLong::Definition()
                 false,        "phononL",           0
              );
   }
-  theInstance = reinterpret_cast<G4PhononLong*>(anInstance);
+  theInstance = static_cast<G4PhononLong*>(anInstance);
   return theInstance;
 }
 

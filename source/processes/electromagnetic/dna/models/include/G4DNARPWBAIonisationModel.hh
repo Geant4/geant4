@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Reference:
+//    A.D. Dominguez-Munoz, M.I. Gallardo, M.C. Bordage,
+//    Z. Francis, S. Incerti, M.A. Cortes-Giraldo,
+//    Radiat. Phys. Chem. 199 (2022) 110363.
 //
-// Created on 2022/03/03
+// Class authors:
+//    A.D. Dominguez-Munoz
+//    M.A. Cortes-Giraldo (miancortes -at- us.es)
 //
-// Authors: A.D. Dominguez-Munoz, M.I. Gallardo, M.C. Bordage,
-//          Z. Francis, S. Incerti, M.A. Cortes-Giraldo
-// 
-// Contact: M.A. Cortes-Giraldo (miancortes -at- us.es)
-// 
+// Class creation: 2022-03-03
+//
 //
 
 #ifndef G4DNARPWBAIonisationModel_h

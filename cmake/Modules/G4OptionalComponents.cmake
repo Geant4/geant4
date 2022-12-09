@@ -39,7 +39,7 @@ endif()
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
 
 if(GEANT4_USE_SYSTEM_CLHEP)
-  find_package(CLHEP 2.4.5.1 REQUIRED CONFIG)
+  find_package(CLHEP 2.4.6.0 REQUIRED CONFIG)
   geant4_save_package_variables(CLHEP CLHEP_DIR)
 else()
   set(CLHEP_FOUND TRUE)
@@ -295,7 +295,7 @@ endif()
 
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
-  find_package(VecGeom 1.1.18 REQUIRED)
+  find_package(VecGeom 1.2.0 REQUIRED)
   # Shim until VecGeom supports config mode properly
   include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
   # Backward Compatibility

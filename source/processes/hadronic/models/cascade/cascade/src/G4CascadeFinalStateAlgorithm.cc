@@ -96,7 +96,7 @@ Configure(G4InuclElementaryParticle* bullet,
     G4cout << " >>> " << GetName() << "::Configure" << G4endl;
 
   // Identify initial and final state (if two-body) for algorithm selection
-  multiplicity = particle_kinds.size();
+  multiplicity = (G4int)particle_kinds.size();
   G4int is = bullet->type() * target->type();
   G4int fs = (multiplicity==2) ? particle_kinds[0]*particle_kinds[1] : 0;
 
@@ -469,7 +469,7 @@ FillUsingKopylov(G4double initialMass,
 
   finalState.clear();
 
-  size_t N = masses.size();
+  std::size_t N = masses.size();
   finalState.resize(N);
 
   G4double mtot = std::accumulate(masses.begin(), masses.end(), 0.0);
@@ -480,9 +480,9 @@ FillUsingKopylov(G4double initialMass,
   G4ThreeVector momV, boostV;		// Buffers to reduce memory churn
   G4LorentzVector recoil(0.0,0.0,0.0,Mass);
 
-  for (size_t k=N-1; k>0; --k) {
+  for (std::size_t k=N-1; k>0; --k) {
     mu -= masses[k];
-    T *= (k>1) ? BetaKopylov(k) : 0.;
+    T *= (k>1) ? BetaKopylov((G4int)k) : 0.;
     
     recoilMass = mu + T;
 

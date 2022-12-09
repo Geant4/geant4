@@ -93,7 +93,7 @@ G4AntiSigmaMinus* G4AntiSigmaMinus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiSigmaMinus*>(anInstance);
+  theInstance = static_cast<G4AntiSigmaMinus*>(anInstance);
   return theInstance;
 }
 

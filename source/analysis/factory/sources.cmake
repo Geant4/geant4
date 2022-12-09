@@ -6,14 +6,16 @@ geant4_add_module(G4analysisfac
     G4AnalysisManager.hh
     G4GenericAnalysisManager.hh
     G4GenericAnalysisManager.icc
+    G4GenericAnalysisMessenger.hh
     G4GenericFileManager.hh
     G4GenericFileManager.icc
   SOURCES
     G4GenericAnalysisManager.cc
+    G4GenericAnalysisMessenger.cc
     G4GenericFileManager.cc)
 
 geant4_module_link_libraries(G4analysisfac
-  PUBLIC G4analysismng G4hntools G4globman
+  PUBLIC G4analysismng G4hntools G4globman G4intercoms
   PRIVATE G4csv G4root G4xml)
 
 # HDF5, if enabled

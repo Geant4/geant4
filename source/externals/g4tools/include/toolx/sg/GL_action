@@ -421,7 +421,7 @@ public:
     tmp.no_translate();
     tools::mat4f normal_matrix;
     if(!tmp.invert(normal_matrix)) {
-      m_out << "toolx::WebGL::render::load_model_matrix :"
+      m_out << "toolx::sg::GL_action::render::load_model_matrix :"
             << " can't invert model matrix."
             << std::endl;
     }
@@ -441,7 +441,8 @@ public:
 
   virtual void enable_light(unsigned int a_light,
                             float a_dx,float a_dy,float a_dz,
-                            float a_r,float a_g,float a_b,float a_a){
+                            float a_r,float a_g,float a_b,float a_a,
+                            float a_ar,float a_ag,float a_ab,float a_aa){
     ::glEnable(GL_LIGHTING);
     GLenum light = GL_LIGHT0+a_light;
     //::printf("debug : GL_MAX_LIGHTS %d\n",GL_MAX_LIGHTS);
@@ -465,10 +466,10 @@ public:
     ::glLightfv(light,GL_DIFFUSE,params);
     ::glLightfv(light,GL_SPECULAR,params); //coin/SoDirectionalLight does that.
 
-    params[0] = 0;
-    params[1] = 0;
-    params[2] = 0;
-    params[3] = 1;
+    params[0] = a_ar;
+    params[1] = a_ag;
+    params[2] = a_ab;
+    params[3] = a_aa;
     ::glLightfv(light,GL_AMBIENT,params); //coin/SoDirectionalLight does that.
 
     // coin/SoDirectionalLight does the below :
@@ -656,5 +657,6 @@ protected:
 };
 
 }}
+
 
 #endif

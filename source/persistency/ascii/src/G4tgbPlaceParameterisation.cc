@@ -63,7 +63,7 @@ CheckNExtraData(G4tgrPlaceParameterisation* tgrParam, G4int nWcheck,
                 WLSIZEtype st, const G4String& methodName)
 {
   std::vector<G4double> extraData = tgrParam->GetExtraData();
-  G4int ndata                     = extraData.size();
+  G4int ndata                     = (G4int)extraData.size();
 
   G4String outStr = methodName + " " + tgrParam->GetType() + " ";
   G4bool isOK     = G4tgrUtils::CheckListSize(ndata, nWcheck, st, outStr);

@@ -385,13 +385,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
           G4double  startEnergy= track.GetKineticEnergy();
           G4double  endEnergy= fTransportEndKineticEnergy; 
       
-          static G4ThreadLocal G4int no_inexact_steps=0; // , no_large_ediff;
           G4double absEdiff = std::fabs(startEnergy- endEnergy);
-          if( absEdiff > perMillion * endEnergy )
-          {
-            no_inexact_steps++;
-            // Possible statistics keeping here ...
-          }
 #ifdef G4VERBOSE
           if( (verboseLevel > 1) && ( absEdiff > perThousand * endEnergy) )
           {

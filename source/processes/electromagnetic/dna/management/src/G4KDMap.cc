@@ -32,13 +32,13 @@ using namespace std;
 
 typedef std::deque<G4KDNode_Base*>::iterator _deq_iterator;
 
-bool __1DSortOut::sortOutNDim::operator()(G4KDNode_Base* const & lhs,
-                                          G4KDNode_Base* const & rhs) //const
+G4bool __1DSortOut::sortOutNDim::operator()(G4KDNode_Base* const & lhs,
+                                            G4KDNode_Base* const & rhs) //const
 {
   return (*lhs)[fDimension] < (*rhs)[fDimension];
 }
 
-__1DSortOut::__1DSortOut(size_t dimension) :
+__1DSortOut::__1DSortOut(std::size_t dimension) :
     fSortOutNDim(dimension)
 {
 }
@@ -48,15 +48,15 @@ __1DSortOut::__1DSortOut(const __1DSortOut& right) :
 {
 }
 
-int __1DSortOut::GetDimension()
+G4int __1DSortOut::GetDimension()
 {
-  return fSortOutNDim.fDimension;
+  return (G4int)fSortOutNDim.fDimension;
 }
 
-G4KDNode_Base* __1DSortOut::GetMidle(size_t& main_middle)
+G4KDNode_Base* __1DSortOut::GetMidle(std::size_t& main_middle)
 {
-  size_t contSize = fContainer.size();
-  main_middle = (size_t) ceil(contSize / 2.); // ceil = round up
+  std::size_t contSize = fContainer.size();
+  main_middle = (std::size_t) ceil(contSize / 2.); // ceil = round up
   return fContainer[main_middle];
 }
 
@@ -67,7 +67,7 @@ _deq_iterator __1DSortOut::Insert(G4KDNode_Base* pos)
 
 G4KDNode_Base* __1DSortOut::PopOutMiddle()
 {
-  size_t middle;
+  std::size_t middle;
   G4KDNode_Base* pos = GetMidle(middle);
   _deq_iterator deq_pos = fContainer.begin() + middle;
 
@@ -91,13 +91,13 @@ void G4KDMap::Insert(G4KDNode_Base* pos)
 {
   vector<_deq_iterator>& vit = fMap[pos];
 
-  size_t maxSize = fSortOut.size();
+  std::size_t maxSize = fSortOut.size();
 
   G4cout << "G4KDMap::Insert : " << maxSize << G4endl;
 
   vit.reserve(maxSize);
 
-  for (size_t i = 0; i < fSortOut.size(); ++i)
+  for (std::size_t i = 0; i < fSortOut.size(); ++i)
   {
     vit[i] = fSortOut[i].Insert(pos);
 
@@ -117,7 +117,7 @@ void G4KDMap::Insert(G4KDNode_Base* pos)
 
    G4KDNode* tmpNode = fMap_it->first;
 
-   for(size_t i = 0 ; i < fSortOut.size() ; i++)
+   for(std::size_t i = 0 ; i < fSortOut.size() ; i++)
    {
    G4cout << "i = " << i << G4endl;
    G4cout << "vit[i] = " << *(vit[i]) << G4endl;
@@ -134,7 +134,7 @@ void G4KDMap::Insert(G4KDNode_Base* pos)
   fIsSorted = false;
 }
 
-G4KDNode_Base* G4KDMap::PopOutMiddle(size_t dimension)
+G4KDNode_Base* G4KDMap::PopOutMiddle(std::size_t dimension)
 {
   G4cout << "_____________" << G4endl;
   G4cout << "G4KDMap::PopOutMiddle ( "<< dimension << " )" << G4endl;
@@ -169,7 +169,7 @@ G4KDNode_Base* G4KDMap::PopOutMiddle(size_t dimension)
    }
    */
 
-  for(size_t i = 0; i < fSortOut.size(); i++)
+  for(std::size_t i = 0; i < fSortOut.size(); ++i)
   {
     if(i != dimension)
     {
@@ -195,7 +195,7 @@ G4KDNode_Base* G4KDMap::PopOutMiddle(size_t dimension)
 
 void G4KDMap::Sort()
 {
-  for (size_t i = 0; i < fSortOut.size(); ++i)
+  for (std::size_t i = 0; i < fSortOut.size(); ++i)
   {
     fSortOut[i].Sort();
   }

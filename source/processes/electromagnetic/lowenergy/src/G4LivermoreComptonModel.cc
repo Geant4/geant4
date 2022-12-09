@@ -216,7 +216,7 @@ void G4LivermoreComptonModel::ReadData(size_t Z, const char* path)
 	 << "> is not opened!" << G4endl;
     G4Exception("G4LivermoreComptonModel::ReadData()",
 		"em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.34 or later");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later");
       return;
     } else {
       if(verboseLevel > 3) {
@@ -259,7 +259,7 @@ G4LivermoreComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
       if(pv == nullptr) { return cs; }
     }
 
-  G4int n = pv->GetVectorLength() - 1;   
+  G4int n = G4int(pv->GetVectorLength() - 1);   
   G4double e1 = pv->Energy(0);
   G4double e2 = pv->Energy(n);
 
@@ -314,7 +314,7 @@ void G4LivermoreComptonModel::SampleSecondaries(
   const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
 
-  G4int Z = G4lrint(elm->GetZ());
+  G4int Z = elm->GetZasInt();
 
   G4double epsilon0Local = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0Local * epsilon0Local;
@@ -487,7 +487,7 @@ void G4LivermoreComptonModel::SampleSecondaries(
     G4cout << "Started atomic de-excitation " << fAtomDeexcitation << G4endl;
   }
 
-  if(fAtomDeexcitation && iteration < maxDopplerIterations) {
+  if(nullptr != fAtomDeexcitation && iteration < maxDopplerIterations) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
       size_t nbefore = fvect->size();
@@ -514,11 +514,7 @@ void G4LivermoreComptonModel::SampleSecondaries(
       }
     }
   }
-  //This should never happen
-  if(bindingE < 0.0) 
-     G4Exception("G4LivermoreComptonModel::SampleSecondaries()", "em2050",
-                FatalException, "Negative local energy deposit");
- 
+  bindingE = std::max(bindingE, 0.0);
   fParticleChange->ProposeLocalEnergyDeposit(bindingE);
 }
 

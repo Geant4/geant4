@@ -41,8 +41,8 @@ namespace
   G4Mutex theREMutex = G4MUTEX_INITIALIZER;
 }
 
-G4double G4VRangeToEnergyConverter::sEmin = 0.0;
-G4double G4VRangeToEnergyConverter::sEmax = 10000;
+G4double G4VRangeToEnergyConverter::sEmin = CLHEP::keV;
+G4double G4VRangeToEnergyConverter::sEmax = 10.*CLHEP::GeV;
 
 std::vector<G4double>* G4VRangeToEnergyConverter::sEnergy = nullptr;
 
@@ -64,7 +64,7 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
   // this method defines lock itself
   if(isFirstInstance)
   {
-    FillEnergyVector(1*CLHEP::keV, 10.0*CLHEP::GeV);
+    FillEnergyVector(CLHEP::keV, 10.0*CLHEP::GeV);
   }
 }
 
@@ -75,8 +75,8 @@ G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
   { 
     delete sEnergy;
     sEnergy = nullptr; 
-    sEmin = 0.;
-    sEmax = 10000.;
+    sEmin = CLHEP::keV;
+    sEmax = 10.*CLHEP::GeV;
   }
 }
 
@@ -161,20 +161,15 @@ void G4VRangeToEnergyConverter::FillEnergyVector(const G4double emin,
 {
   if(emin != sEmin || emax != sEmax || nullptr == sEnergy) 
   {
-    G4AutoLock l(&theREMutex);
-    if(emin != sEmin || emax != sEmax || nullptr == sEnergy)
-    {
-      sEmin = emin;
-      sEmax = emax;
-      sNbin = sNbinPerDecade*static_cast<G4int>(std::log10(emax/emin));
-      if(nullptr == sEnergy) { sEnergy = new std::vector<G4double>; }
-      sEnergy->resize(sNbin + 1);
-      (*sEnergy)[0] = emin;
-      (*sEnergy)[sNbin] = emax;
-      G4double fact = G4Log(emax/emin)/sNbin;
-      for(G4int i=1; i<sNbin; ++i) { (*sEnergy)[i] = emin*G4Exp(i * fact); }
-    }
-    l.unlock();
+    sEmin = emin;
+    sEmax = emax;
+    sNbin = sNbinPerDecade*G4lrint(std::log10(emax/emin));
+    if(nullptr == sEnergy) { sEnergy = new std::vector<G4double>; }
+    sEnergy->resize(sNbin + 1);
+    (*sEnergy)[0] = emin;
+    (*sEnergy)[sNbin] = emax;
+    G4double fact = G4Log(emax/emin)/sNbin;
+    for(G4int i=1; i<sNbin; ++i) { (*sEnergy)[i] = emin*G4Exp(i * fact); }
   }
 }
 
@@ -187,7 +182,7 @@ G4VRangeToEnergyConverter::ConvertForGamma(const G4double rangeCut,
   const G4double* dens = material->GetAtomicNumDensityVector();
 
   // fill absorption length vector
-  G4int nelm = material->GetNumberOfElements();
+  G4int nelm = (G4int)material->GetNumberOfElements();
   G4double range1 = 0.0;
   G4double range2 = 0.0;
   G4double e1 = 0.0;
@@ -224,7 +219,7 @@ G4VRangeToEnergyConverter::ConvertForElectron(const G4double rangeCut,
   const G4double* dens = material->GetAtomicNumDensityVector();
 
   // fill absorption length vector
-  G4int nelm = material->GetNumberOfElements();
+  G4int nelm = (G4int)material->GetNumberOfElements();
   G4double dedx1 = 0.0;
   G4double dedx2 = 0.0;
   G4double range1 = 0.0;

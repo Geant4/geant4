@@ -68,6 +68,18 @@ G4NtupleBookingManager::GetNtupleBookingInFunction(
   return fNtupleBookingVector[index];
 }
 
+//_____________________________________________________________________________
+G4bool G4NtupleBookingManager::CheckName(
+  const G4String& name, const G4String& objectType) const
+{
+  if (name.size() == 0u) {
+    Warn("Empty " + objectType + " name is not allowed.\n" +
+      objectType + " was not created.",  fkClass, "CheckName");
+    return false;
+  }
+  return true;
+}
+
 //
 // protected functions
 //
@@ -75,13 +87,15 @@ G4NtupleBookingManager::GetNtupleBookingInFunction(
 //_____________________________________________________________________________
 G4bool G4NtupleBookingManager::IsEmpty() const
 {
-  return ! fNtupleBookingVector.size();
+  return fNtupleBookingVector.size() == 0u;
 }
 
 //_____________________________________________________________________________
 G4int G4NtupleBookingManager::CreateNtuple(
   const G4String& name, const G4String& title)
 {
+  if ( ! CheckName(name, "Ntuple") ) return kInvalidId;
+
   Message(kVL4, "create", "ntuple booking", name);
 
   // Create ntuple description
@@ -201,7 +215,7 @@ void  G4NtupleBookingManager::SetActivation(
 {
   auto ntupleBooking
     = GetNtupleBookingInFunction(ntupleId, "SetActivation");
-  if ( ! ntupleBooking ) return;
+  if (ntupleBooking == nullptr) return;
 
   ntupleBooking->fActivation = activation;
 }
@@ -212,7 +226,7 @@ G4bool  G4NtupleBookingManager::GetActivation(
 {
   auto ntupleBooking
     = GetNtupleBookingInFunction(ntupleId, "GetActivation");
-  if ( ! ntupleBooking ) return false;
+  if (ntupleBooking == nullptr) return false;
 
   return ntupleBooking->fActivation;
 }
@@ -232,14 +246,14 @@ void  G4NtupleBookingManager::SetFileName(
 {
   auto ntupleBooking
     = GetNtupleBookingInFunction(ntupleId, "SetFileName");
-  if ( ! ntupleBooking ) return;
+  if (ntupleBooking == nullptr) return;
 
   // Do nothing if file name does not change
   if ( ntupleBooking->fFileName == fileName ) return;
 
   auto ntupleFileName = fileName;
   auto extension = GetExtension(fileName);
-  if ( extension.size() ) {
+  if (extension.size() != 0u) {
     // Check if valid extension (if present)
     auto output = G4Analysis::GetOutput(extension);
     if ( output == G4AnalysisOutput::kNone ) {
@@ -249,7 +263,7 @@ void  G4NtupleBookingManager::SetFileName(
     }
   }
   else {
-    if ( fFileType.size() ) {
+    if (fFileType.size() != 0u) {
       //add extension if missing and file type is defined
       ntupleFileName = fileName + "." + fFileType;
     }
@@ -267,7 +281,7 @@ G4String  G4NtupleBookingManager::GetFileName(
 {
   auto ntupleBooking
     = GetNtupleBookingInFunction(ntupleId, "GetFileName");
-  if ( ! ntupleBooking ) return "";
+  if (ntupleBooking == nullptr) return "";
 
   return ntupleBooking->fFileName;
 }
@@ -300,8 +314,7 @@ void G4NtupleBookingManager::SetFileType(const G4String& fileType)
   // Give warning and redefine file extension in bookings
   // with file name of different fileTypes
   for ( auto ntupleBooking : fNtupleBookingVector ) {
-
-    if ( ! (ntupleBooking->fFileName).size() ) continue;
+    if ((ntupleBooking->fFileName).size() == 0u) continue;
 
     auto extension = GetExtension(ntupleBooking->fFileName);
     if ( fFileType == extension ) continue;
@@ -309,7 +322,7 @@ void G4NtupleBookingManager::SetFileType(const G4String& fileType)
     // multiple file types are not suported
     auto baseFileName = GetBaseName(ntupleBooking->fFileName);
     auto ntupleFileName = baseFileName + "." + fFileType;
-    if ( extension.size() ) {
+    if (extension.size() != 0u) {
       Warn("Writing ntuples in files of different output types " +
            fFileType + ", " + extension + " is not supported.",
            fkClass, "SetFileType");

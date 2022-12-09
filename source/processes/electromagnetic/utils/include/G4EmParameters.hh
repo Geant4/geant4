@@ -57,6 +57,7 @@
 #include "G4MscStepLimitType.hh"
 #include "G4NuclearFormfactorType.hh"
 #include "G4DNAModelSubType.hh"
+#include "G4EmFluoDirectory.hh"
 #include "G4EmSaturation.hh"
 #include "G4ThreeVector.hh"
 #include <vector>
@@ -124,11 +125,15 @@ public:
   void SetFluo(G4bool val);
   G4bool Fluo() const;
 
-  void SetBeardenFluoDir(G4bool val);
-  G4bool BeardenFluoDir() const;
+  G4EmFluoDirectory FluoDirectory() const;
 
+  void SetFluoDirectory(G4EmFluoDirectory);
+  void SetBeardenFluoDir(G4bool val);
   void SetANSTOFluoDir(G4bool val);
-  G4bool ANSTOFluoDir() const;
+  void SetXDB_EADLFluoDir(G4bool val);
+
+  G4bool BeardenFluoDir();
+  G4bool ANSTOFluoDir();
 
   void SetAuger(G4bool val);
   void SetAugerCascade(G4bool val) { SetAuger(val); };
@@ -196,6 +201,9 @@ public:
 
   G4bool RetrieveMuDataFromFile() const;
   void SetRetrieveMuDataFromFile(G4bool v);
+
+  G4bool PhotoeffectBelowKShell() const;
+  void SetPhotoeffectBelowKShell(G4bool v);
 
   // 5d
   void SetOnIsolated(G4bool val);
@@ -412,6 +420,7 @@ private:
   G4bool fSamplingTable;
   G4bool fPolarisation;
   G4bool fMuDataFromFile;
+  G4bool fPEKShell;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
   G4bool fIsPrinted;

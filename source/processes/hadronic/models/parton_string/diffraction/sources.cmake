@@ -10,6 +10,8 @@ geant4_add_module(G4had_string_diff
     G4FTFModel.hh
     G4FTFParameters.hh
     G4FTFParticipants.hh
+    G4FTFTunings.hh
+    G4FTFTuningsMessenger.hh
   SOURCES
     G4DiffractiveExcitation.cc
     G4DiffractiveSplitableHadron.cc
@@ -17,7 +19,9 @@ geant4_add_module(G4had_string_diff
     G4FTFAnnihilation.cc
     G4FTFModel.cc
     G4FTFParameters.cc
-    G4FTFParticipants.cc)
+    G4FTFParticipants.cc
+    G4FTFTunings.cc
+    G4FTFTuningsMessenger.cc)
 
 geant4_module_link_libraries(G4had_string_diff
   PUBLIC
@@ -26,6 +30,7 @@ geant4_module_link_libraries(G4had_string_diff
     G4had_string_man
     G4hadronic_util
     G4hepgeometry
+    G4intercoms
   PRIVATE
     G4had_string_frag
     G4hadronic_xsect

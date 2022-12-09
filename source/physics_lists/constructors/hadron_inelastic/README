@@ -65,7 +65,12 @@
  - charm and bottom hadrons inelastic:
    - cross section: Glauber-Gribov
    - final-state:   FTFP for all energies
-
+ - light hypernuclei inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - light anti-hypernuclei inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
 
  G4HadronPhysicsFTFP_BERT_ATL
  ----------------------------
@@ -132,6 +137,12 @@
  - kaons inelastic:
    - cross section: Glauber-Gribov
    - final-state:   QGSP > 14 GeV; BERT < 15 GeV
+ - light hypernuclei inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP > 15 GeV; 1 MeV < INCLXX < 20 GeV; Preco < 2 MeV
+ - light anti-hypernuclei inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
  Note: it is possible to specify in the constructor the use of FTFP
        instead of QGSP;
        moreover, NeutronHP can also be activated in the constructor,

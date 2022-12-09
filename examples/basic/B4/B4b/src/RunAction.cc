@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.cc
+/// \file B4/B4b/src/RunAction.cc
 /// \brief Implementation of the B4b::RunAction class
 
 #include "RunAction.hh"
@@ -75,12 +75,6 @@ RunAction::RunAction()
   analysisManager->CreateNtupleDColumn("Labs");
   analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -75,7 +75,7 @@ void G4PolarizationManager::ListVolumes()
          << " registered volume(s) : " << G4endl;
   if(!fActivated)
     G4cout << " but polarization deactivated " << G4endl;
-  for(auto vp : fVolumePolarizations)
+  for(auto& vp : fVolumePolarizations)
   {
     G4cout << vp.first->GetName() << " : " << vp.second << G4endl;
   }

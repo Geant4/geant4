@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EmCalorimeterHit.hh
+/// \file B5/include/EmCalorimeterHit.hh
 /// \brief Definition of the B5::EmCalorimeterHit class
 
 #ifndef B5EmCalorimeterHit_h
@@ -54,10 +54,10 @@ namespace B5
 class EmCalorimeterHit : public G4VHit
 {
   public:
-    EmCalorimeterHit();
+    EmCalorimeterHit() = default;
     EmCalorimeterHit(G4int cellID);
     EmCalorimeterHit(const EmCalorimeterHit &right) = default;
-    ~EmCalorimeterHit() override;
+    ~EmCalorimeterHit() override = default;
 
     EmCalorimeterHit& operator=(const EmCalorimeterHit &right) = default;
     G4bool operator==(const EmCalorimeterHit &right) const;

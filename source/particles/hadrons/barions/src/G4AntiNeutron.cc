@@ -89,7 +89,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
     anInstance->SetDecayTable(table);
  
   }
-  theInstance = reinterpret_cast<G4AntiNeutron*>(anInstance);
+  theInstance = static_cast<G4AntiNeutron*>(anInstance);
   return theInstance;
 }
 

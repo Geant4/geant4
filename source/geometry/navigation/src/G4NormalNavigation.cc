@@ -80,7 +80,7 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector& localPoint,
   G4ThreeVector sampleDirection;
   G4double ourStep = currentProposedStepLength, ourSafety;
   G4double motherSafety, motherStep = DBL_MAX;
-  G4int localNoDaughters, sampleNo;
+  G4long localNoDaughters, sampleNo;
   G4bool motherValidExitNormal = false;
   G4ThreeVector motherExitNormal; 
 
@@ -337,7 +337,7 @@ G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid;
   G4double motherSafety, ourSafety;
-  G4int localNoDaughters, sampleNo;
+  G4long localNoDaughters, sampleNo;
 
   motherPhysical = history.GetTopVolume();
   motherLogical  = motherPhysical->GetLogicalVolume();

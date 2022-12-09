@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file StackingAction.hh
-/// \brief Definition of the StackingAction class
+/// \file scavenger/include/StackingAction.hh
+/// \brief Definition of the scavenger::StackingAction class
 
 #ifndef SCAVENGER_StackingAction_h
 #define SCAVENGER_StackingAction_h 1

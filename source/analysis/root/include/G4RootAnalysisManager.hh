@@ -36,7 +36,6 @@
 #include "globals.hh"
 
 #include "tools/wroot/ntuple"
-#include "tools/histo/hmpi"
 
 #include <memory>
 #include <string_view>
@@ -59,7 +58,7 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
   friend class G4ThreadLocalSingleton<G4RootAnalysisManager>;
 
   public:
-    virtual ~G4RootAnalysisManager();
+    ~G4RootAnalysisManager() override;
 
     // Static methods
     static G4RootAnalysisManager* Instance();
@@ -76,29 +75,19 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     std::vector<tools::wroot::ntuple*>::const_iterator EndConstNtuple() const;
 
     // MT/MPI
-    virtual void SetNtupleMerging(G4bool mergeNtuples,
-                   G4int nofReducedNtupleFiles = 0) override;
-    virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
-    virtual void SetBasketSize(unsigned int basketSize) override;
-    virtual void SetBasketEntries(unsigned int basketEntries) override;
-
-  protected:
-    // virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName) override;
-    virtual G4bool WriteImpl() override;
-    virtual G4bool CloseFileImpl(G4bool reset) override;
-    virtual G4bool ResetImpl() override;
-    virtual G4bool IsOpenFileImpl() const final;
+    void SetNtupleMerging(G4bool mergeNtuples, G4int nofReducedNtupleFiles = 0) override;
+    void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
+    void SetBasketSize(unsigned int basketSize) override;
+    void SetBasketEntries(unsigned int basketEntries) override;
 
   private:
     G4RootAnalysisManager();
 
     // Static data members
-    inline static G4RootAnalysisManager* fgMasterInstance { nullptr };
     inline static G4ThreadLocal G4bool fgIsInstance { false };
     static constexpr std::string_view fkClass { "G4RootAnalysisManager" };
 
-    // data members
+    // Data members
     std::shared_ptr<G4RootFileManager> fFileManager { nullptr };
     std::shared_ptr<G4RootNtupleFileManager> fNtupleFileManager { nullptr };
 };

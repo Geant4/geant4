@@ -150,6 +150,7 @@ geant4_module_link_libraries(G4emdna-models
     G4cuts
     G4emdna-man
     G4emdna-molman
+    G4emdna-moltypes
     G4emdna-utils
     G4emlowenergy
     G4emutils
@@ -161,5 +162,5 @@ geant4_module_link_libraries(G4emdna-models
     G4partman
     G4track
   PRIVATE
-    G4emdna-moltypes
-    G4emstandard)
+    G4emstandard
+    G4ions)

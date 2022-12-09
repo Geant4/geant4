@@ -53,19 +53,22 @@ class G4MPIToolsManager
   public:
     // Methods
     template <typename HT>
-    G4bool Merge(const std::vector<HT*>& htVector,
-                 const std::vector<G4HnInformation*>& hnVector);
+    G4bool Merge(const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector
+
+);
   private:
     // Methods
     template <typename HT>
     G4bool Send(G4int nofActiveT,
-                const std::vector<HT*>& htVector,
-                const std::vector<G4HnInformation*>& hnVector);
+                const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector
+
+);
 
     template <typename HT>
     G4bool Receive(G4int nofActiveT,
-                const std::vector<HT*>& htVector,
-                const std::vector<G4HnInformation*>& hnVector);
+                const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector
+
+);
 
     // Static data members
     static constexpr std::string_view fkClass { "G4MPIToolsManager" };

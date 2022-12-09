@@ -25,7 +25,7 @@
 //
 //
 /// \file ExUCNActionInitialization.cc
-/// \brief Implementation of the F04ActionInitialization class
+/// \brief Implementation of the ExUCNActionInitialization class
 
 #include "ExUCNActionInitialization.hh"
 #include "ExUCNPrimaryGeneratorAction.hh"

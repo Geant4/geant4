@@ -364,7 +364,7 @@ void G4RunManager::RunInitialization()
 
   if(G4VScoreNtupleWriter::Instance() != nullptr)
   {
-    auto hce            = fSDM->PrepareNewEvent();
+    auto hce            = (fSDM != nullptr) ? fSDM->PrepareNewEvent() : nullptr;
     isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
     delete hce;
   }
@@ -907,7 +907,7 @@ void G4RunManager::ConstructScoringWorlds()
   if(ScM == nullptr)
     return;
 
-  G4int nPar = ScM->GetNumberOfMesh();
+  G4int nPar = (G4int)ScM->GetNumberOfMesh();
   if(nPar < 1)
     return;
 
@@ -981,14 +981,14 @@ void G4RunManager::UpdateScoring()
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(ScM == nullptr)
     return;
-  G4int nPar = ScM->GetNumberOfMesh();
+  G4int nPar = (G4int)ScM->GetNumberOfMesh();
   if(nPar < 1)
     return;
 
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
   if(HCE == nullptr)
     return;
-  G4int nColl = HCE->GetCapacity();
+  G4int nColl = (G4int)HCE->GetCapacity();
   for(G4int i = 0; i < nColl; ++i)
   {
     G4VHitsCollection* HC = HCE->GetHC(i);

@@ -69,7 +69,7 @@ public:
   }
   virtual void Execute(vtkObject *caller, unsigned long, void*)
   {
-    vtkRenderer *ren = reinterpret_cast<vtkRenderer *>(caller);
+    vtkRenderer *ren = static_cast<vtkRenderer *>(caller);
     vtkCamera *cam = ren->GetActiveCamera();
     //G4cout << cam->GetFocalPoint()[0] << " " << cam->GetFocalPoint()[1] << " " << cam->GetFocalPoint()[2] << G4endl;
     //
@@ -114,7 +114,7 @@ public:
 
   virtual void Execute(vtkObject *caller, unsigned long, void*)
   {
-    vtkRenderer *ren = reinterpret_cast<vtkRenderer *>(caller);
+    vtkRenderer *ren = static_cast<vtkRenderer *>(caller);
     int      nActors = ren->GetActors()->GetNumberOfItems();
     vtkCamera   *cam = ren->GetActiveCamera();
     if(!cam) return;
@@ -136,7 +136,8 @@ public:
     float fps = 1.0/tdiff.count();
 
     // String for display
-    sprintf(this->TextBuff,"camera position    : %.1f %.1f %.1f \n"
+    snprintf(this->TextBuff,sizeof this->TextBuff,
+	                   "camera position    : %.1f %.1f %.1f \n"
                            "camera focal point : %.1f %.1f %.1f \n"
                            "view angle         : %.1f\n"
                            "distance           : %.1f\n"

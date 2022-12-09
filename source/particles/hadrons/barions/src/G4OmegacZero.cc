@@ -75,7 +75,7 @@ G4OmegacZero* G4OmegacZero::Definition()
                 false,     0.069e-3*ns,          NULL,
                 false,       "omega_c");
   }
-  theInstance = reinterpret_cast<G4OmegacZero*>(anInstance);
+  theInstance = static_cast<G4OmegacZero*>(anInstance);
   return theInstance;
 }
 

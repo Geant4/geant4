@@ -40,6 +40,8 @@
 #include <sstream>
 #include <cmath>
 
+#define G4warn G4cout
+
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
   fNumberOfCloudPoints(10000),
@@ -184,7 +186,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
-    G4cerr <<
+    G4warn <<
       "ERROR: G4ViewParameters::AddCutawayPlane:"
       "\n  A maximum of 3 cutaway planes supported." << G4endl;
   }
@@ -193,7 +195,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
 void G4ViewParameters::ChangeCutawayPlane
 (size_t index, const G4Plane3D& cutawayPlane) {
   if (index >= fCutawayPlanes.size()) {
-    G4cerr <<
+    G4warn <<
       "ERROR: G4ViewParameters::ChangeCutawayPlane:"
       "\n  Plane " << index << " does not exist." << G4endl;
   } else {
@@ -204,12 +206,12 @@ void G4ViewParameters::ChangeCutawayPlane
 void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
   if (visibleDensity < 0) {
-    G4cout << "G4ViewParameters::SetVisibleDensity: attempt to set negative "
+    G4warn << "G4ViewParameters::SetVisibleDensity: attempt to set negative "
       "density - ignored." << G4endl;
   }
   else {
     if (visibleDensity > reasonableMaximum) {
-      G4cout << "G4ViewParameters::SetVisibleDensity: density > "
+      G4warn << "G4ViewParameters::SetVisibleDensity: density > "
 	     << G4BestUnit (reasonableMaximum, "Volumic Mass")
 	     << " - did you mean this?"
 	     << G4endl;
@@ -222,7 +224,7 @@ G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
   const G4int nSidesMin = fDefaultVisAttributes.GetMinLineSegmentsPerCircle();
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
-    G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
+    G4warn << "G4ViewParameters::SetNoOfSides: attempt to set the"
     "\nnumber of sides per circle < " << nSidesMin
     << "; forced to " << nSides << G4endl;
   }
@@ -234,7 +236,7 @@ G4int G4ViewParameters::SetNumberOfCloudPoints(G4int nPoints) {
   const G4int nPointsMin = 100;
   if (nPoints < nPointsMin) {
     nPoints = nPointsMin;
-    G4cout << "G4ViewParameters::SetNumberOfCloudPoints:"
+    G4warn << "G4ViewParameters::SetNumberOfCloudPoints:"
     "\nnumber of points per cloud set to minimum " << nPoints
     << G4endl;
   }
@@ -253,7 +255,7 @@ void G4ViewParameters::SetViewAndLights
     static G4bool firstTime = true;
     if (firstTime) {
       firstTime = false;
-      G4cout <<
+      G4warn <<
       "WARNING: Viewpoint direction is very close to the up vector direction."
       "\n  Change the up vector or \"/vis/viewer/set/rotationStyle freeRotation\"."
       << G4endl;
@@ -1259,7 +1261,7 @@ void G4ViewParameters::SetXGeometryString (const G4String& geomString)
     // if there is only Width. Special case to be backward compatible
     // We set Width and Height the same to obtain a square windows.
     
-    G4cout << "Unrecognised geometry string \""
+    G4warn << "Unrecognised geometry string \""
            << geomString
            << "\".  No Height found. Using Width value instead"
            << G4endl;

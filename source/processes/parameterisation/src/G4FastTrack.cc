@@ -118,8 +118,8 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // must be deleted by G4FastTrack.
   //--------------------------------------------------------
   const G4Navigator* NavigatorToUse;
-  if(theNavigator != 0 ) NavigatorToUse = theNavigator;
-  else                   NavigatorToUse = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  if(theNavigator != nullptr ) NavigatorToUse = theNavigator;
+  else NavigatorToUse = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   
   G4TouchableHistoryHandle history = NavigatorToUse->CreateTouchableHistoryHandle();
   
@@ -127,9 +127,10 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // Run accross the hierarchy to find the physical volume
   // associated with the envelope
   //-----------------------------------------------------
-  G4int depth = history->GetHistory()->GetDepth();
-  G4int idepth, Done = 0;
-  for (idepth = 0; idepth <= depth; idepth++)
+  G4int depth = (G4int)history->GetHistory()->GetDepth();
+  G4int idepth;
+  G4bool Done = false;
+  for (idepth = 0; idepth <= depth; ++idepth)
   {
     G4VPhysicalVolume* currPV = history->GetHistory()->GetVolume(idepth);
     G4LogicalVolume* currLV   = currPV->GetLogicalVolume();
@@ -138,14 +139,14 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
       fEnvelopePhysicalVolume = currPV;
       fEnvelopeLogicalVolume  = currLV;
       fEnvelopeSolid          = currLV->GetSolid();
-      Done = 1;
+      Done = true;
       break;
     }
   }
   //---------------------------------------------
   //-- Verification: should be removed in future:
   //---------------------------------------------
-  if ( !Done )
+  if ( Done == false )
     {
       G4ExceptionDescription ed;
       ed << "Can't find transformation for `" << fEnvelopePhysicalVolume->GetName() << "'" << G4endl;

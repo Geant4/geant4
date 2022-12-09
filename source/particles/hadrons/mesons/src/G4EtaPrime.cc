@@ -98,7 +98,7 @@ G4EtaPrime* G4EtaPrime::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4EtaPrime*>(anInstance);
+  theInstance = static_cast<G4EtaPrime*>(anInstance);
   return theInstance;
 }
 

@@ -60,10 +60,10 @@ class G4strstreambuf : public std::basic_streambuf<char>
 {
  public:
   G4strstreambuf();
-  ~G4strstreambuf();
+  ~G4strstreambuf() override;
 
-  virtual G4int overflow(G4int c = EOF);
-  virtual G4int sync();
+  G4int overflow(G4int c = EOF) override;
+  G4int sync() override;
 
 #ifdef WIN32
   virtual G4int underflow();

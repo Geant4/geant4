@@ -73,7 +73,7 @@ G4H2O* G4H2O::Definition()
         ((G4MoleculeDefinition*) pInstance)->SetFormatedName(formatedName);
 
     }
-    fgpInstance = reinterpret_cast<G4H2O*>(pInstance);
+    fgpInstance = static_cast<G4H2O*>(pInstance);
     return fgpInstance;
 }
 

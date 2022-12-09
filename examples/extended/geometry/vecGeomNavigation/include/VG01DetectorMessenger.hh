@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file geometry/VecGeomNavigation/src/VG01DetectorMessenger.hh
-/// \brief Implementation of the VG01PrimaryGeneratorAction class
 //
-//
+/// \file VG01DetectorMessenger.hh
+/// \brief Implementation of the VG01DetectorMessenger class
 
 #ifndef VG01DetectorMessenger_hh
 #define VG01DetectorMessenger_hh 1

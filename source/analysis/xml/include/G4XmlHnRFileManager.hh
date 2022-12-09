@@ -44,11 +44,11 @@ class G4XmlHnRFileManager : public G4VTHnRFileManager<HT>
     G4XmlHnRFileManager(G4XmlRFileManager* rfileManger)
       : G4VTHnRFileManager<HT>(), fRFileManager(rfileManger) {}
     G4XmlHnRFileManager() = delete;
-    virtual ~G4XmlHnRFileManager() = default;
+    ~G4XmlHnRFileManager() override = default;
 
     // Methods for writing objects
-    virtual HT* Read(const G4String& htName, const G4String& fileName,
-                     const G4String& dirName,  G4bool isUserFileName) final;
+    HT* Read(const G4String& htName, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
 
   private:
     // Static data members

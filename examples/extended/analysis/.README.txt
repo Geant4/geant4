@@ -13,7 +13,13 @@
 \link ExampleAnaEx02 AnaEx02 \endlink
 
  As AnaEx01, but direct interface to ROOT.
-  
+
+\link ExampleAnaEx03 AnaEx03 \endlink
+
+ Demonstrates usage of analysis commands for file management
+ (new since Geant4 11.1), in particular writing histograms and ntuples in a file
+ multiple times.
+
 \link ExampleB1Con B1Con \endlink
 
  B1Con shows how to use the statistical tool G4ConvergenceTester.

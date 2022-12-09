@@ -105,7 +105,7 @@ void G4EmDNAPhysicsActivator::ConstructParticle()
 void G4EmDNAPhysicsActivator::ConstructProcess()
 {
   const std::vector<G4String>& regnamesDNA = theParameters->RegionsDNA();
-  G4int nreg = regnamesDNA.size();
+  std::size_t nreg = regnamesDNA.size();
   if(0 == nreg)
   {
     return;
@@ -116,7 +116,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
   G4bool st = theParameters->DNAStationary();
 
   const G4double emaxDNA = 1.*CLHEP::MeV;
-  const G4double emaxIonDNA = 100.*CLHEP::MeV;
+  const G4double emaxIonDNA = 300.*CLHEP::MeV;
   const G4double eminBorn = 500.*CLHEP::keV;
   const G4double emax = theParameters->MaxKinEnergy();
 
@@ -137,7 +137,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
   G4ParticleDefinition* h0 = genericIonsManager->GetIon("hydrogen");
 
   // loop over regions
-  for(G4int i = 0; i < nreg; ++i)
+  for(std::size_t i = 0; i < nreg; ++i)
   {
     if(IsVerbose())
     {
@@ -167,7 +167,7 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
     DeactivateElectronProcesses(emaxDNA, emax, reg);
     G4EmDNABuilder::ConstructDNAElectronPhysics(emaxDNA, opt, fast, st, reg);
     DeactivateHadronProcesses(prot, emaxDNA, emax, reg);
-    G4EmDNABuilder::ConstructDNAProtonPhysics(eminBorn, emaxDNA, opt, fast, st, reg);
+    G4EmDNABuilder::ConstructDNAProtonPhysics(eminBorn, emaxIonDNA, opt, fast, st, reg);
     DeactivateIonProcesses(gion, emaxIonDNA, emax, reg);
     G4EmDNABuilder::ConstructDNAIonPhysics(emax, st, reg);
     DeactivateIonProcesses(alpha2, emaxIonDNA, emax, reg);

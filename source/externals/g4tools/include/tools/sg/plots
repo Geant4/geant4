@@ -938,7 +938,6 @@ protected:
 
       m_sep.clear();
 
-      unsigned int index = 0;
       for(unsigned int irow=0;irow<rows;irow++) {
         for(unsigned int icol=0;icol<cols;icol++) {
           separator* sep = new separator;
@@ -958,8 +957,6 @@ protected:
           //sep->add(tsf); //TSF()
 
           sep->add(new plotter(m_ttf)); //PLOTTER()
-
-          index++;
         }
       }
 

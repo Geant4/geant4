@@ -124,9 +124,7 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
     G4double hnext, hdid;
 
     G4double dydx[G4FieldTrack::ncompSVEC];
-    G4bool succeeded = true, lastStepSucceeded;
-
-    G4int noFullIntegr = 0, noSmallIntegr = 0;
+    G4bool succeeded = true;
 
     G4double y[G4FieldTrack::ncompSVEC];
     track.DumpToArray(y);
@@ -154,7 +152,6 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
         if (h > GetMinimumStep())
         {
             OneGoodStep(y, dydx, curveLength, h, eps, hdid, hnext);
-            lastStepSucceeded = (hdid == h);   
         }
         else
         {
@@ -177,11 +174,7 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
             hdid = h;
             curveLength += hdid;
             hnext = Base::ComputeNewStepSize(dyerr / eps, h);
-            lastStepSucceeded = (dyerr <= eps);
         }
-
-        if (lastStepSucceeded)  { ++noFullIntegr; }
-        else                    { ++noSmallIntegr; }
 
         const G4ThreeVector EndPos =
             field_utils::makeVector(y, field_utils::Value3D::Position);
@@ -240,13 +233,10 @@ void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
 
     G4double h = htry;
 
-    static G4ThreadLocal G4int tot_no_trials = 0; 
     const G4int max_trials = 100; 
 
     for (G4int iter = 0; iter < max_trials; ++iter)
     {
-        tot_no_trials++;
-
         Base::GetStepper()->Stepper(y, dydx, h, ytemp, yerr); 
         error2 = field_utils::relativeError2(y, yerr, std::max(h, fMinimumStep),
                                              eps_rel_max);

@@ -276,7 +276,7 @@ void DetectorConstruction::DefineMaterials() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter() {
-  if ( ! areParametersOK() ) {
+  if ( ! AreParametersOK() ) {
     G4cout << " DetectorConstruction::ConstructCalorimeter() : ***ERROR*** "
            << G4endl << "\t PARAMETERS NOT WELL-DEFINED! GEOMETRY UNCHANGED."
            << G4endl;
@@ -517,34 +517,34 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool DetectorConstruction::areParametersOK() {
+G4bool DetectorConstruction::AreParametersOK() {
   bool isOk = true;
   if ( ! fAbsorberMaterial ) {
     isOk = false;
-    G4cout << " DetectorConstruction::areParametersOK() : UNDEFINED absorber material" << G4endl;
+    G4cout << " DetectorConstruction::AreParametersOK() : UNDEFINED absorber material" << G4endl;
   }
   if ( ! fActiveMaterial ) {
     isOk = false;
-    G4cout << " DetectorConstruction::areParametersOK() : UNDEFINED active material" << G4endl;
+    G4cout << " DetectorConstruction::AreParametersOK() : UNDEFINED active material" << G4endl;
   }
   if ( fAbsorberTotalLength <= 0.0 ) {
     isOk = false;
-    G4cout << " DetectorConstruction::areParametersOK() : fAbsorberTotalLength = "
+    G4cout << " DetectorConstruction::AreParametersOK() : fAbsorberTotalLength = "
            << fAbsorberTotalLength << G4endl;
   }
   if ( fCalorimeterRadius <= 0.0 ) {
     isOk = false;
-    G4cout << " DetectorConstruction::areParametersOK() : fCalorimeterRadius = "
+    G4cout << " DetectorConstruction::AreParametersOK() : fCalorimeterRadius = "
            << fCalorimeterRadius << G4endl;
   }
   if ( fActiveLayerNumber <= 0 ) {
     isOk = false;
-    G4cout << " DetectorConstruction::areParametersOK() : fActiveLayerNumber = "
+    G4cout << " DetectorConstruction::AreParametersOK() : fActiveLayerNumber = "
            << fActiveLayerNumber << G4endl;
   }
   if ( fActiveLayerSize <= 0.0 ) {
     isOk = false;
-    G4cout << " DetectorConstruction::areParametersOK() : fActiveLayerSize = "
+    G4cout << " DetectorConstruction::AreParametersOK() : fActiveLayerSize = "
            << fActiveLayerSize << G4endl;
   }
   return isOk;

@@ -36,55 +36,10 @@
 #include "G4DynamicParticle.hh"
 
 // --------------------------------------------------------------------
-G4ParticleChangeForTransport::G4ParticleChangeForTransport()
-  : G4ParticleChange()
+G4ParticleChangeForTransport::G4ParticleChangeForTransport() 
 {
   // Disable flag that is enabled in G4VParticleChange if G4VERBOSE.
   debugFlag = false;
-}
-
-// --------------------------------------------------------------------
-G4ParticleChangeForTransport::~G4ParticleChangeForTransport()
-{
-}
-
-// --------------------------------------------------------------------
-G4ParticleChangeForTransport::
-G4ParticleChangeForTransport(const G4ParticleChangeForTransport& r)
-  : G4ParticleChange(r)
-{
-  theTouchableHandle          = r.theTouchableHandle;
-  isMomentumChanged           = r.isMomentumChanged;
-  theMaterialChange           = r.theMaterialChange;
-  theMaterialCutsCoupleChange = r.theMaterialCutsCoupleChange;
-  theSensitiveDetectorChange  = r.theSensitiveDetectorChange;
-}
-
-// --------------------------------------------------------------------
-G4ParticleChangeForTransport&
-G4ParticleChangeForTransport::operator=(const G4ParticleChangeForTransport& r)
-{
-  if(this != &r)
-  {
-    theListOfSecondaries          = r.theListOfSecondaries;
-    theSizeOftheListOfSecondaries = r.theSizeOftheListOfSecondaries;
-    theNumberOfSecondaries        = r.theNumberOfSecondaries;
-    theStatusChange               = r.theStatusChange;
-    theTouchableHandle            = r.theTouchableHandle;
-    theMaterialChange             = r.theMaterialChange;
-    theMaterialCutsCoupleChange   = r.theMaterialCutsCoupleChange;
-    theSensitiveDetectorChange    = r.theSensitiveDetectorChange;
-    theMomentumDirectionChange    = r.theMomentumDirectionChange;
-    thePolarizationChange         = r.thePolarizationChange;
-    thePositionChange             = r.thePositionChange;
-    theTimeChange                 = r.theTimeChange;
-    theEnergyChange               = r.theEnergyChange;
-    theVelocityChange             = r.theVelocityChange;
-    theTrueStepLength             = r.theTrueStepLength;
-    theLocalEnergyDeposit         = r.theLocalEnergyDeposit;
-    theSteppingControlFlag        = r.theSteppingControlFlag;
-  }
-  return *this;
 }
 
 // --------------------------------------------------------------------
@@ -125,13 +80,11 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->SetProperTime(theProperTimeChange);
 
 #ifdef G4VERBOSE
-  G4Track* aTrack = pStep->GetTrack();
-  if(debugFlag) { CheckIt(*aTrack); }
+  if(debugFlag) { CheckIt(*theCurrentTrack); }
 #endif
 
   // Update the G4Step specific attributes
   pStep->SetStepLength( theTrueStepLength );
-  // pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetControlFlag(theSteppingControlFlag);
 
   return pStep;
@@ -186,9 +139,6 @@ void G4ParticleChangeForTransport::DumpInfo() const
 {
   // use base-class DumpInfo
   G4ParticleChange::DumpInfo();
-
-  G4int oldprc = G4cout.precision(3);
   G4cout << "        Touchable (pointer) : " << std::setw(20)
          << theTouchableHandle() << G4endl;
-  G4cout.precision(oldprc);
 }

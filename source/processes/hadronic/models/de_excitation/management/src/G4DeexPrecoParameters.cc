@@ -292,9 +292,9 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 {
   static const G4String namm[5] = {"Evaporation","GEM","Evaporation+GEM","GEMVI","Dummy"};
   static const G4int nmm[5] = {8, 68, 68, 31, 0};
-  size_t idx = (size_t)fDeexChannelType;
+  G4int idx = fDeexChannelType;
 
-  G4int prec = os.precision(5);
+  G4long prec = os.precision(5);
   os << "=======================================================================" << "\n";
   os << "======       Pre-compound/De-excitation Physics Parameters     ========" << "\n";
   os << "=======================================================================" << "\n";

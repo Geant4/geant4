@@ -53,17 +53,17 @@
 
 class G4PSFlatSurfaceFlux3D : public G4PSFlatSurfaceFlux
 {
- public:  // with description
+ public:
   G4PSFlatSurfaceFlux3D(G4String name, G4int direction, G4int ni = 1,
                         G4int nj = 1, G4int nk = 1, G4int depi = 2,
                         G4int depj = 1, G4int depk = 0);
   G4PSFlatSurfaceFlux3D(G4String name, G4int direction, const G4String& unit,
                         G4int ni = 1, G4int nj = 1, G4int nk = 1,
                         G4int depi = 2, G4int depj = 1, G4int depk = 0);
-  virtual ~G4PSFlatSurfaceFlux3D();
+  ~G4PSFlatSurfaceFlux3D() override = default;
 
- protected:  // with description
-  virtual G4int GetIndex(G4Step*);
+ protected:
+  G4int GetIndex(G4Step*) override;
 
  private:
   G4int fDepthi, fDepthj, fDepthk;

@@ -46,7 +46,6 @@
 #include "globals.hh"
 #include "G4ElementData.hh"
 #include "G4PhysicsVector.hh"
-#include "G4Threading.hh"
 #include <vector>
 
 class G4DynamicParticle;
@@ -72,6 +71,18 @@ public:
   G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
                                   const G4Material* mat = nullptr) final;
 
+  G4double ComputeCrossSectionPerElement(G4double kinEnergy, G4double loge,
+                                         const G4ParticleDefinition*,
+                                         const G4Element*,
+                                         const G4Material*) final;
+  
+  G4double ComputeIsoCrossSection(G4double kinEnergy, G4double loge,
+                                  const G4ParticleDefinition*,
+                                  G4int Z, G4int A,
+                                  const G4Isotope* iso,
+                                  const G4Element* elm,
+                                  const G4Material* mat) final;
+
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                               const G4Isotope* iso = nullptr,
                               const G4Element* elm = nullptr,
@@ -83,6 +94,8 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
   void CrossSectionDescription(std::ostream&) const final;
+
+  G4double ElementCrossSection(G4double kinEnergy, G4double loge, G4int Z);
 
   G4double IsoCrossSection(G4double ekin, G4double logE, G4int Z, G4int A);
 
@@ -106,6 +119,7 @@ private:
   const G4ParticleDefinition* particle;
 
   std::vector<G4double> temp;
+  G4double elimit;
 
   G4int index = 0;
   G4bool isMaster = false;
@@ -114,10 +128,6 @@ private:
   static G4ElementData* data[5];
   static G4double coeff[MAXZINELP][5];
   static G4String gDataDirectory[5];
-
-#ifdef G4MULTITHREADED
-  static G4Mutex particleInelasticXSMutex;
-#endif
 };
 
 inline

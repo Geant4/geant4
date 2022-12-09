@@ -1,9 +1,21 @@
 # Category hadr-fission History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-26 Gabriele Cosmo (hadr-fission-V11-00-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-05 Ben Morgan (hadr-fission-V11-00-02)
+- Update dependencies to address warnings from consistency check
+
+## 2022-07-01 Alberto Ribon (hadr-fission-V11-00-01)
+- G4FissLib.cc, G4LFission.cc : use consistent thresholds for relative
+  (10% instead of 5%) and absolute (350 GeV instead of 250 GeV) energy 
+  non-conservation check.
 
 ## 2021-12-10 Ben Morgan (hadr-fission-V11-00-00)
 - Change to new Markdown History format

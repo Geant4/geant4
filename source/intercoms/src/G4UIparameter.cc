@@ -131,7 +131,7 @@ void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
 // --------------------------------------------------------------------
 void G4UIparameter::SetDefaultUnit(const char* theDefaultUnit)
 {
-  char type = toupper(parameterType);
+  char type = (char)std::toupper(parameterType);
   if(type != 'S')
   {
     G4ExceptionDescription ed;
@@ -225,7 +225,7 @@ G4int G4UIparameter::RangeCheck(const char* newValue)
   yystype result;
   bp = 0;  // reset buffer pointer for G4UIpGetc()
   std::istringstream is(newValue);
-  char type = toupper(parameterType);
+  char type = (char)std::toupper(parameterType);
   switch(type)
   {
     case 'D':
@@ -263,7 +263,7 @@ G4int G4UIparameter::RangeCheck(const char* newValue)
 G4int G4UIparameter::TypeCheck(const char* newValue)
 {
   G4String newValueString(newValue);
-  char type = toupper(parameterType);
+  char type = (char)std::toupper(parameterType);
   switch(type)
   {
     case 'D':
@@ -805,7 +805,7 @@ G4int G4UIparameter::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
            << " " << G4int(arg2.type) << G4endl;
     paramERR = 1;
   }
-  char type = toupper(parameterType);
+  char type = (char)std::toupper(parameterType);
   if(arg1.type == IDENTIFIER)
   {
     switch(type)
@@ -1118,7 +1118,7 @@ G4int G4UIparameter::Follow(G4int expect, G4int ifyes, G4int ifno)
 
 G4int G4UIparameter::G4UIpGetc()
 {  // emulation of getc()
-  G4int length = parameterRange.length();
+  G4int length = (G4int)parameterRange.length();
   if(bp < length)
   {
     return parameterRange[bp++];

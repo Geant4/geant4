@@ -14,12 +14,12 @@
 /dnageom/fractalScaling 50 50 50 nm
 
 /dnageom/definitionFile geometries/bacteria-XFXFXFX-4.txt
-/dnageom/placementVolume turn geometries/4strands_50nm_turn.txt
-/dnageom/placementVolume turntwist geometries/4strands_50nm_turn.txt true
-/dnageom/placementVolume straight geometries/4strands_50nm_straight.txt
+/dnageom/placementVolume turn geometries/8strands_50nm_turn.txt
+/dnageom/placementVolume turntwist geometries/8strands_50nm_turn.txt true
+/dnageom/placementVolume straight geometries/8strands_50nm_straight.txt
 
 /chem/activate true
-/scheduler/verbose 1
+/scheduler/verbose 0
 
 /dnadamage/directDamageLower 17.5 eV
 /dnadamage/directDamageUpper 17.5 eV
@@ -37,14 +37,14 @@
 /dnadamage/inductionEaqChance 0.00
 
 
-/chromosome/add bacteria ellipse 950 400 400 0 0 0 nm 0 0 0
+/chromosome/add bacteria ellipse 900 400 400 0 0 0 nm 0 0 0
 # /chromosome/add bacteria rod 450 950 25 0 0 nm 0 90 0
 
 
 #/chromosome/plotData chromosome.txt
 #/dnatests/chromosome
 
-/analysisDNA/saveStrands true
+/analysisDNA/saveStrands false
 /analysisDNA/strandDir ./damage_maps/
 
 /run/initialize
@@ -70,4 +70,4 @@
 /gps/particle e-
 /gps/energy 9.999 keV
 
-/run/beamOn 1000
+/run/beamOn 10

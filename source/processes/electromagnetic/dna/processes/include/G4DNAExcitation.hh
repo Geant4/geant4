@@ -31,36 +31,28 @@
 
 #include "G4VEmProcess.hh"
 
-#include "G4DNAGenericIonsManager.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-
-// Available models
-#include "G4DNAMillerGreenExcitationModel.hh"
-#include "G4DNABornExcitationModel.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4DNAExcitation : public G4VEmProcess
 {
-public: 
+public:
 
   G4DNAExcitation(const G4String& processName ="DNAExcitation",
 		     G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4DNAExcitation();
+  ~G4DNAExcitation() override = default;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
   
-  virtual void PrintInfo();
+  void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
      
-  G4bool       isInitialised;
+  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

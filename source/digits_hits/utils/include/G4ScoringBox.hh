@@ -43,20 +43,20 @@ class G4ScoringBox : public G4VScoringMesh
 {
  public:
   G4ScoringBox(G4String wName);
-  ~G4ScoringBox();
-
- protected:
-  // construct this mesh
-  virtual void SetupGeometry(G4VPhysicalVolume* fWorldPhys);
+  ~G4ScoringBox() override = default;
 
  public:
-  void List() const;
-  void Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg = 111);
+  void List() const override;
+  void Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg = 111) override;
   void DrawColumn(RunScore* map, G4VScoreColorMap* colorMap, G4int idxProj,
-                  G4int idxColumn);
+                  G4int idxColumn) override;
 
   // set a direction to segment this mesh
   void SetSegmentDirection(G4int dir) { fSegmentDirection = dir; }
+
+ protected:
+  // construct this mesh
+  void SetupGeometry(G4VPhysicalVolume* fWorldPhys) override;
 
  private:
   // get replicated position from 3D index (x,y,z)

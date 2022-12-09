@@ -72,7 +72,7 @@ G4NeutrinoE* G4NeutrinoE::Definition()
              false,           "e"
               );
   }
-  theInstance = reinterpret_cast<G4NeutrinoE*>(anInstance);
+  theInstance = static_cast<G4NeutrinoE*>(anInstance);
   return theInstance;
 }
 

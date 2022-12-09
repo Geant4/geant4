@@ -208,6 +208,9 @@ void G4TransportationWithMsc::StartTracking(G4Track* track)
     msc->StartTracking(track);
     msc->SetIonisation(ionisation, currParticle);
   }
+
+  // Ensure that field propagation state is also cleared / prepared
+  G4Transportation::StartTracking(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

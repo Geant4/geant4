@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-04  I. Hrivnacova (VecGeomNavigation-V11-00-03)
+- Fixed Doxygen file descriptions
+
 ## 2022-04-07 Ben Morgan (VecGeomNavigation-V11-00-02)
 - Build g4vecgeomnav as a static library if only Geant4 static libs are available
 

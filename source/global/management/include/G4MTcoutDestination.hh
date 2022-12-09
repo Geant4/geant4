@@ -46,7 +46,7 @@ class G4MTcoutDestination : public G4MulticoutDestination
 {
  public:
   explicit G4MTcoutDestination(const G4int& threadId);
-  virtual ~G4MTcoutDestination();
+  ~G4MTcoutDestination() override;
 
   virtual void Reset();
 

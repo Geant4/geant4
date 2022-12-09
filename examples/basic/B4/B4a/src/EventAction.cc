@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B4/B4a/src/EventAction.cc
 /// \brief Implementation of the B4a::EventAction class
 
 #include "EventAction.hh"
@@ -40,16 +40,6 @@
 
 namespace B4a
 {
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::EventAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

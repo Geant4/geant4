@@ -43,6 +43,9 @@
 
 #include "G4DNAWaterExcitationStructure.hh"
 
+#include "G4DNAPTBExcitationStructure.hh"
+#include "G4DNAPTBIonisationStructure.hh"
+
 /*!
  * \brief The G4DNAPTBExcitationModel class
  * This class implements the PTB excitation model.
@@ -117,6 +120,9 @@ private:
 
   G4DNAWaterExcitationStructure waterStructure;
 
+  G4DNAPTBExcitationStructure ptbExcitationStructure;
+  G4DNAPTBIonisationStructure ptbIonisationStructure;
+  
   typedef std::map<G4String,G4double,std::less<G4String> > MapMeanEnergy;
   MapMeanEnergy tableMeanEnergyPTB; ///< map: [materialName]=energyValue
   

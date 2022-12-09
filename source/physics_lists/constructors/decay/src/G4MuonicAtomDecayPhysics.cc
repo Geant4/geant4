@@ -38,6 +38,7 @@
 #include "G4MuonicAtomDecay.hh"
 #include "globals.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -50,6 +51,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4MuonicAtomDecayPhysics);
 G4MuonicAtomDecayPhysics::G4MuonicAtomDecayPhysics(G4int vL)
    :  G4VPhysicsConstructor("G4MuonicAtomDecay")
 {
+  G4PhysListUtil::InitialiseParameters();
   SetVerboseLevel(vL);
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
@@ -59,15 +61,9 @@ G4MuonicAtomDecayPhysics::G4MuonicAtomDecayPhysics(G4int vL)
 #endif
 }
 
-G4MuonicAtomDecayPhysics::G4MuonicAtomDecayPhysics(const G4String& name)
-:  G4VPhysicsConstructor(name)
+G4MuonicAtomDecayPhysics::G4MuonicAtomDecayPhysics(const G4String&)
+  : G4MuonicAtomDecayPhysics(1)
 {
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>0) {
-   G4cout << "G4MuonicAtomDecayPhysics() with verboseLevel "
-          << verboseLevel << " and name " << name << G4endl;
-  }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

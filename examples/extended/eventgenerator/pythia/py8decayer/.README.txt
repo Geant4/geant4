@@ -30,45 +30,57 @@
   examples/extended/eventgenerator/pythia/py8decayer
   
 
-  Installation of Pythia8: 
+  ## Installation of Pythia8: 
 
-  NOTE: As of June 2021, pythia8.3.0.5 is the most current version,
-  this it is used in this example.
+  NOTE: As of October 2022, pythia8.3.0.7 is the most current version,
+  thus it is used in this example.  
   In the future, please check updates at Pythia8 site: https://pythia.org
   
 - 1. cd path/to/your/pythia8/area
 
 - 2. Download desired version of Pythia8 and un-tar it, e.g. 
 \verbatim
-wget http://home.thep.lu.se/~torbjorn/pythia8/pythia8305.tgz
-tar xzf pythia8305.tgz
+wget https://pythia.org/download/pythia83/pythia8307.tgz
+tar xzf pythia8307.tgz
 \endverbatim
 
 - 3. Build/install Pythia8
 \verbatim
-cd pythia8305
+cd pythia8307
 export CXX=\`which g++\`
 ./configure --prefix=$PWD --cxx=$CXX
 make
 \endverbatim
-     NOTE: By default, Pythia8 (as of 8.3.0.5) builds with C++11 standards. 
+     NOTE: By default, Pythia8 (as of 8.3.0.7) builds with C++11 standards. 
      If one wants to turn to e.g. C++17 standard, one needs to override flags 
      via --cxx-common argument to configure script. 
+     Alternatively, one can setup CXX_COMMON environment variable.
+     As of pythia8307, the default flags are the following:
+     -O2 -std=c++11 -pedantic -W -Wall -Wshadow -pthread
+     Please note use of -pthread which was not among default flags in earlier
+     relesaes of Pythia8.
+     Example of specifying C++17 standards by overriding the default flags via 
+     use of --cxx_common argument to configure script:
+\verbatim
+./configure --prefix=$PWD --cxx=$CXX \
+	--cxx-common='-O2 -std=c++17 -pedantic -W -Wall -Wshadow -fPIC -pthread'
+\endverbatim
 
-   4. Setup PYTHIA8 environment variable to point to the area where Pythia8
+- 4. Setup PYTHIA8 environment variable to point to the area where Pythia8
       is built/installed:
 \verbatim
 export PYTHIA8=$PWD
 \endverbatim
 
-  Building example:
+
+  ## Building example:
   
   Upon setup of PYTHIA8 environment variable to point to the area where 
   Pythia8 package is installed, the pythia/py8decayer example will be
   compiled together with several other features of the eventgenerator example.
 
 
-  Description of classes:
+  ## Description of classes:
   
   Py8Decayer class provides implementation of the G4VExternalDecayer interface 
   with the use of PYTHIA8.
@@ -99,22 +111,28 @@ export PYTHIA8=$PWD
   
   Class SingleParticleGun demonstrates how to implement generaton of the primary
   particle.
+
+  Class ActionInitialization instantiates and registers to Geant4 kernel all user 
+  action classes; in this case it is SingleParticleGun.
   
 
-  Main program:
+  ## Main program:
   
   pythia8_decayer.cc
+
+  This application explicitly uses SerialOnly RunManager.
+  Transition to MT/Tasking operation is in the plans.
   
 
-  Executable:
+  ## Executable:
   
   pythia8_decayer
   
 
-  Execution:
+  ## Execution:
   
   At present, the pythia8_decayer executable does not take any input arguments.
-  Everything, including the choine of primary particle, is hardcoded in the main.
+  Everything, including the choine of primary particle, is hardcoded.
   Although in the future some configurability may be added.
 
   By default it'll run 5 single tau events using Pythia8 to decays them. 
@@ -123,6 +141,64 @@ export PYTHIA8=$PWD
   Once again, please bear in mind that the decay of pi0's by Pythia8 is disabled 
   (see Py8Decayer constructor) since the idea is to hand the pi0's back to Geant4 
   and make Geant4 decay them.
+
+
+  ## Additional notes on the contents of Geant4 and Pythia8 Particle Data Tables (PDT) :
+  
+  In their default form, PDT's in Geant4 and Pythia8 (v3.0.7) have a number 
+  of differences that need to be kept in mind.
+
+  In the case of the Geant4 py8decayer example those differences are unlikely 
+  to cause any major issues.
+
+  But Pythia8 can, in principle, be used within Geant4 in more ways that just 
+  as an external decayer.
+  Thus, if one is potentially interested in more sophisticated use of Pythia8 
+  in Geant4, one may want to consider whatever differences exist between (default) 
+  Geant4 and Pythia8 PDT's.
+
+  To be more precise, by default Pythia8 PDT contains 669 entries, of which 
+  525 particles have an antiparticle (it looks like antiparticles do not make 
+  separate entries in Pythia8 PDT, but the total number of available species 
+  should be considered as 1194).
+
+  Geant4 PDT contains 508 entries. 
+
+  Of those, 239 particles/antiparticles match by Particle ID's (on the Geant4 side 
+  it is explicitly called "PDG encoding" while on Pythia8 side it is just "id").
+
+  Many of Pythia8 PDT's entries are not available in Geant4 PDT, e.g. Z or W bosons 
+  are not in Geant4.
+
+  Some of the species in the Geant4 PDT do not seem to be in the Pythia8 PDT 
+  (e.g. excited nucleons do not seem to be in the Pythia8 PDT).
+
+  Also, there are entries in both PDT's that mean the same particles but are 
+  marked with different ID's.
+  For example, excited Delta(s) are present in both PDT's but in Geant4 each one 
+  is marked with a 4-digit number as an ID (PDG encoding) while in Pythia8 an ID 
+  for such particle would be a 6-digit number starting with "20" and the last 
+  4 digits would be the same as the Geant4 ID for such particle.
+  
+  Speaking of the 239 particles that match by ID (PDG ID), there may be further 
+  differences, e.g. by mass, either central value or width, or both (there might be 
+  other aspects but they have not been checked for).
+
+  As of October 2022, check has been made for differences larger that 1 keV in 
+  either mass central value or width.
+
+  The largest differences have been observed for quarks/diquarks.
+  It appears that Geant4 sets (at least) masses of quarks as listed in PDG.
+  For details on default settings for the quark masses in Pythia8 please refer 
+  to the Pythia8 manual: 
+  https://pythia.org/manuals/pythia8307/Welcome.html
+  See Particles and Decays section, Particle Data subsection.
+
+  Beyond quarks/diquarks some differences in mass central values or width have also
+  been observed, mainly for resonances.
+  But even for such particles as proton or muon there may be differences on the order 
+  of a few keV (e.g. central value of the proton mass is 938.27 MeV in Pythia8 and 
+  938.272 MeV in Geant4)
 
 
 */   

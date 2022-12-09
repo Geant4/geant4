@@ -22,6 +22,11 @@
 # viewing in a VRML viewer:
 #/vis/open VRML2FILE
 #
+# Use this open statement to create an offscreen file with TSG:
+#/vis/open TSG_OFFSCREEN 1200x1200
+# See the tsg_offscreen.mac file for more commands to change
+# the file format, file name, picture size, etc.
+#
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
 /vis/viewer/set/autoRefresh false

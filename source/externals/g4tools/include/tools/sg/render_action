@@ -68,8 +68,9 @@ public:
   virtual void set_depth_test(bool) = 0;
   virtual unsigned int max_lights() = 0;
   virtual void enable_light(unsigned int,
-                            float,float,float, //directrion
-                            float,float,float,float) = 0; //RGBA
+                            float,float,float,             //directrion
+                            float,float,float,float,       //diffuse RGBA
+                            float,float,float,float) = 0;  //ambient RGBA
   virtual void set_lighting(bool) = 0;
   virtual void set_blend(bool) = 0;
   virtual void restore_state(unsigned int) = 0;
@@ -101,8 +102,8 @@ public:
   bool have_to_do_transparency() const {return m_have_to_do_transparency;}
 
   bool have_to_render() {
-    bool transparent = state().m_color.a()!=1?true:false;
-    if(transparent) {
+    bool transparent = state().m_color.a()!=1.0f?true:false;
+    if(transparent && state().m_GL_BLEND) {
       if(m_do_transparency) return true;
       m_have_to_do_transparency = true;
       return false;
@@ -130,10 +131,11 @@ public:
 
   void enable_light(unsigned int a_light,
                     const vec3f& a_dir,
-                    const colorf& a_col) {
+                    const colorf& a_col,const colorf& a_ambient) {
     enable_light(a_light,
                  a_dir[0],a_dir[1],a_dir[2],
-                 a_col[0],a_col[1],a_col[2],1);
+                 a_col[0],a_col[1],a_col[2],a_col[3],
+                 a_ambient[0],a_ambient[1],a_ambient[2],a_ambient[3]);
   }
 
   void draw_vertex_array(gl::mode_t a_mode,const std::vector<float>& a_xyzs){

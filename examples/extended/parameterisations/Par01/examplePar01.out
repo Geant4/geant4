@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -55,6 +55,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -107,6 +109,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -134,7 +137,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -185,8 +188,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -665,6 +668,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -1326,7 +1334,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0     57.8      474 1.03e+03     0.511        0        0         0     Crystal initStep
     1     53.7      476 1.02e+03     0.223        0     8.74      8.74     Crystal compt
     2     56.6      475 1.02e+03     0.223        0     3.13      11.9     Crystal Rayl
-    3     57.5      475 1.02e+03     0.223        0    0.977      12.9     Crystal Rayl
+    3     57.5      475 1.02e+03     0.223        0    0.976      12.8     Crystal Rayl
     4     59.8      474 1.02e+03         0    0.036     2.48      15.3     Crystal phot
 
 *********************************************************************************************************
@@ -1398,7 +1406,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0     58.4      472 1.03e+03     0.388        0        0         0     Crystal initStep
     1     57.5      473 1.03e+03     0.216        0     3.24      3.24     Crystal compt
     2     57.6      474 1.03e+03     0.216        0    0.502      3.75     Crystal Rayl
-    3     58.4      477 1.03e+03         0    0.036     3.24      6.98     Crystal phot
+    3     58.4      477 1.03e+03         0    0.036     3.23      6.98     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 35
@@ -1425,7 +1433,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.986      650  1.1e+03      1.56        0     1.85      1.85     Crystal CoupledTransportation
     2     13.6      620 1.09e+03     0.569        0     33.2        35     Crystal compt
     3     35.1      611 1.01e+03     0.195        0     79.4       114     Crystal compt
-    4     33.7      616 1.02e+03         0  0.00501     6.28       121     Crystal phot
+    4     33.7      616 1.02e+03         0  0.00501     6.27       121     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 42,   Parent ID = 21
@@ -1458,7 +1466,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.207      652  1.1e+03     0.147        0        0         0     Crystal initStep
-    1    0.286      652  1.1e+03         0  0.00572    0.589     0.589     Crystal phot
+    1    0.286      652  1.1e+03         0  0.00572    0.588     0.588     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 20
@@ -1565,7 +1573,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.436      660  1.1e+03    0.0628        0        0         0     Crystal initStep
-    1   -0.449      660  1.1e+03         0    0.036   0.0952    0.0952     Crystal phot
+    1   -0.449      660  1.1e+03         0    0.036   0.0953    0.0953     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 51,   Parent ID = 16
@@ -1582,15 +1590,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.409      660  1.1e+03     0.275        0        0         0     Crystal initStep
     1     -1.8      650  1.1e+03     0.275        0     10.3      10.3     Crystal CoupledTransportation
-    2    -3.27      640 1.09e+03     0.275        0     10.9      21.3     Crystal Rayl
-    3    -3.86      636 1.09e+03         0   0.0332     4.04      25.3     Crystal phot
+    2    -3.27      640 1.09e+03     0.275        0     10.9      21.2     Crystal Rayl
+    3    -3.85      636 1.09e+03         0   0.0332     4.04      25.3     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 52,   Parent ID = 15
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.86      636 1.09e+03     0.242        0        0         0     Crystal initStep
+    0    -3.85      636 1.09e+03     0.242        0        0         0     Crystal initStep
     1    -3.87      636 1.09e+03         0    0.242    0.244     0.244     Crystal eIoni
 
 *********************************************************************************************************
@@ -1657,7 +1665,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0    -9.45      573 1.09e+03     0.511        0        0         0     Crystal initStep
     1        0      586  1.1e+03     0.511        0     19.3      19.3     Crystal CoupledTransportation
     2     10.3      600 1.12e+03     0.511        0       21      40.3     Crystal CoupledTransportation
-    3     10.6      600 1.12e+03         0    0.036    0.639        41     Crystal phot
+    3     10.6      600 1.12e+03         0    0.036    0.638        41     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 62,   Parent ID = 57
@@ -1678,7 +1686,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3       50      519 1.07e+03      1.48        0       48      85.2     Crystal CoupledTransportation
     4     51.1      518 1.07e+03     0.321        0     1.51      86.7     Crystal compt
     5       50      517 1.07e+03     0.321        0      5.4      92.1     Crystal CoupledTransportation
-    6     49.8      516 1.07e+03         0    0.036    0.783      92.9     Crystal phot
+    6     49.8      516 1.07e+03         0    0.036    0.784      92.9     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 64,   Parent ID = 56
@@ -1686,7 +1694,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     49.8      516 1.07e+03     0.285        0        0         0     Crystal initStep
-    1     49.8      516 1.07e+03     0.218   0.0667   0.0904    0.0904     Crystal msc
+    1     49.8      516 1.07e+03     0.218   0.0667   0.0905    0.0905     Crystal msc
     2     49.8      516 1.07e+03         0    0.218    0.209     0.299     Crystal eIoni
 
 *********************************************************************************************************
@@ -1725,7 +1733,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     -6.8      617 1.09e+03     0.138        0        0         0     Crystal initStep
-    1       -7      617 1.09e+03         0    0.036    0.284     0.284     Crystal phot
+    1       -7      617 1.09e+03         0    0.036    0.283     0.283     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 66,   Parent ID = 65
@@ -1741,7 +1749,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.454      658  1.1e+03    0.0931        0        0         0     Crystal initStep
-    1   -0.448      659  1.1e+03         0    0.036    0.356     0.356     Crystal phot
+    1   -0.448      659  1.1e+03         0    0.036    0.357     0.357     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 67,   Parent ID = 13
@@ -1848,7 +1856,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     40.5      639 1.04e+03    0.0386        0        0         0     Crystal initStep
-    1     40.6      639 1.04e+03         0    0.036    0.115     0.115     Crystal phot
+    1     40.6      639 1.04e+03         0    0.036    0.114     0.114     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 77,   Parent ID = 76
@@ -2108,15 +2116,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -4.26      656  1.1e+03    0.0953        0        0         0     Crystal initStep
-    1    -6.57      657  1.1e+03         0  0.00122     2.81      2.81     Crystal phot
+    1    -6.58      657  1.1e+03         0  0.00122     2.82      2.82     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 105,   Parent ID = 104
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -6.57      657  1.1e+03    0.0941        0        0         0     Crystal initStep
-    1    -6.57      657  1.1e+03         0   0.0941   0.0547    0.0547     Crystal eIoni
+    0    -6.58      657  1.1e+03    0.0941        0        0         0     Crystal initStep
+    1    -6.58      657  1.1e+03         0   0.0941   0.0547    0.0547     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 99,   Parent ID = 7
@@ -2124,7 +2132,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -2.77      655  1.1e+03     0.143        0        0         0     Crystal initStep
-    1    -3.82      656  1.1e+03         0   0.0332     1.86      1.86     Crystal phot
+    1    -3.82      656  1.1e+03         0   0.0332     1.85      1.85     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 106,   Parent ID = 99
@@ -2147,8 +2155,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5    -32.8      629 1.12e+03     0.381        0     16.7      51.6     Crystal Rayl
     6    -36.2      620 1.12e+03     0.231        0     9.94      61.5     Crystal compt
     7    -37.5      620 1.11e+03     0.183        0     4.15      65.6     Crystal compt
-    8    -37.2      620 1.11e+03      0.18        0    0.878      66.5     Crystal compt
-    9    -34.1      623 1.11e+03         0    0.036     5.74      72.3     Crystal phot
+    8    -37.2      620 1.11e+03      0.18        0    0.877      66.5     Crystal compt
+    9    -34.1      623 1.11e+03         0    0.036     5.73      72.2     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 113,   Parent ID = 98
@@ -2238,7 +2246,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -1.69      656 1.09e+03     0.194        0        0         0     Crystal initStep
-    1    -1.96      655  1.1e+03         0    0.036    0.686     0.686     Crystal phot
+    1    -1.96      655  1.1e+03         0    0.036    0.685     0.685     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 116,   Parent ID = 96
@@ -2877,7 +2885,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.123     -280      934    0.0111        0        0         0 WorldPhysical initStep
     1   -0.116     -300    1e+03    0.0111        0     68.5      68.5     Crystal CoupledTransportation
-    2   -0.116     -300    1e+03         0  0.00572 0.000964      68.5     Crystal phot
+    2   -0.116     -300    1e+03         0  0.00572 0.000965      68.5     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 3

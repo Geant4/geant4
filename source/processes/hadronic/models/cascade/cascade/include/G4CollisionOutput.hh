@@ -62,9 +62,10 @@
 class G4CascadParticle;
 class G4LorentzConvertor;
 
+class G4CollisionOutput
+{
+ public:
 
-class G4CollisionOutput {
-public:
   G4CollisionOutput();
   G4CollisionOutput& operator=(const G4CollisionOutput& right);
 
@@ -121,7 +122,7 @@ public:
 
   // ===== Access contents of lists =====
 
-  G4int numberOfOutgoingParticles() const { return outgoingParticles.size(); }
+  G4int numberOfOutgoingParticles() const { return (G4int)outgoingParticles.size(); }
     
   const std::vector<G4InuclElementaryParticle>& getOutgoingParticles() const {
     return outgoingParticles;
@@ -131,7 +132,7 @@ public:
     return outgoingParticles;
   };
 
-  G4int numberOfOutgoingNuclei() const { return outgoingNuclei.size(); };
+  G4int numberOfOutgoingNuclei() const { return (G4int)outgoingNuclei.size(); };
  
   const std::vector<G4InuclNuclei>& getOutgoingNuclei() const {
     return outgoingNuclei;
@@ -139,7 +140,7 @@ public:
 
   std::vector<G4InuclNuclei>& getOutgoingNuclei() { return outgoingNuclei; };
 
-  G4int numberOfFragments() const { return recoilFragments.size(); }
+  G4int numberOfFragments() const { return (G4int)recoilFragments.size(); }
 
   const G4Fragment& getRecoilFragment(G4int index=0) const;
 
@@ -169,10 +170,11 @@ public:
   void setOnShell(G4InuclParticle* bullet, G4InuclParticle* target);
   void setRemainingExitationEnergy();
 
-  double getRemainingExitationEnergy() const { return eex_rest; };
+  G4double getRemainingExitationEnergy() const { return eex_rest; };
   G4bool acceptable() const { return on_shell; };
 
-private: 
+ private: 
+
   G4int verboseLevel;
 
   std::vector<G4InuclElementaryParticle> outgoingParticles;

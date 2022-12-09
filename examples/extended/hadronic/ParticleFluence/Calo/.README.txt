@@ -1,7 +1,7 @@
 ///\file "hadronic/ParticleFluence/Calo/.README.txt"
 ///\brief Example ParticleFluence/Calo README page
 
-/*! \page ExampeParticleFluenceCalo Example Calo
+/*! \page ExampleCalo Example Calo
 
 In this example, the particle fluence is evaluated for simplified,
 cylindrical hadronic calorimeters with axis along the z-direction,
@@ -17,6 +17,10 @@ The particle fluence is estimated by summing the track length in a
 cases) or a thin hemisphere shell (for the "side" case) filled up with
 G4_Galactic (very low density gas) material, immediately outside the
 calorimeter - and then dividing for the cubic volume of such scoring volume.
+
+Complementary information on average multiplicity, average kinetic energy,
+and average total energy flow (i.e. sum of kinetic energies) for the
+particles produced in the calorimeter are also computed.
 
 The particle fluence is evaluated for the following 11 particle types:
 -  all
@@ -47,14 +51,18 @@ physics list is used).
 
 To build this example:
 
-  mkdir Build; cd Build
-  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DGeant4_DIR=/path-to-geant4-libraries ../.
-  make
+\verbatim
+mkdir Build; cd Build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DGeant4_DIR=/path-to-geant4-libraries ../.
+make
+\endverbatim
 
 To run it:
 
-  ./Calo atlasHec.g4
+\verbatim
+./Calo atlasHec.g4
+\endverbatim
 
 which shoots 50 GeV pion- on a simplified ATLAS HEC hadronic calorimeter,
 in one run of 100 events, and print out some information on the particle

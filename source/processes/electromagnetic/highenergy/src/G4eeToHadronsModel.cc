@@ -114,7 +114,7 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
 
   crossBornPerElectron = model->PhysicsVector();
   crossPerElectron     = model->PhysicsVector(); 
-  nbins = crossPerElectron->GetVectorLength();
+  nbins = (G4int)crossPerElectron->GetVectorLength();
   for(G4int i=0; i<nbins; ++i) {
     G4double e  = crossPerElectron->Energy(i);
     G4double cs = model->ComputeCrossSection(e);
@@ -199,8 +199,8 @@ void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp
     //G4cout << "mass= " << mass << " " << boost << G4endl;
     const G4ThreeVector dir = gamma->GetMomentumDirection();
     model->SampleSecondaries(newp, mass, dir);
-    G4int np = newp->size();
-    for(G4int j=0; j<np; ++j) {
+    std::size_t np = newp->size();
+    for(std::size_t j=0; j<np; ++j) {
       G4DynamicParticle* dp = (*newp)[j];
       G4LorentzVector v = dp->Get4Momentum();
       v.boost(boost);

@@ -1,0 +1,58 @@
+#
+# Macro file for the test of AnaEx03 example
+#
+#
+
+#/run/numberOfThreads 2
+
+# reduce output in MT
+/control/cout/ignoreThreadsExcept 0
+
+# initialize
+/run/initialize
+
+# set file type via parameter passed from calling macro
+# or use the default value "root" set in main
+/analysis/setDefaultFileType {defaultFileType}
+
+# open analysis file
+/analysis/openFile e-
+
+# e- 100MeV 
+/gun/particle e-
+/gun/energy 100 MeV
+/run/beamOn 10
+/analysis/write
+/analysis/reset
+
+# e- 200MeV 
+/gun/energy 200 MeV
+#
+/run/beamOn 20
+/analysis/write
+/analysis/reset
+#
+# e- 300MeV 
+/gun/energy 300 MeV
+#
+/run/beamOn 30
+/analysis/write
+/analysis/closeFile
+
+# open analysis file
+/analysis/openFile proton
+
+# proton 400MeV 
+/gun/particle proton
+/gun/energy 400 MeV
+/run/beamOn 40
+/analysis/write
+/analysis/reset
+
+# proton 500MeV 
+/gun/energy 500 MeV
+#
+/run/beamOn 50
+/analysis/write
+/analysis/closeFile
+#

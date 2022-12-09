@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file ScoreSpecies.hh
-/// \brief Definition of the ScoreSpecies class
+/// \file scavenger/include/ScoreSpecies.hh
+/// \brief Definition of the scavenger::ScoreSpecies class
 
 #ifndef SCAVENGER_ScoreSpecies_h
 #define SCAVENGER_ScoreSpecies_h 1
@@ -41,13 +41,17 @@ class G4VAnalysisManager;
 
 class G4MolecularConfiguration;
 
-/// Primitive scorer class for scoring the radiolytic species
-/// produced after irradiation in a water volume
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
 
+/// \brief Primitive scorer class for scoring the radiolytic species
+/// produced after irradiation in a water volume
+///
+/// This is a primitive scorer class for molecular species.
+/// The number of species is recorded for all times (predetermined or
+/// user chosen). It also scores the energy deposition in order to compute the
+/// radiochemical yields.
 
 class ScoreSpecies
   : public G4VPrimitiveScorer

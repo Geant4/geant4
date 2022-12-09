@@ -35,14 +35,14 @@ G4HCtable::~G4HCtable() { ; }
 
 G4int G4HCtable::Registor(G4String SDname, G4String HCname)
 {
-  for(size_t i = 0; i < HClist.size(); i++)
+  for(std::size_t i = 0; i < HClist.size(); ++i)
   {
     if(HClist[i] == HCname && SDlist[i] == SDname)
       return -1;
   }
   HClist.push_back(HCname);
   SDlist.push_back(SDname);
-  return HClist.size();
+  return (G4int)HClist.size();
 }
 
 G4int G4HCtable::GetCollectionID(G4String HCname) const
@@ -50,19 +50,19 @@ G4int G4HCtable::GetCollectionID(G4String HCname) const
   G4int i = -1;
   if(HCname.find("/") == std::string::npos)  // HCname only
   {
-    for(size_t j = 0; j < HClist.size(); j++)
+    for(std::size_t j = 0; j < HClist.size(); ++j)
     {
       if(HClist[j] == HCname)
       {
         if(i >= 0)
           return -2;
-        i = j;
+        i = (G4int)j;
       }
     }
   }
   else
   {
-    for(size_t j = 0; j < HClist.size(); j++)
+    for(std::size_t j = 0; j < HClist.size(); ++j)
     {
       G4String tgt = SDlist[j];
       tgt += "/";
@@ -71,7 +71,7 @@ G4int G4HCtable::GetCollectionID(G4String HCname) const
       {
         if(i >= 0)
           return -2;
-        i = j;
+        i = (G4int)j;
       }
     }
   }
@@ -91,17 +91,17 @@ G4int G4HCtable::GetCollectionID(G4VSensitiveDetector* aSD) const
     G4cerr << "Sensitive detector <" << aSD->GetName()
            << "> has more than one registered hits collections." << G4endl;
     G4cerr << "Candidates are : ";
-    for(G4int j = 0; j < aSD->GetNumberOfCollections(); j++)
+    for(G4int j = 0; j < aSD->GetNumberOfCollections(); ++j)
     {
       G4cerr << aSD->GetCollectionName(j) << " ";
     }
     G4cerr << G4endl;
     return -1;
   }
-  for(size_t k = 0; k < SDlist.size(); k++)
+  for(std::size_t k = 0; k < SDlist.size(); ++k)
   {
     if(SDlist[k] == aSD->GetName())
-      return k;
+      return (G4int)k;
   }
   return -1;
 }

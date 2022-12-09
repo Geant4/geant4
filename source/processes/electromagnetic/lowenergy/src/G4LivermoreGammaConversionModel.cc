@@ -171,7 +171,7 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermoreGammaConversionModel::ReadData()",
 		"em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   }
   else

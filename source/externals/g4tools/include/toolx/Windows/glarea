@@ -15,6 +15,7 @@
 #include <string>
 
 #if defined(_MSC_VER) && _MSC_VER < 1900
+#elif defined(__MINGW32__)
 #else
 #define TOOLX_WINDOWS_TOUCH
 #endif
@@ -57,12 +58,12 @@ class glarea {
   }
 public:
   virtual void resize(unsigned int,unsigned int){}
-  virtual void paint(unsigned int a_w,unsigned int a_h) {}
+  virtual void paint(unsigned int,unsigned int) {}
   virtual void close(){}
   
-  virtual void left_button_up(unsigned int a_x,unsigned int a_y) {}
-  virtual void left_button_down(unsigned int a_x,unsigned int a_y) {}
-  virtual void mouse_move(unsigned int a_x,unsigned int a_y,bool) {}
+  virtual void left_button_up(unsigned int,unsigned int) {}
+  virtual void left_button_down(unsigned int,unsigned int) {}
+  virtual void mouse_move(unsigned int,unsigned int,bool) {}
 public:
   glarea(HWND a_parent)
   :m_parent(a_parent)

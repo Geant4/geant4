@@ -55,8 +55,3 @@ G4hPairProductionModel::G4hPairProductionModel(const G4ParticleDefinition* p,
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4hPairProductionModel::~G4hPairProductionModel()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

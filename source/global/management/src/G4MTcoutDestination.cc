@@ -28,16 +28,17 @@
 // Authors: M.Asai, A.Dotti (SLAC) - 23 May 2013
 // ---------------------------------------------------------------
 
-#include <assert.h>
-#include <sstream>
+#include "G4MTcoutDestination.hh"
 
 #include "G4AutoLock.hh"
 #include "G4BuffercoutDestination.hh"
 #include "G4FilecoutDestination.hh"
 #include "G4LockcoutDestination.hh"
-#include "G4MTcoutDestination.hh"
 #include "G4MasterForwardcoutDestination.hh"
 #include "G4strstreambuf.hh"
+
+#include <cassert>
+#include <sstream>
 
 namespace
 {

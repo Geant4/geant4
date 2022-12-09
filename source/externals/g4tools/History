@@ -1,8 +1,49 @@
 # Category g4tools History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-25 Gabriele Cosmo (g4tools-V11-00-13)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1
+  in files: spline, THistogram and zlib.
+
+## 2022-10-13 Guy Barrand (g4tools-V11-00-12)
+- tools/fpng, fpng.icc: a pure header, thread safe, png writer.
+- tools/toojpeg, toojpeg.icc: a pure header, thread safe, jpeg writer.
+- tools/offscreen/session, sg_viewer: to handle offscreen graphics.
+- tools/sg/gl2ps_action: revisit lightening logic to be closer than the OpenGL one.
+- tools/sg/zb_action: revisit lightening logic to be closer than the OpenGL one.
+- tools/sg/zb_action: handle blending (transparency).
+- tools/sg/plots_viewer: handle blending (transparency).
+- tools/zb/buffer: handle blending (transparency).
+- tools/sg/torche, head_light, gl2ps_action, render_action: handle ambient color lightening.
+- toolx/sg/GL_action: handle ambient color lightening.
+- tools/sg/write_paper: gl2ps, zb formats: handle transparency.
+- tools/gl2ps: handle the TOOLS_GL2PS_PORTABLE_SORT to be able to produce same output
+  file on all platforms. (Related to the fact that qsort, for "same objects", may not
+  produce the same "equal" sub lists on all platforms).
+- tools/version: pass to 6.1.0.
+
+## 2022-10-10 Guy Barrand (g4tools-V11-00-11)
+- intel-icx: fix compilation warnings for the variable "size"
+  set but not used glutess/render/static_RenderFan, static_RenderStrip.
+- intel-icx: fix compilation warnings #3179: deprecated conversion of string literal to char*.
+
+## 2022-10-05 Guy Barrand (g4tools-V11-00-10)
+- tools/typedefs, rroot/file, wroot/file and toolx/Windows/glarea, Qt/session, mpi/wrmpi:
+  some #ifdef for MinGW. The ones in wroot/file are important to produce good .root files.
+- tools/gl2ps: replace the usage of sprintf, by strcpy or std::ostringstream.
+
+## 2022-10-04 Gabriele Cosmo (g4tools-V11-00-09)
+- Fixed compilation warnings on Intel-icx compiler for variables
+  set but not used in plotter::rep_bins2D_xy_random_one() and
+  plots::update_sg().
+
+## 2022-09-22 Ben Morgan (g4tools-V11-00-08)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
 
 ## 2022-06-09 Guy Barrand (g4tools-V11-00-07)
 - toolx/X11/base_session: show_window(): check that the window is not already mapped. (Else it hangs in the XIfEvent).

@@ -223,18 +223,14 @@ void CML2PhantomConstruction::applyNewCentre(G4ThreeVector ctr)
 }
 G4String CML2PhantomConstruction::getCurrentTranslationString()
 {
-	char cT[5];
 	G4int cTI;
 	G4String translationName;
 	cTI=(G4int)((currentCentre.getX()/mm));
-	sprintf(cT,"%d",cTI);
-	translationName="_TrX"+G4String(cT)+"_";
+	translationName="_TrX"+std::to_string(cTI)+"_";
 	cTI=(G4int)((currentCentre.getY()/mm));
-	sprintf(cT,"%d",cTI);
-	translationName+="Y"+G4String(cT)+"_";
+	translationName+="Y"+std::to_string(cTI)+"_";
 	cTI=(G4int)((currentCentre.getZ()/mm));
-	sprintf(cT,"%d",cTI);
-	translationName+="Z"+G4String(cT);
+	translationName+="Z"+std::to_string(cTI);
 	return translationName;
 }
 

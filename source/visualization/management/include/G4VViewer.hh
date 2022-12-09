@@ -198,17 +198,17 @@ protected:
 
     // Operations
     void AddSplinePoint(const G4Vector3D& v);
-    G4Vector3D GetInterpolatedSplinePoint(float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
-    int GetNumPoints();
+    G4Vector3D GetInterpolatedSplinePoint(G4float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
+    G4int GetNumPoints();
     G4Vector3D GetPoint(int);
     // method for computing the Catmull-Rom parametric equation
     // given a time (t) and a vector quadruple (p1,p2,p3,p4).
-    G4Vector3D CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2,
+    G4Vector3D CatmullRom_Eq(G4float t, const G4Vector3D& p1, const G4Vector3D& p2,
                              const G4Vector3D& p3, const G4Vector3D& p4);
 
   private:
     std::vector<G4Vector3D> vp;
-    float delta_t;
+    G4float delta_t;
   };
   
   //////////////////////////////////////////////////////////////

@@ -45,16 +45,16 @@ G4DNAModelInterface::G4DNAModelInterface(const G4String &nam)
 G4DNAModelInterface::~G4DNAModelInterface()
 {
     // Loop on all the registered models to properly delete them (free the memory)
-    for(unsigned int i=0, ie = fRegisteredModels.size(); i<ie; ++i)
+    for(std::size_t i=0, ie = fRegisteredModels.size(); i<ie; ++i)
     {
-            if(fRegisteredModels.at(i) != nullptr) delete fRegisteredModels.at(i);
+      if(fRegisteredModels.at(i) != nullptr) delete fRegisteredModels.at(i);
     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNAModelInterface::Initialise(const G4ParticleDefinition* particle,
-                                  const G4DataVector& cuts)
+                                     const G4DataVector& cuts)
 {
     // Those two statements are necessary to override the energy limits set in the G4DNAProcesses (ionisation, elastic, etc...).
     // Indeed, with the ModelInterface system, the model define themselves their energy limits per material and particle.
@@ -66,9 +66,9 @@ void G4DNAModelInterface::Initialise(const G4ParticleDefinition* particle,
     fpParticleChangeForGamma = GetParticleChangeForGamma();
 
     // Loop on all the registered models to initialise them
-    for(unsigned int i=0, ie = fRegisteredModels.size(); i<ie; ++i)
+    for(std::size_t i=0, ie = fRegisteredModels.size(); i<ie; ++i)
     {
-        fRegisteredModels.at(i)->Initialise(particle, cuts, fpParticleChangeForGamma);
+      fRegisteredModels.at(i)->Initialise(particle, cuts, fpParticleChangeForGamma);
     }
 
 
@@ -153,11 +153,11 @@ G4double G4DNAModelInterface::CrossSectionPerVolume(const G4Material* material,
         std::map<G4Material*, G4double>::const_iterator it = componentsMap.begin();
 
         // Get the size
-        unsigned int componentNumber = componentsMap.size();
+        std::size_t componentNumber = componentsMap.size();
 
         // Loop on all the components
         //for(it = material->GetMatComponents().begin(); it!=material->GetMatComponents().end();++it)
-        for(unsigned int i=0; i<componentNumber; ++i)
+        for(std::size_t i=0; i<componentNumber; ++i)
         {
             // Get the current component
             G4Material* component = it->first;
@@ -348,7 +348,7 @@ void G4DNAModelInterface::BuildMaterialParticleModelTable(const G4ParticleDefini
         std::map<G4Material*, G4double> componentMap = mat->GetMatComponents();
 
         // Get the number of component within the composite
-        unsigned int compositeSize = componentMap.size();
+        std::size_t compositeSize = componentMap.size();
 
         // Check that the material is not a composite material
         if(componentMap.empty())
@@ -457,7 +457,7 @@ void G4DNAModelInterface::InsertModelInTable(const G4String& matName, const G4St
             // Loop on all models registered in the simulation to check:
             // 1- if they can be applied to the current material
             // 2- if they can be applied to the current particle
-            for(unsigned int i=0, ie=fRegisteredModels.size(); i<ie; ++i)
+            for(std::size_t i=0, ie=fRegisteredModels.size(); i<ie; ++i)
             {
                 // check if the model is correct for material and particle (previous 1 and 2)
                 if(fRegisteredModels[i]->IsParticleExistingInModelForMaterial(pName, matName))
@@ -492,7 +492,7 @@ void G4DNAModelInterface::InsertModelInTable(const G4String& matName, const G4St
 
                 // Loop on all the model for the current couple
                 // and fill a map with [lim] = modelNumber
-                for(unsigned int ii=0, em=models.size(); ii<em; ++ii)
+                for(std::size_t ii=0, em=models.size(); ii<em; ++ii)
                 {
                     G4double lowLim = models[ii]->GetLowELimit(matName, pName);
                     G4double highLim = models[ii]->GetHighELimit(matName, pName);
@@ -502,14 +502,14 @@ void G4DNAModelInterface::InsertModelInTable(const G4String& matName, const G4St
                         lowLim += smallDiff;
                     }
 
-                    sortMap[lowLim] = ii;
+                    sortMap[lowLim] = (G4int)ii;
 
                     if(sortMap.find(highLim) != sortMap.end() )
                     {
                         highLim -= smallDiff;
                     }
 
-                    sortMap[highLim] = ii;
+                    sortMap[highLim] = (G4int)ii;
                 }
 
                 // The map has been created and ordered at this point.
@@ -524,7 +524,7 @@ void G4DNAModelInterface::InsertModelInTable(const G4String& matName, const G4St
                 // Loop on all the models again.
                 // The goal is to check if for each limit pairs we have the same model number
                 // and that the upper and lower limit are consistent.
-                for(unsigned int ii=0, eii=models.size(); ii<eii; ++ii)
+                for(std::size_t ii=0, eii=models.size(); ii<eii; ++ii)
                 {
                     G4double lim1 = it->first - smallDiff;
                     G4int count1 = it->second;
@@ -551,7 +551,7 @@ void G4DNAModelInterface::InsertModelInTable(const G4String& matName, const G4St
                         oss<<" have several models registered for the "<<fName<<" interaction and their energy ranges ";
                         oss<<"do not match. \nEnergy ranges: \n";
 
-                        for(int iii=0, eiii=models.size(); iii<eiii; ++iii)
+                        for(std::size_t iii=0, eiii=models.size(); iii<eiii; ++iii)
                         {
                             oss<<models[iii]->GetName()<<"\n";
                             oss<<"low: "<<models[iii]->GetLowELimit(matName, pName)/eV<<" eV \n";
@@ -596,7 +596,7 @@ G4VDNAModel *G4DNAModelInterface::GetDNAModel(const G4String &material, const G4
     //G4bool isOneModelSelected = false;
 
     // Loop on all the models within the models vector and check if ekin is within the energy range.
-    for(int i=0, ie=models.size(); i<ie; ++i)
+    for(std::size_t i=0, ie=models.size(); i<ie; ++i)
     {
         // ekin is in the energy range: we select the model and stop the loop.
         if( ekin >= models[i]->GetLowELimit(material, particle)

@@ -22,8 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-/// \file TimeStepAction.hh
-/// \brief Implementation of the TimeStepAction class
+/// \file scavenger/src/TimeStepAction.cc
+/// \brief Implementation of the scavenger::TimeStepAction class
 
 #include "TimeStepAction.hh"
 

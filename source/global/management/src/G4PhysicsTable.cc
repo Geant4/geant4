@@ -44,13 +44,7 @@
 #include "G4PhysicsVectorType.hh"
 
 // --------------------------------------------------------------------
-G4PhysicsTable::G4PhysicsTable()
-  : G4PhysCollection()
-{}
-
-// --------------------------------------------------------------------
 G4PhysicsTable::G4PhysicsTable(std::size_t cap)
-  : G4PhysCollection()
 {
   reserve(cap);
   vecFlag.reserve(cap);

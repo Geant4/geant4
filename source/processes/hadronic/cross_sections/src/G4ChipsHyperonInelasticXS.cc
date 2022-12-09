@@ -68,12 +68,12 @@ G4ChipsHyperonInelasticXS::G4ChipsHyperonInelasticXS():G4VCrossSectionDataSet(De
 
 G4ChipsHyperonInelasticXS::~G4ChipsHyperonInelasticXS()
 {
-    G4int lens=LEN->size();
-    for(G4int i=0; i<lens; ++i) delete[] (*LEN)[i];
+    std::size_t lens=LEN->size();
+    for(std::size_t i=0; i<lens; ++i) delete[] (*LEN)[i];
     delete LEN;
 
-    G4int hens=HEN->size();
-    for(G4int i=0; i<hens; ++i) delete[] (*HEN)[i];
+    std::size_t hens=HEN->size();
+    for(std::size_t i=0; i<hens; ++i) delete[] (*HEN)[i];
     delete HEN;
 }
 
@@ -147,10 +147,10 @@ G4double G4ChipsHyperonInelasticXS::GetChipsCrossSection(G4double pMom, G4int tg
     lastP   = 0.;                      // New momentum history (nothing to compare with)
     lastN   = tgN;                     // The last N of the calculated nucleus
     lastZ   = tgZ;                     // The last Z of the calculated nucleus
-    lastI   = colN.size();             // Size of the Associative Memory DB in the heap
+    lastI   = (G4int)colN.size();      // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
 
-    if(lastI) for(G4int i=0; i<lastI; i++) // AMDB exists, try to find the (Z,N) isotope
+    if(lastI) for(G4int i=0; i<lastI; ++i) // AMDB exists, try to find the (Z,N) isotope
     {
       if(colN[i]==tgN && colZ[i]==tgZ) // Try the record "i" in the AMDB
       {
@@ -233,7 +233,7 @@ G4double G4ChipsHyperonInelasticXS::CalculateCrossSection(G4int F, G4int I,
   {
     if(F<0)                            // This isotope was found in DAMDB =-----=> RETRIEVE
     {
-      G4int sync=LEN->size();
+      G4int sync=(G4int)LEN->size();
       if(sync<=I) G4cerr<<"*!*G4QPiMinusNuclCS::CalcCrosSect:Sync="<<sync<<"<="<<I<<G4endl;
       lastLEN=(*LEN)[I];               // Pointer to prepared LowEnergy cross sections
       lastHEN=(*HEN)[I];               // Pointer to prepared High Energy cross sections
@@ -257,7 +257,7 @@ G4double G4ChipsHyperonInelasticXS::CalculateCrossSection(G4int F, G4int I,
       }
       // --- End of possible separate function
       // *** The synchronization check ***
-      G4int sync=LEN->size();
+      G4int sync=(G4int)LEN->size();
       if(sync!=I)
       {
         G4cerr<<"***G4QHyperNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ

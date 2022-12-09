@@ -701,7 +701,7 @@ myuint_t MixMaxRng::modadd(myuint_t foo, myuint_t bar)
 #if defined(__x86_64__) && defined(__GNUC__) && (!defined(__ICC))
    //#warning Using assembler routine in modadd
    myuint_t out;
-   /* Assembler trick suggested by Andrzej Görlich     */
+   /* Assembler trick suggested by Andrzej Görlich     */
    __asm__ ("addq %2, %0; "
             "btrq $61, %0; "
             "adcq $0, %0; "

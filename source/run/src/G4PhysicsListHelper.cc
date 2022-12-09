@@ -118,7 +118,7 @@ void G4PhysicsListHelper::CheckParticleList() const
     if(!isEmProc)
     {
       G4ProcessVector* list = particle->GetProcessManager()->GetProcessList();
-      for(std::size_t idx = 0; idx < list->size(); ++idx)
+      for(G4int idx = 0; idx < (G4int)list->size(); ++idx)
       {
         isEmProc = ((*list)[idx])->GetProcessType() == fElectromagnetic;
         if(isEmProc)
@@ -561,7 +561,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess* process,
   {
     G4bool duplicated      = false;
     G4ProcessVector* pList = pManager->GetProcessList();
-    for(std::size_t idx = 0; idx < pList->size(); ++idx)
+    for(G4int idx = 0; idx < (G4int)pList->size(); ++idx)
     {
       const G4VProcess* p = (*pList)[idx];
       if((p->GetProcessType() == pType) && (p->GetProcessSubType() == pSubType))

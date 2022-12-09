@@ -16,6 +16,11 @@
 
   class G3toG4ActionInitialization {};
   class G3toG4DetectorConstruction {};
+  class Common::DetectorConstruction{};
+  class Common::DetectorConstruction0{};
+  class Common::GeantinoPhysicsList{};
+  class Common::GpsPrimaryGeneratorAction{};
+  class Common::GunPrimaryGeneratorAction{};
 
 /** @} */
 

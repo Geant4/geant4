@@ -46,8 +46,8 @@ class B1Run : public G4Run
 
     // method from the base class
     virtual void Merge(const G4Run*);
-    
-    virtual void AddEdep (G4double edep); 
+
+    virtual void AddEdep (G4double edep);
 
     // get methods
     G4double GetEdep()  const { return fEdep; }

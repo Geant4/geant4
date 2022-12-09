@@ -47,7 +47,7 @@ G4HyperHe5* G4HyperHe5::Definition() {
   const G4String name = "hyperHe5";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast< G4Ions* >( pTable->FindParticle( name ) );
+  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -108,7 +108,7 @@ G4HyperHe5* G4HyperHe5::Definition() {
     delete [] mode;
     anInstance->SetDecayTable( table );
   }
-  theInstance = reinterpret_cast< G4HyperHe5* >( anInstance );
+  theInstance = static_cast< G4HyperHe5* >( anInstance );
   return theInstance;
 }
 

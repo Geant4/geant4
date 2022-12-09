@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorMessenger.cc
+/// \file B2/B2b/src/DetectorMessenger.cc
 /// \brief Implementation of the B2b::DetectorMessenger class
 
 #include "DetectorMessenger.hh"

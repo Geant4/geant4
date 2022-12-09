@@ -32,13 +32,6 @@
 
 //_____________________________________________________________________________
 inline
-G4bool G4Hdf5AnalysisManager::IsOpenFileImpl() const
-{
-  return fFileManager->IsOpenFile();
-}
-
-//_____________________________________________________________________________
-inline
 toolx::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple();

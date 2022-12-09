@@ -54,7 +54,7 @@ G4DNACPA100WaterExcitationStructure::G4DNACPA100WaterExcitationStructure(): nLev
   energyConstant.push_back(12.91*eV);
   energyConstant.push_back(14.50*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

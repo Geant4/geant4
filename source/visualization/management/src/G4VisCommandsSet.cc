@@ -40,6 +40,8 @@
 #include "G4BoundingExtentScene.hh"
 #include <sstream>
 
+#define G4warn G4cout
+
 ////////////// /vis/set/arrow3DLineSegmentsPerCircle ////////////////////////////////////
 
 G4VisCommandSetArrow3DLineSegmentsPerCircle::G4VisCommandSetArrow3DLineSegmentsPerCircle ()
@@ -233,7 +235,7 @@ void G4VisCommandSetLineWidth::SetNewValue (G4UIcommand*, G4String newValue)
   fCurrentLineWidth = fpCommand->GetNewDoubleValue(newValue);
 
   if (verbosity >= G4VisManager::warnings) {
-    G4cout <<
+    G4warn <<
     "Line width for *future* \"/vis/scene/add/\" commands has been set to "
     << fCurrentLineWidth <<
     "\nSee \"/vis/viewer/set/lineWidth\" for more information."
@@ -442,7 +444,7 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
     iBegin = newValue.find_first_not_of(' ',iEnd);
     if (iBegin == G4String::npos) {
       if (verbosity >= G4VisManager::warnings) {
-        G4cout <<
+        G4warn <<
         "WARNING: G4VisCommandSetTouchable::SetNewValue"
 	"\n  A pair not found.  (There should be an even number of parameters.)"
         "\n  Command ignored."
@@ -458,7 +460,7 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
     std::istringstream iss(newValue.substr(iBegin,iEnd-iBegin));
     if (!(iss >> copyNo)) {
       if (verbosity >= G4VisManager::warnings) {
-        G4cout <<
+        G4warn <<
         "WARNING: G4VisCommandSetTouchable::SetNewValue"
         "\n  Error reading copy number - it was not numeric?"
         "\n  Command ignored."
@@ -500,7 +502,7 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
     }
   } else {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
       "WARNING: G4VisCommandSetTouchable::SetNewValue"
       "\n  Touchable not found."
       << G4endl;
@@ -577,11 +579,11 @@ void G4VisCommandSetVolumeForField::SetNewValue (G4UIcommand*, G4String newValue
 
   if (fCurrrentPVFindingsForField.empty()) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Volume \"" << name << "\"";
+      G4warn << "ERROR: Volume \"" << name << "\"";
       if (copyNo >= 0) {
-        G4cerr << ", copy no. " << copyNo << ",";
+        G4warn << ", copy no. " << copyNo << ",";
       }
-      G4cerr << " not found." << G4endl;
+      G4warn << " not found." << G4endl;
     }
     return;
   }

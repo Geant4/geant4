@@ -59,7 +59,7 @@ class G4UIsession;
 
 class G4UIXm : public G4VBasicShell, public G4VInteractiveSession {
 public: // With description
-  G4UIXm(int,char**);
+  G4UIXm(G4int,char**);
   // (argv, argc) or (0, NULL) had to be given.
   G4UIsession* SessionStart();
   // To enter interactive X loop ; waiting/executing command,...
@@ -86,15 +86,16 @@ private:
   void SecondaryLoop(G4String);
   G4bool GetHelpChoice(G4int&);
   void ExitHelp() const;
-private:
-  Widget form,shell,command,menuBar,text;
-  std::map<Widget,G4String, std::less<Widget> > commands;
   static void CommandEnteredCallback(Widget,XtPointer,XtPointer);
   static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
+  static void ButtonCallback(Widget,XtPointer,XtPointer);
+
+  Widget form,shell,command,menuBar,text;
+  std::map<Widget,G4String, std::less<Widget> > commands;
   G4bool fHelp;
   G4int fHelpChoice;
-  static void ButtonCallback(Widget,XtPointer,XtPointer);
+  G4String menu_str[6] = { "form", "menuBar", "command",
+                           "Clear", "clearButton", "text" };
 };
 
 #endif
-

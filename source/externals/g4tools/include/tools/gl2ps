@@ -821,12 +821,46 @@ inline void *tools_gl2psListPointer(tools_GL2PSlist *list, tools_GLint idx)
   return &list->array[idx * list->size];
 }
 
-inline void tools_gl2psListSort(tools_GL2PSlist *list,
-                          int (*fcmp)(const void *a, const void *b))
+//G.Barrand: begin:
+inline bool tools_gl2psPortableSort(void* a_items,size_t a_nitem,size_t a_item_size,int(*a_cmp)(const void*,const void*)) {
+  //  We observed that qsort on macOS/clang, Linux/gcc, Windows/VisualC++
+  // does not produce the same output list for objects considered as "the same".
+  // "Same objects" are put correctly contiguously but not in the same order
+  // according the platform. In case of gl2ps, if using qsort we have, at end,
+  // primitives in the output file which are not in the same order according the platform.
+  // Then, we let the possibility to use a portable sort algorithm that will
+  // give the same sorted list, and then the same output file, on all platforms.
+  if(a_nitem<=1) return true;
+  if(!a_item_size) return true;
+  void* tmp = ::malloc(a_item_size);
+  if(!tmp) return false;
+  char* p = (char*)a_items;
+  size_t i,j;
+  char* a = p;char* b;
+  for(i=0;i<a_nitem;i++,a+=a_item_size) {
+    b = p+a_item_size*(i+1);
+    for(j=i+1;j<a_nitem;j++,b+=a_item_size) {
+      if(a_cmp(b,a)>=0) continue;  //b>=a
+      ::memcpy(tmp,a,a_item_size);
+      ::memcpy(a,b,a_item_size);
+      ::memcpy(b,tmp,a_item_size);
+    }
+  }
+  ::free(tmp);
+  return true;
+}
+//G.Barrand: end.
+
+inline void tools_gl2psListSort(tools_GL2PScontext* gl2ps,
+                                tools_GL2PSlist *list,
+                                int (*fcmp)(const void *a, const void *b))
 {
-  if(!list)
-    return;
-  qsort(list->array, list->n, list->size, fcmp);
+  if(!list) return;
+  if(gl2ps->options & TOOLS_GL2PS_PORTABLE_SORT) {
+    tools_gl2psPortableSort(list->array, list->n, list->size, fcmp);
+  } else {
+    ::qsort(list->array, list->n, list->size, fcmp);
+  }
 }
 
 /* Must be a list of tools_GL2PSprimitives. */
@@ -1715,6 +1749,7 @@ inline int tools_gl2psCompareDepth(const void *a, const void *b)
   }
   else{
     /* Ensure that initial ordering is preserved when depths match. */
+    if(q->sortid==w->sortid) return 0;  //G.Barrand.
     return q->sortid < w->sortid ? -1 : 1;
   }
 }
@@ -1725,6 +1760,7 @@ inline int tools_gl2psTrianglesFirst(const void *a, const void *b)
 
   q = *(const tools_GL2PSprimitive* const*)a;
   w = *(const tools_GL2PSprimitive* const*)b;
+  if(q->type==w->type) return 0;  //G.Barrand.
   return (q->type < w->type ? 1 : -1);
 }
 
@@ -1882,11 +1918,11 @@ inline void tools_gl2psBuildBspTree(tools_GL2PScontext* gl2ps, tools_GL2PSbsptre
   }
 
   if(tools_gl2psListNbr(tree->primitives)){
-    tools_gl2psListSort(tree->primitives, tools_gl2psTrianglesFirst);
+    tools_gl2psListSort(gl2ps, tree->primitives, tools_gl2psTrianglesFirst);
   }
 
   if(tools_gl2psListNbr(frontlist)){
-    tools_gl2psListSort(frontlist, tools_gl2psTrianglesFirst);
+    tools_gl2psListSort(gl2ps, frontlist, tools_gl2psTrianglesFirst);
     tree->front = (tools_GL2PSbsptree*)tools_gl2psMalloc(sizeof(tools_GL2PSbsptree));
     tools_gl2psBuildBspTree(gl2ps, tree->front, frontlist);
   }
@@ -1895,7 +1931,7 @@ inline void tools_gl2psBuildBspTree(tools_GL2PScontext* gl2ps, tools_GL2PSbsptre
   }
 
   if(tools_gl2psListNbr(backlist)){
-    tools_gl2psListSort(backlist, tools_gl2psTrianglesFirst);
+    tools_gl2psListSort(gl2ps, backlist, tools_gl2psTrianglesFirst);
     tree->back = (tools_GL2PSbsptree*)tools_gl2psMalloc(sizeof(tools_GL2PSbsptree));
     tools_gl2psBuildBspTree(gl2ps, tree->back, backlist);
   }
@@ -5335,6 +5371,9 @@ inline void tools_gl2psSVGGetCoordsAndColors(tools_GL2PScontext* gl2ps, int n, t
   }
 }
 
+#include <sstream>  //G.Barrand
+#include <iomanip>  //G.Barrand
+
 inline void tools_gl2psSVGGetColorString(tools_GL2PSrgba rgba, char str[32])
 {
   int _r = (int)(255. * rgba[0]);
@@ -5343,7 +5382,15 @@ inline void tools_gl2psSVGGetColorString(tools_GL2PSrgba rgba, char str[32])
   int rc = (_r < 0) ? 0 : (_r > 255) ? 255 : _r;
   int gc = (_g < 0) ? 0 : (_g > 255) ? 255 : _g;
   int bc = (_b < 0) ? 0 : (_b > 255) ? 255 : _b;
-  sprintf(str, "#%2.2x%2.2x%2.2x", rc, gc, bc);
+//sprintf(str, "#%2.2x%2.2x%2.2x", rc, gc, bc); //G.Barrand
+//G.Barrand:begin:
+  std::ostringstream oss;
+  oss << "#";
+  oss << std::setw(2) << std::setfill('0') << std::hex << rc;
+  oss << std::setw(2) << std::setfill('0') << std::hex << gc;
+  oss << std::setw(2) << std::setfill('0') << std::hex << bc;
+  strcpy(str,oss.str().c_str());
+//G.Barrand:end.
 }
 
 inline void tools_gl2psPrintSVGHeader(tools_GL2PScontext* gl2ps)
@@ -5594,30 +5641,38 @@ inline void tools_gl2psPrintSVGPrimitive(tools_GL2PScontext* gl2ps, void *data)
                   col, prim->width);
       switch (prim->linecap){
       case TOOLS_GL2PS_LINE_CAP_BUTT:
-        sprintf (lcap, "%s", "butt");
+      //sprintf (lcap, "%s", "butt");  //G.Barrand
+        strcpy (lcap, "butt");         //G.Barrand
         break;
       case TOOLS_GL2PS_LINE_CAP_ROUND:
-        sprintf (lcap, "%s", "round");
+      //sprintf (lcap, "%s", "round"); //G.Barrand
+        strcpy (lcap, "round");        //G.Barrand
         break;
       case TOOLS_GL2PS_LINE_CAP_SQUARE:
-        sprintf (lcap, "%s", "square");
+      //sprintf (lcap, "%s", "square"); //G.Barrand
+        strcpy (lcap, "square");        //G.Barrand
         break;
       default: /*G.Barrand : to quiet Coverity :*/
-        sprintf (lcap, "%s", "butt");
+      //sprintf (lcap, "%s", "butt");   //G.Barrand
+        strcpy (lcap, "butt");          //G.Barrand
         break;
       }
       switch (prim->linejoin){
       case TOOLS_GL2PS_LINE_JOIN_MITER:
-        sprintf (ljoin, "%s", "miter");
+      //sprintf (ljoin, "%s", "miter");  //G.Barrand
+        strcpy (ljoin, "miter");         //G.Barrand 
         break;
       case TOOLS_GL2PS_LINE_JOIN_ROUND:
-        sprintf (ljoin, "%s", "round");
+      //sprintf (ljoin, "%s", "round");  //G.Barrand
+        strcpy (ljoin, "round");         //G.Barrand
         break;
       case TOOLS_GL2PS_LINE_JOIN_BEVEL:
-        sprintf (ljoin, "%s", "bevel");
+      //sprintf (ljoin, "%s", "bevel");  //G.Barrand
+        strcpy (ljoin, "bevel");         //G.Barrand
         break;
       default: /*G.Barrand : to quiet Coverity :*/
-        sprintf (ljoin, "%s", "miter");
+      //sprintf (ljoin, "%s", "miter");  //G.Barrand 
+        strcpy (ljoin, "miter");         //G.Barrand
         break;
       }
       tools_gl2psPrintf(gl2ps,"stroke-linecap=\"%s\" stroke-linejoin=\"%s\" ",
@@ -6168,7 +6223,7 @@ inline tools_GLint tools_gl2psPrintPrimitives(tools_GL2PScontext* gl2ps)
     break;
   case TOOLS_GL2PS_SIMPLE_SORT :
     tools_gl2psListAssignSortIds(gl2ps->primitives);
-    tools_gl2psListSort(gl2ps->primitives, tools_gl2psCompareDepth);
+    tools_gl2psListSort(gl2ps, gl2ps->primitives, tools_gl2psCompareDepth);
     if(gl2ps->options & TOOLS_GL2PS_OCCLUSION_CULL){
       tools_gl2psListActionInverseContext(gl2ps, gl2ps->primitives, tools_gl2psAddInImageTree);
       tools_gl2psFreeBspImageTree(&gl2ps->imagetree);

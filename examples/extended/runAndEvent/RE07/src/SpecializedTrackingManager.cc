@@ -33,9 +33,8 @@
 #include "G4ProcessManager.hh"
 #include "G4RegionStore.hh"
 #include "G4StackManager.hh"
-#include "G4TrackingManager.hh"
-
 #include "G4SystemOfUnits.hh"
+#include "G4TrackingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,26 +46,21 @@ SpecializedTrackingManager::~SpecializedTrackingManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SpecializedTrackingManager::BuildPhysicsTable(
-  const G4ParticleDefinition& part)
+void SpecializedTrackingManager::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(fBackRegion == nullptr)
-  {
+  if (fBackRegion == nullptr) {
     fBackRegion = G4RegionStore::GetInstance()->GetRegion("Back", false);
   }
 
-  G4ProcessManager* pManager       = part.GetProcessManager();
+  G4ProcessManager* pManager = part.GetProcessManager();
   G4ProcessManager* pManagerShadow = part.GetMasterProcessManager();
 
   G4ProcessVector* pVector = pManager->GetProcessList();
-  for(std::size_t j = 0; j < pVector->size(); ++j)
-  {
-    if(pManagerShadow == pManager)
-    {
+  for (std::size_t j = 0; j < pVector->size(); ++j) {
+    if (pManagerShadow == pManager) {
       (*pVector)[j]->BuildPhysicsTable(part);
     }
-    else
-    {
+    else {
       (*pVector)[j]->BuildWorkerPhysicsTable(part);
     }
   }
@@ -74,21 +68,17 @@ void SpecializedTrackingManager::BuildPhysicsTable(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SpecializedTrackingManager::PreparePhysicsTable(
-  const G4ParticleDefinition& part)
+void SpecializedTrackingManager::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  G4ProcessManager* pManager       = part.GetProcessManager();
+  G4ProcessManager* pManager = part.GetProcessManager();
   G4ProcessManager* pManagerShadow = part.GetMasterProcessManager();
 
   G4ProcessVector* pVector = pManager->GetProcessList();
-  for(std::size_t j = 0; j < pVector->size(); ++j)
-  {
-    if(pManagerShadow == pManager)
-    {
+  for (std::size_t j = 0; j < pVector->size(); ++j) {
+    if (pManagerShadow == pManager) {
       (*pVector)[j]->PreparePhysicsTable(part);
     }
-    else
-    {
+    else {
       (*pVector)[j]->PrepareWorkerPhysicsTable(part);
     }
   }
@@ -98,20 +88,18 @@ void SpecializedTrackingManager::PreparePhysicsTable(
 
 void SpecializedTrackingManager::HandOverOneTrack(G4Track* aTrack)
 {
-  if(aTrack->GetKineticEnergy() < 100 * MeV)
-  {
+  if (aTrack->GetKineticEnergy() < 100 * MeV) {
     // If the particle energy is lower than 100 MeV, track it immediately by
     // passing to the generic G4TrackingManager. This avoids storing lower
     // energy particles in the buffer and feeding it through the specialized
     // tracking.
-    G4EventManager* eventManager    = G4EventManager::GetEventManager();
+    G4EventManager* eventManager = G4EventManager::GetEventManager();
     G4TrackingManager* trackManager = eventManager->GetTrackingManager();
 
     trackManager->ProcessOneTrack(aTrack);
-    if(aTrack->GetTrackStatus() != fStopAndKill)
-    {
-      G4Exception("SpecializedTrackingManager::HandOverOneTrack", "NotStopped",
-                  FatalException, "track was not stopped");
+    if (aTrack->GetTrackStatus() != fStopAndKill) {
+      G4Exception("SpecializedTrackingManager::HandOverOneTrack", "NotStopped", FatalException,
+        "track was not stopped");
     }
 
     G4TrackVector* secondaries = trackManager->GimmeSecondaries();
@@ -127,26 +115,22 @@ void SpecializedTrackingManager::HandOverOneTrack(G4Track* aTrack)
 
 void SpecializedTrackingManager::FlushEvent()
 {
-  G4EventManager* eventManager       = G4EventManager::GetEventManager();
-  G4TrackingManager* trackManager    = eventManager->GetTrackingManager();
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  G4TrackingManager* trackManager = eventManager->GetTrackingManager();
   G4SteppingManager* steppingManager = trackManager->GetSteppingManager();
-  G4TrackVector* secondaries         = trackManager->GimmeSecondaries();
+  G4TrackVector* secondaries = trackManager->GimmeSecondaries();
 
-  for(G4Track* aTrack : fBufferedTracks)
-  {
+  for (G4Track* aTrack : fBufferedTracks) {
     // Clear secondary particle vector
-    for(std::size_t itr = 0; itr < secondaries->size(); ++itr)
-    {
-      delete(*secondaries)[itr];
+    for (std::size_t itr = 0; itr < secondaries->size(); ++itr) {
+      delete (*secondaries)[itr];
     }
     secondaries->clear();
 
     steppingManager->SetInitialStep(aTrack);
 
-    G4UserTrackingAction* userTrackingAction =
-      trackManager->GetUserTrackingAction();
-    if(userTrackingAction != nullptr)
-    {
+    G4UserTrackingAction* userTrackingAction = trackManager->GetUserTrackingAction();
+    if (userTrackingAction != nullptr) {
       userTrackingAction->PreUserTrackingAction(aTrack);
     }
 
@@ -160,24 +144,19 @@ void SpecializedTrackingManager::FlushEvent()
     aTrack->GetDefinition()->GetProcessManager()->StartTracking(aTrack);
 
     // Track the particle Step-by-Step while it is alive
-    while((aTrack->GetTrackStatus() == fAlive) ||
-          (aTrack->GetTrackStatus() == fStopButAlive))
-    {
+    while ((aTrack->GetTrackStatus() == fAlive) || (aTrack->GetTrackStatus() == fStopButAlive)) {
       G4Region* region = aTrack->GetVolume()->GetLogicalVolume()->GetRegion();
-      if(region == fBackRegion)
-      {
+      if (region == fBackRegion) {
         StepInBackRegion(aTrack);
       }
-      else
-      {
+      else {
         StepOutside(aTrack);
       }
     }
 
     aTrack->GetDefinition()->GetProcessManager()->EndTracking();
 
-    if(userTrackingAction != nullptr)
-    {
+    if (userTrackingAction != nullptr) {
       userTrackingAction->PostUserTrackingAction(aTrack);
     }
 
@@ -192,33 +171,28 @@ void SpecializedTrackingManager::FlushEvent()
 
 void SpecializedTrackingManager::StepInBackRegion(G4Track* aTrack)
 {
-  G4EventManager* eventManager       = G4EventManager::GetEventManager();
-  G4TrackingManager* trackManager    = eventManager->GetTrackingManager();
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  G4TrackingManager* trackManager = eventManager->GetTrackingManager();
   G4SteppingManager* steppingManager = trackManager->GetSteppingManager();
 
   // Track the particle Step-by-Step while it is alive and inside the "Back"
   // region of the detector. Implement a low-energy cut-off for particles
   // below 100 MeV. More specialized handling would also be possible, such
   // as only killing particles in non-sensitive materials / volumes.
-  while((aTrack->GetTrackStatus() == fAlive) ||
-        (aTrack->GetTrackStatus() == fStopButAlive))
-  {
+  while ((aTrack->GetTrackStatus() == fAlive) || (aTrack->GetTrackStatus() == fStopButAlive)) {
     aTrack->IncrementCurrentStepNumber();
     steppingManager->Stepping();
 
-    if(aTrack->GetTrackStatus() != fStopAndKill)
-    {
+    if (aTrack->GetTrackStatus() != fStopAndKill) {
       // Switch the touchable to update the volume, which is checked in the
       // condition below and at the call site.
       aTrack->SetTouchableHandle(aTrack->GetNextTouchableHandle());
       G4Region* region = aTrack->GetVolume()->GetLogicalVolume()->GetRegion();
-      if(region != fBackRegion)
-      {
+      if (region != fBackRegion) {
         return;
       }
 
-      if(aTrack->GetKineticEnergy() < 100 * MeV)
-      {
+      if (aTrack->GetKineticEnergy() < 100 * MeV) {
         // Kill the particle.
         aTrack->SetTrackStatus(fStopAndKill);
       }
@@ -230,26 +204,22 @@ void SpecializedTrackingManager::StepInBackRegion(G4Track* aTrack)
 
 void SpecializedTrackingManager::StepOutside(G4Track* aTrack)
 {
-  G4EventManager* eventManager       = G4EventManager::GetEventManager();
-  G4TrackingManager* trackManager    = eventManager->GetTrackingManager();
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  G4TrackingManager* trackManager = eventManager->GetTrackingManager();
   G4SteppingManager* steppingManager = trackManager->GetSteppingManager();
 
   // Track the particle Step-by-Step while it is alive and still outside of
   // the "Back" region.
-  while((aTrack->GetTrackStatus() == fAlive) ||
-        (aTrack->GetTrackStatus() == fStopButAlive))
-  {
+  while ((aTrack->GetTrackStatus() == fAlive) || (aTrack->GetTrackStatus() == fStopButAlive)) {
     aTrack->IncrementCurrentStepNumber();
     steppingManager->Stepping();
 
-    if(aTrack->GetTrackStatus() != fStopAndKill)
-    {
+    if (aTrack->GetTrackStatus() != fStopAndKill) {
       // Switch the touchable to update the volume, which is checked in the
       // condition below and at the call site.
       aTrack->SetTouchableHandle(aTrack->GetNextTouchableHandle());
       G4Region* region = aTrack->GetVolume()->GetLogicalVolume()->GetRegion();
-      if(region == fBackRegion)
-      {
+      if (region == fBackRegion) {
         return;
       }
     }

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -41,6 +41,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
@@ -68,7 +69,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -104,8 +105,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -146,18 +146,18 @@ Index : 0     used in the geometry : Yes
 
  
   compCrossSectionPerVolume: 	0.0761496 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0341792 cm^-1	 0.600247 cm^-1
-  cross section per volume : 	 0.076168 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0341803 cm^-1	 0.600266 cm^-1
-  cross section per mass   : 	  1.43092 mm2/g 	  9.20379 mm2/g 	        0 um2/mg	  642.126 um2/mg	  11.2768 mm2/g 
+  cross section per volume : 	 0.076168 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0341792 cm^-1	 0.600265 cm^-1
+  cross section per mass   : 	  1.43092 mm2/g 	  9.20379 mm2/g 	        0 um2/mg	  642.104 um2/mg	  11.2768 mm2/g 
  
-  mean free path           : 	  13.1289 cm 	  2.04116 cm 	5.82593e+288 pc 	  29.2566 cm 	  1.66593 cm 
-        (g/cm2)            : 	   69.885 g/cm2 	  10.8651 g/cm2 	2.88022e+285 kg/cm2	  155.733 g/cm2 	  8.86773 g/cm2 
+  mean free path           : 	  13.1289 cm 	  2.04116 cm 	5.82593e+288 pc 	  29.2575 cm 	  1.66593 cm 
+        (g/cm2)            : 	   69.885 g/cm2 	  10.8651 g/cm2 	2.88022e+285 kg/cm2	  155.738 g/cm2 	  8.86775 g/cm2 
 
 -----------------------------------------------------------
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001107s Sys=0.000000s
+  User=0.000000s Real=0.000520s Sys=0.000000s
 
   Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -227,7 +227,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000183s Sys=0.000000s
+  User=0.000000s Real=0.000131s Sys=0.000000s
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

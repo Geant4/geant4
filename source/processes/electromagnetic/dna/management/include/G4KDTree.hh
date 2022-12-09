@@ -47,6 +47,7 @@
 #define G4KDTREE_HH 1
 
 #include <vector>
+#include "G4Types.hh"
 #include "G4KDNode.hh"
 #include "G4KDTreeResult.hh"
 
@@ -71,7 +72,7 @@ class G4KDTree
   friend class G4KDNode_Base;
 
  public:
-  G4KDTree(size_t dim = 3);
+  G4KDTree(std::size_t dim = 3);
   ~G4KDTree();
   void Clear();
 
@@ -86,7 +87,7 @@ class G4KDTree
     }
   }
 
-  size_t GetDim() const { return fDim; }
+  std::size_t GetDim() const { return fDim; }
   G4int GetNbNodes() const { return fNbNodes; }
   G4KDNode_Base* GetRoot() { return fRoot; }
 
@@ -120,7 +121,7 @@ class G4KDTree
   G4KDTreeResultHandle NearestInRange(const Position& pos, const G4double& range);
   G4KDTreeResultHandle NearestInRange(G4KDNode_Base* node, const G4double& range);
 
-  void* operator new(size_t);
+  void* operator new(std::size_t);
   void operator delete(void*);
 
  protected:
@@ -128,16 +129,16 @@ class G4KDTree
   class HyperRect
   {
    public:
-    HyperRect(size_t dim)
+    HyperRect(std::size_t dim)
       : fDim(dim)
-      , fMin(new double[fDim])
-      , fMax(new double[fDim])
+      , fMin(new G4double[fDim])
+      , fMax(new G4double[fDim])
     {}
 
     template <typename Position>
     void SetMinMax(const Position& min, const Position& max)
     {
-      for(size_t i = 0; i < fDim; i++)
+      for(G4int i = 0; i < (G4int)fDim; ++i)
       {
         fMin[i] = min[i];
         fMax[i] = max[i];
@@ -156,7 +157,7 @@ class G4KDTree
       fMin = new G4double[fDim];
       fMax = new G4double[fDim];
 
-      for(size_t i = 0; i < fDim; i++)
+      for(std::size_t i = 0; i < fDim; ++i)
       {
         fMin[i] = rect.fMin[i];
         fMax[i] = rect.fMax[i];
@@ -166,7 +167,7 @@ class G4KDTree
     template <typename Position>
     void Extend(const Position& pos)
     {
-      for(size_t i = 0; i < fDim; i++)
+      for(G4int i = 0; i < (G4int)fDim; ++i)
       {
         if(pos[i] < fMin[i])
         {
@@ -180,11 +181,11 @@ class G4KDTree
     }
 
     template <typename Position>
-    bool CompareDistSqr(const Position& pos, const G4double* bestmatch)
+    G4bool CompareDistSqr(const Position& pos, const G4double* bestmatch)
     {
       G4double result = 0;
 
-      for(size_t i = 0; i < fDim; i++)
+      for(G4int i = 0; i < (G4int)fDim; ++i)
       {
         if(pos[i] < fMin[i])
         {
@@ -203,12 +204,12 @@ class G4KDTree
       return true;
     }
 
-    size_t GetDim() { return fDim; }
+    std::size_t GetDim() { return fDim; }
     G4double* GetMin() { return fMin; }
     G4double* GetMax() { return fMax; }
 
    protected:
-    size_t fDim;
+    std::size_t fDim;
     G4double *fMin, *fMax; /* minimum/maximum coords */
 
    private:
@@ -232,7 +233,7 @@ class G4KDTree
 
   template <typename Position>
   void __NearestToPosition(G4KDNode_Base* node, const Position& pos,
-                           G4KDNode_Base*& result, double* result_dist_sq,
+                           G4KDNode_Base*& result, G4double* result_dist_sq,
                            HyperRect* fRect);
 
   template <typename Position>
@@ -243,7 +244,7 @@ class G4KDTree
  protected:
   HyperRect* fRect     = nullptr;
   G4KDNode_Base* fRoot = nullptr;
-  size_t fDim;
+  std::size_t fDim;
   G4int fNbNodes       = 0;
   G4int fNbActiveNodes = 0;
   G4KDMap* fKDMap;

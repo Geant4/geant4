@@ -6,6 +6,12 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-17 Gabriele Cosmo (event-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-05 Ben Morgan (event-V11-00-06)
+- Remove unneeded dependency on G4magneticfield
+
 ## 2022-04-04 Ben Morgan (event-V11-00-05)
 - Apply basic set of C++ modernization fixes suggested by clang-tidy
 

@@ -1229,7 +1229,7 @@ DamageClassification* DamageRecord::GetClassification(
       {
         nDSB++;
         lastTenTracked2 =
-          (1 << (utility::fls(lastTenTracked2) - 1)) ^ lastTenTracked2;
+          (1 << (utility::Fls(lastTenTracked2) - 1)) ^ lastTenTracked2;
         if((count2 > 1) || (count1))
         {
           nDSBPlus++;
@@ -1253,7 +1253,7 @@ DamageClassification* DamageRecord::GetClassification(
       {
         nDSB++;
         lastTenTracked1 =
-          (1 << (utility::fls(lastTenTracked1) - 1)) ^ lastTenTracked1;
+          (1 << (utility::Fls(lastTenTracked1) - 1)) ^ lastTenTracked1;
         if((count1 > 1) || (count2))
         {
           nDSBPlus++;

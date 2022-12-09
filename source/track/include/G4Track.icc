@@ -439,7 +439,7 @@ inline void G4Track::SetParentResonanceID(const G4int parentID)
 }
 
 inline G4bool G4Track::HasParentResonance() const {
-  return ( fParentResonanceDef == nullptr ? false : true );
+  return ( fParentResonanceDef != nullptr );
 }
 
 inline G4int G4Track::GetParentResonancePDGEncoding() const {

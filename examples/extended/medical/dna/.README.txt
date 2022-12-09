@@ -35,6 +35,8 @@ This directory contains a set of Geant4-DNA examples.
 
    - \link ExampleAuNP AuNP \endlink Simulation calculates absorbed dose around AuNP.
 
+   - \link Examplejetcounter jetcounter \endlink A setup for simulation of a typical experiment with the Jet Counter nanodosemeter
+
 \section dna_s1 Chemistry
    - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
    - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.

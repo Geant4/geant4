@@ -57,7 +57,7 @@ void ChromosomeMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if(command == fpAddChromosome.get())
   {
-    std::vector<G4String> values = utility::split(newValue, ' ');
+    std::vector<G4String> values = utility::Split(newValue, ' ');
     G4String key                 = values[0];
     std::vector<G4String> commands;
     for(auto it = (values.begin() + 1); it != values.end(); it++)

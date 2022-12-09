@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -131,7 +131,6 @@ THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhys
 #    Phantoms
 # fullWater // water box
 # boxInBox  // box in a box with a layer of PMMA at the exposed surface
-Using seed 1
 I'm building acc1 accelerator
 /control/execute acc1.mac
 /accelerator/isoCentre 1000 mm
@@ -251,6 +250,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -278,7 +278,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -314,8 +314,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -357,8 +356,8 @@ conv:  for gamma SubType=14 BuildTable=1
 Livermore5DConversion : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      Lambda table from 100 eV  to 150 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 176 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -481,7 +480,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LindhardSorensen : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -974,10 +973,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.510000s Real=16.713021s Sys=0.000000s
+  User=18.270000s Real=18.437294s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 196
-loop elapsed time [s] : 16.55
+ Number of entries 144
+loop elapsed time [s] : 18.3
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1201,10 +1200,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.850000s Real=17.085527s Sys=0.010000s
+  User=17.640000s Real=17.773664s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 126
-loop elapsed time [s] : 16.89
+ Number of entries 181
+loop elapsed time [s] : 17.68
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1498,10 +1497,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=17.100000s Real=17.334355s Sys=0.010000s
+  User=17.290000s Real=17.412110s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 116
-loop elapsed time [s] : 17.14
+ Number of entries 166
+loop elapsed time [s] : 17.34
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1725,13 +1724,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.950000s Real=17.184810s Sys=0.010000s
+  User=17.080000s Real=17.203649s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 116
-loop elapsed time [s] : 16.99
+ Number of entries 154
+loop elapsed time [s] : 17.11
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 70.7
+loop elapsed time [s] : 73.92
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1746,10 +1745,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 22
+Total navigation history collections cleaned: 24
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0327 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0346 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00577 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00288 MB
@@ -1761,11 +1760,11 @@ Pool ID '17G4DynamicParticle', size : 0.00385 MB
 Pool ID '7G4Track', size : 0.00769 MB
 Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '12G4Trajectory', size : 0.00288 MB
-Pool ID '17G4TrajectoryPoint', size : 0.0356 MB
+Pool ID '12G4Trajectory', size : 0.00385 MB
+Pool ID '17G4TrajectoryPoint', size : 0.0442 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 0.1 MB
+Dynamic pools deleted: 15 / Total memory freed: 0.11 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

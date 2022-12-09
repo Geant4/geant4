@@ -178,7 +178,7 @@ void G4MicroElecElasticModel_new::Initialise(const G4ParticleDefinition* /*parti
     
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
     
     for (G4int i = 0; i < numOfCouples; ++i) {
       const G4Material* material =

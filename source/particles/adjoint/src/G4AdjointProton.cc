@@ -71,7 +71,7 @@ G4AdjointProton* G4AdjointProton::Definition()
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
     anInstance->SetPDGMagneticMoment( 2.792847351 * mN);
   }
-  theInstance = reinterpret_cast<G4AdjointProton*>(anInstance);
+  theInstance = static_cast<G4AdjointProton*>(anInstance);
   return theInstance;
 }
 

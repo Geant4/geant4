@@ -47,7 +47,7 @@ void G4PreCompoundFragmentVector::SetVector(pcfvector * avector)
     theChannels = avector;
   }
   if(theChannels) {
-    nChannels = theChannels->size();
+    nChannels = (G4int)theChannels->size();
     probabilities.resize(nChannels, 0.0);
   } else {
     nChannels = 0;

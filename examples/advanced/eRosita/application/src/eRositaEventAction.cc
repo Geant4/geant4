@@ -23,18 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
 #include "eRositaEventAction.hh"
 
 #include "G4Event.hh"
-//#include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
 
- 
 eRositaEventAction::eRositaEventAction()
 {
 }
@@ -43,38 +39,54 @@ eRositaEventAction::~eRositaEventAction()
 {
 }
 
-void eRositaEventAction::BeginOfEventAction(const G4Event* evt)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void eRositaEventAction::BeginOfEventAction(const G4Event* event)
 {
-  G4int nEvent = evt->GetEventID() + 1;
-  
-  G4int frequency = 100;
-  if (nEvent > 1000 ) frequency = 1000;
-  if (nEvent > 10000) frequency = 10000;
-  if (nEvent > 100000) frequency = 100000;
- 
-  G4int remainder = nEvent % frequency;
-  if (remainder == 0) G4cout << "---- eRosita event counter: " << nEvent
-                            << std::endl;
+    auto numberOfEvents = event->GetEventID() + 1;
+
+    constexpr auto INITIAL_FREQUENCY{100};
+    constexpr auto FIRST_FREQUENCY_THRESHOLD{1000};
+    constexpr auto SECOND_FREQUENCY_THRESHOLD{10000};
+    constexpr auto THIRD_FREQUENCY_THRESHOLD{100000};
+
+    auto frequency = INITIAL_FREQUENCY;
+    if (numberOfEvents > FIRST_FREQUENCY_THRESHOLD) {
+        frequency = FIRST_FREQUENCY_THRESHOLD;
+    }
+    if (numberOfEvents > SECOND_FREQUENCY_THRESHOLD) {
+        frequency = SECOND_FREQUENCY_THRESHOLD;
+    }
+    if (numberOfEvents > THIRD_FREQUENCY_THRESHOLD) {
+        frequency = THIRD_FREQUENCY_THRESHOLD;
+    }
+
+    auto remainder = numberOfEvents % frequency;
+    if (remainder == 0) {
+        G4cout << "---- eRosita number of events: " << numberOfEvents << G4endl;
+    }
 }
 
-void eRositaEventAction::EndOfEventAction(const G4Event*) // evt)
-{
-/*
-  G4int event_id = evt->GetEventID();
-  
-  // get number of stored trajectories
-  //
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
-  // periodic printing
-  //
-  if (event_id < 100 || event_id%100 == 0) {
-    //G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-    //G4cout << "    " << n_trajectories 
-    // 	   << " trajectories stored in this event." << G4endl;
-  }
-*/
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void eRositaEventAction::EndOfEventAction(const G4Event* event)
+{
+    auto eventIdentifier = event->GetEventID();
+
+    // get the number of stored trajectories
+
+    auto *trajectoryContainer = event->GetTrajectoryContainer();
+    auto numberOfTrajectories = 0;
+    if (trajectoryContainer != nullptr) {
+        numberOfTrajectories = trajectoryContainer->entries();
+    }
+
+    // periodic printing
+
+    constexpr auto THRESHOLD{100};
+
+    if (eventIdentifier < THRESHOLD || eventIdentifier % THRESHOLD == 0) {
+        G4cout << ">>> Event: " << event->GetEventID() << G4endl;
+        G4cout << "    " << numberOfTrajectories << " trajectories stored in this event." << G4endl;
+    }
+}

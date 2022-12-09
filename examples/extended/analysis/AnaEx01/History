@@ -5,6 +5,14 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-11-04 I. Hrivnacova (AnaEx01-V11-00-02)
+- Updated README files (new macros description)
+
+## 2022-11-03 I. Hrivnacova (AnaEx01-V11-00-01)
+- Added test macros for all supported file types
+  and moved instatiating of G4AnalysisManager in the HistoManager class
+  constructor to get analysis commands available before run initialization
+
 ## 2021-12-10 Ben Morgan (AnaEx01-V11-00-00)
 - Change to new Markdown History format
 

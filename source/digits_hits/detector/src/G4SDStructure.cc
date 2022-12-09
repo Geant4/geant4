@@ -35,11 +35,11 @@ G4SDStructure::G4SDStructure(const G4String& aPath)
 {
   pathName = aPath;
   dirName  = aPath;
-  G4int i  = dirName.length();
+  auto i  = dirName.length();
   if(i > 1)
   {
     dirName.erase(i - 1);
-    G4int isl = dirName.rfind('/');
+    auto isl = dirName.rfind('/');
     dirName.erase(0, isl + 1);
     dirName += "/";
   }

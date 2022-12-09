@@ -6,6 +6,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-16 Gabriele Cosmo (materials-V11-00-19)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-03 Vladimir Ivanchenko (materials-V11-00-18)
+- G4NistMaterialBuilder - S. Zein fix bio-medical material
+    descriptions for G4_ADENINE, G4_GUANINE, G4_CYTOSINE,
+    G4_THYMINE, G4_DEOXYRIBOSE, and add G4_PHOSPHORIC_ACID
+
+## 2022-10-26 Daren Sawkey (materials-V11-00-17)
+- G4MaterialPropertiesIndex, G4MaterialPropertiesTable, G4SurfaceProperty
+  Parameters to specify opticalphoton transport through thin film coating.
+  Contribution of Laurie Cappellugola et al, Aix Marseille U.
+
+## 2022-10-20 Vladimir Ivanchenko (materials-V11-00-16)
+- G4Material - added an extra check (nAtoms>0) inside 
+    method AddElementByNumberOfAtoms(..) to address #2514 
+
+## 2022-10-13 Vladimir Ivanchenko (materials-V11-00-15)
+- G4AtomicShell - extra data is added for Z=101-104 by R. Chakma;
+- G4AtomicShell, G4AtomicShell_XDB_EADL - change format of 
+    internal tables allowing to make diff and see differences
+    in a clear way
+
+## 2022-08-30 Vladimir Ivanchenko (materials-V11-00-14)
+- G4CrystalExtension - fixed Coverity warning.
+
+## 2022-08-30 Vladimir Ivanchenko (materials-V11-00-13)
+- G4CrystalExtension - fixed Coverity warning and minor clean-up.
+
+## 2022-07-19 Vladimir Ivanchenko (materials-V11-00-12)
+- fixed Coverity warning in G4CrystalExtension.
+
 ## 2022-05-23 Gabriele Cosmo (materials-V11-00-11)
 - Corrected G4UCNMicroRoughnessHelper destructor.
 

@@ -37,7 +37,6 @@
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
 #include "G4ITTransportationManager.hh"
-// #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 #include "G4GeometryTolerance.hh"
 #include "G4ParticleTable.hh"
 #include "G4ITTrackingManager.hh"
@@ -62,7 +61,7 @@
 
 using namespace std;
 
-static const size_t SizeOfSelectedDoItVector = 100;
+static const std::size_t SizeOfSelectedDoItVector = 100;
 
 template<typename T>
   inline bool IsInf(T value)
@@ -326,7 +325,7 @@ void G4ITStepProcessor::ActiveOnlyITProcess(G4ProcessManager* processManager)
   G4ProcessVector* processVector = processManager->GetProcessList();
 
   G4VITProcess* itProcess = 0;
-  for(std::size_t i = 0; i < processVector->size(); ++i)
+  for(G4int i = 0; i < (G4int)processVector->size(); ++i)
   {
     G4VProcess* base_process = (*processVector)[i];
     itProcess = dynamic_cast<G4VITProcess*>(base_process);
@@ -434,7 +433,7 @@ void G4ITStepProcessor::SetupGeneralProcessInfo(G4ParticleDefinition* particle,
   {
     fpProcessInfo->fpTransportation = dynamic_cast<G4ITTransportation*>
     ((*fpProcessInfo->fpAlongStepGetPhysIntVector)
-        [fpProcessInfo->MAXofAlongStepLoops-1]);
+        [G4int(fpProcessInfo->MAXofAlongStepLoops-1)]);
 
     if(fpProcessInfo->fpTransportation == 0)
     {
@@ -549,7 +548,7 @@ void G4ITStepProcessor::GetAtRestIL()
 
   unsigned int NofInactiveProc=0;
 
-  for( size_t ri=0; ri < fpProcessInfo->MAXofAtRestLoops; ri++ )
+  for( G4int ri=0; ri < (G4int)fpProcessInfo->MAXofAtRestLoops; ++ri )
   {
     fpCurrentProcess = dynamic_cast<G4VITProcess*>((*fpProcessInfo->fpAtRestGetPhysIntVector)[ri]);
     if (fpCurrentProcess== 0)
@@ -985,7 +984,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
   fpState->fPhysicalStep = DBL_MAX; // Initialize by a huge number
   fPhysIntLength = DBL_MAX; // Initialize by a huge number
 
-  double proposedTimeStep = DBL_MAX;
+  G4double proposedTimeStep = DBL_MAX;
   G4VProcess* processWithPostStepGivenByTimeStep(0);
 
   // GPIL for PostStep
@@ -998,10 +997,10 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
   //         << " id : " << fpTrack->GetTrackID()
   //         << G4endl;
 
-  for(size_t np = 0; np < fpProcessInfo->MAXofPostStepLoops; np++)
+  for(std::size_t np = 0; np < fpProcessInfo->MAXofPostStepLoops; ++np)
   {
     fpCurrentProcess = dynamic_cast<G4VITProcess*>((*fpProcessInfo
-        ->fpPostStepGetPhysIntVector)[np]);
+        ->fpPostStepGetPhysIntVector)[(G4int)np]);
     if(fpCurrentProcess == 0)
     {
       (fpState->fSelectedPostStepDoItVector)[np] = InActivated;
@@ -1058,8 +1057,8 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
     if(fCondition == ExclusivelyForced)
     {
-      for(size_t nrest = np + 1; nrest < fpProcessInfo->MAXofPostStepLoops;
-          nrest++)
+      for(std::size_t nrest = np + 1; nrest < fpProcessInfo->MAXofPostStepLoops;
+          ++nrest)
       {
         (fpState->fSelectedPostStepDoItVector)[nrest] = InActivated;
       }
@@ -1097,10 +1096,10 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
   fpState->fProposedSafety = DBL_MAX;
   G4double safetyProposedToAndByProcess = fpState->fProposedSafety;
 
-  for(size_t kp = 0; kp < fpProcessInfo->MAXofAlongStepLoops; kp++)
+  for(std::size_t kp = 0; kp < fpProcessInfo->MAXofAlongStepLoops; ++kp)
   {
     fpCurrentProcess = dynamic_cast<G4VITProcess*>((*fpProcessInfo
-        ->fpAlongStepGetPhysIntVector)[kp]);
+        ->fpAlongStepGetPhysIntVector)[(G4int)kp]);
     if(fpCurrentProcess == 0) continue;
     // NULL means the process is inactivated by a user on fly.
 

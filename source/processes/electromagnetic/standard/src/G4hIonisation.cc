@@ -132,37 +132,45 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     }
     SetBaseParticle(theBaseParticle);
 
+    // model limit defined for protons
     mass  = part->GetPDGMass();
     ratio = electron_mass_c2/mass;
     eth   = 2.0*MeV*mass/proton_mass_c2;
 
     G4EmParameters* param = G4EmParameters::Instance();
-    G4double emin = std::min(param->MinKinEnergy(), 0.1*eth);
-    G4double emax = std::max(param->MaxKinEnergy(), 10*eth);
+    G4double emin = param->MinKinEnergy();
+    G4double emax = param->MaxKinEnergy();
 
-    if(emin != param->MinKinEnergy() || emax != param->MaxKinEnergy()) {
-      SetMinKinEnergy(emin);
-      SetMaxKinEnergy(emax);
+    // define model of energy loss fluctuations
+    if (nullptr == FluctModel()) {
+      G4bool ion = (pname == "GenericIon" || pname == "alpha"); 
+      SetFluctModel(G4EmStandUtil::ModelOfFluctuations(ion));
     }
 
     if (nullptr == EmModel(0)) { 
       if(q > 0.0) { SetEmModel(new G4BraggModel()); }
       else        { SetEmModel(new G4ICRU73QOModel()); }
     }
+    // to compute ranges correctly we have to use low-energy
+    // model even if activation limit is high
     EmModel(0)->SetLowEnergyLimit(emin);
-    EmModel(0)->SetHighEnergyLimit(eth);
-    
-    if (nullptr == FluctModel()) {
-      G4bool ion = (pname == "GenericIon" || pname == "alpha"); 
-      SetFluctModel(G4EmStandUtil::ModelOfFluctuations(ion));
-    }
+
+    // high energy limit may be eth or DBL_MAX
+    G4double emax1 = (EmModel(0)->HighEnergyLimit() < emax) ? eth : emax;
+    EmModel(0)->SetHighEnergyLimit(emax1);
     AddEmModel(1, EmModel(0), FluctModel());
+    
+    // second model is used if the first does not cover energy range
+    if(emax1 < emax) {
+      if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
+      EmModel(1)->SetLowEnergyLimit(emax1);
 
-    if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
-    EmModel(1)->SetLowEnergyLimit(eth);
-    EmModel(1)->SetHighEnergyLimit(emax);
-    AddEmModel(1, EmModel(1), FluctModel());  
-
+      // for extremely heavy particles upper limit of the model
+      // should be increased
+      emax = std::max(emax, eth*10); 
+      EmModel(1)->SetHighEnergyLimit(emax);
+      AddEmModel(2, EmModel(1), FluctModel());  
+    }
     isInitialised = true;
   }
 }

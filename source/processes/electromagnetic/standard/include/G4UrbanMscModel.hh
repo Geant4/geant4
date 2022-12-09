@@ -166,7 +166,6 @@ private:
   G4double rangeinit;
   G4double currentRadLength;
 
-  G4double rangecut;
   G4double drr,finalr;
 
   G4double tlow;
@@ -176,7 +175,7 @@ private:
   G4double rndmarray[2];
 
   struct mscData {
-    G4double ecut, Z23, sqrtZ;
+    G4double Z23, sqrtZ;
     G4double coeffth1, coeffth2;
     G4double coeffc1, coeffc2, coeffc3, coeffc4;
     G4double stepmina, stepminb;

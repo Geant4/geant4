@@ -27,11 +27,7 @@
 // Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
 // Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 // 
-//
-//
-
 #include "G4MIRDRightArmBone.hh"
-
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
@@ -46,25 +42,14 @@
 #include "G4HumanPhantomColour.hh"
 #include "G4HumanPhantomMaterial.hh"
 
-G4MIRDRightArmBone::G4MIRDRightArmBone()
-{
-}
-
-G4MIRDRightArmBone::~G4MIRDRightArmBone()
-{
-}
-
 G4VPhysicalVolume* G4MIRDRightArmBone::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 						 const G4String& colourName,G4bool wireFrame, G4bool)
-{
-  // Remind! the elliptical cone gives problems! Intersections of volumes, 
-  // wrong calculation of the volume!
-   
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+{ 
+  auto* material = new G4HumanPhantomMaterial();
    
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
-  G4Material* skeleton = material -> GetMaterial("skeleton");
+  auto* skeleton = material -> GetMaterial("skeleton");
   
   delete material;
 
@@ -72,15 +57,14 @@ G4VPhysicalVolume* G4MIRDRightArmBone::Construct(const G4String& volumeName,G4VP
   G4double dy = 2.7 * cm;//b
   // G4double dz= 46. * cm;//z0
 
-  //G4EllipticalCone* arm = new G4EllipticalCone("OneRightArmBone",dx/2.,dy/2.,dz, 34.5 *cm);
-  G4EllipticalTube* rightArm = new G4EllipticalTube("OneRightArmBone",dx,dy,34.5 *cm);
+  auto* rightArm = new G4EllipticalTube("OneRightArmBone",dx,dy,34.5 *cm);
  
-  G4LogicalVolume* logicRightArmBone = new G4LogicalVolume(rightArm,
+  auto* logicRightArmBone = new G4LogicalVolume(rightArm,
 							   skeleton,
 							   "logical" + volumeName,
-							   0, 0,0);
+							   nullptr, nullptr, nullptr);
 
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree);
   G4VPhysicalVolume* physRightArmBone = new G4PVPlacement(rm,
 							  G4ThreeVector(-18.4 * cm, 0.0, -0.5*cm),
@@ -89,14 +73,12 @@ G4VPhysicalVolume* G4MIRDRightArmBone::Construct(const G4String& volumeName,G4VP
 							  logicRightArmBone,
 							  mother,
 							  false,0,true);
-			      
-
-
+			
   // Visualization Attributes
   //G4VisAttributes* RightArmBoneVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* RightArmBoneVisAtt = new G4VisAttributes(colour);
+  auto* RightArmBoneVisAtt = new G4VisAttributes(colour);
 
   RightArmBoneVisAtt->SetForceSolid(wireFrame);
   logicRightArmBone->SetVisAttributes(RightArmBoneVisAtt);

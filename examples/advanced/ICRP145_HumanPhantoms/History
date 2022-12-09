@@ -1,0 +1,26 @@
+# Example ICRP145_HumanPhantoms History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-10-04 Gabriele Cosmo (ICRP145Phantoms-V11-00-03)
+- Fixed compilation warnings on Intel-icx compiler for set but unused variable
+  in TETModelImport source; code formatting.
+
+## 2022-09-20 Susanna Guatelli (ICRP145Phantoms-V11-00-02)
+- README file updated
+- RunManagerFactory implemented
+- QGSP_BIC_HP physics list adopted
+- general code review
+- Migration to c++11/14/17 features
+    
+## 2022-09-09 Susanna Guatelli (ICRP145Phantoms-V11-00-01)
+- Ranecu Engine removed. Default one now used
+    
+## 2022-07-24 John Allison (ICRP145Phantoms-V11-00-00)
+- First version.
+  - New human phantom example, based on
+    https://www.icrp.org/publication.asp?id=ICRP%20Publication%20145.

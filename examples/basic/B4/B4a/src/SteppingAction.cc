@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file SteppingAction.cc
-/// \brief Implementation of the SteppingAction class
+/// \file B4/B4a/src/SteppingAction.cc
+/// \brief Implementation of the B4a::SteppingAction class
 
 #include "SteppingAction.hh"
 #include "EventAction.hh"
@@ -45,11 +45,6 @@ SteppingAction::SteppingAction(const DetectorConstruction* detConstruction,
                                EventAction* eventAction)
   : fDetConstruction(detConstruction),
     fEventAction(eventAction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

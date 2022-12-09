@@ -873,6 +873,14 @@ function(geant4_compose_targets)
   #   and sources (what it uses internally)
   # Probaly just needs module : location
   # - Checking of files is runtime operation, so will refind/check each time
+  # - Store set of build settings relevant to filtering headers in dependency checks
+  # - "Dumb" as simply reproduced as CMake list in last column of every row (de-dupped in script)
+  # - Settings are designed to overcome limitation of ifdef in parsing, so map
+  #   to symbols in code
+  set(__gmc_build_settings )
+  if(GEANT4_BUILD_MULTITHREADED)
+    list(APPEND __gmc_build_settings "G4MULTITHREADED")
+  endif()
   file(WRITE "${PROJECT_BINARY_DIR}/G4ModuleInterfaceMap.csv" "")
   configure_file("${PROJECT_SOURCE_DIR}/cmake/Modules/geant4_module_check.py" "${PROJECT_BINARY_DIR}/geant4_module_check.py" COPYONLY)
 
@@ -888,9 +896,10 @@ function(geant4_compose_targets)
     # 2. Module interfaces, needs CMAKE, PUBLIC_HEADER
     geant4_get_module_property(__listfile ${__module} CMAKE_LIST_FILE)
     geant4_get_module_property(__publichdrs ${__module} PUBLIC_HEADERS)
+    geant4_get_module_property(__parent_target ${__module} PARENT_TARGET)
     get_filename_component(__listdir "${__listfile}" DIRECTORY)
     list(TRANSFORM __publichdrs REPLACE "^/.*/" "")
-    file(APPEND "${PROJECT_BINARY_DIR}/G4ModuleInterfaceMap.csv" "${__module},${__listdir},${__publichdrs},${__publicdeps},${__privatedeps},${__interfacedeps}\n")
+    file(APPEND "${PROJECT_BINARY_DIR}/G4ModuleInterfaceMap.csv" "${__module},${__listdir},${__publichdrs},${__publicdeps},${__privatedeps},${__interfacedeps},${__parent_target},${__gmc_build_settings}\n")
   endforeach()
 
   # Process all defined libraries
@@ -1183,6 +1192,7 @@ function(__geant4_add_library _name _type)
   else()
     target_compile_features(${_target_name} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
     set(_props_to_process "PUBLIC" "PRIVATE" "INTERFACE")
+    set(_promote_interface_to_public TRUE)
   endif()
 
   if(_lib_cmake_type STREQUAL "SHARED")
@@ -1249,11 +1259,21 @@ function(__geant4_add_library _name _type)
     # sets of rules should apply (i.e. can't specify inc dirs
     # at source level).
     foreach(_prop ${_props_to_process})
+      # Further gotcha with INTERFACE modules here
+      # - If an interface module is composed into a non-interface module
+      #   its headers are exposed correctly to *clients* of the library, but
+      #   *not* the internals of the library! This being the case, we promote
+      #   these properties to PUBLIC
+      set(_target_prop ${_prop})
+      if(_promote_interface_to_public AND (_prop STREQUAL "INTERFACE"))
+        set(_target_prop "PUBLIC")
+      endif()
+
       geant4_get_module_property(_incdirs ${__g4mod} ${_prop}_INCLUDE_DIRECTORIES)
-      target_include_directories(${_target_name} ${_prop} ${_incdirs})
+      target_include_directories(${_target_name} ${_target_prop} ${_incdirs})
 
       geant4_get_module_property(_defs ${__g4mod} ${_prop}_COMPILE_DEFINITIONS)
-      target_compile_definitions(${_target_name} ${_prop} ${_defs})
+      target_compile_definitions(${_target_name} ${_target_prop} ${_defs})
 
       # Target linking requires additional processing to resolve
       geant4_get_module_property(_linklibs ${__g4mod} ${_prop}_LINK_LIBRARIES)
@@ -1277,7 +1297,7 @@ function(__geant4_add_library _name _type)
           set(_linklibs ${_g4linklibs})
         endif()
 
-        target_link_libraries(${_target_name} ${_prop} ${_linklibs})
+        target_link_libraries(${_target_name} ${_target_prop} ${_linklibs})
       endif()
     endforeach()
 

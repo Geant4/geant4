@@ -48,11 +48,11 @@
  
 G4QGSMFragmentation::G4QGSMFragmentation() 
 {
-    SigmaQT = 0.45 * GeV;  // Uzhi June 2020
+    SigmaQT = 0.45 * GeV;
 
     MassCut = 0.35*GeV; 
 
-    SetStrangenessSuppression((1.0 - 0.12)/2.);  // Uzhi June 2020 0.16 -> 0.12
+    SetStrangenessSuppression((1.0 - 0.16)/2.);
 
     // Check if charmed and bottom hadrons are enabled: if this is the case, then
     // set the non-zero probabilities for c-cbar and b-bbar creation from the vacuum,
@@ -60,15 +60,15 @@ G4QGSMFragmentation::G4QGSMFragmentation()
     // hadrons can't/can be created during the string fragmentation of ordinary
     // (i.e. not heavy) projectile hadron nuclear reactions.
     if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
-      SetProbCCbar(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+      SetProbCCbar(0.0002);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094; tuned by Uzhi Oct. 2022
       SetProbBBbar(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
     } else {
       SetProbCCbar(0.0);
       SetProbBBbar(0.0);
     }
     
-    SetDiquarkSuppression(0.195);     // Uzhi June 2020 0.32 -> 0.195
-    SetDiquarkBreakProbability(0.0);  // Uzhi June 2020 0.7  -> 0.0
+    SetDiquarkSuppression(0.32);
+    SetDiquarkBreakProbability(0.7);
 
     SetMinMasses();
 
@@ -220,11 +220,11 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 
 		// Split current string into 2 final Hadrons
                 #ifdef debug_QGSMfragmentation
-                if( inner_sucess ) {  // Uzhi June 2020
+                if( inner_sucess ) {
                   G4cout<<"Split remaining string into 2 final hadrons."<<G4endl;
                 } else {
 		  G4cout<<" New attempt to fragment string"<<G4endl;
-		}  // Uzhi June 2020
+		}
                 #endif
                 // To the close production of hadrons at last string decay
 		if ( inner_sucess && 
@@ -277,8 +277,7 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 
 G4bool G4QGSMFragmentation::IsItFragmentable(const G4FragmentingString * string)
 {
-        //Uzhi June 2020  return sqr( PossibleHadronMass(string) + MassCut ) < string->Mass2();
-	return sqr( MinimalStringMass + MassCut ) < string->Mass2();  // Uzhi June 2020
+	return sqr( MinimalStringMass + MassCut ) < string->Mass2();
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -428,8 +427,8 @@ G4ParticleDefinition *G4QGSMFragmentation::DiQuarkSplitup( G4ParticleDefinition*
       G4ParticleDefinition * decayQuark=FindParticle(decayQuarkEncoding);
       G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decayQuark);
 
-      DecayQuark = decay->GetPDGEncoding();  //Uzhi June 2020  decayQuarkEncoding;
-      NewQuark   = NewDecayEncoding;         //Uzhi June 2020  QuarkPair.first->GetPDGEncoding();
+      DecayQuark = decay->GetPDGEncoding();
+      NewQuark   = NewDecayEncoding;
 
       return had;
 
@@ -489,8 +488,8 @@ G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron
        G4ThreeVector HadronPt    , RemSysPt;
        G4double      HadronMassT2, ResidualMassT2;
 
-       //Uzhi June 2020  Mt distribution is implemented
-       G4double HadronMt, Pt, Pt2, phi;  // Uzhi June 2020
+       // Mt distribution is implemented
+       G4double HadronMt, Pt, Pt2, phi;
 
        //...  sample Pt of the hadron
        G4int attempt=0;
@@ -498,12 +497,11 @@ G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron
        {
          attempt++; if (attempt > StringLoopInterrupt) return 0;
 
-         HadronMt = HadronMass - 200.0*G4Log(G4UniformRand());    // Uzhi June 2020, 200.0 must be tuned
-         Pt2 = sqr(HadronMt)-sqr(HadronMass); Pt=std::sqrt(Pt2);  // Uzhi June 2020
+         HadronMt = HadronMass - 200.0*G4Log(G4UniformRand());    // 200.0 must be tuned
+         Pt2 = sqr(HadronMt)-sqr(HadronMass); Pt=std::sqrt(Pt2);
          phi = 2.*pi*G4UniformRand();
          G4ThreeVector SampleQuarkPtw= G4ThreeVector(Pt*std::cos(phi), Pt*std::sin(phi), 0);
-         HadronPt =SampleQuarkPtw  + string->DecayPt();           // Uzhi June 2020
-         //Uzhi June 2020  HadronPt =SampleQuarkPt()  + string->DecayPt();  // Save this for possible return
+         HadronPt =SampleQuarkPtw  + string->DecayPt();
          HadronPt.setZ(0);
          RemSysPt = StringPt - HadronPt;
 
@@ -558,7 +556,7 @@ G4LorentzVector * G4QGSMFragmentation::SplitEandP(G4ParticleDefinition * pHadron
 G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int /* PartonEncoding */ ,  
                                             G4ParticleDefinition* /* pHadron */, G4double ptx , G4double pty)
 {    
-  G4double lambda = 2.0*(sqr(ptx)+sqr(pty))/sqr(GeV);  // Uzhi June 2020
+  G4double lambda = 2.0*(sqr(ptx)+sqr(pty))/sqr(GeV);
 
   #ifdef debug_QGSMfragmentation
   G4cout<<"GetLightConeZ zmin zmax Parton pHadron "<<zmin<<" "<<zmax<<" "/*<< PartonEncoding */
@@ -595,10 +593,11 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
 
   if ( d1 < 0. ) {
     q1 = absDecayQuarkCode/1000; q2 = (absDecayQuarkCode % 1000)/100; DiQold = IndexDiQ[q1-1][q2-1];
-    d1 = FFqq2qq[DiQold][absNewQuarkCode-1][0]; d2 = FFqq2qq[DiQold][absNewQuarkCode-1][1];
+    qA = absNewQuarkCode/1000;   qB = (absNewQuarkCode % 1000)/100;   DiQnew = IndexDiQ[qA-1][qB-1];
+    d1 = FFqq2qq[DiQold][DiQnew][0]; d2 = FFqq2qq[DiQold][DiQnew][1];
   }
 
-  d2 +=lambda;  // Uzhi June 2020
+  d2 +=lambda;
   d1+=1.0; d2+=1.0;
 
   invD1=1./d1; invD2=1./d2;
@@ -648,7 +647,7 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
     G4double LeftHadronMass(0.); G4double RightHadronMass(0.);
     do
     {
-        if (cClusterInterrupt++ >= ClusterLoopInterrupt) return false;  // Uzhi June 2020
+        if (cClusterInterrupt++ >= ClusterLoopInterrupt) return false;
         LeftHadronMass = -MaxMass; RightHadronMass = -MaxMass;
 
 	G4ParticleDefinition * quark = nullptr;
@@ -664,12 +663,12 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
 	  pDefPair QuarkPair = CreatePartonPair(IsParticle);
 	  quark = QuarkPair.second;
 
-	  LeftHadron= hadronizer->BuildLowSpin(QuarkPair.first, string->GetLeftParton());
-          if ( LeftHadron == NULL ) continue;                                      // Uzhi June 2020
-          RightHadron = hadronizer->BuildLowSpin(string->GetRightParton(), quark); // Uzhi June 2020
-          if ( RightHadron == NULL ) continue;                                     // Uzhi June 2020
-	} else if( (!string->DecayIsQuark() &&  string->StableIsQuark() ) ||       // Uzhi June 2020
-	           ( string->DecayIsQuark() && !string->StableIsQuark() )   ) {    // Uzhi June 2020
+	  LeftHadron= hadronizer->Build(QuarkPair.first, string->GetLeftParton());
+          if ( LeftHadron == NULL ) continue;
+          RightHadron = hadronizer->Build(string->GetRightParton(), quark);
+          if ( RightHadron == NULL ) continue;    
+	} else if( (!string->DecayIsQuark() &&  string->StableIsQuark() ) ||   
+	           ( string->DecayIsQuark() && !string->StableIsQuark() )   ) {
 	  //... there is a Diquark on one of cluster ends
 	  G4int IsParticle;
 	  if ( string->StableIsQuark() ) {
@@ -685,13 +684,11 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
       	  pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
           //SetStrangenessSuppression((1.0-ProbSaS)/2.0);
       	  quark = QuarkPair.second;
-      	  LeftHadron=hadronizer->BuildLowSpin(QuarkPair.first, string->GetLeftParton());
-          if ( LeftHadron == NULL ) continue;                                      // Uzhi June 2020
-          RightHadron = hadronizer->BuildLowSpin(string->GetRightParton(), quark); // Uzhi June 2020
-          if ( RightHadron == NULL ) continue;                                     // Uzhi June 2020
-        } else {  // Diquark and anti-diquark are on the string ends               // Uzhi June 2020
-          //+++++++++++++++++++++++++++++++ Inserted from FTF                      // Uzhi June 2020
-          // Uzhi  G4double StringMass = string->Mass();
+      	  LeftHadron=hadronizer->Build(QuarkPair.first, string->GetLeftParton());
+          if ( LeftHadron == NULL ) continue;
+          RightHadron = hadronizer->Build(string->GetRightParton(), quark);
+          if ( RightHadron == NULL ) continue;
+        } else {  // Diquark and anti-diquark are on the string ends 
           if (cClusterInterrupt++ >= ClusterLoopInterrupt) return false;
           G4int LeftQuark1= string->GetLeftParton()->GetPDGEncoding()/1000;
           G4int LeftQuark2=(string->GetLeftParton()->GetPDGEncoding()/100)%10;
@@ -705,7 +702,6 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
             RightHadron =hadronizer->Build(FindParticle( LeftQuark2), FindParticle(RightQuark1));
           }
 	  if ( (LeftHadron == NULL) || (RightHadron == NULL) ) continue;
-          // End of inserting from FTF Uzhi June 2020
         }
         LeftHadronMass  = LeftHadron->GetPDGMass();
         RightHadronMass = RightHadron->GetPDGMass();
@@ -742,7 +738,7 @@ G4bool G4QGSMFragmentation::SplitLast(G4FragmentingString * string,
 void G4QGSMFragmentation::Sample4Momentum(G4LorentzVector* Mom    , G4double Mass    , 
                                           G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass) 
 {
-    #ifdef debug_QGSMfragmentation  // Uzhi June 2020
+    #ifdef debug_QGSMfragmentation
     G4cout<<"Sample4Momentum Last-----------------------------------------"<<G4endl;
     G4cout<<"  StrMass "<<InitialMass<<" Mass1 "<<Mass<<" Mass2 "<<AntiMass<<G4endl;
     G4cout<<"  SumMass "<<Mass+AntiMass<<G4endl;

@@ -52,8 +52,8 @@ void G4NuclWatcher::watch(G4int a, G4int z) {
   if (std::abs(z-nuclz) >= small) return;
 
   G4bool here = false;		// Increment specified nucleus count
-  G4int  simulatedAsSize = simulated_as.size();
-  for (G4int i = 0; i<simulatedAsSize && !here; i++) {
+  std::size_t  simulatedAsSize = simulated_as.size();
+  for (std::size_t i = 0; i<simulatedAsSize && !here; ++i) {
     if (std::abs(simulated_as[i] - a) < small) {
       simulated_cs[i] += 1.0;
       here = true;		// Terminates loop
@@ -67,8 +67,8 @@ void G4NuclWatcher::watch(G4int a, G4int z) {
 }
 
 void G4NuclWatcher::setInuclCs(G4double csec, G4int nev) { 
-  G4int  simulatedAsSize = simulated_as.size();
-  for(G4int i = 0; i < simulatedAsSize ; i++) {
+  std::size_t  simulatedAsSize = simulated_as.size();
+  for(std::size_t i = 0; i < simulatedAsSize ; ++i) {
     double err = std::sqrt(simulated_cs[i]) / simulated_cs[i];
     
     simulated_prob.push_back(simulated_cs[i] / nev);
@@ -81,8 +81,8 @@ std::pair<G4double, G4double> G4NuclWatcher::getExpCs() const {
   G4double cs = 0.0;
   G4double err = 0.0;
   
-  G4int experAsSize = exper_as.size();
-  for(G4int iz = 0; iz < experAsSize; iz++) {
+  std::size_t experAsSize = exper_as.size();
+  for(std::size_t iz = 0; iz < experAsSize; ++iz) {
     cs += exper_cs[iz];
     err += exper_err[iz];
   }
@@ -93,8 +93,8 @@ std::pair<G4double, G4double> G4NuclWatcher::getExpCs() const {
 std::pair<G4double, G4double> G4NuclWatcher::getInuclCs() const {
   G4double cs = 0.0;
   G4double err = 0.0;
-  G4int  simulatedAsSize = simulated_as.size();
-  for(G4int iz = 0; iz < simulatedAsSize; iz++) {
+  std::size_t simulatedAsSize = simulated_as.size();
+  for(std::size_t iz = 0; iz < simulatedAsSize; ++iz) {
     cs += simulated_cs[iz];
     err += simulated_errors[iz];
   }
@@ -116,20 +116,20 @@ void G4NuclWatcher::print() {
   G4double inucl_cs = 0.0;
   G4double inucl_cs_err = 0.0;
   std::vector<G4bool> not_used(simulated_cs.size(), true);
-  G4int nmatched = exper_as.size();
-  G4int nused = simulated_cs.size();
+  std::size_t nmatched = exper_as.size();
+  std::size_t nused = simulated_cs.size();
   G4double lhood = 0.0;
-  G4int experAsSize = exper_as.size();
+  std::size_t experAsSize = exper_as.size();
 
-  for (G4int iz = 0; iz < experAsSize; iz++) {
+  for (std::size_t iz = 0; iz < experAsSize; ++iz) {
     G4double a = exper_as[iz];
     
     exp_cs += exper_cs[iz];
     exp_cs_err += exper_err[iz];
     
     G4bool found = false;
-    G4int  simulatedAsSize = simulated_as.size();
-    for (G4int i = 0; i<simulatedAsSize && !found; i++) {
+    std::size_t  simulatedAsSize = simulated_as.size();
+    for (std::size_t i = 0; i<simulatedAsSize && !found; ++i) {
       if (std::fabs(simulated_as[i] - a) < small) {
 	G4double rat = simulated_cs[i] / exper_cs[iz];
 	
@@ -150,11 +150,11 @@ void G4NuclWatcher::print() {
 	not_used[i] = false;
 	izotop_chsq += (rat - 1.0) * (rat - 1.0) / rat_err / rat_err; 
 	found = true;
-	nused--;
+	--nused;
       }
     }
 
-    if (found) nmatched--;
+    if (found) --nmatched;
     else
       G4cout << " not found exper.: A " << a << " exp.cs " << exper_cs[iz] 
 	     << " err " << exper_err[iz] << G4endl;
@@ -163,8 +163,8 @@ void G4NuclWatcher::print() {
   G4cout << " not found in simulations " << nmatched << G4endl
 	 << " not found in exper: " << nused << G4endl;
 
-  G4int  simulatedAsSize = simulated_as.size();
-  for(G4int i = 0; i < simulatedAsSize; i++) {
+  std::size_t  simulatedAsSize = simulated_as.size();
+  for(std::size_t i = 0; i < simulatedAsSize; ++i) {
     inucl_cs += simulated_cs[i];
     inucl_cs_err += simulated_errors[i];
     
@@ -175,7 +175,7 @@ void G4NuclWatcher::print() {
     G4cout << " simulated production rate " << simulated_prob[i] << G4endl;
   }
 
-  G4int matched = exper_as.size() - nmatched;
+  G4int matched = G4int(exper_as.size() - nmatched);
   
   if (matched > 0) {
     aver_lhood = lhood;

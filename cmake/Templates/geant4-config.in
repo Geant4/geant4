@@ -215,13 +215,6 @@ feature_list="${feature_list} qt[${have_qt}]"
 if test "x${have_qt}" = "xyes" ; then
   vis_cflags="${vis_cflags} \
   -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT @G4_QT_CFLAGS@"
-
-if test "x${qt_version}" \< "5.15.0" ; then
-  vis_libs="-lG4visQt3D ${vis_libs}"
-  libs="-lG4visQt3D ${libs}"
-  vis_cflags="${vis_cflags} -DG4UI_USE_QT3D"
-fi
-
   geant4_uses_opengl="yes"
 fi
 
@@ -229,6 +222,10 @@ fi
 have_qt3d="@G4_BUILTWITH_QT3D@"
 feature_list="${feature_list} qt3d[${have_qt3d}]"
 
+if test "x${have_qt3d}" = "xyes" ; then
+  vis_libs="-lG4visQt3D ${vis_libs}"
+  vis_cflags="${vis_cflags} -DG4UI_USE_QT3D"
+fi
 
 # - Motif
 have_motif="@G4_BUILTWITH_MOTIF@"
@@ -276,10 +273,10 @@ feature_list="${feature_list} vtk[${have_vtk}]"
 
 
 # - If we have any OpenGL based feature, then we need to add in the
-# OpenGL global define and the G4OpenGL/G4gl2ps libraries.
+# OpenGL global define and the G4OpenGL libraries.
 if test "x${geant4_uses_opengl}" = "xyes" ; then
   vis_cflags="-DG4VIS_USE_OPENGL ${vis_cflags}"
-  vis_libs="-lG4OpenGL -lG4gl2ps ${vis_libs}"
+  vis_libs="-lG4OpenGL ${vis_libs}"
 fi
 
 # - If we have any X11 based feature, then we *may* need the X11 includes

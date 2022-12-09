@@ -36,6 +36,7 @@
 #include "G4ProcessManager.hh"
 #include "G4DNAElectronSolvation.hh"
 #include "G4DNAVibExcitation.hh"
+#include "G4DNASancheExcitationModel.hh"
 #include "G4DNAMolecularDissociation.hh"
 #include "G4DNABrownianTransportation.hh"
 #include "G4DNAMolecularReactionTable.hh"

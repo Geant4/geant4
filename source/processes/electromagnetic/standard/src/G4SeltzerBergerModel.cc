@@ -102,7 +102,7 @@ G4SeltzerBergerModel::~G4SeltzerBergerModel()
 {
   // delete SB-DCS data per Z
   if (IsMaster()) {
-    for (size_t iz = 0; iz < gMaxZet; ++iz) {
+    for (std::size_t iz = 0; iz < gMaxZet; ++iz) {
       if (gSBDCSData[iz]) {
         delete gSBDCSData[iz];
         gSBDCSData[iz] = nullptr;
@@ -126,8 +126,8 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
   if (IsMaster()) {
 
     auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
-    for(size_t j=0; j<numOfCouples; ++j) {
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+    for(G4int j=0; j<numOfCouples; ++j) {
       auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
       auto elmVec = mat->GetElementVector();
       for (auto & elm : *elmVec) {

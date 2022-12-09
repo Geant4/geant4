@@ -36,8 +36,11 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/*.c)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Add common subdirectory
+# Add common subdirectory and
+# - disable building examples in common
+# - add a unique prefix to the common library built in this example
 #
+set (EXAMPLES_COMMON OFF)
 set (common_prefix decayer6_)
 add_subdirectory(common) 
 

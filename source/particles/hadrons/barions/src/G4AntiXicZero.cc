@@ -75,7 +75,7 @@ G4AntiXicZero* G4AntiXicZero::Definition()
                 false,     0.112e-3*ns,          NULL,
                 false,       "xi_c");
   }
-  theInstance = reinterpret_cast<G4AntiXicZero*>(anInstance);
+  theInstance = static_cast<G4AntiXicZero*>(anInstance);
   return theInstance;
 }
 

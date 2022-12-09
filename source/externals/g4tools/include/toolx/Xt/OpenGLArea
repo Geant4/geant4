@@ -30,12 +30,12 @@ typedef struct {
  XEvent* event;
 } XoAnyCallbackStruct;
 
-#define XoNdoubleBufferOn "doubleBufferOn"
-#define XoNpaintCallback  "paintCallback"
-#define XoNeventCallback  "eventCallback"
-
 #define XoCR_PAINT 1
 #define XoCR_EVENT 2
+
+#define XoNdoubleBufferOn toolx::Xt::OpenGLArea::XoN_doubleBufferOn()
+#define XoNpaintCallback  toolx::Xt::OpenGLArea::XoN_paintCallback()
+#define XoNeventCallback  toolx::Xt::OpenGLArea::XoN_eventCallback()
 
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -71,6 +71,13 @@ typedef struct _OpenGLAreaRec {
 ///////////////////////////////////////////////////////////
 
 class OpenGLArea {
+protected:
+  static const char* class_name()         {static const char* s_s = "OpenGLArea";return s_s;}
+  static const char* XoC_DoubleBufferOn() {static const char* s_s = "DoubleBufferOn";return s_s;}
+public:
+  static const char* XoN_doubleBufferOn() {static const char* s_s = "doubleBufferOn";return s_s;}
+  static const char* XoN_paintCallback()  {static const char* s_s = "paintCallback";return s_s;}
+  static const char* XoN_eventCallback()  {static const char* s_s = "eventCallback";return s_s;}
 public:
   static void paint(Widget a_this) {
     if(!XtIsRealized(a_this)) return;
@@ -90,7 +97,7 @@ protected:
     if(a_request->core.width<=0)  a_this->core.width  = 100;
     if(a_request->core.height<=0) a_this->core.height = 100;
 
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     ::printf ("debug : OpenGLArea : InitializeWidget : %s\n",::XtName(a_this));
 #endif
 
@@ -190,13 +197,13 @@ protected:
     ::XtAddEventHandler
        (a_this,ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|KeyPressMask|KeyReleaseMask,0,event_handler,NULL);
 
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : InitializeWidget : end\n");
 #endif
   }
 
   static void realize_widget(Widget a_this,XtValueMask* a_mask,XSetWindowAttributes* a_watbs) {
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : realize_widget : %s\n",XtName(a_this));
 #endif
 
@@ -216,13 +223,13 @@ protected:
   
     //make_current(a_this);
   
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : realize_widget : end\n");
 #endif
   }
 
   static void destroy_widget(Widget a_this) {
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : destroy_widget : begin\n");
 #endif
     OpenGLAreaPart& athis = _athis(a_this);
@@ -236,7 +243,7 @@ protected:
       ::glXDestroyContext(XtDisplay(a_this),athis.glContext);
       athis.glContext = NULL;
     }
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : destroy_widget : end\n");
 #endif
   }
@@ -257,7 +264,7 @@ protected:
   }
   
   static void change_widget_size(Widget a_this) {
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : change_widget_size : %s\n",XtName(a_this));
 #endif
 
@@ -265,13 +272,13 @@ protected:
     if(widget_class()->core_class.superclass->core_class.resize!=NULL)
       (widget_class()->core_class.superclass->core_class.resize)(a_this);
   
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : change_widget_size : end\n");
 #endif
 }
 
   static void draw_widget(Widget  a_this,XEvent* a_event,Region a_region) {
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
     printf("debug : OpenGLArea : draw_widget : %s\n",XtName(a_this));
 #endif
 
@@ -279,7 +286,7 @@ protected:
       (widget_class()->core_class.superclass->core_class.expose)(a_this,a_event,a_region);
 
     if(make_current(a_this)==1) {
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
       printf("debug : OpenGLArea : draw_widget : %s : make_current ok : call paintCallback...\n",XtName(a_this));
 #endif
       XoAnyCallbackStruct value;
@@ -290,7 +297,7 @@ protected:
       ::glXMakeCurrent(XtDisplay(a_this),None,NULL);
     }
   
-#ifdef OPENGLAREA_DEBUG
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
   printf("debug : OpenGLArea : draw_widget : end\n");
 #endif
   }
@@ -414,12 +421,12 @@ protected:
 
 public:
   static WidgetClass widget_class() {
-    static XtResource s_resources [] = {
-      {(String)XoNdoubleBufferOn,(String)"DoubleBufferOn",XtRBoolean,sizeof(Boolean),
+    static XtResource s_resources[] = {
+      {(String)XoN_doubleBufferOn(),(String)XoC_DoubleBufferOn(),XtRBoolean,sizeof(Boolean),
        XtOffset(OpenGLAreaWidget,openGLArea.doubleBufferOn),XtRImmediate,(XtPointer)True},
-      {(String)XoNpaintCallback,XtCCallback,XtRCallback,sizeof(XtCallbackList),
+      {(String)XoN_paintCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
        XtOffset(OpenGLAreaWidget,openGLArea.paintCallback),XtRImmediate,(XtPointer)NULL},
-      {(String)XoNeventCallback,XtCCallback,XtRCallback,sizeof(XtCallbackList),
+      {(String)XoN_eventCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
        XtOffset(OpenGLAreaWidget,openGLArea.eventCallback),XtRImmediate,(XtPointer)NULL}
     };
 
@@ -427,7 +434,7 @@ public:
       // Core Class Part :
       {
         (WidgetClass) &compositeClassRec, // pointer to superclass ClassRec   
-        (String)"OpenGLArea",             // widget resource class name       
+        (String)class_name(),             // widget resource class name
         sizeof(OpenGLAreaRec),           // size in bytes of widget record   
         initialize_class,                // class_initialize                 
         NULL,                            // dynamic initialization           
@@ -477,5 +484,6 @@ public:
 };
 
 }}
+
 
 #endif

@@ -46,28 +46,32 @@
 #include "G4SystemOfUnits.hh"
 #include "Run.hh"
 
-const std::array< G4String, SteppingAction::numberKinematicRegions >
-SteppingAction::arrayKinematicRegionNames = { "", "below 20 MeV", "above 20 MeV" };
+const std::array< G4String, SteppingAction::fkNumberKinematicRegions >
+SteppingAction::fkArrayKinematicRegionNames = { "", "below 20 MeV", "above 20 MeV" };
 
-const std::array< G4String, SteppingAction::numberScoringPositions >
-SteppingAction::arrayScoringPositionNames = { "forward", "backward" };
+const std::array< G4String, SteppingAction::fkNumberScoringPositions >
+SteppingAction::fkArrayScoringPositionNames = { "forward", "backward" };
 
-const std::array< G4String, SteppingAction::numberParticleTypes >
-SteppingAction::arrayParticleTypeNames = { "all", "electron", "gamma", "muon", "neutrino",
+const std::array< G4String, SteppingAction::fkNumberParticleTypes >
+SteppingAction::fkArrayParticleTypeNames = { "all", "electron", "gamma", "muon", "neutrino",
                                            "pion", "neutron", "proton", "ion", "otherMeson",
                                            "otherBaryon" };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int SteppingAction::getIndex( const G4int iKinematicRegion, const G4int iScoringPosition,
-            const G4int iParticleType ) {
+G4int SteppingAction::GetIndex( const G4int iKinematicRegion, const G4int iScoringPosition,
+                                const G4int iParticleType ) {
   G4int index = -1;
-  if ( iKinematicRegion >= 0  &&  iKinematicRegion < numberKinematicRegions  &&
-       iScoringPosition >= 0  &&  iScoringPosition < numberScoringPositions  &&
-       iParticleType >= 0     &&  iParticleType < numberParticleTypes           ) {
-    index = iKinematicRegion * numberScoringPositions * numberParticleTypes +
-                                     iScoringPosition * numberParticleTypes +
-                                                        iParticleType;
+  if ( iKinematicRegion >= 0  &&  iKinematicRegion < fkNumberKinematicRegions  &&
+       iScoringPosition >= 0  &&  iScoringPosition < fkNumberScoringPositions  &&
+       iParticleType >= 0     &&  iParticleType < fkNumberParticleTypes           ) {
+    index = iKinematicRegion * fkNumberScoringPositions * fkNumberParticleTypes +
+                                       iScoringPosition * fkNumberParticleTypes +
+                                                                 iParticleType;
+  }
+  if ( index < 0 || index >= fkNumberCombinations ) {
+    G4cerr << "SteppingAction::GetIndex : WRONG index=" << index << "  set it to 0 !" << G4endl;
+    index = 0;
   }
   return index;
 }
@@ -75,16 +79,12 @@ G4int SteppingAction::getIndex( const G4int iKinematicRegion, const G4int iScori
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction() :G4UserSteppingAction() {
-  initialize();
+  Initialize();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void SteppingAction::initialize() {
+void SteppingAction::Initialize() {
   // Initialization needed at the beginning of each Run  
   fPrimaryParticleId = 0;
   fPrimaryParticleEnergy = 0.0;
@@ -94,16 +94,16 @@ void SteppingAction::initialize() {
   fIsFirstStepInTarget = true;
   fIsFirstStepInScoringShell = true;  
   fCubicVolumeScoringShell = 1.0;
-  for ( G4int i = 0; i < numberCombinations; ++i ) {
+  for ( G4int i = 0; i < fkNumberCombinations; ++i ) {
     fArraySumStepLengths[i] = 0.0;
   }
   /*
-  for ( G4int i = 0; i < numberCombinations; ++i ) fArraySumStepLengths[i] = 999.9;
-  G4cout << " numberCombinations=" << numberCombinations << G4endl;
-  for ( G4int i = 0; i < numberKinematicRegions; ++i ) {
-    for ( G4int j = 0; j < numberScoringPositions; ++j ) {
-      for ( G4int k = 0; k < numberParticleTypes; ++k ) {
-        G4int index = getIndex( i, j, k );
+  for ( G4int i = 0; i < fkNumberCombinations; ++i ) fArraySumStepLengths[i] = 999.9;
+  G4cout << " fkNumberCombinations=" << fkNumberCombinations << G4endl;
+  for ( G4int i = 0; i < fkNumberKinematicRegions; ++i ) {
+    for ( G4int j = 0; j < fkNumberScoringPositions; ++j ) {
+      for ( G4int k = 0; k < fkNumberParticleTypes; ++k ) {
+        G4int index = GetIndex( i, j, k );
         G4cout << "(i, j, k)=(" << i << ", " << j << ", " << k << ")  ->" << index;
         if ( fArraySumStepLengths[ index ] < 1.0 ) G4cout << " <=== REPEATED!";
         else                                       fArraySumStepLengths[ index ] = 0.0;
@@ -111,7 +111,7 @@ void SteppingAction::initialize() {
       }
     }
   }
-  for ( G4int i = 0; i < numberCombinations; ++i ) {
+  for ( G4int i = 0; i < fkNumberCombinations; ++i ) {
     if ( fArraySumStepLengths[i] > 999.0 ) G4cout << " i=" << i << " NOT COVERED !" << G4endl;
   }
   */
@@ -127,9 +127,9 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
       fPrimaryParticleEnergy = theStep->GetPreStepPoint()->GetKineticEnergy();
       fPrimaryParticleDirection = theStep->GetPreStepPoint()->GetMomentumDirection();
       if ( fRunPtr ) {
-        fRunPtr->setPrimaryParticleId( fPrimaryParticleId );
-        fRunPtr->setPrimaryParticleEnergy( fPrimaryParticleEnergy );
-        fRunPtr->setPrimaryParticleDirection( fPrimaryParticleDirection );
+        fRunPtr->SetPrimaryParticleId( fPrimaryParticleId );
+        fRunPtr->SetPrimaryParticleEnergy( fPrimaryParticleEnergy );
+        fRunPtr->SetPrimaryParticleDirection( fPrimaryParticleDirection );
       }
       fIsFirstStepOfTheEvent = false;
     }
@@ -138,7 +138,7 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
   if ( fIsFirstStepInTarget  &&
        theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "physiSphere" ) {
     fTargetMaterialName = theStep->GetPreStepPoint()->GetMaterial()->GetName();
-    if ( fRunPtr ) fRunPtr->setTargetMaterialName( fTargetMaterialName );
+    if ( fRunPtr ) fRunPtr->SetTargetMaterialName( fTargetMaterialName );
     fIsFirstStepInTarget = false;
   }
   // Get information on step lengths in the scoring shell
@@ -146,7 +146,7 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
     if (  fIsFirstStepInScoringShell ) {
       fCubicVolumeScoringShell =
         theStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetSolid()->GetCubicVolume();
-      if ( fRunPtr ) fRunPtr->setCubicVolumeScoringShell( fCubicVolumeScoringShell );
+      if ( fRunPtr ) fRunPtr->SetCubicVolumeScoringShell( fCubicVolumeScoringShell );
       fIsFirstStepInScoringShell = false;
     }
     G4double stepLength = theStep->GetTrack()->GetStepLength() * theStep->GetTrack()->GetWeight();
@@ -185,18 +185,18 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
     else if ( absPdg > 1000 ) iParticleType = 10;  // other baryons (e.g. hyperons, anti-hyperons,
                                                    // etc.)
     // Consider the specific case : kinematic region, scoring position, and particle type
-    G4int index = getIndex( iKinematicRegion, iScoringPosition, iParticleType );
+    G4int index = GetIndex( iKinematicRegion, iScoringPosition, iParticleType );
     fArraySumStepLengths[index] += stepLength;
     // Consider the "all" particle case, with the same kinematic region and scoring position
-    index = getIndex( iKinematicRegion, iScoringPosition, 0 );
+    index = GetIndex( iKinematicRegion, iScoringPosition, 0 );
     fArraySumStepLengths[index] += stepLength;
     // Consider the "any" kinematic region case, with the same scoring position and particle type
-    index = getIndex( 0, iScoringPosition, iParticleType );
+    index = GetIndex( 0, iScoringPosition, iParticleType );
     fArraySumStepLengths[index] += stepLength;
     // Consider the "any" kinematic region and "all" particle, with the same scoring position
-    index = getIndex( 0, iScoringPosition, 0 );
+    index = GetIndex( 0, iScoringPosition, 0 );
     fArraySumStepLengths[index] += stepLength;
-    if ( fRunPtr ) fRunPtr->setArray( fArraySumStepLengths );
+    if ( fRunPtr ) fRunPtr->SetSteppingArray( fArraySumStepLengths );
   }
 }
 

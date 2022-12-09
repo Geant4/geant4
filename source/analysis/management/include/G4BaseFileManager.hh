@@ -47,6 +47,10 @@ class G4BaseFileManager
       // Set the base file name (without extension)
     virtual G4String GetFileType() const;
       // Return the manager type (starts with a lowercase letter)
+    virtual G4bool HasCycles() const;
+      // Return true when the output supports writing the same object in a file
+      // multiple times.
+      // The default implementation returns false.
 
     void AddFileName(const G4String& fileName);
       // For handling multiple files
@@ -68,15 +72,24 @@ class G4BaseFileManager
       // - add _hn_hnName suffix to the file base name
       // - add file extension if not present
 
-    G4String GetNtupleFileName(const G4String& ntupleName) const;
+    G4String GetHnFileName(const G4String& fileName,
+                           G4int cycle = 0) const;
+      // Update Hn file name:
+      // - add _vN  suffix to the base namer if cycle > 0
+
+    G4String GetNtupleFileName(const G4String& ntupleName,
+                               G4int cycle = 0) const;
       // Compose and return the ntuple specific file name:
       // - add _nt_ntupleName suffix to the file base name
+      // - add _vN  suffix if cycle > 0
       // - add _tN suffix if called on thread worker
       // - add file extension if not present
 
-    G4String GetNtupleFileName(G4int ntupleFileNumber) const;
+    G4String GetNtupleFileName(G4int ntupleFileNumber,
+                                G4int cycle = 0) const;
       // Compose and return the ntuple specific file name:
       // - add _mN suffix to the file base name
+      // - add _vN  suffix if cycle > 0
       // - add file extension if not present
 
     G4String GetPlotFileName() const;
@@ -100,6 +113,10 @@ inline G4bool G4BaseFileManager::SetFileName(const G4String& fileName) {
   // CHECK if still needed in this base class
   fFileName = fileName;
   return true;
+}
+
+inline G4bool G4BaseFileManager::HasCycles() const {
+  return false;
 }
 
 inline G4String G4BaseFileManager::GetFileName() const {

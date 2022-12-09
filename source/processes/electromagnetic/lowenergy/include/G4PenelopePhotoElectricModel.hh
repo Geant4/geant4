@@ -84,8 +84,8 @@ public:
   G4int GetVerbosityLevel(){return fVerboseLevel;};
 
   //testing purposes
-  size_t GetNumberOfShellXS(G4int);
-  G4double GetShellCrossSection(G4int Z,size_t shellID,G4double energy);
+  std::size_t GetNumberOfShellXS(G4int);
+  G4double GetShellCrossSection(G4int Z,std::size_t shellID,G4double energy);
 
   G4PenelopePhotoElectricModel & operator=(const G4PenelopePhotoElectricModel &right) = delete;
   G4PenelopePhotoElectricModel(const G4PenelopePhotoElectricModel&) = delete;
@@ -98,8 +98,8 @@ private:
   void SetParticle(const G4ParticleDefinition*);
   G4double SampleElectronDirection(G4double energy);
   void ReadDataFile(G4int Z);
-  size_t SelectRandomShell(G4int Z,G4double energy);
-  G4String WriteTargetShell(size_t shellID);
+  std::size_t SelectRandomShell(G4int Z,G4double energy);
+  G4String WriteTargetShell(std::size_t shellID);
 
   //For each Z, the PhysicsTable contains nShell+1 physics vectors
   //with log(E) vs. log(XS)

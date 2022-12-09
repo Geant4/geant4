@@ -35,12 +35,8 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 
-int main(int argc,char** argv) {
-
-  // Choose the Random engine
-
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
+int main(int argc,char** argv) 
+{
   // Construct the default run manager
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();

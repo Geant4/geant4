@@ -184,8 +184,8 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
   private:
 
-    G4int       fNv;
-    G4int       fNz;
+    std::size_t    fNv;
+    std::size_t    fNz;
     std::vector<G4TwoVector> fPolygon;
     std::vector<ZSection>    fZSections;
     std::vector< std::vector<G4int> > fTriangles;

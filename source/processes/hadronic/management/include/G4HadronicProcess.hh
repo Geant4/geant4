@@ -134,6 +134,8 @@ public:
 
   // access to the target nucleus
   inline const G4Nucleus* GetTargetNucleus() const;
+
+  inline G4Nucleus* GetTargetNucleusPointer();
   
   inline const G4Isotope* GetTargetIsotope();
 
@@ -179,9 +181,6 @@ protected:
   inline G4HadronicInteraction* ChooseHadronicInteraction(
       const G4HadProjectile & aHadProjectile, G4Nucleus& aTargetNucleus,
       const G4Material* aMaterial, const G4Element* anElement);
-
-  // access to the target nucleus
-  inline G4Nucleus* GetTargetNucleusPointer();
               
   // access to the cross section data set
   inline G4double GetLastCrossSection();
@@ -220,7 +219,7 @@ protected:
 
   G4ParticleChange* theTotalResult;
   G4double fWeight = 1.0;
-  G4int epReportLevel = 0;
+  G4long epReportLevel = 0;
 
 private:
     

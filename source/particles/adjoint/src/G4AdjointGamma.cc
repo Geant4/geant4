@@ -71,7 +71,7 @@ G4AdjointGamma*  G4AdjointGamma::Definition()
                 false,     "adj_gamma",      10000022
 	      );
   }
-  theInstance = reinterpret_cast<G4AdjointGamma*>(anInstance);
+  theInstance = static_cast<G4AdjointGamma*>(anInstance);
   return theInstance;
 }
 

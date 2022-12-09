@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file CalorimeterSD.hh
+/// \file B4/B4c/include/CalorimeterSD.hh
 /// \brief Definition of the B4c::CalorimeterSD class
 
 #ifndef B4cCalorimeterSD_h
@@ -56,7 +56,7 @@ class CalorimeterSD : public G4VSensitiveDetector
     CalorimeterSD(const G4String& name,
                   const G4String& hitsCollectionName,
                   G4int nofCells);
-    ~CalorimeterSD() override;
+    ~CalorimeterSD() override = default;
 
     // methods from base class
     void   Initialize(G4HCofThisEvent* hitCollection) override;

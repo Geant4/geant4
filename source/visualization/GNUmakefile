@@ -39,26 +39,20 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4Tree
   SUBDIRS += gMocren
   SUBLIBS += G4GMocren
+  SUBDIRS += ToolsSG
+  SUBLIBS += G4ToolsSG
 # Drivers needing external libraries...
 ifdef G4VIS_BUILD_OPENGL_DRIVER
-  SUBDIRS += externals/gl2ps
   SUBDIRS += OpenGL
   SUBLIBS += G4OpenGL
-  SUBLIBS += G4gl2ps
 endif
 ifdef G4VIS_BUILD_OI_DRIVER
-  SUBDIRS += externals/gl2ps
   SUBDIRS += OpenInventor
   SUBLIBS += G4OpenInventor
-  SUBLIBS += G4gl2ps
 endif
 ifdef G4VIS_BUILD_QT3D_DRIVER
   SUBDIRS += Qt3D
   SUBLIBS += G4visQt3D
-endif
-ifdef G4VIS_BUILD_TOOLSSG_DRIVER
-  SUBDIRS += ToolsSG
-  SUBLIBS += G4ToolsSG
 endif
 endif #G4VIS_BUILD
 

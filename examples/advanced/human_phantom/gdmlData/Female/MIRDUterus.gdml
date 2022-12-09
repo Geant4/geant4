@@ -106,7 +106,7 @@
   </material>
  </materials>
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Uterus" ax="2.47" by="1.55" cz="5.61" zcut1="-5.61" zcut2="2.81" />
+  <ellipsoid lunit="cm" name="Uterus" ax="2.47" by="1.55" cz="5.61" zcut1="-5.61" zcut2="2.81" />
  </solids>
  <structure>
   <volume name="UterusVolume" >

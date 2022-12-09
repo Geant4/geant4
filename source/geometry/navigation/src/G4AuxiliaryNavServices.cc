@@ -38,7 +38,7 @@
 
 void G4AuxiliaryNavServices::ReportTolerances()
 {
-   G4int oldPrec = G4cout.precision(16);
+   G4long oldPrec = G4cout.precision(16);
    
    G4cout << " Cartesian Tolerance (kCarTolerance): "
           << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()

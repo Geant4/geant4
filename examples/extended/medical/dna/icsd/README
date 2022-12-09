@@ -7,7 +7,8 @@
                              icsd
                             -------
 
-Authors: Sylvain Meylan et Carmen Villagrasa (IRSN, France)
+Authors: Sylvain Meylan, Yann Perrot and Carmen Villagrasa (IRSN, France)
+         Marcin Pietrzak (NCBJ, Poland)
 For any question, please contact:
 carmen.villagrasa@irsn.fr
 
@@ -18,22 +19,33 @@ shall cite the following Geant4-DNA collaboration publications:
 [2] Phys. Med. 31 (2015) 861-874
 In addition, for this example using DNA-materials cross-sections, please cite:
 [3] Rad. Phys and Chem. 130 (2017) 459-479
+For this example using N2 cross-sections, please cite:
+[4] Phys. Med. 102 (2022) 103-109
 
 ---->0. INTRODUCTION.                                                    
                                                                        
 The icsd name of this example stands for: Ionisation Cluster Size Distribution.
 This example allows the calculation of the distribution concerning the number of ionisations per event in an small cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin.
 It constitutes the first use of new DNA-like material's cross-sections that were experimentally obtained at PTB (Rad. Phys and Chem. 130 (2017) 459-479) for electrons and calculated for protons on THF, TMP, PY and PU materials.
-The new physical models corresponding to the DNA materials have recently been implemented in Geant4-DNA thaks to new classes, that allow the use of other materials different from liquid water: G4VDNAModel, G4DNAModelInterface,G4DNADummyModel and other associated classes.  
+The new physical models corresponding to the DNA materials a,d nitrogen have recently been implemented in Geant4-DNA thaks to new classes, that allow the use of other materials different from liquid water: G4VDNAModel, G4DNAModelInterface,G4DNADummyModel and other associated classes.  
 
 These new models are further described at:
 http://geant4-dna.org
 
 ---->1. GEOMETRY SET-UP AND PRIMARY PARTICLES
  
-As indicated in the introduction, the geometry used in this exercise is very simple: a cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin that is centered in a cubic world of 10 nanometers side length filled with liquid water.
-This cylinder is filled with THF material. The definition of the THF material must be done using the G4String="THF". Currently, other materials are available than also use the G4Strings to be recognized by the model classes "TMP", "PY" or "PU" for the DNA-like materials and "deoxyribose","adenine", "guanine", "thymine" or "cytosine" for the derived DNA materials. 
-Primary particles are electrons starting at (-1.15 nanometers, 0,0) (at the cylinder's edge) and initial momentum (1,0,0)
+As indicated in the introduction, the geometry used in this exercise is a cylinder.
+Two options are proposed: one nanometric cylinder made of DNA or a macroscopic volume with low nitrogen density.
+The selection of the geometry is performed in the macro file:
+
+--> /icsd/setGeom dna: a cylinder of 2.3 nanometers diameter and 3.4 nanometers height, typical dimensions of a 10 base pairs piece of chromatin that is centered in a cubic world of 10 nanometers side length filled with liquid water.
+This cylinder is filled with THF material. The definition of the THF material must be done using the G4String="THF". Currently, other materials are available than also use the G4Strings to be recognized by the model classes "TMP", "PY" or "PU" for the DNA-like materials and "deoxyribose","adenine", "guanine", "thymine" or "cytosine" for the derived DNA materials.
+
+--> /icsd/setGeom nanodosimeter: a cylinder of 10 mm nanometers diameter and 10 nanometers height filled with low pressure nitrogen (0.34 µg/cm3)  mimicking the size of a short of segment od DNA of 2.3 nm in both diameter and height
+The obtained results can be compared to experimental data from Jet Counter nanodosimeter as shown in Pietrazk et al.
+Phys. Med. 102 (2022) 103-109
+
+Primary particles are electrons starting at the cylinder's edge) and initial momentum (1,0,0)
 
 ---->2. PHYSICS LIST
                                                                         

@@ -14,49 +14,49 @@
  </define> 
 
  <materials>
-  <material name="sH" formula=" " Z="1."><D value="0.00009" /><atom value="1.008"/></material>
-  <material name="sC" formula=" " Z="6."><D value="0.00226" /><atom value="12.011"/></material>
-  <material name="sN" formula=" " Z="7."><D value="0.00125" /><atom value="14.006"/></material>
-  <material name="sO" formula=" " Z="8."><D value="0.00143" /><atom value="15.999"/></material>
-  <material name="sF" formula=" " Z="9."><D value="0.00169" /><atom value="18.998"/></material>
-  <material name="sNa" formula=" " Z="11."><D value="0.00097" /><atom value="22.989"/></material>
-  <material name="sMg" formula=" " Z="12."><D value="0.00174" /><atom value="24.3"/></material>
-  <material name="sSi" formula=" " Z="14."><D value="0.00233" /><atom value="28.086"/></material>
-  <material name="sP" formula=" " Z="15."><D value="0.00182" /><atom value="30.973"/></material>
-  <material name="sS" formula=" " Z="16."><D value="0.00207" /><atom value="32.064"/></material>
-  <material name="sCl" formula=" " Z="17."><D value="0.00321" /><atom value="35.453"/></material>
-  <material name="sK" formula=" " Z="19."><D value="0.00086" /><atom value="39.10"/></material>
-  <material name="sCa" formula=" " Z="20."><D value="0.00155" /><atom value="40.08"/></material>
-  <material name="sFe" formula=" " Z="26."><D value="0.00786" /><atom value="55.847"/></material>
-  <material name="sZn" formula=" " Z="30."><D value="0.00714" /><atom value="65.37"/></material>
-  <material name="sRb" formula=" " Z="37."><D value="0.00153" /><atom value="85.47"/></material> 
-  <material name="sSr" formula=" " Z="38."><D value="0.00260" /><atom value="87.62"/></material>
-  <material name="sZr" formula=" " Z="40."><D value="0.00649" /><atom value="91.22"/></material>
-  <material name="sPb" formula=" " Z="82."><D value="0.01140" /><atom value="207.19"/></material>
-  <material formula=" " name="SoftTissue">
+  <material name="sH_lowerlargeint" formula=" " Z="1."><D value="0.00009" /><atom value="1.008"/></material>
+  <material name="sC_lowerlargeint" formula=" " Z="6."><D value="0.00226" /><atom value="12.011"/></material>
+  <material name="sN_lowerlargeint" formula=" " Z="7."><D value="0.00125" /><atom value="14.006"/></material>
+  <material name="sO_lowerlargeint" formula=" " Z="8."><D value="0.00143" /><atom value="15.999"/></material>
+  <material name="sF_lowerlargeint" formula=" " Z="9."><D value="0.00169" /><atom value="18.998"/></material>
+  <material name="sNa_lowerlargeint" formula=" " Z="11."><D value="0.00097" /><atom value="22.989"/></material>
+  <material name="sMg_lowerlargeint" formula=" " Z="12."><D value="0.00174" /><atom value="24.3"/></material>
+  <material name="sSi_lowerlargeint" formula=" " Z="14."><D value="0.00233" /><atom value="28.086"/></material>
+  <material name="sP_lowerlargeint" formula=" " Z="15."><D value="0.00182" /><atom value="30.973"/></material>
+  <material name="sS_lowerlargeint" formula=" " Z="16."><D value="0.00207" /><atom value="32.064"/></material>
+  <material name="sCl_lowerlargeint" formula=" " Z="17."><D value="0.00321" /><atom value="35.453"/></material>
+  <material name="sK_lowerlargeint" formula=" " Z="19."><D value="0.00086" /><atom value="39.10"/></material>
+  <material name="sCa_lowerlargeint" formula=" " Z="20."><D value="0.00155" /><atom value="40.08"/></material>
+  <material name="sFe_lowerlargeint" formula=" " Z="26."><D value="0.00786" /><atom value="55.847"/></material>
+  <material name="sZn_lowerlargeint" formula=" " Z="30."><D value="0.00714" /><atom value="65.37"/></material>
+  <material name="sRb_lowerlargeint" formula=" " Z="37."><D value="0.00153" /><atom value="85.47"/></material> 
+  <material name="sSr_lowerlargeint" formula=" " Z="38."><D value="0.00260" /><atom value="87.62"/></material>
+  <material name="sZr_lowerlargeint" formula=" " Z="40."><D value="0.00649" /><atom value="91.22"/></material>
+  <material name="sPb_lowerlargeint" formula=" " Z="82."><D value="0.01140" /><atom value="207.19"/></material>
+  <material formula=" " name="SoftTissue_lowerlargeint">
    <D value="1.04" />
-   <fraction n="0.10454" ref="sH" />
-   <fraction n="0.22663" ref="sC" />
-   <fraction n="0.02490" ref="sN" />
-   <fraction n="0.63525" ref="sO" />
-   <fraction n="0.00112" ref="sNa" />
-   <fraction n="0.00013" ref="sMg" />
-   <fraction n="0.00030" ref="sSi" />
-   <fraction n="0.00134" ref="sP" />
-   <fraction n="0.00204" ref="sS" />
-   <fraction n="0.00133" ref="sCl" />
-   <fraction n="0.00208" ref="sK" />
-   <fraction n="0.00024" ref="sCa" />
-   <fraction n="0.00005" ref="sFe" />
-   <fraction n="0.00003" ref="sZn" />
-   <fraction n="0.00001" ref="sRb" />
-   <fraction n="0.00001" ref="sZr" />
+   <fraction n="0.10454" ref="sH_lowerlargeint" />
+   <fraction n="0.22663" ref="sC_lowerlargeint" />
+   <fraction n="0.02490" ref="sN_lowerlargeint" />
+   <fraction n="0.63525" ref="sO_lowerlargeint" />
+   <fraction n="0.00112" ref="sNa_lowerlargeint" />
+   <fraction n="0.00013" ref="sMg_lowerlargeint" />
+   <fraction n="0.00030" ref="sSi_lowerlargeint" />
+   <fraction n="0.00134" ref="sP_lowerlargeint" />
+   <fraction n="0.00204" ref="sS_lowerlargeint" />
+   <fraction n="0.00133" ref="sCl_lowerlargeint" />
+   <fraction n="0.00208" ref="sK_lowerlargeint" />
+   <fraction n="0.00024" ref="sCa_lowerlargeint" />
+   <fraction n="0.00005" ref="sFe_lowerlargeint" />
+   <fraction n="0.00003" ref="sZn_lowerlargeint" />
+   <fraction n="0.00001" ref="sRb_lowerlargeint" />
+   <fraction n="0.00001" ref="sZr_lowerlargeint" />
   </material>
  </materials>
 
  <solids>
  
-  <eltube aunit="cm" lunit="cm" name="DescendingColonLowerLargeIntestine" dx="1.62" dy="2.09" dz="6.885" />
+  <eltube lunit="cm" name="DescendingColonLowerLargeIntestine" dx="1.62" dy="2.09" dz="6.885" />
   <torus aunit="radian" lunit="cm" name="SigmoidColonUpLowerLargeIntestine" rmin="0.0" rmax="1.62" rtor="5.16" startphi="0" deltaphi="HALFPI" />
   <torus aunit="radian" lunit="cm" name="SigmoidColonDownLowerLargeIntestine" rmin="0.0" rmax="1.62" rtor="2.70" startphi="0" deltaphi="HALFPI" />
 
@@ -77,7 +77,7 @@
 
  <structure>
   <volume name="LowerLargeIntestineVolume" >
-   <materialref ref="SoftTissue" />
+   <materialref ref="SoftTissue_lowerlargeint" />
    <solidref ref="LowerLargeIntestine" />
   </volume>
  </structure>

@@ -50,11 +50,11 @@ class DicomPhantomParameterisationColour : public G4PhantomParameterisation
 public:
     typedef std::map<G4String,G4VisAttributes*> ColourMap_t;
 
-    static G4String defaultColorFile;
+    static G4String fDefaultColorFile;
 
 public:  // with description
     DicomPhantomParameterisationColour(G4String colorFile =
-                                       defaultColorFile);
+                                       fDefaultColorFile);
     ~DicomPhantomParameterisationColour();
 
     virtual G4Material* ComputeMaterial(const G4int repNo,
@@ -69,7 +69,7 @@ private:
 
 private:
     ColourMap_t fColours;
-    std::map<G4int, G4VisAttributes*> mColours;
+    std::map<G4int, G4VisAttributes*> fColours2;
 };
 
 

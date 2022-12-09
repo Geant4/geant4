@@ -72,7 +72,7 @@ void G4SteppingVerboseWithUnits::SetManager(G4SteppingManager* const fMan)
 void G4SteppingVerboseWithUnits::TrackingStarted()
 {  
  CopyState();
- G4int oldprec = G4cout.precision(fprec);
+ G4long oldprec = G4cout.precision(fprec);
   
  // Step zero
  //  
@@ -108,7 +108,7 @@ void G4SteppingVerboseWithUnits::TrackingStarted()
 void G4SteppingVerboseWithUnits::StepInfo()
 {  
  CopyState();
- G4int oldprec = G4cout.precision(fprec);
+ G4long oldprec = G4cout.precision(fprec);
 
  if( verboseLevel >= 1 )
  {
@@ -193,7 +193,7 @@ void G4SteppingVerboseWithUnits::AtRestDoItInvoked()
       if( (*fSelectedAtRestDoItVector)[npGPIL] == G4ForceCondition::Forced )
       {
         ++npt;                
-        ptProcManager = (*fAtRestDoItVector)[np];
+        ptProcManager = (*fAtRestDoItVector)[(G4int)np];
         G4cout << "   # " << npt << " : " 
                << ptProcManager->GetProcessName() 
                << " (Forced)" << G4endl;
@@ -201,7 +201,7 @@ void G4SteppingVerboseWithUnits::AtRestDoItInvoked()
       else if ( (*fSelectedAtRestDoItVector)[npGPIL] == G4ForceCondition::NotForced )
       {
         ++npt;                
-        ptProcManager = (*fAtRestDoItVector)[np];
+        ptProcManager = (*fAtRestDoItVector)[(G4int)np];
         G4cout << "   # " << npt << " : "  << ptProcManager->GetProcessName()
                << G4endl;
       }
@@ -257,7 +257,7 @@ void G4SteppingVerboseWithUnits::AlongStepDoItAllDone()
 
     for(std::size_t ci=0; ci<MAXofAlongStepLoops; ++ci)
     {
-      ptProcManager = (*fAlongStepDoItVector)(ci);
+      ptProcManager = (*fAlongStepDoItVector)((G4int)ci);
       G4cout << "      " << ci+1 << ") ";
       if(ptProcManager != nullptr)
       {
@@ -322,7 +322,7 @@ void G4SteppingVerboseWithUnits::PostStepDoItAllDone()
         if( (*fSelectedPostStepDoItVector)[npGPIL] == G4ForceCondition::Forced )
         {
           ++npt;
-          ptProcManager = (*fPostStepDoItVector)[np];
+          ptProcManager = (*fPostStepDoItVector)[(G4int)np];
           G4cout << "      " << npt << ") "
                  << ptProcManager->GetProcessName()
                  << " (Forced)" << G4endl;
@@ -330,7 +330,7 @@ void G4SteppingVerboseWithUnits::PostStepDoItAllDone()
         else if ( (*fSelectedPostStepDoItVector)[npGPIL] == G4ForceCondition::NotForced )
         {
           ++npt;
-          ptProcManager = (*fPostStepDoItVector)[np];
+          ptProcManager = (*fPostStepDoItVector)[(G4int)np];
           G4cout << "      " << npt << ") " << ptProcManager->GetProcessName()
                  << G4endl;
         }
@@ -567,7 +567,7 @@ void G4SteppingVerboseWithUnits::VerboseTrack()
 
   G4cout << G4endl;
   G4cout << "    ++G4Track Information " << G4endl;
-  G4int oldprec = G4cout.precision(fprec);
+  G4long oldprec = G4cout.precision(fprec);
 
 
   G4cout << "      -----------------------------------------------" << G4endl;
@@ -695,7 +695,7 @@ void G4SteppingVerboseWithUnits::ShowStep() const
    // Show header
    G4cout << G4endl;
    G4cout << "    ++G4Step Information " << G4endl;
-   G4int oldprc = G4cout.precision(fprec);
+   G4long oldprc = G4cout.precision(fprec);
 
    // Show G4Step specific information
    G4cout << "      Address of G4Track : "

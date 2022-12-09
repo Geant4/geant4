@@ -103,10 +103,11 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
   // interval. RightHandSide is the right-hand side of ODE system. 
   // The source is similar to odeint routine from NRC p.721-722 .
 
-  G4int nstp, i, no_warnings = 0;
+  G4int nstp, i;
   G4double x, hnext, hdid, h;
 
 #ifdef G4DEBUG_FIELD
+  G4int no_warnings = 0;
   static G4int dbg = 1;
   G4double ySubStepStart[G4FieldTrack::ncompSVEC];
   G4FieldTrack  yFldTrkStart(y_current);
@@ -115,12 +116,10 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
   G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
   G4double ystart[G4FieldTrack::ncompSVEC], yEnd[G4FieldTrack::ncompSVEC]; 
   G4double  x1, x2;
-  G4bool succeeded = true, lastStepSucceeded;
+  G4bool succeeded = true;
 
   G4double startCurveLength;
 
-  G4int noFullIntegr = 0, noSmallIntegr = 0;
-  static G4ThreadLocal G4int  noGoodSteps = 0;  // Bad = chord > curve-len 
   const G4int nvar = fNoVars;
 
   G4FieldTrack yStartFT(y_current);
@@ -200,7 +199,7 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
     { 
       OneGoodStep(y,dydx,x,h,eps,hdid,hnext) ;
       //--------------------------------------
-      lastStepSucceeded = (hdid == h);   
+
 #ifdef G4DEBUG_FIELD
       if (dbg) // (dbg>2)
       {
@@ -256,11 +255,7 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
       hnext = ComputeNewStepSize( dyerr/eps, h);
 
       // .. hnext= ComputeNewStepSize_WithinLimits( dyerr/eps, h);
-      lastStepSucceeded = (dyerr<= eps);
     }
-
-    if (lastStepSucceeded)  { ++noFullIntegr; }
-    else                    { ++noSmallIntegr; }
 
     G4ThreeVector EndPos( y[0], y[1], y[2] );
 
@@ -293,19 +288,13 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
         {
           WarnEndPointTooFar ( endPointDist, hdid, eps, dbg ); 
           G4cerr << "  Total steps:  bad " << fNoBadSteps
-                 << " good " << noGoodSteps << " current h= " << hdid
-                 << G4endl;
+                 << " current h= " << hdid << G4endl;
           PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
         }
-#endif
         ++no_warnings;
+#endif
       }
     }
-    else
-    {
-      ++noGoodSteps;
-    } 
-// #endif
 
     //  Avoid numerous small last steps
     if( (h < eps * hstep) || (h < fSmallestFraction * startCurveLength) )
@@ -380,9 +369,9 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
 
   if(nstp > fMaxNoSteps)
   {
-    ++no_warnings;
     succeeded = false;
 #ifdef G4DEBUG_FIELD
+    ++no_warnings;
     if (dbg)
     {
       WarnTooManyStep( x1, x2, x );  //  Issue WARNING
@@ -525,7 +514,6 @@ G4OldMagIntDriver::OneGoodStep(      G4double y[],        // InOut
   G4double errvel_sq = 0.0;    // square of momentum vector difference
   G4double errspin_sq = 0.0;   // square of spin vector difference
 
-  static G4ThreadLocal G4int tot_no_trials=0; 
   const G4int max_trials=100; 
 
   G4ThreeVector Spin(y[9],y[10],y[11]);
@@ -534,7 +522,6 @@ G4OldMagIntDriver::OneGoodStep(      G4double y[],        // InOut
 
   for (G4int iter=0; iter<max_trials; ++iter)
   {
-    ++tot_no_trials;
     pIntStepper-> Stepper(y,dydx,h,ytemp,yerr); 
     //            *******
     G4double eps_pos = eps_rel_max * std::max(h, fMinimumStep); 
@@ -647,9 +634,6 @@ G4bool G4OldMagIntDriver::QuickAdvance(G4FieldTrack& y_posvel,    // INOUT
   G4double s_start;
   G4double dyerr_mom_sq, vel_mag_sq, inv_vel_mag_sq;
 
-  static G4ThreadLocal G4int no_call = 0; 
-  ++no_call; 
-
 #ifdef  G4DEBUG_FIELD  
   G4FieldTrack startTrack( y_posvel );  // For debugging
 #endif
@@ -713,7 +697,7 @@ G4bool G4OldMagIntDriver::QuickAdvance(G4FieldTrack& y_posvel,    // INOUT
 #ifdef  G4DEBUG_FIELD  
   // For debugging
   G4cout // << "G4MagInt_Driver::"
-         << "QuickAdvance call # " << no_call << G4endl
+         << "QuickAdvance" << G4endl
          << " Input:  hstep= " << hstep       << G4endl
          << "         track= " << startTrack  << G4endl
          << " Output: track= " << y_posvel    << G4endl
@@ -844,7 +828,7 @@ void G4OldMagIntDriver::PrintStatus(const G4FieldTrack& StartFT,
 {
     G4int verboseLevel= fVerboseLevel;
     const G4int noPrecision = 5;
-    G4int oldPrec= G4cout.precision(noPrecision);
+    G4long oldPrec= G4cout.precision(noPrecision);
     // G4cout.setf(ios_base::fixed,ios_base::floatfield);
 
     const G4ThreeVector StartPosition=       StartFT.GetPosition();
@@ -926,7 +910,7 @@ void G4OldMagIntDriver::PrintStat_Aux(const G4FieldTrack& aFieldTrack,
            << std::setw( 8) << UnitVelocity.x() << " "
            << std::setw( 8) << UnitVelocity.y() << " "
            << std::setw( 8) << UnitVelocity.z() << " ";
-    G4int oldprec= G4cout.precision(3);
+    G4long oldprec= G4cout.precision(3);
     G4cout << std::setw( 8) << UnitVelocity.mag2()-1.0 << " ";
     G4cout.precision(6);
     G4cout << std::setw(10) << dotVeloc_StartCurr << " ";
@@ -968,7 +952,7 @@ void G4OldMagIntDriver::PrintStat_Aux(const G4FieldTrack& aFieldTrack,
 void G4OldMagIntDriver::PrintStatisticsReport()
 {
   G4int noPrecBig = 6;
-  G4int oldPrec = G4cout.precision(noPrecBig);
+  G4long oldPrec = G4cout.precision(noPrecBig);
 
   G4cout << "G4OldMagIntDriver Statistics of steps undertaken. " << G4endl;
   G4cout << "G4OldMagIntDriver: Number of Steps: "

@@ -32,24 +32,20 @@
 
 #include "EventAction.hh"
 
-#include "Run.hh"
-
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 
+#include "Run.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det)
-  : G4UserEventAction()
-  , fDetector(det)
-{}
+EventAction::EventAction(DetectorConstruction* det) : G4UserEventAction(), fDetector(det) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
-  for(G4int k = 0; k < kMaxAbsor; k++)
-  {
+  for (G4int k = 0; k < kMaxAbsor; k++) {
     fEnergyDeposit[k] = fTrackLengthCh[k] = 0.0;
   }
 }
@@ -58,11 +54,9 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  Run* run =
-    static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
-  for(G4int k = 1; k <= fDetector->GetNbOfAbsor(); k++)
-  {
+  for (G4int k = 1; k <= fDetector->GetNbOfAbsor(); k++) {
     run->FillPerEvent(k, fEnergyDeposit[k], fTrackLengthCh[k]);
   }
 }

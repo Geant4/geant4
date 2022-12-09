@@ -35,11 +35,8 @@
 #include "globals.hh"
 #include "G4VCoulombBarrier.hh"
 
-class G4Pow;
-
 class G4CoulombBarrier : public G4VCoulombBarrier
 {
-
 public:
 
   explicit G4CoulombBarrier(G4int anA, G4int aZ);
@@ -51,15 +48,6 @@ public:
 
   G4CoulombBarrier(const G4CoulombBarrier & right) = delete;
   const G4CoulombBarrier & operator=(const G4CoulombBarrier & right) = delete;
-  G4bool operator==(const G4CoulombBarrier & right) const = delete;
-  G4bool operator!=(const G4CoulombBarrier & right) const = delete;
- 
-protected:
-
-  G4Pow* g4calc;
-
-private:
-
-  G4double factor;
 };
+
 #endif

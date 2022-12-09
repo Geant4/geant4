@@ -1,8 +1,6 @@
-# Macro file for the initialization phase of the
-# GammaRayTel
+# Macro file for the initialization phase of the GammaRayTel
 #
-# Sets some default verbose
-# and initializes the graphic.
+# Sets some default verbose and initializes the graphic.
 #
 /control/verbose 2
 /control/saveHistory
@@ -13,5 +11,3 @@
 /gun/energy 1 GeV
 /gun/vertexRadius 25. cm
 /gun/sourceType 2
-
-

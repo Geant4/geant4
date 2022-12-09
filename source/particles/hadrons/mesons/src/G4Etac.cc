@@ -76,7 +76,7 @@ G4Etac* G4Etac::Definition()
                 false,          0.0*ns,          NULL,
                 false,          "etac",           441);
   }
-  theInstance = reinterpret_cast<G4Etac*>(anInstance);
+  theInstance = static_cast<G4Etac*>(anInstance);
   return theInstance;
 }
 

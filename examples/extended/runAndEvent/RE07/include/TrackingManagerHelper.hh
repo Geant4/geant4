@@ -62,41 +62,36 @@ class TrackingManagerHelper
     // automatically after this method returns. If secondaries should be given
     // back to the G4EventManager, put them into the container passed as the
     // last argument.
-    virtual void AlongStepDoIt(G4Track& track, G4Step& step,
-                               G4TrackVector& secondaries) = 0;
+    virtual void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) = 0;
 
     // This method is called unless the track has been killed during this step.
     // If secondaries should be given back to the G4EventManager, put them into
     // the container passed as the last argument.
-    virtual void PostStepDoIt(G4Track& track, G4Step& step,
-                              G4TrackVector& secondaries) = 0;
+    virtual void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) = 0;
 
     virtual bool HasAtRestProcesses() { return false; }
 
     // This method is called when a track is stopped, but still alive. If
     // secondaries should be given back to the G4EventManager, put them into
     // the container passed as the last argument.
-    virtual void AtRestDoIt(G4Track& track, G4Step& step,
-                            G4TrackVector& secondaries)
+    virtual void AtRestDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries)
     {
-      (void) track;
-      (void) step;
-      (void) secondaries;
+      (void)track;
+      (void)step;
+      (void)secondaries;
     }
   };
 
   class Navigation
   {
    public:
-    virtual G4double MakeStep(G4Track& track, G4Step& step,
-                              G4double physicalStep) = 0;
+    virtual G4double MakeStep(G4Track& track, G4Step& step, G4double physicalStep) = 0;
 
     virtual void FinishStep(G4Track& track, G4Step& step) = 0;
   };
 
   template <typename PhysicsImpl, typename NavigationImpl>
-  static void TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
-                            NavigationImpl& navigation);
+  static void TrackParticle(G4Track* aTrack, PhysicsImpl& physics, NavigationImpl& navigation);
 
   template <typename PhysicsImpl>
   static void TrackChargedParticle(G4Track* aTrack, PhysicsImpl& physics);

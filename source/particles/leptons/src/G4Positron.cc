@@ -81,7 +81,7 @@ G4Positron* G4Positron::Definition()
    anInstance->SetPDGMagneticMoment( muB * 1.00115965218076 );
 
   }
-  theInstance = reinterpret_cast<G4Positron*>(anInstance);
+  theInstance = static_cast<G4Positron*>(anInstance);
   return theInstance;
 }
 

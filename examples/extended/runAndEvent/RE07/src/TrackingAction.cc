@@ -33,28 +33,24 @@
 
 #include "TrackingAction.hh"
 
-#include "Run.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
 
+#include "Run.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction()
-  : G4UserTrackingAction()
-{}
+TrackingAction::TrackingAction() : G4UserTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   // get Run
-  Run* run =
-    static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
-  if(track->GetTrackID() != 1)
-  {
+  if (track->GetTrackID() != 1) {
     run->AddSecondaryTrack(track);
   }
 }

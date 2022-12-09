@@ -208,13 +208,13 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -Wl,-w -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -Wl,-w -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

@@ -79,8 +79,8 @@ double RandGamma::genGamma( HepRandomEngine *anEngine,
  *                              Acceptance complement method gd          *
  *************************************************************************/
 
-  static CLHEP_THREAD_LOCAL double aa = -1.0, aaa = -1.0, b, c, d, e, r, s, si, ss, q0;
-  static const double q1 = 0.0416666664, q2 =  0.0208333723, q3 = 0.0079849875,
+  double aa = -1.0, aaa = -1.0, b{0.}, c{0.}, d{0.}, e{0.}, r{0.}, s{0.}, si{0.}, ss{0.}, q0{0.};
+  constexpr double q1 = 0.0416666664, q2 =  0.0208333723, q3 = 0.0079849875,
        q4 = 0.0015746717, q5 = -0.0003349403, q6 = 0.0003340332,
        q7 = 0.0006053049, q8 = -0.0004701849, q9 = 0.0001710320,
        a1 = 0.333333333,  a2 = -0.249999949,  a3 = 0.199999867,
@@ -90,8 +90,8 @@ double RandGamma::genGamma( HepRandomEngine *anEngine,
        e4 = 0.041664508,  e5 =  0.008345522,  e6 = 0.001353826,
        e7 = 0.000247453;
 
-double gds,p,q,t,sign_u,u,v,w,x;
-double v1,v2,v12;
+ double gds{0.},p{0.},q{0.},t{0.},sign_u{0.},u{0.},v{0.},w{0.},x{0.};
+ double v1{0.},v2{0.},v12{0.};
 
 // Check for invalid input values
 

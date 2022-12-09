@@ -78,12 +78,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
     new G4UIcmdWithAString("/score/create/cylinderMesh", this);
   meshCylinderCreateCmd->SetGuidance("Create scoring mesh.");
   meshCylinderCreateCmd->SetParameterName("MeshName", false);
-  //
-  //  meshSphereCreateCmd = new
-  //  G4UIcmdWithAString("/score/create/sphereMesh",this);
-  //  meshSphereCreateCmd->SetGuidance("Create scoring mesh.");
-  //  meshSphereCreateCmd->SetParameterName("MeshName",false);
-  //
+
   meshRWLogVolCreateCmd =
     new G4UIcommand("/score/create/realWorldLogVol", this);
   meshRWLogVolCreateCmd->SetGuidance(
@@ -115,7 +110,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultUnit("mm");
   probeCreateCmd->SetParameter(param);
   param = new G4UIparameter("checkOverlap", 'b', true);
-  param->SetDefaultValue(false);
+  param->SetDefaultValue(0);
   probeCreateCmd->SetParameter(param);
   //
   meshOpnCmd = new G4UIcmdWithAString("/score/open", this);
@@ -124,11 +119,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
   meshClsCmd = new G4UIcmdWithoutParameter("/score/close", this);
   meshClsCmd->SetGuidance("Close scoring mesh.");
-  //
-  //  meshActCmd = new G4UIcmdWithABool("/score/mesh/activate",this);
-  //  meshActCmd->SetGuidance("Activate scoring mesh.");
-  //  meshActCmd->SetParameterName("MeshName",false);
-  //
+ 
   meshDir = new G4UIdirectory("/score/mesh/");
   meshDir->SetGuidance("    Mesh processing commands.");
   //
@@ -186,9 +177,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mBinCmd->SetGuidance("   Nr  :(int) Number of bins in radial axis ");
   mBinCmd->SetGuidance("   Nz  :(int) Number of bins in z axis ");
   mBinCmd->SetGuidance("   Nphi:(int) Number of bins in phi axis ");
-  // mBinCmd->SetGuidance("  Axis:(int) Axis of division ");
-  //  mBinCmd->SetGuidance("  P1..Pn-1  :(double) \"paramter from P1 to Pn-1 for
-  //  division.\"");
+
   param = new G4UIparameter("Ni", 'i', false);
   param->SetDefaultValue("1");
   param->SetParameterRange("Ni>0");
@@ -201,10 +190,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue("1");
   mBinCmd->SetParameter(param);
   param->SetParameterRange("Nk>0");
-  // param = new G4UIparameter("Axis",'i',true);
-  // param->SetDefaultValue("3");
-  // mBinCmd->SetParameter(param);
-  //
+
   //   Placement command
   mTransDir = new G4UIdirectory("/score/mesh/translate/");
   mTransDir->SetGuidance("Mesh translation commands.");
@@ -219,10 +205,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   //
   mRotDir = new G4UIdirectory("/score/mesh/rotate/");
   mRotDir->SetGuidance("Mesh rotation commands.");
-  //
-  // mRResetCmd = new G4UIcmdWithoutParameter("/score/mesh/rotate/reset",this);
-  // mRResetCmd->SetGuidance("Reset rotation angles of the scoring mesh.");
-  //
+
   mRotXCmd = new G4UIcmdWithADoubleAndUnit("/score/mesh/rotate/rotateX", this);
   mRotXCmd->SetGuidance("Rotate the scoring mesh in X axis.");
   mRotXCmd->SetParameterName("Rx", false);
@@ -328,26 +311,6 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   colorMapMinMaxCmd->SetParameter(param);
   colorMapMinMaxCmd->SetToBeBroadcasted(false);
 
-  /*
-  chartCmd = new G4UIcommand("/score/drawChart",this);
-  chartCmd->SetGuidance("Draw color chart on the screen.");
-  chartCmd->SetGuidance("[usage] /score/drawChart");
-  chartCmd->SetGuidance("  mesh    :(String) Mesh name.");
-  chartCmd->SetGuidance("  psname  :(String) PS name.");
-  chartCmd->SetGuidance("  On/Off  :(boolean) On or Off the color chart.");
-  chartCmd->SetGuidance("  scale   :(String) default=linear, or log ");
-  param = new G4UIparameter("meshName",'s',false);
-  chartCmd->SetParameter(param);
-  param = new G4UIparameter("psName",'s',false);
-  chartCmd->SetParameter(param);
-  param = new G4UIparameter("On",'s',true);
-  param->SetDefaultValue("true");
-  chartCmd->SetParameter(param);
-  param = new G4UIparameter("scale",'s',true);
-  param->SetDefaultValue("linear");
-  chartCmd->SetParameter(param);
-  */
-
   // Dump a scored quantity
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
   dumpQtyToFileCmd->SetGuidance("Dump one scored quantity to file.");
@@ -439,26 +402,22 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete meshRWLogVolCreateCmd;
   delete probeCreateCmd;
   delete meshCreateDir;
-  //    delete           meshSphereCreateCmd;
   //
   delete meshOpnCmd;
   //
   delete meshClsCmd;
-  //    delete    meshActCmd;
   delete meshDir;
   //
   delete mBoxSizeCmd;
   delete mCylinderSizeCmd;
   delete mCylinderRMinCmd;
   delete mCylinderAngleCmd;
-  //    delete  mSphereSizeCmd;
   //
   delete mBinCmd;
   //
   delete mTResetCmd;
   delete mTXyzCmd;
   delete mTransDir;
-  //    delete   mRResetCmd;
   delete mRotXCmd;
   delete mRotYCmd;
   delete mRotZCmd;
@@ -468,7 +427,6 @@ G4ScoringMessenger::~G4ScoringMessenger()
   delete probeMatCmd;
   delete probeDir;
   //
-  // delete     chartCmd;
   delete dumpCmd;
   delete drawCmd;
   delete drawColumnCmd;
@@ -515,13 +473,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4int iColumn         = StoI(next());
     G4String colorMapName = next();
     fSMan->DrawMesh(meshName, psName, iPlane, iColumn, colorMapName);
-    //  } else if(command==chartCmd ){
-    //      G4Tokenizer next(newVal);
-    //      G4String meshName = next();
-    //      G4String psName = next();
-    //      //G4bool   onFlag = StoB(next());
-    //      G4String scaleOption = next();
-    //      fSMan->DrawChart(meshName,psName,onFlag,scaleOption);
   }
   else if(command == dumpQtyToFileCmd)
   {
@@ -531,7 +482,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4String fileName = next();
     G4String option   = next("\n");
     auto mesh         = fSMan->FindMesh(meshName);
-    if(!mesh)
+    if(mesh == nullptr)
     {
       G4ExceptionDescription ed;
       ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
@@ -549,7 +500,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4double fac      = StoD(next());
     G4String option   = next("\n");
     auto mesh         = fSMan->FindMesh(meshName);
-    if(!mesh)
+    if(mesh == nullptr)
     {
       G4ExceptionDescription ed;
       ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
@@ -567,7 +518,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4String fileName = next();
     G4String option   = next("\n");
     auto mesh         = fSMan->FindMesh(meshName);
-    if(!mesh)
+    if(mesh == nullptr)
     {
       G4ExceptionDescription ed;
       ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
@@ -584,7 +535,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4double fac      = StoD(next());
     G4String option   = next("\n");
     auto mesh         = fSMan->FindMesh(meshName);
-    if(!mesh)
+    if(mesh == nullptr)
     {
       G4ExceptionDescription ed;
       ed << "Mesh name <" << meshName << "> is not found. Command ignored.";
@@ -606,7 +557,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == meshBoxCreateCmd)
   {
     G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh();
-    if(currentmesh)
+    if(currentmesh != nullptr)
     {
       G4ExceptionDescription ed;
       ed << "ERROR[" << meshBoxCreateCmd->GetCommandPath() << "] : Mesh <"
@@ -617,7 +568,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     else
     {
       G4VScoringMesh* mesh = fSMan->FindMesh(newVal);
-      if(!mesh)
+      if(mesh == nullptr)
       {
         mesh = new G4ScoringBox(newVal);
         fSMan->RegisterScoringMesh(mesh);
@@ -635,7 +586,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == meshCylinderCreateCmd)
   {
     G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh();
-    if(currentmesh)
+    if(currentmesh != nullptr)
     {
       G4ExceptionDescription ed;
       ed << "ERROR[" << meshCylinderCreateCmd->GetCommandPath() << "] : Mesh <"
@@ -646,7 +597,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     else
     {
       G4VScoringMesh* mesh = fSMan->FindMesh(newVal);
-      if(!mesh)
+      if(mesh == nullptr)
       {
         mesh = new G4ScoringCylinder(newVal);
         fSMan->RegisterScoringMesh(mesh);
@@ -664,7 +615,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == meshRWLogVolCreateCmd)
   {
     auto mesh = fSMan->GetCurrentMesh();
-    if(mesh)
+    if(mesh != nullptr)
     {
       G4ExceptionDescription ed;
       ed << "ERROR[" << meshRWLogVolCreateCmd->GetCommandPath() << "] : Mesh <"
@@ -678,7 +629,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
       G4String meshName = next();
       G4int idx         = StoI(next());
       mesh              = fSMan->FindMesh(meshName);
-      if(!mesh)
+      if(mesh == nullptr)
       {
         mesh = new G4ScoringRealWorld(meshName);
         mesh->SetCopyNumberLevel(idx);
@@ -697,7 +648,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == probeCreateCmd)
   {
     auto mesh = fSMan->GetCurrentMesh();
-    if(mesh)
+    if(mesh != nullptr)
     {
       G4ExceptionDescription ed;
       ed << "ERROR[" << meshRWLogVolCreateCmd->GetCommandPath() << "] : Mesh <"
@@ -713,7 +664,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
       halfSize *= G4UIcommand::ValueOf(next());
       G4bool checkOverlap = StoB(next());
       mesh                = fSMan->FindMesh(qname);
-      if(!mesh)
+      if(mesh == nullptr)
       {
         mesh = new G4ScoringProbe(qname, halfSize, checkOverlap);
         fSMan->RegisterScoringMesh(mesh);
@@ -730,7 +681,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == probeMatCmd || command == probeLocateCmd)
   {
     auto mesh = fSMan->GetCurrentMesh();
-    if(!mesh)
+    if(mesh == nullptr)
     {
       G4ExceptionDescription ed;
       ed << "ERROR : No mesh is currently open. Open/create a mesh first. "
@@ -774,7 +725,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == floatMinMaxCmd)
   {
     G4VScoreColorMap* colorMap = fSMan->GetScoreColorMap(newVal);
-    if(colorMap)
+    if(colorMap != nullptr)
     {
       colorMap->SetFloatingMinMax(true);
     }
@@ -793,7 +744,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4double minVal            = StoD(next());
     G4double maxVal            = StoD(next());
     G4VScoreColorMap* colorMap = fSMan->GetScoreColorMap(mapName);
-    if(colorMap)
+    if(colorMap != nullptr)
     {
       colorMap->SetFloatingMinMax(false);
       colorMap->SetMinMax(minVal, maxVal);
@@ -809,7 +760,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
   else if(command == meshOpnCmd)
   {
     G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh();
-    if(currentmesh)
+    if(currentmesh != nullptr)
     {
       G4ExceptionDescription ed;
       ed << "ERROR[" << meshOpnCmd->GetCommandPath() << "] : Mesh <"
@@ -820,7 +771,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     else
     {
       G4VScoringMesh* mesh = fSMan->FindMesh(newVal);
-      if(!mesh)
+      if(mesh == nullptr)
       {
         G4ExceptionDescription ed;
         ed << "ERROR[" << meshOpnCmd->GetCommandPath() << "] : Scoring mesh <"
@@ -845,7 +796,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
     G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
     //
     // Commands for Current Mesh
-    if(mesh)
+    if(mesh != nullptr)
     {
       MeshShape shape = mesh->GetShape();
       if(shape == MeshShape::realWorldLogVol)
@@ -863,10 +814,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
         FillTokenVec(newVal, token);
         //
         // Mesh Geometry
-        //
-        //	  if(command==meshActCmd) {
-        //	      mesh->Activate(meshActCmd->GetNewBoolValue(newVal));
-        //	  } else
         if(command == mBoxSizeCmd)
         {
           if(shape == MeshShape::box)
@@ -943,7 +890,6 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
           centerPosition[1] = xyz.y();
           centerPosition[2] = xyz.z();
           mesh->SetCenterPosition(centerPosition);
-          //	  } else if(command==mRResetCmd) {
         }
         else if(command == mRotXCmd)
         {
@@ -1000,7 +946,7 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token)
   G4int Nk = StoI(token[2]);
   G4int nSegment[3];
 
-  if(dynamic_cast<G4ScoringBox*>(mesh))
+  if(dynamic_cast<G4ScoringBox*>(mesh) != nullptr)
   {
     G4cout << ".... G4ScoringMessenger::MeshBinCommand - G4ScoringBox"
            << G4endl;
@@ -1008,7 +954,7 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token)
     nSegment[1] = Nj;
     nSegment[2] = Nk;
   }
-  else if(dynamic_cast<G4ScoringCylinder*>(mesh))
+  else if(dynamic_cast<G4ScoringCylinder*>(mesh) != nullptr)
   {
     G4cout << ".... G4ScoringMessenger::MeshBinCommand - G4ScoringCylinder"
            << G4endl;
@@ -1040,7 +986,7 @@ void G4ScoringMessenger::Fill1D(G4UIcommand* cmd, G4String newVal)
   G4int copyNo      = StoI(next());
 
   auto filler = G4VScoreHistFiller::Instance();
-  if(!filler)
+  if(filler == nullptr)
   {
     G4ExceptionDescription ed;
     ed << "G4TScoreHistFiller is not instantiated in this application.";

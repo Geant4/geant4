@@ -56,7 +56,7 @@ TEMPLATE G4ITMANAGER::G4ITFinder()
 
 TEMPLATE G4ITMANAGER::~G4ITFinder()
 {
-  for(auto it : fTree)
+  for(auto & it : fTree)
   {
     delete it.second;
   }
@@ -67,7 +67,7 @@ TEMPLATE G4ITMANAGER::~G4ITFinder()
 TEMPLATE
 void G4ITMANAGER::Clear()
 {
-  for(auto it : fTree)
+  for(auto & it : fTree)
   {
     delete it.second;
   }

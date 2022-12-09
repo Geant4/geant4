@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-09-09 Susanna Guatelli (XRayFluo-V11-00-02)
+- Ranecu Engine removed. Default one now used
+  
 ## 2022-02-14 Gabriele Cosmo (XRayFluo-V11-00-01)
 - XrayFluoEventAction: fixed compilation warning on Intel-icx compiler
   for unused variable.

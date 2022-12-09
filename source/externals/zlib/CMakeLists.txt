@@ -73,8 +73,13 @@ configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/src/zconf.h.cmakein
 # -----
 # - Geant4 specific part to integrate
 #
-#   headers listed under Sources are internal zlib headers
-#   Private headers are in src!
+# Intel/Clang may warn about -Wdeprecated-non-prototype, but per https://github.com/madler/zlib/issues/633
+# we suppress this warning if the compiler supports the flag
+include(CheckCCompilerFlag)
+check_c_compiler_flag("-Wno-deprecated-non-prototype" G4ZLIB_NEEDS_DNP)
+
+# Headers listed under Sources are internal zlib headers
+# Private headers are in src!
 set(ZLIB_PUBLIC_HDRS
   ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
   include/zlib.h )
@@ -107,7 +112,7 @@ set(ZLIB_SRCS
 
 geant4_add_external_library(NAME G4zlib SOURCES ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS} ${ZLIB_SRCS})
 
-# Add header paths for private/generated files in Build
+# Add header paths for private/generated files in Build, plus flags if present
 foreach(__g4zlib_target G4zlib G4zlib-static)
   if(TARGET ${__g4zlib_target})
     target_include_directories(${__g4zlib_target}
@@ -116,6 +121,10 @@ foreach(__g4zlib_target G4zlib G4zlib-static)
       PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     )
+
+    if(G4ZLIB_NEEDS_DNP)
+      target_compile_options(${__g4zlib_target} PRIVATE "-Wno-deprecated-non-prototype")
+    endif()
   endif()
 endforeach()
 

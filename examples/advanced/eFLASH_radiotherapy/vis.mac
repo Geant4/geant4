@@ -1,0 +1,61 @@
+# Use these open statements to open selected visualization
+#
+# Use this open statement to create an OpenGL view:
+/vis/open OGL 600x600-0+0
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#
+# Draw geometry:
+/vis/drawVolume
+#
+# Specify view angle:
+/vis/viewer/set/viewpointVector -1 0 0
+/vis/viewer/set/lightsVector -1 0 0
+#
+# Specify style (surface, wireframe, auxiliary edges,...)
+/vis/viewer/set/style wireframe
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/lineSegmentsPerCircle 100
+
+# Axes, scale, etc.
+#/vis/scene/add/scale   # Simple scale line
+#/vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate 50000
+
+#
+/vis/viewer/set/style wireframe
+/vis/viewer/set/hiddenMarker true
+/vis/viewer/set/viewpointThetaPhi 90
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+/vis/scene/add/trajectories
+
+##BEAM
+/control/execute 9MeVEF.mac
+
+
+# Scoring mesh is used to calculate
+#  the dose in the phantom
+
+/score/create/boxMesh boxMesh_1
+
+/score/mesh/boxSize 5 0.05 0.5 cm
+/score/mesh/nBin 100 1 1
+/score/mesh/translate/xyz 50 0 0 mm 
+/score/quantity/doseDeposit dose Gy
+
+#
+/score/close
+
+#/score/dumpQuantityToFile boxMesh_1 dose dose.out
+
+##to visualize the scoring mesh:
+
+#/score/drawProjection boxMesh_1 dose
+

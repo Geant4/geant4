@@ -297,7 +297,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 
   // determine the smallest non-negative solution
   //
-  for ( size_t k = 0 ; k<roots.size() ; ++k )
+  for ( std::size_t k = 0 ; k<roots.size() ; ++k )
   {
     t = roots[k] ;
 
@@ -1460,7 +1460,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -1500,7 +1500,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4int oldprc = G4cout.precision(16) ;
+     G4long oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -1573,7 +1573,7 @@ G4VSolid* G4Torus::Clone() const
 
 std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

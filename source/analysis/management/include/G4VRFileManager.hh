@@ -53,7 +53,7 @@ class G4VRFileManager : public G4BaseFileManager
     explicit G4VRFileManager(const G4AnalysisManagerState& state)
       : G4BaseFileManager(state) {}
     G4VRFileManager() = delete;
-    virtual ~G4VRFileManager() = default;
+    ~G4VRFileManager() override = default;
 
     // Methods applied to all registered files
     virtual void CloseFiles() = 0;

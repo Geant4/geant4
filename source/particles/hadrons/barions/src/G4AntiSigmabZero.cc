@@ -89,7 +89,7 @@ G4AntiSigmabZero* G4AntiSigmabZero::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiSigmabZero*>(anInstance);
+  theInstance = static_cast<G4AntiSigmabZero*>(anInstance);
   return theInstance;
 }
 

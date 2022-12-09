@@ -5,7 +5,7 @@
 /*! \page ExampleB1Con Example B1Con
 
 
-Example of Convergence Tester 
+Example of Convergence Tester
 
           Koi, Tatsumi \n
           SLAC National Accelerator Laboratory / PPA  \n
@@ -13,25 +13,25 @@ Example of Convergence Tester
 
 This example shows how to use convergece tester in Geant4.
 The aim of Convergence Tester
-- After a Monte Carlo simulation, we get an answer. However how to estimate quality of the answer. 
-The answer is usually given in a form of average value. 
-But sometimes the value is strongly affected by single or a few events in the full calculation.  
+- After a Monte Carlo simulation, we get an answer. However how to estimate quality of the answer.
+The answer is usually given in a form of average value.
+But sometimes the value is strongly affected by single or a few events in the full calculation.
 In such case, we must concern about quality of the value.
 
 What we must remember is
 - Large number of history does not valid result of simulation.
 - Small Relative Error does not valid result of simulation
-Convergence tester provides statistical information 
+Convergence tester provides statistical information
 to assist establishing valid confidence intervals for Monte Carlo results for users.
 
-Geometry and Physics are same to exampleB1. Please see \ref ExampleB1. 
+Geometry and Physics are same to exampleB1. Please see \ref ExampleB1.
 Note that in this example, the classes with the code added for
 the purpose of demonstration of the Convergence Tester start with a prefix
 B1Con instead of B1 and also the executable and the test macro names are changed
-in exampleB1Con and exampleB1Con.in. 
+in exampleB1Con and exampleB1Con.in.
 
 Known problem:
-Computing time of T cannot be gotten properly in current MT migration of example of B1Con. Therefore  
+Computing time of T cannot be gotten properly in current MT migration of example of B1Con. Therefore
 FOM (=1/(R^2T) where R is relative error and T is computing time) relates numbers are unusable.
 
 \verbatim
@@ -39,7 +39,7 @@ FOM (=1/(R^2T) where R is relative error and T is computing time) relates number
 Output example
 
 // Part I.A
-// Basic statistics values 
+// Basic statistics values
 
 G4ConvergenceTester Output Result of DOSE_TALLY
        EFFICIENCY =         0.601
@@ -52,7 +52,7 @@ G4ConvergenceTester Output Result of DOSE_TALLY
               FOM =       1238.68
 
 // Part I.B
-// If the largeset scored events happen at next to the last event, 
+// If the largeset scored events happen at next to the last event,
 // then how much the event effects the statistics values of the calculation
 
 THE LARGEST SCORE =   1.07301e-11 and it happend at 487th event
@@ -67,16 +67,16 @@ THE LARGEST SCORE =   1.07301e-11 and it happend at 487th event
 
 MEAN distribution is  RANDOM
 r follows 1/std::sqrt(N)
-r is monotonically decrease 
+r is monotonically decrease
 r is less than 0.1. r = 0.0304622
 VOV follows 1/std::sqrt(N)
-VOV is monotonically decrease 
+VOV is monotonically decrease
 FOM distribution is not RANDOM
 SLOPE is not large enough
 This result passes 6 / 8 Convergence Test.
 
 // Part II
-// Profile of statistics values in the history 
+// Profile of statistics values in the history
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
@@ -108,6 +108,6 @@ Judith F. Briesmeister, Editor \n
 LA-12625-M, Issued: March 1997, UC 705 and UC 700 \n
 CHAPTER 2. GEOMETRY, DATA, PHYSICS, AND MATHEMATICS \n
        VI. ESTIMATION OF THE MONTE CARLO PRECISION  \n
-       
-*/       
+
+*/
 

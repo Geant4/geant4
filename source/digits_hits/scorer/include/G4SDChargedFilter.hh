@@ -47,11 +47,10 @@ class G4ChargedDefinition;
 
 class G4SDChargedFilter : public G4VSDFilter
 {
- public:  // with description
+ public:
   G4SDChargedFilter(G4String name);
-  virtual ~G4SDChargedFilter();
+  ~G4SDChargedFilter() override = default;
 
- public:  // with description
-  virtual G4bool Accept(const G4Step*) const;
+  G4bool Accept(const G4Step*) const override;
 };
 #endif

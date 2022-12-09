@@ -70,12 +70,12 @@ void G4DecayKineticTracks::Decay(G4KineticTrackVector *tracks) const {
       tracks->insert(tracks->end(), daughters->begin(), daughters->end());
       delete track;		// Remove parent track
       delete daughters;
-      (*tracks)[i] = NULL;	// Flag parent's slot for removal
+      (*tracks)[i] = nullptr;	// Flag parent's slot for removal
     }
   }
 
   // Find and remove null pointers created by decays above
-  for (int j=tracks->size()-1; j>=0; --j) {
-    if (NULL == (*tracks)[j]) tracks->erase(tracks->begin()+j);
+  for (G4int j=(G4int)tracks->size()-1; j>=0; --j) {
+    if (nullptr == (*tracks)[j]) tracks->erase(tracks->begin()+j);
   }
 }

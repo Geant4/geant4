@@ -70,7 +70,7 @@ G4BsMesonZero* G4BsMesonZero::Definition()
                 false,     1.505e-3*ns,          NULL,
                 false,       "Bs");
   }
-  theInstance = reinterpret_cast<G4BsMesonZero*>(anInstance);
+  theInstance = static_cast<G4BsMesonZero*>(anInstance);
   return theInstance;
 }
 

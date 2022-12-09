@@ -6,6 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-26 Gabriele Cosmo (hadr-inclxx-V11-00-08)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (hadr-inclxx-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-11 Alberto Ribon (hadr-inclxx-V11-00-06)
+- G4INCLXXInterface: introduced a protection against unphysical nuclear remnants
+  (i.e. unbound systems), and, if this is the case, resample the collision.
+
+## 2022-10-07 Gabriele Cosmo (hadr-inclxx-V11-00-05)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used in G4INCLInvFInterpolationTable, G4INCLStore,
+  G4INCLNpiToMissingStrangenessChannel and G4INCLNNToMissingStrangenessChannel.
+
 ## 2022-05-25 Alberto Ribon (hadr-inclxx-V11-00-04)
 -  G4INCLParticle, G4INCLEventInfo, G4INCLNucleus, G4INCLDeltaDecayChannel,
    G4INCLXXInterface : set and propagate the information on parent resonance.

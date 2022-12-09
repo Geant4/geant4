@@ -75,6 +75,7 @@ struct E_P_E_isoAng
       energy=0.0;
       n=0;
       sum_of_probXdEs=0.0;
+      secondary_energy_cdf_size=0;
    };
 };
 

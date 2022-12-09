@@ -52,20 +52,18 @@ public:
   void AddBodyPart(G4String);	      // Set Body Parts Sensitivity
 
 private:
-  G4HumanPhantomConstruction*           myUserPhantom;
+  G4HumanPhantomConstruction*    fUserPhantom;
 
-  G4UIdirectory*                 phantomDir;
-  G4UIdirectory*                 bpDir;
+  G4UIdirectory*                 fPhantomDir;
+  G4UIdirectory*                 fDir;
 
-  G4UIcmdWithAString*            modelCmd; 
-  G4UIcmdWithAString*            sexCmd;  
-  G4UIcmdWithAString*            bodypartCmd;
-  G4UIcmdWithoutParameter*       endCmd;
+  G4UIcmdWithAString*            fModelCmd; 
+  G4UIcmdWithAString*            fSexCmd;  
+  G4UIcmdWithAString*            fBodypartCmd;
+  G4UIcmdWithoutParameter*       fEndCmd;
 
-  G4String                       bodypart;
-  G4bool                         bps;
-
+  G4String                       fBodypart;
+  G4bool                         fBps;
 };
-
 #endif
 

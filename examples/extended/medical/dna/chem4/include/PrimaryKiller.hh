@@ -98,7 +98,7 @@ protected:
 public:
   virtual void Initialize(G4HCofThisEvent*);
   virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
+  virtual void Clear();
   virtual void DrawAll();
   virtual void PrintAll();
 };

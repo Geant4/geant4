@@ -81,7 +81,7 @@ G4Electron* G4Electron::Definition()
    anInstance->SetPDGMagneticMoment( muB * 1.00115965218076 );
 
   }
-  theInstance = reinterpret_cast<G4Electron*>(anInstance);
+  theInstance = static_cast<G4Electron*>(anInstance);
   return theInstance;
 }
 

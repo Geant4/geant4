@@ -1,8 +1,13 @@
 # Category gdml History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-11 Gabriele Cosmo (gdml-V11-00-05)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
 ## 2022-04-04 Sergio Losilla (gdml-V11-00-04)
 - Changed default temperature to 20 °C (followup to commit ba61d0).

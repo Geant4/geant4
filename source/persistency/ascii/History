@@ -1,8 +1,16 @@
 # Category ascii History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-18 Gabriele Cosmo (ascii-V11-00-03)
+- More compilation warnings fixes for implicit type conversions.
+
+## 2022-11-11 Gabriele Cosmo (ascii-V11-00-02)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
 ## 2021-12-22 Pedro Arce (ascii-V11-00-01)
 - Correct wrong automatic conversion degree-radian for G4Polycone phi angle parameter

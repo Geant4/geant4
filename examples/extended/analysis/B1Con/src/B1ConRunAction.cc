@@ -42,18 +42,18 @@
 
 B1ConRunAction::B1ConRunAction()
 : G4UserRunAction()
-{ 
+{
   // add new units for dose
-  // 
+  //
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
-  const G4double nanogray  = 1.e-9*gray;  
+  const G4double nanogray  = 1.e-9*gray;
   const G4double picogray  = 1.e-12*gray;
-   
+
   new G4UnitDefinition("milligray", "milliGy" , "Dose", milligray);
   new G4UnitDefinition("microgray", "microGy" , "Dose", microgray);
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
-  new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);        
+  new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
 
 }
 
@@ -65,19 +65,19 @@ B1ConRunAction::~B1ConRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* B1ConRunAction::GenerateRun()
-{ 
-  return new B1ConRun; 
+{
+  return new B1ConRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1ConRunAction::BeginOfRunAction(const G4Run* aRun)
-{ 
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  
+
   if (IsMaster()) {
      fdose_tally = new G4ConvergenceTester("DOSE_TALLY");
      //fdose_tally = new G4ConvergenceTester();
@@ -91,7 +91,7 @@ void B1ConRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int nofEvents = aRun->GetNumberOfEvent();
   if (nofEvents == 0) return;
-  
+
   const B1ConRun* b1ConRun = static_cast<const B1ConRun*>(aRun);
 
   // Compute dose
@@ -123,15 +123,15 @@ void B1ConRunAction::EndOfRunAction(const G4Run* aRun)
     G4double particleEnergy = particleGun->GetParticleEnergy();
     runCondition += G4BestUnit(particleEnergy,"Energy");
   }
-        
+
   // Print
-  //  
+  //
   if (IsMaster())
   {
 
      for ( G4int i = 0 ; i != b1ConRun->GetNumberOfEvent(); i++ ) {
-        G4double aDose = b1ConRun->GetEdepPerEvent(i)/mass/gray; 
-        fdose_tally->AddScore( aDose ); 
+        G4double aDose = b1ConRun->GetEdepPerEvent(i)/mass/gray;
+        fdose_tally->AddScore( aDose );
      }
 
      fdose_tally->ShowResult();
@@ -148,7 +148,7 @@ void B1ConRunAction::EndOfRunAction(const G4Run* aRun)
   }
   G4cout
      << "\n The run consists of " << nofEvents << " "<< runCondition
-     << "\n Dose in scoring volume : " 
+     << "\n Dose in scoring volume : "
      << G4BestUnit(dose,"Dose") << " +- " << G4BestUnit(rmsDose,"Dose")
      << "\n------------------------------------------------------------\n"
      << G4endl;

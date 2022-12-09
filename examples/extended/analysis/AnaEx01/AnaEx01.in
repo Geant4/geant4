@@ -2,16 +2,17 @@
 # Macro file for the test of AnaEx01 example
 #
 
+#/run/numberOfThreads 2
+
 # reduce output in MT
 /control/cout/ignoreThreadsExcept 0
 
 # initialize
 /run/initialize
 
-# e- 500MeV 
-/gun/particle e-
-/gun/energy 500 MeV
-/run/beamOn 1000
+# set file type via parameter passed from calling macro
+# or use the default value "root" set in main
+/analysis/setDefaultFileType {defaultFileType}
 
 # Test commands defined in this example
 /control/verbose 2
@@ -24,3 +25,8 @@
 /det/setNbOfLayers 20
 #
 /run/beamOn 1
+
+# e- 500MeV
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 1000

@@ -46,7 +46,7 @@ class B1ConRun : public B1Run
 
     // method from the base class
     virtual void Merge(const G4Run*);
-    virtual void AddEdep (G4double edep); 
+    virtual void AddEdep (G4double edep);
 
     // get methods
     G4int GetNumberOfEvent() const { return (G4int)fEdepEventVector.size(); }

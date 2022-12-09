@@ -44,7 +44,7 @@ G4RayleighScattering::G4RayleighScattering(const G4String& processName,
   SetStartFromNullFlag(false);
   SetBuildTableFlag(true);
   SetProcessSubType(fRayleigh);
-  SetMinKinEnergyPrim(100*keV);
+  SetMinKinEnergyPrim(150*CLHEP::keV);
   SetSplineFlag(false);
 }
 

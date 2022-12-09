@@ -103,7 +103,7 @@ void G4OpenInventorXtExtendedViewer::Initialise() {
              << G4endl;
       width = 600;
       height = 600;  
-      sprintf(s,"%dx%d",width,height);
+      snprintf(s,32,"%dx%d",width,height);
       sgeometry = s;
     } else {
       width = fVP.GetWindowSizeHintX();

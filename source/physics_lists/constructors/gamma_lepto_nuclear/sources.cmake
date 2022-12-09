@@ -26,6 +26,7 @@ geant4_module_link_libraries(G4phys_ctor_glnuclear
     G4intercoms
     G4run
   PRIVATE
+    G4baryons
     G4bosons
     G4emhighenergy
     G4emutils
@@ -33,11 +34,12 @@ geant4_module_link_libraries(G4phys_ctor_glnuclear
     G4had_lend
     G4had_preequ_exciton
     G4hadronic_coherent_elastic
-    G4hadronic_deex_photon_evaporation
-    G4hadronic_mgt
     G4hadronic_util
     G4hadronic_xsect
+    G4ions
     G4leptons
+    G4mesons
+    G4muons
     G4partman
     G4phys_builders
     G4phys_ctor_em

@@ -33,15 +33,15 @@
 
 B1Run::B1Run()
 : G4Run(),
-  fEdep(0.), 
+  fEdep(0.),
   fEdep2(0.)
-{} 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1Run::~B1Run()
-{} 
- 
+{}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1Run::Merge(const G4Run* run)
@@ -50,8 +50,8 @@ void B1Run::Merge(const G4Run* run)
   fEdep  += localRun->fEdep;
   fEdep2 += localRun->fEdep2;
 
-  G4Run::Merge(run); 
-} 
+  G4Run::Merge(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

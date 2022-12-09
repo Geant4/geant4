@@ -344,7 +344,7 @@ void G4DNAScavengerMaterial::Dump()
 
     G4cout << " --- > For " << pReactant->GetName() << G4endl;
 
-    for(auto it2 : it.second)
+    for(const auto& it2 : it.second)
     {
       G4cout << " " << G4BestUnit(it2.first, "Time") << "    "
              << it2.second / (Avogadro * V * 1.0e-6 /*mm3 to L*/) << G4endl;

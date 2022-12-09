@@ -107,7 +107,7 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="31.55"/>
+  <eltube lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="31.55"/>
  </solids>
 
  <structure>

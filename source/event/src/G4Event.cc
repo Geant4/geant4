@@ -90,27 +90,27 @@ void G4Event::Draw() const
 
   if(trajectoryContainer != nullptr)
   {
-    G4int n_traj = trajectoryContainer->entries();
-    for(G4int i=0; i<n_traj; ++i)
+    std::size_t n_traj = trajectoryContainer->entries();
+    for(std::size_t i=0; i<n_traj; ++i)
     { (*trajectoryContainer)[i]->DrawTrajectory(); }
   }
 
   if(HC != nullptr)
   {
-    G4int n_HC = HC->GetCapacity();
-    for(G4int j=0; j<n_HC; ++j)
+    std::size_t n_HC = HC->GetCapacity();
+    for(std::size_t j=0; j<n_HC; ++j)
     {
-      G4VHitsCollection* VHC = HC->GetHC(j);
+      G4VHitsCollection* VHC = HC->GetHC((G4int)j);
       if(VHC != nullptr) VHC->DrawAllHits();
     }
   }
 
   if(DC != nullptr)
   {
-    G4int n_DC = DC->GetCapacity();
-    for(G4int j=0; j<n_DC; ++j)
+    std::size_t n_DC = DC->GetCapacity();
+    for(std::size_t j=0; j<n_DC; ++j)
     {
-      G4VDigiCollection* VDC = DC->GetDC(j);
+      G4VDigiCollection* VDC = DC->GetDC((G4int)j);
       if(VDC != nullptr) VDC->DrawAllDigi();
     }
   }

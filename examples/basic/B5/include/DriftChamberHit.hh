@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DriftChamberHit.hh
+/// \file B5/include/DriftChamberHit.hh
 /// \brief Definition of the B5::DriftChamberHit class
 
 #ifndef B5DriftChamberHit_h
@@ -54,10 +54,10 @@ namespace B5
 class DriftChamberHit : public G4VHit
 {
   public:
-    DriftChamberHit();
+    DriftChamberHit() = default;
     DriftChamberHit(G4int layerID);
     DriftChamberHit(const DriftChamberHit &right) = default;
-    ~DriftChamberHit() override;
+    ~DriftChamberHit() override = default;
 
     DriftChamberHit& operator=(const DriftChamberHit &right) = default;
     G4bool operator==(const DriftChamberHit &right) const;

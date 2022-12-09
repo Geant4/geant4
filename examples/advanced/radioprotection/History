@@ -1,20 +1,23 @@
-# Example radioprotection History
+-------------------------------------------------------------------
+-------------------------------------------------------------------
 
-See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+     =========================================================
+ 		      Geant4 - radiprotection example
+     =========================================================
 
-
-## 2021-12-10 Ben Morgan (radioprotection-V11-00-00)
-- Change to new Markdown History format
+                      Category History file
+                      ---------------------
+## 2022-11-16 F. Romano, J.Magini, G.Parisi, G. Milluzzo (radioprotection-V11-00-02)
+-  Updating the READMEfile.
+   
+## 2022-11-09 Francesco Romano (radioprotection-V11-00-01)
+-  Added the diamondTelescope detector. Messengers modified accordingly.
+   Added python scripts to analyze the spectra files and calculate microdosimetric
+   Quantities.
 
 ---
 
 # History entries prior to 11.0
-
-06.11.2021,  I. Hrivnacova tag radioprotection-V10-07-05
-             Added analysis manager Clear() call instead of
-             deleting in the end of run (removed on July 19)
 
 28.10.2021,  S.Guatelli tag radioprotection-V10-07-04
              Added the Bridge silicon microdosimeter and a

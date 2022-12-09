@@ -43,9 +43,9 @@ class DetectorConstruction;
 class ActionInitialization : public G4VUserActionInitialization {
   public:
     ActionInitialization( const DetectorConstruction* inputDetectorConstruction = nullptr );
-    virtual ~ActionInitialization();
-    virtual void BuildForMaster() const override;
-    virtual void Build() const override;
+    ~ActionInitialization() override = default;
+    void BuildForMaster() const override;
+    void Build() const override;
   private:
     const DetectorConstruction* fPtrDetectorConstruction = nullptr;
 };

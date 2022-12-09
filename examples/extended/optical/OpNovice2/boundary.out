@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -34,6 +34,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -280,7 +282,6 @@ OpWLS2 is created
 /opnovice2/gun/optPhotonPolar
 #
 /analysis/setFileName unified
-Set file name: unified
 /analysis/h1/set 10 40 -1 39
 /analysis/h1/set 11 100 -1.1 1.1
 /analysis/h1/set 12 100 -1.1 1.1
@@ -314,6 +315,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -341,7 +343,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     1
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -377,8 +379,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -408,8 +409,8 @@ conv:  for gamma SubType=14 BuildTable=1
       BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      Lambda table from 100 eV  to 150 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 176 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -533,7 +534,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LindhardSorensen : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -918,6 +919,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: hFritiofCaptureAtRest
 
 ---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for anti_lambda
 
   Process: hadElastic
@@ -1209,7 +1215,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.260000s Real=0.262454s Sys=0.000000s
+  User=0.230000s Real=0.224553s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1251,9 +1257,9 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.720988 rms = 0.226951
  Y momentum dir of backward-going photons: mean = 0.0346578 rms = 0.490875
  Z momentum dir of backward-going photons: mean = -0.0078835 rms = 0.431797
- X momentum dir of forward-going photons: mean = 0.874189 rms = 0.0520985
- Y momentum dir of forward-going photons: mean = 0.475426 rms = 0.0728797
- Z momentum dir of forward-going photons: mean = -0.000867872 rms = 0.0416731
+ X momentum dir of forward-going photons: mean = 0.860211 rms = 0.0612268
+ Y momentum dir of forward-going photons: mean = 0.496349 rms = 0.0847609
+ Z momentum dir of forward-going photons: mean = -0.00136924 rms = 0.0523376
  X momentum dir of Fresnel-refracted photons: mean = 0.807506 rms = 0.0643027
  Y momentum dir of Fresnel-refracted photons: mean = 0.57524 rms = 0.0798274
  Z momentum dir of Fresnel-refracted photons: mean = -0.00325975 rms = 0.0807162
@@ -1298,7 +1304,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.120000s Real=0.129378s Sys=0.000000s
+  User=0.140000s Real=0.136260s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1337,8 +1343,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.1934e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.69981e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.875318 rms = 0.0357669
- Y momentum dir of forward-going photons: mean = 0.478382 rms = 0.0607407
+ X momentum dir of forward-going photons: mean = 0.862264 rms = 0.0391375
+ Y momentum dir of forward-going photons: mean = 0.500552 rms = 0.0664648
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 4.71216e-08
  Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 8.84707e-08
@@ -1405,7 +1411,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.127567s Sys=0.000000s
+  User=0.150000s Real=0.152509s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1444,8 +1450,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.670658 rms = 0.232053
  Y momentum dir of backward-going photons: mean = -0.00486638 rms = 0.500942
  Z momentum dir of backward-going photons: mean = 0.00525044 rms = 0.495354
- X momentum dir of forward-going photons: mean = 0.875864 rms = 0.0355147
- Y momentum dir of forward-going photons: mean = 0.477456 rms = 0.0603125
+ X momentum dir of forward-going photons: mean = 0.86371 rms = 0.0389944
+ Y momentum dir of forward-going photons: mean = 0.498096 rms = 0.0662218
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 5.47504e-08
  Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.12506e-08
@@ -1518,7 +1524,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.170074s Sys=0.000000s
+  User=0.160000s Real=0.156718s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1556,8 +1562,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34394e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.71929e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95994e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.04971e-07
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.80051e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.65679e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1598,7 +1604,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.147604s Sys=0.000000s
+  User=0.170000s Real=0.171693s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1636,8 +1642,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.666296 rms = 0.232659
  Y momentum dir of backward-going photons: mean = -0.00214743 rms = 0.500117
  Z momentum dir of backward-going photons: mean = 0.000440326 rms = 0.501795
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95427e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 9.85619e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75049e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.1617e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1678,7 +1684,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.740000s Real=0.821421s Sys=0.000000s
+  User=0.830000s Real=0.832997s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1720,9 +1726,9 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.723433 rms = 0.226173
  Y momentum dir of backward-going photons: mean = 0.0427161 rms = 0.487412
  Z momentum dir of backward-going photons: mean = 0.00275586 rms = 0.431378
- X momentum dir of forward-going photons: mean = 0.744109 rms = 0.230078
- Y momentum dir of forward-going photons: mean = 0.129661 rms = 0.468665
- Z momentum dir of forward-going photons: mean = -0.00870147 rms = 0.396019
+ X momentum dir of forward-going photons: mean = 0.750192 rms = 0.224457
+ Y momentum dir of forward-going photons: mean = 0.16505 rms = 0.4472
+ Z momentum dir of forward-going photons: mean = 0.000906528 rms = 0.399501
  X momentum dir of Fresnel-refracted photons: mean = -0.753612 rms = 0.232061
  Y momentum dir of Fresnel-refracted photons: mean = 0.122198 rms = 0.451181
  Z momentum dir of Fresnel-refracted photons: mean = -0.0280522 rms = 0.398663
@@ -1762,7 +1768,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.740000s Real=0.750019s Sys=0.010000s
+  User=0.830000s Real=0.832168s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1804,9 +1810,9 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.725695 rms = 0.225527
  Y momentum dir of backward-going photons: mean = 0.0473025 rms = 0.483795
  Z momentum dir of backward-going photons: mean = 0.000246226 rms = 0.43152
- X momentum dir of forward-going photons: mean = 0.711575 rms = 0.241704
- Y momentum dir of forward-going photons: mean = 0.102294 rms = 0.480997
- Z momentum dir of forward-going photons: mean = 0.0205167 rms = 0.439314
+ X momentum dir of forward-going photons: mean = 0.70093 rms = 0.243467
+ Y momentum dir of forward-going photons: mean = 0.0957969 rms = 0.486993
+ Z momentum dir of forward-going photons: mean = 0.0366591 rms = 0.449153
  X momentum dir of Fresnel-refracted photons: mean = -0.67226 rms = 0.249608
  Y momentum dir of Fresnel-refracted photons: mean = 0.0115693 rms = 0.50363
  Z momentum dir of Fresnel-refracted photons: mean = -0.0425384 rms = 0.479766
@@ -1851,7 +1857,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.134577s Sys=0.000000s
+  User=0.160000s Real=0.159462s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1889,8 +1895,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35967e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95427e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 9.98211e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75998e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.27987e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1931,7 +1937,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.157012s Sys=0.000000s
+  User=0.180000s Real=0.180076s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1972,8 +1978,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.71706 rms = 0.229153
  Y momentum dir of backward-going photons: mean = 0.0278294 rms = 0.494429
  Z momentum dir of backward-going photons: mean = -0.000614049 rms = 0.433681
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95994e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.03908e-07
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.56007e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1997,7 +2003,6 @@ View them with "/vis/plot" or "/vis/reviewPlots".
 /opnovice2/surfaceFinish polished
 /run/geometryModified
 /analysis/setFileName glisur
-Set file name: glisur
 /run/initialize
 /run/beamOn 10000
 
@@ -2026,7 +2031,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.158073s Sys=0.000000s
+  User=0.140000s Real=0.140206s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2065,8 +2070,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.1943e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.69981e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.875887 rms = 0.0355035
- Y momentum dir of forward-going photons: mean = 0.477415 rms = 0.0602935
+ X momentum dir of forward-going photons: mean = 0.863213 rms = 0.0390496
+ Y momentum dir of forward-going photons: mean = 0.498939 rms = 0.0663156
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 5.77119e-08
  Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.24593e-08
@@ -2133,7 +2138,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.170000s Real=0.181164s Sys=0.000000s
+  User=0.150000s Real=0.149739s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2172,8 +2177,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.665679 rms = 0.237039
  Y momentum dir of backward-going photons: mean = 0.00323197 rms = 0.499428
  Z momentum dir of backward-going photons: mean = 0.00393247 rms = 0.501227
- X momentum dir of forward-going photons: mean = 0.876202 rms = 0.0353534
- Y momentum dir of forward-going photons: mean = 0.476881 rms = 0.0600386
+ X momentum dir of forward-going photons: mean = 0.86315 rms = 0.0390561
+ Y momentum dir of forward-going photons: mean = 0.499046 rms = 0.0663267
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 6.14391e-08
  Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.36523e-08
@@ -2248,7 +2253,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.166371s Sys=0.000000s
+  User=0.160000s Real=0.156099s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2288,9 +2293,9 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.57387 rms = 0.280293
  Y momentum dir of backward-going photons: mean = 0.318401 rms = 0.489987
  Z momentum dir of backward-going photons: mean = -0.00339989 rms = 0.50063
- X momentum dir of forward-going photons: mean = 0.872571 rms = 0.074788
- Y momentum dir of forward-going photons: mean = 0.468585 rms = 0.080761
- Z momentum dir of forward-going photons: mean = -0.000613873 rms = 0.0832623
+ X momentum dir of forward-going photons: mean = 0.856952 rms = 0.0912705
+ Y momentum dir of forward-going photons: mean = 0.486358 rms = 0.0981361
+ Z momentum dir of forward-going photons: mean = -0.000985291 rms = 0.105483
  X momentum dir of Fresnel-refracted photons: mean = 0.802852 rms = 0.106683
  Y momentum dir of Fresnel-refracted photons: mean = 0.554123 rms = 0.116838
  Z momentum dir of Fresnel-refracted photons: mean = -0.00293762 rms = 0.152759
@@ -2337,7 +2342,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.135767s Sys=0.000000s
+  User=0.150000s Real=0.156581s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2375,8 +2380,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35618e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.7201e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95427e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.00927e-07
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75366e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.1617e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2417,7 +2422,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.420000s Real=0.427520s Sys=0.000000s
+  User=0.390000s Real=0.391231s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2456,8 +2461,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34744e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.74652e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.912889 rms = 1.28617e-07
- Y momentum dir of forward-going photons: mean = 0.408207 rms = 5.18873e-08
+ X momentum dir of forward-going photons: mean = 0.912889 rms = 1.10007e-07
+ Y momentum dir of forward-going photons: mean = 0.408207 rms = 4.7707e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = -0.898384 rms = 4.94216e-08
  Y momentum dir of Fresnel-refracted photons: mean = 0.43921 rms = 4.18163e-08
@@ -2498,7 +2503,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.150851s Sys=0.000000s
+  User=0.160000s Real=0.163997s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2536,8 +2541,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.668927 rms = 0.233197
  Y momentum dir of backward-going photons: mean = 0.00455305 rms = 0.499985
  Z momentum dir of backward-going photons: mean = 0.0006191 rms = 0.498146
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.94573e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 9.62827e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75366e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.14468e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2578,10 +2583,21 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : OpBoun06
+      issued by : G4OpBoundaryProcess
+G4OpBoundaryProcess: Opticalphoton step length: 2.43136e-09 mm.
+This is larger than the threshold 1e-09 mm to set status StepTooSmall.
+Boundary scattering may be incorrect. 
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.360000s Real=0.367694s Sys=0.010000s
+  User=0.400000s Real=0.400961s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2620,9 +2636,9 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.581268 rms = 0.276491
  Y momentum dir of backward-going photons: mean = 0.28925 rms = 0.499641
  Z momentum dir of backward-going photons: mean = -0.00241224 rms = 0.502363
- X momentum dir of forward-going photons: mean = 0.623985 rms = 0.299056
- Y momentum dir of forward-going photons: mean = 0.0978792 rms = 0.517803
- Z momentum dir of forward-going photons: mean = 0.0121155 rms = 0.493316
+ X momentum dir of forward-going photons: mean = 0.628043 rms = 0.302429
+ Y momentum dir of forward-going photons: mean = 0.140535 rms = 0.502935
+ Z momentum dir of forward-going photons: mean = 0.00998157 rms = 0.491228
  X momentum dir of Fresnel-refracted photons: mean = -0.637031 rms = 0.269848
  Y momentum dir of Fresnel-refracted photons: mean = -0.0229246 rms = 0.511249
  Z momentum dir of Fresnel-refracted photons: mean = 0.00207596 rms = 0.50938
@@ -2670,7 +2686,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.136930s Sys=0.000000s
+  User=0.150000s Real=0.152017s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2708,8 +2724,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34132e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.71929e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95994e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.0563e-07
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.77568e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.41289e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2753,7 +2769,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.146964s Sys=0.000000s
+  User=0.160000s Real=0.169125s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2791,8 +2807,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.571993 rms = 0.278865
  Y momentum dir of backward-going photons: mean = 0.314963 rms = 0.495714
  Z momentum dir of backward-going photons: mean = 0.00860356 rms = 0.50005
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.95427e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.00514e-07
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.77568e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.39638e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2821,7 +2837,6 @@ LUT DAVIS - reflectivity data file: RoughTeflon_LUTR.z read in!
 /run/geometryModified
 /run/initialize
 /analysis/setFileName davis_roughTeflon
-Set file name: davis_roughTeflon
 /run/beamOn 10000
 
 ========= Table of registered couples ============================
@@ -2849,7 +2864,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.080000s Real=1.092155s Sys=0.000000s
+  User=1.140000s Real=1.145008s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2886,8 +2901,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.776235 rms = 0.205994
  Y momentum dir of backward-going photons: mean = 0.2101 rms = 0.427686
  Z momentum dir of backward-going photons: mean = 0.00550741 rms = 0.357685
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.1151e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 3.24763e-08
+ X momentum dir of forward-going photons: mean = 0 rms = 0
+ Y momentum dir of forward-going photons: mean = 0 rms = 0
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2905,7 +2920,6 @@ G4OpticalSurface: data file /cvmfs/geant4.cern.ch/share/data/RealSurface2.2/Dete
 LUT DAVIS - reflectivity data file: Detector_LUTR.z read in! 
 /run/geometryModified
 /analysis/setFileName davis_detector
-Set file name: davis_detector
 /run/beamOn 10000
 
 ========= Table of registered couples ============================
@@ -2933,7 +2947,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.043714s Sys=0.000000s
+  User=0.050000s Real=0.048908s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2970,8 +2984,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.906337 rms = 0.00228861
  Y momentum dir of backward-going photons: mean = 0.422492 rms = 0.00492185
  Z momentum dir of backward-going photons: mean = 0.000449425 rms = 0.00491918
- X momentum dir of forward-going photons: mean = 0.898384 rms = 5.59736e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 9.15543e-08
+ X momentum dir of forward-going photons: mean = 0 rms = 0
+ Y momentum dir of forward-going photons: mean = 0 rms = 0
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2994,7 +3008,6 @@ G4OpticalSurface: data file /cvmfs/geant4.cern.ch/share/data/RealSurface2.2/Poli
 LUT - data file: PolishedLumirror.z read in! 
 /run/geometryModified
 /analysis/setFileName lbnl_polishedLumirrorAir
-Set file name: lbnl_polishedLumirrorAir
 /run/beamOn 1000
 
 ========= Table of registered couples ============================
@@ -3022,7 +3035,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.080000s Real=0.080336s Sys=0.000000s
+  User=0.090000s Real=0.085472s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -3060,8 +3073,8 @@ Surface events by process:
  X momentum dir of backward-going photons: mean = -0.932707 rms = 0.0389432
  Y momentum dir of backward-going photons: mean = 0.138195 rms = 0.266115
  Z momentum dir of backward-going photons: mean = 0.0163755 rms = 0.195854
- X momentum dir of forward-going photons: mean = 0.898384 rms = 3.16101e-08
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 2.73752e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 2.78775e-08
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 7.45058e-09
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0

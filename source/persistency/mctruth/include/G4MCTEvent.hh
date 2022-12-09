@@ -121,7 +121,7 @@ inline G4int G4MCTEvent::GetEventNumber() const
 
 inline G4int G4MCTEvent::GetNofPrimaries() const
 {
-  return gen2simParticleMap.size();
+  return (G4int)gen2simParticleMap.size();
 }
 
 inline G4MCTSimEvent* G4MCTEvent::GetSimEvent() const

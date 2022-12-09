@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -116,7 +116,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
-### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 ### HadronInelasticQBBC Construct Process:
     Emin(FTFP)= 3 GeV Emax(FTFP)= 100000 GeV
     Emin(BERT)= 1 GeV Emax(BERT)= 6 GeV Emax(BERTpions)= 12 GeV
@@ -136,6 +135,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -163,7 +163,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -214,8 +214,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -566,28 +566,6 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
-                           Hadronic Processes for neutron
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-
-
-  Process: neutronInelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 6 GeV
-        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-
-
-  Process: nCapture
-        Model:               nRadCapture: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-
-  Process: nKiller
-
----------------------------------------------------
                            Hadronic Processes for B-
 
   Process: hadElastic
@@ -700,6 +678,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -869,6 +852,28 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: muMinusCaptureAtRest
 
 ---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
@@ -1018,7 +1023,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=1.780000s Real=15.329440s Sys=0.150000s
+Initialisation time:  User=1.920000s Real=11.422591s Sys=0.280000s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
 EventAction: Event # 20 started
@@ -1032,34 +1037,34 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.920000s Real=0.939916s Sys=0.000000s
-RunAction::EndOfRunAction:  User=0.920000s Real=0.939989s Sys=0.000000s
+  User=1.100000s Real=1.108479s Sys=0.000000s
+RunAction::EndOfRunAction:  User=1.100000s Real=1.108585s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         587.7   RMS(MeV) 385.2
-Average number of steps              906.5
-Average number of gamma              57.91
-Average number of e-                 74.03
-Average number of e+                 4.31
-Average number of neutrons           20.6
-Average number of protons            4.8
+Average energy deposit (MeV)         566.3   RMS(MeV) 363.5
+Average number of steps              1089
+Average number of gamma              75.65
+Average number of e-                 95.3
+Average number of e+                 5.74
+Average number of neutrons           22.67
+Average number of protons            4.43
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.67
-Average number of pi0                0.31
-Average number of kaons              0.01
-Average number of muons              0.04
-Average number of deuterons+tritons  2.54
-Average number of He3+alpha          1.77
-Average number of ions               4.99
-Average number of forward neutrons   1.34
-Average number of reflected neutrons 15.29
-Average number of leaked neutrons    0.67
-Average number of proton leak        1.15
-Average number of pion leak          0.45
+Average number of pi+ & pi-          0.61
+Average number of pi0                0.41
+Average number of kaons              0
+Average number of muons              0.08
+Average number of deuterons+tritons  1.98
+Average number of He3+alpha          1.07
+Average number of ions               6.02
+Average number of forward neutrons   0.75
+Average number of reflected neutrons 16.78
+Average number of leaked neutrons    0.86
+Average number of proton leak        0.97
+Average number of pion leak          0.38
 ========================================================
 
 #
@@ -1076,10 +1081,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 26
+Total navigation history collections cleaned: 24
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0385 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0356 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.0125 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00673 MB
@@ -1088,7 +1093,7 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.024 MB
+Pool ID '7G4Track', size : 0.025 MB
 Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00769 MB

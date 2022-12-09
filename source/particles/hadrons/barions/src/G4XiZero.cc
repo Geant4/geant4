@@ -93,7 +93,7 @@ G4XiZero* G4XiZero::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4XiZero*>(anInstance);
+  theInstance = static_cast<G4XiZero*>(anInstance);
   return theInstance;
 }
 

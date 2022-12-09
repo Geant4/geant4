@@ -84,18 +84,18 @@ class G4ErrorPropagatorData
   static void SetVerbose(G4int ver);
 
  private:
-  G4ErrorPropagatorData();
+  G4ErrorPropagatorData() = default;
   ~G4ErrorPropagatorData();
   // constructor and destructor are private
 
  private:
   static G4ThreadLocal G4ErrorPropagatorData* fpInstance;
 
-  G4ErrorMode theMode;
+  G4ErrorMode theMode{G4ErrorMode_PropTest};
 
-  G4ErrorState theState;
+  G4ErrorState theState{G4ErrorState_PreInit};
 
-  G4ErrorStage theStage;
+  G4ErrorStage theStage{G4ErrorStage_Inflation};
 
   G4ErrorTarget* theTarget = nullptr;
 

@@ -30,7 +30,7 @@
 //
 // --------------------------------------------------------------------
 
-inline size_t G4BlockingList::Length() const
+inline std::size_t G4BlockingList::Length() const
 {
   return fBlockingList.size();
 }
@@ -59,10 +59,10 @@ inline void G4BlockingList::Reset()
 
 inline void G4BlockingList::Enlarge(const G4int nv)
 {
-  size_t len=fBlockingList.size();
+  std::size_t len=fBlockingList.size();
   if ( G4int(len)<nv )
   {
-    size_t newlen = (nv/fStride+1)*fStride;
+    std::size_t newlen = (nv/fStride+1)*fStride;
     fBlockingList.resize(newlen);
     for (auto i=len; i<newlen; ++i)
     {

@@ -7,6 +7,28 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-26 Gabriele Cosmo (hadr-util-V11-00-13)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-07 Alberto Ribon (hadr-util-V11-00-12)
+- G4Nucleus : corrected the method GetN_asInt for the case of hypernuclei.
+
+## 2022-08-02 Alberto Ribon (hadr-util-V11-00-11)
+- G4HadronicParametersMessenger : rolled back as it was in hadr-until-V11-00-09,
+  to avoid circular dependency between G4hadronic_util and G4had_string_diff.
+  A new messenger class is created in G4had_string_diff.
+
+## 2022-07-28 Alberto Ribon (hadr-util-V11-00-10)
+- G4HadronicParametersMessenger : added two new UI commands to select one
+  tuning of the FTF model's parameters.
+
+## 2022-07-05 Vladimir Ivanchenko (hadr-util-V11-00-09)
+- G4NuclearPolarization - fixed Coverity warning
+
+## 2022-07-05 Vladimir Ivanchenko (hadr-util-V11-00-08)
+- G4HadronicParameters - added flag to enable general neutron process
+- G4HadDataHandler - new data class
+
 ## 2022-06-09 Laurie Nevay (hadr-util-V11-00-07)
 - Add option to G4HadronicParameters to control diffraction for baryon
   number greater than 10.

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -105,7 +105,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000556s Sys=0.000000s
+  User=0.000000s Real=0.000476s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -140,6 +140,11 @@ Run Summary
   rms proj angle of transmit primary particle = 0 mrad (central part only)
   computed theta0 (Highland formula)          = 0 mrad
   central part defined as +- 0 mrad   Tail ratio = 0 %
+## Gamma process counts:
+   Photoeffect 0
+   Compton     0
+   Conversion  0
+   Rayleigh    0
 
 ------- MixMaxRng engine status -------
  Current state vector is:
@@ -179,7 +184,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 6
-  User=0.000000s Real=0.000089s Sys=0.000000s
+  User=0.000000s Real=0.000147s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -214,6 +219,11 @@ Run Summary
   rms proj angle of transmit primary particle = 0 mrad (central part only)
   computed theta0 (Highland formula)          = 0 mrad
   central part defined as +- 0 mrad   Tail ratio = 0 %
+## Gamma process counts:
+   Photoeffect 0
+   Compton     0
+   Conversion  0
+   Rayleigh    0
 
 ------- MixMaxRng engine status -------
  Current state vector is:

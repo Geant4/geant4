@@ -39,6 +39,7 @@
 #include "G4NuclearLevelData.hh"
 #include "G4DeexPrecoParameters.hh"
 #include "G4NuclideTable.hh"
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -47,9 +48,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
+G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int ver)
 :  G4VPhysicsConstructor("G4RadioactiveDecay")
 {
+  G4PhysListUtil::InitialiseParameters();
+  SetVerboseLevel(ver);
+
   // hadronic physics extra configuration
   G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
   deex->SetStoreICLevelData(true);

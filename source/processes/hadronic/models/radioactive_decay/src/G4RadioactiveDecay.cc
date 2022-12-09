@@ -165,7 +165,6 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 
   // Apply default values
   applyARM = true;
-  applyICM = true;  // Always on; keep only for backward compatibility
  
   // RDM applies to all logical volumes by default
   isAllVolumesMode = true;
@@ -472,10 +471,9 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
   G4DeexPrecoParameters* deex =
     G4NuclearLevelData::GetInstance()->GetParameters();
   G4EmParameters* emparam = G4EmParameters::Instance();
-  G4double minMeanLife
-      = G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()/std::log(2.);
+  G4double minMeanLife = G4NuclideTable::GetInstance()->GetMeanLifeThreshold();
 
-  G4int prec = os.precision(5);
+  G4long prec = os.precision(5);
   os << "======================================================================"
      << endline;
   os << "======          Radioactive Decay Physics Parameters           ======="
@@ -490,6 +488,8 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
      << deex->GetInternalConversionFlag() << endline;
   os << "Stored internal conversion coefficients           "
      << deex->StoreICLevelData() << endline;
+  os << "Enabled atomic relaxation mode                    "
+     << applyARM << endline;
   os << "Enable correlated gamma emission                  "
      << deex->CorrelatedGamma() << endline;
   os << "Max 2J for sampling of angular correlations       "
@@ -956,7 +956,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
                << " is not selected for the RDM"<< G4endl;
         G4cout << " There are " << ValidVolumes.size() << " volumes" << G4endl;
         G4cout << " The Valid volumes are " << G4endl;
-        for (size_t i = 0; i< ValidVolumes.size(); i++)
+        for (std::size_t i = 0; i< ValidVolumes.size(); ++i)
                                   G4cout << ValidVolumes[i] << G4endl;
       }
 #endif

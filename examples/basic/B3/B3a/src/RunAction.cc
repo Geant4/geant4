@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.cc
+/// \file B3/B3a/src/RunAction.cc
 /// \brief Implementation of the B3a::RunAction class
 
 #include "RunAction.hh"
@@ -65,11 +65,6 @@ RunAction::RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void RunAction::BeginOfRunAction(const G4Run* run)
 {
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
@@ -96,9 +91,8 @@ void RunAction::EndOfRunAction(const G4Run* run)
   // Run conditions
   //  note: There is no primary generator action object for "master"
   //        run manager for multi-threaded mode.
-  const PrimaryGeneratorAction* generatorAction
-    = static_cast<const PrimaryGeneratorAction*>(
-        G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+  const auto generatorAction = static_cast<const PrimaryGeneratorAction*>(
+    G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4String partName;
   if (generatorAction)
   {

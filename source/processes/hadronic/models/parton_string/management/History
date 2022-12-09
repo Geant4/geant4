@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-11 Alberto Ribon (hadr-partonstring-mgt-V11-00-03)
+- G4VPartonStringModel : added debugging information on the number of lambdas
+  for residual projectile hypernuclei.
+
 ## 2022-06-07 Alberto Ribon (hadr-partonstring-mgt-V11-00-02)
 - G4VSplitableHadron : changed the method Splitting() from "protected" to
   "public" (this is needed to change the status of SplitableHadron in

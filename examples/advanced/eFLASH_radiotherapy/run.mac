@@ -1,0 +1,40 @@
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+###########BEAM##############
+
+##Custom Histogram (ElectronFlash)########################
+/control/execute 9MeVEF.mac
+#/control/execute 7MeVEF.mac
+#########################
+
+# Scoring mesh is used to calculate
+#  the dose in the phantom
+
+/score/create/boxMesh boxMesh_1
+
+# scorer for dose in water phantom
+
+/score/mesh/boxSize 60 2 2 mm
+/score/mesh/nBin 120 1 1
+/score/mesh/translate/xyz 60 0 0 mm 
+/score/quantity/doseDeposit dose Gy
+
+/score/close
+
+/score/list  
+
+/run/beamOn	500000
+
+/score/dumpQuantityToFile boxMesh_1 dose dose.out
+

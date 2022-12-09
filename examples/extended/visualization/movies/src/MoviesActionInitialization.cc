@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file MoviesActionInitialization.cc
+/// \brief Implementation of the MoviesActionInitialization class
 //
 
 #include "MoviesActionInitialization.hh"

@@ -36,6 +36,8 @@ template <typename T>
 G4int G4NtupleBookingManager::CreateNtupleTColumn(
   G4int ntupleId, const G4String& name, std::vector<T>* vector)
 {
+  if (! CheckName(name, "NtupleColumn")) return G4Analysis::kInvalidId;
+
   Message(G4Analysis::kVL4, "create", "ntuple T column",
     " ntupleId " + std::to_string(ntupleId));
 
@@ -46,10 +48,12 @@ G4int G4NtupleBookingManager::CreateNtupleTColumn(
   // Save column info in booking
   auto& ntupleBooking = g4NtupleBooking->fNtupleBooking;
   auto index = ntupleBooking.columns().size();
-  if ( ! vector )
+  if (! vector) {
     ntupleBooking.template add_column<T>(name);
-  else
+  }
+  else {
     ntupleBooking.template add_column<T>(name, *vector);
+  }
 
   // Create column if ntuple already exists
   // CreateTColumnInNtuple<T>(ntupleBooking, name, vector);

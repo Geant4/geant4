@@ -88,10 +88,11 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   lastMat       = material;
   lastKinEnergy = kineticEnergy;
 
-  G4double mass   = p->GetPDGMass();
+  G4double mass = p->GetPDGMass();
   effCharge = p->GetPDGCharge();
   G4int Zi = G4lrint(effCharge*inveplus);
   chargeCorrection = 1.0;
+  if(Zi <= 1) { return effCharge; }
 
   // The aproximation of ion effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
@@ -103,7 +104,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " 
   //<< material->GetName() << G4endl;
 
-  if(Zi <= 1 || reducedEnergy > effCharge*energyHighLimit ) {
+  if(reducedEnergy > effCharge*energyHighLimit ) {
     return effCharge;
   }
   G4double z = material->GetIonisation()->GetZeffective();

@@ -47,7 +47,7 @@ private:
 };
 
 
-#include "G4Types.hh"
+#include "G4String.hh"
 
 //#include "G4OpenInventorViewer.hh"
 
@@ -182,6 +182,7 @@ private:
    int uiQtTabIndex;
 
    int processSoEventCount;
+   G4String empty = "";
 
 public:
 

@@ -54,16 +54,8 @@
 
 G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
                                                    G4int direction, G4int depth)
-  : G4VPrimitiveScorer(name, depth)
-  , HCID(-1)
-  , fDirection(direction)
-  , EvtMap(0)
-  , weighted(true)
-  , divideByArea(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-}
+  : G4PSSphereSurfaceCurrent(name, direction, "percm2", depth)
+{}
 
 G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
                                                    G4int direction,
@@ -72,7 +64,7 @@ G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
   : G4VPrimitiveScorer(name, depth)
   , HCID(-1)
   , fDirection(direction)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
   , divideByArea(true)
 {
@@ -80,15 +72,13 @@ G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
   SetUnit(unit);
 }
 
-G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent() { ; }
-
 G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
   G4VSolid* solid      = ComputeCurrentSolid(aStep);
   assert(dynamic_cast<G4Sphere*>(solid) != nullptr);
 
-  G4Sphere* sphereSolid = static_cast<G4Sphere*>(solid);
+  auto  sphereSolid = static_cast<G4Sphere*>(solid);
 
   G4int dirFlag = IsSelectedSurface(aStep, sphereSolid);
   if(dirFlag > 0)
@@ -114,7 +104,7 @@ G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep,
@@ -180,28 +170,23 @@ void G4PSSphereSurfaceCurrent::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSSphereSurfaceCurrent::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSSphereSurfaceCurrent::clear() { EvtMap->clear(); }
-
-void G4PSSphereSurfaceCurrent::DrawAll() { ; }
 
 void G4PSSphereSurfaceCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, current] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first << "  current  : ";
+    G4cout << "  copy no.: " << copy << "  current  : ";
     if(divideByArea)
     {
-      G4cout << *(itr->second) / GetUnitValue() << " [" << GetUnit() << "]";
+      G4cout << *(current) / GetUnitValue() << " [" << GetUnit() << "]";
     }
     else
     {
-      G4cout << *(itr->second) << " [tracks]";
+      G4cout << *(current) << " [tracks]";
     }
     G4cout << G4endl;
   }
@@ -215,7 +200,7 @@ void G4PSSphereSurfaceCurrent::SetUnit(const G4String& unit)
   }
   else
   {
-    if(unit == "")
+    if(unit.empty())
     {
       unitName  = unit;
       unitValue = 1.0;

@@ -60,7 +60,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
   lowEnergy(emin), highEnergy(emax)
 {
-  G4int n = material->GetNumberOfElements();
+  G4int n = (G4int)material->GetNumberOfElements();
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
   if(nElmMinusOne > 0) {

@@ -12,7 +12,7 @@
 #define PATH_MAX 4096
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__MINGW32__)
 #include <windows.h>
 #define realpath( a, b ) GetFullPathName( a, PATH_MAX, b, NULL )
 #endif
@@ -533,10 +533,10 @@ char *MCGIDI_map_toXMLString( statusMessageReporting *smr, MCGIDI_map *map ) {
     for( entry = map->mapEntries; entry != NULL; entry = entry->next ) {
         switch( entry->type ) {
         case MCGIDI_mapEntry_type_target :
-            sprintf( p, targetFormat, entry->schema, entry->evaluation, entry->projectile, entry->targetName, entry->path );
+            snprintf( p, sizeof start, targetFormat, entry->schema, entry->evaluation, entry->projectile, entry->targetName, entry->path );
             break;
         case MCGIDI_mapEntry_type_path :
-            sprintf( p, pathFormat, entry->projectile, entry->path );
+            snprintf( p, sizeof start, pathFormat, entry->projectile, entry->path );
             break;
         }
         while( *p ) p++; // Loop checking, 11.06.2015, T. Koi

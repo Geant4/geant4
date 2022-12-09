@@ -168,17 +168,17 @@ public:
 
   // Get model pointer from the model list for a given material cuts couple
   // no check on material cuts couple index
-  G4VEmModel* GetRegionModel(G4int idx, size_t index_couple);
+  G4VEmModel* GetRegionModel(G4int idx, std::size_t index_couple);
 
   // total number of models for material cut couples
   // no check on material cuts couple index
-  G4int NumberOfRegionModels(size_t index_couple) const;
+  G4int NumberOfRegionModels(std::size_t index_couple) const;
 
   // Automatic documentation
   void DumpModelList(std::ostream& out, G4int verb);
 
   // Select model for given material cuts couple index
-  inline G4VEmModel* SelectModel(G4double energy, size_t index);
+  inline G4VEmModel* SelectModel(G4double energy, std::size_t index);
 
   // Access to cuts
   inline const G4DataVector* Cuts() const;
@@ -224,7 +224,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-G4VEmModel* G4EmModelManager::SelectModel(G4double kinEnergy, size_t index)
+G4VEmModel* G4EmModelManager::SelectModel(G4double kinEnergy, std::size_t index)
 {
   if(severalModels) {
     if(nRegions > 1) {

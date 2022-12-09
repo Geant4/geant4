@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file TrackerHit.hh
+/// \file B2/B2b/include/TrackerHit.hh
 /// \brief Definition of the B2::TrackerHit class
 
 #ifndef B2TrackerHit_h
@@ -48,9 +48,9 @@ namespace B2
 class TrackerHit : public G4VHit
 {
   public:
-    TrackerHit();
+    TrackerHit() = default;
     TrackerHit(const TrackerHit&) = default;
-    ~TrackerHit() override;
+    ~TrackerHit() override = default;
 
     // operators
     TrackerHit& operator=(const TrackerHit&) = default;
@@ -84,7 +84,7 @@ class TrackerHit : public G4VHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4THitsCollection<TrackerHit> TrackerHitsCollection;
+using TrackerHitsCollection = G4THitsCollection<TrackerHit>;
 
 extern G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator;
 

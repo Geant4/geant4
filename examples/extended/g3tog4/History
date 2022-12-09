@@ -5,6 +5,13 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-11-09 I. Hrivnacova (g3tog4Tests-V11-00-02)
+- Removed common examples and test from the top clGeometry directory
+  (added by mistake in the previous update)
+
+## 2022-11-07 I. Hrivnacova (g3tog4Tests-V11-00-01)
+- Updated common directory (excommon-V11-00-01)
+
 ## 2021-12-10 Ben Morgan (g3tog4Tests-V11-00-00)
 - Change to new Markdown History format
 

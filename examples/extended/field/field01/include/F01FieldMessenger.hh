@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 /// \file field/field01/include/F01FieldMessenger.hh
-/// \brief Definition of the F01FieldMessenger class
-//
-//
-//
+/// \brief  F01FieldMessenger allows interactive user control of
+//     - the strength of the (uniform) magnetic field 
+//     - the key parameters for the accuracy of integration 
+//     - the integration method used - a choice between
+//          * different embedded Runge-Kutta methods or 'tableaus'
+//          * the symplectic Boris method for accelerator setups
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +42,7 @@
 class F01FieldSetup;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
@@ -51,9 +54,9 @@ class F01FieldMessenger: public G4UImessenger
   public:
     F01FieldMessenger(F01FieldSetup* );
     virtual ~F01FieldMessenger();
- 
+
     virtual void SetNewValue(G4UIcommand*, G4String);
- 
+
   private:
 
     F01FieldSetup*             fEMfieldSetup;
@@ -64,6 +67,9 @@ class F01FieldMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fMagFieldZCmd;
     G4UIcmdWith3VectorAndUnit* fMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* fMinStepCmd;
+    G4UIcmdWithADoubleAndUnit* fDeltaOneStepCmd;
+    G4UIcmdWithADouble*        fEpsMinCmd;
+    G4UIcmdWithADouble*        fEpsMaxCmd;   
     G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 

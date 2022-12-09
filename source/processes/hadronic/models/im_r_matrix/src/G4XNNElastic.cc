@@ -64,21 +64,20 @@ G4XNNElastic::G4XNNElastic()
 
 G4XNNElastic::~G4XNNElastic()
 { 
-  if (components != 0) 
+  if (components != nullptr) 
     {
-      G4int nComponents = this->GetComponents()->size();
-      G4int i;
-      for (i=0; i<nComponents; i++)
+      std::size_t nComponents = GetComponents()->size();
+      for (std::size_t i=0; i<nComponents; ++i)
 	{
           G4CrossSectionSourcePtr componentPtr = (*components)[i];
 	  G4VCrossSectionSource* component = componentPtr();
 	  delete component;
-	  component = 0;
-	  componentPtr = 0;
+	  component = nullptr;
+	  componentPtr = nullptr;
 	}
     }
   delete components;
-  components = 0;
+  components = nullptr;
 }
 
 

@@ -34,7 +34,7 @@ extern G4GEOM_DLL G4Allocator<G4NavigationHistory>*& aNavigHistoryAllocator();
 // following "new" & "delete" will fail and give errors. 
 //
 inline
-void* G4NavigationHistory::operator new(size_t)
+void* G4NavigationHistory::operator new(std::size_t)
 {
   if (aNavigHistoryAllocator() == nullptr)
   {
@@ -139,7 +139,7 @@ G4VPhysicalVolume* G4NavigationHistory::GetTopVolume() const
 }
 
 inline
-size_t G4NavigationHistory::GetDepth() const
+std::size_t G4NavigationHistory::GetDepth() const
 {
   return fStackDepth;
 }
@@ -170,7 +170,7 @@ G4VPhysicalVolume* G4NavigationHistory::GetVolume(G4int n) const
 }
 
 inline
-size_t G4NavigationHistory::GetMaxDepth() const
+std::size_t G4NavigationHistory::GetMaxDepth() const
 {
   return fNavHistory->size();
 }
@@ -196,12 +196,12 @@ void G4NavigationHistory::BackLevel(G4int n)
 inline
 void G4NavigationHistory::EnlargeHistory()
 {
-  size_t len = fNavHistory->size();
+  std::size_t len = fNavHistory->size();
   if ( len == fStackDepth )
   {
     // Note: Resize operation clears additional entries
     //
-    size_t nlen = len+kHistoryStride;
+    std::size_t nlen = len+kHistoryStride;
     fNavHistory->resize(nlen);
   }  
 }

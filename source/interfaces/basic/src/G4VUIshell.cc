@@ -67,9 +67,9 @@ void G4VUIshell::MakePrompt(const char* msg)
 
   promptString="";
   G4int i;
-  for(i=0; i<G4int(promptSetting.length())-1; i++){
-    if(promptSetting[(size_t)i]=='%'){
-      switch (promptSetting[(size_t)(i+1)]) {
+  for(i=0; i<(G4int)promptSetting.length()-1; ++i){
+    if(promptSetting[i]=='%'){
+      switch (promptSetting[i+1]) {
       case 's':  // current application status
 	{
            G4String stateStr;
@@ -125,12 +125,12 @@ G4UIcommandTree* G4VUIshell::GetCommandTree(const G4String& input) const
 
   // parsing absolute path ...
   if(absPath.length()==0) return NULL;
-  if(absPath[absPath.length()-1] != '/') return NULL; // error??
+  if(absPath[G4int(absPath.length()-1)] != '/') return NULL; // error??
   if(absPath=="/") return cmdTree;
 
-  for(G4int indx=1; indx<G4int(absPath.length())-1; ) {
-    G4int jslash= absPath.find("/", indx);  // search index begin with "/" 
-    if(jslash != G4int(G4String::npos)) {
+  for(std::size_t indx=1; indx<absPath.length()-1; ) {
+    std::size_t jslash= absPath.find("/", indx);  // search index begin with "/" 
+    if(jslash != G4String::npos) {
       if(cmdTree != NULL)
         cmdTree= cmdTree-> GetTree(G4String(absPath.substr(0,jslash+1)));
     }
@@ -150,17 +150,17 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
   // if "apath" does not start with "/", 
   //   then it is treared as relative path
   G4String bpath= apath;
-  if(apath[(size_t)0] != '/') bpath= currentCommandDir + apath;
+  if(apath[(std::size_t)0] != '/') bpath= currentCommandDir + apath;
 
   // parsing...
   G4String absPath= "/";
-  for(G4int indx=1; indx<=G4int(bpath.length())-1; ) {
-    G4int jslash= bpath.find("/", indx);  // search index begin with "/"
+  for(std::size_t indx=1; indx<=bpath.length()-1; ) {
+    std::size_t jslash= bpath.find("/", indx);  // search index begin with "/"
     if(indx == jslash) { // skip first '///'
-      indx++;
+      ++indx;
       continue;
     }
-    if(jslash != G4int(G4String::npos)) {
+    if(jslash != G4String::npos) {
       if(bpath.substr(indx,jslash-indx) == ".."){  // directory up
         if(absPath == "/") {
           indx = jslash+1;
@@ -173,7 +173,7 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
         }
       } else if(bpath.substr(indx,jslash-indx) == "."){  // nothing to do
       } else { // add
-        if( !(jslash==indx && bpath[indx]=='/') ) // truncate "////"
+        if( !(jslash==indx && bpath[(G4int)indx]=='/') ) // truncate "////"
           absPath+= bpath.substr(indx, jslash-indx+1);
           // better to be check directory existence. (it costs!)
       }
@@ -193,17 +193,17 @@ G4String G4VUIshell::GetCommandPathTail(const G4String& apath) const
 {   // xxx/xxx/zzz -> zzz, trancate /// -> /
   if(apath.empty()) return apath;
 
-  G4int lstr= apath.length();
+  G4int lstr= (G4int)apath.length();
 
   // for trancating "/"
   G4bool Qsla= FALSE;
-  if(apath[(size_t)(lstr-1)]=='/') Qsla= TRUE;
+  if(apath[lstr-1]=='/') Qsla= TRUE;
 
   // searching last '/' from tail
   G4int indx= -1;
-  for(G4int i=lstr-1; i>=0; i--) {
-    if(Qsla && apath[(size_t)i]!='/') Qsla= FALSE; // break "/" flag!!
-    if(apath[(size_t)i]=='/' && !Qsla) {
+  for(G4int i=lstr-1; i>=0; --i) {
+    if(Qsla && apath[i]!='/') Qsla= FALSE; // break "/" flag!!
+    if(apath[i]=='/' && !Qsla) {
       indx= i;
       break;
     } 
@@ -237,11 +237,11 @@ void G4VUIshell::ListCommand(const G4String& dir,
   G4String vpath= currentCommandDir;
   G4String vcmd;
 
-  G4int len= input.length();
+  G4int len= (G4int)input.length();
   if(! input.empty()) {
     G4int indx= -1;
-    for(G4int i=len-1; i>=0; i--) { // search last '/'
-      if(input[(size_t)i]=='/') {
+    for(G4int i=len-1; i>=0; --i) { // search last '/'
+      if(input[i]=='/') {
         indx= i;
         break;
       }   

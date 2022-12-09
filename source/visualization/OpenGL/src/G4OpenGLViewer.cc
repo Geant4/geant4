@@ -409,8 +409,7 @@ void G4OpenGLViewer::SetView () {
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
   if (fVP.IsCutaway() &&
-      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
-      nPlanes > 0) {
+      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection) {
     double a[4];
     a[0] = cutaways[0].a();
     a[1] = cutaways[0].b();
@@ -1229,7 +1228,7 @@ void G4OpenGLViewer::rotateSceneThetaPhi(G4double dx, G4double dy)
   new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
   
   // to avoid z rotation flipping
-  // to allow more than 360∞ rotation
+  // to allow more than 360° rotation
 
   if (fVP.GetLightsMoveWithCamera()) {
     new_up = (new_vp.cross(yprime)).unit();

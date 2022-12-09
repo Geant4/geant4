@@ -52,23 +52,21 @@ void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
   using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
   using RunScore = G4VScoringMesh::RunScore;
-  G4ScoringManager* scoringManager =
-    G4ScoringManager::GetScoringManagerIfExist();
+  G4ScoringManager* scoringManager= G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
-    size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+    G4int nMeshes = (G4int)scoringManager->GetNumberOfMesh();
+    for (G4int iMesh = 0; iMesh < nMeshes; ++iMesh) {
       G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
       if (mesh && mesh->IsActive()) {
-	MeshScoreMap scoreMap = mesh->GetScoreMap();
-	for(MeshScoreMap::const_iterator i = scoreMap.begin();
-	    i != scoreMap.end(); ++i) {
-	  const G4String& name = i->first;
-	  if (fRequestedMapName == "all" || name == fRequestedMapName) {
-	    RunScore* fpCurrentHits = i->second;
-	    //G4cout << name << ": " << fpCurrentHits << G4endl;
-	    if (fpCurrentHits) sceneHandler.AddCompound(*fpCurrentHits);
-	  }
-	}
+        MeshScoreMap scoreMap = mesh->GetScoreMap();
+        for(MeshScoreMap::const_iterator i = scoreMap.cbegin();
+            i != scoreMap.cend(); ++i) {
+          const G4String& name = i->first;
+          if (fRequestedMapName == "all" || name == fRequestedMapName) {
+            RunScore* fpCurrentHits = i->second;
+            if (fpCurrentHits) sceneHandler.AddCompound(*fpCurrentHits);
+          }
+        }
       }
     }
   }

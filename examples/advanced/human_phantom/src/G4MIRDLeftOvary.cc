@@ -45,40 +45,30 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftOvary::G4MIRDLeftOvary()
-{
-}
-
-G4MIRDLeftOvary::~G4MIRDLeftOvary()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftOvary::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 					      const G4String& colourName, G4bool wireFrame, G4bool)
 { 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
   G4double ax= 1. *cm;
   G4double by= 0.5*cm;
   G4double cz= 2.*cm;
 
-  G4Ellipsoid* OneOvary = new G4Ellipsoid("OneOvary",
+  auto* OneOvary = new G4Ellipsoid("OneOvary",
 					  ax, by, cz);
 
 
-  G4LogicalVolume* logicLeftOvary = new G4LogicalVolume(OneOvary,
+  auto* logicLeftOvary = new G4LogicalVolume(OneOvary,
 							soft,
 							"logical" + volumeName,
-							0, 0, 0);
+							nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physLeftOvary = new G4PVPlacement(0,
+  G4VPhysicalVolume* physLeftOvary = new G4PVPlacement(nullptr,
 						       G4ThreeVector(-6. *cm,0.5*cm, -20*cm),
 						       "physicalLeftOvary",
 						       logicLeftOvary,
@@ -88,11 +78,11 @@ G4VPhysicalVolume* G4MIRDLeftOvary::Construct(const G4String& volumeName,G4VPhys
 
   // Visualization Attributes
   //G4VisAttributes* LeftOvaryVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   delete colourPointer;
 
-  G4VisAttributes* LeftOvaryVisAtt = new G4VisAttributes(colour);
+  auto* LeftOvaryVisAtt = new G4VisAttributes(colour);
   LeftOvaryVisAtt->SetForceSolid(wireFrame);
   logicLeftOvary->SetVisAttributes(LeftOvaryVisAtt);
 

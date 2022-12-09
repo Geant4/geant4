@@ -36,8 +36,6 @@
 #include "tools/histo/p1d"
 #include "tools/histo/p2d"
 
-#include "toolx/hdf5/h2file"
-
 //_____________________________________________________________________________
 template <typename HT>
 inline

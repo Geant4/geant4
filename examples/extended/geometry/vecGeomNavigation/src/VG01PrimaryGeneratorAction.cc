@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file geometry/VecGeomNavigation/src/VG01PrimaryGeneratorAction.cc
+//
+/// \file VG01PrimaryGeneratorAction.cc
 /// \brief Implementation of the VG01PrimaryGeneratorAction class
 //
 //  Authors: J. Apostolakis & S. Wenzel (CERN)  2018-2021

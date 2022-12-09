@@ -47,7 +47,7 @@ typedef struct
 
 typedef struct
 {
-  size_t size;
+  std::size_t size;
   G4int totalspace;
   G4ChunkType *preAllocated;
 } G4ChunkIndexType;
@@ -88,11 +88,11 @@ class G4EnhancedVecAllocator : public std::allocator<_Tp>
 
     // override allocate / deallocate
     //
-    void deallocate(_Tp* _Ptr, size_t _Count);
+    void deallocate(_Tp* _Ptr, std::size_t _Count);
 #ifdef __IBMCPP__
-    _Tp* allocate(size_t _Count, void * const hint = 0);  // IBM AIX
+    _Tp* allocate(std::size_t _Count, void * const hint = 0);  // IBM AIX
 #else
-    _Tp* allocate(size_t _Count);
+    _Tp* allocate(std::size_t _Count);
 #endif
 };
 
@@ -105,7 +105,7 @@ class G4EnhancedVecAllocator : public std::allocator<_Tp>
 // ************************************************************
 //
 template<typename _Tp>
-void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
+void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, std::size_t _Count)
 {
   G4int found = -1;
   if (G4AllocStats::allocStat != 0)
@@ -140,13 +140,13 @@ void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
 //
 #ifdef __IBMCPP__
 template<typename _Tp>
-_Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count, void * const hint)
+_Tp* G4EnhancedVecAllocator<_Tp>::allocate(std::size_t _Count, void * const hint)
 #else
 template<typename _Tp>
-_Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
+_Tp* G4EnhancedVecAllocator<_Tp>::allocate(std::size_t _Count)
 #endif
 {
-  size_t totalsize = _Count * sizeof(_Tp);
+  std::size_t totalsize = _Count * sizeof(_Tp);
 
   G4int found = -1;
   if (G4AllocStats::allocStat != 0)

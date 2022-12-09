@@ -247,8 +247,13 @@ void ExUCNDetectorConstruction::ConstructSDandField()
      G4PropagatorInField* fieldPropagator =
                                       transportManager->GetPropagatorInField();
 
-     G4double epsMin            = 2.5e-7*mm;
-     G4double epsMax            = 0.05*mm;
+     // Dimensionless limits for relative accuracy of integration
+     G4double epsMin            = 2.5e-7;
+     G4double epsMax            = 0.001; // Will soon be maximum without warning.
+     // The relative accuracy used for a step of length 'l'
+     //                    a.)  epsMin              if deltaOneStep / l < epsMin
+     //    epsilon_step =  b.)  epsMax              if deltaOneStep / l > epsMax
+     //                    c.)  deltaOneStep / l    otherwise
 
      fieldPropagator->SetMinimumEpsilonStep(epsMin);
      fieldPropagator->SetMaximumEpsilonStep(epsMax);

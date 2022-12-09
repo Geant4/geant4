@@ -1,0 +1,76 @@
+
+                 Geant4 10.7 - patch-04 Release Notes
+                 ------------------------------------
+
+                                                            9 September 2022
+
+List of fixes included in this public patch since the public release 10.7.p03:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Update extraction of include paths from VecGeom to use imported target 
+        property. Addressing problem report #2485.
+
+  o Global:
+    ------
+    + Updated date and version for 10.7.p04.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic
+      o G4GammaGeneralProcess: fixed problem of Compton scattering selection
+        in the low energy interval < 150 keV.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + utils
+      o G4EmExtraParameters: safe definition of StepFuction for G4GenericIon.
+        Addressing problem report #2495.
+      o G4EmExtraParametersMessenger: fixed typo.
+        Addressing problem report #2492.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections
+      o G4ComponentAntiNuclNuclearXS: correct treatment of the cross-sections
+        of light anti-nuclei on hydrogen target. This relies on the isospin
+        symmetry assumption, according to which the properties of the reactions
+        between anti-proton and light nuclei are equivalent to those between
+        light anti-nuclei and hydrogen.
+    + models/coherent_elastic
+      o G4AntiNuclElastic: correction in SampleInvariantT() method of the
+        highest momentum transfer (which was causing the cosine of the polar
+        angle in the center-of-mass system to be larger than 1 in some cases).
+        Addressing problem report #2204.
+    + models/inclxx
+      o G4INCLXXInterface: fixed treatment of kaon0, anti_kaon0, kaon0L, and
+        kaon0S. In current reference physics lists, INCLXX is never used for
+        handling kaons, although it is capable of doing so, but at process-
+        level or in custom physics lists one could observe crashes when trying
+        to use INCLXX for neutral kaon projectiles. The change fixes this
+        misbehavior.
+    + models/particle_hp
+      o Fixed issue for photons too high in energy generated from
+        G4NDL/Capture/FSMF6 data. Addressing problem report #2468.
+      o G4ParticleHPContAngularPar: added protections against evaluations of
+        arrays at negative index (-1), fixing rare reproducibility problems
+        and rare crashes observed.
+      o Code cleanup in G4ParticleHPContEnergyAngular and
+        G4ParticleHPContAngularPar: removed debug and commented out code,
+        indentation of loops and if branches.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.7 series.
+  o  Technical notes distributed for release 10.7 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.7.p04 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

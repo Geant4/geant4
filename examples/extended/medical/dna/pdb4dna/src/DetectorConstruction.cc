@@ -374,11 +374,9 @@ void DetectorConstruction::AtomisticView(G4LogicalVolume* worldLV,
     residueListTemp = moleculeListTemp->GetFirst();
 
     k++;
-    int j=0;
     while (residueListTemp)
     {
       AtomTemp=residueListTemp->GetFirst();
-      j++;
 
       int startFrom=0;
       int upTo=residueListTemp->fNbAtom; //case Base+sugar+phosphat (all atoms)
@@ -521,12 +519,8 @@ void DetectorConstruction::BarycenterView(G4LogicalVolume* worldLV,
   G4LogicalVolume* atomLV_ZZ;
   G4VisAttributes* MyVisAtt_ZZ;
 
-  int k=0;
-
   while (barycenterListTemp)
   {
-    k++;
-
     atomS_ZZ = new G4Orb("Sphere", (barycenterListTemp->GetRadius())*angstrom);
     atomLV_ZZ = new G4LogicalVolume(atomS_ZZ,fpWaterMaterial,"atomLV_ZZ");
     MyVisAtt_ZZ = new G4VisAttributes(G4Colour(G4Colour::Magenta()));
@@ -571,12 +565,8 @@ void DetectorConstruction::ResiduesView(G4LogicalVolume* worldLV,
   G4VSolid* CS_ZZ;
   G4LogicalVolume* CLV_ZZ;
 
-  int k=0;
-
   while (barycenterListTemp)
   {
-    k++;
-
     //3 spheres to Base, Sugar, Phosphate)
     AS_ZZ = new G4Orb("Sphere", 1.*angstrom);
     ALV_ZZ = new G4LogicalVolume(AS_ZZ,fpWaterMaterial, "ALV_ZZ");

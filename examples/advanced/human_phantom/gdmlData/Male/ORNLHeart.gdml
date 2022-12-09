@@ -53,8 +53,8 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Heart1" ax="4.00" by="4.00" cz="7.00" zcut1="-7.00" zcut2="0.0" />
-  <sphere aunit="cm" lunit="cm" name="Heart2" rmax="3.99" deltaphi="TWOPI" deltatheta="HALFPI" />
+  <ellipsoid lunit="cm" name="Heart1" ax="4.00" by="4.00" cz="7.00" zcut1="-7.00" zcut2="0.0" />
+  <sphere aunit="radian" lunit="cm" name="Heart2" rmax="3.99" deltaphi="TWOPI" deltatheta="HALFPI" />
   <union name="Heart">
    <first ref="Heart1" />
    <second ref="Heart2" />

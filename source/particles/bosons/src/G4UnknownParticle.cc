@@ -72,7 +72,7 @@ G4UnknownParticle*  G4UnknownParticle::Definition()
 		false,      "geantino",            0
 		);
   }
-  theInstance = reinterpret_cast<G4UnknownParticle*>(anInstance);
+  theInstance = static_cast<G4UnknownParticle*>(anInstance);
   return theInstance;
 
 }

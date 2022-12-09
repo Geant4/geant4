@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
-/// \file GeantinoPhysicsList.hh
-/// \brief Definition of the GeantinoPhysicsList class
+//
+/// \file common/include/GeantinoPhysicsList.hh
+/// \brief Definition of the Common::GeantinoPhysicsList class
 
 #ifndef GeantinoPhysicsList_h
 #define GeantinoPhysicsList_h 1
@@ -34,17 +34,22 @@
 
 /// Physics list with geantino and charged geantino only
 
+namespace Common
+{
+
 class GeantinoPhysicsList: public G4VUserPhysicsList
 {
   public:
     GeantinoPhysicsList();
-    ~GeantinoPhysicsList();
+    ~GeantinoPhysicsList() override;
 
   protected:
     // Construct particle and physics process
-    void ConstructParticle();
-    void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 };
+
+}
 
 #endif
 

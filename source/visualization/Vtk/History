@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-25 Gabriele Cosmo (visVtk-V11-00-07)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-14 I. Hrivnacova (visVtk-V11-00-06)
+- Replaced reinterpret_cast with static_cast where possible
+
+## 2022-10-10 Igor Semeniouk (visVtk-V11-00-05)
+- G4VtkViewer.hh : replaced sprintf by snprintf.
+
+## 2022-09-06 Ben Morgan (visVtk-V11-00-04)
+- Resolve inconsistencies in module dependencies
+
 ## 2022-03-22 Ben Morgan (visVtk-V11-00-03)
 - Use geant4_module_sources to add optional sources
 - Move setting of G4VIS_USE_VTK_QT flag on G4UIcommon module to that module's

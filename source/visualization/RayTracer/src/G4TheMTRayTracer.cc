@@ -46,6 +46,8 @@
 #include "G4VVisManager.hh"
 #include "G4RunManagerFactory.hh"
 
+#define G4warn G4cout
+
 G4TheMTRayTracer* G4TheMTRayTracer::theInstance = nullptr;
 
 G4TheMTRayTracer::G4TheMTRayTracer(G4VFigureFileMaker* figMaker,
@@ -100,14 +102,14 @@ void G4TheMTRayTracer::Trace(const G4String& fileName)
   G4ApplicationState currentState = theStateMan->GetCurrentState();
   if(currentState!=G4State_Idle)
   {
-    G4cerr << "Illegal application state <" << theStateMan->GetStateString(currentState)
+    G4warn << "Illegal application state <" << theStateMan->GetStateString(currentState)
            << "> - Trace() ignored. " << G4endl;
     return;
   }
 
   if(!theFigMaker)
   {
-    G4cerr << "Figure file maker class is not specified - Trace() ignored." << G4endl;
+    G4warn << "Figure file maker class is not specified - Trace() ignored." << G4endl;
     return;
   }
 
@@ -135,8 +137,8 @@ void G4TheMTRayTracer::Trace(const G4String& fileName)
   if(succeeded)
   { CreateFigureFile(fileName); }
   else
-  { G4cerr << "Could not create figure file" << G4endl;
-    G4cerr << "You might set the eye position outside of the world volume" << G4endl; }
+  { G4warn << "Could not create figure file" << G4endl;
+    G4warn << "You might set the eye position outside of the world volume" << G4endl; }
 
   G4String str = "/tracking/storeTrajectory " + G4UIcommand::ConvertToString(storeTrajectory);
   UI->ApplyCommand(str);

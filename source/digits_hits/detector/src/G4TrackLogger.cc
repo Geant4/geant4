@@ -52,7 +52,7 @@ void G4TrackLogger::SetEventID(G4int id)
 G4bool G4TrackLogger::FirstEnterance(G4int trid)
 {
   G4bool first = true;
-  G4int n      = fTrackIDsSet.count(trid);
+  auto n       = fTrackIDsSet.count(trid);
   if(n == 1)
   {
     first = false;

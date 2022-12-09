@@ -187,11 +187,11 @@ void PhysicsList::ConstructEM()
             new G4DNASancheExcitationModel();
 
             G4DNAPTBElasticModel* modelDNAPTBElastic = 
-            new G4DNAPTBElasticModel("THF/TMP/PY", particle);
+            new G4DNAPTBElasticModel("THF/TMP/PY/N2", particle);
             G4DNAPTBIonisationModel* modelDNAPTBIonisation = 
-            new G4DNAPTBIonisationModel("THF/TMP/PY",particle);
+            new G4DNAPTBIonisationModel("THF/TMP/PY/N2",particle);
             G4DNAPTBExcitationModel* modelDNAPTBExcitation = 
-            new G4DNAPTBExcitationModel("THF/TMP/PY",particle);
+            new G4DNAPTBExcitationModel("THF/TMP/PY/N2",particle);
 
 
             // Register models in the model interface

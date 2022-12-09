@@ -60,7 +60,6 @@
 #include "G4HelixMixedStepper.hh"
 #include "G4ExactHelixStepper.hh"
 
-// Newest steppers - from Release 10.3-beta (June 2013)
 #include "G4BogackiShampine23.hh"
 #include "G4BogackiShampine45.hh"
 #include "G4DormandPrince745.hh"
@@ -86,8 +85,7 @@ F01FieldSetup::F01FieldSetup(G4ThreeVector fieldVector,
                              G4bool        useFSALstepper )
  : fMagneticField(new G4UniformMagField(fieldVector)),
    fUseFSALstepper(useFSALstepper),
-   fStepperType(0),
-   fMinStep(0.)
+   fStepperType(0)
 {
   G4cout << " F01FieldSetup: magnetic field set to Uniform( "
          << fieldVector << " ) " << G4endl;
@@ -106,10 +104,9 @@ F01FieldSetup::F01FieldSetup(G4ThreeVector fieldVector,
      if( stepperNum > 0 )
         fStepperType =   stepperNum;
      else
-        fStepperType = - stepperNum;        
-     
+        fStepperType = - stepperNum;
   }
-  
+
   InitialiseAll();
 }
 
@@ -118,8 +115,7 @@ F01FieldSetup::F01FieldSetup(G4ThreeVector fieldVector,
 F01FieldSetup::F01FieldSetup()
  : fMagneticField(new G4UniformMagField(G4ThreeVector())),
    fUseFSALstepper(false),
-   fStepperType(17),   // Use Dormand Prince (7) 4/5 as default stepper
-   fMinStep(0.)
+   fStepperType(17)   // Use Dormand Prince (7) 4/5 as default stepper
 {
   G4cout << " F01FieldSetup: magnetic field set to Uniform( 0.0, 0, 0 ) "
          << G4endl;
@@ -134,8 +130,11 @@ void F01FieldSetup::InitialiseAll()
  
   fEquation = new G4Mag_UsualEqRhs(fMagneticField);
  
-  fMinStep     = 1.0*mm; // minimal step of 1 mm is default
-
+  fMinStep      = 3.0e-3*mm; // minimal step of 1 um is default ==> accept any error for smaller steps!
+  fDeltaOneStep = 1.0e-5*mm; // Errors of this size in an integration sub-step are acceptable
+                             //   except limited by the relative integration error limits (epsilon_min/max)
+                             //  Notes: - their initial values are set in the header.
+                             //         - both this and the eps min/max can be changed using Set methods.
   fFieldManager = G4TransportationManager::GetTransportationManager()
                     ->GetFieldManager();
 
@@ -145,11 +144,58 @@ void F01FieldSetup::InitialiseAll()
   else
   {
     CreateStepperAndChordFinder();
+    // To try the symplectic method (Boris Scheme/Driver) replace the line above with the one below:
+    // CreateAndSetupBorisDriver();
   }
-
-  G4cout  << "                 4. Updating Field Manager."  << G4endl;  
+  
+  G4cout  << "   4/5. Updating eps_min and eps_max in Field Manager."  << G4endl;
   fFieldManager->SetChordFinder( fChordFinder );
   fFieldManager->SetDetectorField(fMagneticField );
+
+  // For controling the accurancy 
+  fFieldManager -> SetMinimumEpsilonStep( fDesiredEpsilonMin ) ;  
+  //
+  // const G4double increaseFactor = 3.0 ;     // typical rangle  1.0 - 10.0
+  //  maxEpsilon must not exceed a ceiling, ideally 0.001 -- above this integration is unreliable
+  // const G4double maxEpsilon = increaseFactor * fDesiredEpsilonMin;
+  // fFieldManager -> SetMaximumEpsilonStep( maxEpsilon );
+
+  // For now, though, let's demonstrate how to extend the ceiling, if needed:
+  if( fDesiredEpsilonMax < G4FieldManager::GetMaxAcceptedEpsilon()  )
+  {
+     G4cout << "F01FieldSetup: requesting Max(imum) Epsilon = " << fDesiredEpsilonMax << G4endl;
+     fFieldManager -> SetMaximumEpsilonStep( fDesiredEpsilonMax );
+  }
+  else
+  {
+     G4bool softFail= true;
+     G4bool good= G4FieldManager::SetMaxAcceptedEpsilon(fDesiredEpsilonMax, softFail);
+
+     if( good ) {
+        G4cout << "F01FieldSetup: requested increase Max(imum) Accepted Epsilon to "
+               << fDesiredEpsilonMax << " succeeded." << G4endl;
+        fFieldManager -> SetMaximumEpsilonStep( fDesiredEpsilonMax );
+     } else {
+        G4double maxEpsAllowed = G4FieldManager::GetMaxAcceptedEpsilon();
+        fFieldManager -> SetMaximumEpsilonStep( maxEpsAllowed );
+        G4cout << "F01FieldSetup: requested increase Max(imum) Accepted Epsilon to "
+               << fDesiredEpsilonMax << " FAILED." << G4endl
+               << "  Setting it to max allowed = " << maxEpsAllowed << G4endl;
+     }
+  }
+  // To demonstrate that it is now possible to change the maximum accepted epsilon
+  
+  // Note: The values of both epsilon parameters must be between
+  //    fMaxAcceptedEpsilon = 0.001
+  //   to ensure robustness of integration (adequate accuracy of intermediate results)
+  // and (much bigger than)
+  //    fMinAcceptedEpsilon ~= 2.2e-13  ( 1000.0 * std::numeric_limits<G4double>::epsilon() )
+  // which even the best integration methods would struggle greatly to achieve.
+  
+  G4cout << " Changed FieldManager epsilon values to  epsilon_min= "
+         << fFieldManager -> GetMinimumEpsilonStep()
+         <<  " and epsilon_max= "
+         << fFieldManager -> GetMaximumEpsilonStep() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,15 +217,15 @@ void F01FieldSetup::CreateStepperAndChordFinder()
    
   // Update field
   G4cout << " F01FieldSetup::CreateStepperAndChordFinder() called. " << G4endl
-         << "                 1. Creating Stepper."  << G4endl;
+         << "   1. Creating Stepper."  << G4endl;
 
   SetStepper();
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
 
-  G4cout  << "                 2. Creating ChordFinder."  << G4endl;
+  G4cout << "   2. Creating ChordFinder."  << G4endl;
   fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper );
 
-  G4cout  << "                 3. Updating Field Manager."  << G4endl;  
+  G4cout << "   3. Updating Field Manager (chord finder, field-ptr)."  << G4endl;
   fFieldManager->SetChordFinder( fChordFinder );
   fFieldManager->SetDetectorField(fMagneticField );
 }
@@ -314,13 +360,13 @@ F01FieldSetup::CreateFSALStepperAndDriver()
   fStepper = nullptr;
   
   G4cout << " F01FieldSetup::CreateFSALStepperAndDriver() called. " << G4endl;   
-  G4cout << "                 1. Creating Stepper."  << G4endl;
+  G4cout << "   1. Creating Stepper."  << G4endl;
   // auto fsalStepper = new FsalStepperType( fEquation );
   G4RK547FEq1* stepper1 = nullptr;
   G4RK547FEq2* stepper2 = nullptr;
   G4RK547FEq3* stepper3 = nullptr;
 
-  G4cout  << "                2. Creating FSAL Driver."  << G4endl;
+  G4cout << "   2. Creating FSAL Driver."  << G4endl;
   G4VIntegrationDriver* fsalDriver = nullptr;
   switch ( fStepperType )
   {
@@ -388,7 +434,7 @@ void F01FieldSetup::CreateFSALStepperAndChordFinder()
   fDriver = FSALdriver;
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
 
-  G4cout  << "                 3. Creating ChordFinder."  << G4endl;
+  G4cout << "    3. Creating ChordFinder."  << G4endl;
   fChordFinder = new G4ChordFinder( FSALdriver );  // ( fMagneticField, fMinStep, fStepper );
 }
 
@@ -448,3 +494,29 @@ G4FieldManager* F01FieldSetup::GetGlobalFieldManager()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4BorisScheme.hh"
+#include"G4BorisDriver.hh"
+
+void
+F01FieldSetup::CreateAndSetupBorisDriver()
+{
+ 
+  G4cout << " F01FieldSetup::CreateAndSetupBorisDriver() called. " << G4endl;   
+  G4cout << "   1. Creating Scheme (Stepper)."  << G4endl;
+  auto borisStepr = new G4BorisScheme(fEquation);
+  G4cout << "   2. Creating Driver."  << G4endl;
+  auto driver = new G4BorisDriver(fMinStep, borisStepr);
+
+  GetGlobalFieldManager()->SetFieldChangesEnergy(true);  // To test energy conservation!!
+
+  G4cout  << "  3. Creating ChordFinder."  << G4endl;
+  fChordFinder = new G4ChordFinder( driver );
+
+  G4cout  << "  4. Updating Field Manager (with ChordFinder, field)."  << G4endl;
+  fFieldManager->SetChordFinder( fChordFinder );
+  fFieldManager->SetDetectorField(fMagneticField );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

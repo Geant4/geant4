@@ -53,15 +53,12 @@ class PhysListEmStandard : public G4VPhysicsConstructor
 {
 public:
 
-  explicit PhysListEmStandard(G4int ver = 1);
+  explicit PhysListEmStandard(G4int verbose = 1);
 
   ~PhysListEmStandard() override;
 
   void ConstructParticle() override;
   void ConstructProcess() override;
-
-private:
-  G4int  verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

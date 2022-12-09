@@ -215,12 +215,12 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(G4int & Z,
   
   G4int DeltaZ = 0;
   G4double CP =  G4StatMFParameters::GetCoulomb();
-  G4int multiplicity = FragmentsA.size();
+  G4int multiplicity = (G4int)FragmentsA.size();
   
   do {
     FragmentsZ.clear();
     G4int SumZ = 0;
-    for (G4int i = 0; i < multiplicity; i++) 
+    for (G4int i = 0; i < multiplicity; ++i) 
       {
 	G4int A = FragmentsA[i];
 	if (A <= 1) 
@@ -269,7 +269,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(G4int & Z,
   FragmentsZ[idx] += DeltaZ;
   
   G4StatMFChannel * theChannel = new G4StatMFChannel;
-  for (G4int i = multiplicity-1; i >= 0; i--) 
+  for (G4int i = multiplicity-1; i >= 0; --i) 
     {
       theChannel->CreateFragment(FragmentsA[i],FragmentsZ[i]);
     }

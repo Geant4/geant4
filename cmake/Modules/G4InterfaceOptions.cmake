@@ -106,15 +106,6 @@ if(WIN32)
   geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
 endif()
 
-# Overall ToolsSG enable flag
-set(GEANT4_USE_TOOLSSG OFF)
-if(GEANT4_USE_TOOLSSG_QT_GLES 
-   OR GEANT4_USE_TOOLSSG_XT_GLES 
-   OR GEANT4_USE_TOOLSSG_X11_GLES 
-   OR GEANT4_USE_TOOLSSG_WINDOWS_GLES)
-  set(GEANT4_USE_TOOLSSG ON)
-endif()
-
 #-----------------------------------------------------------------------
 # Find dependencies
 #
@@ -147,14 +138,9 @@ if(GEANT4_USE_QT)
   # Use versioned targets to support Qt5 < 5.15
   # Once 5.15 is the minimum version, the "Qt${QT_VERSION_MAJOR}_..." variables can be dropped
   # - https://doc.qt.io/qt-6/cmake-manual.html
-  find_package(QT NAMES Qt5 Qt6 COMPONENTS Core REQUIRED)
+  find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
   find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL PrintSupport REQUIRED)
 
-  if(QT_VERSION_MAJOR VERSION_LESS 6)
-    get_target_property(QT_QMAKE_EXECUTABLE ${Qt${QT_VERSION_MAJOR}Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
-  else()
-    get_target_property(QT_QMAKE_EXECUTABLE Qt6::qmake IMPORTED_LOCATION)
-  endif()
   geant4_save_package_variables(Qt${QT_VERSION_MAJOR}
     Qt${QT_VERSION_MAJOR}Core_DIR
     Qt${QT_VERSION_MAJOR}Gui_DIR
@@ -162,14 +148,14 @@ if(GEANT4_USE_QT)
     Qt${QT_VERSION_MAJOR}OpenGL_DIR
     Qt${QT_VERSION_MAJOR}PrintSupport_DIR)
 
-
+  get_target_property(QT_QMAKE_EXECUTABLE ${Qt${QT_VERSION_MAJOR}Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
   geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt${QT_VERSION_MAJOR} support")
 
   # Qt3D is only supported on 5.15 and above, but always on if available
   set(QT3D_MINIMUM_VERSION 5.15.0)
   set(GEANT4_USE_QT3D OFF)
 
-  if(QT_VERSION GREATER_EQUAL QT3D_MINIMUM_VERSION)
+  if(QT_VERSION VERSION_GREATER_EQUAL QT3D_MINIMUM_VERSION)
     find_package(Qt${QT_VERSION_MAJOR}3DCore ${QT_VERSION} EXACT QUIET)
     find_package(Qt${QT_VERSION_MAJOR}3DExtras ${QT_VERSION} EXACT QUIET)
     find_package(Qt${QT_VERSION_MAJOR}3DRender ${QT_VERSION} EXACT QUIET)

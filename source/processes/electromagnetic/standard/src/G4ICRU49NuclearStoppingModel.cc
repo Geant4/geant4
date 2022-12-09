@@ -134,11 +134,11 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(
   mass1 /= amu_c2;
 
   //  loop for the elements in the material
-  G4int numberOfElements = mat->GetNumberOfElements();
+  std::size_t numberOfElements = mat->GetNumberOfElements();
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* atomDensity  = mat->GetAtomicNumDensityVector();
  
-  for (G4int iel=0; iel<numberOfElements; ++iel) {
+  for (std::size_t iel=0; iel<numberOfElements; ++iel) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
     G4double mass2 = element->GetN();

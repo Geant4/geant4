@@ -56,16 +56,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , fCurrentTrkID(-1)
-  , fCellFlux(0)
-  , EvtMap(0)
-  , weighted(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-}
+  : G4PSPassageCellFlux(name, "percm2", depth)
+{}
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
                                          G4int depth)
@@ -73,14 +65,12 @@ G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
   , HCID(-1)
   , fCurrentTrkID(-1)
   , fCellFlux(0)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
 {
   DefineUnitAndCategory();
   SetUnit(unit);
 }
-
-G4PSPassageCellFlux::~G4PSPassageCellFlux() { ; }
 
 G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -95,10 +85,10 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4int index = GetIndex(aStep);
     EvtMap->add(index, fCellFlux);
 
-    if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+    if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
     {
       auto filler = G4VScoreHistFiller::Instance();
-      if(!filler)
+      if(filler == nullptr)
       {
         G4Exception(
           "G4PSPassageCellFlux::ProcessHits", "SCORER0123", JustWarning,
@@ -112,12 +102,12 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep)
 {
-  G4bool Passed = FALSE;
+  G4bool Passed = false;
 
   G4bool IsEnter = aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary;
   G4bool IsExit  = aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary;
@@ -130,7 +120,7 @@ G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep)
   if(IsEnter && IsExit)
   {                         // Passed at one step
     fCellFlux = trklength;  // Track length is absolutely given.
-    Passed    = TRUE;
+    Passed    = true;
   }
   else if(IsEnter)
   {                         // Enter a new geometry
@@ -142,7 +132,7 @@ G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep)
     if(fCurrentTrkID == trkid)
     {                          // if the track is same as entered,
       fCellFlux += trklength;  // add the track length to current one.
-      Passed = TRUE;
+      Passed = true;
     }
   }
   else
@@ -166,22 +156,17 @@ void G4PSPassageCellFlux::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSPassageCellFlux::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSPassageCellFlux::clear() { EvtMap->clear(); }
-
-void G4PSPassageCellFlux::DrawAll() { ; }
 
 void G4PSPassageCellFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, flux] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  cell flux : " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  cell flux : " << *(flux) / GetUnitValue() << " ["
            << GetUnit() << G4endl;
   }
 }

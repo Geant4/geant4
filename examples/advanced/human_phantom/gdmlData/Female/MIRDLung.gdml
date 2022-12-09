@@ -110,8 +110,8 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="OneLung" ax="4.09" by="6.98" cz="20.55" zcut1="0.0" zcut2="20.55" />
-  <ellipsoid aunit="cm" lunit="cm" name="SubtrLung" ax="5.0" by="7.0" cz="20.55" />
+  <ellipsoid lunit="cm" name="OneLung" ax="4.09" by="6.98" cz="20.55" zcut1="0.0" zcut2="20.55" />
+  <ellipsoid lunit="cm" name="SubtrLung" ax="5.0" by="7.0" cz="20.55" />
 
   <union name="Lung1">
    <first ref="OneLung" />

@@ -6,7 +6,7 @@
 examples/extended/visualization/standalone
 
 
-This example illustrates how one might use the Geant Visualization
+This example illustrates how one might use the Geant4 Visualization
 System as a "stand alone" graphics library and viewer.  It makes use
 of the "user action" feature of the Geant4 vis manager - for a fuller
 example of the use of this feature see

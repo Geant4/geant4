@@ -1,9 +1,55 @@
 # Category phys-ctor-em History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-24 Gabriele Cosmo (phys-ctor-em-V11-00-35)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-15 Vladimir Ivanchenko (phys-ctor-em-V11-00-34)
+- G4EmBuilder - added G4AntiLambda and G4PionZero to the minimal 
+    EM particle list to avoid warnings issued due to new hypernuclei
+
+## 2022-11-08 Vladimir Ivanchenko (phys-ctor-em-V11-00-33)
+- G4EmBuilder - added G4Lambda to the minimal EM particle list
+    needed for hyper-nuclei physics
+
+## 2022-11-04 Vladimir Ivanchenko (phys-ctor-em-V11-00-32)
+- G4EmBuilder - added e- and mu- neutrino and anti-neutrino to
+    the minimal EM particle list
+- G4EmDNABuilder - added minimal list of EM standard particles
+    to all DNA physics variants, this allowing enable radioactive 
+    decay, provides correct printout of EM processes and models,
+    and fix problem #2412
+
+## 2022-10-14 Vladimir Ivanchenko (phys-ctor-em-V11-00-31)
+- G4EmDNABuilder - enable combination of DNA and standard physics
+
+## 2022-10-08 Vladimir Ivanchenko (phys-ctor-em-V11-00-30)
+- Increased upper limit of DNA proton/ion physics from 100 MeV
+  to 300 MeV in all DNA constructors
+- G4EmDNABuilder - introduced const upper limit 1 MeV for DNA
+    models; introduced const upper limit 2 MeV for standard
+    low-energy ionisation; use the same upper limit for DNA
+    excitation and ionisation  
+
+## 2022-09-05 Ben Morgan (phys-ctor-em-V11-00-29)
+- Update public/private dependencies for consistency
+
+## 2022-08-30 Vladimir Ivanchenko (phys-ctor-em-V11-00-28)
+- Chemistry builders - added used headers
+
+## 2022-08-09 Vladimir Ivanchenko (phys-ctor-em-V11-00-27)
+- G4EmBuilder, G4EmDNAPhysics - instantiate singletones for physics
+
+## 2022-07-06 Vladimir Ivanchenko (phys-ctor-em-V11-00-26)
+- G4GammaGeneralProcess - fixed problem of Compton scattering selection
+    in the low energy interval < 150 keV identified in test67; apply
+    spline interpolation for tables at low energy (<150 keV) and at 
+    high energy (> 100 MeV) 
 
 ## 2022-06-17 Vladimir Ivanchenko (phys-ctor-em-V11-00-25)
 - G4EmStandardPhysics_option4 - use Penelope ionisation model for e- 

@@ -66,7 +66,7 @@ G4Accumulable<T>::G4Accumulable(const G4Accumulable& rhs)
 
 //_____________________________________________________________________________
 template <typename T>
-G4Accumulable<T>::G4Accumulable(G4Accumulable&& rhs)
+G4Accumulable<T>::G4Accumulable(G4Accumulable&& rhs) noexcept
   : G4VAccumulable(rhs),
     fValue(std::move(rhs.fValue)),
     fInitValue(std::move(rhs.fInitValue)),
@@ -96,8 +96,7 @@ G4Accumulable<T>::operator=(const G4Accumulable<T>& rhs)
 
 //_____________________________________________________________________________
 template <typename T>
-G4Accumulable<T>&
-G4Accumulable<T>::operator=(G4Accumulable<T>&& rhs)
+G4Accumulable<T>& G4Accumulable<T>::operator=(G4Accumulable<T>&& rhs) noexcept
 {
   // check assignment to self
   if (this == &rhs) return *this;

@@ -50,7 +50,7 @@ class G4FilecoutDestination : public G4coutDestination
     , m_mode(mode)
     , m_output(nullptr)
   {}
-  virtual ~G4FilecoutDestination();
+  ~G4FilecoutDestination() override;
 
   void SetFileName(const G4String& fname) { m_name = fname; }
 
@@ -58,8 +58,8 @@ class G4FilecoutDestination : public G4coutDestination
   // By default append to existing file
   void Close();
 
-  virtual G4int ReceiveG4cout(const G4String& msg) override;
-  virtual G4int ReceiveG4cerr(const G4String& msg) override;
+  G4int ReceiveG4cout(const G4String& msg) override;
+  G4int ReceiveG4cerr(const G4String& msg) override;
 
  private:
   G4String m_name;

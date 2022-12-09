@@ -32,9 +32,7 @@ inline G4String::G4String(const std::string& str)
   : std::string(str)
 {}
 
-inline G4String::G4String(const G4String& str)
-  : std::string(str)
-{}
+inline G4String::G4String(const G4String& str) = default;
 
 inline G4String::G4String(std::string&& str)
   : std::string(std::move(str))

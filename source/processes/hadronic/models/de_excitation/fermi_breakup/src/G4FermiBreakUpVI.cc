@@ -159,7 +159,7 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
 G4bool G4FermiBreakUpVI::SampleDecay()
 {
   const G4FermiChannels* chan = thePool->ClosestChannels(Z, A, mass);
-  if(!chan) { return false; }
+  if(nullptr == chan) { return false; }
   size_t nn = chan->GetNumberOfChannels();
   if(verbose > 1) {
     G4cout << "== SampleDecay " << nn << " channels Eex= " 

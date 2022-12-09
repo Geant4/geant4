@@ -42,22 +42,22 @@ class G4MIRDRibCage: public G4VOrgan
 public:
 
   G4MIRDRibCage();
-  ~G4MIRDRibCage();
+  ~G4MIRDRibCage() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
-				    const G4String&, G4bool, G4bool);
+				    const G4String&, G4bool, G4bool) override;
 
 private:
-  G4VPhysicalVolume* physRib1;
-  G4VPhysicalVolume* physRib2;
-  G4VPhysicalVolume* physRib3;
-  G4VPhysicalVolume* physRib4;
-  G4VPhysicalVolume* physRib5;
-  G4VPhysicalVolume* physRib6;
-  G4VPhysicalVolume* physRib7;
-  G4VPhysicalVolume* physRib8;
-  G4VPhysicalVolume* physRib9;
-  G4VPhysicalVolume* physRib10;
-  G4VPhysicalVolume* physRib11;
-  G4VPhysicalVolume* physRib12;
+  G4VPhysicalVolume* fPhysRib1;
+  G4VPhysicalVolume* fPhysRib2;
+  G4VPhysicalVolume* fPhysRib3;
+  G4VPhysicalVolume* fPhysRib4;
+  G4VPhysicalVolume* fPhysRib5;
+  G4VPhysicalVolume* fPhysRib6;
+  G4VPhysicalVolume* fPhysRib7;
+  G4VPhysicalVolume* fPhysRib8;
+  G4VPhysicalVolume* fPhysRib9;
+  G4VPhysicalVolume* fPhysRib10;
+  G4VPhysicalVolume* fPhysRib11;
+  G4VPhysicalVolume* fPhysRib12;
 };
 #endif

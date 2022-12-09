@@ -27,6 +27,15 @@
 
 /** @} */
 
+/** @defgroup extended_analysis_AnaEx03 AnaEx03
+ *  Analysis AnaEx03 example has its
+ *  <a href="../html_AnaEx03/html/index.html">standalone documentation </a>
+ *  @ingroup extended_analysis
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_analysis_B1Con B1Con
  *  Analysis example B1Con 
  *  @ingroup extended_analysis

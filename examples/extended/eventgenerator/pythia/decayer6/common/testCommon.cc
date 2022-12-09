@@ -37,6 +37,8 @@
 #include "G4RunManager.hh"
 #include "FTFP_BERT.hh"
 
+using namespace Common;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Test program which only instantiates classes defined in 

@@ -559,8 +559,8 @@ void G4GDMLWriteSolids::GenericPolyconeWrite(
   polyconeElement->setAttributeNode(NewAttribute("lunit", "mm"));
   solElement->appendChild(polyconeElement);
 
-  const std::size_t num_rzpoints = polycone->GetNumRZCorner();
-  for(std::size_t i = 0; i < num_rzpoints; ++i)
+  const G4int num_rzpoints = (G4int)polycone->GetNumRZCorner();
+  for(G4int i = 0; i < num_rzpoints; ++i)
   {
     const G4double r_point = polycone->GetCorner(i).r;
     const G4double z_point = polycone->GetCorner(i).z;
@@ -617,9 +617,9 @@ void G4GDMLWriteSolids::PolyhedraWrite(xercesc::DOMElement* solElement,
     polyhedraElement->setAttributeNode(NewAttribute("lunit", "mm"));
     solElement->appendChild(polyhedraElement);
 
-    const std::size_t num_rzpoints = polyhedra->GetNumRZCorner();
+    const G4int num_rzpoints = (G4int)polyhedra->GetNumRZCorner();
 
-    for(std::size_t i = 0; i < num_rzpoints; ++i)
+    for(G4int i = 0; i < num_rzpoints; ++i)
     {
       const G4double r_point = polyhedra->GetCorner(i).r;
       const G4double z_point = polyhedra->GetCorner(i).z;
@@ -669,11 +669,11 @@ void G4GDMLWriteSolids::TessellatedWrite(
   std::map<G4ThreeVector, G4String, G4ThreeVectorCompare> vertexMap;
 
   const std::size_t NumFacets = tessellated->GetNumberOfFacets();
-  std::size_t NumVertex       = 0;
+  std::size_t NumVertex = 0;
 
   for(std::size_t i = 0; i < NumFacets; ++i)
   {
-    const G4VFacet* facet          = tessellated->GetFacet(i);
+    const G4VFacet* facet          = tessellated->GetFacet((G4int)i);
     const size_t NumVertexPerFacet = facet->GetNumberOfVertices();
 
     G4String FacetTag;
@@ -712,7 +712,7 @@ void G4GDMLWriteSolids::TessellatedWrite(
       // cache it in the local map and add it as position in the
       // "define" section of the GDML file.
 
-      const G4ThreeVector& vertex = facet->GetVertex(j);
+      const G4ThreeVector& vertex = facet->GetVertex((G4int)j);
 
       if(vertexMap.find(vertex) != vertexMap.cend())  // Vertex is cached
       {

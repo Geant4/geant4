@@ -1,6 +1,28 @@
 # Uncomment a line to select a specific detector type
-# Leave both commented to use the default one
+# Leave everything commented to use the default one
 
 #/geometrySetup/selectDetector Diamond
 #/geometrySetup/selectDetector MicroDiamond
 #/geometrySetup/selectDetector Silicon
+#/geometrySetup/selectDetector SiliconBridge
+#/geometrySetup/selectDetector DiamondTelescope
+
+# Uncomment to change the detector's width and/or thickness
+# Otherwise default values are used
+#/geometrySetup/detectorDimension/setWidth 30 um
+#/geometrySetup/detectorDimension/setThickness 10 um
+
+# If DiamondTelescope is selected, uncomment to change the telescope's width and/or thickness
+# Otherwise default values are used
+#/geometrySetup/detectorDimension/secondStage/setWidth 500 um
+#/geometrySetup/detectorDimension/secondStage/setThickness 800 um
+
+# Uncomment the following line to place the detector in a water phantom,
+# or leave it commented out to place it in vacuum
+#/geometrySetup/enableWaterPhantom true
+
+# If the water phantom is used, uncomment the following line to set a custom depth in water
+#/geometrySetup/detectorPosition/setDepth 50 mm
+
+# The above commands are only applied if the following line is uncommented
+#/geometrySetup/applyChanges

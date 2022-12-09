@@ -45,7 +45,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleHPFinalState.hh"
 #include "G4HadTmpUtil.hh"
-
+#include "G4ParticleHPThermalBoost.hh"
 #include "G4ParticleHPReactionWhiteBoard.hh"
 
 G4double G4ParticleHPChannel::GetXsec(G4double energy)
@@ -94,7 +94,7 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
     // Bug fix by TK on behalf of AH
     //if ( Z <=theElement->GetZ()-5 ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this material");
     G4int count = 0;
-    if(registerCount==0) count = theElement->GetNumberOfIsotopes();
+    if(registerCount==0) count = (G4int)theElement->GetNumberOfIsotopes();
     if(count == 0||registerCount!=0) count +=
          theStableOnes.GetNumberOfIsotopes(Z);
     niso = count;
@@ -107,7 +107,7 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
     theFinalStates = new G4ParticleHPFinalState * [niso];
     delete theChannelData;
     theChannelData = new G4ParticleHPVector; 
-    for(G4int i=0; i<niso; i++)
+    for(G4int i=0; i<niso; ++i)
     {
       theFinalStates[i] = theFS->New();
       theFinalStates[i]->SetProjectile(theProjectile);
@@ -116,7 +116,7 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
     G4int nIsos = niso;
     if(theElement->GetNumberOfIsotopes()!=0&&registerCount==0)
     {
-      for (G4int i1=0; i1<nIsos; i1++)
+      for (G4int i1=0; i1<nIsos; ++i1)
       {
         // G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
@@ -133,9 +133,7 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
 	//     <<Z<<" "<<theElement
 	//     << G4endl;
       G4int first = theStableOnes.GetFirstIsotope(Z);
-      for(G4int i1=0; 
-        i1<theStableOnes.GetNumberOfIsotopes(Z);
-        i1++)
+      for(G4int i1=0; i1<theStableOnes.GetNumberOfIsotopes(Z); ++i1)
       {
         G4int A = theStableOnes.GetIsotopeNucleonCount(first+i1);
         G4double frac = theStableOnes.GetAbundance(first+i1);
@@ -151,16 +149,15 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
     return result;
   }
   
-  //void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
   void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance, G4ParticleDefinition* projectile)
   {
     // Initialze the G4FissionFragment generator for this isomer if needed
-	if(wendtFissionGenerator)
-	{
-	  wendtFissionGenerator->InitializeANucleus(A, Z, M, theDir);
-	}
+    if(wendtFissionGenerator)
+    {
+      wendtFissionGenerator->InitializeANucleus(A, Z, M, theDir);
+    }
 
-	theFinalStates[index]->Init(A, Z, M, theDir, theFSType, projectile);
+    theFinalStates[index]->Init(A, Z, M, theDir, theFSType, projectile);
     if(!theFinalStates[index]->HasAnyData()) return; // nothing there for exactly this isotope.
 
     // the above has put the X-sec into the FS
@@ -200,7 +197,7 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
         G4double xp = aPassive->GetEnergy(p);
         if( std::abs(std::abs(xp-xa)/xa)<0.001 )
         {
-          p++;
+          ++p;
         }
       } else {
         tmp = anActive; t=a;
@@ -211,19 +208,17 @@ G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber
     while (a!=anActive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       theMerge->SetData(m_tmp++, anActive->GetEnergy(a), anActive->GetXsec(a));
-      a++;
+      ++a;
     }
     while (p!=aPassive->GetVectorLength()) // Loop checking, 11.05.2015, T. Koi
     {
       if(std::abs(theMerge->GetEnergy(std::max(0,m_tmp-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
         theMerge->SetData(m_tmp++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
-      p++;
+      ++p;
     }
     delete theStore;
     theStore = theMerge;
   }
-
-#include "G4ParticleHPThermalBoost.hh"
 
   G4HadFinalState * G4ParticleHPChannel::
   ApplyYourself(const G4HadProjectile & theTrack, G4int anIsotope)

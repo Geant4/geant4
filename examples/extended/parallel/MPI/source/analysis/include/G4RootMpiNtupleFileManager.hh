@@ -56,7 +56,7 @@ class G4RootMpiNtupleFileManager : public  G4RootNtupleFileManager
     // virtual methods from base class
     virtual G4bool ActionAtOpenFile(const G4String& fileName) final;
     virtual G4bool ActionAtWrite() final;
-    virtual G4bool ActionAtCloseFile(G4bool reset) final; 
+    virtual G4bool ActionAtCloseFile() final; 
     virtual G4bool Reset() final;
 
     virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;

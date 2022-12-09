@@ -35,15 +35,15 @@
 class G4ScoreLogColorMap : public G4VScoreColorMap
 {
  public:
-  G4ScoreLogColorMap(G4String mName);
-  virtual ~G4ScoreLogColorMap();
+  using G4VScoreColorMap::G4VScoreColorMap;
+  ~G4ScoreLogColorMap() override = default;
 
  public:
-  virtual void GetMapColor(G4double val, G4double color[4]);
+  void GetMapColor(G4double val, G4double color[4]) override;
 
   // draw a color chart
-  virtual void DrawColorChartBar(G4int nPoint);
-  virtual void DrawColorChartText(G4int nPoint);
+  void DrawColorChartBar(G4int nPoint) override;
+  void DrawColorChartText(G4int nPoint) override;
 };
 
 #endif

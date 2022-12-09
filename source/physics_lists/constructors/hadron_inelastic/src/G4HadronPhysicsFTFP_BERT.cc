@@ -286,6 +286,12 @@ void G4HadronPhysicsFTFP_BERT::Others()
     if( param->EnableBCParticles() ) {
       G4HadronicBuilder::BuildBCHadronsFTFP_BERT();
     }
+
+    // light hypernuclei and anti-hypernuclei
+    if ( param->EnableHyperNuclei() ) {
+      G4HadronicBuilder::BuildHyperNucleiFTFP_BERT();
+      G4HadronicBuilder::BuildHyperAntiNucleiFTFP_BERT();
+    }
   }
 }
 

@@ -39,7 +39,7 @@ G4Polymarker::G4Polymarker (const G4VMarker& marker):
   fMarkerType (G4Polymarker::dots)
 {}
 
-G4Polymarker::~G4Polymarker () {}
+G4Polymarker::~G4Polymarker () = default;
 
 std::ostream& operator << (std::ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";

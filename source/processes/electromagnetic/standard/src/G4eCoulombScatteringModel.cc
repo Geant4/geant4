@@ -154,11 +154,11 @@ G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
 
   // find out lightest element
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
+  std::size_t nelm = material->GetNumberOfElements();
 
   // select lightest element
   G4int Z = 300;
-  for (G4int j=0; j<nelm; ++j) {
+  for (std::size_t j=0; j<nelm; ++j) {
     Z = std::min(Z,(*theElementVector)[j]->GetZasInt());
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));

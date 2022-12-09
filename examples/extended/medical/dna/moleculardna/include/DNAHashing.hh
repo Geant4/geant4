@@ -71,7 +71,7 @@ namespace G4::hashing
 #define _H_(x) _I_(x) _I_(x + 1llu)
 #define _I_(x) f<x>::value,
 
-    static constexpr unsigned crc_table[] = { _A_(0llu) };
+    static constexpr unsigned fCrc_table[] = { _A_(0llu) };
 
     //--------------------------------------------------------------------------
     // CRC32 ALGO
@@ -79,7 +79,7 @@ namespace G4::hashing
 
     //--------------------------------
     // RUN TIME ALGO
-    uint32_t hash(const char* str, size_t len);
+    uint32_t Hash(const char* str, size_t len);
 
     //--------------------------------------------------------------------------
     // Details for compilation time
@@ -87,21 +87,21 @@ namespace G4::hashing
     {
       // CRC32 Table (zlib polynomial)
       template <size_t idx>
-      constexpr uint32_t combine_crc32(const char* str, uint32_t part)
+      constexpr uint32_t Combine_crc32(const char* str, uint32_t part)
       {
-        return (part >> 8) ^ crc_table[(part ^ str[idx]) & 0x000000FF];
+        return (part >> 8) ^ fCrc_table[(part ^ str[idx]) & 0x000000FF];
       }
 
       // recursion
       template <size_t idx>
-      constexpr uint32_t crc32(const char* str)
+      constexpr uint32_t Crc32(const char* str)
       {
-        return combine_crc32<idx>(str, crc32<idx - 1>(str));
+        return Combine_crc32<idx>(str, Crc32<idx - 1>(str));
       }
 
       // stop-recursion
       template <>
-      constexpr uint32_t crc32<size_t(-1)>(const char* /*str*/)
+      constexpr uint32_t Crc32<size_t(-1)>(const char* /*str*/)
       {
         return 0xFFFFFFFF;
       }
@@ -110,14 +110,14 @@ namespace G4::hashing
     //--------------------------------------------------------------------------
     // use COMPILATION TIME CRC32 as a hash function
     template <size_t len>
-    constexpr uint32_t hash(const char (&str)[len])
+    constexpr uint32_t Hash(const char (&str)[len])
     {
-      return detail::crc32<len - 2>(str) ^ 0xFFFFFFFF;
+      return detail::Crc32<len - 2>(str) ^ 0xFFFFFFFF;
     }
 
     //--------------------------------------------------------------------------
     // std::string hasher for convenience
-    uint32_t hash(const std::string& str);
+    uint32_t Hash(const std::string& str);
     // in window
     //warning C4717: 'G4::hashing::crc32::crc32_hasher<G4String>::operator()': recursive on all control paths, function will cause runtime stack overflow
     /*
@@ -155,7 +155,7 @@ namespace G4::hashing
 
     //------------------------------------------------------------------------
     // Run time
-    size_t hash(const std::string& str);
+    size_t Hash(const std::string& str);
 
     //--------------------------------------------------------------------------
     // Details for compilation time
@@ -163,14 +163,14 @@ namespace G4::hashing
     {
       // recursion
       template <int idx>
-      constexpr size_t fnv(const char* str, size_t len, size_t hash)
+      constexpr size_t Fnv(const char* str, size_t len, size_t hash)
       {
-        return fnv<idx - 1>(str, len, (hash ^ (str[len - idx])) * fnv_prime);
+        return Fnv<idx - 1>(str, len, (hash ^ (str[len - idx])) * fnv_prime);
       }
 
       // stop-recursion
       template <>
-      constexpr size_t fnv<-1>(const char*, size_t, size_t hash)
+      constexpr size_t Fnv<-1>(const char*, size_t, size_t hash)
       {
         return hash;
       }
@@ -179,9 +179,9 @@ namespace G4::hashing
     //------------------------------------------------------------------------
     // COMPILATION TIME
     template <size_t len>
-    constexpr size_t hash(const char (&str)[len])
+    constexpr size_t Hash(const char (&str)[len])
     {
-      return detail::fnv<len - 2>(str, len - 2, fnv_offset_basis);
+      return detail::Fnv<len - 2>(str, len - 2, fnv_offset_basis);
     }
 
     //------------------------------------------------------------------------
@@ -194,10 +194,10 @@ namespace G4::hashing
       template <size_t len>
       size_t constexpr operator()(const char (&str)[len]) const
       {
-        return hash(str);
+        return Hash(str);
       }
 
-      size_t operator()(const T& str) const { return hash(str); }
+      size_t operator()(const T& str) const { return Hash(str); }
     };
 
     //      template<>
@@ -207,7 +207,7 @@ namespace G4::hashing
     //      }
 
     template <typename T>
-    size_t constexpr hash(T&& t)
+    size_t constexpr Hash(T&& t)
     {
       return fnv_hasher<typename std::decay<T>::type>()(std::forward<T>(t));
     }
@@ -225,14 +225,14 @@ namespace G4::hashing
     {
       // recursion
       template <int idx>
-      constexpr size_t larson(const char* str, size_t len, size_t hash)
+      constexpr size_t Larson(const char* str, size_t len, size_t hash)
       {
-        return larson<idx - 1>(str, len + 1, hash * 101 + str[len]);
+        return Larson<idx - 1>(str, len + 1, hash * 101 + str[len]);
       }
 
       // stop-recursion
       template <>
-      constexpr size_t larson<-1>(const char*, size_t, size_t hash)
+      constexpr size_t Larson<-1>(const char*, size_t, size_t hash)
       {
         return hash;
       }
@@ -241,16 +241,16 @@ namespace G4::hashing
     //------------------------------------------------------------------------
     // COMPILATION TIME
     template <size_t len>
-    constexpr size_t cthash(const char (&str)[len], unsigned int seed = 0)
+    constexpr size_t Cthash(const char (&str)[len], unsigned int seed = 0)
     {
-      return detail::larson<len - 2>(str, 0, seed);
+      return detail::Larson<len - 2>(str, 0, seed);
     }
 
     //------------------------------------------------------------------------
     // RUN TIME
-    size_t hash(const char* str, unsigned int seed = 0);
+    size_t Hash(const char* str, unsigned int seed = 0);
 
-    size_t hash(std::string str, unsigned int seed = 0);
+    size_t Hash(std::string str, unsigned int seed = 0);
   }  // namespace larson
 
   //--------------------------------------------------------------------------
@@ -273,14 +273,14 @@ namespace G4::hashing
   };
 
   template <typename T>
-  std::size_t constexpr hash(T&& t)
+  std::size_t constexpr Hash(T&& t)
   {
     return hasher<typename std::decay<T>::type>()(std::forward<T>(t));
   }
 
   // not necessary
   template <>
-  std::size_t constexpr hash<const char*>(const char*&& str)
+  std::size_t constexpr Hash<const char*>(const char*&& str)
   {
     return hasher<std::string>()(str);
   }

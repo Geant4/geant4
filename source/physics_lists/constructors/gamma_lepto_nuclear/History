@@ -1,9 +1,23 @@
 # Category phys-ctor-glnuclear History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-03 Vladimir Grichine (phys-ctor-glnuclear-V11-00-07)
+- G4EmExtraPhysics - update for tau-neutrino nucleus processes
+
+## 2022-09-05 Ben Morgan (phys-ctor-glnuclear-V11-00-06)
+- Update public/private dependencies for consistency
+
+## 2022-08-24 Gabriele Cosmo (phys-ctor-glnuclear-V11-00-05)
+- Added missing dependency on G4muons in GNUmakefile and CMake script.
+
+## 2022-08-21 Vladimir Ivanchenko (phys-ctor-glnuclear-V11-00-04)
+- G4EmExtraPhysics, G4EmMessenger - added muon to muon pair process,
+    move initialisation class members to the header
 
 ## 2022-06-22 Guilherme Amadio (phys-ctor-glnuclear-V11-00-03)
 - Replace std::getenv with G4FindDataDir

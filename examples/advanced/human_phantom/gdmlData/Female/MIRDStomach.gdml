@@ -110,7 +110,7 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="Stomach" ax="3.43" by="2.92" cz="7.16" zcut1="-7.16" zcut2="7.16" />
+  <ellipsoid lunit="cm" name="Stomach" ax="3.43" by="2.92" cz="7.16" zcut1="-7.16" zcut2="7.16" />
 
  </solids>
 

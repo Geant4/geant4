@@ -25,10 +25,6 @@
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
-//
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,27 +54,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
- fAbsorberMaterial(0),fGapMaterial(0),fDefaultMaterial(0),
- fSolidWorld(0),fLogicWorld(0),fPhysiWorld(0),
- fSolidCalor(0),fLogicCalor(0),fPhysiCalor(0),
- fSolidLayer(0),fLogicLayer(0),fPhysiLayer(0),
- fSolidAbsorber(0),fLogicAbsorber(0),fPhysiAbsorber(0),
- fSolidGap (0),fLogicGap (0),fPhysiGap (0),
- fDetectorMessenger(0)
 {
-  // default parameter values of the calorimeter
-  fAbsorberThickness = 10.*mm;
-  fGapThickness      =  5.*mm;
-  fNbOfLayers        = 10;
-  fCalorSizeYZ       = 10.*cm;
   ComputeCalorParameters();
-  
+
   // materials
   DefineMaterials();
   SetAbsorberMaterial("G4_Pb");
   SetGapMaterial("G4_lAr");
-  
+
   // create commands for interactive definition of the calorimeter
   fDetectorMessenger = new DetectorMessenger(this);
 }
@@ -86,7 +69,9 @@ DetectorConstruction::DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete fDetectorMessenger;}
+{
+  delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,24 +83,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::DefineMaterials()
-{ 
-// use G4-NIST materials data base
-//
-G4NistManager* man = G4NistManager::Instance();
-fDefaultMaterial = man->FindOrBuildMaterial("G4_Galactic");
-man->FindOrBuildMaterial("G4_Pb");
-man->FindOrBuildMaterial("G4_lAr");
+{
+  // use G4-NIST materials data base
+  //
+  G4NistManager* man = G4NistManager::Instance();
+  fDefaultMaterial = man->FindOrBuildMaterial("G4_Galactic");
+  man->FindOrBuildMaterial("G4_Pb");
+  man->FindOrBuildMaterial("G4_lAr");
 
-// print table
-//
-G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  // print table
+  //
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 {
-
   // Clean old geometry, if any
   //
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -125,126 +109,128 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
   // complete the Calor parameters definition
   ComputeCalorParameters();
-   
-  //     
+
+  //
   // World
   //
-  fSolidWorld = new G4Box("World",                                //its name
-                   fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);  //its size
-                         
+  fSolidWorld = new G4Box("World",                          //its name
+    fWorldSizeX/2,fWorldSizeYZ/2,fWorldSizeYZ/2);           //its size
+
   fLogicWorld = new G4LogicalVolume(fSolidWorld,            //its solid
                                    fDefaultMaterial,        //its material
                                    "World");                //its name
-                                   
-  fPhysiWorld = new G4PVPlacement(0,                        //no rotation
+
+  fPhysiWorld = new G4PVPlacement(nullptr,                  //no rotation
                                  G4ThreeVector(),           //at (0,0,0)
-                                 fLogicWorld,             //its logical volume
+                                 fLogicWorld,               //its logical volume
                                  "World",                   //its name
-                                 0,                         //its mother  volume
-                                 false,                  //no boolean operation
+                                 nullptr,                   //its mother  volume
+                                 false,                     //no boolean operation
                                  0);                        //copy number
-  
-  //                               
-  // Calorimeter
-  //  
-  fSolidCalor=0; fLogicCalor=0; fPhysiCalor=0;
-  fSolidLayer=0; fLogicLayer=0; fPhysiLayer=0;
-  
-  if (fCalorThickness > 0.)  
-    { fSolidCalor = new G4Box("Calorimeter",                //its name
-                    fCalorThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);//size
-                                 
-      fLogicCalor = new G4LogicalVolume(fSolidCalor,        //its solid
-                                        fDefaultMaterial,   //its material
-                                        "Calorimeter");     //its name
-                                           
-      fPhysiCalor = new G4PVPlacement(0,                    //no rotation
-                                     G4ThreeVector(),       //at (0,0,0)
-                                     fLogicCalor,           //its logical volume
-                                     "Calorimeter",         //its name
-                                     fLogicWorld,           //its mother  volume
-                                     false,              //no boolean operation
-                                     0);                    //copy number
-  
-  //                                 
-  // Layer
+
   //
-      fSolidLayer = new G4Box("Layer",                        //its name
-                       fLayerThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2); //size
-                       
-      fLogicLayer = new G4LogicalVolume(fSolidLayer,        //its solid
-                                       fDefaultMaterial,    //its material
-                                       "Layer");            //its name
-      if (fNbOfLayers > 1)                                      
-        fPhysiLayer = new G4PVReplica("Layer",              //its name
-                                     fLogicLayer,           //its logical volume
-                                     fLogicCalor,           //its mother
-                                     kXAxis,              //axis of replication
-                                     fNbOfLayers,           //number of replica
-                                     fLayerThickness);      //witdth of replica
-      else
-        fPhysiLayer = new G4PVPlacement(0,                  //no rotation
-                                     G4ThreeVector(),       //at (0,0,0)
-                                     fLogicLayer,           //its logical volume
-                                     "Layer",               //its name
-                                     fLogicCalor,           //its mother  volume
-                                     false,               //no boolean operation
-                                     0);                    //copy number     
-    }                                   
-  
-  //                               
+  // Calorimeter
+  //
+  fSolidCalor = nullptr; fLogicCalor = nullptr; fPhysiCalor = nullptr;
+  fSolidLayer = nullptr; fLogicLayer = nullptr; fPhysiLayer = nullptr;
+
+  if (fCalorThickness > 0.)  {
+    fSolidCalor = new G4Box("Calorimeter",                //its name
+      fCalorThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);   //size
+
+    fLogicCalor = new G4LogicalVolume(fSolidCalor,        //its solid
+                                      fDefaultMaterial,   //its material
+                                      "Calorimeter");     //its name
+
+    fPhysiCalor = new G4PVPlacement(nullptr,              //no rotation
+                                   G4ThreeVector(),       //at (0,0,0)
+                                   fLogicCalor,           //its logical volume
+                                   "Calorimeter",         //its name
+                                   fLogicWorld,           //its mother  volume
+                                   false,                 //no boolean operation
+                                   0);                    //copy number
+
+    //
+    // Layer
+    //
+    fSolidLayer = new G4Box("Layer",                      //its name
+      fLayerThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);   //size
+
+    fLogicLayer = new G4LogicalVolume(fSolidLayer,        //its solid
+                                     fDefaultMaterial,    //its material
+                                     "Layer");            //its name
+    if (fNbOfLayers > 1) {
+      fPhysiLayer = new G4PVReplica("Layer",              //its name
+                                   fLogicLayer,           //its logical volume
+                                   fLogicCalor,           //its mother
+                                   kXAxis,                //axis of replication
+                                   fNbOfLayers,           //number of replica
+                                   fLayerThickness);      //witdth of replica
+    }
+    else {
+      fPhysiLayer = new G4PVPlacement(nullptr,            //no rotation
+                                   G4ThreeVector(),       //at (0,0,0)
+                                   fLogicLayer,           //its logical volume
+                                   "Layer",               //its name
+                                   fLogicCalor,           //its mother  volume
+                                   false,                 //no boolean operation
+                                   0);                    //copy number
+    }
+  }
+
+  //
   // Absorber
   //
-  fSolidAbsorber=0; fLogicAbsorber=0; fPhysiAbsorber=0;  
-  
-  if (fAbsorberThickness > 0.) 
-    { fSolidAbsorber = new G4Box("Absorber",                //its name
-                          fAbsorberThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2); 
-                          
-      fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
-                                            fAbsorberMaterial, //its material
-                                            fAbsorberMaterial->GetName());//name
-                                                
-      fPhysiAbsorber = new G4PVPlacement(0,                   //no rotation
-                          G4ThreeVector(-fGapThickness/2,0.,0.),  //its position
-                                        fLogicAbsorber,     //its logical volume
-                                        fAbsorberMaterial->GetName(), //its name
-                                        fLogicLayer,          //its mother
-                                        false,               //no boulean operat
-                                        0);                   //copy number
-                                        
-    }
-  
-  //                                 
+  fSolidAbsorber = nullptr; fLogicAbsorber = nullptr; fPhysiAbsorber = nullptr;
+
+  if (fAbsorberThickness > 0.) {
+    fSolidAbsorber = new G4Box("Absorber",                 //its name
+      fAbsorberThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2); //size
+
+    fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
+                                         fAbsorberMaterial, //its material
+                                         fAbsorberMaterial->GetName()); //name
+
+    fPhysiAbsorber = new G4PVPlacement(nullptr,             //no rotation
+                                       G4ThreeVector(-fGapThickness/2,0.,0.),  //its position
+                                       fLogicAbsorber,      //its logical volume
+                                       fAbsorberMaterial->GetName(), //its name
+                                       fLogicLayer,         //its mother
+                                       false,               //no boulean operat
+                                       0);                  //copy number
+
+  }
+
+  //
   // Gap
   //
-  fSolidGap=0; fLogicGap=0; fPhysiGap=0; 
-  
-  if (fGapThickness > 0.)
-    { fSolidGap = new G4Box("Gap",
-                               fGapThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);
-                               
-      fLogicGap = new G4LogicalVolume(fSolidGap,
-                                           fGapMaterial,
-                                           fGapMaterial->GetName());
-                                           
-      fPhysiGap = new G4PVPlacement(0,                      //no rotation
-               G4ThreeVector(fAbsorberThickness/2,0.,0.),   //its position
-                                   fLogicGap,               //its logical volume
-                                   fGapMaterial->GetName(), //its name
-                                   fLogicLayer,             //its mother
-                                   false,                   //no boulean operat
-                                   0);                      //copy number
-    }
-    
-  PrintCalorParameters();     
-  
-  //                                        
+  fSolidGap = nullptr; fLogicGap = nullptr; fPhysiGap = nullptr;
+
+  if (fGapThickness > 0.) {
+    fSolidGap = new G4Box("Gap",
+                          fGapThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);
+
+    fLogicGap = new G4LogicalVolume(fSolidGap,
+                                    fGapMaterial,
+                                    fGapMaterial->GetName());
+
+    fPhysiGap = new G4PVPlacement(nullptr,                  //no rotation
+                                  G4ThreeVector(fAbsorberThickness/2,0.,0.),   //its position
+                                  fLogicGap,               //its logical volume
+                                  fGapMaterial->GetName(), //its name
+                                  fLogicLayer,             //its mother
+                                  false,                   //no boulean operat
+                                  0);                      //copy number
+  }
+
+  PrintCalorParameters();
+
+  //
   // Visualization attributes
   //
   fLogicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
 
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto  simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   fLogicCalor->SetVisAttributes(simpleBoxVisAtt);
 
@@ -260,54 +246,47 @@ void DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n------------------------------------------------------------"
          << "\n---> The calorimeter is " << fNbOfLayers << " layers of: [ "
-         << fAbsorberThickness/mm << "mm of " << fAbsorberMaterial->GetName() 
+         << fAbsorberThickness/mm << "mm of " << fAbsorberMaterial->GetName()
          << " + "
-         << fGapThickness/mm << "mm of " << fGapMaterial->GetName() << " ] " 
+         << fGapThickness/mm << "mm of " << fGapMaterial->GetName() << " ] "
          << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
-{
-  // search the material by its name   
-  G4Material* pttoMaterial =
-  G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);      
-  if (pttoMaterial)
-  {
-      fAbsorberMaterial = pttoMaterial;
-      if ( fLogicAbsorber )
-      {
-          fLogicAbsorber->SetMaterial(fAbsorberMaterial);
-          G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-      }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetGapMaterial(G4String materialChoice)
+void DetectorConstruction::SetAbsorberMaterial(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial =  
-  G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);   
-  if (pttoMaterial)
-  {
-      fGapMaterial = pttoMaterial;
-      if ( fLogicGap )
-      {
-          fLogicGap->SetMaterial(fGapMaterial);
-          G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-      }
+  auto material = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  if (material != nullptr) {
+    fAbsorberMaterial = material;
+    if (fLogicAbsorber != nullptr) {
+      fLogicAbsorber->SetMaterial(fAbsorberMaterial);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsorberThickness(G4double val)
+void DetectorConstruction::SetGapMaterial(const G4String& materialChoice)
+{
+  auto material = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+  if (material != nullptr) {
+    fGapMaterial = material;
+    if ( fLogicGap != nullptr) {
+      fLogicGap->SetMaterial(fGapMaterial);
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetAbsorberThickness(G4double value)
 {
   // change Absorber thickness and recompute the calorimeter parameters
-  fAbsorberThickness = val;
+  fAbsorberThickness = value;
   if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
     G4RunManager::GetRunManager()->ReinitializeGeometry();
   }
@@ -315,10 +294,10 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetGapThickness(G4double val)
+void DetectorConstruction::SetGapThickness(G4double value)
 {
   // change Gap thickness and recompute the calorimeter parameters
-  fGapThickness = val;
+  fGapThickness = value;
   if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
     G4RunManager::GetRunManager()->ReinitializeGeometry();
   }
@@ -326,10 +305,10 @@ void DetectorConstruction::SetGapThickness(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetCalorSizeYZ(G4double val)
+void DetectorConstruction::SetCalorSizeYZ(G4double value)
 {
   // change the transverse size and recompute the calorimeter parameters
-  fCalorSizeYZ = val;
+  fCalorSizeYZ = value;
   if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
     G4RunManager::GetRunManager()->ReinitializeGeometry();
   }
@@ -337,9 +316,9 @@ void DetectorConstruction::SetCalorSizeYZ(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetNbOfLayers(G4int val)
+void DetectorConstruction::SetNbOfLayers(G4int value)
 {
-  fNbOfLayers = val;
+  fNbOfLayers = value;
   if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
     G4RunManager::GetRunManager()->ReinitializeGeometry();
   }

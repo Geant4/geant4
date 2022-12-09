@@ -31,6 +31,7 @@
 
 // Author: Hisaya Kurashige, 23 March 1998  
 // Revision: Vladimir Ivantchenko, 15 April 2005
+//                                 24 August 2022
 // --------------------------------------------------------------------
 #ifndef G4ParticleChangeForGamma_hh
 #define G4ParticleChangeForGamma_hh 1
@@ -41,67 +42,53 @@
 
 class G4DynamicParticle;
 
-class G4ParticleChangeForGamma : public G4VParticleChange
+class G4ParticleChangeForGamma final : public G4VParticleChange
 {
-  public:
+public:
 
-    G4ParticleChangeForGamma();
-      // Default constructor
+  G4ParticleChangeForGamma();
 
-    virtual ~G4ParticleChangeForGamma();
-      // Destructor
+  ~G4ParticleChangeForGamma() override = default;
+
+  G4ParticleChangeForGamma(const G4ParticleChangeForGamma& right) = delete;
+  G4ParticleChangeForGamma& operator=(const G4ParticleChangeForGamma& right) = delete;
 
   // --- the following methods are for updating G4Step -----
 
-    G4Step* UpdateStepForAtRest(G4Step* pStep);
-    G4Step* UpdateStepForPostStep(G4Step* Step);
+  G4Step* UpdateStepForAtRest(G4Step* pStep) final;
+  G4Step* UpdateStepForPostStep(G4Step* Step) final;
       // A physics process gives the final state of the particle
       // based on information of G4Track
 
-    inline void InitializeForPostStep(const G4Track&);
+  inline void InitializeForPostStep(const G4Track&);
       // Initialize all properties by using G4Track information
 
-    void AddSecondary(G4DynamicParticle* aParticle);
+  void AddSecondary(G4DynamicParticle* aParticle);
       // Add next secondary
 
-    inline G4double GetProposedKineticEnergy() const;
-    inline void SetProposedKineticEnergy(G4double proposedKinEnergy);
+  inline G4double GetProposedKineticEnergy() const;
+  inline void SetProposedKineticEnergy(G4double proposedKinEnergy);
       // Get/Set the final kinetic energy of the current particle
 
-    inline const G4ThreeVector& GetProposedMomentumDirection() const;
-    inline void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
-    inline void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
-      // Get/Propose the MomentumDirection vector: it is the final momentum
-      // direction
+  inline const G4ThreeVector& GetProposedMomentumDirection() const;
+  inline void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+      // Get/Set the final momentum direction
 
-    inline const G4ThreeVector& GetProposedPolarization() const;
-    inline void ProposePolarization(const G4ThreeVector& dir);
-    inline void ProposePolarization(G4double Px, G4double Py, G4double Pz);
+  inline const G4ThreeVector& GetProposedPolarization() const;
+  inline void ProposePolarization(const G4ThreeVector& dir);
+  inline void ProposePolarization(G4double Px, G4double Py, G4double Pz);
 
-    inline const G4Track* GetCurrentTrack() const;
+  void DumpInfo() const override;
 
-    virtual void DumpInfo() const;
+private:
 
-    virtual G4bool CheckIt(const G4Track&);
-
-  protected:
-
-    G4ParticleChangeForGamma(const G4ParticleChangeForGamma& right);
-    G4ParticleChangeForGamma& operator=(const G4ParticleChangeForGamma& right);
-      // Hidden copy constructor and assignment operator
-
-  private:
-
-    const G4Track* currentTrack = nullptr;
-      // The pointer to G4Track
-
-    G4double proposedKinEnergy = 0.0;
+  G4double proposedKinEnergy = 0.0;
       // The final kinetic energy of the current particle
 
-    G4ThreeVector proposedMomentumDirection;
+  G4ThreeVector proposedMomentumDirection;
       // The final momentum direction of the current particle
 
-    G4ThreeVector proposedPolarization;
+  G4ThreeVector proposedPolarization;
       // The final polarization of the current particle
 };
 
@@ -136,22 +123,6 @@ ProposeMomentumDirection(const G4ThreeVector& dir)
 }
 
 inline
-void G4ParticleChangeForGamma::ProposeMomentumDirection(G4double Px,
-                                                        G4double Py,
-                                                        G4double Pz)
-{
-  proposedMomentumDirection.setX(Px);
-  proposedMomentumDirection.setY(Py);
-  proposedMomentumDirection.setZ(Pz);
-}
-
-inline
-const G4Track* G4ParticleChangeForGamma::GetCurrentTrack() const
-{
-  return currentTrack;
-}
-
-inline
 const G4ThreeVector& G4ParticleChangeForGamma::GetProposedPolarization() const
 {
   return proposedPolarization;
@@ -176,16 +147,13 @@ void G4ParticleChangeForGamma::ProposePolarization(G4double Px,
 inline
 void G4ParticleChangeForGamma::InitializeForPostStep(const G4Track& track)
 {
-  theStatusChange             = track.GetTrackStatus();
-  theLocalEnergyDeposit       = 0.0;
-  theNonIonizingEnergyDeposit = 0.0;
-  InitializeSecondaries(track);
-  theParentWeight           = track.GetWeight();
-  isParentWeightProposed    = false;
+  InitializeSecondaries();
+  InitializeLocalEnergyDeposit();
+  InitializeParentWeight(track);
+  InitializeStatusChange(track);
   proposedKinEnergy         = track.GetKineticEnergy();
   proposedMomentumDirection = track.GetMomentumDirection();
   proposedPolarization      = track.GetPolarization();
-  currentTrack              = &track;
 }
 
 #endif

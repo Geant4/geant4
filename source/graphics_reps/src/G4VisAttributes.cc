@@ -36,7 +36,6 @@
 G4VisAttributes::G4VisAttributes ():
 fVisible             (true),
 fDaughtersInvisible  (false),
-fColour              (G4Colour ()),
 fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
@@ -47,14 +46,14 @@ fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-fVeryLongTime),
 fEndTime             (fVeryLongTime),
-fAttValues           (0),
-fAttDefs             (0)
+fAttValues           (nullptr),
+fAttDefs             (nullptr)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility):
 fVisible             (visibility),
 fDaughtersInvisible  (false),
-fColour              (G4Colour ()),
+
 fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
@@ -65,8 +64,8 @@ fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-fVeryLongTime),
 fEndTime             (fVeryLongTime),
-fAttValues           (0),
-fAttDefs             (0)
+fAttValues           (nullptr),
+fAttDefs             (nullptr)
 {}
 
 G4VisAttributes::G4VisAttributes (const G4Colour& colour):
@@ -83,8 +82,8 @@ fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-fVeryLongTime),
 fEndTime             (fVeryLongTime),
-fAttValues           (0),
-fAttDefs             (0)
+fAttValues           (nullptr),
+fAttDefs             (nullptr)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
@@ -102,35 +101,10 @@ fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-fVeryLongTime),
 fEndTime             (fVeryLongTime),
-fAttValues           (0),
-fAttDefs             (0)
+fAttValues           (nullptr),
+fAttDefs             (nullptr)
 {}
 
-G4VisAttributes::G4VisAttributes (const G4VisAttributes& va):
-fVisible             (va.fVisible),
-fDaughtersInvisible  (va.fDaughtersInvisible),
-fColour              (va.fColour),
-fLineStyle           (va.fLineStyle),
-fLineWidth           (va.fLineWidth),
-fForceDrawingStyle   (va.fForceDrawingStyle),
-fForcedStyle         (va.fForcedStyle),
-fForcedNumberOfCloudPoints (va.fForcedNumberOfCloudPoints),
-fForceAuxEdgeVisible (va.fForceAuxEdgeVisible),
-fForcedAuxEdgeVisible(va.fForcedAuxEdgeVisible),
-fForcedLineSegmentsPerCircle (va.fForcedLineSegmentsPerCircle),
-fStartTime           (va.fStartTime),
-fEndTime             (va.fEndTime),
-// AttValues are created afresh for each object (using the
-// CreateAttValues message), but deletion is the responsibility of
-// the creator.  So just copy pointer.
-fAttValues           (va.fAttValues),
-// AttDefs, if any, belong to the object from which they were obtained
-// (with a GetAttDefs message), so just copy pointer.
-fAttDefs             (va.fAttDefs)
-{}
-
-G4VisAttributes::~G4VisAttributes()
-{}
 
 G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
 {
@@ -210,12 +184,12 @@ void G4VisAttributes::SetForceAuxEdgeVisible (G4bool visibility) {
 G4VisAttributes::ForcedDrawingStyle
 G4VisAttributes::GetForcedDrawingStyle () const {
   if (fForceDrawingStyle) return fForcedStyle;
-  else return G4VisAttributes::wireframe;
+  return G4VisAttributes::wireframe;
 }
 
 G4bool G4VisAttributes::IsForcedAuxEdgeVisible () const {
   if (fForceAuxEdgeVisible) return fForcedAuxEdgeVisible;
-  else return false;
+  return false;
 }
 
 const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
@@ -237,6 +211,7 @@ void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
 
 std::ostream& operator << (std::ostream& os, const G4VisAttributes& a)
 {
+  os << std::defaultfloat;
   os << "G4VisAttributes: ";
   if (!a.fVisible) os << "in";
   os << "visible, daughters ";
@@ -285,12 +260,12 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a)
   }
   os << "\n  time range: (" << a.fStartTime << ',' << a.fEndTime << ')';
   os << "\n  G4AttValue pointer is ";
-  if (a.fAttValues) {
+  if (a.fAttValues != nullptr) {
     os << "non-";
   }
   os << "zero";
   os << ", G4AttDef pointer is ";
-  if (a.fAttDefs) {
+  if (a.fAttDefs != nullptr) {
     os << "non-";
   }
   os << "zero";

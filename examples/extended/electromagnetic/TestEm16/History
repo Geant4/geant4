@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-08-11 H.Burkhardt (testem16-V11-00-01)
+- minor cleanup in vis.mac and run01.mac to make output
+  with multi threading more readable
 
 ## 2021-12-10 Ben Morgan (testem16-V11-00-00)
 - Change to new Markdown History format

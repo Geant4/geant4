@@ -496,7 +496,7 @@ G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
   G4double component;
 
   ClipPolygon(pPolygon,pVoxelLimit,pAxis);
-  noLeft = pPolygon.size();
+  noLeft = (G4int)pPolygon.size();
 
   if ( noLeft )
   {
@@ -614,7 +614,7 @@ G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
                                const G4VoxelLimits& pVoxelLimit       ) const
 {
   G4int i;
-  G4int noVertices=pPolygon.size();
+  G4int noVertices = (G4int)pPolygon.size();
   G4ThreeVector vEnd,vStart;
 
   for (i = 0 ; i < noVertices ; ++i )

@@ -58,7 +58,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   using G4FlagCollection = std::vector<G4bool>;
 
  public:
-  G4PhysicsTable();
+  G4PhysicsTable() = default;
   // Default constructor
 
   explicit G4PhysicsTable(size_t cap);
@@ -84,7 +84,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   void insertAt(std::size_t, G4PhysicsVector*);
   // Insert element at the specified position in the collection
 
-  void resize(std::size_t, G4PhysicsVector* vec = (G4PhysicsVector*) (0));
+  void resize(std::size_t, G4PhysicsVector* vec = nullptr);
   // Resize collection
 
   std::size_t entries() const;

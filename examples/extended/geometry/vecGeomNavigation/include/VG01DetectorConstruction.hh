@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+/// \file VG01DetectorConstruction.hh
+/// \brief Definition of the VG01DetectorConstruction class
+
 
 #ifndef VG01DetectorConstruction_h
 #define VG01DetectorConstruction_h 1

@@ -4,6 +4,30 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-11-15 Hoang Tran (molecularDNA-V11-00-11)
+- correct ecoli.mac file
+
+## 2022-10-24 Konstantinos Chatzipapas (molecularDNA-V11-00-10)
+- Add repair-survival-models
+	- molecularDNArepair.py
+	- molecularDNAsurvival.py (beta)
+- Update ecoli files (fix bug)
+- Update vis.mac and cylinders.mac
+
+## 2022-09-20 Hoang Tran (molecularDNA-V11-00-09)
+- Fixed the examples naming conventions violations
+- reduce event number of ecoli.mac
+
+## 2022-08-30 Vladimir Ivanchenko (molecularDNA-V11-00-08)
+- ChemistryList - added forgotten header
+
+## 2022-08-27 Hoang Tran (molecularDNA-V11-00-07)
+- Fix smart pointer warning in gcc 12.1.
+- Fix typo in the human_cell.C.
+
+## 2022-07-12 Konstantinos Chatzipapas (molecularDNA-V11-00-06)
+- Fix ecoli.C minor bug on filename.
+
 ## 2022-06-10 Sergio Losilla (molecularDNA-V11-00-05)
 - Added missing headers.
 

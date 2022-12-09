@@ -34,6 +34,7 @@
 #define MixMaxRng_h 1
 
 #include <array>
+#include <cstdint>
 #include "CLHEP/Random/RandomEngine.h"
 
 namespace CLHEP {

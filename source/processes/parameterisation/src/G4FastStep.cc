@@ -311,52 +311,6 @@ G4FastStep::~G4FastStep()
   }
 }
 
-// copy and assignment operators are implemented as "shallow copy"
-G4FastStep::G4FastStep(const G4FastStep &right)
-  : G4VParticleChange()
-{
-   *this = right;
-}
-
-
-G4FastStep & G4FastStep::operator=(const G4FastStep &right)
-{
-   if (this != &right)
-   {
-     G4VParticleChange::operator=(right);
-     theListOfSecondaries          = right.theListOfSecondaries;
-     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-     theNumberOfSecondaries        = right.theNumberOfSecondaries;
-     theStatusChange               = right.theStatusChange;
-     theMomentumChange             = right.theMomentumChange;
-     thePolarizationChange         = right.thePolarizationChange;
-     thePositionChange             = right.thePositionChange;
-     theProperTimeChange           = right.theProperTimeChange;
-     theTimeChange                 = right.theTimeChange;
-     theEnergyChange               = right.theEnergyChange;
-     theTrueStepLength             = right.theTrueStepLength;
-     theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
-     theSteppingControlFlag        = right.theSteppingControlFlag;
-     theWeightChange               = right.theWeightChange;
-     fFastTrack                    = right.fFastTrack;
-   }
-   return *this;
-}
-
-
-
-
-
-G4bool G4FastStep::operator==(const G4FastStep &right) const
-{
-   return ((G4VParticleChange *)this == (G4VParticleChange *) &right);
-}
-
-G4bool G4FastStep::operator!=(const G4FastStep &right) const
-{
-   return ((G4VParticleChange *)this != (G4VParticleChange *) &right);
-}
-
 //----------------------------------------------------------------
 // methods for updating G4Step 
 //
@@ -444,7 +398,7 @@ void G4FastStep::DumpInfo() const
   G4cout << "        Position - z (mm)   : " <<      G4BestUnit( thePositionChange.z(), "Length" ) << G4endl;   
   G4cout << "        Time (ns)           : " <<      G4BestUnit( theTimeChange,         "Time"   ) << G4endl;
   G4cout << "        Proper Time (ns)    : " <<      G4BestUnit( theProperTimeChange,   "Time"   ) << G4endl;
-  G4int olprc = G4cout.precision(3);
+  G4long olprc = G4cout.precision(3);
   G4cout << "        Momentum Direct - x : " << std::setw(20) << theMomentumChange.x() << G4endl;
   G4cout << "        Momentum Direct - y : " << std::setw(20) << theMomentumChange.y() << G4endl;
   G4cout << "        Momentum Direct - z : " << std::setw(20) << theMomentumChange.z() << G4endl;

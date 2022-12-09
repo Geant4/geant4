@@ -81,7 +81,7 @@ class G4ClippablePolygon
     // Returns pointer to maximum point along the specified axis.
     // Take care! Do not use pointer after destroying parent polygon.
 
-  inline G4int GetNumVertices() const;
+  inline std::size_t GetNumVertices() const;
   inline G4bool Empty() const;
   
   virtual G4bool InFrontOf( const G4ClippablePolygon& other, EAxis axis ) const;

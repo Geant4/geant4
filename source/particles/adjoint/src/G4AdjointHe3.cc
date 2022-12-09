@@ -42,7 +42,7 @@ G4AdjointHe3* G4AdjointHe3::Definition()
   const G4String name = "adj_He3";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance =  reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  G4AdjointIons* anInstance =  static_cast<G4AdjointIons*>(pTable->FindParticle(name));
   if (anInstance ==0) 
   {
   // create particle
@@ -73,7 +73,7 @@ G4AdjointHe3* G4AdjointHe3::Definition()
   //No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 
-  theInstance = reinterpret_cast<G4AdjointHe3*>(anInstance);
+  theInstance = static_cast<G4AdjointHe3*>(anInstance);
   return theInstance;
 }
 

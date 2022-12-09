@@ -100,25 +100,25 @@ G4LossTableManager::~G4LossTableManager()
   for (G4int i=0; i<n_loss; ++i) {
     delete loss_vector[i]; 
   }
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; ++j) {
+  std::size_t msc = msc_vector.size();
+  for (std::size_t j=0; j<msc; ++j) {
     delete msc_vector[j];
   }
-  size_t emp = emp_vector.size();
-  for (size_t k=0; k<emp; ++k) {
+  std::size_t emp = emp_vector.size();
+  for (std::size_t k=0; k<emp; ++k) {
     delete emp_vector[k];
   }
   emp = p_vector.size();
-  for (size_t k=0; k<emp; ++k) {
+  for (std::size_t k=0; k<emp; ++k) {
     delete p_vector[k];
   }
-  size_t mod = mod_vector.size();
-  size_t fmod = fmod_vector.size();
+  std::size_t mod = mod_vector.size();
+  std::size_t fmod = fmod_vector.size();
   //G4cout << "   Nmod" << mod << "  Nfluc= " << fmod << G4endl;
-  for (size_t a=0; a<mod; ++a) {
+  for (std::size_t a=0; a<mod; ++a) {
     //G4cout << "Delete model #" << a << "  " <<  mod_vector[a] << G4endl;
     if( nullptr != mod_vector[a] ) { 
-      for (size_t b=0; b<fmod; ++b) {
+      for (std::size_t b=0; b<fmod; ++b) {
         if((G4VEmModel*)(fmod_vector[b]) == mod_vector[a]) {
           fmod_vector[b] = nullptr;
         }
@@ -127,7 +127,7 @@ G4LossTableManager::~G4LossTableManager()
       mod_vector[a] = nullptr;
     }
   }
-  for (size_t b=0; b<fmod; ++b) {
+  for (std::size_t b=0; b<fmod; ++b) {
     delete fmod_vector[b];
   }
   Clear();
@@ -254,8 +254,8 @@ void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 void G4LossTableManager::Register(G4VMultipleScattering* p)
 {
   if(!p) { return; }
-  G4int n = msc_vector.size();
-  for (G4int i=0; i<n; ++i) {
+  std::size_t n = msc_vector.size();
+  for (std::size_t i=0; i<n; ++i) {
     if(msc_vector[i] == p) { return; }
   }
   if(verbose > 1) {
@@ -270,8 +270,8 @@ void G4LossTableManager::Register(G4VMultipleScattering* p)
 void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
 {
   if(!p) { return; }
-  size_t msc = msc_vector.size();
-  for (size_t i=0; i<msc; ++i) {
+  std::size_t msc = msc_vector.size();
+  for (std::size_t i=0; i<msc; ++i) {
     if(msc_vector[i] == p) { 
       msc_vector[i] = nullptr;
       break;
@@ -284,8 +284,8 @@ void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
 void G4LossTableManager::Register(G4VEmProcess* p)
 {
   if(!p) { return; }
-  G4int n = emp_vector.size();
-  for (G4int i=0; i<n; ++i) {
+  std::size_t n = emp_vector.size();
+  for (std::size_t i=0; i<n; ++i) {
     if(emp_vector[i] == p) { return; }
   }
   if(verbose > 1) {
@@ -300,8 +300,8 @@ void G4LossTableManager::Register(G4VEmProcess* p)
 void G4LossTableManager::DeRegister(G4VEmProcess* p)
 {
   if(!p) { return; }
-  size_t emp = emp_vector.size();
-  for (size_t i=0; i<emp; ++i) {
+  std::size_t emp = emp_vector.size();
+  for (std::size_t i=0; i<emp; ++i) {
     if(emp_vector[i] == p) { 
       emp_vector[i] = nullptr; 
       break;
@@ -314,8 +314,8 @@ void G4LossTableManager::DeRegister(G4VEmProcess* p)
 void G4LossTableManager::Register(G4VProcess* p)
 {
   if(!p) { return; }
-  G4int n = p_vector.size();
-  for (G4int i=0; i<n; ++i) {
+  std::size_t n = p_vector.size();
+  for (std::size_t i=0; i<n; ++i) {
     if(p_vector[i] == p) { return; }
   }
   if(verbose > 1) {
@@ -330,8 +330,8 @@ void G4LossTableManager::Register(G4VProcess* p)
 void G4LossTableManager::DeRegister(G4VProcess* p)
 {
   if(!p) { return; }
-  size_t emp = p_vector.size();
-  for (size_t i=0; i<emp; ++i) {
+  std::size_t emp = p_vector.size();
+  for (std::size_t i=0; i<emp; ++i) {
     if(p_vector[i] == p) { 
       p_vector[i] = nullptr;
       break;
@@ -355,8 +355,8 @@ void G4LossTableManager::Register(G4VEmModel* p)
 void G4LossTableManager::DeRegister(G4VEmModel* p)
 {
   //G4cout << "G4LossTableManager::DeRegister G4VEmModel : " << p << G4endl;
-  size_t n = mod_vector.size();
-  for (size_t i=0; i<n; ++i) {
+  std::size_t n = mod_vector.size();
+  for (std::size_t i=0; i<n; ++i) {
     if(mod_vector[i] == p) { 
       mod_vector[i] = nullptr; 
       break;
@@ -379,8 +379,8 @@ void G4LossTableManager::Register(G4VEmFluctuationModel* p)
 
 void G4LossTableManager::DeRegister(G4VEmFluctuationModel* p)
 {
-  size_t n = fmod_vector.size();
-  for (size_t i=0; i<n; ++i) {
+  std::size_t n = fmod_vector.size();
+  for (std::size_t i=0; i<n; ++i) {
     if(fmod_vector[i] == p) { fmod_vector[i] = nullptr; }
   }
 }
@@ -416,8 +416,6 @@ void G4LossTableManager::RegisterExtraParticle(
 G4VEnergyLossProcess* 
 G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
 {
-  //G4cout << "G4LossTableManager::GetEnergyLossProcess: " 
-  //<< aParticle << "  " << currentParticle << "  " << currentLoss << G4endl;
   if(aParticle != currentParticle) {
     currentParticle = aParticle;
     std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
@@ -425,8 +423,9 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
       currentLoss = (*pos).second;
     } else {
       currentLoss = nullptr;
-      if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
-        currentLoss = (*pos).second;
+      if(0.0 != aParticle->GetPDGCharge() && 
+	 (pos = loss_map.find(theGenericIon)) != loss_map.end()) {
+	currentLoss = (*pos).second;
       }
     }
   }
@@ -796,7 +795,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   G4ProcessVector* pvec = 
     aParticle->GetProcessManager()->GetProcessList();
-  G4int nvec = pvec->size();
+  G4int nvec = (G4int)pvec->size();
 
   for (i=0; i<n_loss; ++i) {
     p = loss_vector[i];
@@ -839,7 +838,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
     }
   }
 
-  G4int n_dedx = t_list.size();
+  G4int n_dedx = (G4int)t_list.size();
   if (0 == n_dedx || !em) {
     G4cout << "G4LossTableManager WARNING: no DEDX processes for " 
            << aParticle->GetParticleName() << G4endl;

@@ -33,6 +33,7 @@
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 
 #ifdef  G4GEOMETRY_VOXELDEBUG
 #include "G4ios.hh"
@@ -78,7 +79,7 @@ G4GeometryManager::~G4GeometryManager()
 G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
                                         G4VPhysicalVolume* pVolume)
 {
-  if (!fIsClosed)
+  if (!fIsClosed && G4Threading::IsMasterThread())
   {
     if (pVolume != nullptr)
     {
@@ -101,7 +102,7 @@ G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
 //
 void G4GeometryManager::OpenGeometry(G4VPhysicalVolume* pVolume)
 {
-  if (fIsClosed)
+  if (fIsClosed && G4Threading::IsMasterThread())
   {
     if (pVolume != nullptr)
     {
@@ -357,7 +358,7 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   //
   // Get total memory use
   //
-  G4int i, nStat = stats.size();
+  G4int i, nStat = (G4int)stats.size();
   G4long totalMemory = 0;
  
   for( i=0; i<nStat; ++i )  { totalMemory += stats[i].GetMemoryUse(); }

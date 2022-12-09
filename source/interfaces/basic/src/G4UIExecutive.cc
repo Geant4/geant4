@@ -134,7 +134,7 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
 #endif
     break;
  case kTcsh:
-#ifndef WIN32
+#if !(defined(WIN32) || defined(__MINGW32__))
     DISCARD_PARAMETER(argc);
     DISCARD_PARAMETER(argv);
     shell = new G4UItcsh;

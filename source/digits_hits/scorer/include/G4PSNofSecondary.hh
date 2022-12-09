@@ -52,8 +52,9 @@
 
 class G4PSNofSecondary : public G4VPrimitivePlotter
 {
- public:  // with description
+ public:
   G4PSNofSecondary(G4String name, G4int depth = 0);
+  ~G4PSNofSecondary() override = default;
 
   // Scoring option
   void SetParticle(const G4String& particleName);
@@ -61,30 +62,20 @@ class G4PSNofSecondary : public G4VPrimitivePlotter
   inline void Weighted(G4bool flg = true) { weighted = flg; }
   // Multiply track weight
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
- public:
-  virtual ~G4PSNofSecondary();
-
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-
- public:
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
 
- private:
-  G4int HCID;
-  G4THitsMap<G4double>* EvtMap;
-  G4ParticleDefinition* particleDef;
-  G4bool weighted;
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
- public:
+ private:
+  G4int HCID{-1};
+  G4THitsMap<G4double>* EvtMap{nullptr};
+  G4ParticleDefinition* particleDef{nullptr};
+  G4bool weighted{true};
 };
 
 #endif

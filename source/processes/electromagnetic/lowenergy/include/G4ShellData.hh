@@ -54,7 +54,7 @@ public:
   explicit G4ShellData(G4int minZ = 1, G4int maxZ = 100, G4bool isOccupancy = false);
   ~G4ShellData();
  
-  size_t NumberOfShells(G4int Z) const;
+  std::size_t NumberOfShells(G4int Z) const;
   G4int ShellId(G4int Z, G4int shellIndex) const;
   G4double ShellOccupancyProbability(G4int Z, G4int shellIndex) const;
   const std::vector<G4double>& ShellIdVector(G4int Z) const;

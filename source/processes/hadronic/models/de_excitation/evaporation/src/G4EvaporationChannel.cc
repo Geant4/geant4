@@ -107,7 +107,7 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
     bCoulomb = theCoulombBarrier->GetCoulombBarrier(resA, resZ, 0.0);
 
     // for OPTxs >0 penetration under the barrier is taken into account
-    elim = (0 != OPTxs) ? bCoulomb*0.5 : bCoulomb;
+    elim = (0 != OPTxs) ? bCoulomb*0.6 : bCoulomb;
   }
   /*
   G4cout << "exEnergy= " << exEnergy << " Ec= " << bCoulomb

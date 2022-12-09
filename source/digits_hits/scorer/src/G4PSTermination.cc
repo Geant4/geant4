@@ -41,26 +41,21 @@
 
 G4PSTermination::G4PSTermination(G4String name, G4int depth)
   : G4VPrimitiveScorer(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-  , weighted(false)
 {
   SetUnit("");
 }
 
-G4PSTermination::~G4PSTermination() { ; }
-
 G4bool G4PSTermination::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   if(aStep->GetTrack()->GetTrackStatus() != fStopAndKill)
-    return FALSE;
+    return false;
 
   G4int index  = GetIndex(aStep);
   G4double val = 1.0;
   if(weighted)
     val *= aStep->GetPreStepPoint()->GetWeight();
   EvtMap->add(index, val);
-  return TRUE;
+  return true;
 }
 
 void G4PSTermination::Initialize(G4HCofThisEvent* HCE)
@@ -73,28 +68,23 @@ void G4PSTermination::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSTermination::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSTermination::clear() { EvtMap->clear(); }
-
-void G4PSTermination::DrawAll() { ; }
 
 void G4PSTermination::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, terminations] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  terminations: " << *(itr->second) << G4endl;
+    G4cout << "  copy no.: " << copy
+           << "  terminations: " << *(terminations) << G4endl;
   }
 }
 
 void G4PSTermination::SetUnit(const G4String& unit)
 {
-  if(unit == "")
+  if(unit.empty())
   {
     unitName  = unit;
     unitValue = 1.0;

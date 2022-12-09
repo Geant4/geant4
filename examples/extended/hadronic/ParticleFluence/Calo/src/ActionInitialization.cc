@@ -35,6 +35,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 #include "Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,10 +43,6 @@
 ActionInitialization::
 ActionInitialization( const DetectorConstruction* inputDetectorConstruction ) :
   G4VUserActionInitialization(), fPtrDetectorConstruction( inputDetectorConstruction ) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,7 +58,9 @@ void ActionInitialization::Build() const {
   SetUserAction( new PrimaryGeneratorAction( fPtrDetectorConstruction )  );
   SteppingAction* steppingAction = new SteppingAction;
   SetUserAction( steppingAction );
-  SetUserAction( new RunAction( steppingAction ) );
+  TrackingAction* trackingAction = new TrackingAction;
+  SetUserAction( trackingAction );
+  SetUserAction( new RunAction( steppingAction, trackingAction ) );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

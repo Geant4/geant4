@@ -58,7 +58,7 @@ class G4Tokenizer
     {
       for(i = 0; i < l; ++i)
       {
-        if(string2tokenize[actual] == str[i])
+        if(string2tokenize[(G4int)actual] == str[i])
           hasws = true;
       }
       if(hasws)
@@ -73,7 +73,7 @@ class G4Tokenizer
     for(j = actual; j < string2tokenize.size(); ++j)
     {
       for(i = 0; i < l; ++i)
-        if(string2tokenize[j] == str[i])
+        if(string2tokenize[(G4int)j] == str[i])
           break;
       if(i < l)
         break;

@@ -57,7 +57,7 @@
  <solids>
   <tube aunit="degree" lunit="cm" name="LobOfThyroidOut" z="4.20" rmax="1.85" deltaphi="180" />
   <tube aunit="degree" lunit="cm" name="LobOfThyroidIn" z="4.50" rmax="0.83" deltaphi="360"/>
-  <box aunit="cm" lunit="cm" name="SubtrThyroid" x="3.72" y="3.72" z="20.00" /> 
+  <box lunit="cm" name="SubtrThyroid" x="3.72" y="3.72" z="20.00" /> 
 
   <subtraction name="FirstThyroid">
    <first ref="LobOfThyroidOut" />

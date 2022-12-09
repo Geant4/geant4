@@ -53,7 +53,7 @@ public:
 			G4bool chips = false, G4bool hp = false, 
 			G4bool glauber = false);
 
-  virtual ~G4HadronInelasticQBBC();
+  virtual ~G4HadronInelasticQBBC() = default;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and

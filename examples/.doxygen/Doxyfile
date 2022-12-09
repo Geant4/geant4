@@ -714,7 +714,7 @@ WARNINGS               = YES
 # will automatically be disabled.
 # The default value is: YES.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If the WARN_IF_DOC_ERROR tag is set to YES, doxygen will generate warnings for
 # potential errors in the documentation, such as not documenting some parameters
@@ -795,6 +795,7 @@ INPUT                  = Doxymain.h \
                          ../extended/analysis/.README.txt \
                          ../extended/analysis/AnaEx01/.README.txt \
                          ../extended/analysis/AnaEx02/.README.txt \
+                         ../extended/analysis/AnaEx03/.README.txt \
                          ../extended/analysis/B1Con \
                          ../extended/biasing \
                          ../extended/electromagnetic/.README.txt \
@@ -855,6 +856,11 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr10/.README.txt \
                          ../extended/hadronic/FissionFragment \
                          ../extended/hadronic/NeutronSource/.README.txt \
+                         ../extended/hadronic/ParticleFluence/.README.txt \
+                         ../extended/hadronic/ParticleFluence/Calo/.README.txt \
+                         ../extended/hadronic/ParticleFluence/ConcentricSpheres/.README.txt \
+                         ../extended/hadronic/ParticleFluence/Layer/.README.txt \
+                         ../extended/hadronic/ParticleFluence/Sphere/.README.txt \
                          ../extended/medical/.README.txt \
                          ../extended/medical/DICOM \
                          ../extended/medical/DICOM2 \
@@ -875,10 +881,12 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/dnadamage1/.README.txt \
                          ../extended/medical/dna/dnaphysics/.README.txt \
                          ../extended/medical/dna/icsd/.README.txt \
+                         ../extended/medical/dna/jetcounter/.README.txt \
                          ../extended/medical/dna/mfp/.README.txt \
                          ../extended/medical/dna/microdosimetry/.README.txt \
                          ../extended/medical/dna/microprox/.README.txt \
                          ../extended/medical/dna/microyz/.README.txt \
+                         ../extended/medical/dna/moleculardna/.README.txt \
                          ../extended/medical/dna/neuron/.README.txt \
                          ../extended/medical/dna/pdb4dna/.README.txt \
                          ../extended/medical/dna/range/.README.txt \
@@ -952,7 +960,8 @@ FILE_PATTERNS          = *.hh \
                          *.icc \
                          *.cc \
                          .README*.txt \
-                         *.mac
+                         *.mac \
+                         *.g4
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -1009,18 +1018,6 @@ EXCLUDE                = ../basic/B2/B2b/include/ActionInitialization.hh \
                          ../basic/B4/B4d/include/RunAction.hh \
                          ../basic/B4/B4c/src/RunAction.cc \
                          ../basic/B4/B4d/src/RunAction.cc \
-                         ../extended/analysis/B1Con/include/B1DetectorConstruction.hh \
-                         ../extended/analysis/B1Con/include/B1EventAction.hh \
-                         ../extended/analysis/B1Con/include/B1EventInformation.hh \
-                         ../extended/analysis/B1Con/include/B1PrimaryGeneratorAction.hh \
-                         ../extended/analysis/B1Con/include/B1SteppingAction.hh \
-                         ../extended/analysis/B1Con/include/B1Run.hh \
-                         ../extended/analysis/B1Con/src/B1DetectorConstruction.cc \
-                         ../extended/analysis/B1Con/src/B1EventAction.cc \
-                         ../extended/analysis/B1Con/src/B1EventInformation.cc \
-                         ../extended/analysis/B1Con/src/B1PrimaryGeneratorAction.cc \
-                         ../extended/analysis/B1Con/src/B1SteppingAction.cc \
-                         ../extended/analysis/B1Con/src/B1Run.cc \
                          ../extended/g3tog4/clGeometry/common \
                          ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4AsciiReader.hh \
                          ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4AsciiReaderMessenger.hh \
@@ -1040,24 +1037,6 @@ EXCLUDE                = ../basic/B2/B2b/include/ActionInitialization.hh \
                          ../extended/eventgenerator/HepMC/MCTruth/src/PrimaryGeneratorAction.cc \
                          ../extended/eventgenerator/pythia/decayer6/common \
                          ../extended/parallel/TBB/B2b/exampleB2b.cc \
-                         ../extended/parallel/TBB/B2b/include/B2ActionInitialization.hh \
-                         ../extended/parallel/TBB/B2b/include/B2bChamberParameterisation.hh \
-                         ../extended/parallel/TBB/B2b/include/B2bDetectorConstruction.hh \
-                         ../extended/parallel/TBB/B2b/include/B2bDetectorMessenger.hh \
-                         ../extended/parallel/TBB/B2b/include/B2EventAction.hh \
-                         ../extended/parallel/TBB/B2b/include/B2PrimaryGeneratorAction.hh \
-                         ../extended/parallel/TBB/B2b/include/B2RunAction.hh \
-                         ../extended/parallel/TBB/B2b/include/B2TrackerHit.hh \
-                         ../extended/parallel/TBB/B2b/include/B2TrackerSD.hh \
-                         ../extended/parallel/TBB/B2b/src/B2ActionInitialization.cc \
-                         ../extended/parallel/TBB/B2b/src/B2bChamberParameterisation.cc \
-                         ../extended/parallel/TBB/B2b/src/B2bDetectorConstruction.cc \
-                         ../extended/parallel/TBB/B2b/src/B2bDetectorMessenger.cc \
-                         ../extended/parallel/TBB/B2b/src/B2EventAction.cc \
-                         ../extended/parallel/TBB/B2b/src/B2PrimaryGeneratorAction.cc \
-                         ../extended/parallel/TBB/B2b/src/B2RunAction.cc \
-                         ../extended/parallel/TBB/B2b/src/B2TrackerHit.cc \
-                         ../extended/parallel/TBB/B2b/src/B2TrackerSD.cc \
                          ../extended/parameterisations/gflash/gflasha \
                          ../extended/parameterisations/gflash/gflash2/include/ExGflashActionInitialization.hh \
                          ../extended/parameterisations/gflash/gflash2/include/ExGflashEventAction.hh \

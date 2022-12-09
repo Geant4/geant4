@@ -27,8 +27,7 @@
 // Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
 // Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 // 
-//
-//
+
 #include "G4MIRDSmallIntestine.hh"
 
 #include "globals.hh"
@@ -50,32 +49,21 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDSmallIntestine::G4MIRDSmallIntestine()
-{
-}
-
-G4MIRDSmallIntestine::~G4MIRDSmallIntestine()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDSmallIntestine::Construct(const G4String& volumeName,
 						   G4VPhysicalVolume* mother,
 						   const G4String& colourName, G4bool wireFrame,G4bool)
 {
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
   
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
   
   G4double boxX = 11.*cm;
   G4double boxY = 3.53*cm;
   G4double boxZ = 5*cm;
 
-
-  G4Box* smallIntestineBox = new G4Box("smallIntestineBox",boxX,boxY,boxZ);
+  auto* smallIntestineBox = new G4Box("smallIntestineBox",boxX,boxY,boxZ);
   
   G4double tubsRmin = 0*cm;
   G4double tubsRmax = 11.*cm;
@@ -83,33 +71,32 @@ G4VPhysicalVolume* G4MIRDSmallIntestine::Construct(const G4String& volumeName,
   G4double tubsSphi = 0*degree;
   G4double tubsDphi = 360*degree;
   
-
-  G4Tubs* smallIntestineTubs = new G4Tubs("smallIntestineTubs",tubsRmin,tubsRmax,tubsZ,tubsSphi,tubsDphi);
+  auto* smallIntestineTubs = new G4Tubs("smallIntestineTubs",tubsRmin,tubsRmax,tubsZ,tubsSphi,tubsDphi);
 
   //G4IntersectionSolid* SmallIntestine = new G4IntersectionSolid("SmallIntestine",smallIntestineTubs,smallIntestineBox,
-  G4IntersectionSolid* filledSmallIntestine1 = new G4IntersectionSolid("filledSmallIntestine1",smallIntestineTubs,smallIntestineBox,
-								      0,G4ThreeVector(0*cm,-1.33*cm, 0*cm));
+  auto* filledSmallIntestine1 = new G4IntersectionSolid("filledSmallIntestine1",smallIntestineTubs,smallIntestineBox,
+						           nullptr,G4ThreeVector(0*cm,-1.33*cm, 0*cm));
 
-  G4IntersectionSolid* filledSmallIntestine = new G4IntersectionSolid("filledSmallIntestine",filledSmallIntestine1,smallIntestineTubs,
-								      0,G4ThreeVector(0*cm,0.8*cm, 0*cm));
+  auto* filledSmallIntestine = new G4IntersectionSolid("filledSmallIntestine",filledSmallIntestine1,smallIntestineTubs,
+								      nullptr,G4ThreeVector(0*cm,0.8*cm, 0*cm));
 
   G4double dx = 2.50*cm; // aU
   G4double dy = 2.50*cm; //bU
   G4double dz = 4.775*cm; //dzU
 
-  G4VSolid* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
+  auto* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
  
   dx = 2.50 * cm;//bt
   dy = 1.50 *cm;//ct
   dz = 10.50* cm;//x1t
 
-  G4VSolid* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
+  auto* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
 
-  G4RotationMatrix* relative_rm =  new G4RotationMatrix();
+  auto* relative_rm =  new G4RotationMatrix();
   relative_rm -> rotateX(90. * degree);
   //relative_rm -> rotateZ(180. * degree);
   relative_rm -> rotateY(90. * degree);
-  G4UnionSolid* upperLargeIntestine = new G4UnionSolid("UpperLargeIntestine",
+  auto* upperLargeIntestine = new G4UnionSolid("UpperLargeIntestine",
 						       AscendingColonUpperLargeIntestine,
 						       TraverseColonUpperLargeIntestine,
 						       relative_rm, 
@@ -119,27 +106,27 @@ G4VPhysicalVolume* G4MIRDSmallIntestine::Construct(const G4String& volumeName,
   dy = 2.13 *cm; //b
   dz = 7.64 *cm; //(z1-z2)/2
   
-  G4EllipticalTube* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
+  auto* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
   
-  G4UnionSolid* upperlowerLargeIntestine = new G4UnionSolid("UpperLowerLargeIntestine",
+  auto* upperlowerLargeIntestine = new G4UnionSolid("UpperLowerLargeIntestine",
 							       upperLargeIntestine,
 							       DescendingColonLowerLargeIntestine,
-							       0, 
+							       nullptr, 
 							       G4ThreeVector(-16.72*cm, 0.0*cm,-2.865* cm)); //,0,dzU + ct t
   
 
-  G4SubtractionSolid* SmallIntestine = new G4SubtractionSolid("SmallIntestine",
+  auto* SmallIntestine = new G4SubtractionSolid("SmallIntestine",
 							      filledSmallIntestine,
 							      upperlowerLargeIntestine,
-							      0,
+							      nullptr,
 							      G4ThreeVector(8.0*cm,-0.3*cm,-2.775*cm));
 
   
-  G4LogicalVolume* logicSmallIntestine = new G4LogicalVolume( SmallIntestine, 
+  auto* logicSmallIntestine = new G4LogicalVolume( SmallIntestine, 
 							      soft,
 							      "logical"+volumeName,
-							      0, 0, 0);
-  G4RotationMatrix* rm = new G4RotationMatrix();
+							      nullptr, nullptr, nullptr);
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree); 
   rm->rotateY(180.*degree); 
   G4VPhysicalVolume* physSmallIntestine = new G4PVPlacement(rm,     
@@ -155,9 +142,9 @@ G4VPhysicalVolume* G4MIRDSmallIntestine::Construct(const G4String& volumeName,
   
   // Visualization Attributes
   //G4VisAttributes* SmallIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* SmallIntestineVisAtt = new G4VisAttributes(colour);
+  auto* SmallIntestineVisAtt = new G4VisAttributes(colour);
   SmallIntestineVisAtt->SetForceSolid(wireFrame);
   logicSmallIntestine->SetVisAttributes(SmallIntestineVisAtt);
   
@@ -179,6 +166,5 @@ G4VPhysicalVolume* G4MIRDSmallIntestine::Construct(const G4String& volumeName,
   G4double SmallIntestineMass = (SmallIntestineVol)*SmallIntestineDensity;
   G4cout << "Mass of SmallIntestine = " << SmallIntestineMass/gram << " g" << G4endl;
 
-  
   return physSmallIntestine;
 }

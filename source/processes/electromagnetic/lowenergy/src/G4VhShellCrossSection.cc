@@ -71,9 +71,9 @@ G4int G4VhShellCrossSection::SelectRandomShell(G4int Z,
   std::vector<G4double> p = 
     Probabilities(Z,incidentEnergy,mass,deltaEnergy,mat);
   G4int shell = -1;
-  size_t nShells = p.size();
+  G4int nShells = (G4int)p.size();
   G4double q = G4UniformRand();
-  for (size_t i=0; i<nShells; i++) {
+  for (G4int i=0; i<nShells; ++i) {
     
     if (p[i] >= q) {
       shell = i;
@@ -83,5 +83,3 @@ G4int G4VhShellCrossSection::SelectRandomShell(G4int Z,
   }
   return shell;
 }
-
-

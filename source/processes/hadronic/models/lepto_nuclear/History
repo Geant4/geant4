@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-10-30 Vladimir Grichine(hadr-lepnuc-V11-00-06)
+- G4(A)NuTauMucleusNc(Cc)Models added for (anti)_nu_tau final state 
+
+## 2022-10-26 Alberto Ribon (hadr-lepnuc-V11-00-05)
+- G4ElectroVDNuclearModel : added protections against null pointers to 
+  gamma cross section and material (causing rare crashes).
 
 ## 2022-06-20 Igor Semeniouk (hadr-lepnuc-V11-00-04)
 - G4ANuElNucleusCcModel.cc, G4ANuElNucleusNcModel.cc,

@@ -1,8 +1,19 @@
 # Category proccuts History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-16 Gabriele Cosmo (proccuts-V11-00-06)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-06-01 Vladimir Ivantchenko (proccuts-V11-00-05)
+- G4VRangeToEnergyConverter - do not set lock inside private static
+    method; code clean-up
+- G4ProductionCuts - removed unnecessary thread local variables;
+    code clean-up and simplified
 
 ## 2022-06-13 Sergio Losilla (proccuts-V11-00-04)
 - Added warning when trying to set cuts for particles other than

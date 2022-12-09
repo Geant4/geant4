@@ -6,6 +6,42 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-25 Gabriele Cosmo (opengl-V11-00-21)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-21 Ben Morgan (opengl-V11-00-20)
+- Revert link support for Qt6 until code is ready.
+
+## 2022-10-28 John Allison (opengl-V11-00-19)
+- Update a comment about requesting a kernel visit when cutaway mode
+  changes - noted but not relevant because OGL does its own cutaways:
+  - G4OpenGLStoredQtViewer.cc
+  - G4OpenGLStoredViewer.cc
+- Minor tidy - speed cutaway check:
+  - G4OpenGLViewer::SetView
+
+## 2022-10-17 Gabriele Cosmo (opengl-V11-00-18)
+- Replaced use of sprintf() with snprintf(), to fix deprecation compilation
+  warnings on macOS-13 SDK.
+
+## 2022-10-11 Ben Morgan (opengl-V11-00-17)
+- Link to Qt OpenGLWidgets target for Qt6 only.
+
+## 2022-10-07 Gabriele Cosmo (opengl-V11-00-16)
+- Fixed compilation warnings on Intel/icc compiler for deprecated conversion
+  of string literal to char* in G4OpenGLXmConvenienceRoutines and
+  G4OpenGLXmViewer.
+
+## 2022-09-14 John Allison (opengl-V11-00-15)
+- G4OpenGLStoredViewer.cc, G4OpenGLStoredQtViewer.cc:
+  - Add check on special mesh rendering option in CompareForKernelVisit.
+
+## 2022-09-06 Ben Morgan (opengl-V11-00-14)
+- Address dependency inconsistencies reported by geant4_module_check
+
+## 2022-07-13 Ben Morgan (opengl-V11-00-13)
+- Fix compiler warnings in the use of G4OpenGLQtViewer::toggleProjection.
+
 ## 2022-05-03 Ben Morgan (opengl-V11-00-12)
 - Preliminary build support for Qt5 and Qt6
 

@@ -5,6 +5,19 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-10-31 Vladimir Ivanchenko (testem1-V11-00-04)
+- PhysicsList::AddRadioactiveDecay(): enable atomic de-excitation
+  in order to fix problem #2494 
+
+## 2022-10-11 Michel Maire (testem1-V11-00-03)
+- PhysicsList::AddRadioactiveDecay(): update lifeTime threshold 
+
+## 2022-10-02 Michel Maire (testem1-V11-00-02)
+- update photoelec.mac
+
+## 2022-08-24 Michel Maire (testem1-V11-00-01)
+- add 3 new macros to play with StepFunction() : pRange, alphaRange, ionRange
+
 ## 2021-12-10 Ben Morgan (testem1-V11-00-00)
 - Change to new Markdown History format
 

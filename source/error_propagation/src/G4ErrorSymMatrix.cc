@@ -568,7 +568,7 @@ std::ostream& operator<<(std::ostream& os, const G4ErrorSymMatrix& q)
   // Fixed format needs 3 extra characters for field,
   // while scientific needs 7
 
-  G4int width;
+  std::size_t width;
   if(os.flags() & std::ios::fixed)
   {
     width = os.precision() + 3;
@@ -577,9 +577,9 @@ std::ostream& operator<<(std::ostream& os, const G4ErrorSymMatrix& q)
   {
     width = os.precision() + 7;
   }
-  for(G4int irow = 1; irow <= q.num_row(); irow++)
+  for(G4int irow = 1; irow <= q.num_row(); ++irow)
   {
-    for(G4int icol = 1; icol <= q.num_col(); icol++)
+    for(G4int icol = 1; icol <= q.num_col(); ++icol)
     {
       os.width(width);
       os << q(irow, icol) << " ";
@@ -593,11 +593,11 @@ G4ErrorSymMatrix G4ErrorSymMatrix::apply(G4double (*f)(G4double, G4int,
                                                        G4int)) const
 {
   G4ErrorSymMatrix mret(num_row());
-  G4ErrorMatrixConstIter a = m.begin();
+  G4ErrorMatrixConstIter a = m.cbegin();
   G4ErrorMatrixIter b      = mret.m.begin();
-  for(G4int ir = 1; ir <= num_row(); ir++)
+  for(G4int ir = 1; ir <= num_row(); ++ir)
   {
-    for(G4int ic = 1; ic <= ir; ic++)
+    for(G4int ic = 1; ic <= ir; ++ic)
     {
       *(b++) = (*f)(*(a++), ir, ic);
     }

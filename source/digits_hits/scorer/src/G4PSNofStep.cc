@@ -42,30 +42,25 @@
 
 G4PSNofStep::G4PSNofStep(G4String name, G4int depth)
   : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-  , boundaryFlag(false)
 {
   SetUnit("");
 }
-
-G4PSNofStep::~G4PSNofStep() { ; }
 
 G4bool G4PSNofStep::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   if(boundaryFlag)
   {
     if(aStep->GetStepLength() == 0.)
-      return FALSE;
+      return false;
   }
   G4int index  = GetIndex(aStep);
   G4double val = 1.0;
   EvtMap->add(index, val);
 
-  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
   {
     auto filler = G4VScoreHistFiller::Instance();
-    if(!filler)
+    if(filler == nullptr)
     {
       G4Exception(
         "G4PSNofStep::ProcessHits", "SCORER0123", JustWarning,
@@ -77,7 +72,7 @@ G4bool G4PSNofStep::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSNofStep::Initialize(G4HCofThisEvent* HCE)
@@ -90,28 +85,23 @@ void G4PSNofStep::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSNofStep::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSNofStep::clear() { EvtMap->clear(); }
-
-void G4PSNofStep::DrawAll() { ; }
 
 void G4PSNofStep::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, nsteps] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  num of step: " << *(itr->second) << " [steps] " << G4endl;
+    G4cout << "  copy no.: " << copy
+           << "  num of step: " << *(nsteps) << " [steps] " << G4endl;
   }
 }
 
 void G4PSNofStep::SetUnit(const G4String& unit)
 {
-  if(unit == "")
+  if(unit.empty())
   {
     unitName  = unit;
     unitValue = 1.0;

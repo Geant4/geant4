@@ -250,20 +250,15 @@ namespace G4INCL {
     loadedZ = Z;
     loadedStoppingTime = stoppingTime;
 
-    G4int readA = 0;
-    G4int readZ = 0;
     while(1) { /* Loop checking, 10.07.2015, D.Mancusi */
       in >> ID >> type >> isParticipant >> x >> y >> z >> px >> py >> pz >> E >> v;
       if(!in.good()) break;
       ParticleType t;
       if(type == 1) {
 	t = Proton;
-	readZ++;
-	readA++;
       }
       else if(type == -1) {
 	t = Neutron;
-	readA++;
       }
       else {
         INCL_FATAL("Unrecognized particle type while loading particles; type=" << type << '\n');
@@ -302,7 +297,7 @@ namespace G4INCL {
 	      << "0.0" << '\n';
 
     for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
-      G4int ID = (*i)->getID();
+      G4int ID = (G4int)(*i)->getID();
       G4int type = 0;
       if((*i)->getType() == Proton) {
 	type = 1;

@@ -31,13 +31,9 @@
 
 #include "G4Timer.hh"
 #include "G4ios.hh"
+#include "G4Exception.hh"
 
 #include <iomanip>
-
-// Global error function
-#include "G4ExceptionSeverity.hh"
-void G4Exception(const char* originOfException, const char* exceptionCode,
-                 G4ExceptionSeverity severity, const char* comments);
 
 #if defined(IRIX6_2)
 #  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED == 1)
@@ -113,10 +109,6 @@ std::ostream& operator<<(std::ostream& os, const G4Timer& t)
 
   return os;
 }
-
-G4Timer::G4Timer()
-  : fValidTimes(false)
-{}
 
 G4double G4Timer::GetRealElapsed() const
 {

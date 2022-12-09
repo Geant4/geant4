@@ -69,5 +69,3 @@ add_custom_target(gammaray_telescope DEPENDS GammaRayTel)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS GammaRayTel DESTINATION bin)
-
-

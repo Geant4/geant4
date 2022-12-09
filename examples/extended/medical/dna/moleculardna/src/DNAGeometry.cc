@@ -445,7 +445,7 @@ std::pair<G4LogicalVolume*, PlacementVolumeInfo*> DNAGeometry::LoadVoxelVolume(
     G4ThreeVector(0, 0, 0), G4ThreeVector(vxdim, vydim, vzdim), 1);
 
   // open and load file
-  if(!utility::path_exists(filename))
+  if(!utility::Path_exists(filename))
   {
     G4ExceptionDescription errmsg;
     errmsg << "The file: " << filename << " could not be found." << G4endl;
@@ -471,7 +471,7 @@ std::pair<G4LogicalVolume*, PlacementVolumeInfo*> DNAGeometry::LoadVoxelVolume(
     {
       if(currentline[0] != '#')
       {
-        std::vector<G4String> line = utility::split(currentline, ' ');
+        std::vector<G4String> line = utility::Split(currentline, ' ');
         // validation
         if(uncommented_line_number == 0)
         {
@@ -732,7 +732,7 @@ std::pair<G4LogicalVolume*, PlacementVolumeInfo*> DNAGeometry::LoadVoxelVolume(
 void DNAGeometry::FillVoxelVectors()
 {
   G4String filename = fFractalCurveFile;
-  if(!utility::path_exists(filename))
+  if(!utility::Path_exists(filename))
   {
     G4ExceptionDescription errmsg;
     errmsg << "The file: " << filename << " could not be found." << G4endl;
@@ -758,7 +758,7 @@ void DNAGeometry::FillVoxelVectors()
         try
         {
           G4int pi_or_one            = fAnglesAsPi ? pi : 1;
-          std::vector<G4String> line = utility::split(currentline, ' ');
+          std::vector<G4String> line = utility::Split(currentline, ' ');
           fVoxelIndices.push_back(std::stoi(line.at(0)));
           fVoxelTypes.push_back((G4String) line.at(1));
           pos = G4ThreeVector(std::stod(line.at(2)) * fFractalScaling.getX(),
@@ -874,7 +874,7 @@ G4VPhysicalVolume* DNAGeometry::PlacePhosphate(G4LogicalVolume* physicsLogical,
     G4Ellipsoid* mol;
     // NOTE: will work to cut molecules at boundary only when the chain is
     // leaving the box.
-    G4double z_cut = -1 * utility::min(overlaps);
+    G4double z_cut = -1 * utility::Min(overlaps);
     if(z_cut < 0)  // all molecules fit
     {
       mol = new G4Ellipsoid(name, thisMolecule.fsize.getX(),
@@ -964,7 +964,7 @@ G4VPhysicalVolume* DNAGeometry::PlaceSugar(G4LogicalVolume* physicsLogical,
     G4Ellipsoid* mol;
     // NOTE: will work to cut molecules at boundary only when the chain is
     // leaving the box.
-    G4double z_cut = -1 * utility::min(overlaps);
+    G4double z_cut = -1 * utility::Min(overlaps);
     if(z_cut < 0)  // all molecules fit
     {
       mol = new G4Ellipsoid(name, thisMolecule.fsize.getX(),
@@ -1367,7 +1367,7 @@ int64_t DNAGeometry::GetGlobalUniqueID(G4VPhysicalVolume* dnavol,
                                const G4VTouchable* touch) const
 {
   const G4String& dnaName        = dnavol->GetName();
-  std::array<G4String, 4> pv_arr = utility::get_four_elements(dnaName, '-');
+  std::array<G4String, 4> pv_arr = utility::Get_four_elements(dnaName, '-');
   molecule mol                   = utility::GetMoleculeEnum(pv_arr.at(0));
   G4int chainIdx                 = std::stoi(pv_arr.at(1));
   G4int strandIdx                = std::stoi(pv_arr.at(2));
@@ -1376,7 +1376,7 @@ int64_t DNAGeometry::GetGlobalUniqueID(G4VPhysicalVolume* dnavol,
 
   const G4String& placementName = touch->GetVolume()->GetName();
   G4int placeIdx =
-    std::stoi(utility::get_seperated_element(placementName, '-', 1));
+    std::stoi(utility::Get_seperated_element(placementName, '-', 1));
 
   G4int chains     = this->GetNumberOfChains();      // dousatsu
   G4int placements = this->GetNumberOfPlacements();  // dousatsu

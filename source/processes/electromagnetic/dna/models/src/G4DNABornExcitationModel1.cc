@@ -234,8 +234,8 @@ G4int G4DNABornExcitationModel1::RandomSelect(G4double k)
   G4int level = 0;
 
   G4double* valuesBuffer = new G4double[fTableData->NumberOfComponents()];
-  const size_t n(fTableData->NumberOfComponents());
-  size_t i(n);
+  const G4int n = (G4int)fTableData->NumberOfComponents();
+  G4int i(n);
   G4double value = 0.;
 
   while (i > 0)

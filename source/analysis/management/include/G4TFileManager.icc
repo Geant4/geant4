@@ -170,9 +170,17 @@ std::shared_ptr<FT> G4TFileManager<FT>::CreateTFile(const G4String& fileName)
 {
   // Check if file already exists
   if ( GetFileInFunction(fileName, "CreateTFile", false) ) {
-    G4Analysis::Warn("File " + fileName + " already exists.",
-      fkClass, "CreateTFile");
-    return nullptr;
+      // Do not issue the warning if cycle > 0
+    if (fAMState.GetCycle() == 0) {
+      G4Analysis::Warn("File " + fileName + " already exists.",
+        fkClass, "CreateTFile");
+      return nullptr;
+    }
+    else {
+      return GetFileInFunction(fileName, "CreateTFile", false);
+      // should we also update fileInformation ??
+    }
+
   }
 
   auto fileInformation = GetFileInfoInFunction(fileName, "CreateTFile", false);

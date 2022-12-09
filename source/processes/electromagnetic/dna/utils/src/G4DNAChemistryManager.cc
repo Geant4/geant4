@@ -415,21 +415,21 @@ void G4DNAChemistryManager::InitializeMaster()
         description << "No user chemistry list has been provided.";
         G4Exception("G4DNAChemistryManager::InitializeMaster", "NO_CHEM_LIST",
                     FatalException, description);
+    }else
+    {
+      fpUserChemistryList->ConstructDissociationChannels();
+      if (!fSkipReactions)
+      {
+          fpUserChemistryList->ConstructReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
+      }
+      else
+      {
+          G4DNAMolecularReactionTable::GetReactionTable(); // init pointer
+      }
     }
 
     G4Scheduler::Instance();
     // creates a concrete object of the scheduler
-
-
-    fpUserChemistryList->ConstructDissociationChannels();
-    if (!fSkipReactions)
-    {
-        fpUserChemistryList->ConstructReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
-    }
-    else
-    {
-        G4DNAMolecularReactionTable::GetReactionTable(); // init pointer
-    }
     fMasterInitialized = true;
 }
 
@@ -482,6 +482,10 @@ void G4DNAChemistryManager::InitializeThread()
         description << "No user chemistry list has been provided.";
         G4Exception("G4DNAChemistryManager::InitializeThread", "NO_CHEM_LIST",
                     FatalException, description);
+    }else
+    {
+        HandleStandaloneInitialization();// To make coverty happy
+        fpUserChemistryList->ConstructTimeStepModel(G4DNAMolecularReactionTable::GetReactionTable());
     }
 
     if (fVerbose)
@@ -490,9 +494,6 @@ void G4DNAChemistryManager::InitializeThread()
                << G4endl;
     }
 
-    HandleStandaloneInitialization();
-
-    fpUserChemistryList->ConstructTimeStepModel(G4DNAMolecularReactionTable::GetReactionTable());
     G4Scheduler::Instance()->Initialize();
 
     fpThreadData->fThreadInitialized = true;

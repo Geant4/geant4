@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.cc
+/// \file B1/src/RunAction.cc
 /// \brief Implementation of the B1::RunAction class
 
 #include "RunAction.hh"
@@ -67,11 +67,6 @@ RunAction::RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   // inform the runManager to save random number seed
@@ -102,9 +97,8 @@ void RunAction::EndOfRunAction(const G4Run* run)
   G4double rms = edep2 - edep*edep/nofEvents;
   if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
-  const DetectorConstruction* detConstruction
-   = static_cast<const DetectorConstruction*>
-     (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  const auto detConstruction = static_cast<const DetectorConstruction*>(
+    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double mass = detConstruction->GetScoringVolume()->GetMass();
   G4double dose = edep/mass;
   G4double rmsDose = rms/mass;
@@ -112,9 +106,8 @@ void RunAction::EndOfRunAction(const G4Run* run)
   // Run conditions
   //  note: There is no primary generator action object for "master"
   //        run manager for multi-threaded mode.
-  const PrimaryGeneratorAction* generatorAction
-   = static_cast<const PrimaryGeneratorAction*>
-     (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+  const auto generatorAction = static_cast<const PrimaryGeneratorAction*>(
+    G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4String runCondition;
   if (generatorAction)
   {

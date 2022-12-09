@@ -29,12 +29,10 @@
 // ---------------------------------------------------------------
 
 #include "PTL/TaskGroup.hh"
-#include "PTL/Globals.hh"
-#include "PTL/Task.hh"
+
 #include "PTL/TaskRunManager.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/VTask.hh"
 
 //======================================================================================//
 

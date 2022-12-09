@@ -76,10 +76,3 @@ inline G4String G4GenericAnalysisManager::GetDefaultFileType() const
 {
   return fFileManager->GetDefaultFileType();
 }
-
-//_____________________________________________________________________________
-inline
-G4bool G4GenericAnalysisManager::IsOpenFileImpl() const
-{
-  return fFileManager->IsOpenFile();
-}

@@ -19,7 +19,7 @@
 {
 //*******************************************************************************//
 // If you need to add multiple root outputs, by multithreading, use this command:
-system ("hadd -O -f moleXcular-dna.root molecular-dna_t*.root");
+system ("hadd -O -f molecular-dna.root molecular-dna_t*.root");
 
 // Define these parameters of the simulation
 char ifile[256] = "molecular-dna.root";  // input filepath

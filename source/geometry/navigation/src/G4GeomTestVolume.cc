@@ -133,8 +133,8 @@ void G4GeomTestVolume::TestOverlapInTree() const
 
     // check overlaps for daughters
     G4LogicalVolume* logical = current->GetLogicalVolume();
-    G4int ndaughters = logical->GetNoDaughters();
-    for (G4int i=0; i<ndaughters; ++i)
+    std::size_t ndaughters = logical->GetNoDaughters();
+    for (std::size_t i=0; i<ndaughters; ++i)
     {
       G4VPhysicalVolume* daughter = logical->GetDaughter(i);
       daughter->CheckOverlaps(resolution, tolerance, verbosity, maxErr);
@@ -142,7 +142,7 @@ void G4GeomTestVolume::TestOverlapInTree() const
 
     // append the queue of volumes
     G4LogicalVolume* previousLogical = nullptr;
-    for (G4int i=0; i<ndaughters; ++i)
+    for (std::size_t i=0; i<ndaughters; ++i)
     {
       G4VPhysicalVolume* daughter = logical->GetDaughter(i);
       G4LogicalVolume* daughterLogical = daughter->GetLogicalVolume();
@@ -194,7 +194,7 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
   std::set<const G4LogicalVolume *> tested;
 
   const G4LogicalVolume *logical = target->GetLogicalVolume();
-  G4int nDaughter = logical->GetNoDaughters();
+  G4int nDaughter = (G4int)logical->GetNoDaughters();
   for( auto iDaughter=0; iDaughter<nDaughter; ++iDaughter )
   {
     G4VPhysicalVolume *daughter = logical->GetDaughter(iDaughter);

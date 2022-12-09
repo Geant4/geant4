@@ -74,7 +74,7 @@ G4bool G4XmlRFileManager::OpenRFile(const G4String& fileName)
   G4bool verbose = false;
 
   // create factory (if it does not yet exist)
-  if ( ! fReadFactory ) {
+  if (fReadFactory == nullptr) {
     fReadFactory = new tools::xml::default_factory();
   }
 
@@ -116,9 +116,8 @@ toolx::raxml* G4XmlRFileManager::GetRFile(const G4String& fileName) const
   G4String name = GetFullFileName(fileName, isPerThread);
 
   auto it = fRFiles.find(name);
-  if  ( it != fRFiles.end() )
+  if (it != fRFiles.end()) {
     return it->second;
-  else {
-    return nullptr;
   }
+  return nullptr;
 }

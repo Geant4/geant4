@@ -49,10 +49,10 @@ class G4Polyline: public G4Visible, public G4Point3DList {
 
 public: // With description
 
-  typedef G4Point3DList::iterator iterator;
+  using iterator = G4Point3DList::iterator;
 
   G4Polyline ();
-  virtual ~G4Polyline ();
+  ~G4Polyline () override;
   G4Polyline& transform (const G4Transform3D&);
 };
 

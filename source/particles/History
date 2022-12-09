@@ -6,6 +6,64 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-18 Gabriele Cosmo (particles-V11-00-15)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1
+  in G4IonTable.
+
+## 2022-11-14 I. Hrivnacova (particles-V11-00-14)
+- Replaced reinterpret_cast with static_cast where possible
+
+## 2022-11-11 Alberto Ribon (particles-V11-00-13)
+- G4HyperNucleiProperties : optimization improvement and minor clean-up.
+
+## 2022-11-02 Alberto Ribon (particles-V11-00-12)
+- G4Triton, G4AntiTriton : corrected the lifetime value for triton
+  and anti_triton : the half-life (12.32 years) was incorrectly used
+  instead of the mean lifetime (17.774 years) for triton, whereas the
+  anti_triton was incorrectly treated as stable.
+  Thanks to the user Francisco Ogallar Ruiz for spotting and reporting it!
+
+## 2022-10-24 Dennis Wright (particles-V11-00-11)
+- G4NuclideTableMessenger: add command /particle/manage/nuclide/min_meanlife
+  corresponding to G4NuclideTable::SetMeanLifeThreshold().  Default minimum 
+  mean life is 1.0 ns.
+  In /particle/nuclideTable/min_halflife change default minumum halflife
+  to 0.693 
+
+## 2022-10-24 Dennis Wright (particles-V11-00-10)
+- G4NuclideTable::entries() const :
+  replace static_cast<size_t>(0) with std::size_t(0)
+
+## 2022-10-10 Dennis Wright (particles-V11-00-09)
+- Use nuclide mean-life instead of half-life in G4NuclideTable in order to be
+  consistent with ENSDFSTATE data, which use mean-life.  Provide two new 
+  methods, SetMeanLifeThreshold and GetMeanLifeThreshold() so that the lifetimes
+  can be accessed as either half-life or mean-life.
+
+## 2022-10-05 Gabriele Cosmo (particles-V11-00-08)
+- Fixed compilation warning on Intel/icx compiler for variable set
+  but never used in G4MuonRadiativeDecayChannelWithSpin.
+
+## 2022-09-27 Dennis Wright (particles-V11-00-07)
+- Changed halflife threshold for nuclide creation to be consistent with 
+  lifetimes in nuclear deexcitation code; in management/src/G4NuclideTable.cc
+  ctor, change threshold_of_halflife from 1000 ns to 1 ns 
+
+## 2022-08-08 Alberto Ribon (particles-V11-00-06)
+Fixed three bugs regarding the transportation of hypernuclei and anti-hypernuclei:
+-  G4Ion : set (forgotten) isGeneralIon to false for hypernuclei and 
+   anti-hypernuclei (otherwise they would get the same processes as GenericIon).
+-  G4DoubleHyperDoubleNeutron, G4AntiDoubleHyperDoubleNeutron : added (forgotten)
+   call to SetDecayTable (otherwise the decay table would not be defined for
+   these particles).
+-  G4ParticleDefinition : protect the two methods GetNumberOfLambdasInHypernucleus()
+   and GetNumberOfAntiLambdasInAntiHypernucleus() against baryonic resonances
+   with high spins (such as N(2220), N(2250) and their anti-particles) which have
+   8-digits PDG codes, but which are not hypernuclei or anti-hypernuclei.
+
+## 2022-07-02 Ben Morgan (particles-V11-00-05)
+- Remove obsolete and unused `G4DynamicParticleFastVector` type alias.
+
 ## 2022-05-16 Guilherme Amadio (particles-V11-00-04)
 - Replace getenv() calls for data variables with G4FindDataDir()
 

@@ -41,38 +41,32 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-{
-  SetUnit("MeV");
-}
+  : G4PSEnergyDeposit(name, "MeV", depth)
+{}
 
 G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, const G4String& unit,
                                      G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
-  , EvtMap(0)
+  , EvtMap(nullptr)
 {
   SetUnit(unit);
 }
-
-G4PSEnergyDeposit::~G4PSEnergyDeposit() { ; }
 
 G4bool G4PSEnergyDeposit::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep == 0.)
-    return FALSE;
+    return false;
   G4double wei = aStep->GetPreStepPoint()->GetWeight();  // (Particle Weight)
   G4int index  = GetIndex(aStep);
   G4double edepwei = edep * wei;
   EvtMap->add(index, edepwei);
 
-  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
   {
     auto filler = G4VScoreHistFiller::Instance();
-    if(!filler)
+    if(filler == nullptr)
     {
       G4Exception(
         "G4PSEnergyDeposit::ProcessHits", "SCORER0123", JustWarning,
@@ -84,7 +78,7 @@ G4bool G4PSEnergyDeposit::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSEnergyDeposit::Initialize(G4HCofThisEvent* HCE)
@@ -98,22 +92,17 @@ void G4PSEnergyDeposit::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSEnergyDeposit::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSEnergyDeposit::clear() { EvtMap->clear(); }
-
-void G4PSEnergyDeposit::DrawAll() { ; }
 
 void G4PSEnergyDeposit::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, edep] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  energy deposit: " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  energy deposit: " << *(edep) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }

@@ -43,7 +43,7 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
 
   while(pos != G4String::npos || pos0 != G4String::npos)
   {
-    if(str[pos0] == '\"')
+    if(str[(G4int)pos0] == '\"')
     {
       pos = str.find_first_of("\"", pos0 + 1);
       if(pos != G4String::npos)
@@ -51,7 +51,7 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
         pos++;
       }
     }
-    if(str[pos0] == '\'')
+    if(str[(G4int)pos0] == '\'')
     {
       pos = str.find_first_of("\'", pos0 + 1);
       if(pos != G4String::npos)

@@ -71,7 +71,7 @@ G4AntiBMesonZero* G4AntiBMesonZero::Definition()
                 false,     1.520e-3*ns,          NULL,
                 false,       "B");
   }
-  theInstance = reinterpret_cast<G4AntiBMesonZero*>(anInstance);
+  theInstance = static_cast<G4AntiBMesonZero*>(anInstance);
   return theInstance;
 }
 

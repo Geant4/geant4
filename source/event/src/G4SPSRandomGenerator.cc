@@ -275,16 +275,16 @@ G4double G4SPSRandomGenerator::GenRandX()
       // IPDF has not been created, so create it
       //
       G4double bins[1024], vals[1024], sum;
-      G4int ii;
-      G4int maxbin = G4int(XBiasH.GetVectorLength());
-      bins[0] = XBiasH.GetLowEdgeEnergy(std::size_t(0));
-      vals[0] = XBiasH(std::size_t(0));
+      std::size_t ii;
+      std::size_t maxbin = XBiasH.GetVectorLength();
+      bins[0] = XBiasH.GetLowEdgeEnergy(0);
+      vals[0] = XBiasH(0);
       sum = vals[0];
       for (ii=1; ii<maxbin; ++ii)
       {
-        bins[ii] = XBiasH.GetLowEdgeEnergy(std::size_t(ii));
-        vals[ii] = XBiasH(std::size_t(ii)) + vals[ii - 1];
-        sum = sum + XBiasH(std::size_t(ii));
+        bins[ii] = XBiasH.GetLowEdgeEnergy(ii);
+        vals[ii] = XBiasH(ii) + vals[ii - 1];
+        sum = sum + XBiasH(ii);
       }
 
       for (ii=0; ii<maxbin; ++ii)
@@ -306,9 +306,9 @@ G4double G4SPSRandomGenerator::GenRandX()
   // difference in the biased probability (the area)
   //
   std::size_t numberOfBin = IPDFXBiasH.GetVectorLength();
-  G4int biasn1 = 0;
-  G4int biasn2 = numberOfBin / 2;
-  G4int biasn3 = numberOfBin - 1;
+  std::size_t biasn1 = 0;
+  std::size_t biasn2 = numberOfBin / 2;
+  std::size_t biasn3 = numberOfBin - 1;
   while (biasn1 != biasn3 - 1)
   {
     if (rndm > IPDFXBiasH(biasn2))
@@ -322,8 +322,8 @@ G4double G4SPSRandomGenerator::GenRandX()
   //
   bweights_t& w = bweights.Get();
   w[0] = IPDFXBiasH(biasn2) - IPDFXBiasH(biasn2 - 1);
-  G4double xaxisl = IPDFXBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-  G4double xaxisu = IPDFXBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+  G4double xaxisl = IPDFXBiasH.GetLowEdgeEnergy(biasn2 - 1);
+  G4double xaxisu = IPDFXBiasH.GetLowEdgeEnergy(biasn2);
   G4double NatProb = xaxisu - xaxisl;
   w[0] = NatProb / w[0];
   if (verbosityLevel >= 1)
@@ -356,16 +356,16 @@ G4double G4SPSRandomGenerator::GenRandY()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(YBiasH.GetVectorLength());
-        bins[0] = YBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = YBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = YBiasH.GetVectorLength();
+        bins[0] = YBiasH.GetLowEdgeEnergy(0);
+        vals[0] = YBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = YBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = YBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + YBiasH(std::size_t(ii));
+          bins[ii] = YBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = YBiasH(ii) + vals[ii - 1];
+          sum = sum + YBiasH(ii);
         }
 
         for (ii=0; ii<maxbin; ++ii)
@@ -381,9 +381,9 @@ G4double G4SPSRandomGenerator::GenRandY()
 
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFYBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFYBiasH(biasn2))
@@ -394,8 +394,8 @@ G4double G4SPSRandomGenerator::GenRandY()
     }
     bweights_t& w = bweights.Get();
     w[1] = IPDFYBiasH(biasn2) - IPDFYBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFYBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFYBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFYBiasH.GetLowEdgeEnergy(biasn2 - 1);
+    G4double xaxisu = IPDFYBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[1] = NatProb / w[1];
     if (verbosityLevel >= 1)
@@ -428,16 +428,16 @@ G4double G4SPSRandomGenerator::GenRandZ()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(ZBiasH.GetVectorLength());
-        bins[0] = ZBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = ZBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = ZBiasH.GetVectorLength();
+        bins[0] = ZBiasH.GetLowEdgeEnergy(0);
+        vals[0] = ZBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = ZBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = ZBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + ZBiasH(std::size_t(ii));
+          bins[ii] = ZBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = ZBiasH(ii) + vals[ii - 1];
+          sum = sum + ZBiasH(ii);
         }
 
         for (ii=0; ii<maxbin; ++ii)
@@ -453,9 +453,9 @@ G4double G4SPSRandomGenerator::GenRandZ()
 
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFZBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFZBiasH(biasn2))
@@ -466,8 +466,8 @@ G4double G4SPSRandomGenerator::GenRandZ()
     }
     bweights_t& w = bweights.Get();
     w[2] = IPDFZBiasH(biasn2) - IPDFZBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFZBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFZBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFZBiasH.GetLowEdgeEnergy(biasn2 - 1);
+    G4double xaxisu = IPDFZBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[2] = NatProb / w[2];
     if (verbosityLevel >= 1)
@@ -501,16 +501,16 @@ G4double G4SPSRandomGenerator::GenRandTheta()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(ThetaBiasH.GetVectorLength());
-        bins[0] = ThetaBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = ThetaBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = ThetaBiasH.GetVectorLength();
+        bins[0] = ThetaBiasH.GetLowEdgeEnergy(0);
+        vals[0] = ThetaBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = ThetaBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = ThetaBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + ThetaBiasH(std::size_t(ii));
+          bins[ii] = ThetaBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = ThetaBiasH(ii) + vals[ii - 1];
+          sum = sum + ThetaBiasH(ii);
         }
 
         for (ii=0; ii<maxbin; ++ii)
@@ -526,9 +526,9 @@ G4double G4SPSRandomGenerator::GenRandTheta()
 
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFThetaBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFThetaBiasH(biasn2))
@@ -539,8 +539,8 @@ G4double G4SPSRandomGenerator::GenRandTheta()
     }
     bweights_t& w = bweights.Get();
     w[3] = IPDFThetaBiasH(biasn2) - IPDFThetaBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFThetaBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFThetaBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFThetaBiasH.GetLowEdgeEnergy(biasn2 - 1);
+    G4double xaxisu = IPDFThetaBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[3] = NatProb / w[3];
     if (verbosityLevel >= 1)
@@ -573,16 +573,16 @@ G4double G4SPSRandomGenerator::GenRandPhi()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(PhiBiasH.GetVectorLength());
-        bins[0] = PhiBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = PhiBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = PhiBiasH.GetVectorLength();
+        bins[0] = PhiBiasH.GetLowEdgeEnergy(0);
+        vals[0] = PhiBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = PhiBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = PhiBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + PhiBiasH(std::size_t(ii));
+          bins[ii] = PhiBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = PhiBiasH(ii) + vals[ii - 1];
+          sum = sum + PhiBiasH(ii);
         }
 
         for (ii=0; ii<maxbin; ++ii)
@@ -598,9 +598,9 @@ G4double G4SPSRandomGenerator::GenRandPhi()
 
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFPhiBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFPhiBiasH(biasn2))
@@ -611,8 +611,8 @@ G4double G4SPSRandomGenerator::GenRandPhi()
     }
     bweights_t& w = bweights.Get();
     w[4] = IPDFPhiBiasH(biasn2) - IPDFPhiBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFPhiBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFPhiBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFPhiBiasH.GetLowEdgeEnergy(biasn2 - 1);
+    G4double xaxisu = IPDFPhiBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[4] = NatProb / w[4];
     if (verbosityLevel >= 1)
@@ -645,16 +645,16 @@ G4double G4SPSRandomGenerator::GenRandEnergy()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(EnergyBiasH.GetVectorLength());
-        bins[0] = EnergyBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = EnergyBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = EnergyBiasH.GetVectorLength();
+        bins[0] = EnergyBiasH.GetLowEdgeEnergy(0);
+        vals[0] = EnergyBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = EnergyBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = EnergyBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + EnergyBiasH(std::size_t(ii));
+          bins[ii] = EnergyBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = EnergyBiasH(ii) + vals[ii - 1];
+          sum = sum + EnergyBiasH(ii);
         }
         IPDFEnergyBiasH = ZeroPhysVector;
         for (ii=0; ii<maxbin; ++ii)
@@ -670,9 +670,9 @@ G4double G4SPSRandomGenerator::GenRandEnergy()
 
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFEnergyBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFEnergyBiasH(biasn2))
@@ -683,8 +683,8 @@ G4double G4SPSRandomGenerator::GenRandEnergy()
     }
     bweights_t& w = bweights.Get();
     w[5] = IPDFEnergyBiasH(biasn2) - IPDFEnergyBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFEnergyBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFEnergyBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFEnergyBiasH.GetLowEdgeEnergy(biasn2 - 1);
+    G4double xaxisu = IPDFEnergyBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[5] = NatProb / w[5];
     if (verbosityLevel >= 1)
@@ -718,16 +718,16 @@ G4double G4SPSRandomGenerator::GenRandPosTheta()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(PosThetaBiasH.GetVectorLength());
-        bins[0] = PosThetaBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = PosThetaBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = PosThetaBiasH.GetVectorLength();
+        bins[0] = PosThetaBiasH.GetLowEdgeEnergy(0);
+        vals[0] = PosThetaBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = PosThetaBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = PosThetaBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + PosThetaBiasH(std::size_t(ii));
+          bins[ii] = PosThetaBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = PosThetaBiasH(ii) + vals[ii - 1];
+          sum = sum + PosThetaBiasH(ii);
         }
 
         for (ii=0; ii<maxbin; ++ii)
@@ -743,9 +743,9 @@ G4double G4SPSRandomGenerator::GenRandPosTheta()
     //
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFPosThetaBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFPosThetaBiasH(biasn2))
@@ -756,8 +756,8 @@ G4double G4SPSRandomGenerator::GenRandPosTheta()
     }
     bweights_t& w = bweights.Get();
     w[6] = IPDFPosThetaBiasH(biasn2) - IPDFPosThetaBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFPosThetaBiasH.GetLowEdgeEnergy(std::size_t(biasn2-1));
-    G4double xaxisu = IPDFPosThetaBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFPosThetaBiasH.GetLowEdgeEnergy(biasn2-1);
+    G4double xaxisu = IPDFPosThetaBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[6] = NatProb / w[6];
     if (verbosityLevel >= 1)
@@ -790,16 +790,16 @@ G4double G4SPSRandomGenerator::GenRandPosPhi()
         // IPDF has not been created, so create it
         //
         G4double bins[1024], vals[1024], sum;
-        G4int ii;
-        G4int maxbin = G4int(PosPhiBiasH.GetVectorLength());
-        bins[0] = PosPhiBiasH.GetLowEdgeEnergy(std::size_t(0));
-        vals[0] = PosPhiBiasH(std::size_t(0));
+        std::size_t ii;
+        std::size_t maxbin = PosPhiBiasH.GetVectorLength();
+        bins[0] = PosPhiBiasH.GetLowEdgeEnergy(0);
+        vals[0] = PosPhiBiasH(0);
         sum = vals[0];
         for (ii=1; ii<maxbin; ++ii)
         {
-          bins[ii] = PosPhiBiasH.GetLowEdgeEnergy(std::size_t(ii));
-          vals[ii] = PosPhiBiasH(std::size_t(ii)) + vals[ii - 1];
-          sum = sum + PosPhiBiasH(std::size_t(ii));
+          bins[ii] = PosPhiBiasH.GetLowEdgeEnergy(ii);
+          vals[ii] = PosPhiBiasH(ii) + vals[ii - 1];
+          sum = sum + PosPhiBiasH(ii);
         }
 
         for (ii=0; ii<maxbin; ++ii)
@@ -815,9 +815,9 @@ G4double G4SPSRandomGenerator::GenRandPosPhi()
 
     G4double rndm = G4UniformRand();
     std::size_t numberOfBin = IPDFPosPhiBiasH.GetVectorLength();
-    G4int biasn1 = 0;
-    G4int biasn2 = numberOfBin / 2;
-    G4int biasn3 = numberOfBin - 1;
+    std::size_t biasn1 = 0;
+    std::size_t biasn2 = numberOfBin / 2;
+    std::size_t biasn3 = numberOfBin - 1;
     while (biasn1 != biasn3 - 1)
     {
       if (rndm > IPDFPosPhiBiasH(biasn2))
@@ -828,8 +828,8 @@ G4double G4SPSRandomGenerator::GenRandPosPhi()
     }
     bweights_t& w = bweights.Get();
     w[7] = IPDFPosPhiBiasH(biasn2) - IPDFPosPhiBiasH(biasn2 - 1);
-    G4double xaxisl = IPDFPosPhiBiasH.GetLowEdgeEnergy(std::size_t(biasn2 - 1));
-    G4double xaxisu = IPDFPosPhiBiasH.GetLowEdgeEnergy(std::size_t(biasn2));
+    G4double xaxisl = IPDFPosPhiBiasH.GetLowEdgeEnergy(biasn2 - 1);
+    G4double xaxisu = IPDFPosPhiBiasH.GetLowEdgeEnergy(biasn2);
     G4double NatProb = xaxisu - xaxisl;
     w[7] = NatProb / w[7];
     if (verbosityLevel >= 1)

@@ -244,7 +244,7 @@ void G4PAIySection::Initialize( const G4Material* material,
 
 void G4PAIySection::ComputeLowEnergyCof(const G4Material* material)
 {    
-  G4int i, numberOfElements = material->GetNumberOfElements();
+  G4int i, numberOfElements = (G4int)material->GetNumberOfElements();
   G4double sumZ = 0., sumCof = 0.; 
 
   static const G4double p0 =  1.20923e+00; 

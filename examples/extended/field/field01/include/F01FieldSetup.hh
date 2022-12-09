@@ -62,11 +62,11 @@ public:
                 G4bool useFSALstepper= false );
 
   F01FieldSetup();               //  A zero field
-  F01FieldSetup( F01FieldSetup & ) = delete; 
+  F01FieldSetup( F01FieldSetup & ) = delete;
 
   virtual ~F01FieldSetup();
 
-  void SetStepperType( G4int i ) 
+  void SetStepperType( G4int i )
      { fStepperType = i; CreateStepperAndChordFinder(); }
 
   void SetStepper();
@@ -75,26 +75,41 @@ public:
 
   void InitialiseAll();    //  Set parameters and call method below
 
-   // Original method - 
+   // Original method
   void CreateStepperAndChordFinder();
 
-   // New method - create FSAL stepper and driver
-  void CreateFSALStepperAndChordFinder(); 
+   // Create FSAL stepper and driver
+  void CreateFSALStepperAndChordFinder();
 
+   // Create Boris driver ( 2nd order Symplectic integration )
+  void CreateAndSetupBorisDriver();
+
+  void   SetUseFSALstepper(G4bool val= true) { fUseFSALstepper = val; }
+  G4bool GetUseFSALstepper()                 { return fUseFSALstepper; }
+
+  // Parameters for integration accuracy : get / control
+  // -------------------------------------------------------
+  G4double GetEpsilonMin(){ return fDesiredEpsilonMin; }
+  G4double GetEpsilonMax(){ return fDesiredEpsilonMax; }
+
+  void   SetEpsilonMin(G4double val){ fDesiredEpsilonMin= val; }
+  void   SetEpsilonMax(G4double val){ fDesiredEpsilonMax= val; }
+
+  void   SetDeltaOneStep(G4double val){ fDeltaOneStep= val; }
+
+  // Special for this setup only
+  // ----------------------------
   void SetFieldValue(G4ThreeVector fieldVector);
   void SetFieldZValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
 
-  void   SetUseFSALstepper(G4bool val= true) { fUseFSALstepper = val; }
-  G4bool GetUseFSALstepper()                 { return fUseFSALstepper; }
-   
 protected:
    // Implementation methods
   G4VIntegrationDriver* CreateFSALStepperAndDriver();
 
    // Find the global Field Manager
   G4FieldManager*          GetGlobalFieldManager();
-   
+
 protected:
 
   G4FieldManager*          fFieldManager = nullptr;
@@ -106,11 +121,13 @@ protected:
   G4bool                   fUseFSALstepper = false;
   G4VIntegrationDriver*    fDriver =  nullptr;  // If non-null, its new type (FSAL)
   G4int                    fStepperType = -1;
-
-  G4double                 fMinStep = -1.0;
-   
   F01FieldMessenger*       fFieldMessenger = nullptr;
 
+  // Parameters / Invariant during tracking loop
+  G4double             fMinStep     = -1.0;
+  G4double             fDeltaOneStep= -1.0;
+  G4double             fDesiredEpsilonMin = 1.0e-05; // tight: 1.0e-8  std: 1.0e-5 to 1.e-6  loose: 1.0e-4
+  G4double             fDesiredEpsilonMax = 0.005;   // tight: 1.0e-5  std: 1.0e-4 to 5.e-3  loose: 1.0e-3+
 };
 
 #endif

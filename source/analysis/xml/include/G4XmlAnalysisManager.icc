@@ -30,13 +30,6 @@
 
 //_____________________________________________________________________________
 inline
-G4bool G4XmlAnalysisManager::IsOpenFileImpl() const
-{
-  return fFileManager->IsOpenFile();
-}
-
-//_____________________________________________________________________________
-inline
 tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple();

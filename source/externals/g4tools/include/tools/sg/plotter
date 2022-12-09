@@ -6814,7 +6814,6 @@ protected: //rep
         vtxs->mode = gl::points();
         separator->add(vtxs);
 
-        int ipt = 0;
         float xdbin = xe - xx;
         float ydbin = ye - yy;
         for(int count=0;count<npt;count++) {
@@ -6826,7 +6825,6 @@ protected: //rep
              (yyy>=0)&&(yyy<=1)  ) {
             vtxs->add(xxx,yyy,a_zz);
             empty = false;
-            ipt++;
           }
         }
       }
@@ -6894,7 +6892,7 @@ protected: //rep
       if(ye>1) ye = 1;
 
       char sval[32];
-      ::sprintf (sval,"%d",ival);
+      //::sprintf (sval,"%d",ival);
       SbString sbval(sval);
       int charn = sbval.getLength();
       if(charn<=0) continue;
@@ -6903,7 +6901,7 @@ protected: //rep
       separator->addChild(sep);
 
      {char s[128];
-      ::sprintf(s,"%d %d",a_bins[index].fI,a_bins[index].fJ);
+      //::sprintf(s,"%d %d",a_bins[index].fI,a_bins[index].fJ);
       sep->setInfos(s);}
      {std::string sp;
       if(!p2sx(sep->getInfos(),sp)){}

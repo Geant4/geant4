@@ -16,15 +16,16 @@ geant4_add_module(G4visVtk
 
 geant4_module_link_libraries(G4visVtk
   PUBLIC
-    G4modeling
-    G4globman
-    G4hepgeometry
+    G4intercoms
     G4vis_management
     ${VTK_LIBRARIES}
   PRIVATE
+    G4csg
+    G4geometrymng
+    G4globman
     G4graphics_reps
-    G4UIbasic
-    G4UIcommon)
+    G4materials
+    G4modeling)
 
 # - VTK-Qt if Qt enabled
 if(GEANT4_USE_QT)
@@ -37,5 +38,7 @@ if(GEANT4_USE_QT)
       G4VtkQt.cc
       G4VtkQtSceneHandler.cc
       G4VtkQtViewer.cc)
+
+  geant4_module_link_libraries(G4visVtk PRIVATE G4UIbasic G4UIcommon)
 endif()
 

@@ -15,6 +15,7 @@ geant4_add_module(G4emdna-utils
     G4DNAMolecularReactionTable.hh
     G4DNAEmfietzoglouWaterExcitationStructure.hh
     G4DNAEmfietzoglouWaterIonisationStructure.hh
+    G4DNAPTBExcitationStructure.hh
     G4DNAPTBIonisationStructure.hh
     G4DNARevertProbability.hh
     G4DNAWaterExcitationStructure.hh
@@ -33,6 +34,7 @@ geant4_add_module(G4emdna-utils
 	G4VChemistryWorld.hh
 	G4DNAMesh.hh
 	G4DNAEventSet.hh
+	G4ChemicalMoleculeFinder.hh
   SOURCES
     G4DNAChemistryManager.cc
     G4DNACPA100LogLogInterpolation.cc
@@ -46,6 +48,7 @@ geant4_add_module(G4emdna-utils
     G4DNAMolecularReactionTable.cc
     G4DNAEmfietzoglouWaterExcitationStructure.cc
     G4DNAEmfietzoglouWaterIonisationStructure.cc
+    G4DNAPTBExcitationStructure.cc
     G4DNAPTBIonisationStructure.cc
     G4DNAWaterExcitationStructure.cc
     G4DNAWaterIonisationStructure.cc
@@ -69,13 +72,13 @@ geant4_module_link_libraries(G4emdna-utils
     G4emdna-molman
     G4emlowenergy
     G4globman
+    G4intercoms
     G4partman
   PRIVATE
     G4analysismng
     G4emdna-moltypes
     G4geometrymng
     G4heprandom
-    G4intercoms
     G4ions
     G4materials
     G4procman

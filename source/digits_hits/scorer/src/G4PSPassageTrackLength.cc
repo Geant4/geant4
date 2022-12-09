@@ -46,15 +46,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , fCurrentTrkID(-1)
-  , fTrackLength(0.)
-  , EvtMap(0)
-  , weighted(false)
-{
-  SetUnit("mm");
-}
+  : G4PSPassageTrackLength(name, "mm", depth)
+{}
 
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name,
                                                const G4String& unit,
@@ -63,13 +56,11 @@ G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name,
   , HCID(-1)
   , fCurrentTrkID(-1)
   , fTrackLength(0.)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(false)
 {
   SetUnit(unit);
 }
-
-G4PSPassageTrackLength::~G4PSPassageTrackLength() { ; }
 
 G4bool G4PSPassageTrackLength::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -78,10 +69,10 @@ G4bool G4PSPassageTrackLength::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4int index = GetIndex(aStep);
     EvtMap->add(index, fTrackLength);
 
-    if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+    if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
     {
       auto filler = G4VScoreHistFiller::Instance();
-      if(!filler)
+      if(filler == nullptr)
       {
         G4Exception(
           "G4PSPassageTrackLength::ProcessHits", "SCORER0123", JustWarning,
@@ -94,12 +85,12 @@ G4bool G4PSPassageTrackLength::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4bool G4PSPassageTrackLength::IsPassed(G4Step* aStep)
 {
-  G4bool Passed = FALSE;
+  G4bool Passed = false;
 
   G4bool IsEnter = aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary;
   G4bool IsExit  = aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary;
@@ -112,7 +103,7 @@ G4bool G4PSPassageTrackLength::IsPassed(G4Step* aStep)
   if(IsEnter && IsExit)
   {                            // Passed at one step
     fTrackLength = trklength;  // Track length is absolutely given.
-    Passed       = TRUE;
+    Passed       = true;
   }
   else if(IsEnter)
   {                         // Enter a new geometry
@@ -124,7 +115,7 @@ G4bool G4PSPassageTrackLength::IsPassed(G4Step* aStep)
     if(fCurrentTrkID == trkid)
     {
       fTrackLength += trklength;  // Adding the track length to current one,
-      Passed = TRUE;              // if the track is same as entered.
+      Passed = true;              // if the track is same as entered.
     }
   }
   else
@@ -148,22 +139,17 @@ void G4PSPassageTrackLength::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSPassageTrackLength::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSPassageTrackLength::clear() { EvtMap->clear(); }
-
-void G4PSPassageTrackLength::DrawAll() { ; }
 
 void G4PSPassageTrackLength::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveSenstivity " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, length] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  track length : " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  track length : " << *(length) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }

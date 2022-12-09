@@ -70,8 +70,11 @@ G4double G4DiffusionControlledReactionModel::GetReactionRadius(
                 "::GetReactionRadius()",
                 "G4DiffusionControlledReactionModel00", FatalException,
                 exceptionDescription);
+    return 0.;
+  }else
+  {
+    return reactionData->GetEffectiveReactionRadius();
   }
-  return reactionData->GetEffectiveReactionRadius();
 }
 
 G4double G4DiffusionControlledReactionModel::GetReactionRadius(const G4int& i)

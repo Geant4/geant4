@@ -76,7 +76,7 @@ G4bool G4RootMpiNtupleManager::Send(G4int id, RootNtupleDescription* ntupleDescr
   // G4cout << "ntuple: " << ntupleDescription->fNtuple << G4endl;
 
   // Get ntuple
-  auto ntuple = ntupleDescription->fNtuple;
+  auto ntuple = ntupleDescription->GetNtuple();
 
   // Get basket sizes    
   std::vector<tools::wroot::branch*> mainBranches;
@@ -166,7 +166,7 @@ G4bool G4RootMpiNtupleManager::InitializeRanks()
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
 
     // Do not create ntuple if it is inactivated 
-    if ( fState.GetIsActivation() && ( ! ntupleDescription->fActivation ) ) continue;
+    if ( fState.GetIsActivation() && ( ! ntupleDescription->GetActivation() ) ) continue;
 
     auto result = Send(counter++, ntupleDescription);
     finalResult = finalResult && result;
@@ -329,10 +329,10 @@ G4bool G4RootMpiNtupleManager::Merge()
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
 
     // Do not create ntuple if it is inactivated 
-    if ( fState.GetIsActivation() && ( ! ntupleDescription->fActivation ) ) continue;
+    if ( fState.GetIsActivation() && ( ! ntupleDescription->GetActivation() ) ) continue;
 
     // G4cout << "Go to call merge_number_of_entries" << G4endl;
-    ntupleDescription->fNtuple->merge_number_of_entries();
+    ntupleDescription->GetNtuple()->merge_number_of_entries();
   }
 
   return finalResult;

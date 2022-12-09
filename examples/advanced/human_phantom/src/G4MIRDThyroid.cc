@@ -46,24 +46,14 @@
 #include "G4SubtractionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDThyroid::G4MIRDThyroid()
-{
-}
-
-G4MIRDThyroid::~G4MIRDThyroid()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDThyroid::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					    const G4String& colourName, G4bool wireFrame, G4bool)
 {
- 
-  
+
   G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
   
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
   
   G4double z= 4.20*cm; //c thickness = c,  
@@ -72,53 +62,51 @@ G4VPhysicalVolume* G4MIRDThyroid::Construct(const G4String& volumeName,G4VPhysic
   G4double startphi = 0. * degree;
   G4double deltaphi= 180. * degree; // y< y0
   
-  G4Tubs* LobOfThyroidOut = new G4Tubs("LobOfThyroidOut",
+  auto* LobOfThyroidOut = new G4Tubs("LobOfThyroidOut",
 				       rmin, rmax,z/2., 
 				       startphi, deltaphi);
 
   z= 4.50*cm; // c thickness + something
   rmax= 0.83 * cm; //r
   deltaphi= 360. * degree; 
-  G4Tubs* LobOfThyroidIn = new G4Tubs("LobOfThyroidIn",
+  auto* LobOfThyroidIn = new G4Tubs("LobOfThyroidIn",
 				      rmin, rmax,z/2., 
 				      startphi, deltaphi);
 
   G4double xx = 3.72*cm;
   G4double yy= 3.72*cm;
   G4double zz= 20.00*cm;
-  G4Box* SubtrThyroid = new G4Box("SubtrThyroid",
+  auto* SubtrThyroid = new G4Box("SubtrThyroid",
 				  xx/2., yy/2., zz/2.);
 
   // subtraction of the two tubs
-  G4SubtractionSolid* FirstThyroid = new G4SubtractionSolid("FirstThyroid",
+  auto* FirstThyroid = new G4SubtractionSolid("FirstThyroid",
 							    LobOfThyroidOut,
 							    LobOfThyroidIn);
 
-  G4RotationMatrix* relative_matrix = new G4RotationMatrix();
+  auto* relative_matrix = new G4RotationMatrix();
   relative_matrix -> rotateX(-50.* degree);
 
-  G4SubtractionSolid* SecondThyroid = new G4SubtractionSolid("SecondThyroid",
+  auto* SecondThyroid = new G4SubtractionSolid("SecondThyroid",
 							     FirstThyroid,
 							     SubtrThyroid,
 							     relative_matrix,
 							     G4ThreeVector(0.0 *cm,0.0 *cm, 4.20*cm));
 
-  G4RotationMatrix* relative_matrix_2 = new G4RotationMatrix();
+  auto* relative_matrix_2 = new G4RotationMatrix();
   relative_matrix_2 -> rotateX(50.* degree);
  
-  G4SubtractionSolid* thyroid = new G4SubtractionSolid("SecondThyroid",
+  auto* thyroid = new G4SubtractionSolid("SecondThyroid",
 						       SecondThyroid,
 						       SubtrThyroid,
 						       relative_matrix_2,
 						       G4ThreeVector(0.0 *cm,0.0 *cm, -5.40*cm));
 
-
-
-  G4LogicalVolume* logicThyroid = new G4LogicalVolume(thyroid, soft,
+  auto* logicThyroid = new G4LogicalVolume(thyroid, soft,
 						      "ThyroidVolume",
-						      0, 0, 0);
+						      nullptr, nullptr, nullptr);
 
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateZ(180.*degree);
   G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,
 						     //						     G4ThreeVector(0.0*cm,-3.91*cm, -5.925*cm),//y0
@@ -131,9 +119,9 @@ G4VPhysicalVolume* G4MIRDThyroid::Construct(const G4String& volumeName,G4VPhysic
  
  
   // Visualization Attributes
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* ThyroidVisAtt = new G4VisAttributes(colour);
+  auto* ThyroidVisAtt = new G4VisAttributes(colour);
   ThyroidVisAtt->SetForceSolid(wireFrame);
   logicThyroid->SetVisAttributes(ThyroidVisAtt);
 

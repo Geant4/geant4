@@ -58,23 +58,15 @@
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, G4int direction,
                                              G4int depth)
-  : G4VPrimitiveScorer(name, depth)
-  , HCID(-1)
-  , fDirection(direction)
-  , EvtMap(0)
-  , weighted(true)
-  , divideByArea(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-}
+  : G4PSSphereSurfaceFlux(name, direction, "percm2", depth)
+{}
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, G4int direction,
                                              const G4String& unit, G4int depth)
   : G4VPrimitiveScorer(name, depth)
   , HCID(-1)
   , fDirection(direction)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
   , divideByArea(true)
 {
@@ -82,16 +74,14 @@ G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, G4int direction,
   SetUnit(unit);
 }
 
-G4PSSphereSurfaceFlux::~G4PSSphereSurfaceFlux() { ; }
-
 G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
 
   G4VPhysicalVolume* physVol       = preStep->GetPhysicalVolume();
   G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid                  = 0;
-  if(physParam)
+  G4VSolid* solid                  = nullptr;
+  if(physParam != nullptr)
   {  // for parameterized volume
     G4int idx =
       ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
@@ -104,14 +94,14 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-  G4Sphere* sphereSolid = (G4Sphere*) (solid);
+  auto  sphereSolid = (G4Sphere*) (solid);
 
   G4int dirFlag = IsSelectedSurface(aStep, sphereSolid);
   if(dirFlag > 0)
   {
     if(fDirection == fFlux_InOut || fDirection == dirFlag)
     {
-      G4StepPoint* thisStep = 0;
+      G4StepPoint* thisStep = nullptr;
       if(dirFlag == fFlux_In)
       {
         thisStep = preStep;
@@ -122,7 +112,7 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       }
       else
       {
-        return FALSE;
+        return false;
       }
 
       G4TouchableHandle theTouchable = thisStep->GetTouchableHandle();
@@ -162,7 +152,7 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep,
@@ -228,22 +218,17 @@ void G4PSSphereSurfaceFlux::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSSphereSurfaceFlux::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSSphereSurfaceFlux::clear() { EvtMap->clear(); }
-
-void G4PSSphereSurfaceFlux::DrawAll() { ; }
 
 void G4PSSphereSurfaceFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, flux] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  Flux  : " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  Flux  : " << *(flux) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }
@@ -256,7 +241,7 @@ void G4PSSphereSurfaceFlux::SetUnit(const G4String& unit)
   }
   else
   {
-    if(unit == "")
+    if(unit.empty())
     {
       unitName  = unit;
       unitValue = 1.0;

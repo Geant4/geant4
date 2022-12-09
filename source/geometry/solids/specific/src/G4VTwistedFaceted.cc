@@ -886,7 +886,7 @@ std::ostream& G4VTwistedFaceted::StreamInfo(std::ostream& os) const
   //
   // Stream object contents to an output stream
   //
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

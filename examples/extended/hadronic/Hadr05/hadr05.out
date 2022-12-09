@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -119,33 +119,33 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=78.650000s Real=84.688196s Sys=0.210000s
+  User=87.340000s Real=92.194527s Sys=0.050000s
 
  ---> The run is 1000 proton of 5 GeV through calorimeter
 
  Process calls frequency :
-                  Decay=      3745            He3Inelastic=         2               NoProcess=   4052062
-        Radioactivation=     80759                    Rayl=    215969          Transportation=   3998258
-         alphaInelastic=         3                 annihil=     57916                   compt=   2649589
-                   conv=     54627              dInelastic=        78                   eBrem=    389207
-                  eIoni=   6188997   hBertiniCaptureAtRest=       467                   hIoni=   1425675
-             hadElastic=   4492144              ionElastic=         2                 ionIoni=   4140715
-         kaon+Inelastic=        16          kaon-Inelastic=         2         kaon0LInelastic=        13
-        kaon0SInelastic=         3         lambdaInelastic=        12                     msc=    257743
-                 muIoni=      8017    muMinusCaptureAtRest=        12                nCapture=     52834
-       neutronInelastic=     91833                    phot=    849821           photonNuclear=       212
-           pi+Inelastic=      1006            pi-Inelastic=       928         protonInelastic=      4181
-        sigma-Inelastic=         1              tInelastic=         9 
+                  Decay=      3650            He3Inelastic=         3               NoProcess=   4066419
+        Radioactivation=     81190                    Rayl=    219865          Transportation=   4002565
+         alphaInelastic=         5                 annihil=     57840                   compt=   2660404
+                   conv=     54581              dInelastic=       123                   eBrem=    383877
+                  eIoni=   6188225   hBertiniCaptureAtRest=       529                   hIoni=   1434390
+             hadElastic=   4508608                 ionIoni=   4160978          kaon+Inelastic=        11
+        kaon0LInelastic=         8         kaon0SInelastic=         1         lambdaInelastic=         5
+                    msc=    260952                  muIoni=      7310    muMinusCaptureAtRest=         6
+               nCapture=     53035        neutronInelastic=     93136                    phot=    848626
+          photonNuclear=       197            pi+Inelastic=      1082            pi-Inelastic=       913
+        protonInelastic=      4037         sigma-Inelastic=         1              tInelastic=        12
+
 
 ------------------------------------------------------------
         material      Edep        rmsE        sqrt(E0(GeV))*rmsE/Edep     total tracklen 
  
- 1          Iron    4.0414 GeV   297.7 MeV     16.47 +- 0.521 %       2.172 m   +-    48 cm 
- 2  Scintillator    115.45 MeV   33.47 MeV     64.82 +-  2.05 %       22.64 cm  +-  6.84 cm 
+ 1          Iron    4.0273 GeV   291.1 MeV     16.16 +- 0.511 %       2.141 m   +-  47.4 cm 
+ 2  Scintillator       114 MeV    32.9 MeV     64.53 +-  2.04 %       22.05 cm  +-  6.69 cm 
 
-   Total Edep = 4.157 GeV
-   Leakage :  primary = 0 eV    secondaries = 191.1 MeV  ---> total = 191.1 MeV
-   Total energy released :  Edep + Eleak = 4.348 GeV
+   Total Edep = 4.141 GeV
+   Leakage :  primary = 0 eV    secondaries = 198.9 MeV  ---> total = 198.9 MeV
+   Total energy released :  Edep + Eleak = 4.34 GeV
 ------------------------------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

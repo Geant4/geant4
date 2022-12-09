@@ -38,6 +38,8 @@
 
 #include <sstream>
 
+#define G4warn G4cout
+
 ////////////// /vis/touchable/set/colour ///////////////////////////////////////
 
 G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
@@ -184,7 +186,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: no current viewer."
       << G4endl;
     }
@@ -311,7 +313,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: unrecognised command."
       << G4endl;
     }

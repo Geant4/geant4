@@ -23,16 +23,11 @@
 //
 
 #include "PTL/Threading.hh"
-#include "PTL/AutoLock.hh"
-#include "PTL/Globals.hh"
 #include "PTL/Types.hh"
+#include "PTL/Utility.hh"
 
 #if defined(PTL_WINDOWS)
 #    include <Windows.h>
-#elif defined(PTL_UNIX)
-#    include <sys/syscall.h>
-#    include <sys/types.h>
-#    include <unistd.h>
 #endif
 
 #if defined(PTL_MACOS)
@@ -42,8 +37,6 @@
 #if defined(PTL_LINUX)
 #    include <fstream>
 #endif
-
-#include <atomic>
 
 using namespace PTL;
 

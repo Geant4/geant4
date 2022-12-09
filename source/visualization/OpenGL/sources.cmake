@@ -39,10 +39,7 @@ geant4_module_link_libraries(G4OpenGL
     G4vis_management
   PRIVATE
     G4geometrymng
-    G4UIcommon
-    G4UIbasic
-    G4run
-    G4gl2ps)
+    G4run)
 
 #----------------------------------------------------------------------------
 # Add X11 OpenGL Support if requested
@@ -128,8 +125,8 @@ if(GEANT4_USE_XM)
   # Add the compile definitions needed for the Xm component (G4OpenGL.hh, G4OpenGLViewer.cc)
   geant4_module_compile_definitions(G4OpenGL PRIVATE G4VIS_BUILD_OPENGLXM_DRIVER)
 
-  # Add in Xm
-  geant4_module_link_libraries(G4OpenGL PUBLIC Motif::Xm)
+  # Add in Xm and needed modules
+  geant4_module_link_libraries(G4OpenGL PUBLIC Motif::Xm PRIVATE G4UIcommon)
 endif()
 
 # Common X11/Xm link libraries
@@ -172,8 +169,10 @@ if(GEANT4_USE_QT)
   # Add the definitions (G4OpenGL.hh, G4OpenGLViewer.cc)
   geant4_module_compile_definitions(G4OpenGL PRIVATE G4VIS_BUILD_OPENGLQT_DRIVER)
 
-  # Add in Qt libraries
-  geant4_module_link_libraries(G4OpenGL PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Widgets OpenGL::GL)
+  # Add in Qt libraries and geant4 modules
+  geant4_module_link_libraries(G4OpenGL
+    PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Widgets OpenGL::GL
+    PRIVATE G4UIbasic G4UIcommon)
 endif()
 
 #----------------------------------------------------------------------------

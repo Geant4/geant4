@@ -1259,21 +1259,21 @@ void G4GDMLReadSolids::PolyconeRead(
     }
   }
 
-  G4int numZPlanes = zplaneList.size();
+  std::size_t numZPlanes = zplaneList.size();
 
   G4double* rmin_array = new G4double[numZPlanes];
   G4double* rmax_array = new G4double[numZPlanes];
   G4double* z_array    = new G4double[numZPlanes];
 
-  for(G4int i = 0; i < numZPlanes; ++i)
+  for(std::size_t i = 0; i < numZPlanes; ++i)
   {
     rmin_array[i] = zplaneList[i].rmin * lunit;
     rmax_array[i] = zplaneList[i].rmax * lunit;
     z_array[i]    = zplaneList[i].z * lunit;
   }
 
-  new G4Polycone(name, startphi, deltaphi, numZPlanes, z_array, rmin_array,
-                 rmax_array);
+  new G4Polycone(name, startphi, deltaphi, (G4int)numZPlanes, z_array,
+                 rmin_array, rmax_array);
 
   delete[] rmin_array;
   delete[] rmax_array;
@@ -1376,18 +1376,18 @@ void G4GDMLReadSolids::GenericPolyconeRead(
     }
   }
 
-  G4int numRZPoints = rzPointList.size();
+  std::size_t numRZPoints = rzPointList.size();
 
   G4double* r_array = new G4double[numRZPoints];
   G4double* z_array = new G4double[numRZPoints];
 
-  for(G4int i = 0; i < numRZPoints; ++i)
+  for(std::size_t i = 0; i < numRZPoints; ++i)
   {
     r_array[i] = rzPointList[i].r * lunit;
     z_array[i] = rzPointList[i].z * lunit;
   }
-  new G4GenericPolycone(name, startphi, deltaphi, numRZPoints, r_array,
-                        z_array);
+  new G4GenericPolycone(name, startphi, deltaphi, (G4int)numRZPoints,
+                        r_array, z_array);
   delete[] r_array;
   delete[] z_array;
 }
@@ -1493,21 +1493,21 @@ void G4GDMLReadSolids::PolyhedraRead(
     }
   }
 
-  G4int numZPlanes = zplaneList.size();
+  std::size_t numZPlanes = zplaneList.size();
 
   G4double* rmin_array = new G4double[numZPlanes];
   G4double* rmax_array = new G4double[numZPlanes];
   G4double* z_array    = new G4double[numZPlanes];
 
-  for(G4int i = 0; i < numZPlanes; ++i)
+  for(std::size_t i = 0; i < numZPlanes; ++i)
   {
     rmin_array[i] = zplaneList[i].rmin * lunit;
     rmax_array[i] = zplaneList[i].rmax * lunit;
     z_array[i]    = zplaneList[i].z * lunit;
   }
 
-  new G4Polyhedra(name, startphi, deltaphi, numsides, numZPlanes, z_array,
-                  rmin_array, rmax_array);
+  new G4Polyhedra(name, startphi, deltaphi, numsides, (G4int)numZPlanes,
+                  z_array, rmin_array, rmax_array);
 
   delete[] rmin_array;
   delete[] rmax_array;
@@ -1615,19 +1615,19 @@ void G4GDMLReadSolids::GenericPolyhedraRead(
     }
   }
 
-  G4int numRZPoints = rzpointList.size();
+  std::size_t numRZPoints = rzpointList.size();
 
   G4double* r_array = new G4double[numRZPoints];
   G4double* z_array = new G4double[numRZPoints];
 
-  for(G4int i = 0; i < numRZPoints; ++i)
+  for(std::size_t i = 0; i < numRZPoints; ++i)
   {
     r_array[i] = rzpointList[i].r * lunit;
     z_array[i] = rzpointList[i].z * lunit;
   }
 
-  new G4Polyhedra(name, startphi, deltaphi, numsides, numRZPoints, r_array,
-                  z_array);
+  new G4Polyhedra(name, startphi, deltaphi, numsides, (G4int)numRZPoints,
+                  r_array, z_array);
 
   delete[] r_array;
   delete[] z_array;

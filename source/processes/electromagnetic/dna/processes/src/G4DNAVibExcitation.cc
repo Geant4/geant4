@@ -25,6 +25,7 @@
 //
 
 #include "G4DNAVibExcitation.hh"
+#include "G4DNASancheExcitationModel.hh"
 #include "G4LEPTSVibExcitationModel.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Positron.hh"
@@ -41,11 +42,6 @@ G4DNAVibExcitation::G4DNAVibExcitation(const G4String& processName,
   SetProcessSubType(fLowEnergyVibrationalExcitation);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-G4DNAVibExcitation::~G4DNAVibExcitation()
-{}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4DNAVibExcitation::IsApplicable(const G4ParticleDefinition& p)
@@ -57,6 +53,8 @@ G4bool G4DNAVibExcitation::IsApplicable(const G4ParticleDefinition& p)
 
 void G4DNAVibExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 {
+  // default models are defined in the case of unit tests,
+  // when G4EmDNABuilder is not used
   if(!isInitialised) 
   {
     isInitialised = true;
@@ -66,16 +64,17 @@ void G4DNAVibExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-" )
     { 
-      if(!EmModel())
+      if(nullptr == EmModel())
       {
         SetEmModel(new G4DNASancheExcitationModel);
         EmModel()->SetLowEnergyLimit(2*eV);
         EmModel()->SetHighEnergyLimit(100*eV);
       }
       AddEmModel(1, EmModel());
-    } else if(name == "e+")
+    }
+    else if(name == "e+")
     { 
-      if(!EmModel())
+      if(nullptr == EmModel())
       {
         SetEmModel(new G4LEPTSVibExcitationModel);
         EmModel()->SetLowEnergyLimit(2*eV);
@@ -88,10 +87,10 @@ void G4DNAVibExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4DNAVibExcitation::PrintInfo()
+void G4DNAVibExcitation::ProcessDescription(std::ostream& out) const
 {
-     G4cout
-      << " Total cross sections computed from " 
-      << EmModel()->GetName() 
-      << G4endl;
+  out << "  DNA Vibrational Excitation";
+  G4VEmProcess::ProcessDescription(out);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

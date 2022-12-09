@@ -77,8 +77,8 @@
       m_typeKey(typeKey)
     {};
 
-    G4AttDef(){};
-    virtual ~G4AttDef(){};
+    G4AttDef()= default;
+    virtual ~G4AttDef()= default;
     
     const G4String& GetName()const{return m_name;};
     const G4String& GetDesc()const{return m_desc;};

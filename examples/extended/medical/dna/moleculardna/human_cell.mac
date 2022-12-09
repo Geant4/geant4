@@ -51,10 +51,10 @@
 /gps/direction 0 -1 0
 
 # Source Energy
-/gps/particle  proton
+/gps/particle  e-
 
-/analysisDNA/fileName 50MeV
-/gps/energy 50 MeV
+#/analysisDNA/fileName 50MeV
+/gps/energy 0.662 MeV
 /run/beamOn 2
 
 

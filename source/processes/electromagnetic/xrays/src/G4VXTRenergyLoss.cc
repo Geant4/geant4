@@ -131,12 +131,12 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume* anEnvelope,
            << G4endl;
 
   // index of plate material
-  fMatIndex1 = foilMat->GetIndex();
+  fMatIndex1 = (G4int)foilMat->GetIndex();
   if(verboseLevel > 0)
     G4cout << "plate material = " << foilMat->GetName() << G4endl;
 
   // index of gas material
-  fMatIndex2 = gasMat->GetIndex();
+  fMatIndex2 = (G4int)gasMat->GetIndex();
   if(verboseLevel > 0)
     G4cout << "gas material = " << gasMat->GetName() << G4endl;
 
@@ -342,12 +342,8 @@ void G4VXTRenergyLoss::BuildEnergyTable()
     fGamma =
       1.0 + (fProtonEnergyVector->GetLowEdgeEnergy(iTkin) / proton_mass_c2);
 
-    fMaxThetaTR = 25. * 2500.0 / (fGamma * fGamma);  // theta^2
-
-    if(fMaxThetaTR > fTheMaxAngle)
-      fMaxThetaTR = fTheMaxAngle;
-    else if(fMaxThetaTR < fTheMinAngle)
-      fMaxThetaTR = fTheMinAngle;
+    // if(fMaxThetaTR > fTheMaxAngle)     fMaxThetaTR = fTheMaxAngle;
+    // else if(fMaxThetaTR < fTheMinAngle)     fMaxThetaTR = fTheMinAngle;
 
     energySum = 0.0;
 
@@ -1192,7 +1188,7 @@ G4double G4VXTRenergyLoss::GetPlateCompton(G4double omega)
   G4double xSection = 0., nowZ, sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (*theMaterialTable)[fMatIndex1]->GetNumberOfElements();
+  numberOfElements = (G4int)(*theMaterialTable)[fMatIndex1]->GetNumberOfElements();
 
   for(i = 0; i < numberOfElements; ++i)
   {
@@ -1213,7 +1209,7 @@ G4double G4VXTRenergyLoss::GetGasCompton(G4double omega)
   G4double xSection = 0., nowZ, sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
+  numberOfElements = (G4int)(*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
 
   for(i = 0; i < numberOfElements; ++i)
   {

@@ -182,8 +182,7 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose > 2 )
   { 
-    static int nCalls = 0;
-    G4int oldcoutPrec = G4cout.precision(8);
+    G4long oldcoutPrec = G4cout.precision(8);
     G4cout << "*** G4ITNavigator2::LocateGlobalPointAndSetup: ***" << G4endl;
     G4cout << "    Called with arguments: " << G4endl
            << "    Globalpoint = " << globalPoint << G4endl
@@ -194,13 +193,10 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       PrintState();
     }
     G4cout.precision(oldcoutPrec);
-    nCalls++;
-//    if(nCalls == 2) abort();
   }
 #endif
 
   G4int noLevelsExited=0 ;
-  G4int noLevelsEntered= 0;
 
   if ( !relativeSearch )
   {
@@ -254,8 +250,6 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         if ( fEntering )
         {
           // assert( fBlockedPhysicalVolume!=0 );
-
-          noLevelsEntered++;   // count the first level entered too
 
           switch (VolumeType(fBlockedPhysicalVolume))
           {
@@ -547,8 +541,6 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 
     if ( noResult )
     {
-      noLevelsEntered++;
-      
       // Entering a daughter after ascending
       //
       // The blocked volume is no longer valid - it was for another level
@@ -593,7 +585,7 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose >= 4 )
   {
-    G4int oldcoutPrec = G4cout.precision(8);
+    G4long oldcoutPrec = G4cout.precision(8);
     G4String curPhysVol_Name("None");
     if (targetPhysical)  { curPhysVol_Name = targetPhysical->GetName(); }
     G4cout << "    Return value = new volume = " << curPhysVol_Name << G4endl;
@@ -942,9 +934,6 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fCalculatedExitNormal  = false;
     // Reset for new step
 
-  static G4ThreadLocal G4int sNavCScalls=0;
-  sNavCScalls++;
-
   fLastTriedStepComputation= true; 
 
 #ifdef G4VERBOSE
@@ -1175,7 +1164,6 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
               << fNumberZeroSteps
               << " at " << pGlobalpoint
               << " in volume " << motherPhysical->GetName()
-              << " nav-comp-step calls # " << sNavCScalls
               << G4endl;
     }
 #endif
@@ -1317,7 +1305,7 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
     //
     if( fValidExitNormal || fCalculatedExitNormal )
     {
-      G4int depth= fHistory.GetDepth();
+      G4int depth= (G4int)fHistory.GetDepth();
       if( depth > 0 )
       {
         G4AffineTransform GrandMotherToGlobalTransf =
@@ -1452,7 +1440,7 @@ void G4ITNavigator2::ResetState()
 void G4ITNavigator2::SetupHierarchy()
 {
   G4int i;
-  const G4int cdepth = fHistory.GetDepth();
+  const G4int cdepth = (G4int)fHistory.GetDepth();
   G4VPhysicalVolume *current;
   G4VSolid *pSolid;
   G4VPVParameterisation *pParam;
@@ -2276,7 +2264,7 @@ G4TouchableHistoryHandle G4ITNavigator2::CreateTouchableHistoryHandle() const
 void  G4ITNavigator2::PrintState() const
 {
   CheckNavigatorStateIsValid();
-  G4int oldcoutPrec = G4cout.precision(4);
+  G4long oldcoutPrec = G4cout.precision(4);
   if( fVerbose >= 4 )
   {
     G4cout << "The current state of G4Navigator is: " << G4endl;
@@ -2365,8 +2353,8 @@ void G4ITNavigator2::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
 
     if( diffShiftSaf > fAccuracyForWarning )
     {
-      G4int oldcoutPrec= G4cout.precision(8);
-      G4int oldcerrPrec= G4cerr.precision(10);
+      G4long oldcoutPrec= G4cout.precision(8);
+      G4long oldcerrPrec= G4cerr.precision(10);
       std::ostringstream message, suggestion;
       message << "Accuracy error or slightly inaccurate position shift."
               << G4endl
@@ -2449,7 +2437,7 @@ std::ostream& operator << (std::ostream &os,const G4ITNavigator2 &n)
   
   // Adapted from G4ITNavigator2::PrintState() const
 
-  G4int oldcoutPrec = os.precision(4);
+  G4long oldcoutPrec = os.precision(4);
   if( n.fVerbose >= 4 )
   {
     os << "The current state of G4ITNavigator2 is: " << G4endl;
@@ -2539,7 +2527,7 @@ void G4ITNavigator2::GetRandomInCurrentVolume(G4ThreeVector& _rndmPoint) const
   G4VoxelLimits voxelLimits;  // Defaults to "infinite" limits.
   G4double vmin, vmax;
   G4AffineTransform dummy;
-  std::vector<std::vector<double> > fExtend;
+  std::vector<std::vector<G4double> > fExtend;
 
   solid->CalculateExtent(kXAxis,voxelLimits,dummy,vmin,vmax);
   fExtend[kXAxis][BoundingBox::kMin] = vmin;
@@ -2557,10 +2545,10 @@ void G4ITNavigator2::GetRandomInCurrentVolume(G4ThreeVector& _rndmPoint) const
 
   while(1)
   {
-    for(size_t i = 0 ; i < 3 ; ++i)
+    for(G4int i = 0 ; i < 3 ; ++i)
     {
-      double min = fExtend[i][BoundingBox::kMin];
-      double max = fExtend[i][BoundingBox::kMax];
+      G4double min = fExtend[i][BoundingBox::kMin];
+      G4double max = fExtend[i][BoundingBox::kMax];
       rndmPos[i] = G4UniformRand()*(max-min)+min;
     }
 

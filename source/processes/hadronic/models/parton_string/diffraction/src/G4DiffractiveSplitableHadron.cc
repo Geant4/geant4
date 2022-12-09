@@ -202,6 +202,16 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     G4int j100  = (PDGcode % 1000)/100;
     G4int j10   = (PDGcode % 100)/10;
 
+    if ( absPDGcode > 4000 ) {
+      *aEnd = j10;
+      if ( G4UniformRand() > 0.25 ) {
+        *bEnd = Diquark( j1000, j100, 0 );
+      } else {
+        *bEnd = Diquark( j1000, j100, 1 );
+      }
+      return;
+    }
+
     G4double SuppresUUDDSS=1.0/2.0;
     if ((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
 

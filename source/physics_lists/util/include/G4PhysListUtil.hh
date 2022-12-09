@@ -43,6 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4HadronicProcess.hh"
 #include "G4VProcess.hh"
+#include "G4NeutronGeneralProcess.hh"
 
 class G4PhysListUtil
 {
@@ -59,6 +60,8 @@ public:
   static G4HadronicProcess* FindCaptureProcess(const G4ParticleDefinition*);
 
   static G4HadronicProcess* FindFissionProcess(const G4ParticleDefinition*);
+
+  static G4NeutronGeneralProcess* FindNeutronGeneralProcess();
 
 };
 #endif

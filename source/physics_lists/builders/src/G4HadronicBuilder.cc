@@ -63,6 +63,10 @@
 #include "G4VDecayChannel.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 
+#include "G4PreCompoundModel.hh"
+#include "G4INCLXXInterface.hh"
+
+
 void G4HadronicBuilder::BuildFTFP_BERT(const std::vector<G4int>& partList,
                                        G4bool bert, const G4String& xsName) {
 
@@ -489,4 +493,61 @@ void G4HadronicBuilder::BuildDecayTableForBCHadrons() {
     delete [] mode;
     G4Upsilon::Definition()->SetDecayTable( decayTable );
   }  
+}
+
+
+void G4HadronicBuilder::BuildHyperNucleiFTFP_BERT() {
+  if ( G4HadronicParameters::Instance()->EnableHyperNuclei() ) {
+    // Bertini intra-nuclear cascade model is currently not applicable for light
+    // hypernuclei, therefore FTFP is used down to zero kinetic energy (but at
+    // very low energies, a dummy model is used that simply returns the projectile
+    // hypernucleus in the final state).
+    BuildFTFP_BERT( G4HadParticles::GetHyperNuclei(), false, "Glauber-Gribov" );
+  }
+}
+
+
+void G4HadronicBuilder::BuildHyperAntiNucleiFTFP_BERT() {
+  if ( G4HadronicParameters::Instance()->EnableHyperNuclei() ) {
+    // FTFP can be used down to zero kinetic energy.
+    BuildFTFP_BERT( G4HadParticles::GetHyperAntiNuclei(), false, "AntiAGlauber" );
+  }
+}
+ 
+
+void G4HadronicBuilder::BuildHyperNucleiFTFP_INCLXX() {
+  if ( G4HadronicParameters::Instance()->EnableHyperNuclei() ) {
+    BuildFTFP_INCLXX( G4HadParticles::GetHyperNuclei(), "Glauber-Gribov" );
+  }
+}
+
+
+void G4HadronicBuilder::BuildFTFP_INCLXX( const std::vector< G4int >& partList, const G4String& xsName ) {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  auto theTheoFSModel = new G4TheoFSGenerator( "FTFP" );
+  auto theStringModel = new G4FTFModel;
+  theStringModel->SetFragmentationModel( new G4ExcitedStringDecay );
+  theTheoFSModel->SetHighEnergyGenerator( theStringModel );
+  theTheoFSModel->SetTransport( new G4GeneratorPrecompoundInterface );
+  theTheoFSModel->SetMaxEnergy( param->GetMaxEnergy() );
+  theTheoFSModel->SetMinEnergy( 15.0*CLHEP::GeV );
+  G4VPreCompoundModel* thePrecoModel = new G4PreCompoundModel;
+  thePrecoModel->SetMinEnergy( 0.0 );
+  thePrecoModel->SetMaxEnergy( 2.0*CLHEP::MeV );
+  G4INCLXXInterface* theINCLXXModel = new G4INCLXXInterface( thePrecoModel );
+  theINCLXXModel->SetMinEnergy( 1.0*CLHEP::MeV );
+  theINCLXXModel->SetMaxEnergy( 20.0*CLHEP::GeV );
+  auto xsinel = G4HadProcesses::InelasticXS( xsName );
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for ( auto & pdg : partList ) {
+    auto part = table->FindParticle( pdg );
+    if ( part == nullptr ) continue;
+    auto hadi = new G4HadronInelasticProcess( part->GetParticleName()+"Inelastic", part );
+    hadi->AddDataSet( xsinel );
+    hadi->RegisterMe( theTheoFSModel );
+    hadi->RegisterMe( theINCLXXModel );
+    if ( param->ApplyFactorXS() ) hadi->MultiplyCrossSectionBy( param->XSFactorHadronInelastic() );
+    ph->RegisterProcess( hadi, part );
+  }
 }

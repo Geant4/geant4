@@ -95,11 +95,11 @@ void G4GeneralParticleSourceData::IntensityNormalise()
   {
     if (!flat_sampling)
     {
-      GetCurrentSource(i)->GetBiasRndm()->SetIntensityWeight(1.);
+      GetCurrentSource((G4int)i)->GetBiasRndm()->SetIntensityWeight(1.);
     }
     else
     {
-      GetCurrentSource(i)->GetBiasRndm()
+      GetCurrentSource((G4int)i)->GetBiasRndm()
       ->SetIntensityWeight(sourceNormalizedIntensity[i]*sourceIntensity.size());
     }
   }
@@ -117,7 +117,7 @@ void G4GeneralParticleSourceData::AddASource(G4double intensity)
   currentSource = new G4SingleParticleSource();
   sourceVector.push_back(currentSource);
   sourceIntensity.push_back(intensity);
-  currentSourceIdx = sourceVector.size() - 1;
+  currentSourceIdx = G4int(sourceVector.size() - 1);
   normalised = false;
 }
 

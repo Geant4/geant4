@@ -46,6 +46,7 @@
 #include <cassert>
 #include <fstream>
 #include <ios>
+#include <cstdint>
 
 namespace CLHEP {
 

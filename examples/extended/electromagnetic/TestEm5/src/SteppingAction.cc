@@ -66,7 +66,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     fEventAction->CountStepsCharg();
   } else {
     fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
-    fEventAction->CountStepsNeutr();
+    fEventAction->CountStepsNeutr(aStep->GetPostStepPoint()->GetProcessDefinedStep());
   }
 }
 

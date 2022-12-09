@@ -22,10 +22,7 @@
 
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/Threading.hh"
 #include "PTL/VUserTaskQueue.hh"
-
-#include <iostream>
 
 using namespace PTL;
 

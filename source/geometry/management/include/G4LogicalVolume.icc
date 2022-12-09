@@ -69,7 +69,7 @@ G4FieldManager* G4LogicalVolume::GetMasterFieldManager() const
 // ********************************************************************
 //
 inline
-size_t G4LogicalVolume::GetNoDaughters() const
+std::size_t G4LogicalVolume::GetNoDaughters() const
 {
   return fDaughters.size();
 }
@@ -79,7 +79,7 @@ size_t G4LogicalVolume::GetNoDaughters() const
 // ********************************************************************
 //
 inline
-G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
+G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const std::size_t i) const
 {
   return fDaughters[i];
 }

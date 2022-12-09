@@ -143,24 +143,24 @@ template<typename PointT>
 
 //__________________________________________________________________
 template<typename Position>
-  int G4KDTree::__NearestInRange(G4KDNode_Base* node,
-                                 const Position& pos,
-                                 const double& range_sq,
-                                 const double& range,
-                                 G4KDTreeResult& list,
-                                 int ordered,
-                                 G4KDNode_Base *source_node)
+  G4int G4KDTree::__NearestInRange(G4KDNode_Base* node,
+                                   const Position& pos,
+                                   const double& range_sq,
+                                   const double& range,
+                                   G4KDTreeResult& list,
+                                   G4int ordered,
+                                   G4KDNode_Base *source_node)
   {
     if (!node) return 0;
 
-    double dist_sq(DBL_MAX), dx(DBL_MAX);
-    int ret(-1), added_res(0);
+    G4double dist_sq(DBL_MAX), dx(DBL_MAX);
+    G4int ret(-1), added_res(0);
 
     if (node->IsValid() && node != source_node)
     {
-      bool do_break = false;
+      G4bool do_break = false;
       dist_sq = 0;
-      for (size_t i = 0; i < fDim; i++)
+      for (G4int i = 0; i < (G4int)fDim; ++i)
       {
         dist_sq += sqr((*node)[i] - pos[i]);
         if (dist_sq > range_sq)
@@ -201,13 +201,13 @@ template<typename Position>
   void G4KDTree::__NearestToPosition(G4KDNode_Base *node,
                                      const Position &pos,
                                      G4KDNode_Base *&result,
-                                     double *result_dist_sq,
+                                     G4double *result_dist_sq,
                                      HyperRect* rect)
   {
-    int dir = node->GetAxis();
-    double dummy(0.), dist_sq(-1.);
+    G4int dir = node->GetAxis();
+    G4double dummy(0.), dist_sq(-1.);
     G4KDNode_Base* nearer_subtree(0), *farther_subtree(0);
-    double *nearer_hyperrect_coord(0), *farther_hyperrect_coord(0);
+    G4double *nearer_hyperrect_coord(0), *farther_hyperrect_coord(0);
 
     /* Decide whether to go left or right in the tree */
     dummy = pos[dir] - (*node)[dir];
@@ -243,8 +243,8 @@ template<typename Position>
     if (node->IsValid()) // TODO
     {
       dist_sq = 0;
-      bool do_break = false;
-      for (size_t i = 0; i < fDim; i++)
+      G4bool do_break = false;
+      for (G4int i = 0; i < (G4int)fDim; ++i)
       {
         dist_sq += sqr((*node)[i] - pos[i]);
         if (dist_sq > *result_dist_sq)
@@ -286,7 +286,7 @@ template<typename Position>
     if (!fRect) return 0;
 
     G4KDNode_Base *result(0);
-    double dist_sq = DBL_MAX;
+    G4double dist_sq = DBL_MAX;
 
     /* Duplicate the bounding hyperrectangle, we will work on the copy */
     HyperRect* newrect = new HyperRect(*fRect);
@@ -318,14 +318,14 @@ template<typename Position>
                                  G4KDNode_Base* node,
                                  const Position& pos,
                                  std::vector<G4KDNode_Base*>& result,
-                                 double *result_dist_sq,
+                                 G4double *result_dist_sq,
                                  HyperRect* rect,
-                                 int& nbresult)
+                                 G4int& nbresult)
   {
-    int dir = node->GetAxis();
-    double dummy, dist_sq;
-    G4KDNode_Base *nearer_subtree(0), *farther_subtree(0);
-    double *nearer_hyperrect_coord(0), *farther_hyperrect_coord(0);
+    G4int dir = node->GetAxis();
+    G4double dummy, dist_sq;
+    G4KDNode_Base *nearer_subtree(nullptr), *farther_subtree(nullptr);
+    G4double *nearer_hyperrect_coord(nullptr), *farther_hyperrect_coord(nullptr);
 
     /* Decide whether to go left or right in the tree */
     dummy = pos[dir] - (*node)[dir];
@@ -361,8 +361,8 @@ template<typename Position>
     if (node->IsValid() && node != source_node)
     {
       dist_sq = 0;
-      bool do_break = false;
-      for (size_t i = 0; i < fDim; i++)
+      G4bool do_break = false;
+      for (std::size_t i = 0; i < fDim; ++i)
       {
         dist_sq += sqr((*node)[i] - pos[i]);
         if (dist_sq > *result_dist_sq)
@@ -410,11 +410,11 @@ template<typename Position>
 
 template<typename Position>
   G4KDTreeResultHandle G4KDTree::NearestInRange(const Position& pos,
-                                                const double& range)
+                                                const G4double& range)
   {
-    int ret(-1);
+    G4int ret(-1);
 
-    const double range_sq = sqr(range);
+    const G4double range_sq = sqr(range);
 
     G4KDTreeResultHandle rset = new G4KDTreeResult(this);
     if ((ret = __NearestInRange(fRoot, pos, range_sq, range, *(rset()), 0)) == -1)

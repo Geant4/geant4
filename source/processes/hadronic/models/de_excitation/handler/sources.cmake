@@ -19,4 +19,5 @@ geant4_module_link_libraries(G4hadronic_deex_handler
     G4hadronic_deex_photon_evaporation
     G4hepgeometry
     G4leptons
+    G4baryons
     G4procman)

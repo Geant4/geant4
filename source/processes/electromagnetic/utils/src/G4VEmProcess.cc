@@ -282,7 +282,7 @@ void G4VEmProcess::StreamInfo(std::ostream& out,
           out << "      Lambda table from ";
           G4double emin = v->Energy(0);
           G4double emax = v->GetMaxEnergy();
-          G4int nbin = v->GetVectorLength() - 1;
+          G4int nbin = G4int(v->GetVectorLength() - 1);
           if(emin > minKinEnergy) { out << "threshold "; }
           else { out << G4BestUnit(emin,"Energy"); } 
           out << " to "
@@ -377,8 +377,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   if(biasManager) {
     if(0 == track.GetParentID()) {
       if(biasFlag && 
-         biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
-        return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
+         biasManager->ForcedInteractionRegion((G4int)currentCoupleIndex)) {
+        return biasManager->GetStepLimit((G4int)currentCoupleIndex, previousStepSize);
       }
     }
   }
@@ -472,7 +472,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // forced process - should happen only once per track
   if(biasFlag) {
-    if(biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+    if(biasManager->ForcedInteractionRegion((G4int)currentCoupleIndex)) {
       biasFlag = false;
     }
   }
@@ -526,15 +526,15 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
                                   track.GetDynamicParticle(),
                                   (*theCuts)[currentCoupleIndex]);
 
-  G4int num0 = secParticles.size();
+  G4int num0 = (G4int)secParticles.size();
 
   // splitting or Russian roulette
   if(biasManager) {
-    if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+    if(biasManager->SecondaryBiasingRegion((G4int)currentCoupleIndex)) {
       G4double eloss = 0.0;
       weight *= biasManager->ApplySecondaryBiasing(
         secParticles, track, currentModel, &fParticleChange, eloss, 
-        currentCoupleIndex, (*theCuts)[currentCoupleIndex],
+        (G4int)currentCoupleIndex, (*theCuts)[currentCoupleIndex],
         step.GetPostStepPoint()->GetSafety());
       if(eloss > 0.0) {
         eloss += fParticleChange.GetLocalEnergyDeposit();
@@ -544,7 +544,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
 
   // save secondaries
-  G4int num = secParticles.size();
+  G4int num = (G4int)secParticles.size();
   if(num > 0) {
 
     fParticleChange.SetNumberOfSecondaries(num);

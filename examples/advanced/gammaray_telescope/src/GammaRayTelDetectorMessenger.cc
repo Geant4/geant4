@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -35,237 +34,217 @@
 //
 // ************************************************************
 
+#include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelDetectorMessenger.hh"
 
-#include "GammaRayTelDetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorConstruction * GammaRayTelDet)
-  :GammaRayTelDetector(GammaRayTelDet)
+GammaRayTelDetectorMessenger::GammaRayTelDetectorMessenger(GammaRayTelDetectorConstruction *GammaRayTelDet) : detector(GammaRayTelDet) {
+	directory = new G4UIdirectory("/payload/");
+	directory->SetGuidance("GammaRayTel payload control.");
 
-{ 
-  GammaRayTeldetDir = new G4UIdirectory("/payload/");
-  GammaRayTeldetDir->SetGuidance("GammaRayTel payload control.");
-  
-  // converter material command
-  
-  ConverterMaterCmd = new G4UIcmdWithAString("/payload/setConvMat",this);
-  ConverterMaterCmd->SetGuidance("Select Material of the Converter.");
-  ConverterMaterCmd->SetParameterName("choice",false);
-  ConverterMaterCmd->AvailableForStates(G4State_Idle);
+	// converter material command
 
-  // converter thickness command
-  
-  ConverterThickCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setConvThick",this);
-  ConverterThickCmd->SetGuidance("Set Thickness of the Converter");
-  ConverterThickCmd->SetParameterName("Size",false);
-  ConverterThickCmd->SetRange("Size>=0.");
-  ConverterThickCmd->SetUnitCategory("Length");
-  ConverterThickCmd->AvailableForStates(G4State_Idle);
+	converterMaterialCmd = new G4UIcmdWithAString("/payload/setConvMat", this);
+	converterMaterialCmd->SetGuidance("Select the material of the converter.");
+	converterMaterialCmd->SetParameterName("choice", false);
+	converterMaterialCmd->AvailableForStates(G4State_Idle);
 
-  // tracker silicon thickness command
+	// converter thickness command
 
-  SiliconThickCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setSiThick",this);
-  SiliconThickCmd->SetGuidance("Set Thickness of the Silicon");
-  SiliconThickCmd->SetParameterName("Size",false);
-  SiliconThickCmd->SetRange("Size>=0.");
-  SiliconThickCmd->SetUnitCategory("Length");
-  SiliconThickCmd->AvailableForStates(G4State_Idle);
+	converterThicknessCmd = new G4UIcmdWithADoubleAndUnit("/payload/setConvThick", this);
+	converterThicknessCmd->SetGuidance("Set the thickness of the converter.");
+	converterThicknessCmd->SetParameterName("Size", false);
+	converterThicknessCmd->SetRange("Size>=0.");
+	converterThicknessCmd->SetUnitCategory("Length");
+	converterThicknessCmd->AvailableForStates(G4State_Idle);
 
-  // tracker silicon pitch command
+	// tracker silicon thickness command
 
-  SiliconPitchCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setSiPitch",this);
-  SiliconPitchCmd->SetGuidance("Set Pitch of the Silicon Strips");
-  SiliconPitchCmd->SetParameterName("Size",false);
-  SiliconPitchCmd->SetRange("Size>=0."); 
-  SiliconPitchCmd->SetUnitCategory("Length");
-  SiliconPitchCmd->AvailableForStates(G4State_Idle);
-  
-  // tracker silicon tile size command
-  
-  SiliconTileXYCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setSiTileXY",this);
-  SiliconTileXYCmd->SetGuidance("Set XY dimensions of Si Tile");
-  SiliconTileXYCmd->SetParameterName("Size",false);
-  SiliconTileXYCmd->SetRange("Size>=0.");
-  SiliconTileXYCmd->SetUnitCategory("Length");  
-  SiliconTileXYCmd->AvailableForStates(G4State_Idle);
-  
-  // tracker number of silicon tiles
+	siliconThicknessCmd = new G4UIcmdWithADoubleAndUnit("/payload/setSiThick", this);
+	siliconThicknessCmd->SetGuidance("Set the thickness of the silicon.");
+	siliconThicknessCmd->SetParameterName("Size", false);
+	siliconThicknessCmd->SetRange("Size>=0.");
+	siliconThicknessCmd->SetUnitCategory("Length");
+	siliconThicknessCmd->AvailableForStates(G4State_Idle);
 
-  NbSiTilesCmd = new G4UIcmdWithAnInteger("/payload/setNbOfSiTiles",this);
-  NbSiTilesCmd->SetGuidance("Set number of Si Tiles.");
-  NbSiTilesCmd->SetParameterName("NbSiTiles",false);
-  NbSiTilesCmd->SetRange("NbSiTiles>0 && NbSiTiles<100");
-  NbSiTilesCmd->AvailableForStates(G4State_Idle);
+	// tracker silicon pitch command
 
-  // tracker number of silicon layers
+	siliconPitchCmd = new G4UIcmdWithADoubleAndUnit("/payload/setSiPitch", this);
+	siliconPitchCmd->SetGuidance("Set the pitch of silicon strips.");
+	siliconPitchCmd->SetParameterName("Size", false);
+	siliconPitchCmd->SetRange("Size>=0.");
+	siliconPitchCmd->SetUnitCategory("Length");
+	siliconPitchCmd->AvailableForStates(G4State_Idle);
 
-  NbTKRLayersCmd = new G4UIcmdWithAnInteger("/payload/setNbOfTKRLayers",this);
-  NbTKRLayersCmd->SetGuidance("Set number of TKR Layers.");
-  NbTKRLayersCmd->SetParameterName("NbTKRLayers",false);
-  NbTKRLayersCmd->SetRange("NbTKRLayers>0 && NbTKRLayers<30");
-  NbTKRLayersCmd->AvailableForStates(G4State_Idle);
+	// tracker silicon tile size command
 
-  // tracker layer distance
+	siliconTileXYCmd = new G4UIcmdWithADoubleAndUnit("/payload/setSiTileXY", this);
+	siliconTileXYCmd->SetGuidance("Set XY dimensions of a silicon tile.");
+	siliconTileXYCmd->SetParameterName("Size", false);
+	siliconTileXYCmd->SetRange("Size>=0.");
+	siliconTileXYCmd->SetUnitCategory("Length");
+	siliconTileXYCmd->AvailableForStates(G4State_Idle);
 
-  LayerDistanceCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setLayerDistance",this);
-  LayerDistanceCmd->SetGuidance("Set distance between two layers");
-  LayerDistanceCmd->SetParameterName("Size",false);
-  LayerDistanceCmd->SetRange("Size>=0.");
-  LayerDistanceCmd->SetUnitCategory("Length");  
-  LayerDistanceCmd->AvailableForStates(G4State_Idle);
+	// tracker number of silicon tiles
 
-  // tracker views distance
-  
-  ViewsDistanceCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setViewsDistance",this);
-  ViewsDistanceCmd->SetGuidance("Set distance between X and Y views");
-  ViewsDistanceCmd->SetParameterName("Size",false);
-  ViewsDistanceCmd->SetRange("Size>=0.");
-  ViewsDistanceCmd->SetUnitCategory("Length");  
-  ViewsDistanceCmd->AvailableForStates(G4State_Idle);
+	numberOfSiTilesCmd = new G4UIcmdWithAnInteger("/payload/setNbOfSiTiles", this);
+	numberOfSiTilesCmd->SetGuidance("Set the number of silicon tiles.");
+	numberOfSiTilesCmd->SetParameterName("NbSiTiles", false);
+	numberOfSiTilesCmd->SetRange("NbSiTiles>0 && NbSiTiles<100");
+	numberOfSiTilesCmd->AvailableForStates(G4State_Idle);
 
-  // calorimeter detector thickness
+	// tracker number of silicon layers
 
-  CALThickCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setCALThick",this);
-  CALThickCmd->SetGuidance("Set thickness of CAL detectors");
-  CALThickCmd->SetParameterName("Size",false);
-  CALThickCmd->SetRange("Size>=0.");
-  CALThickCmd->SetUnitCategory("Length");  
-  CALThickCmd->AvailableForStates(G4State_Idle);
+	numberOfTKRLayersCmd = new G4UIcmdWithAnInteger("/payload/setNbOfTKRLayers", this);
+	numberOfTKRLayersCmd->SetGuidance("Set the number of TKR layers.");
+	numberOfTKRLayersCmd->SetParameterName("NbTKRLayers", false);
+	numberOfTKRLayersCmd->SetRange("NbTKRLayers>0 && NbTKRLayers<30");
+	numberOfTKRLayersCmd->AvailableForStates(G4State_Idle);
 
-  // number calorimeter detectors 
+	// tracker layer distance
 
-  NbCALBarsCmd = new G4UIcmdWithAnInteger("/payload/setNbOfCALBars",this);
-  NbCALBarsCmd->SetGuidance("Set number of CsI Bars.");
-  NbCALBarsCmd->SetParameterName("NbSiTiles",false);
-  NbCALBarsCmd->SetRange("NbSiTiles>0 && NbSiTiles<100");
-  NbCALBarsCmd->AvailableForStates(G4State_Idle);
+	layerDistanceCmd = new G4UIcmdWithADoubleAndUnit("/payload/setLayerDistance", this);
+	layerDistanceCmd->SetGuidance("Set the distance between two layers.");
+	layerDistanceCmd->SetParameterName("Size", false);
+	layerDistanceCmd->SetRange("Size>=0.");
+	layerDistanceCmd->SetUnitCategory("Length");
+	layerDistanceCmd->AvailableForStates(G4State_Idle);
 
-  // number calorimeter layers
+	// tracker views distance
 
-  NbCALLayersCmd = new G4UIcmdWithAnInteger("/payload/setNbOfCALLayers",this);
-  NbCALLayersCmd->SetGuidance("Set number of CAL Layers.");
-  NbCALLayersCmd->SetParameterName("NbCALLayers",false);
-  NbCALLayersCmd->SetRange("NbCALLayers>0 && NbCALLayers<16");
-  NbCALLayersCmd->AvailableForStates(G4State_Idle);
+	viewsDistanceCmd = new G4UIcmdWithADoubleAndUnit("/payload/setViewsDistance", this);
+	viewsDistanceCmd->SetGuidance("Set the distance between X and Y views.");
+	viewsDistanceCmd->SetParameterName("Size", false);
+	viewsDistanceCmd->SetRange("Size>=0.");
+	viewsDistanceCmd->SetUnitCategory("Length");
+	viewsDistanceCmd->AvailableForStates(G4State_Idle);
 
-  // calorimeter detector thickness
+	// calorimeter detector thickness
 
-  ACDThickCmd = new G4UIcmdWithADoubleAndUnit
-    ("/payload/setACDThick",this);
-  ACDThickCmd->SetGuidance("Set thickness of ACD detectors");
-  ACDThickCmd->SetParameterName("Size",false);
-  ACDThickCmd->SetRange("Size>=0.");
-  ACDThickCmd->SetUnitCategory("Length");  
-  ACDThickCmd->AvailableForStates(G4State_Idle);
-  
-  // update Payload
+	calThicknessCmd = new G4UIcmdWithADoubleAndUnit("/payload/setCALThick", this);
+	calThicknessCmd->SetGuidance("Set the thickness of CAL detectors.");
+	calThicknessCmd->SetParameterName("Size", false);
+	calThicknessCmd->SetRange("Size>=0.");
+	calThicknessCmd->SetUnitCategory("Length");
+	calThicknessCmd->AvailableForStates(G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/payload/update",this);
-  UpdateCmd->SetGuidance("Update payload geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
-      
-  // magnetic field
+	// calorimeter, number of detectors
 
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/payload/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_Idle);  
+	numberOfCALBarsCmd = new G4UIcmdWithAnInteger("/payload/setNbOfCALBars", this);
+	numberOfCALBarsCmd->SetGuidance("Set the number of CsI bars.");
+	numberOfCALBarsCmd->SetParameterName("NbSiTiles", false);
+	numberOfCALBarsCmd->SetRange("NbSiTiles>0 && NbSiTiles<100");
+	numberOfCALBarsCmd->AvailableForStates(G4State_Idle);
+
+	// calorimeter, number of layers
+
+	numberOfCALLayersCmd = new G4UIcmdWithAnInteger("/payload/setNbOfCALLayers", this);
+	numberOfCALLayersCmd->SetGuidance("Set the number of CAL layers.");
+	numberOfCALLayersCmd->SetParameterName("NbCALLayers", false);
+	numberOfCALLayersCmd->SetRange("NbCALLayers>0 && NbCALLayers<16");
+	numberOfCALLayersCmd->AvailableForStates(G4State_Idle);
+
+	// anticoincidence detector thickness
+
+	acdThicknessCmd = new G4UIcmdWithADoubleAndUnit("/payload/setACDThick", this);
+	acdThicknessCmd->SetGuidance("Set the thickness of ACD detectors");
+	acdThicknessCmd->SetParameterName("Size", false);
+	acdThicknessCmd->SetRange("Size>=0.");
+	acdThicknessCmd->SetUnitCategory("Length");
+	acdThicknessCmd->AvailableForStates(G4State_Idle);
+
+	// update payload geometry
+
+	updateCmd = new G4UIcmdWithoutParameter("/payload/update", this);
+	updateCmd->SetGuidance("Update the geometry of the payload.");
+	updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+	updateCmd->SetGuidance("if you changed geometrical value(s).");
+	updateCmd->AvailableForStates(G4State_Idle);
+
+	// magnetic field
+
+	magneticFieldCmd = new G4UIcmdWithADoubleAndUnit("/payload/setField", this);
+	magneticFieldCmd->SetGuidance("Define the magnetic field.");
+	magneticFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+	magneticFieldCmd->SetParameterName("Bz", false);
+	magneticFieldCmd->SetUnitCategory("Magnetic flux density");
+	magneticFieldCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelDetectorMessenger::~GammaRayTelDetectorMessenger()
-{
-  delete ConverterMaterCmd; delete ConverterThickCmd;
-  delete NbSiTilesCmd;      delete NbTKRLayersCmd;
-  delete SiliconTileXYCmd;  delete SiliconPitchCmd;
-  delete SiliconThickCmd;   delete LayerDistanceCmd;
-  delete ViewsDistanceCmd;  delete ACDThickCmd;
-  delete NbCALLayersCmd;    delete NbCALBarsCmd;
-  delete CALThickCmd;       delete UpdateCmd;
-  delete MagFieldCmd;       delete GammaRayTeldetDir;
+GammaRayTelDetectorMessenger::~GammaRayTelDetectorMessenger() {
+	delete converterMaterialCmd;
+	delete converterThicknessCmd;
+	delete numberOfSiTilesCmd;
+	delete numberOfTKRLayersCmd;
+	delete siliconTileXYCmd;
+	delete siliconPitchCmd;
+	delete siliconThicknessCmd;
+	delete layerDistanceCmd;
+	delete viewsDistanceCmd;
+	delete acdThicknessCmd;
+	delete numberOfCALLayersCmd;
+	delete numberOfCALBarsCmd;
+	delete calThicknessCmd;
+	delete updateCmd;
+	delete magneticFieldCmd;
+	delete directory;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
+void GammaRayTelDetectorMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+	// converter
 
-  // converter
+	if (command == converterMaterialCmd) {
+		detector->SetConverterMaterial(newValue);
+	} else if (command == converterThicknessCmd) {
+		detector->SetConverterThickness(converterThicknessCmd->GetNewDoubleValue(newValue));
+    } else
 
-  if( command == ConverterMaterCmd )
-    { GammaRayTelDetector->SetConverterMaterial(newValue);}
-   
-  if( command == ConverterThickCmd )
-    { GammaRayTelDetector->SetConverterThickness(ConverterThickCmd->GetNewDoubleValue(newValue));}
-  
-  // tracker
+    // tracker (TKR)
 
-  if( command == SiliconTileXYCmd )
-    { GammaRayTelDetector->SetTKRTileSizeXY(SiliconTileXYCmd->GetNewDoubleValue(newValue));}
+    if (command == siliconTileXYCmd) {
+		detector->SetTKRTileSizeXY(siliconTileXYCmd->GetNewDoubleValue(newValue));
+	} else if (command == siliconPitchCmd) {
+		detector->SetTKRSiliconPitch(siliconPitchCmd->GetNewDoubleValue(newValue));
+	} else if (command == siliconThicknessCmd) {
+		detector->SetTKRSiliconThickness(siliconThicknessCmd->GetNewDoubleValue(newValue));
+	} else if (command == numberOfSiTilesCmd) {
+		detector->SetNbOfTKRTiles(numberOfSiTilesCmd->GetNewIntValue(newValue));
+	} else if (command == numberOfTKRLayersCmd) {
+		detector->SetNbOfTKRLayers(numberOfTKRLayersCmd->GetNewIntValue(newValue));
+	} else if (command == layerDistanceCmd) {
+		detector->SetTKRLayerDistance(layerDistanceCmd->GetNewDoubleValue(newValue));
+	} else if (command == viewsDistanceCmd) {
+		detector->SetTKRViewsDistance(viewsDistanceCmd->GetNewDoubleValue(newValue));
+	} else
 
-  if( command == SiliconPitchCmd )
-    { GammaRayTelDetector->SetTKRSiliconPitch(SiliconPitchCmd->GetNewDoubleValue(newValue));}
+	// calorimeter (CAL)
 
-  if( command == SiliconThickCmd )
-    { GammaRayTelDetector->SetTKRSiliconThickness(SiliconThickCmd->GetNewDoubleValue(newValue));}
-  
-  if( command == NbSiTilesCmd )
-    { GammaRayTelDetector->SetNbOfTKRTiles(NbSiTilesCmd->GetNewIntValue(newValue));}
+	if (command == numberOfCALLayersCmd) {
+		detector->SetNbOfCALLayers(numberOfCALLayersCmd->GetNewIntValue(newValue));
+	} else if (command == numberOfCALBarsCmd) {
+		detector->SetNbOfCALBars(numberOfCALBarsCmd->GetNewIntValue(newValue));
+	} else if (command == calThicknessCmd) {
+		detector->SetCALBarThickness(calThicknessCmd->GetNewDoubleValue(newValue));
+	} else
 
-  if( command == NbTKRLayersCmd )
-    { GammaRayTelDetector->SetNbOfTKRLayers(NbTKRLayersCmd->GetNewIntValue(newValue));}
+	// anticoincidence (ACD)
 
-  if( command == LayerDistanceCmd )
-    { GammaRayTelDetector->SetTKRLayerDistance(LayerDistanceCmd->GetNewDoubleValue(newValue));}
-
-  if( command == ViewsDistanceCmd )
-    { GammaRayTelDetector->SetTKRViewsDistance(ViewsDistanceCmd->GetNewDoubleValue(newValue));}
-  
-  // calorimeter
-
-  if( command == NbCALLayersCmd )
-    { GammaRayTelDetector->SetNbOfCALLayers(NbCALLayersCmd->GetNewIntValue(newValue));}
-  
-  if( command == NbCALBarsCmd )
-    { GammaRayTelDetector->SetNbOfCALBars(NbCALBarsCmd->GetNewIntValue(newValue));}
-
-  if( command == CALThickCmd )
-    { GammaRayTelDetector->SetCALBarThickness(CALThickCmd->GetNewDoubleValue(newValue));}
-  
-  // anticoincidence
-
-  if( command == ACDThickCmd )
-    { GammaRayTelDetector->SetACDThickness(ACDThickCmd->GetNewDoubleValue(newValue));}
-  
-  if( command == UpdateCmd )
-    { GammaRayTelDetector->UpdateGeometry(); }
-  
-  if( command == MagFieldCmd )
-    { GammaRayTelDetector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+	if (command == acdThicknessCmd) {
+		detector->SetACDThickness(acdThicknessCmd->GetNewDoubleValue(newValue));
+	} else if (command == updateCmd) {
+		detector->UpdateGeometry();
+	} else if (command == magneticFieldCmd) {
+		detector->SetMagField(magneticFieldCmd->GetNewDoubleValue(newValue));
+	}
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-

@@ -47,40 +47,30 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDThymus::G4MIRDThymus()
-{
-}
-
-G4MIRDThymus::~G4MIRDThymus()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDThymus::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 					   const G4String& colourName, G4bool wireFrame,G4bool)
 { 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
   G4double ax= 3. *cm;
   G4double by= 0.5*cm;
   G4double cz= 4.*cm;
 
-  G4Ellipsoid* Thymus = new G4Ellipsoid("Thymus",
+  auto* Thymus = new G4Ellipsoid("Thymus",
 					ax, by, cz);
 
-  G4LogicalVolume* logicThymus = new G4LogicalVolume(Thymus,
+  auto* logicThymus = new G4LogicalVolume(Thymus,
 						     soft,
 						     "logical" + volumeName,
-						     0, 0, 0);
+						     nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physThymus = new G4PVPlacement(0,
+  G4VPhysicalVolume* physThymus = new G4PVPlacement(nullptr,
 						    G4ThreeVector(2.*cm,-6.*cm, 25.5*cm),
 						    "physicalThymus",
 						    logicThymus,
@@ -88,13 +78,11 @@ G4VPhysicalVolume* G4MIRDThymus::Construct(const G4String& volumeName, G4VPhysic
 						    false,
 						    0, true);
   
-
-
   // Visualization Attributes
   // G4VisAttributes* ThymusVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* ThymusVisAtt = new G4VisAttributes(colour);
+  auto* ThymusVisAtt = new G4VisAttributes(colour);
   ThymusVisAtt->SetForceSolid(wireFrame);
   logicThymus->SetVisAttributes(ThymusVisAtt);
 

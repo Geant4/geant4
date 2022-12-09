@@ -209,9 +209,9 @@ class G4LogicalVolume
     void SetName(const G4String& pName);
       // Returns and sets the name of the logical volume.
 
-    inline size_t GetNoDaughters() const;
+    inline std::size_t GetNoDaughters() const;
       // Returns the number of daughters (0 to n).
-    inline G4VPhysicalVolume* GetDaughter(const G4int i) const;
+    inline G4VPhysicalVolume* GetDaughter(const std::size_t i) const;
       // Returns the ith daughter. Note numbering starts from 0,
       // and no bounds checking is performed.
     void AddDaughter(G4VPhysicalVolume* p);

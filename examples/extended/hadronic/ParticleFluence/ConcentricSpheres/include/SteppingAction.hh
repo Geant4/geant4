@@ -46,9 +46,9 @@ class Run;
 class SteppingAction : public G4UserSteppingAction {
   public:  
     SteppingAction();
-    virtual ~SteppingAction();
+    ~SteppingAction() override = default;
   
-    virtual void UserSteppingAction( const G4Step* ) override;
+    void UserSteppingAction( const G4Step* ) override;
     // This is the main method where the step lengths of particles inside
     // the scoring shell are collected, and then the corresponding fluences
     // are filled up in the Run object where they are stored (and then
@@ -56,36 +56,36 @@ class SteppingAction : public G4UserSteppingAction {
     // (For simplicity and brevity, we avoid histograms and compute instead
     //  some statistics ourself, which will be print-out at the end of the run.)
 
-    void initialize();
+    void Initialize();
     // This method is called by RunAction::BeginOfRunAction for the
     // initialization of the stepping-action at the beginning of each Run.
     // This is necessary because different runs can have different primary particle
     // types, kinetic energies, and detector configurations.
 
-    void setRunPointer( Run* inputValue = nullptr ) { fRunPtr = inputValue; }
+    void SetRunPointer( Run* inputValue = nullptr ) { fRunPtr = inputValue; }
     // This method is called by RunAction::BeginOfRunAction for providing to the
     // stepping-action the pointer to the run object at the beginning of each Run.
     // This pointer is then used to pass the information collected by the stepping-action
     // to the run object.
 
-    G4double getCubicVolumeScoringTrackerShell() const { return fCubicVolumeScoringTrackerShell; }
-    G4double getCubicVolumeScoringEmCaloShell()  const { return fCubicVolumeScoringEmCaloShell; }
-    G4double getCubicVolumeScoringHadCaloShell() const { return fCubicVolumeScoringHadCaloShell; }
+    G4double GetCubicVolumeScoringTrackerShell() const { return fCubicVolumeScoringTrackerShell; }
+    G4double GetCubicVolumeScoringEmCaloShell()  const { return fCubicVolumeScoringEmCaloShell; }
+    G4double GetCubicVolumeScoringHadCaloShell() const { return fCubicVolumeScoringHadCaloShell; }
     // Needed to get the fluence from the sum of step lengths
   
-    static const G4int numberScoringShells = 3;     // tracker, emCalo, hadCalo
-    static const G4int numberKinematicRegions = 3;  // all, below 20 MeV, above 20 MeV
-    static const G4int numberScoringPositions = 2;  // forward, backward (hemisphere, with respect
-                                                    // to the primary particle direction)
-    static const G4int numberParticleTypes = 11;    // all, e, gamma, mu, nu, pi, n, p, ions,
-                                                    // other-mesons, other-baryons
-    static const G4int numberCombinations =
-      numberScoringShells*numberKinematicRegions*numberScoringPositions*numberParticleTypes;
-    static const std::array< G4String, numberScoringShells > arrayScoringShellNames;
-    static const std::array< G4String, numberKinematicRegions > arrayKinematicRegionNames;
-    static const std::array< G4String, numberScoringPositions > arrayScoringPositionNames;
-    static const std::array< G4String, numberParticleTypes > arrayParticleTypeNames;
-    static G4int getIndex( const G4int iScoringShell, const G4int iKinematicRegion,
+    static const G4int fkNumberScoringShells = 3;     // tracker, emCalo, hadCalo
+    static const G4int fkNumberKinematicRegions = 3;  // all, below 20 MeV, above 20 MeV
+    static const G4int fkNumberScoringPositions = 2;  // forward, backward (hemisphere, w.r.t.
+                                                      // the primary particle direction)
+    static const G4int fkNumberParticleTypes = 11;    // all, e, gamma, mu, nu, pi, n, p, ions,
+                                                      // other-mesons, other-baryons
+    static const G4int fkNumberCombinations = fkNumberScoringShells *
+      fkNumberKinematicRegions * fkNumberScoringPositions * fkNumberParticleTypes;
+    static const std::array< G4String, fkNumberScoringShells > fkArrayScoringShellNames;
+    static const std::array< G4String, fkNumberKinematicRegions > fkArrayKinematicRegionNames;
+    static const std::array< G4String, fkNumberScoringPositions > fkArrayScoringPositionNames;
+    static const std::array< G4String, fkNumberParticleTypes > fkArrayParticleTypeNames;
+    static G4int GetIndex( const G4int iScoringShell, const G4int iKinematicRegion,
                            const G4int iScoringPosition, const G4int iParticleType );
  
   private:   
@@ -107,7 +107,7 @@ class SteppingAction : public G4UserSteppingAction {
     G4bool fIsFirstStepInScoringHadCaloShell;
     G4double fCubicVolumeScoringHadCaloShell;
   
-    std::array< G4double, numberCombinations > fArraySumStepLengths;
+    std::array< G4double, fkNumberCombinations > fArraySumStepLengths;
     // Array to collect the sum of step lengths in the scoring shells for the whole run,
     // according to the various cases (scoring shell, kinematical region, scoring position
     // and particle type).

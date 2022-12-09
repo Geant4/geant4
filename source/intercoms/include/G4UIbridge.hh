@@ -54,7 +54,7 @@ class G4UIbridge
 
     inline G4UImanager* LocalUI() const { return localUImanager; }
     inline const G4String& DirName() const { return dirName; }
-    inline G4int DirLength() const { return dirName.length(); }
+    inline G4int DirLength() const { return (G4int)dirName.length(); }
 
   private:
 

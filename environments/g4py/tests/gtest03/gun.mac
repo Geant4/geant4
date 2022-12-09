@@ -1,8 +1,0 @@
-# gun.mac
-
-/gun/number 1
-/gun/particle gamma
-/gun/energy 1 MeV
-/gun/direction 0. 0.  1.
-/gun/position 0. 0. -20. cm
-

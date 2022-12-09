@@ -35,20 +35,19 @@
 #include "globals.hh"
 
 #include <memory>
+#include <utility>
 
 template <typename FT>
 struct G4TFileInformation
 {
-  G4TFileInformation(const G4String fileName)
-    :  fFileName(fileName) {}
-
+  G4TFileInformation(G4String fileName) : fFileName(std::move(fileName)) {}
   G4TFileInformation() = default;
   ~G4TFileInformation() = default;
 
   G4String fFileName;
   std::shared_ptr<FT> fFile { nullptr };
   G4bool fIsOpen { false };
-  G4bool fIsEmpty { true };
+  G4bool fIsEmpty  {true };
   G4bool fIsDeleted { false };
 };
 

@@ -244,6 +244,7 @@ int main()
 #pragma once
 
 #include "PTL/Threading.hh"
+#include "PTL/Utility.hh"
 
 #include <chrono>
 #include <iostream>
@@ -262,9 +263,9 @@ public:
     //------------------------------------------------------------------------//
     // Some useful typedefs
     //------------------------------------------------------------------------//
-    typedef std::unique_lock<MutexT>           unique_lock_t;
-    typedef TemplateAutoLock<MutexT>           this_type;
-    typedef typename unique_lock_t::mutex_type mutex_type;
+    using unique_lock_t = std::unique_lock<MutexT>;
+    using this_type     = TemplateAutoLock<MutexT>;
+    using mutex_type    = typename unique_lock_t::mutex_type;
 
 public:
     //------------------------------------------------------------------------//
@@ -380,11 +381,6 @@ private:
 #undef _is_recur_mutex
 #undef _is_other_mutex
 
-    // used in _lock_deferred chrono variants to avoid ununsed-variable warning
-    template <typename Tp>
-    void suppress_unused_variable(const Tp&)
-    {}
-
     //========================================================================//
     // NOTE on _lock_deferred(...) variants:
     //      a system_error in lock means that the mutex is unavailable
@@ -467,7 +463,7 @@ private:
              << "being called after the statics were destroyed. \n\t--> "
              << "Exception: [code: " << e.code() << "] caught: " << e.what() << std::endl;
 #else
-        suppress_unused_variable(e);
+        ConsumeParameters(e);
 #endif
     }
 };
@@ -480,12 +476,7 @@ private:
 //
 // -------------------------------------------------------------------------- //
 
-typedef TemplateAutoLock<Mutex>          AutoLock;
-typedef TemplateAutoLock<RecursiveMutex> RecursiveAutoLock;
-
-// provide abbriviated type if another mutex type is desired to be used
-// aside from above
-template <typename Tp>
-using TAutoLock = TemplateAutoLock<Tp>;
+using AutoLock          = TemplateAutoLock<Mutex>;
+using RecursiveAutoLock = TemplateAutoLock<RecursiveMutex>;
 
 }  // namespace PTL

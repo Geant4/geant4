@@ -51,15 +51,14 @@ public:
   void SetModel(G4String);
   void SetMotherVolume(G4VPhysicalVolume*);
 
- 
+
 G4VPhysicalVolume* GetPhantom();
 
 protected: 
-  G4VBodyFactory* body;
+  G4VBodyFactory* fBody;
+  G4String fModel;
 
-  G4String model;
-
-  G4VPhysicalVolume* motherVolume;
-  G4VPhysicalVolume* headVolume;
+  G4VPhysicalVolume* fMotherVolume;
+  G4VPhysicalVolume* fHeadVolume;
 };
 #endif

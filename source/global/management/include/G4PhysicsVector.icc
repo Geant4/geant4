@@ -153,7 +153,8 @@ inline G4double G4PhysicsVector::Interpolation(const std::size_t idx,
 inline std::size_t G4PhysicsVector::ComputeLogVectorBin(
   const G4double loge) const
 {
-  return std::min(static_cast<G4int>((loge - logemin) * invdBin), idxmax);
+  return std::min( static_cast<G4int>((loge - logemin) * invdBin),
+                   static_cast<G4int>(idxmax) );
 }
 
 // ---------------------------------------------------------------
@@ -167,13 +168,14 @@ inline std::size_t G4PhysicsVector::GetBin(const G4double e) const
       break;
 
     case T_G4PhysicsLinearVector:
-      bin = std::min(static_cast<G4int>((e - edgeMin) * invdBin), idxmax);
+      bin = std::min( static_cast<G4int>((e - edgeMin) * invdBin),
+                      static_cast<G4int>(idxmax) );
       break;
 
     default:
       // Bin location proposed by K.Genser (FNAL)
-      bin = std::lower_bound(binVector.begin(), binVector.end(), e) -
-        binVector.begin() - 1;
+      bin = std::lower_bound(binVector.cbegin(), binVector.cend(), e) -
+            binVector.cbegin() - 1;
   }
   return bin;
 }

@@ -40,10 +40,9 @@ class G4MIRDLeftClavicle:public G4VOrgan
 {
 public:
 
-  G4MIRDLeftClavicle();
-  ~G4MIRDLeftClavicle();
+  G4MIRDLeftClavicle() = default;
+  ~G4MIRDLeftClavicle() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool);
-private:
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

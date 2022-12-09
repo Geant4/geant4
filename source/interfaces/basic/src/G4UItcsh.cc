@@ -127,8 +127,8 @@ void G4UItcsh::MakePrompt(const char* msg)
   }
 
   promptString="";
-  size_t i;
-  for(i=0; i<promptSetting.length()-1; i++){
+  G4int i;
+  for(i=0; i<(G4int)promptSetting.length()-1; ++i){
     if(promptSetting[i]=='%'){
       switch (promptSetting[i+1]) {
       case 's':  // current application status
@@ -166,7 +166,7 @@ void G4UItcsh::MakePrompt(const char* msg)
   }
 
   // append last chaacter
-  if(i == promptSetting.length()-1) 
+  if(i == G4int(promptSetting.length()-1)) 
     promptString += promptSetting[i];
 }
 
@@ -198,10 +198,10 @@ void G4UItcsh::InsertCharacter(char cc)
 
   // display...
   G4cout << cc;
-  size_t i;
-  for(i=cursorPosition-1; i<commandLine.length() ;i++) 
-    G4cout << commandLine[i];
-  for(i=cursorPosition-1; i<commandLine.length() ;i++)
+  std::size_t i;
+  for(i=cursorPosition-1; i<commandLine.length(); ++i) 
+    G4cout << commandLine[(G4int)i];
+  for(i=cursorPosition-1; i<commandLine.length(); ++i)
     G4cout << AsciiBS;
   G4cout << std::flush;
     
@@ -225,12 +225,12 @@ void G4UItcsh::BackspaceCharacter()
     G4cout << AsciiBS << ' ' << AsciiBS << std::flush;
   } else { 
     G4cout << AsciiBS;
-    size_t i;
-    for(i=cursorPosition-2; i< commandLine.length()-1 ;i++){
-      G4cout << commandLine[i+1];
+    std::size_t i;
+    for(i=cursorPosition-2; i< commandLine.length()-1; ++i){
+      G4cout << commandLine[G4int(i+1)];
     }
     G4cout << ' ';
-    for(i=cursorPosition-2; i< commandLine.length() ;i++){
+    for(i=cursorPosition-2; i< commandLine.length(); ++i){
       G4cout << AsciiBS;
     }
     G4cout << std::flush;
@@ -249,12 +249,12 @@ void G4UItcsh::DeleteCharacter()
   if(IsCursorLast()) return;
 
   // display...
-  size_t i;
-  for(i=cursorPosition-1; i< commandLine.length()-1 ;i++){
-    G4cout << commandLine[i+1];
+  std::size_t i;
+  for(i=cursorPosition-1; i< commandLine.length()-1; ++i){
+    G4cout << commandLine[G4int(i+1)];
   }
   G4cout << ' ';
-  for(i=cursorPosition-1; i< commandLine.length() ;i++){
+  for(i=cursorPosition-1; i< commandLine.length(); ++i){
     G4cout << AsciiBS;
   }
   G4cout << std::flush;
@@ -268,10 +268,10 @@ void G4UItcsh::ClearLine()
 //////////////////////////
 {
   // display...
-  G4int i;
+  std::size_t i;
   for(i= cursorPosition; i>=2; i--) G4cout << AsciiBS;
-  for(i=1; i<=G4int(commandLine.length()); i++) G4cout << ' ';
-  for(i=1; i<=G4int(commandLine.length()); i++) G4cout << AsciiBS;
+  for(i=1; i<=commandLine.length(); ++i) G4cout << ' ';
+  for(i=1; i<=commandLine.length(); ++i) G4cout << AsciiBS;
   G4cout << std::flush;
   
   // command line string...
@@ -286,9 +286,8 @@ void G4UItcsh::ClearAfterCursor()
   if(IsCursorLast()) return;
 
   // display...
-  G4int i;
-  for(i=cursorPosition; i<=G4int(commandLine.length()); i++) G4cout << ' ';
-  for(i=commandLine.length(); i>=cursorPosition; i--) G4cout << AsciiBS;
+  for(std::size_t i=cursorPosition; i<=commandLine.length(); ++i) G4cout << ' ';
+  for(G4int j=(G4int)commandLine.length(); j>=cursorPosition; --j) G4cout << AsciiBS;
   G4cout << std::flush;
 
   // command line string...
@@ -305,7 +304,7 @@ void G4UItcsh::ClearScreen()
 
     G4cout << promptString << commandLine << std::flush;
     // reset cursur position
-    for(G4int i=commandLine.length()+1; i>=cursorPosition+1; i--) 
+    for(G4int i=G4int(commandLine.length()+1); i>=cursorPosition+1; --i) 
       G4cout << AsciiBS << std::flush;
   }
 }
@@ -316,7 +315,7 @@ void G4UItcsh::ForwardCursor()
 {
   if(IsCursorLast()) return;
 
-  G4cout << commandLine[(size_t)(cursorPosition-1)] << std::flush;
+  G4cout << commandLine[cursorPosition-1] << std::flush;
   cursorPosition++;
 }
 
@@ -334,7 +333,7 @@ void G4UItcsh::BackwardCursor()
 void G4UItcsh::MoveCursorTop()
 //////////////////////////////
 {
-  for(G4int i=cursorPosition; i>1; i--){
+  for(G4int i=cursorPosition; i>1; --i){
     G4cout << AsciiBS;
   }
   G4cout << std::flush;
@@ -345,11 +344,11 @@ void G4UItcsh::MoveCursorTop()
 void G4UItcsh::MoveCursorEnd()
 //////////////////////////////
 {
-  for(size_t i=cursorPosition-1; i<commandLine.length(); i++){
+  for(G4int i=cursorPosition-1; i<(G4int)commandLine.length(); ++i){
     G4cout << commandLine[i];
   }
   G4cout << std::flush;
-  cursorPosition=commandLine.length()+1;
+  cursorPosition=G4int(commandLine.length()+1);
 }
 
 ////////////////////////////////
@@ -368,7 +367,7 @@ void G4UItcsh::PreviousCommand()
     commandLine= RestoreHistory(currentHistoryNo+relativeHistoryIndex);
 
     G4cout << commandLine << std::flush;
-    cursorPosition= commandLine.length()+1;
+    cursorPosition= G4int(commandLine.length()+1);
   }
 }
 
@@ -387,7 +386,7 @@ void G4UItcsh::NextCommand()
     else commandLine= RestoreHistory(currentHistoryNo+relativeHistoryIndex);
 
     G4cout << commandLine << std::flush;      
-    cursorPosition= commandLine.length()+1;
+    cursorPosition= G4int(commandLine.length()+1);
   }
 }
 
@@ -412,11 +411,11 @@ void G4UItcsh::ListMatchedCommand()
   G4String vcmd = "";
 
   if( !input.empty() ) {
-    G4int len= input.length();
+    G4int len= (G4int)input.length();
     G4int indx=-1;
-    for(G4int i=len-1; i>=0; i--) {
-      if(input[(size_t)i]=='/') {
-        indx= i;
+    for(G4int i=len-1; i>=0; --i) {
+      if(input[i]=='/') {
+        indx= (G4int)i;
         break;
       }
     }
@@ -447,7 +446,7 @@ void G4UItcsh::CompleteCommand()
   }
 
   // tail string
-  size_t thead = input.find_last_of('/');
+  std::size_t thead = input.find_last_of('/');
   G4String strtail = input;
   if (thead != G4String::npos) strtail = input.substr(thead+1, input.size()-thead-1);
 
@@ -455,10 +454,10 @@ void G4UItcsh::CompleteCommand()
   G4String vpath= currentCommandDir;
   G4String vcmd;
 
-  G4int len= input.length();
+  G4int len= (G4int)input.length();
   if(!input.empty()) {
     G4int indx= -1;
-    for(G4int i=len-1; i>=0; i--) {
+    for(G4int i=len-1; i>=0; --i) {
       if(input[i]=='/') {
         indx= i;
         break;
@@ -477,8 +476,8 @@ void G4UItcsh::CompleteCommand()
   G4String inputpath= vpath+vcmd;
   G4int nMatch= 0;
 
-  int Ndir= atree-> GetTreeEntry();
-  int Ncmd= atree-> GetCommandEntry();
+  G4int Ndir= atree-> GetTreeEntry();
+  G4int Ncmd= atree-> GetCommandEntry();
   
   // directory ...
   for(G4int idir=1; idir<=Ndir; idir++) {
@@ -518,13 +517,13 @@ void G4UItcsh::CompleteCommand()
   if(jhead == G4String::npos) jhead=0;
   else jhead++;
 
-  G4int jt = jhead;
+  std::size_t jt = jhead;
 
   G4String dspstr; 
-  G4int i;
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= AsciiBS; 
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= ' '; 
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= AsciiBS; 
+  std::size_t i;
+  for(i=jt; i<=input.length()-1; ++i) dspstr+= AsciiBS; 
+  for(i=jt; i<=input.length()-1; ++i) dspstr+= ' '; 
+  for(i=jt; i<=input.length()-1; ++i) dspstr+= AsciiBS; 
 
   dspstr+= (vpath + stream);
   if (nMatch == 0) dspstr+= strtail;
@@ -536,7 +535,7 @@ void G4UItcsh::CompleteCommand()
   if (nMatch==0) input+= strtail;
 
   commandLine= input;
-  cursorPosition= commandLine.length()+1;
+  cursorPosition= G4int(commandLine.length()+1);
 }
 
 // --------------------------------------------------------------------
@@ -656,7 +655,7 @@ G4String G4UItcsh::GetCommandLineString(const char* msg)
   G4String newCommand= ReadLine();  // read line...
   // multi-line
   while( (newCommand.length() > 0) &&
-	 ( newCommand[newCommand.length()-1] == '_') ) {
+	 ( newCommand[G4int(newCommand.length()-1)] == '_') ) {
     newCommand.erase(newCommand.length()-1);
     G4cout << G4endl;
     promptString= "? ";
@@ -667,7 +666,7 @@ G4String G4UItcsh::GetCommandLineString(const char* msg)
 
   // update history...
   G4bool isMeaningfull= FALSE; // check NULL command
-  for (size_t i=0; i<newCommand.length(); i++) {
+  for (G4int i=0; i<(G4int)newCommand.length(); ++i) {
     if(newCommand[i] != ' ') {
       isMeaningfull= TRUE;
       break;
@@ -687,13 +686,13 @@ G4String G4UItcsh::GetFirstMatchedString(const G4String& str1,
 					 const G4String& str2) const
 ////////////////////////////////////////////////////////////////////
 {
-  int nlen1= str1.length();
-  int nlen2= str2.length();
+  std::size_t nlen1= str1.length();
+  std::size_t nlen2= str2.length();
 
-  int nmin = nlen1<nlen2 ? nlen1 : nlen2;
+  std::size_t nmin = nlen1<nlen2 ? nlen1 : nlen2;
 
   G4String strMatched;
-  for(size_t i=0; G4int(i)<nmin; i++){
+  for(G4int i=0; i<(G4int)nmin; ++i){
     if(str1[i]==str2[i]) {
       strMatched+= str1[i];
     } else {
@@ -757,4 +756,3 @@ void G4UItcsh::RestoreTerm()
 }  
 
 #endif
-

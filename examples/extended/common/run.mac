@@ -1,0 +1,12 @@
+# Macro file for example common
+# 
+# To be run preferably in batch
+# % ./exampleCommon[NoVis] run.mac
+#
+#/run/numberOfThreads 4
+/run/initialize
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/beamOn 10

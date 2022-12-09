@@ -1,0 +1,6 @@
+/control/execute init_phys.in
+/run/initialize
+/control/execute primaries.in
+/run/beamOn 40  # just for a test run
+# /run/beamOn 4000  # uncomment this line for a minimum recommended size of simulation
+# (about 3 in 4 projectiles hits the collimator, so only about 1000 events are useful)

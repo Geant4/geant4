@@ -121,9 +121,9 @@ ptl_add_option(PTL_USE_SANITIZER "Enable -fsanitize=<type>" OFF)
 if(PTL_USE_SANITIZER)
     set(__ptl_sanitizer_type_default "thread")
     if(PTL_SANITIZER_TYPE)
-      set(__ptl_sanitizer_type_default "${PTL_SANITIZER_TYPE}")
+        set(__ptl_sanitizer_type_default "${PTL_SANITIZER_TYPE}")
     endif()
-    
+
     set(PTL_SANITIZER_TYPE
         "${__ptl_sanitizer_type_default}"
         CACHE STRING "Sanitizer type (-fsanitize=<type>)")

@@ -41,7 +41,6 @@
 #include <string_view>
 
 class G4Hdf5AnalysisManager;
-class G4Hdf5FileManager;
 class G4Hdf5NtupleFileManager;
 template <class T>
 class G4ThreadLocalSingleton;
@@ -51,7 +50,7 @@ class G4Hdf5AnalysisManager : public G4ToolsAnalysisManager
   friend class G4ThreadLocalSingleton<G4Hdf5AnalysisManager>;
 
   public:
-    virtual ~G4Hdf5AnalysisManager();
+    ~G4Hdf5AnalysisManager() override;
 
     // Static methods
     static G4Hdf5AnalysisManager* Instance();
@@ -69,23 +68,18 @@ class G4Hdf5AnalysisManager : public G4ToolsAnalysisManager
 
   protected:
     // Virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl(G4bool reset) final;
-    virtual G4bool ResetImpl() final;
-    virtual G4bool IsOpenFileImpl() const final;
+    G4bool OpenFileImpl(const G4String& fileName) final;
+    G4bool CloseFileImpl(G4bool reset) final;
 
   private:
     G4Hdf5AnalysisManager();
 
     // Static data members
-    inline static G4Hdf5AnalysisManager* fgMasterInstance { nullptr };
     inline static G4ThreadLocal G4bool fgIsInstance { false };
     static constexpr std::string_view fkClass { "G4Hdf5AnalysisManager" };
 
     // Data members
     std::shared_ptr<G4Hdf5NtupleFileManager>  fNtupleFileManager { nullptr };
-    std::shared_ptr<G4Hdf5FileManager>  fFileManager { nullptr };
 };
 
 #include "G4Hdf5AnalysisManager.icc"

@@ -38,7 +38,7 @@
 G4DigiModel::~G4DigiModel () {}
 
 G4DigiModel::G4DigiModel ():
-  fpCurrentDigi(0)
+  fpCurrentDigi(nullptr)
 {
   fType = "G4DigiModel";
   fGlobalTag = "G4DigiModel for all digis.";
@@ -49,17 +49,17 @@ void G4DigiModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
   const G4Event* event = fpMP->GetEvent();
   if (event) {
-    G4DCofThisEvent* DCE = event -> GetDCofThisEvent ();
+    G4DCofThisEvent* DCE = event->GetDCofThisEvent();
     if (DCE) {
-      G4int nDC = DCE -> GetCapacity ();
-      for (int iDC = 0; iDC < nDC; iDC++) {
-	G4VDigiCollection* DC = DCE -> GetDC (iDC);
-	if (DC) {
-	  for(size_t iDigi = 0; iDigi < DC->GetSize(); ++iDigi) {
-	    fpCurrentDigi = DC -> GetDigi (iDigi);
-	    if (fpCurrentDigi) sceneHandler.AddCompound (*fpCurrentDigi);
-	  }
-	}
+      G4int nDC = (G4int)DCE->GetCapacity();
+      for (G4int iDC = 0; iDC < nDC; ++iDC) {
+        G4VDigiCollection* DC = DCE->GetDC(iDC);
+        if (DC) {
+          for(std::size_t iDigi = 0; iDigi < DC->GetSize(); ++iDigi) {
+            fpCurrentDigi = DC->GetDigi(iDigi);
+            if (fpCurrentDigi) sceneHandler.AddCompound(*fpCurrentDigi);
+          }
+        }
       }
     }
   }

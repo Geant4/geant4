@@ -69,6 +69,30 @@ class Par03SensitiveDetector {};
 
 /** @} */
 
+/** @defgroup extended_parameterisations_Par04 Par04
+ *  parameterisations example Par04
+ *  @{
+ */
+
+class Par04ActionInitialisation {};
+class Par04DefineMeshModel {};
+class Par04DetectorConstruction {};
+class Par04DetectorMessenger {};
+class Par04EventAction {};
+class Par04EventInformation {};
+class Par04Hit {};
+class Par04InferenceInterface {};
+class Par04InferenceMessenger {};
+class Par04InferenceSetup {};
+class Par04LwtnnInference {};
+class Par04MLFastSimModel {};
+class Par04OnnxInference {};
+class Par04PrimaryGeneratorAction {};
+class Par04RunAction {};
+class Par04SensitiveDetector {};
+
+/** @} */
+
 /** @defgroup extended_parameterisations_gflash gflash
  *  Extended examples parameterisations gflash classes
  *  @{

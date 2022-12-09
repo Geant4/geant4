@@ -75,7 +75,7 @@ G4XicPlus* G4XicPlus::Definition()
                 false,     0.442e-3*ns,          NULL,
                 false,       "xi_c");
   }
-  theInstance = reinterpret_cast<G4XicPlus*>(anInstance);
+  theInstance = static_cast<G4XicPlus*>(anInstance);
   return theInstance;
 }
 

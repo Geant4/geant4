@@ -74,10 +74,10 @@ class G4BulirschStoer
 
     const static G4int m_k_max = 8;
 
-    void extrapolate(size_t k, G4double xest[]);
-    G4double calc_h_opt(G4double h, G4double error, size_t k) const;
+    void extrapolate(std::size_t k, G4double xest[]);
+    G4double calc_h_opt(G4double h, G4double error, std::size_t k) const;
 
-    G4bool set_k_opt(size_t k, G4double& dt);
+    G4bool set_k_opt(std::size_t k, G4double& dt);
     G4bool in_convergence_window(G4int k) const;
     G4bool should_reject(G4double error, G4int k) const;
 

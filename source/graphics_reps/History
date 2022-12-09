@@ -1,8 +1,35 @@
 # Category greps History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-17 Gabriele Cosmo (greps-V11-00-16)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-28 John Allison (greps-V11-00-15)
+- G4VVisManager: Add new virtual function DrawGeometry.
+  - Draws a geometry tree starting at the specified physical volume.
+  - This base class implementation is empty, i.e., the derived class
+    implementation is not forced (as it would be if declared pure virtual).
+
+## 2022-10-06 Gabriele Cosmo (greps-V11-00-14)
+- Fixed compilation warning on Intel/icx compiler for variable set
+  but not used in HepPolyhedron::FindNodeNormal().
+
+## 2022-10-03 Evgueni Tcherniaev (greps-V11-00-13)
+- HepPolyhedron: Fix minor coverity defect in operator<<
+
+## 2022-09-19 John Allison (greps-V11-00-12)
+- G4VisAttributes: Fix formatting in operator<<
+
+## 2022-09-14 Ben Morgan (greps-V11-00-11)
+- Apply clang-tidy fixes
+
+## 2022-09-05 Ben Morgan (greps-V11-00-10)
+- Make G4intercoms a private dependency
 
 ## 2022-05-01 Evgueni Tcherniaev (greps-V11-00-09)
 - Faster version of HepPolyhedronTetMesh

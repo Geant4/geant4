@@ -216,8 +216,10 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
     else { status = fStopAndKill; }
     theTotalResult->ProposeTrackStatus(status);
   }
-
-  //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
+  /*
+  G4cout << "Efinal= " << efinal << "  TrackStatus= " << status 
+	 << " time(ns)=" << track.GetGlobalTime()/ns << G4endl;
+  */
   theTotalResult->SetNumberOfSecondaries(0);
 
   // recoil

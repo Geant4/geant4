@@ -36,13 +36,6 @@ G4ThreadLocal G4ErrorPropagatorData*
   G4ErrorPropagatorData::fpInstance = nullptr;
 G4ThreadLocal G4int G4ErrorPropagatorData::theVerbosity = 0;
 
-//---------------------------------------------------------------------
-G4ErrorPropagatorData::G4ErrorPropagatorData()
-  : theMode(G4ErrorMode_PropTest)
-  , theState(G4ErrorState_PreInit)
-  , theStage(G4ErrorStage_Inflation)
-{}
-
 // --------------------------------------------------------------------
 G4ErrorPropagatorData::~G4ErrorPropagatorData()
 {

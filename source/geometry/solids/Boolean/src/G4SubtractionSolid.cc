@@ -591,7 +591,7 @@ G4double G4SubtractionSolid::GetCubicVolume()
    fPtrSolidA->BoundingLimits(bminA, bmaxA);
    fPtrSolidB->BoundingLimits(bminB, bmaxB);
    G4double intersection = 0.;
-   G4bool   canIntersect = 
+   G4bool   canIntersect =
         bminA.x() < bmaxB.x() && bminA.y() < bmaxB.y() && bminA.z() < bmaxB.z() &&
         bminB.x() < bmaxA.x() && bminB.y() < bmaxA.y() && bminB.z() < bmaxA.z();
    if ( canIntersect )
@@ -602,6 +602,7 @@ G4double G4SubtractionSolid::GetCubicVolume()
    }
 
    fCubicVolume = cubVolumeA - intersection;
+   if (fCubicVolume < 0.01*cubVolumeA) fCubicVolume = G4VSolid::GetCubicVolume();
 
    return fCubicVolume;
 }

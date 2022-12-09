@@ -68,7 +68,7 @@ private:
      
   DetectorConstruction* fDetector;
   G4VPhysicalVolume* fWorld;
-  G4bool isInitialised;
+  G4bool fIsInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

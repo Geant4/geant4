@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Reference:
+//    A.D. Dominguez-Munoz, M.I. Gallardo, M.C. Bordage,
+//    Z. Francis, S. Incerti, M.A. Cortes-Giraldo,
+//    Radiat. Phys. Chem. 199 (2022) 110363.
 //
-// Created on 2022/03/03
+// Class authors:
+//    A.D. Dominguez-Munoz
+//    M.A. Cortes-Giraldo (miancortes -at- us.es)
 //
-// Authors: A.D. Dominguez-Munoz, M.I. Gallardo, M.C. Bordage,
-//          Z. Francis, S. Incerti, M.A. Cortes-Giraldo
-// 
-// Contact: M.A. Cortes-Giraldo (miancortes -at- us.es)
-// 
+// Class creation: 2022-03-03
+//
 //
 
 #include "G4DNARPWBAIonisationModel.hh"
@@ -95,7 +98,7 @@ void G4DNARPWBAIonisationModel::InitialiseForProton(
 {
   if(part != fProtonDef)
   {
-    G4Exception("G4DNARPWBAIonisationModel::CrossSectionPerVolume", "em0002",
+    G4Exception("G4DNARPWBAIonisationModel::InitialiseForProton", "em0002",
                 FatalException, "Model not applicable to particle type.");
   }
   // Energy limits
@@ -104,6 +107,15 @@ void G4DNARPWBAIonisationModel::InitialiseForProton(
   const char *path    = G4FindDataDir("G4LEDATA");
   lowEnergyLimit      = 100. * MeV;
   highEnergyLimit     = 300. * MeV;
+
+  if(LowEnergyLimit() < lowEnergyLimit || HighEnergyLimit() > highEnergyLimit)
+  {
+    G4ExceptionDescription ed;
+    ed << "Model is applicable from "<<lowEnergyLimit<<" to "<<highEnergyLimit;
+    G4Exception("G4DNARPWBAIonisationModel::InitialiseForProton", "em0004",
+      FatalException, ed);
+  }
+
   fpTotalCrossSection = make_unique<G4DNACrossSectionDataSet>(
     new G4LogLogInterpolation, eV, scaleFactor);
   fpTotalCrossSection->LoadData(fileProton);
@@ -112,14 +124,14 @@ void G4DNARPWBAIonisationModel::InitialiseForProton(
 
   std::ostringstream pFullFileName;
   fasterCode ? pFullFileName
-                 << path << "/dna/sigmadiff_cumulated_ionisation_p_RPWBA.dat.dat"
+                 << path << "/dna/sigmadiff_cumulated_ionisation_p_RPWBA.dat"
              : pFullFileName << path << "/dna/sigmadiff_ionisation_p_RPWBA.dat";
   std::ifstream pDiffCrossSection(pFullFileName.str().c_str());
   if(!pDiffCrossSection)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "Missing data file: " + pFullFileName.str();
-    G4Exception("G4DNARPWBAIonisationModel::Initialise", "em0003",
+    G4Exception("G4DNARPWBAIonisationModel::InitialiseForProton", "em0003",
                 FatalException, exceptionDescription);
   }
 
@@ -182,8 +194,8 @@ void G4DNARPWBAIonisationModel::Initialise(const G4ParticleDefinition* particle,
   if(verboseLevel > 0)
   {
     G4cout << "RPWBA ionisation model is initialized " << G4endl
-           << "Energy range: " << LowEnergyLimit() / eV << " eV - "
-           << HighEnergyLimit() / keV << " keV for "
+           << "Energy range: " << LowEnergyLimit() / MeV << " MeV - "
+           << HighEnergyLimit() / MeV << " MeV for "
            << particle->GetParticleName() << G4endl;
   }
 
@@ -287,8 +299,7 @@ void G4DNARPWBAIonisationModel::SampleSecondaries(
               particle->GetDefinition() == G4Electron::ElectronDefinition());
     }
 
-    G4double bindingEnergy = 0;
-    bindingEnergy          = waterStructure.IonisationEnergy(ionizationShell);
+    G4double bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
     // SI: additional protection if tcs interpolation method is modified
     if(k < bindingEnergy)
@@ -405,30 +416,30 @@ G4double G4DNARPWBAIonisationModel::RandomizeEjectedElectronEnergy(
 {
   G4double maximumKineticEnergyTransfer =
     4. * (electron_mass_c2 / proton_mass_c2) * k;
+  G4double IonisationEnergyInShell = waterStructure.IonisationEnergy(shell);
+  G4double kIneV = k / eV;
 
   G4double crossSectionMaximum = 0.;
-  for(G4double value = waterStructure.IonisationEnergy(shell);
-      value <= 4. * waterStructure.IonisationEnergy(shell); value += 0.1 * eV)
+  for(G4double value = IonisationEnergyInShell;
+      value <= 4. * IonisationEnergyInShell; value += 0.1 * eV)
   {
     G4double differentialCrossSection =
-      DifferentialCrossSection(k / eV, value / eV, shell);
+      DifferentialCrossSection(kIneV, value / eV, shell);
     if(differentialCrossSection >= crossSectionMaximum)
     {
       crossSectionMaximum = differentialCrossSection;
     }
   }
 
-  G4double secondaryElectronKineticEnergy = 0.;
+  G4double secondaryElectronKineticEnergy;
   do
   {
     secondaryElectronKineticEnergy =
       G4UniformRand() * maximumKineticEnergyTransfer;
   } while(G4UniformRand() * crossSectionMaximum >=
-          DifferentialCrossSection(k / eV,
-                                   (secondaryElectronKineticEnergy +
-                                    waterStructure.IonisationEnergy(shell)) /
-                                     eV,
-                                   shell));
+          DifferentialCrossSection(kIneV,
+             (secondaryElectronKineticEnergy +
+               IonisationEnergyInShell) / eV, shell));
 
   return secondaryElectronKineticEnergy;
 }
@@ -587,12 +598,12 @@ G4int G4DNARPWBAIonisationModel::RandomSelect(G4double k)
   else
   {
     auto valuesBuffer = new G4double[fpTotalCrossSection->NumberOfComponents()];
-    const size_t n(fpTotalCrossSection->NumberOfComponents());
-    size_t i(n);
+    const G4int n = (G4int)fpTotalCrossSection->NumberOfComponents();
+    G4int i(n);
     G4double value = 0.;
     while(i > 0)
     {
-      i--;
+      --i;
       valuesBuffer[i] = fpTotalCrossSection->GetComponent(i)->FindValue(k);
       value += valuesBuffer[i];
     }
@@ -601,7 +612,7 @@ G4int G4DNARPWBAIonisationModel::RandomSelect(G4double k)
 
     while(i > 0)
     {
-      i--;
+      --i;
       if(valuesBuffer[i] > value)
       {
         delete[] valuesBuffer;
@@ -620,16 +631,15 @@ G4double
 G4DNARPWBAIonisationModel::RandomizeEjectedElectronEnergyFromCumulatedDcs(
   const G4double& k, const G4int& shell)
 {
-  G4double secondaryElectronKineticEnergy = 0.;
   G4double random                         = G4UniformRand();
-  secondaryElectronKineticEnergy =
+  G4double secondaryKineticEnergy =
     TransferedEnergy(k / eV, shell, random) * eV -
     waterStructure.IonisationEnergy(shell);
-  if(secondaryElectronKineticEnergy < 0.)
+  if(secondaryKineticEnergy < 0.)
   {
     return 0.;
   }
-  return secondaryElectronKineticEnergy;
+  return secondaryKineticEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

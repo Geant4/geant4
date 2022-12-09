@@ -69,8 +69,6 @@ int main( int argc, char** argv ) {
   runManager->SetUserInitialization( physicsList );
   runManager->SetUserInitialization( new ActionInitialization );
 
-  runManager->Initialize();
-
   if ( ui ) {
     ui->SessionStart();
     delete ui;

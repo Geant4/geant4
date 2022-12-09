@@ -65,7 +65,7 @@ struct CompareMaterial
   bool operator()(const G4Material* mat1, const G4Material* mat2) const;
 };
 
-typedef std::map<const G4Material*, G4double, CompareMaterial> ComponentMap;
+using ComponentMap = std::map<const G4Material*, G4double, CompareMaterial>;
 
 /**
  * \class G4DNAMolecularMaterial
@@ -248,13 +248,13 @@ protected:
             fAskedDensityTable;
   mutable std::map<const G4Material*, std::vector<G4double>*, CompareMaterial>
             fAskedNumPerVolTable;
-  mutable std::map<const G4Material*, bool, CompareMaterial> fWarningPrinted;
+  mutable std::map<const G4Material*, G4bool, CompareMaterial> fWarningPrinted;
   
-  std::map<int /*Material ID*/,
+  std::map<G4int /*Material ID*/,
            G4MolecularConfiguration*> fMaterialToMolecularConf;
 
   G4bool fIsInitialized;
-  size_t fNMaterials;
+  std::size_t fNMaterials;
 };
 
 #endif // G4DNAMolecularMaterial_HH

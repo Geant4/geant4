@@ -33,211 +33,169 @@
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
 // ************************************************************
-#include "G4RunManager.hh"
-#include "GammaRayTelTrackerSD.hh"
 
+#include "GammaRayTelTrackerSD.hh"
 #include "GammaRayTelTrackerHit.hh"
 #include "GammaRayTelDetectorConstruction.hh"
 
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
-
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
-
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelTrackerSD::GammaRayTelTrackerSD(G4String name):G4VSensitiveDetector(name)
-{
- G4RunManager* runManager = G4RunManager::GetRunManager();
-  Detector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
-  
-  G4int NbOfTKRTiles  =  Detector->GetNbOfTKRTiles();
-  NbOfTKRStrips  = Detector->GetNbOfTKRStrips();
-  NbOfTKRLayers  = Detector->GetNbOfTKRLayers();  
-  NbOfTKRStrips = NbOfTKRStrips*NbOfTKRTiles;  
-  
-  NbOfTKRChannels = NbOfTKRStrips* NbOfTKRTiles * NbOfTKRLayers;
-  
-  ThitXID = new G4int[NbOfTKRChannels];
-  ThitYID = new G4int[NbOfTKRChannels];
-  collectionName.insert("TrackerCollection");
+GammaRayTelTrackerSD::GammaRayTelTrackerSD(G4String name) : G4VSensitiveDetector(name) {
+    auto *runManager = G4RunManager::GetRunManager();
+
+    detector = (GammaRayTelDetectorConstruction*) (runManager->GetUserDetectorConstruction());
+
+    auto numberOfTKRTiles = detector->GetNbOfTKRTiles();
+    numberOfTKRStrips = detector->GetNbOfTKRStrips();
+    numberOfTKRLayers = detector->GetNbOfTKRLayers();
+    numberOfTKRStrips = numberOfTKRStrips * numberOfTKRTiles;
+    numberOfTKRChannels = numberOfTKRStrips * numberOfTKRTiles * numberOfTKRLayers;
+
+    tkrHitXID = new G4int[numberOfTKRChannels];
+    tkrHitYID = new G4int[numberOfTKRChannels];
+    
+    constexpr auto TRACKER_COLLECTION_NAME = "TrackerCollection";
+    collectionName.insert(TRACKER_COLLECTION_NAME);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelTrackerSD::~GammaRayTelTrackerSD()
-{
-  delete [] ThitXID;
-  delete [] ThitYID;
+GammaRayTelTrackerSD::~GammaRayTelTrackerSD() {
+    delete[] tkrHitXID;
+    delete[] tkrHitYID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*)
-{
-  TrackerCollection = new GammaRayTelTrackerHitsCollection
-    (SensitiveDetectorName,collectionName[0]);
+void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*) {
+    trackerCollection = new GammaRayTelTrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
 
- for (G4int i=0;i<NbOfTKRChannels;i++)
-   {
-     ThitXID[i] = -1;
-     ThitYID[i] = -1;
-   };
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* )
-{ 
-   
-  G4double edep = 0.;
-  edep = aStep->GetTotalEnergyDeposit();
-  if (edep == 0.) return false;      
-  
-  G4int StripTotal = Detector->GetNbOfTKRStrips();
-  G4int TileTotal  = Detector->GetNbOfTKRTiles();  
-
-  // This TouchableHistory is used to obtain the physical volume
-  // of the hit
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-  
-  //G4VPhysicalVolume* phys_tile = theTouchable->GetVolume();  
-  
-  G4VPhysicalVolume* plane = theTouchable->GetVolume(2);  
-  
-  G4int PlaneNumber = 0;
-  PlaneNumber=plane->GetCopyNo();
-  G4String PlaneName = plane->GetName();
-
-  // The hits sees now the real strip
-
-  G4int StripNumber = 0;
-  G4VPhysicalVolume* strip = 0;
-  strip = theTouchable->GetVolume();
-
-  G4String StripName = strip->GetName();
-  StripNumber= strip->GetCopyNo();  
-  
-  G4VPhysicalVolume* tile = theTouchable->GetVolume(1); 
-  G4int TileNumber = tile->GetCopyNo();  
-  G4String TileName = tile->GetName();   
-  
-  G4int NTile = (TileNumber%TileTotal);  
-  G4int j=0;
-  
-  G4int NChannel = 0;
-  
-  for (j=0;j<TileTotal;j++)
-    {
-      if(NTile==j) StripNumber += StripTotal*NTile;
-    }  
-  
-  NChannel = PlaneNumber*TileTotal*StripTotal + StripNumber;
-
-  /*  G4cout << NChannel << " Channel Number" << G4endl;
-      G4cout << " Plane Number = " << PlaneNumber << " " << PlaneName 
-      << G4endl;
-      G4cout << StripName << " " << StripNumber << G4endl;      */ 
-  
-  if (PlaneName == "TKRDetectorX" )
-    // The hit is on an X silicon plane
-    {
-      // This is a new hit
-      if (ThitXID[NChannel]==-1)
-	{       
-	  GammaRayTelTrackerHit* TrackerHit = new GammaRayTelTrackerHit;
-	  TrackerHit->SetPlaneType(1);
-	  TrackerHit->AddSil(edep);
-	  TrackerHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  TrackerHit->SetNSilPlane(PlaneNumber);
-	  TrackerHit->SetNStrip(StripNumber);
-	  ThitXID[NChannel] = 
-	    TrackerCollection->insert(TrackerHit) -1;
-	}
-      else // This is not new
-	{
-	  (*TrackerCollection)[ThitXID[NChannel]]->AddSil(edep);
-          // G4cout << "X" << PlaneNumber << " " << StripNumber << G4endl;
-	}
-    }
-  
-  if (PlaneName == "TKRDetectorY")
-    // The hit is on an Y silicon plane    
-    {   
-      // This is a new hit
-      if (ThitYID[NChannel]==-1)
-	{       
-	  GammaRayTelTrackerHit* TrackerHit = new GammaRayTelTrackerHit;
-	  TrackerHit->SetPlaneType(0);
-	  TrackerHit->AddSil(edep);
-	  TrackerHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  TrackerHit->SetNSilPlane(PlaneNumber);
-	  TrackerHit->SetNStrip(StripNumber);
-	  ThitYID[NChannel] = 
-	    TrackerCollection->insert(TrackerHit)-1;
-	}
-      else // This is not new
-	{
-	  (*TrackerCollection)[ThitYID[NChannel]]->AddSil(edep);
-          // G4cout << "Y" << PlaneNumber << " " << StripNumber << G4endl;
-	}
-    }
-  
-  return true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void GammaRayTelTrackerSD::EndOfEvent(G4HCofThisEvent* HCE)
-{
-  static G4int HCID = -1;
-  if(HCID<0)
-    { 
-      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
-    }
-  HCE->AddHitsCollection(HCID,TrackerCollection);
-
-
-  for (G4int i=0;i<NbOfTKRChannels;i++) 
-    {
-      ThitXID[i] = -1;
-      ThitYID[i] = -1;
+    for (auto i = 0; i < numberOfTKRChannels; i++) {
+        tkrHitXID[i] = -1;
+        tkrHitYID[i] = -1;
     };
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerSD::clear()
-{} 
+auto GammaRayTelTrackerSD::ProcessHits(G4Step *step, G4TouchableHistory*) -> G4bool {
+    G4double depositedEnergy = 0.;
+    depositedEnergy = step->GetTotalEnergyDeposit();
+    if (depositedEnergy == 0.) {
+        return false;
+    }
+
+    auto totalNumberOfStrips = detector->GetNbOfTKRStrips();
+    auto totalnumberOfTiles = detector->GetNbOfTKRTiles();
+
+    // This TouchableHistory is used to obtain the physical volume of the hit
+    auto *touchable = (G4TouchableHistory*) (step->GetPreStepPoint()->GetTouchable());
+    auto *plane = touchable->GetVolume(2);
+
+    G4int planeNumber = 0;
+    planeNumber = plane->GetCopyNo();
+    auto planeName = plane->GetName();
+
+    // The hits sees now the real strip
+
+    G4int stripNumber = 0;
+    G4VPhysicalVolume *strip{nullptr};
+    strip = touchable->GetVolume();
+
+    G4String stripName = strip->GetName();
+    stripNumber = strip->GetCopyNo();
+
+    auto *tile = touchable->GetVolume(1);
+    auto tileNumber = tile->GetCopyNo();
+    auto tileName = tile->GetName();
+    auto NTile = (tileNumber % totalnumberOfTiles);
+    
+    G4int channelNumber = 0;
+
+    for (auto j = 0; j < totalnumberOfTiles; j++) {
+        if (NTile == j) {
+            stripNumber += totalNumberOfStrips * NTile;
+        }
+    }
+
+    channelNumber = planeNumber * totalnumberOfTiles * totalNumberOfStrips + stripNumber;
+
+/*
+    G4cout << " Channel: " << channelNumber << G4endl;
+    G4cout << " Plane: " << planeNumber << " " << planeName << G4endl;
+    G4cout << " Strip: " << stripNumber << " " << stripName << G4endl;
+*/
+
+    // The hit is on an X silicon plane
+    if (planeName == "TKRDetectorX") {
+        if (tkrHitXID[channelNumber] == -1) { // This is a new hit
+            auto *trackerHit = new GammaRayTelTrackerHit;
+            trackerHit->SetPlaneType(1);
+            trackerHit->AddDepositedEnergy(depositedEnergy);
+            trackerHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+            trackerHit->SetSiliconPlaneNumber(planeNumber);
+            trackerHit->SetStripNumber(stripNumber);
+            tkrHitXID[channelNumber] = trackerCollection->insert(trackerHit) - 1;
+        } else { // This is not new
+            (*trackerCollection)[tkrHitXID[channelNumber]]->AddDepositedEnergy(depositedEnergy);
+            // G4cout << "X" << planeNumber << " " << stripNumber << G4endl;
+        }
+    }
+
+    // The hit is on an Y silicon plane
+    if (planeName == "TKRDetectorY") {
+        if (tkrHitYID[channelNumber] == -1) { // This is a new hit
+            auto *trackerHit = new GammaRayTelTrackerHit;
+            trackerHit->SetPlaneType(0);
+            trackerHit->AddDepositedEnergy(depositedEnergy);
+            trackerHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+            trackerHit->SetSiliconPlaneNumber(planeNumber);
+            trackerHit->SetStripNumber(stripNumber);
+            tkrHitYID[channelNumber] = trackerCollection->insert(trackerHit) - 1;
+        } else { // This is not new
+            (*trackerCollection)[tkrHitYID[channelNumber]]->AddDepositedEnergy(depositedEnergy);
+            // G4cout << "Y" << planeNumber << " " << stripNumber << G4endl;
+        }
+    }
+
+    return true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerSD::DrawAll()
-{} 
+void GammaRayTelTrackerSD::EndOfEvent(G4HCofThisEvent *collection) {
+    static G4int collectionIdentifier = -1;
+    if (collectionIdentifier < 0) {
+        collectionIdentifier = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    }
+    collection->AddHitsCollection(collectionIdentifier, trackerCollection);
+
+    for (auto i = 0; i < numberOfTKRChannels; i++) {
+        tkrHitXID[i] = -1;
+        tkrHitYID[i] = -1;
+    }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerSD::PrintAll()
-{} 
+void GammaRayTelTrackerSD::clear() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void GammaRayTelTrackerSD::DrawAll() {
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelTrackerSD::PrintAll() {
+}

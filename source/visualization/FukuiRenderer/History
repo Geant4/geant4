@@ -1,8 +1,17 @@
 # Category DAWN History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-25 Gabriele Cosmo (DAWN-V11-00-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-13 Gabriele Cosmo (DAWN-V11-00-02)
+- Replaced use of sprintf() with snprintf(), to fix deprecation compilation
+  warnings on macOS-13 SDK.
 
 ## 2022-01-28 Ben Morgan (DAWN-V11-00-01)
 - Replace `geant4_global_library_target` with direct file inclusion and

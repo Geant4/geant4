@@ -61,14 +61,10 @@ Run::Run(DetectorConstruction* det)
   fTransmit[0] = fTransmit[1] = fReflect[0] = fReflect[1] = 0;
   
   fMscEntryCentral = 0;
+  fTypes[0] = fTypes[1] = fTypes[2] = fTypes[3] = 0;
   
   fEnergyLeak[0] = fEnergyLeak[1] = fEnergyLeak2[0] = fEnergyLeak2[1] = 0.;
  }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -108,6 +104,10 @@ void Run::Merge(const G4Run* run)
   fMscProjecTheta  += localRun->fMscProjecTheta;
   fMscProjecTheta2 += localRun->fMscProjecTheta2;
 
+  fTypes[0] += localRun->fTypes[0];
+  fTypes[1] += localRun->fTypes[1];
+  fTypes[2] += localRun->fTypes[2];
+  fTypes[3] += localRun->fTypes[3];
     
   fNbGamma += localRun->fNbGamma;
   fNbElect += localRun->fNbElect;      
@@ -303,6 +303,12 @@ void Run::EndOfRun()
   G4cout << "  central part defined as +- "
          << fMscThetaCentral/mrad << " mrad; " 
          << "  Tail ratio = " << tailMsc << " %" << G4endl;
+
+  G4cout << "## Gamma process counts:" << G4endl;
+  G4cout << "   Photoeffect " << fTypes[0] << G4endl;
+  G4cout << "   Compton     " << fTypes[1] << G4endl;
+  G4cout << "   Conversion  " << fTypes[2] << G4endl;
+  G4cout << "   Rayleigh    " << fTypes[3] << G4endl;
          
   // normalize histograms
   //

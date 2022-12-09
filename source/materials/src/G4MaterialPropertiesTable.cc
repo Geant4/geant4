@@ -92,6 +92,7 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
   fMatPropNames.emplace_back("SCINTILLATIONCOMPONENT1");
   fMatPropNames.emplace_back("SCINTILLATIONCOMPONENT2");
   fMatPropNames.emplace_back("SCINTILLATIONCOMPONENT3");
+  fMatPropNames.emplace_back("COATEDRINDEX");
 
   assert(fMatPropNames.size() == kNumberOfPropertyIndex);
 
@@ -154,6 +155,8 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
   fMatConstPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD1");
   fMatConstPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD2");
   fMatConstPropNames.emplace_back("ELECTRONSCINTILLATIONYIELD3");
+  fMatConstPropNames.emplace_back("COATEDTHICKNESS");
+  fMatConstPropNames.emplace_back("COATEDFRUSTRATEDTRANSMISSION");
 
   assert(fMatConstPropNames.size() == kNumberOfConstPropertyIndex);
 
@@ -173,12 +176,12 @@ G4int G4MaterialPropertiesTable::GetConstPropertyIndex(
 {
   // Returns the constant material property index corresponding to a key
 
-  size_t index = std::distance(
-    fMatConstPropNames.begin(),
-    std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key));
+  std::size_t index = std::distance(
+    fMatConstPropNames.cbegin(),
+    std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key));
   if(index < fMatConstPropNames.size())
   {
-    return index;
+    return (G4int)index;
   }
 
   G4ExceptionDescription ed;
@@ -191,12 +194,12 @@ G4int G4MaterialPropertiesTable::GetConstPropertyIndex(
 G4int G4MaterialPropertiesTable::GetPropertyIndex(const G4String& key) const
 {
   // Returns the material property index corresponding to a key
-  size_t index =
-    std::distance(fMatPropNames.begin(),
-                  std::find(fMatPropNames.begin(), fMatPropNames.end(), key));
+  std::size_t index =
+    std::distance(fMatPropNames.cbegin(),
+                  std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key));
   if(index < fMatPropNames.size())
   {
-    return index;
+    return (G4int)index;
   }
   G4ExceptionDescription ed;
   ed << "Material Property Index for key " << key << " not found.";
@@ -244,24 +247,24 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4int index) const
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4String& key) const
 {
   // Returns true if a const property 'key' exists
-  size_t index = std::distance(
-    fMatConstPropNames.begin(),
-    std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key));
+  std::size_t index = std::distance(
+    fMatConstPropNames.cbegin(),
+    std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key));
   if(index < fMatConstPropNames.size())
-  {  // index is type size_t so >= 0
-    return ConstPropertyExists(index);
+  {  // index is type std::size_t so >= 0
+    return ConstPropertyExists((G4int)index);
   }
   return false;
 }
 
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char* key) const
 {
-  size_t index = std::distance(
-    fMatConstPropNames.begin(),
-    std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key));
+  std::size_t index = std::distance(
+    fMatConstPropNames.cbegin(),
+    std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key));
   if(index < fMatConstPropNames.size())
-  {  // index is type size_t so >= 0
-    return ConstPropertyExists(index);
+  {  // index is type std::size_t so >= 0
+    return ConstPropertyExists((G4int)index);
   }
   return false;
 }
@@ -270,8 +273,8 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
   const G4String& key) const
 {
   // Returns a Material Property Vector corresponding to a key
-  if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) !=
-     fMatPropNames.end())
+  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) !=
+     fMatPropNames.cend())
   {
     const G4int index = GetPropertyIndex(G4String(key));
     return GetProperty(index);
@@ -282,8 +285,8 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
 G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
   const char* key) const
 {
-  if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) !=
-     fMatPropNames.end())
+  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) !=
+     fMatPropNames.cend())
   {
     const G4int index = GetPropertyIndex(G4String(key));
     return GetProperty(index);
@@ -317,7 +320,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
   }
 
   // G4PhysicsVector assumes energies are in increasing order
-  for (size_t i = 0; i < photonEnergies.size() - 1; ++i)
+  for (std::size_t i = 0; i < photonEnergies.size() - 1; ++i)
   {
     if(photonEnergies.at(i+1) < photonEnergies.at(i))
     {
@@ -330,8 +333,8 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
   }
 
   // if the key doesn't exist, add it if requested
-  if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) ==
-     fMatPropNames.end())
+  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) ==
+     fMatPropNames.cend())
   {
     if(createNewKey)
     {
@@ -393,7 +396,7 @@ void G4MaterialPropertiesTable::AddProperty(const G4String& key,
   // G4PhysicsVector assumes energies are in increasing order
   // An MPV with size==0 or 1 is also ok
   if (mpv->GetVectorLength() > 1) {
-    for (size_t i = 0; i < mpv->GetVectorLength() - 1; ++i)
+    for (std::size_t i = 0; i < mpv->GetVectorLength() - 1; ++i)
     {
       if(mpv->Energy(i+1) < mpv->Energy(i))
       {
@@ -407,8 +410,8 @@ void G4MaterialPropertiesTable::AddProperty(const G4String& key,
   }
 
   // if the key doesn't exist, add it
-  if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) ==
-     fMatPropNames.end())
+  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) ==
+     fMatPropNames.cend())
   {
     if(createNewKey)
     {
@@ -458,8 +461,8 @@ void G4MaterialPropertiesTable::AddConstProperty(const G4String& key,
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
-  if(std::find(fMatConstPropNames.begin(), fMatConstPropNames.end(), key) ==
-     fMatConstPropNames.end())
+  if(std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key) ==
+     fMatConstPropNames.cend())
   {
     if(createNewKey)
     {
@@ -522,8 +525,8 @@ void G4MaterialPropertiesTable::AddEntry(const G4String& key,
 {
   // Allows to add an entry pair directly to the Material Property Vector
   // given a key.
-  if(std::find(fMatPropNames.begin(), fMatPropNames.end(), key) ==
-     fMatPropNames.end())
+  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) ==
+     fMatPropNames.cend())
   {
     G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat214",
                 FatalException, "Material Property Vector not found.");
@@ -534,7 +537,7 @@ void G4MaterialPropertiesTable::AddEntry(const G4String& key,
   if(targetVector != nullptr)
   {
     // do not allow duplicate energies
-    for (size_t i = 0; i < targetVector->GetVectorLength(); ++i)
+    for (std::size_t i = 0; i < targetVector->GetVectorLength(); ++i)
     {
       if(aPhotonEnergy == targetVector->Energy(i))
       {
@@ -660,7 +663,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
     groupvel->InsertValues(E0, vg);
 
     // add entries at midpoints between remaining photon energies
-    for(size_t i = 2; i < rindex->GetVectorLength(); ++i)
+    for(std::size_t i = 2; i < rindex->GetVectorLength(); ++i)
     {
       vg = c_light / (0.5 * (n0 + n1) + (n1 - n0) / G4Log(E1 / E0));
 

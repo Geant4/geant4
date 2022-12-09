@@ -40,11 +40,9 @@ class G4MIRDMaleGenitalia: public G4VOrgan
 {
 public:
 
-  G4MIRDMaleGenitalia();
-  ~G4MIRDMaleGenitalia();
+  G4MIRDMaleGenitalia() = default;
+  ~G4MIRDMaleGenitalia() override=default;
   G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool);
-
-private:
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

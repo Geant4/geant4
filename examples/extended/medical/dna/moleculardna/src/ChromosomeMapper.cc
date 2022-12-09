@@ -90,7 +90,7 @@ ChromosomeMapper::~ChromosomeMapper()
 [[maybe_unused]] VirtualChromosome* ChromosomeMapper::GetChromosome(
   const G4String& key) const
 {
-  uint32_t key_i = G4::hashing::crc32::hash(key);
+  uint32_t key_i = G4::hashing::crc32::Hash(key);
 
   try
   {
@@ -107,7 +107,7 @@ ChromosomeMapper::~ChromosomeMapper()
 void ChromosomeMapper::AddChromosome(const G4String& key,
                                      const std::vector<G4String>& commands)
 {
-  uint32_t key_i = G4::hashing::crc32::hash(key);
+  uint32_t key_i = G4::hashing::crc32::Hash(key);
 
   auto it = fChromosomes.find(key_i);
 

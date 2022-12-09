@@ -76,7 +76,7 @@ G4XibZero* G4XibZero::Definition()
                 false,     1.479e-3*ns,          NULL,
                 false,       "xi_b");
   }
-  theInstance = reinterpret_cast<G4XibZero*>(anInstance);
+  theInstance = static_cast<G4XibZero*>(anInstance);
   return theInstance;
 }
 

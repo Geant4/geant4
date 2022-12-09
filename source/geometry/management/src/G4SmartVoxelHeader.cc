@@ -62,7 +62,7 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
     fmaxEquivalent(pSlice),
     fparamAxis(kUndefined)
 {
-  size_t nDaughters = pVolume->GetNoDaughters();
+  std::size_t nDaughters = pVolume->GetNoDaughters();
 
   // Determine whether daughter is replicated
   //
@@ -121,7 +121,7 @@ G4SmartVoxelHeader::~G4SmartVoxelHeader()
   // Manually destroy underlying nodes/headers
   // Delete collected headers and nodes once only
   //
-  size_t node, proxy, maxNode=fslices.size();
+  std::size_t node, proxy, maxNode=fslices.size();
   G4SmartVoxelProxy* lastProxy = nullptr;
   G4SmartVoxelNode *dyingNode, *lastNode=nullptr;
   G4SmartVoxelHeader *dyingHeader, *lastHeader=nullptr;
@@ -179,7 +179,7 @@ G4bool G4SmartVoxelHeader::operator == (const G4SmartVoxelHeader& pHead) const
     && (GetMinExtent() == pHead.GetMinExtent())
     && (GetMaxExtent() == pHead.GetMaxExtent()) )
   {
-    size_t node, maxNode;
+    std::size_t node, maxNode;
     G4SmartVoxelProxy *leftProxy, *rightProxy;
     G4SmartVoxelHeader *leftHeader, *rightHeader;
     G4SmartVoxelNode *leftNode, *rightNode;
@@ -239,13 +239,13 @@ G4bool G4SmartVoxelHeader::operator == (const G4SmartVoxelHeader& pHead) const
 void G4SmartVoxelHeader::BuildVoxels(G4LogicalVolume* pVolume)
 {
   G4VoxelLimits limits;   // Create `unlimited' limits object
-  size_t nDaughters = pVolume->GetNoDaughters();
+  std::size_t nDaughters = pVolume->GetNoDaughters();
 
   G4VolumeNosVector targetList;
   targetList.reserve(nDaughters);
-  for (size_t i=0; i<nDaughters; ++i)
+  for (std::size_t i=0; i<nDaughters; ++i)
   {
-    targetList.push_back(i);
+    targetList.push_back((G4int)i);
   }
   BuildVoxelsWithinLimits(pVolume, limits, &targetList);
 }
@@ -444,7 +444,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
   G4double goodSliceScore=kInfinity, testSliceScore;
   EAxis goodSliceAxis = kXAxis;
   EAxis testAxis      = kXAxis;
-  size_t node, maxNode, iaxis;
+  std::size_t node, maxNode, iaxis;
   G4VoxelLimits noLimits;
 
   // Try all non-limited cartesian axes
@@ -573,8 +573,8 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
 //
 void G4SmartVoxelHeader::BuildEquivalentSliceNos()
 {
-  size_t sliceNo, minNo, maxNo, equivNo;
-  size_t maxNode = fslices.size();
+  std::size_t sliceNo, minNo, maxNo, equivNo;
+  std::size_t maxNode = fslices.size();
   G4SmartVoxelNode *startNode, *sampleNode;
   for (sliceNo=0; sliceNo<maxNode; ++sliceNo)
   {
@@ -599,8 +599,8 @@ void G4SmartVoxelHeader::BuildEquivalentSliceNos()
       for (equivNo=minNo; equivNo<=maxNo; ++equivNo)
       {
         sampleNode = fslices[equivNo]->GetNode();
-        sampleNode->SetMinEquivalentSliceNo(minNo);
-        sampleNode->SetMaxEquivalentSliceNo(maxNo);
+        sampleNode->SetMinEquivalentSliceNo((G4int)minNo);
+        sampleNode->SetMaxEquivalentSliceNo((G4int)maxNo);
       }
       // Advance outer loop to end of equivalent group
       //
@@ -620,8 +620,8 @@ void G4SmartVoxelHeader::BuildEquivalentSliceNos()
 //
 void G4SmartVoxelHeader::CollectEquivalentNodes()
 {
-  size_t sliceNo, maxNo, equivNo;
-  size_t maxNode=fslices.size();
+  std::size_t sliceNo, maxNo, equivNo;
+  std::size_t maxNode=fslices.size();
   G4SmartVoxelNode* equivNode;
   G4SmartVoxelProxy* equivProxy;
 
@@ -667,8 +667,8 @@ void G4SmartVoxelHeader::CollectEquivalentNodes()
 //
 void G4SmartVoxelHeader::CollectEquivalentHeaders()
 {
-  size_t sliceNo, maxNo, equivNo;
-  size_t maxNode = fslices.size();
+  std::size_t sliceNo, maxNo, equivNo;
+  std::size_t maxNode = fslices.size();
   G4SmartVoxelHeader *equivHeader, *sampleHeader;
   G4SmartVoxelProxy *equivProxy;
 
@@ -750,10 +750,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   G4VSolid *targetSolid;
   G4AffineTransform targetTransform;
   G4bool replicated;
-  size_t nCandidates = pCandidates->size();
-  size_t nVol, nNode, targetVolNo;
+  std::size_t nCandidates = pCandidates->size();
+  std::size_t nVol, nNode, targetVolNo;
   G4VoxelLimits noLimits;
-    
+
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "**** G4SmartVoxelHeader::BuildNodes" << G4endl
          << "     Limits = " << pLimits << G4endl
@@ -825,15 +825,15 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     {
       // Find  solid
       //
-      targetSolid = pParam->ComputeSolid(targetVolNo,pDaughter);
+      targetSolid = pParam->ComputeSolid((G4int)targetVolNo,pDaughter);
 
       // Setup solid
       //
-      targetSolid->ComputeDimensions(pParam,targetVolNo,pDaughter);
+      targetSolid->ComputeDimensions(pParam,(G4int)targetVolNo,pDaughter);
 
       // Setup transform
       //
-      pParam->ComputeTransformation(targetVolNo,pDaughter);
+      pParam->ComputeTransformation((G4int)targetVolNo,pDaughter);
       targetTransform = G4AffineTransform(pDaughter->GetRotation(),
                                           pDaughter->GetTranslation());
     }
@@ -966,7 +966,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   for (nNode=0; G4long(nNode)<noNodes; ++nNode)
   {
     G4SmartVoxelNode *pNode;
-    pNode = new G4SmartVoxelNode(nNode);
+    pNode = new G4SmartVoxelNode((G4int)nNode);
     if (pNode == nullptr)
     {
       G4Exception("G4SmartVoxelHeader::BuildNodes()", "GeomMgt0003",
@@ -1064,11 +1064,11 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 G4double G4SmartVoxelHeader::CalculateQuality(G4ProxyVector *pSlice)
 {
   G4double quality;
-  size_t nNodes = pSlice->size();
-  size_t noContained, maxContained=0, sumContained=0, sumNonEmptyNodes=0;
+  std::size_t nNodes = pSlice->size();
+  std::size_t noContained, maxContained=0, sumContained=0, sumNonEmptyNodes=0;
   G4SmartVoxelNode *node;
 
-  for (size_t i=0; i<nNodes; ++i)
+  for (std::size_t i=0; i<nNodes; ++i)
   {
     if ((*pSlice)[i]->IsNode())
     {
@@ -1130,8 +1130,8 @@ G4double G4SmartVoxelHeader::CalculateQuality(G4ProxyVector *pSlice)
 void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
                                      G4VoxelLimits pLimits)
 {
-  size_t refinedDepth=0, minVolumes;
-  size_t maxNode = fslices.size();
+  std::size_t refinedDepth=0, minVolumes;
+  std::size_t maxNode = fslices.size();
 
   if (pLimits.IsXLimited()) 
   {
@@ -1163,7 +1163,7 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 
   if (refinedDepth<2)
   {
-    size_t targetNo, noContainedDaughters, minNo, maxNo, replaceNo, i;
+    std::size_t targetNo, noContainedDaughters, minNo, maxNo, replaceNo, i;
     G4double sliceWidth = (fmaxExtent-fminExtent)/maxNode;
     G4VoxelLimits newLimits;
     G4SmartVoxelNode* targetNode;
@@ -1194,7 +1194,7 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
         targetList->reserve(noContainedDaughters);
         for (i=0; i<noContainedDaughters; ++i)
         {
-          targetList->push_back(targetNode->GetVolume(i));
+          targetList->push_back(targetNode->GetVolume((G4int)i));
         }
         minNo = targetNode->GetMinEquivalentSliceNo();
         maxNo = targetNode->GetMaxEquivalentSliceNo();
@@ -1232,15 +1232,15 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
         newLimits.AddLimit(faxis,fminExtent+sliceWidth*minNo,
                            fminExtent+sliceWidth*(maxNo+1));
         replaceHeader = new G4SmartVoxelHeader(pVolume,newLimits,
-                                               targetList,replaceNo);
+                                               targetList,(G4int)replaceNo);
         if (replaceHeader == nullptr)
         {
           G4Exception("G4SmartVoxelHeader::RefineNodes()", "GeomMgt0003",
                       FatalException, "Refined VoxelHeader allocation error.");
           return;
         }
-        replaceHeader->SetMinEquivalentSliceNo(minNo);
-        replaceHeader->SetMaxEquivalentSliceNo(maxNo);
+        replaceHeader->SetMinEquivalentSliceNo((G4int)minNo);
+        replaceHeader->SetMaxEquivalentSliceNo((G4int)maxNo);
         replaceHeaderProxy = new G4SmartVoxelProxy(replaceHeader);
         if (replaceHeaderProxy == nullptr)
         {
@@ -1271,13 +1271,13 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 //
 G4bool G4SmartVoxelHeader::AllSlicesEqual() const
 {
-  size_t noSlices = fslices.size();
+  std::size_t noSlices = fslices.size();
   G4SmartVoxelProxy* refProxy;
 
   if (noSlices>1)
   {
     refProxy=fslices[0];
-    for (size_t i=1; i<noSlices; ++i)
+    for (std::size_t i=1; i<noSlices; ++i)
     {
       if (refProxy!=fslices[i])
       {
@@ -1296,9 +1296,9 @@ std::ostream& operator << (std::ostream& os, const G4SmartVoxelHeader& h)
 {
   os << "Axis = " << G4int(h.faxis) << G4endl;
   G4SmartVoxelProxy *collectNode=nullptr, *collectHead=nullptr;
-  G4int collectNodeNo = 0;
-  G4int collectHeadNo = 0;
-  size_t i, j;
+  std::size_t collectNodeNo = 0;
+  std::size_t collectHeadNo = 0;
+  std::size_t i, j;
   G4bool haveHeaders = false;
 
   for (i=0; i<h.fslices.size(); ++i)
@@ -1309,9 +1309,9 @@ std::ostream& operator << (std::ostream& os, const G4SmartVoxelHeader& h)
       if (h.fslices[i]!=collectNode)
       {
         os << "{";
-        for (size_t k=0; k<h.fslices[i]->GetNode()->GetNoContained(); ++k)
+        for (std::size_t k=0; k<h.fslices[i]->GetNode()->GetNoContained(); ++k)
         {
-          os << " " << h.fslices[i]->GetNode()->GetVolume(k);
+          os << " " << h.fslices[i]->GetNode()->GetVolume((G4int)k);
         }
         os << " }" << G4endl;
         collectNode = h.fslices[i];

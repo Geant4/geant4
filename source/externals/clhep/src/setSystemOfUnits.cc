@@ -263,7 +263,13 @@ void Evaluator::setSystemOfUnits(double meter,
 
   setVariable("micrometer", micro_ * m);
   setVariable("micron",     micro_ * m);
+  setVariable("um",         micro_ * m);
   setVariable("nanometer",  nano_  * m);
+  setVariable("nm",         nano_  * m);
+
+  const double parsec = 3.0856775807e+16 * m;
+  setVariable("parsec",     parsec);
+  setVariable("pc",         parsec);
 
   // ---  honors Anders Jonas Angstrom (1814-1874) of Sweden
   setVariable("angstrom",   1.e-10 * m);
@@ -329,6 +335,15 @@ void Evaluator::setSystemOfUnits(double meter,
   setVariable("picosecond",  pico_  * s);
   setVariable("ps",          pico_  * s);
 
+  const double minute = 60*s;
+  setVariable("minute", minute);
+  const double hour   = 60*minute;
+  setVariable("hour", hour);
+  const double day    = 24*hour;
+  setVariable("day", day);
+  const double year   = 365*day;  
+  setVariable("year", year);
+
   // Current
 
   setVariable("milliampere", milli_ * A);
@@ -361,11 +376,12 @@ void Evaluator::setSystemOfUnits(double meter,
   setVariable("gigajoule",   giga_ * J);
   setVariable("GJ",          giga_ * J);
 
-  const double e_SI  = 1.60217733e-19;  // positron charge in coulomb
+  const double e_SI  = 1.602176634e-19; // positron charge in coulomb
   const double ePlus = e_SI * C;        // positron charge
   const double eV    = ePlus * V;
   setVariable("electronvolt", eV);
   setVariable("eV",           eV);
+  setVariable("millielectronvolt", milli_ * eV);
   setVariable("kiloelectronvolt", kilo_ * eV);
   setVariable("keV",              kilo_ * eV);
   setVariable("megaelectronvolt", mega_ * eV);

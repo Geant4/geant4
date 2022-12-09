@@ -150,7 +150,8 @@ void HistoManager::SetHisto(G4int ih,
   }
   
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                 "10", "11", "12", "13", "14"};
+                 "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+                 "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"};
   const G4String title[] = { "dummy", // 0
                   "log10(Eloss/Emu) muIonization",              //1
                   "log10(Eloss/Emu) muPair",                    //2
@@ -159,13 +160,28 @@ void HistoManager::SetHisto(G4int ih,
                   "log10(Eloss/Emu) hIonization",               //5
                   "log10(Eloss/Emu) hPair",                     //6
                   "log10(Eloss/Emu) hBrems",                    //7
-                  "dummy",                                      //8
+                  "log10(Eloss/Emu) muToMuonPair",              //8
                   "dummy",                                      //9
                   "dummy",                                      //10
                   "log10(Eloss/Emu) muIonization",              //11
                   "log10(Eloss/Emu) muPair",                    //12
                   "log10(Eloss/Emu) muBrems",                   //13
-                  "log10(Eloss/Emu) muNuclear"                  //14
+                  "log10(Eloss/Emu) muNuclear",                 //14
+                  "dummy",                                      //15
+                  "dummy",                                      //16
+                  "dummy",                                      //17
+                  "log10(Eloss/Emu) muToMuonPair",              //18
+                  "dummy",                                      //19
+                  "dummy",                                      //20
+                  "CS(1/mm) vs ekin muIonisation",              //21
+                  "CS(1/mm) vs ekin muPair",                    //22
+                  "CS(1/mm) vs ekin muBrems",                   //23
+                  "CS(1/mm) vs ekin muNuclear",                 //24
+                  "dummy",                                      //25
+                  "dummy",                                      //26
+                  "dummy",                                      //27
+                  "CS(1/mm) vs ekin muToMuonPair",              //28
+                  "dummy"                                       //29 
                  };
 
   G4String titl = title[ih];

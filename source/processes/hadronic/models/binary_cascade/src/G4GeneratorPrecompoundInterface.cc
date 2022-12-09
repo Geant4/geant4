@@ -49,6 +49,7 @@
 #include "G4KineticTrackVector.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
+#include "G4Lambda.hh"
 
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
@@ -60,6 +61,7 @@
 
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
+#include "G4AntiLambda.hh"
 #include "G4AntiDeuteron.hh"
 #include "G4AntiTriton.hh"
 #include "G4AntiHe3.hh"
@@ -100,6 +102,7 @@ G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundM
 {
    proton = G4Proton::Proton();
    neutron = G4Neutron::Neutron();
+   lambda = G4Lambda::Lambda();
 
    deuteron=G4Deuteron::Deuteron();
    triton  =G4Triton::Triton();
@@ -747,6 +750,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
             const G4ParticleDefinition * LastFragment=aFragment;
             if     (aFragment == proton)  {LastFragment=G4AntiProton::AntiProtonDefinition();}
             else if(aFragment == neutron) {LastFragment=G4AntiNeutron::AntiNeutronDefinition();}
+            else if(aFragment == lambda)  {LastFragment=G4AntiLambda::AntiLambdaDefinition();}
             else if(aFragment == deuteron){LastFragment=G4AntiDeuteron::AntiDeuteronDefinition();}
             else if(aFragment == triton)  {LastFragment=G4AntiTriton::AntiTritonDefinition();}
             else if(aFragment == He3)     {LastFragment=G4AntiHe3::AntiHe3Definition();}
@@ -802,7 +806,7 @@ void G4GeneratorPrecompoundInterface::MakeCoalescence(G4KineticTrackVector *trac
 
   G4double MassCut = deuteron->GetPDGMass() + DeltaM;   // In MeV
 
-  for ( size_t i = 0; i < tracks->size(); ++i ) {  // search for protons
+  for ( std::size_t i = 0; i < tracks->size(); ++i ) {  // search for protons
 
     G4KineticTrack* trackP = (*tracks)[i];
     if ( ! trackP ) continue;
@@ -811,7 +815,7 @@ void G4GeneratorPrecompoundInterface::MakeCoalescence(G4KineticTrackVector *trac
     G4LorentzVector Prot4Mom = trackP->Get4Momentum();
     G4LorentzVector ProtSPposition = G4LorentzVector(trackP->GetPosition(), trackP->GetFormationTime());
 
-    for ( size_t j = 0; j < tracks->size(); ++j ) {  // search for neutron
+    for ( std::size_t j = 0; j < tracks->size(); ++j ) {  // search for neutron
                                                 
       G4KineticTrack* trackN = (*tracks)[j];
       if (! trackN ) continue;
@@ -837,9 +841,7 @@ void G4GeneratorPrecompoundInterface::MakeCoalescence(G4KineticTrackVector *trac
   }
 
   // Find and remove null pointers created by decays above
-  for ( int jj = tracks->size()-1; jj >= 0; --jj ) {
+  for ( G4int jj = (G4int)tracks->size()-1; jj >= 0; --jj ) {
     if ( ! (*tracks)[jj] ) tracks->erase(tracks->begin()+jj);
   }
-
 }
-

@@ -1193,9 +1193,9 @@ G4tgbGeometryDumper::GetPVChildren(G4LogicalVolume* lv)
 G4String G4tgbGeometryDumper::GetTGSolidType(const G4String& solidType)
 {
   G4String newsolidType = solidType.substr(2, solidType.length());
-  for(std::size_t ii = 0; ii < newsolidType.length(); ++ii)
+  for(G4int ii = 0; ii < (G4int)newsolidType.length(); ++ii)
   {
-    newsolidType[ii] = toupper(newsolidType[ii]);
+    newsolidType[ii] = (char)std::toupper(newsolidType[ii]);
   }
   return newsolidType;
 }
@@ -1248,8 +1248,8 @@ G4String G4tgbGeometryDumper::AddQuotes(const G4String& str)
 // --------------------------------------------------------------------
 G4String G4tgbGeometryDumper::SupressRefl(G4String name)
 {
-  G4int irefl = name.rfind("_refl");
-  if(irefl != -1)
+  std::size_t irefl = name.rfind("_refl");
+  if(irefl != G4String::npos)
   {
     name = name.substr(0, irefl);
   }
@@ -1259,8 +1259,8 @@ G4String G4tgbGeometryDumper::SupressRefl(G4String name)
 // --------------------------------------------------------------------
 G4String G4tgbGeometryDumper::SubstituteRefl(G4String name)
 {
-  G4int irefl = name.rfind("_refl");
-  if(irefl != -1)
+  std::size_t irefl = name.rfind("_refl");
+  if(irefl != G4String::npos)
   {
     name = name.substr(0, irefl) + "_REFL";
   }

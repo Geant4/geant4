@@ -52,8 +52,8 @@
  </materials>
 
  <solids>
-   <ellipsoid aunit="cm" lunit="cm" name="PancreasFirst" ax="2.87" by="1.14" cz="13.32" zcut1="-13.32" zcut2="0.0" />
-  <box aunit="cm" lunit="cm" name="SubtrPancreas" x="5.74" y="2.30" z="10.71" /> 
+   <ellipsoid lunit="cm" name="PancreasFirst" ax="2.87" by="1.14" cz="13.32" zcut1="-13.32" zcut2="0.0" />
+  <box lunit="cm" name="SubtrPancreas" x="5.74" y="2.30" z="10.71" /> 
   <subtraction name="Pancreas">
    <first ref="PancreasFirst" />
    <second ref="SubtrPancreas" />

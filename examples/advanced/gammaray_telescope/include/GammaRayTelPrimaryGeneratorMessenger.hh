@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -36,41 +34,39 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef GammaRayTelPrimaryGeneratorMessenger_h
 #define GammaRayTelPrimaryGeneratorMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <memory>
+
 class GammaRayTelPrimaryGeneratorAction;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelPrimaryGeneratorMessenger: public G4UImessenger
-{
+class GammaRayTelPrimaryGeneratorMessenger: public G4UImessenger {
 public:
-  GammaRayTelPrimaryGeneratorMessenger(GammaRayTelPrimaryGeneratorAction*);
-  ~GammaRayTelPrimaryGeneratorMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
+	explicit GammaRayTelPrimaryGeneratorMessenger(GammaRayTelPrimaryGeneratorAction*);
+
+	~GammaRayTelPrimaryGeneratorMessenger() override;
+
+	void SetNewValue(G4UIcommand *command, G4String newValue) override;
+
 private:
-  GammaRayTelPrimaryGeneratorAction* GammaRayTelAction; 
-  G4UIcmdWithAString*          RndmCmd;
-  G4UIcmdWithAnInteger*        SourceTypeCmd;
-  G4UIcmdWithADoubleAndUnit*   VertexRadiusCmd;
-  G4UIcmdWithAnInteger*        SpectrumTypeCmd;
-  G4UIcmdWithABool*            SourceGenCmd;
+	GammaRayTelPrimaryGeneratorAction *GammaRayTelAction;
 
+	G4UIcmdWithAString *rndmCmd;
+
+	G4UIcmdWithAnInteger *sourceTypeCmd;
+
+	G4UIcmdWithADoubleAndUnit *vertexRadiusCmd;
+
+	G4UIcmdWithAnInteger *spectrumTypeCmd;
+
+	G4UIcmdWithABool *sourceGenCmd;
 };
-
 #endif
-
-

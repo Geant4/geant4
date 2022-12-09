@@ -42,113 +42,110 @@
 #include "G4LorentzVector.hh"
 #include "G4ParticleHPDataUsed.hh"
 
-  void G4ParticleHPFSFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &, G4ParticleDefinition*  )
+void G4ParticleHPFSFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &, G4ParticleDefinition*  )
+{
+  G4String tString = "/FS/";
+  G4bool dbool;
+  G4ParticleHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
+  G4String filename = aFile.GetName();
+  SetAZMs( A, Z, M, aFile ); 
+  if(!dbool)
   {
-    G4String tString = "/FS/";
-    G4bool dbool;
-    G4ParticleHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
-    G4String filename = aFile.GetName();
-    SetAZMs( A, Z, M, aFile ); 
-    if(!dbool)
-    {
-      hasAnyData = false;
-      hasFSData = false; 
-      hasXsec = false;
-      return;
-    }
-   //std::ifstream theData(filename, std::ios::in);
-   std::istringstream theData(std::ios::in);
-   G4ParticleHPManager::GetInstance()->GetDataStream(filename,theData);
-
-    // here it comes
-    G4int infoType, dataType;
+    hasAnyData = false;
     hasFSData = false; 
-    while (theData >> infoType) // Loop checking, 11.05.2015, T. Koi
-    {
-      hasFSData = true; 
-      theData >> dataType;
-      switch(infoType)
-      {
-        case 1: 
-          if(dataType==4) theNeutronAngularDis.Init(theData); 
-          if(dataType==5) thePromptNeutronEnDis.Init(theData); 
-          if(dataType==12) theFinalStatePhotons.InitMean(theData); 
-          if(dataType==14) theFinalStatePhotons.InitAngular(theData); 
-          if(dataType==15) theFinalStatePhotons.InitEnergies(theData); 
-          break;
-        case 2:
-          if(dataType==1) theFinalStateNeutrons.InitMean(theData); 
-          break;
-        case 3:
-          if(dataType==1) theFinalStateNeutrons.InitDelayed(theData); 
-          if(dataType==5) theDelayedNeutronEnDis.Init(theData);
-          break;
-        case 4:
-          if(dataType==1) theFinalStateNeutrons.InitPrompt(theData); 
-          break;
-        case 5:
-          if(dataType==1) theEnergyRelease.Init(theData); 
-          break;
-        default:
-          G4cout << "G4ParticleHPFSFissionFS::Init: unknown data type"<<dataType<<G4endl;
-          throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPFSFissionFS::Init: unknown data type");
-          break;
-      }
-    }
-    //targetMass = theFinalStateNeutrons.GetTargetMass();
-    //theData.close();
+    hasXsec = false;
+    return;
   }
-  
-  
-  G4DynamicParticleVector * G4ParticleHPFSFissionFS::ApplyYourself(G4int nPrompt, 
-                                                 G4int nDelayed, G4double * theDecayConst)
-  {  
-    G4int i;
-    G4DynamicParticleVector * aResult = new G4DynamicParticleVector;
-    G4ReactionProduct boosted;
-    boosted.Lorentz( *(fCache.Get().theNeutronRP) , *(fCache.Get().theTarget) );
-    G4double eKinetic = boosted.GetKineticEnergy();
-    
-// Build neutrons
-    G4ReactionProduct * theNeutrons = new G4ReactionProduct[nPrompt+nDelayed];
-    for(i=0; i<nPrompt+nDelayed; i++)
-    {
-      theNeutrons[i].SetDefinition(G4Neutron::Neutron());
-    }
-    
-// sample energies
-   G4int it, dummy;
-   G4double tempE;
-   for(i=0; i<nPrompt; i++)
-   {
-     tempE = thePromptNeutronEnDis.Sample(eKinetic, dummy); // energy distribution (file5) always in lab
-     theNeutrons[i].SetKineticEnergy(tempE);
-   }
-   for(i=nPrompt; i<nPrompt+nDelayed; i++)
-   {
-     theNeutrons[i].SetKineticEnergy(theDelayedNeutronEnDis.Sample(eKinetic, it));  // dito
-     if(it==0) theNeutrons[i].SetKineticEnergy(thePromptNeutronEnDis.Sample(eKinetic, dummy));
-     theDecayConst[i-nPrompt] = theFinalStateNeutrons.GetDecayConstant(it); // this is returned
-   }
 
-// sample neutron angular distribution
-   for(i=0; i<nPrompt+nDelayed; i++)
-   {
-     theNeutronAngularDis.SampleAndUpdate(theNeutrons[i]); // angular comes back in lab automatically
-   }
-   
-// already in lab. Add neutrons to dynamic particle vector
-   for(i=0; i<nPrompt+nDelayed; i++)
-   {
-      G4DynamicParticle * dp = new G4DynamicParticle;
-      dp->SetDefinition(theNeutrons[i].GetDefinition());
-      dp->SetMomentum(theNeutrons[i].GetMomentum());
-      aResult->push_back(dp);
-   }
-   delete [] theNeutrons;
-// return the result
-   return aResult;
+  std::istringstream theData(std::ios::in);
+  G4ParticleHPManager::GetInstance()->GetDataStream(filename,theData);
+
+  G4int infoType, dataType;
+  hasFSData = false; 
+  while (theData >> infoType) // Loop checking, 11.05.2015, T. Koi
+  {
+    hasFSData = true; 
+    theData >> dataType;
+    switch(infoType)
+    {
+      case 1: 
+        if(dataType==4) theNeutronAngularDis.Init(theData); 
+        if(dataType==5) thePromptNeutronEnDis.Init(theData); 
+        if(dataType==12) theFinalStatePhotons.InitMean(theData); 
+        if(dataType==14) theFinalStatePhotons.InitAngular(theData); 
+        if(dataType==15) theFinalStatePhotons.InitEnergies(theData); 
+        break;
+      case 2:
+        if(dataType==1) theFinalStateNeutrons.InitMean(theData); 
+        break;
+      case 3:
+        if(dataType==1) theFinalStateNeutrons.InitDelayed(theData); 
+        if(dataType==5) theDelayedNeutronEnDis.Init(theData);
+        break;
+      case 4:
+        if(dataType==1) theFinalStateNeutrons.InitPrompt(theData); 
+        break;
+      case 5:
+        if(dataType==1) theEnergyRelease.Init(theData); 
+        break;
+      default:
+        G4cout << "G4ParticleHPFSFissionFS::Init: unknown data type"<<dataType<<G4endl;
+        throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPFSFissionFS::Init: unknown data type");
+        break;
+    }
   }
+}
+
+G4DynamicParticleVector*
+G4ParticleHPFSFissionFS::ApplyYourself(G4int nPrompt, G4int nDelayed,
+                                        G4double * theDecayConst)
+{  
+  G4int i;
+  G4DynamicParticleVector * aResult = new G4DynamicParticleVector;
+  G4ReactionProduct boosted;
+  boosted.Lorentz( *(fCache.Get().theNeutronRP) , *(fCache.Get().theTarget) );
+  G4double eKinetic = boosted.GetKineticEnergy();
+    
+  // Build neutrons
+  G4ReactionProduct * theNeutrons = new G4ReactionProduct[nPrompt+nDelayed];
+  for(i=0; i<nPrompt+nDelayed; ++i)
+  {
+    theNeutrons[i].SetDefinition(G4Neutron::Neutron());
+  }
+    
+  // sample energies
+  G4int it, dummy;
+  G4double tempE;
+  for(i=0; i<nPrompt; ++i)
+  {
+    tempE = thePromptNeutronEnDis.Sample(eKinetic, dummy); // energy distribution (file5) always in lab
+    theNeutrons[i].SetKineticEnergy(tempE);
+  }
+  for(i=nPrompt; i<nPrompt+nDelayed; ++i)
+  {
+    theNeutrons[i].SetKineticEnergy(theDelayedNeutronEnDis.Sample(eKinetic, it));  // dito
+    if(it==0) theNeutrons[i].SetKineticEnergy(thePromptNeutronEnDis.Sample(eKinetic, dummy));
+    theDecayConst[i-nPrompt] = theFinalStateNeutrons.GetDecayConstant(it); // this is returned
+  }
+
+  // sample neutron angular distribution
+  for(i=0; i<nPrompt+nDelayed; ++i)
+  {
+    theNeutronAngularDis.SampleAndUpdate(theNeutrons[i]); // angular comes back in lab automatically
+  }
+   
+  // already in lab. Add neutrons to dynamic particle vector
+  for(i=0; i<nPrompt+nDelayed; ++i)
+  {
+    G4DynamicParticle * dp = new G4DynamicParticle;
+    dp->SetDefinition(theNeutrons[i].GetDefinition());
+    dp->SetMomentum(theNeutrons[i].GetMomentum());
+    aResult->push_back(dp);
+  }
+  delete [] theNeutrons;
+
+  return aResult;
+}
 
 void G4ParticleHPFSFissionFS::SampleNeutronMult(G4int&all, G4int&Prompt, G4int&delayed, G4double eKinetic, G4int off)
 {
@@ -162,33 +159,34 @@ void G4ParticleHPFSFissionFS::SampleNeutronMult(G4int&all, G4int&Prompt, G4int&d
      Prompt = 0;
      delayed = 0;
      G4double totalNeutronMulti = theFinalStateNeutrons.GetMean(eKinetic);
-     all = G4Poisson(totalNeutronMulti-off);
+     all = (G4int)G4Poisson(totalNeutronMulti-off);
      all += off;
    }
    else
    {   
-     Prompt  = G4Poisson(promptNeutronMulti-off);
+     Prompt  = (G4int)G4Poisson(promptNeutronMulti-off);
      Prompt += off;
-     delayed = G4Poisson(delayedNeutronMulti);
+     delayed = (G4int)G4Poisson(delayedNeutronMulti);
      all = Prompt+delayed;
    }
 }
 
 G4DynamicParticleVector * G4ParticleHPFSFissionFS::GetPhotons()
 {
-// sample photons
+   // sample photons
    G4ReactionProductVector * temp;
    G4ReactionProduct boosted;
-// the photon distributions are in the Nucleus rest frame.
+
+   // the photon distributions are in the Nucleus rest frame.
    boosted.Lorentz( *(fCache.Get().theNeutronRP) , *(fCache.Get().theTarget) );
    G4double anEnergy = boosted.GetKineticEnergy();
    temp = theFinalStatePhotons.GetPhotons(anEnergy);
    if(temp == 0) { return 0; }
 
-// lorentz transform, and add photons to final state
+   // lorentz transform, and add photons to final state
    unsigned int i;
    G4DynamicParticleVector * result = new G4DynamicParticleVector;
-   for(i=0; i<temp->size(); i++)
+   for(i=0; i<temp->size(); ++i)
    {
      // back to lab
      temp->operator[](i)->Lorentz(*(temp->operator[](i)), -1.* (*(fCache.Get().theTarget)) );

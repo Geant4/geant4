@@ -40,7 +40,7 @@
 
 #include "G4Types.hh"
 
-typedef G4double (*function)(G4double);
+using function = G4double (*)(G4double);
 
 class G4SimpleIntegration
 {

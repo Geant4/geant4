@@ -44,6 +44,7 @@
 #include "tools/wroot/base_pntuple"
 
 #include <vector>
+#include <string_view>
 
 using std::to_string;
 
@@ -62,8 +63,8 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
   friend class G4RootMpiNtupleFileManager;
 
   public:
-    explicit G4RootMpiPNtupleManager(const G4AnalysisManagerState& state, 
-                                     tools::impi* impi, G4int mpiRank, G4int destinationRank);
+    G4RootMpiPNtupleManager(const G4AnalysisManagerState& state, 
+                            tools::impi* impi, G4int mpiRank, G4int destinationRank);
     ~G4RootMpiPNtupleManager();
 
   private:
@@ -96,6 +97,7 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     virtual G4bool Merge() final;
 
     // Clear all data
+    virtual G4bool Reset() final;
     virtual void Clear() final;
 
     // Reset
@@ -107,8 +109,15 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     virtual void  SetActivation(G4int ntupleId, G4bool activation) final;
     virtual G4bool  GetActivation(G4int ntupleId) const final;
 
+    // New cycle option
+    void SetNewCycle(G4bool value) final;
+    G4bool GetNewCycle() const final;
+
     // Access methods
     virtual G4int GetNofNtuples() const final;
+
+    // List ntuples
+    G4bool List(std::ostream& output, G4bool onlyIfActive = true) final;
 
   private:
     G4RootMpiPNtupleDescription*  
@@ -119,6 +128,9 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     template <typename T> 
     G4bool FillNtupleTColumn(G4int ntupleId, G4int columnId, const T& value);
 
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootMpiPNtupleManager" };
+
     // Data members
     // G4RootMpiMainNtupleManager* fMpiMainNtupleManager;
     std::shared_ptr<G4RootFileManager> fFileManager;
@@ -127,6 +139,7 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     tools::impi*  fImpi;
     G4int  fMpiRank;
     G4int  fDestinationRank;
+    G4bool fNewCycle { false };
 };
 
 // inline functions

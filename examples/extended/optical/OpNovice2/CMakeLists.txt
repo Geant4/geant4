@@ -46,6 +46,7 @@ set(OpNovice2_SCRIPTS
     complexRindex.mac
     electron.mac
     fresnel.mac
+    coated.mac
     scint_by_particle.mac
     vis.mac
     wls.mac

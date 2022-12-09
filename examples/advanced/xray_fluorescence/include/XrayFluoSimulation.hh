@@ -39,16 +39,12 @@ class XrayFluoSimulation{
 
 public:
   
-  XrayFluoSimulation(G4int seed);
+  XrayFluoSimulation()=default;
   
-  ~XrayFluoSimulation();
+  ~XrayFluoSimulation()= default;
   
   void RunSimulation(int argc,char* argv[]);
   
-private: 
-
-  G4int dir;
-
 };
 
 

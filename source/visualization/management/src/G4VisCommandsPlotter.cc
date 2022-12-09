@@ -34,6 +34,8 @@
 
 #include <sstream>
 
+#define G4warn G4cout
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////// /vis/plotter/create //////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -162,7 +164,7 @@ void G4VisCommandPlotterAddRegionStyle::SetNewValue (G4UIcommand*, G4String newV
   is >> plotter >> region >> style;
   if(region<0) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: bad region index " << region << "." << G4endl;
+      G4warn <<	"ERROR: bad region index " << region << "." << G4endl;
     }
     return;
   }
@@ -205,7 +207,7 @@ void G4VisCommandPlotterAddRegionParameter::SetNewValue (G4UIcommand* command, G
   tools::double_quotes_tokenize(newValue, args);
   if ( args.size() != command->GetParameterEntries() ) { // check consistency.
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: tokenize value problem." << G4endl;
+      G4warn <<	"ERROR: tokenize value problem." << G4endl;
     }
     return;
   }
@@ -216,7 +218,7 @@ void G4VisCommandPlotterAddRegionParameter::SetNewValue (G4UIcommand* command, G
   std::string value = args[3];
   if(region<0) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: bad region index " << region << "." << G4endl;
+      G4warn <<	"ERROR: bad region index " << region << "." << G4endl;
     }
     return;
   }
@@ -279,7 +281,7 @@ void G4VisCommandPlotterClearRegion::SetNewValue (G4UIcommand*, G4String newValu
   is >> plotter >> region;
   if(region<0) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: bad region index " << region << "." << G4endl;
+      G4warn <<	"ERROR: bad region index " << region << "." << G4endl;
     }
     return;
   }
@@ -339,7 +341,7 @@ void G4VisCommandPlotterAddRegionH1::SetNewValue (G4UIcommand*, G4String newValu
   
   if(region<0) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: bad region index " << region << "." << G4endl;
+      G4warn <<	"ERROR: bad region index " << region << "." << G4endl;
     }
     return;
   }
@@ -384,7 +386,7 @@ void G4VisCommandPlotterAddRegionH2::SetNewValue (G4UIcommand*, G4String newValu
   
   if(region<0) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: bad region index " << region << "." << G4endl;
+      G4warn <<	"ERROR: bad region index " << region << "." << G4endl;
     }
     return;
   }

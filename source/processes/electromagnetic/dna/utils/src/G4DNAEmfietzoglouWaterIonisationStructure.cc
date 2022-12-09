@@ -46,7 +46,7 @@ G4DNAEmfietzoglouWaterIonisationStructure::G4DNAEmfietzoglouWaterIonisationStruc
   energyConstant.push_back(32.2*eV);
   energyConstant.push_back(539.7*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

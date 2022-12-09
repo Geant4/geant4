@@ -82,8 +82,6 @@ namespace G4INCL {
 		
 		G4double rdm = Random::shoot();
 		
-		G4int nbr_particle = 2;
-		
 		if(rdm < 0.35){
 			// Lambda-K chosen
 			nucleon_initial->setType(Lambda);
@@ -93,7 +91,6 @@ namespace G4INCL {
 		}
 		else if((iso == 0 && rdm < 0.55) || rdm < 0.5){
 			// N-K-Kb chosen
-			nbr_particle++;
 			available_iso = 3;
 			min_pions = 1;
 			max_pions = G4int((sqrtS-ParticleTable::getINCLMass(Proton)-2.*ParticleTable::getINCLMass(KZero)-10.)/ParticleTable::getINCLMass(PiPlus));
@@ -109,7 +106,6 @@ namespace G4INCL {
 		nbr_pions = std::min(max_pions,std::max(min_pions,G4int(intermediaire )));
 		
 		available_iso += nbr_pions*2;
-		nbr_particle += nbr_pions;
 
 		// Erase the parent resonance information of the initial particles
 		particle1->setParentResonancePDGCode(0);

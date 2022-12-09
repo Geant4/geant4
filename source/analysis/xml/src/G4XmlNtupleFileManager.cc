@@ -42,24 +42,6 @@ G4XmlNtupleFileManager::G4XmlNtupleFileManager(const G4AnalysisManagerState& sta
 {}
 
 //
-// private methods
-//
-
-//_____________________________________________________________________________
-G4bool G4XmlNtupleFileManager::CloseNtupleFiles()
-{
- // Close ntuple files
-
-  auto result = true;
-  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
-  for ( auto ntupleDescription : ntupleVector) {
-    result &= fFileManager->CloseNtupleFile(ntupleDescription);
-  }
-
-  return result;
-}
-
-//
 // public methods
 //
 
@@ -88,27 +70,24 @@ G4bool G4XmlNtupleFileManager::ActionAtWrite()
 {
   auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
 
-  for ( auto ntuple : ntupleVector ) {
-    if ( ntuple->fNtuple ) ntuple->fNtuple->write_trailer();
+  for ( auto ntupleDescription : ntupleVector ) {
+    if (ntupleDescription->GetNtuple() != nullptr) {
+      ntupleDescription->GetNtuple()->write_trailer();
+    }
   }
 
   return true;
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlNtupleFileManager::ActionAtCloseFile(G4bool reset)
+G4bool G4XmlNtupleFileManager::ActionAtCloseFile()
 {
   auto result = true;
 
   // Close ntuple files
-  result &= CloseNtupleFiles();
-
-  // Reset data
-  if ( ! reset ) {
-    result = Reset();
-    if ( ! result ) {
-      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
-    }
+  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
+  for ( auto ntupleDescription : ntupleVector) {
+    result &= fFileManager->CloseNtupleFile(ntupleDescription);
   }
 
   return result;

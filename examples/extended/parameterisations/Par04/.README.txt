@@ -1,20 +1,17 @@
--------------------------------------------------------------------
+///\file "parameterisations/Par03/.README.txt"
+///\brief Example Par04 README page
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
-
-                            Example Par04
-                            -------------
+/*! \page ExamplePar04 Example Par04
 
  This example demonstrates how to use the Machine Learning (ML) inference
  to create energy deposits as a fast simulation model using
-<a href="https://github.com/microsoft/onnxruntime">ONNX runtime</a>
- and <a href="https://github.com/lwtnn/lwtnn">LWTNN</a> libraries.
+<a href="https://github.com/microsoft/onnxruntime">ONNX runtime</a>,
+ <a href="https://github.com/lwtnn/lwtnn">LWTNN</a>, and
+ <a href="https://pytorch.org/cppdocs/frontend.html">LibTorch</a> libraries.
 
  The model used in this example was trained externally (in Python) on data
  from this examples' full simulation and can be applied to perform fast simulation.
- The python scripts are availbale in the training folder.
+ The python scripts are available in the training folder.
 
  The geometry used in the example is a cylindrical setup of layers: tungsten
  absorber and silicon as the active material. 3D readout geometry (cylindrical)
@@ -32,7 +29,7 @@
 
  Input macro can specify which layer is considered an active layer (sensitive
  detector is attached to it). For fast simulation both layers should be marked
- as sensitive. It is connected to the wway the deposits are created: position is
+ as sensitive. It is connected to the way the deposits are created: position is
  centre of the layer, which may often fall within the absorber (which is thicker
  than the active material). In a realistic detector setup, the positions used in
  fast simulation would be calculated properly, to deposit energy within the active
@@ -73,7 +70,7 @@
 
  ## 6. ML Inference
 
- - Par04MLFastSimModel : model used for parametrisation of źelectrons, positrons,
+ - Par04MLFastSimModel : model used for parametrisation of electrons, positrons,
       and gammas. Energy is deposited and
       distributed according to inferred values from the ML model.
       This class triggers the inference setup, asks for values,
@@ -91,8 +88,8 @@
  - Par04InferenceInterface : is a base class that allows to read in the ML model, configure
        and execute inference.
 
- - Par04OnnxInference and Par04LWTNNInference : inference library specific classes that inherit
-      from the base class Par04InferenceInterface.
+ - Par04OnnxInference and Par04LWTNNInference and Par04TorchInference : inference library specific
+      classes that inherit from the base class Par04InferenceInterface.
 
 
  ## 7. Output
@@ -102,41 +99,67 @@
 
  The macro file examplePar04.mac is used to run full simulation. It will simulate 100
  events, for single 10 GeV electron beams.
- If CMake is able to find inference libraries (lwtnn and/or ONNX Runtime), a configuration
- macro will be available for that library (examplePar04_lwtnn.mac and/or examplePar04_onnx.mac).
- It will use a trained model to run inference and create showers in the detector by directly
- depositing energy.
+ If CMake is able to find inference libraries (LWTNN and/or ONNX Runtime and/or LibTorch), a configuration
+ macro will be available for that library (examplePar04_lwtnn.mac and/or examplePar04_onnx.mac
+ and/or examplePar04_torch.mac). It will use a trained model to run inference and create showers
+ in the detector by directly depositing energy.
 
  ## 8. How to build and run the example
 
-- LWTNN and ONNX Runtime are available on LCG. In order to use them, one can setup the envirnment:
-  % source /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc10-opt/setup.sh
+- LWTNN, ONNX Runtime, and LibTorch are available on LCG. In order to use them, you can set a `CMAKE_PREFIX_PATH`:
+\verbatim
+  % source /cvmfs/sft.cern.ch/lcg/contrib/gcc/11.3.0/x86_64-centos7/setup.sh
+  % cmake -DCMAKE_PREFIX_PATH="/cvmfs/sft.cern.ch/lcg/releases/LCG_102b/lwtnn/2.11.1/x86_64-centos7-gcc11-opt/;/cvmfs/sft.cern.ch/lcg/releases/LCG_102b/onnxruntime/1.11.1/x86_64-centos7-gcc11-opt/;/cvmfs/sft.cern.ch/lcg/releases/LCG_102b/torch/1.11.0/x86_64-centos7-gcc11-opt/lib/python3.9/site-packages/torch/" <Par04_SOURCE>
+\endverbatim
 
-- Compile and link to generate the executable (in your CMAKE build directory):
-  % cmake <Par04_SOURCE>
-  % make
+- Compile and link to generate the executable (in your CMake build directory):
+\verbatim
+% cmake <Par04_SOURCE>
+% make
+\endverbatim
 
 - Execute the application (in batch mode):
-  % ./examplePar04 -m examplePar04.mac
+\verbatim
+% ./examplePar04 -m examplePar04.mac
+\endverbatim
   which produces two root file for full simulation.
 
 - Execute the application (in interactive mode):
-  % ./examplePar04 -i -m vis.mac
+\verbatim
+% ./examplePar04 -i -m vis.mac
+\endverbatim
   which allows to visualize hits (from full simulation).
 
 - If ONNX Runtime is available:
-  % ./examplePar04 -m examplePar04_onnx.mac
+\verbatim
+% ./examplePar04 -m examplePar04_onnx.mac
+\endverbatim
   For interactive mode with visualization:
-  % ./examplePar04 -i -m vis_onnx.mac
+\verbatim
+% ./examplePar04 -i -m vis_onnx.mac
+\endverbatim
 
 - If LWTNN is available:
-  % ./examplePar04 -m examplePar04_lwtnn.mac
+\verbatim
+% ./examplePar04 -m examplePar04_lwtnn.mac
+\endverbatim
   For interactive mode with visualization:
-  % ./examplePar04 -i -m vis_lwtnn.mac
+\verbatim
+% ./examplePar04 -i -m vis_lwtnn.mac
+\endverbatim
+
+- If LibTorch is available:
+\verbatim
+% ./examplePar04 -m examplePar04_torch.mac
+\endverbatim
+  For interactive mode with visualization:
+\verbatim
+% ./examplePar04 -i -m vis_torch.mac
+\endverbatim
 
  By default, CMake will attempt to build fast simulation with ONNX Runtime and LWTNN. However, if none
  of those libraries is found, it will proceed with full simulation only. The search can be switched
- off manually switching CMake flag INFERENCE_LIB to OFF (-DINFERENCE_LIB=OFF)
+ off manually switching CMake flag `INFERENCE_LIB` to `OFF` (`-DINFERENCE_LIB=OFF`)
 
  ## 9. Macros
 
@@ -144,11 +167,15 @@
            It can be used to visualize full simulation.
 
  vis_onnx.mac - Allows to run visualization with ONNX Runtime inference. Pass it to the example in interactive mode
-              ("-i" passed to the executable). It contains ecessary settings of the inference, and it treats full
+              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
               calorimeter as sensitive material (due to deposition of hits regardless of the volume).
 
  vis_lwtnn.mac - Allows to run visualization with LWTNN inference. Pass it to the example in interactive mode
-              ("-i" passed to the executable). It contains ecessary settings of the inference, and it treats full
+              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
+              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+
+ vis_torch.mac - Allows to run visualization with LibTorch inference. Pass it to the example in interactive mode
+              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
               calorimeter as sensitive material (due to deposition of hits regardless of the volume).
 
  examplePar04.mac - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
@@ -160,91 +187,70 @@
  examplePar04_lwtnn.mac - Available only if LWTNN is found by CMake. Runs fast simulation with
                         a NN stored in json file.
 
+ examplePar04_torch.mac - Available only if LibTorch is found by CMake. Runs fast simulation with
+                        a NN stored in pt file.
+
  ## 10. UI commands
 
  UI commands useful in this example:
 
 - activation/disactivation of the fast simulation model:
-   /param/ActivateModel inferenceModel
-   /param/InActivateModel inferenceModel
+\verbatim
+/param/ActivateModel inferenceModel
+/param/InActivateModel inferenceModel
+\endverbatim
 
 - particle gun commands
-   /gun/particle e-
-   /gun/energy 10 GeV
-   /gun/direction 0 1 0
-   /gun/position 0 0 0
+\verbatim
+/gun/particle e-
+/gun/energy 10 GeV
+/gun/direction 0 1 0
+/gun/position 0 0 0
+\endverbatim
 
  UI commands defined in this example:
  - detector settings
-    /Par04/detector/setDetectorInnerRadius 80 cm
-    /Par04/detector/setDetectorLength 2 m
-    /Par04/detector/setNbOfLayers 90
-    /Par04/detector/setAbsorber 0 G4_W 1.4 mm false
-    /Par04/detector/setAbsorber 1 G4_Si 0.3 mm true
+\verbatim
+/Par04/detector/setDetectorInnerRadius 80 cm
+/Par04/detector/setDetectorLength 2 m
+/Par04/detector/setNbOfLayers 90
+/Par04/detector/setAbsorber 0 G4_W 1.4 mm false
+/Par04/detector/setAbsorber 1 G4_Si 0.3 mm true
+\endverbatim
 
  - readout mesh
-    /Par04/mesh/setSizeOfRhoCells 2.325 mm
-    /Par04/mesh/setSizeOfZCells 3.4 mm
-    /Par04/mesh/setNbOfRhoCells 18
-    /Par04/mesh/setNbOfPhiCells 50
-    /Par04/mesh/setNbOfZCells 45
+\verbatim
+/Par04/mesh/setSizeOfRhoCells 2.325 mm
+/Par04/mesh/setSizeOfZCells 3.4 mm
+/Par04/mesh/setNbOfRhoCells 18
+/Par04/mesh/setNbOfPhiCells 50
+/Par04/mesh/setNbOfZCells 45
+\endverbatim
 
  - inference setup
-    /Par04/inference/setSizeLatentVector 10
-    /Par04/inference/setSizeConditionVector 4
-    /Par04/inference/setModelPathName MLModels/Generator.onnx
-    /Par04/inference/setProfileFlag 0
-    /Par04/inference/setOptimizationFlag 0
-    /Par04/inference/setInferenceLibrary ONNX
-    /Par04/inference/setSizeOfRhoCells 2.325 mm
-    /Par04/inference/setSizeOfZCells 3.4 mm
-    /Par04/inference/setNbOfRhoCells 18
-    /Par04/inference/setNbOfPhiCells 50
-    /Par04/inference/setNbOfZCells 45
+\verbatim
+/Par04/inference/setSizeLatentVector 10
+/Par04/inference/setSizeConditionVector 4
+/Par04/inference/setModelPathName MLModels/Generator.onnx
+/Par04/inference/setProfileFlag 0
+/Par04/inference/setOptimizationFlag 0
+/Par04/inference/setInferenceLibrary ONNX
+/Par04/inference/setSizeOfRhoCells 2.325 mm
+/Par04/inference/setSizeOfZCells 3.4 mm
+/Par04/inference/setNbOfRhoCells 18
+/Par04/inference/setNbOfPhiCells 50
+/Par04/inference/setNbOfZCells 45
+\endverbatim
 
  ## 11. Python scripts for training
 
  The scripts available in the training folder were used to train
- the VAE model of this example.
+ the VAE model of this example. More details can be found in 
+ training/README.
 
- - model: defines the VAE model as a class which contains the architecture,
- the loss function and the training function.
-
- - utils: defines the data loading and preprocessing function and returns
- the preprocessed array of shower energies and the condition arrays of energy,
- angle and geometry. The input is expected to be in local directory 'detector_*'.
- In this example, the model is trained on 2 detector geometries and the input
- directories are 'detector_SiW' and 'detector_SciPb'. Each directory contains the
- HDF5 files for each primary particle energy and angle.
-
- - train: defines data loading parameters and calls the data preprocessing function.
- It defines the model parameters and instantiates the VAE model, performs the training
- and then coverts the model into an ONNX format.
-
-    A history object is returned from the training function of the VAE. The history is a callback
-    object registered during the training which records metrics for each epoch such as the loss.
-    The user can list the metrics collected in the history object using:
-
-      % print(history.history.keys())
-
-    The data collected in the history object can be used to create plots such as the loss function
-    as function of the epochs. If the loss metric collected in the history object is called loss,
-    then to plot it using for example the matplotlib library:
-
-      % matplotlib.pyplot.plot(history.history['loss'])
-
-    The traing function can also generate intermediate files representing checkpoints of the model
-    that can be used for validation purposes. These checkpoints are generated if the early stopping flag
-    of the training is off, which means to train the model for the predefined number of epochs. The weights
-    of the model are saved every 100 epochs.
-
-    After the training, the model (only the decoder part) is saved as an HDF5 file and then is converted
-    into an ONNX format. The final output model called Generator.onnx can be used to perform the inference
-    in this example.
-
- To perform the training run:
-  % python train.py
 
  ## 12. Public data
 
  Data generated with full simulation with this example has been published on <a href="https://doi.org/10.5281/zenodo.6082201">zenodo</a>.
+
+ */

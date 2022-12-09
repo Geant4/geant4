@@ -161,20 +161,19 @@ G4double G4Physics2DVector::Value(G4double xx, G4double yy, std::size_t& idx,
   {
     return BicubicInterpolation(x, y, idx, idy);
   }
-  else
-  {
-    const G4double x1  = xVector[idx];
-    const G4double x2  = xVector[idx + 1];
-    const G4double y1  = yVector[idy];
-    const G4double y2  = yVector[idy + 1];
-    const G4double v11 = GetValue(idx, idy);
-    const G4double v12 = GetValue(idx + 1, idy);
-    const G4double v21 = GetValue(idx, idy + 1);
-    const G4double v22 = GetValue(idx + 1, idy + 1);
-    return ((y2 - y) * (v11 * (x2 - x) + v12 * (x - x1)) +
-            ((y - y1) * (v21 * (x2 - x) + v22 * (x - x1)))) /
-           ((x2 - x1) * (y2 - y1));
-  }
+  
+  const G4double x1  = xVector[idx];
+  const G4double x2  = xVector[idx + 1];
+  const G4double y1  = yVector[idy];
+  const G4double y2  = yVector[idy + 1];
+  const G4double v11 = GetValue(idx, idy);
+  const G4double v12 = GetValue(idx + 1, idy);
+  const G4double v21 = GetValue(idx, idy + 1);
+  const G4double v22 = GetValue(idx + 1, idy + 1);
+  return ((y2 - y) * (v11 * (x2 - x) + v12 * (x - x1)) +
+          ((y - y1) * (v21 * (x2 - x) + v22 * (x - x1)))) /
+         ((x2 - x1) * (y2 - y1));
+ 
 }
 
 // --------------------------------------------------------------
@@ -287,7 +286,7 @@ void G4Physics2DVector::PutVectors(const std::vector<G4double>& vecX,
 void G4Physics2DVector::Store(std::ofstream& out) const
 {
   // binning
-  G4int prec = out.precision();
+  G4long prec = out.precision();
   out << G4int(type) << " " << numberOfXNodes << " " << numberOfYNodes
       << G4endl;
   out << std::setprecision(8);

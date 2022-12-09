@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file MoviesDetectorConstruction.hh
+/// \brief Definition of the MoviesDetectorConstruction class
 // 
 
 #ifndef MoviesDetectorConstruction_h

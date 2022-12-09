@@ -95,7 +95,7 @@ G4PionZero* G4PionZero::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4PionZero*>(anInstance);
+  theInstance = static_cast<G4PionZero*>(anInstance);
   return theInstance;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HodoscopeHit.hh
+/// \file B5/include/HodoscopeHit.hh
 /// \brief Definition of the B5::HodoscopeHit class
 
 #ifndef B5HodoscopeHit_h
@@ -56,7 +56,7 @@ class HodoscopeHit : public G4VHit
   public:
     HodoscopeHit(G4int i,G4double t);
     HodoscopeHit(const HodoscopeHit &right) = default;
-    ~HodoscopeHit() override;
+    ~HodoscopeHit() override = default;
 
     HodoscopeHit& operator=(const HodoscopeHit &right) = default;
     G4bool operator==(const HodoscopeHit &right) const;

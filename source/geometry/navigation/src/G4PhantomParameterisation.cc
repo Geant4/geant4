@@ -94,9 +94,9 @@ GetTranslation(const G4int copyNo ) const
 {
   CheckCopyNo( copyNo );
 
-  size_t nx;
-  size_t ny;
-  size_t nz;
+  std::size_t nx;
+  std::size_t ny;
+  std::size_t nz;
 
   ComputeVoxelIndices( copyNo, nx, ny, nz );
 
@@ -120,15 +120,15 @@ G4Material* G4PhantomParameterisation::
 ComputeMaterial(const G4int copyNo, G4VPhysicalVolume *, const G4VTouchable *) 
 { 
   CheckCopyNo( copyNo );
-  size_t matIndex = GetMaterialIndex(copyNo);
+  std::size_t matIndex = GetMaterialIndex(copyNo);
 
   return fMaterials[ matIndex ];
 }
 
 
 //------------------------------------------------------------------
-size_t G4PhantomParameterisation::
-GetMaterialIndex( size_t copyNo ) const
+std::size_t G4PhantomParameterisation::
+GetMaterialIndex( std::size_t copyNo ) const
 {
   CheckCopyNo( copyNo );
 
@@ -138,36 +138,38 @@ GetMaterialIndex( size_t copyNo ) const
 
 
 //------------------------------------------------------------------
-size_t G4PhantomParameterisation::
-GetMaterialIndex( size_t nx, size_t ny, size_t nz ) const
+std::size_t G4PhantomParameterisation::
+GetMaterialIndex( std::size_t nx, std::size_t ny, std::size_t nz ) const
 {
-  size_t copyNo = nx + fNoVoxelsX*ny + fNoVoxelsXY*nz;
+  std::size_t copyNo = nx + fNoVoxelsX*ny + fNoVoxelsXY*nz;
   return GetMaterialIndex( copyNo );
 }
 
 
 //------------------------------------------------------------------
 G4Material*
-G4PhantomParameterisation::GetMaterial( size_t nx, size_t ny, size_t nz) const
+G4PhantomParameterisation::GetMaterial( std::size_t nx, std::size_t ny, std::size_t nz) const
 {
   return fMaterials[GetMaterialIndex(nx,ny,nz)];
 }
 
+
 //------------------------------------------------------------------
-G4Material* G4PhantomParameterisation::GetMaterial( size_t copyNo ) const
+G4Material* G4PhantomParameterisation::GetMaterial( std::size_t copyNo ) const
 {
   return fMaterials[GetMaterialIndex(copyNo)];
 }
 
+
 //------------------------------------------------------------------
 void G4PhantomParameterisation::
-ComputeVoxelIndices(const G4int copyNo, size_t& nx,
-                            size_t& ny, size_t& nz ) const
+ComputeVoxelIndices(const G4int copyNo, std::size_t& nx,
+                          std::size_t& ny, std::size_t& nz ) const
 {
   CheckCopyNo( copyNo );
-  nx = size_t(copyNo%fNoVoxelsX);
-  ny = size_t( (copyNo/fNoVoxelsX)%fNoVoxelsY );
-  nz = size_t(copyNo/fNoVoxelsXY);
+  nx = std::size_t(copyNo%fNoVoxelsX);
+  ny = std::size_t( (copyNo/fNoVoxelsX)%fNoVoxelsY );
+  nz = std::size_t(copyNo/fNoVoxelsXY);
 }
 
 
@@ -325,7 +327,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     }
   }
   
-  G4int copyNo = nx + fNoVoxelsX*ny + fNoVoxelsXY*nz;
+  G4int copyNo = G4int(nx + fNoVoxelsX*ny + fNoVoxelsXY*nz);
 
   // Check if there are still errors 
   //
@@ -337,7 +339,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   else if( nx >= G4int(fNoVoxelsX) )
   {
-    nx = fNoVoxelsX-1;
+    nx = G4int(fNoVoxelsX)-1;
     isOK = false;
   }
   if( ny < 0 )
@@ -347,7 +349,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   else if( ny >= G4int(fNoVoxelsY) )
   {
-    ny = fNoVoxelsY-1;
+    ny = G4int(fNoVoxelsY)-1;
     isOK = false;
   }
   if( nz < 0 )
@@ -357,7 +359,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   else if( nz >= G4int(fNoVoxelsZ) )
   {
-    nz = fNoVoxelsZ-1;
+    nz = G4int(fNoVoxelsZ)-1;
     isOK = false;
   }
   if( !isOK )
@@ -379,7 +381,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
 		  "GeomNav1002", JustWarning, message);
     }
     
-    copyNo = nx + fNoVoxelsX*ny + fNoVoxelsXY*nz;
+    copyNo = G4int(nx + fNoVoxelsX*ny + fNoVoxelsXY*nz);
   }
 
   return copyNo;
@@ -387,7 +389,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
 
 
 //------------------------------------------------------------------
-void G4PhantomParameterisation::CheckCopyNo( const G4int copyNo ) const
+void G4PhantomParameterisation::CheckCopyNo( const G4long copyNo ) const
 { 
   if( copyNo < 0 || copyNo >= G4int(fNoVoxels) )
   {

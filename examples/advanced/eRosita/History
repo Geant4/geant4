@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-11, A. Polsini, F. Longo, (eRosita-V11-00-03)
+- Migration to C++17 standard. General code refactoring.
+  Obsolete physics classes removed.
+  eRositaPhysicsList.cc updated with Livermore and Penelope models.
+  README file updated.
+
 ## 2022-05-16 Guilherme Amadio (eRosita-V11-00-02)
 - Replace getenv() calls for data variables with G4FindDataDir()
 
@@ -19,39 +25,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 ---
 
 # History entries prior to 11.0
-
-12.05.2021, A.Polsini,F.Longo eRosita-V10-07-01
+            
+12.05.2021, A. Polsini, F. Longo, tag eRosita-V10-07-01
             Migration to multithreading (MT) mode
             
-24.05.2021, B. Morgan (eRosita-V10-07-00)
+24.05.2021, B. Morgan, tag eRosita-V10-07-00
             Bump required CMake version range to 3.12...3.20, matching core Geant4
-
             
-02.11.2020, B.Morgan eRosita-V10-06-00
+02.11.2020, B. Morgan, tag eRosita-V10-06-00
             Support same CMake version range as core Geant4
 
-30.10.2019, S.Guatelli eRosita-V10-05-02
+30.10.2019, S. Guatelli, tag eRosita-V10-05-02
             "using namespace std" deleted
 
-29.08.2019, S.Guatelli eRosita-V10-05-01
+29.08.2019, S. Guatelli, tag eRosita-V10-05-01
             G4VIS_USE and G4UI_USE deleted
 
-31.01.2019, I.Hrivnacova eRosita-V10-05-00
+31.01.2019, I. Hrivnacova, tag eRosita-V10-05-00
             Merged GitHub PR #4: all Boolean operators now return G4bool.
 
-15.11.2017, G.Cosmo eRosita-V10-03-02
+15.11.2017, G. Cosmo, tag eRosita-V10-03-02
             Fixed compilation warning.
             Removed unnecessary dependency of PrimaryGeneratorAction on
             DetectorConstruction.
 
-13.11.2017, L.Pandola eRosita-V10-03-01
+13.11.2017, L. Pandola, tag eRosita-V10-03-01
             Small changes to CMakeLists.txt, to allow integration in
             ctests
 
-09.11.2017, MGP,M.C.Han tag eRosita-V10-03-00
+09.11.2017, MGP, M. C. Han, tag eRosita-V10-03-00
             Changes for ctest.
 
-11.10.2012, G.Cosmo, tag eRosita-V09-05-00
+11.10.2012, G. Cosmo, tag eRosita-V09-05-00
             Explicit inclusion of units and constants headers.
 
 28.11.2011, G.Cosmo, tag eRosita V09-04-01
@@ -102,7 +107,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 19.11.2010, MGP, tag eRosita-V09-03-00
             Initial empty directory to host the eROSITA example
             illustrating PIXE simulation with Geant4 as documented in
-            M.G. Pia et al.,
+            M. G. Pia et al.,
             PIXE Simulation With Geant4,
             IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009.
 

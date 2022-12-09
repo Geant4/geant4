@@ -8,7 +8,7 @@
 /testem/det/setMat Iron
 /testem/det/setSize 1 m
 #
-/testem/phys/addPhysics emstandard_opt0
+/testem/phys/addPhysics local
 #
 /run/setCut 1 mm
 #
@@ -18,12 +18,18 @@
 /gun/energy 100 TeV
 #
 /testem/histo/setFileName allproc
-/testem/histo/setHisto 1 100 -10. 0.
-/testem/histo/setHisto 2 100 -10. 0.
-/testem/histo/setHisto 3 100 -10. 0.
-/testem/histo/setHisto 11 100 -10. 0.
-/testem/histo/setHisto 12 100 -10. 0.
-/testem/histo/setHisto 13 100 -10. 0.
+/testem/histo/setHisto 1 100 -10. 0.	# muIonisation simulation
+/testem/histo/setHisto 2 100 -10. 0.	# muPair simulation
+/testem/histo/setHisto 3 100 -10. 0.	# muBrems simulation
+/testem/histo/setHisto 8 100 -10. 0.	# muToMuonPair simulation
+/testem/histo/setHisto 11 100 -10. 0.	# muIonisation theory
+/testem/histo/setHisto 12 100 -10. 0.	# muPair theory
+/testem/histo/setHisto 13 100 -10. 0.	# muBrems theory
+/testem/histo/setHisto 18 100 -10. 0.	# muToMuonPair theory
+#/testem/histo/setHisto 21 100   0. 10000. # muIonisation cross section vs log10(ekin)
+#/testem/histo/setHisto 22 100   0. 10000. # muPair cross section vs log10(ekin)
+#/testem/histo/setHisto 23 100   0. 10000. # muBrems cross section vs log10(ekin)
+#/testem/histo/setHisto 28 100   0  10000. # muToMuonPair cross section vs log10(ekin)
 #
 /run/printProgress 10000
 #

@@ -59,6 +59,9 @@
 
 /run/initialize
 
+# Uncomment the next line to visualize cylinder DNA geometry
+#/control/execute vis.mac
+
 # unit tests
 #/dnatests/uniqueid
 #/dnatests/basepairs

@@ -37,75 +37,21 @@
 #include "G4ExceptionSeverity.hh"
 
 // --------------------------------------------------------------------
-G4ParticleChangeForGamma::G4ParticleChangeForGamma()
-  : G4VParticleChange()
+G4ParticleChangeForGamma::G4ParticleChangeForGamma() 
 {
-  theSteppingControlFlag = NormalCondition;
-  // Disable flag that is enabled in G4VParticleChange if G4VERBOSE.
-  debugFlag              = false;
-}
-
-// --------------------------------------------------------------------
-G4ParticleChangeForGamma::~G4ParticleChangeForGamma()
-{
-}
-
-// --------------------------------------------------------------------
-G4ParticleChangeForGamma::
-G4ParticleChangeForGamma(const G4ParticleChangeForGamma& right)
-  : G4VParticleChange(right)
-{
-  currentTrack              = right.currentTrack;
-  proposedKinEnergy         = right.proposedKinEnergy;
-  proposedMomentumDirection = right.proposedMomentumDirection;
-  proposedPolarization      = right.proposedPolarization;
-}
-
-// --------------------------------------------------------------------
-G4ParticleChangeForGamma&
-G4ParticleChangeForGamma::operator=(const G4ParticleChangeForGamma& right)
-{
-  if(this != &right)
-  {
-    if(theNumberOfSecondaries > 0)
-    {
-      for(G4int index = 0; index < theNumberOfSecondaries; ++index)
-      {
-        if((*theListOfSecondaries)[index])
-          delete(*theListOfSecondaries)[index];
-      }
-    }
-    delete theListOfSecondaries;
-    theListOfSecondaries   = new G4TrackFastVector();
-    theNumberOfSecondaries = right.theNumberOfSecondaries;
-    for(G4int index = 0; index < theNumberOfSecondaries; ++index)
-    {
-      G4Track* newTrack = new G4Track(*((*right.theListOfSecondaries)[index]));
-      theListOfSecondaries->SetElement(index, newTrack);
-    }
-
-    theStatusChange        = right.theStatusChange;
-    theLocalEnergyDeposit  = right.theLocalEnergyDeposit;
-    theSteppingControlFlag = right.theSteppingControlFlag;
-    theParentWeight        = right.theParentWeight;
-
-    currentTrack              = right.currentTrack;
-    proposedKinEnergy         = right.proposedKinEnergy;
-    proposedMomentumDirection = right.proposedMomentumDirection;
-    proposedPolarization      = right.proposedPolarization;
-  }
-  return *this;
+  // Disable flag to avoid check of each secondary at each step
+  debugFlag = false;
 }
 
 // --------------------------------------------------------------------
 void G4ParticleChangeForGamma::AddSecondary(G4DynamicParticle* aParticle)
 {
   // create track
-  G4Track* aTrack = new G4Track(aParticle, currentTrack->GetGlobalTime(),
-                                currentTrack->GetPosition());
+  G4Track* aTrack = new G4Track(aParticle, theCurrentTrack->GetGlobalTime(),
+                                theCurrentTrack->GetPosition());
 
   // touchable handle is copied to keep the pointer
-  aTrack->SetTouchableHandle(currentTrack->GetTouchableHandle());
+  aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
 
   // add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -129,19 +75,26 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
 G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
 {
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-  G4Track* pTrack             = pStep->GetTrack();
 
-  pPostStepPoint->SetKineticEnergy(proposedKinEnergy);
   pPostStepPoint->SetMomentumDirection(proposedMomentumDirection);
   pPostStepPoint->SetPolarization(proposedPolarization);
 
   // update velocity for scattering process and particles with mass
-  if(proposedKinEnergy > 0.0)
+  if(proposedKinEnergy > 0.0) 
   {
-    if(pTrack->GetParticleDefinition()->GetPDGMass() > 0.0)
-    {
-      pPostStepPoint->SetVelocity(pTrack->CalculateVelocity());
+    pPostStepPoint->SetKineticEnergy(proposedKinEnergy);
+    G4double mass = theCurrentTrack->GetDefinition()->GetPDGMass();
+    G4double v = CLHEP::c_light;
+    if(mass > 0.0) { 
+      v *= std::sqrt(proposedKinEnergy*(proposedKinEnergy + 2*mass))/
+	(proposedKinEnergy + mass);
     }
+    pPostStepPoint->SetVelocity(v);
+  }
+  else 
+  {
+    pPostStepPoint->SetKineticEnergy(0.0);
+    pPostStepPoint->SetVelocity(0.0);
   }
 
   if(isParentWeightProposed)
@@ -160,7 +113,9 @@ void G4ParticleChangeForGamma::DumpInfo() const
   // use base-class DumpInfo
   G4VParticleChange::DumpInfo();
 
-  G4int oldprc = G4cout.precision(3);
+  G4long oldprc = G4cout.precision(8);
+  G4cout << "      -----------------------------------------------" << G4endl;
+  G4cout << "        G4ParticleChangeForGamma proposes: " << G4endl;
   G4cout << "        Kinetic Energy (MeV): " << std::setw(20)
          << proposedKinEnergy / MeV << G4endl;
   G4cout << "        Momentum Direction: " << std::setw(20)
@@ -170,50 +125,3 @@ void G4ParticleChangeForGamma::DumpInfo() const
   G4cout.precision(oldprc);
 }
 
-// --------------------------------------------------------------------
-G4bool G4ParticleChangeForGamma::CheckIt(const G4Track& aTrack)
-{
-  G4bool itsOK         = true;
-  G4bool exitWithError = false;
-
-  G4double accuracy;
-
-  // Energy should not be lager than initial value
-  accuracy = (proposedKinEnergy - aTrack.GetKineticEnergy()) / MeV;
-  if(accuracy > accuracyForWarning)
-  {
-    itsOK         = false;
-    exitWithError = (accuracy > accuracyForException);
-#ifdef G4VERBOSE
-    G4cout << "G4ParticleChangeForGamma::CheckIt: ";
-    G4cout << "KinEnergy become larger than the initial value!"
-           << "  Difference:  " << accuracy << "[MeV] " << G4endl;
-    G4cout << aTrack.GetDefinition()->GetParticleName()
-           << " E=" << aTrack.GetKineticEnergy() / MeV
-           << " pos=" << aTrack.GetPosition().x() / m << ", "
-           << aTrack.GetPosition().y() / m << ", "
-           << aTrack.GetPosition().z() / m << G4endl;
-#endif
-  }
-
-  // dump out information of this particle change
-#ifdef G4VERBOSE
-  if(!itsOK) { DumpInfo(); }
-#endif
-
-  // Exit with error
-  if(exitWithError)
-  {
-    G4Exception("G4ParticleChangeForGamma::CheckIt()", "TRACK004",
-                EventMustBeAborted, "energy was  illegal");
-  }
-
-  // correction
-  if(!itsOK)
-  {
-    proposedKinEnergy = aTrack.GetKineticEnergy();
-  }
-
-  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
-  return itsOK;
-}

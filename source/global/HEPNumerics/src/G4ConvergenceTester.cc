@@ -507,8 +507,8 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
   std::vector<G4double> second_ally;
 
   // use 2nd half of hisories
-  G4int N = mean_history.size() / 2;
-  G4int i;
+  std::size_t N = mean_history.size() / 2;
+  std::size_t i;
 
   G4double pearson_r;
   G4double t;
@@ -533,7 +533,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = mean_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r((G4int)N, first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t < 0.429318)  // Student t of (Degree of freedom = N-2 )
@@ -554,7 +554,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = r_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t > 1.090546)
@@ -593,7 +593,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = vov_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t > 1.090546)
@@ -623,7 +623,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = fom_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t < 0.429318)

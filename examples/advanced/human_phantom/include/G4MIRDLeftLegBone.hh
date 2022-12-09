@@ -39,10 +39,9 @@ class G4MIRDLeftLegBone: public G4VOrgan
 {
 public:
 
-  G4MIRDLeftLegBone();
-  ~G4MIRDLeftLegBone();
+  G4MIRDLeftLegBone() = default;
+  ~G4MIRDLeftLegBone() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool);
-private:
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

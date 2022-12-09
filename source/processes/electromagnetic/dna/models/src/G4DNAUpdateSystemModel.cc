@@ -169,7 +169,7 @@ void G4DNAUpdateSystemModel::UpdateSystem(const Index& index,
   const G4int nbProducts = data.GetNbProducts();
   if(nbProducts != 0)
   {
-    for(size_t j = 0; j < (size_t) nbProducts; ++j)
+    for(G4int j = 0; j < nbProducts; ++j)
     {
 #ifdef G4VERBOSE
       if((fVerbose != 0) && j != 0)

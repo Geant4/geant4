@@ -37,44 +37,45 @@
 #ifndef GammaRayTelAnticoincidenceSD_h
 #define GammaRayTelAnticoincidenceSD_h 1
 
+#include "GammaRayTelAnticoincidenceHit.hh"
+
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 
 class GammaRayTelDetectorConstruction;
+
 class G4HCofThisEvent;
 class G4Step;
-#include "GammaRayTelAnticoincidenceHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelAnticoincidenceSD : public G4VSensitiveDetector
-{
+class GammaRayTelAnticoincidenceSD: public G4VSensitiveDetector {
 public:
-  
-  GammaRayTelAnticoincidenceSD(G4String);
-  ~GammaRayTelAnticoincidenceSD();
-  
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step* astep,G4TouchableHistory*);
-  void EndOfEvent(G4HCofThisEvent*);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-  
+	explicit GammaRayTelAnticoincidenceSD(G4String name);
+
+	~GammaRayTelAnticoincidenceSD() override;
+
+	void Initialize(G4HCofThisEvent *collection) override;
+
+	auto ProcessHits(G4Step *step, G4TouchableHistory *history) -> G4bool override;
+
+	void EndOfEvent(G4HCofThisEvent *collection) override;
+
+	void clear() override;
+
+	void DrawAll() override;
+
+	void PrintAll() override;
+
 private:
-  
-  GammaRayTelAnticoincidenceHitsCollection*  AnticoincidenceCollection;      
-  GammaRayTelDetectorConstruction* Detector;
-  G4int *HitLateralID;
-  G4int *HitTopID;
-  G4int NbOfACDLateralTiles;
-  G4int NbOfACDTopTiles; 
+	GammaRayTelAnticoincidenceHitsCollection *anticoincidenceCollection;
+
+	GammaRayTelDetectorConstruction *detector;
+
+	G4int *hitLateralID;
+
+	G4int *hitTopID;
+
+	G4int numberOfACDLateralTiles;
+
+	G4int numberOfACDTopTiles;
 };
-
 #endif
-
-
-
-
-
-

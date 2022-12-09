@@ -44,13 +44,13 @@ class G4XmlHnFileManager : public G4VTHnFileManager<HT>
     G4XmlHnFileManager(G4XmlFileManager* fileManger)
       : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
     G4XmlHnFileManager() = delete;
-    virtual ~G4XmlHnFileManager() = default;
+    ~G4XmlHnFileManager() override = default;
 
     // Methods for writing objects
     // Write to a new file (the file is closed after write)
-    virtual G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
+    G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
     // Write to the default file (handled with OpenFile()/CloseFile methods)
-    virtual G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
+    G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
 
   private:
     // Static data members

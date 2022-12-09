@@ -171,15 +171,13 @@ void G4ParticleHPFFFissionFS::GetAFissionFragment( G4double energy , G4int& frag
    G4double key_energy = DBL_MAX;
    if ( mEnergyFSPData->size() == 1 )
    {
-      key_energy = mEnergyFSPData->begin()->first;
+      key_energy = mEnergyFSPData->cbegin()->first;
    }
    else
    {
       //Find closest energy point
       G4double Dmin=DBL_MAX; 
-      G4int i = 0;
-      for ( std::map< G4double , std::map< G4int , G4double >* >::iterator it = mEnergyFSPData->begin() ; 
-      it != mEnergyFSPData->end() ; it++ )
+      for ( auto it = mEnergyFSPData->cbegin(); it != mEnergyFSPData->cend(); ++it )
       {
          G4double e = (it->first);
          G4double d = std::fabs ( energy - e ); 
@@ -188,7 +186,6 @@ void G4ParticleHPFFFissionFS::GetAFissionFragment( G4double energy , G4int& frag
             Dmin = d;
             key_energy = e;
          }
-         i++;
       }
    }
 
@@ -196,7 +193,7 @@ void G4ParticleHPFFFissionFS::GetAFissionFragment( G4double energy , G4int& frag
 
    G4int ifrag=0;
    G4double ceilling = mFSPYieldData->rbegin()->second; // Because of numerical accuracy, this is not always 2
-   for ( std::map<G4int,G4double>::iterator it = mFSPYieldData->begin() ; it != mFSPYieldData->end() ; it++ )
+   for ( auto it = mFSPYieldData->cbegin(); it != mFSPYieldData->cend(); ++it )
    {
       //if ( ( rand - it->second/ceilling ) < 1.0e-6 ) std::cout << rand - it->second/ceilling << std::endl;
       if ( rand <= it->second/ceilling ) 

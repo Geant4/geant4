@@ -17,6 +17,7 @@ geant4_add_module(G4hadronic_util
     G4Fragment.hh
     G4FragmentVector.hh
     G4GeneralPhaseSpaceDecay.hh
+    G4HadDataHandler.hh
     G4HadDecayGenerator.hh
     G4HadFinalState.hh
     G4HadParticleCodes.hh
@@ -65,6 +66,7 @@ geant4_add_module(G4hadronic_util
     G4FermiMomentum.cc
     G4Fragment.cc
     G4GeneralPhaseSpaceDecay.cc
+    G4HadDataHandler.cc
     G4HadDecayGenerator.cc
     G4HadFinalState.cc
     G4HadPhaseSpaceGenbod.cc

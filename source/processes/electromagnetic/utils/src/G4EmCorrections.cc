@@ -181,7 +181,7 @@ void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     material = mat;
     theElementVector = material->GetElementVector();
     atomDensity  = material->GetAtomicNumDensityVector(); 
-    numberOfElements = material->GetNumberOfElements();
+    numberOfElements = (G4int)material->GetNumberOfElements();
   }
 }
 
@@ -286,7 +286,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     G4int ionPDG = p->GetPDGEncoding();
     if(thcorr.find(ionPDG)==thcorr.end()) {  // Not found: fill the map
       std::vector<G4double> v;
-      for(size_t i=0; i<ncouples; ++i){
+      for(std::size_t i=0; i<ncouples; ++i){
         v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
       }
       thcorr.insert(std::pair< G4int, std::vector<G4double> >(ionPDG,v)); 
@@ -297,7 +297,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     //    it = thcorr.begin(); it != thcorr.end(); ++it){
     //  G4cout << "\t map element: first (key)=" << it->first  
     //     << "\t second (vector): vec size=" << (it->second).size() << G4endl;
-    //  for(size_t i=0; i<(it->second).size(); ++i){
+    //  for(std::size_t i=0; i<(it->second).size(); ++i){
     // G4cout << "\t \t vec element: [" << i << "]=" << (it->second)[i]
     //<< G4endl; } }
 
@@ -907,8 +907,8 @@ void G4EmCorrections::InitialiseForNewRun()
       (it->second).clear();
     }
     thcorr.clear();
-    for(size_t i=0; i<ncouples; ++i) {
-      currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
+    for(std::size_t i=0; i<ncouples; ++i) {
+      currmat[i] = tb->GetMaterialCutsCouple((G4int)i)->GetMaterial();
       G4String nam = currmat[i]->GetName();
       for(G4int j=0; j<nIons; ++j) {
         if(nam == materialName[j]) { materialList[j] = currmat[i]; }

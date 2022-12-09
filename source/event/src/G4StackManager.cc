@@ -581,31 +581,31 @@ void G4StackManager::ClearPostponeStack()
 
 G4int G4StackManager::GetNTotalTrack() const
 {
-  G4int n = urgentStack->GetNTrack()
-          + waitingStack->GetNTrack()
-          + postponeStack->GetNTrack();
+  std::size_t n = urgentStack->GetNTrack()
+                + waitingStack->GetNTrack()
+                + postponeStack->GetNTrack();
   for(G4int i=1; i<=numberOfAdditionalWaitingStacks; ++i)
   {
     n += additionalWaitingStacks[i-1]->GetNTrack();
   }
-  return n;
+  return G4int(n);
 }
 
 G4int G4StackManager::GetNUrgentTrack() const
 {
-  return urgentStack->GetNTrack();
+  return (G4int)urgentStack->GetNTrack();
 }
 
 G4int G4StackManager::GetNWaitingTrack(int i) const
 {
   if(i==0)
   {
-    return waitingStack->GetNTrack();
+    return (G4int)waitingStack->GetNTrack();
   }
   
   if(i<=numberOfAdditionalWaitingStacks)
   {
-    return additionalWaitingStacks[i-1]->GetNTrack();
+    return (G4int)additionalWaitingStacks[i-1]->GetNTrack();
   }
  
   return 0;
@@ -613,7 +613,7 @@ G4int G4StackManager::GetNWaitingTrack(int i) const
 
 G4int G4StackManager::GetNPostponedTrack() const
 {
-  return postponeStack->GetNTrack();
+  return (G4int)postponeStack->GetNTrack();
 }
 
 void G4StackManager::SetVerboseLevel( G4int const value )

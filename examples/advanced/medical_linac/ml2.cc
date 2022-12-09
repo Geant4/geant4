@@ -102,10 +102,8 @@ int main(int argc, char* argv[])
 	UImanager->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData);
 
 
-	// set and initialize the random generator
-	CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-	CLHEP::HepRandom::setTheSeed(myInputData->inputData.generalData.seed);
-	G4cout << "Using seed " << CLHEP::HepRandom::getTheSeed() << G4endl;
+	//CLHEP::HepRandom::setTheSeed(myInputData->inputData.generalData.seed);
+	//G4cout << "Using seed " << CLHEP::HepRandom::getTheSeed() << G4endl;
 
 	// create the world class
 	if (!myWorld->create(&myInputData->inputData, myInputData->getbOnlyVisio()))

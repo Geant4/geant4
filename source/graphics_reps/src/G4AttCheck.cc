@@ -37,15 +37,15 @@
 
 G4ThreadLocal G4bool G4AttCheck::fFirst = true;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fUnitCategories = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fUnitCategories = nullptr;
 
-G4ThreadLocal std::map<G4String,G4String> *G4AttCheck::fStandardUnits = 0;
+G4ThreadLocal std::map<G4String,G4String> *G4AttCheck::fStandardUnits = nullptr;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fCategories = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fCategories = nullptr;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fUnits = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fUnits = nullptr;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fValueTypes = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fValueTypes = nullptr;
 
 G4AttCheck::G4AttCheck
 (const std::vector<G4AttValue>* values,
@@ -89,10 +89,10 @@ G4AttCheck::G4AttCheck
           fUnitCategories->end()) {
         //G4cout << units[i]->GetName() << G4endl;
         G4UnitsContainer& container = units[i]->GetUnitsList();
-        for (size_t j = 0; j < container.size(); ++j) {
+        for (auto & j : container) {
           //G4cout << container[j]->GetName() << ' '
           //       << container[j]->GetSymbol() << G4endl;
-          fUnits->insert(container[j]->GetSymbol());
+          fUnits->insert(j->GetSymbol());
         }
       }
     }
@@ -106,17 +106,13 @@ G4AttCheck::G4AttCheck
   }
 }
 
-G4AttCheck::~G4AttCheck()
-{
-}
-
 void G4AttCheck::Init()
 {
-  if (!fValueTypes) fValueTypes = new std::set<G4String>;
-  if (!fUnits) fUnits = new std::set<G4String>;
-  if (!fCategories) fCategories = new std::set<G4String>;
-  if (!fStandardUnits) fStandardUnits = new std::map<G4String,G4String>;
-  if (!fUnitCategories) fUnitCategories = new std::set<G4String>;
+  if (fValueTypes == nullptr) fValueTypes = new std::set<G4String>;
+  if (fUnits == nullptr) fUnits = new std::set<G4String>;
+  if (fCategories == nullptr) fCategories = new std::set<G4String>;
+  if (fStandardUnits == nullptr) fStandardUnits = new std::map<G4String,G4String>;
+  if (fUnitCategories == nullptr) fUnitCategories = new std::set<G4String>;
 }
 
 G4bool G4AttCheck::Check(const G4String& leader) const
@@ -129,14 +125,14 @@ G4bool G4AttCheck::Check(const G4String& leader) const
     print = true;
   }
   using namespace std;
-  if (!fpValues) return error;  // A null values vector is a valid situation.
-  if (!fpDefinitions) {
+  if (fpValues == nullptr) return error;  // A null values vector is a valid situation.
+  if (fpDefinitions == nullptr) {
     ++iError;
     error = true;
     if (print) {
       G4cerr <<
         "\n*******************************************************";
-      if (leader != "") {
+      if (!leader.empty()) {
         G4cerr << '\n' << leader;
       }
       G4cerr <<
@@ -150,6 +146,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const
   for (iValue = fpValues->begin(); iValue != fpValues->end(); ++iValue) {
     const G4String& valueName = iValue->GetName();
     const G4String& value = iValue->GetValue();
+    // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator
     map<G4String,G4AttDef>::const_iterator iDef =
       fpDefinitions->find(valueName);
     if (iDef == fpDefinitions->end()) {
@@ -158,7 +155,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const
       if (print) {
         G4cerr <<
           "\n*******************************************************";
-        if (leader != "") {
+        if (!leader.empty()) {
           G4cerr << '\n' << leader;
         }
         G4cerr <<
@@ -177,7 +174,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const
         if (print) {
           G4cerr <<
             "\n*******************************************************";
-          if (leader != "") {
+          if (!leader.empty()) {
             G4cerr << '\n' << leader;
           }
           G4cerr <<
@@ -200,7 +197,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const
         if (print) {
           G4cerr <<
             "\n*******************************************************";
-          if (leader != "") {
+          if (!leader.empty()) {
             G4cerr << '\n' << leader;
           }
           G4cerr <<
@@ -223,7 +220,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const
         if (print) {
           G4cerr <<
             "\n*******************************************************";
-          if (leader != "") {
+          if (!leader.empty()) {
             G4cerr << '\n' << leader;
           }
           G4cerr <<
@@ -248,7 +245,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const
 std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
 {
   using namespace std;
-  if (!ac.fpDefinitions) {
+  if (ac.fpDefinitions == nullptr) {
     os << "G4AttCheck: ERROR: zero definitions pointer." << endl;
     return os;
   }
@@ -256,7 +253,7 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
   if (G4AttDefStore::GetStoreKey(ac.fpDefinitions, storeKey)) {
     os << storeKey << ':' << endl;
   }
-  if (!ac.fpValues) {
+  if (ac.fpValues == nullptr) {
     // A null values vector is a valid situation.
     os << "G4AttCheck: zero values pointer." << endl;
     return os;
@@ -265,7 +262,8 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
   for (iValue = ac.fpValues->begin(); iValue != ac.fpValues->end(); ++iValue) {
     const G4String& valueName = iValue->GetName();
     const G4String& value = iValue->GetValue();
-    map<G4String,G4AttDef>::const_iterator iDef =
+    // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator
+    map<G4String,G4AttDef>::const_iterator iDef = 
       ac.fpDefinitions->find(valueName);
     G4bool error = false;
     if (iDef == ac.fpDefinitions->end()) {
@@ -343,7 +341,7 @@ void G4AttCheck::AddValuesAndDefs
   // ...and make appropriate changes...
   (*standardDefinitions)[name].SetName(name);
   (*standardDefinitions)[name].SetExtra(extra);
-  if (description != "") (*standardDefinitions)[name].SetDesc(description);
+  if (!description.empty()) (*standardDefinitions)[name].SetDesc(description);
 }
 
 G4bool G4AttCheck::Standard
@@ -358,6 +356,7 @@ G4bool G4AttCheck::Standard
   for (iValue = fpValues->begin(); iValue != fpValues->end(); ++iValue) {
     const G4String& valueName = iValue->GetName();
     const G4String& value = iValue->GetValue();
+    // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator
     map<G4String,G4AttDef>::const_iterator iDef =
       fpDefinitions->find(valueName);
     if (iDef == fpDefinitions->end()) {

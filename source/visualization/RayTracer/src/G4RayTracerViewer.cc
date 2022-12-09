@@ -44,6 +44,8 @@
 #include "G4RTSimpleScanner.hh"
 #include "G4UImanager.hh"
 
+#define G4warn G4cout
+
 G4RayTracerViewer::G4RayTracerViewer
 (G4VSceneHandler& sceneHandler,
  const G4String& name,
@@ -58,7 +60,7 @@ G4RayTracerViewer::G4RayTracerViewer
 #endif
 {
   if (!theTracer) {
-    G4cerr << "G4RayTracerViewer::Initialise: No tracer" << G4endl;
+    G4warn << "G4RayTracerViewer::Initialise: No tracer" << G4endl;
     fViewId = -1;  // This flags an error.
     return;
   }
@@ -114,7 +116,7 @@ void G4RayTracerViewer::DrawView()
   if (fVP.GetFieldHalfAngle() == 0.) { // Orthogonal (parallel) projection.
     G4double fieldHalfAngle = perMillion;
     fVP.SetFieldHalfAngle(fieldHalfAngle);
-    G4cout << 
+    G4warn <<
       "WARNING: G4RayTracerViewer::DrawView: true orthogonal projection"
       "\n  not yet implemented.  Doing a \"long shot\", i.e., a perspective"
       "\n  projection with a half field angle of "

@@ -5,13 +5,21 @@
 
 
 /** @defgroup extended_errorpropagation errorpropagation
- *  Errorpropagation example
+ *  Extended errorpropagation examples classes
  *  @ingroup extended
+ *  @{
+ */
+
+/** @defgroup extended_errorpropagation_errProp errProp
+ *  errorpropagation example errProp
+ *  @ingroup extended_errorpropagation
  *  @{
  */
 
   class ExErrorDetectorConstruction {};
   class ExErrorDetectorMessenger {};
   class ExErrorMagneticField {};
+
+/** @} */
 
 /** @} */

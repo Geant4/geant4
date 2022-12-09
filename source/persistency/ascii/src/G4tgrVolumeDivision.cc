@@ -88,9 +88,9 @@ G4tgrVolumeDivision::G4tgrVolumeDivision(const std::vector<G4String>& wl)
 
   //---------- set if division is given by number of divisions of by width
   G4String wl0 = wl[0];
-  for(std::size_t ii = 0; ii < wl0.length(); ++ii)
+  for(G4int ii = 0; ii < (G4int)wl0.length(); ++ii)
   {
-    wl0[ii] = toupper(wl0[ii]);
+    wl0[ii] = (char)std::toupper(wl0[ii]);
   }
 
   if(wl0 == ":DIV_NDIV")

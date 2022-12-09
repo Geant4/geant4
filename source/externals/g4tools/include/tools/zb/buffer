@@ -73,15 +73,6 @@ protected:
       m_size = a_from.m_size;
       return *this;
     }
-  public:
-    bool get_pixel(ZPos a_x,ZPos a_y,ZZ /*a_z*/,ZPixel& a_pixel) const {
-      if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX)) {a_pixel=0;return false;}
-      if((a_y<m_buffer.m_begY) || (a_y>m_buffer.m_endY)) {a_pixel=0;return false;}
-      unsigned long offset = a_y * m_buffer.m_zbw + a_x;
-      ZPixel* zimage = m_buffer.m_zimage  + offset;
-      a_pixel = *zimage;
-      return true;
-    }
   protected:
     void _write(ZPos a_x,ZPos a_y,ZZ a_z) {
       if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX)) return;
@@ -95,13 +86,8 @@ protected:
 
       ZPixel* zimage = m_buffer.m_zimage  + offset;
 
-      /* transparency :
-      ZPixel old_pix = *zimage;
-      // need the alpha of m_pixel !
-      */
-
       *zbuff = zpoint;
-      *zimage = m_pixel;
+      m_buffer.blend(*zimage,m_pixel);
     }
   protected:
     buffer& m_buffer;
@@ -156,6 +142,7 @@ protected:
 public:
   buffer()
   :m_depth_test(true)
+  ,m_blend(false)
   ,m_zbuffer(0)
   //,m_zmin(0),m_zmax(0)
   ,m_zimage(0)
@@ -175,14 +162,18 @@ public:
 protected:
   buffer(const buffer& a_from)
   :m_depth_test(a_from.m_depth_test)
+  ,m_blend(a_from.m_blend)
   {}
   buffer& operator=(const buffer& a_from){
     m_depth_test = a_from.m_depth_test;
+    m_blend = a_from.m_blend;
     return *this;
   }
 public:
   void set_depth_test(bool a_on) {m_depth_test = a_on;}
   //bool depth_test() const {return m_depth_test;}
+  
+  void set_blend(bool a_value) {m_blend = a_value;}
 
   bool change_size(unsigned int a_width,unsigned int a_height){
     if(!a_width||!a_height) return false;
@@ -228,8 +219,7 @@ public:
     return true;
   }
 
-  ZPixel* get_color_buffer(unsigned int& a_width,
-                           unsigned int& a_height) const {
+  ZPixel* get_color_buffer(unsigned int& a_width,unsigned int& a_height) const {
     a_width  = m_zbw;
     a_height = m_zbh;
     return m_zimage;
@@ -257,13 +247,9 @@ public:
     }
   }
 
-  //ZPixel get_pixel(ZPos a_x,ZPos a_y) const {
-  //  return *(m_zimage + a_y * m_zbw + a_x);
-  //}
-
   bool get_clipped_pixel(ZPos a_x,ZPos a_y,ZPixel& a_pixel) const {
-    if((a_x<m_begX) || (a_x>m_endX))  return false;
-    if((a_y<m_begY) || (a_y>m_endY))  return false;
+    if((a_x<m_begX) || (a_x>m_endX))  {a_pixel = 0;return false;}
+    if((a_y<m_begY) || (a_y>m_endY))  {a_pixel = 0;return false;}
     a_pixel = *(m_zimage + a_y * m_zbw + a_x);
     return true;
   }
@@ -286,11 +272,6 @@ public:
   void draw_point(const point& a_p,ZPixel a_pixel,unsigned int a_size){
     point_writer pw(a_pixel,*this,a_size);
     pw.write(a_p.x,a_p.y,a_p.z);
-  }
-
-  bool get_pixel(const point& a_p,ZPixel& a_pixel){
-    point_writer pw(a_pixel,*this,1);
-    return pw.get_pixel(a_p.x,a_p.y,a_p.z,a_pixel);
   }
 
   void draw_line(const point& a_beg,const point& a_end,ZPixel a_pixel,unsigned int a_size){
@@ -379,6 +360,22 @@ public:
     }
   }
 */
+
+  typedef unsigned char uchar;
+  static void rgba2pix(float a_r,float a_g,float a_b,float a_a,ZPixel& a_pix) {
+    uchar* _px = (uchar*)&a_pix;
+    *_px = (uchar)(255.0F * a_r);_px++;
+    *_px = (uchar)(255.0F * a_g);_px++;
+    *_px = (uchar)(255.0F * a_b);_px++;
+    *_px = (uchar)(255.0F * a_a);_px++;
+  }
+  static void pix2rgba(const ZPixel& a_pix,float& a_r,float& a_g,float& a_b,float& a_a) {
+    uchar* _px = (uchar*)&a_pix;
+    a_r = (*_px)/255.0f;_px++;
+    a_g = (*_px)/255.0f;_px++;
+    a_b = (*_px)/255.0f;_px++;
+    a_a = (*_px)/255.0f;_px++;
+  }
 protected:
   class scan_writer {
   public:
@@ -459,6 +456,28 @@ protected:
     writer& m_writer;
   };
 
+  void blend(ZPixel& a_pix,const ZPixel& a_new) {
+    if(!m_blend) {
+      a_pix = a_new;
+      return;
+    }
+    float _or,_og,_ob,_oa;
+    pix2rgba(a_pix,_or,_og,_ob,_oa);
+    float nr,ng,nb,na;
+    pix2rgba(a_new,nr,ng,nb,na);
+    if((0.0f<=na)&&(na<1.0f)) {
+      // same as glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA):
+      float one_minus_na = 1.0f-na;
+      float pr = nr*na+_or*one_minus_na;
+      float pg = ng*na+_og*one_minus_na;
+      float pb = nb*na+_ob*one_minus_na;
+      float pa = 1;
+      rgba2pix(pr,pg,pb,pa,a_pix);
+    } else {
+      a_pix = a_new;
+    }
+  }
+  
   static void WriteScanLine(void* a_tag,int a_beg,int a_end,int a_y){
     buffer& a_buffer = *((buffer*)a_tag);
 
@@ -489,11 +508,11 @@ protected:
 //       &&(zpoint<=a_buffer.m_zmax)
           ){
           *zbuff = zpoint;
-	  *zimage = a_buffer.m_scan_pixel;
+          a_buffer.blend(*zimage,a_buffer.m_scan_pixel);
         }
       } else {
         *zbuff = zpoint;
-        *zimage = a_buffer.m_scan_pixel;
+        a_buffer.blend(*zimage,a_buffer.m_scan_pixel);
       }
       zbuff  ++;
       zimage ++;
@@ -595,6 +614,7 @@ protected:
 
 protected:
   bool         m_depth_test;
+  bool         m_blend;
   ZReal*       m_zbuffer;
 //ZReal        m_zmin,m_zmax;
 

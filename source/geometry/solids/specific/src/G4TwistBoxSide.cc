@@ -360,7 +360,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector& gp,
   }  // end general case
 
 
-  nxx = xbuf.size() ;  // save the number of  solutions
+  nxx = (G4int)xbuf.size() ;  // save the number of  solutions
 
   G4ThreeVector xxonsurface  ;       // point on surface
   G4ThreeVector surfacenormal  ;     // normal vector  
@@ -371,7 +371,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector& gp,
   G4int maxint = 30 ;                // number of iterations
 
 
-  for ( size_t k = 0 ; k<xbuf.size() ; ++k )
+  for ( std::size_t k = 0 ; k<xbuf.size() ; ++k )
   {
 #ifdef G4TWISTDEBUG
     G4cout << "Solution " << k << " : " 
@@ -477,7 +477,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector& gp,
 
   // add guesses
 
-  G4int nxxtmp = xbuf.size() ;
+  G4int nxxtmp = (G4int)xbuf.size() ;
 
   if ( nxxtmp<2 || IsParallel  )
   {
@@ -511,7 +511,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector& gp,
     
     xbuf.push_back(xbuftmp) ;  // store it to xbuf
 
-    for ( size_t k = nxxtmp ; k<xbuf.size() ; ++k )
+    for ( std::size_t k = nxxtmp ; k<xbuf.size() ; ++k )
     {
 #ifdef G4TWISTDEBUG
       G4cout << "Solution " << k << " : " 
@@ -617,9 +617,9 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector& gp,
   G4cout << G4endl << G4endl ;
 #endif
 
-  nxx = xbuf.size() ;   // determine number of solutions again.
+  nxx = (G4int)xbuf.size() ;   // determine number of solutions again.
 
-  for ( size_t i = 0 ; i<xbuf.size() ; ++i )
+  for ( G4int i = 0 ; i<(G4int)xbuf.size() ; ++i )
   {
     distance[i] = xbuf[i].distance;
     gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);

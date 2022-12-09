@@ -95,7 +95,7 @@ G4SigmaPlus* G4SigmaPlus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4SigmaPlus*>(anInstance);
+  theInstance = static_cast<G4SigmaPlus*>(anInstance);
   return theInstance;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HodoscopeSD.hh
+/// \file B5/include/HodoscopeSD.hh
 /// \brief Definition of the B5::HodoscopeSD class
 
 #ifndef B5HodoscopeSD_h
@@ -46,7 +46,7 @@ class HodoscopeSD : public G4VSensitiveDetector
 {
   public:
     HodoscopeSD(G4String name);
-    ~HodoscopeSD() override;
+    ~HodoscopeSD() override = default;
 
     void Initialize(G4HCofThisEvent*HCE) override;
     G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) override;

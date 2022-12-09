@@ -339,9 +339,9 @@ void G4KleinNishinaModel::SampleSecondaries(
       G4int Z = elm->GetZasInt();
       auto as = (G4AtomicShellEnumerator)(i);
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-      G4int nbefore = fvect->size();
+      G4int nbefore = (G4int)fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      G4int nafter = fvect->size();
+      G4int nafter = (G4int)fvect->size();
       //G4cout << "N1= " << nbefore << "  N2= " << nafter << G4endl;
       for (G4int j=nbefore; j<nafter; ++j) {
         G4double e = ((*fvect)[j])->GetKineticEnergy();

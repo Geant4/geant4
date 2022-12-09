@@ -92,7 +92,7 @@ G4AntiXiMinus* G4AntiXiMinus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiXiMinus*>(anInstance);
+  theInstance = static_cast<G4AntiXiMinus*>(anInstance);
   return theInstance;
 }
 

@@ -147,8 +147,8 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
     if(fShellCrossSection == nullptr) { fShellCrossSection = new G4ElementData(); }
 
     const G4ElementTable* elemTable = G4Element::GetElementTable();
-    size_t numElems                 = (*elemTable).size();
-    for(size_t ie = 0; ie < numElems; ++ie)
+    std::size_t numElems                 = (*elemTable).size();
+    for(std::size_t ie = 0; ie < numElems; ++ie)
     {
       const G4Element* elem = (*elemTable)[ie];
       const G4int Z         = std::min(maxZ, elem->GetZasInt());
@@ -323,8 +323,8 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   }
     
   // SAMPLING OF THE SHELL INDEX
-  size_t shellIdx = 0;
-  size_t nn = fNShellsUsed[Z];
+  std::size_t shellIdx = 0;
+  std::size_t nn = fNShellsUsed[Z];
   if(nn > 1)
     {
       if(gammaEnergy >= (*(fParamHigh[Z]))[0])
@@ -334,7 +334,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
 	  G4double x3 = x2*x1;
 	  G4double x4 = x3*x1;
 	  G4double x5 = x4*x1;
-	  G4int idx   = nn*7 - 5;
+	  std::size_t idx   = nn*7 - 5;
 	  // when do sampling common factors are not taken into account
 	  // so cross section is not real
           
@@ -371,7 +371,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
 	  G4double x3 = x2*x1;
 	  G4double x4 = x3*x1;
 	  G4double x5 = x4*x1;
-	  G4int idx   = nn*7 - 5;
+	  std::size_t idx   = nn*7 - 5;
 	  // when do sampling common factors are not taken into account
 	  // so cross section is not real
 	  G4double cs0 = G4UniformRand()*((*(fParamLow[Z]))[idx]
@@ -409,13 +409,13 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
 	      cs *= (fCrossSectionLE[Z])->Value(gammaEnergy);
             }
 	  
-	  for(size_t j=0; j<nn; ++j) {
+	  for(G4int j=0; j<(G4int)nn; ++j) {
 	    
-	    shellIdx = (size_t)fShellCrossSection->GetComponentID(Z, j);
+	    shellIdx = (std::size_t)fShellCrossSection->GetComponentID(Z, j);
 	    if(gammaEnergy > (*(fParamLow[Z]))[7*shellIdx+1]) {
 	      cs -= fShellCrossSection->GetValueForComponent(Z, j, gammaEnergy);
 	    }
-	    if(cs <= 0.0 || j+1 == nn) {break;}
+	    if(cs <= 0.0 || j+1 == (G4int)nn) {break;}
 	  }
         }
     }
@@ -445,7 +445,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   G4ThreeVector electronDirection =
     GetAngularDistribution()->SampleDirection(aDynamicGamma,
                                               eKineticEnergy,
-                                              shellIdx,
+                                              (G4int)shellIdx,
                                               couple->GetMaterial());
   
   // The electron is created
@@ -458,13 +458,13 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   if(shell) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
-      G4int nbefore = fvect->size();
+      std::size_t nbefore = fvect->size();
       
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      G4int nafter = fvect->size();
+      std::size_t nafter = fvect->size();
       if(nafter > nbefore) {
 	G4double esec = 0.0;
-	for (G4int j=nbefore; j<nafter; ++j) {
+	for (std::size_t j=nbefore; j<nafter; ++j) {
 	  
 	  G4double e = ((*fvect)[j])->GetKineticEnergy();
 	  if(esec + e > edep) {
@@ -473,7 +473,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
 	    ((*fvect)[j])->SetKineticEnergy(e);
 	    esec += e;
 	    // delete the rest of secondaries (should not happens)
-	    for (G4int jj=nafter-1; jj>j; --jj) {
+	    for (std::size_t jj=nafter-1; jj>j; --jj) {
 	      delete (*fvect)[jj];
 	      fvect->pop_back();
 	    }
@@ -546,7 +546,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermorePhotoElectricModel::ReadData()",
 		"em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   } 
   if(verboseLevel > 3) { 
@@ -617,7 +617,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermorePhotoElectricModel::ReadData()",
 		"em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   } 
   if(verboseLevel > 3) {
@@ -697,7 +697,7 @@ void G4LivermorePhotoElectricModel::ReadData(G4int Z)
 	 << "> is not opened!" << G4endl;
       G4Exception("G4LivermorePhotoElectricModel::ReadData()",
 		  "em0003",FatalException,
-		  ed,"G4LEDATA version should be G4EMLOW7.2 or later.");
+		  ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
       return;
     }
     if(verboseLevel > 3) {

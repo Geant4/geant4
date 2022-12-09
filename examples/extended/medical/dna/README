@@ -86,6 +86,10 @@ This directory contains a set of Geant4-DNA examples.
 
    - moleculardna
        Damage simulation on DNA geometries.
+
+   - jetcounter
+      A setup for simulation of a typical experiment with the Jet Counter nanodosemeter
+
    
 See the README page inside each example for more detail.
 

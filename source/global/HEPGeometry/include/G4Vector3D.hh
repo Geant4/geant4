@@ -31,6 +31,6 @@
 #include "globals.hh"
 #include <CLHEP/Geometry/Vector3D.h>
 
-typedef HepGeom::Vector3D<G4double> G4Vector3D;
+using G4Vector3D = HepGeom::Vector3D<G4double>;
 
 #endif /* G4VECTOR3D_HH */

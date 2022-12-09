@@ -47,6 +47,8 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4AttDef.hh"
 
+#define G4warn G4cout
+
 ////////////// /vis/abortReviewKeptEvents /////////////////////////////
 
 G4VisCommandAbortReviewKeptEvents::G4VisCommandAbortReviewKeptEvents () {
@@ -69,7 +71,7 @@ G4String G4VisCommandAbortReviewKeptEvents::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandAbortReviewKeptEvents::SetNewValue (G4UIcommand*,
                                                      G4String newValue) {
   fpVisManager->SetAbortReviewKeptEvents(G4UIcommand::ConvertToBool(newValue));
-  G4cout << "Type \"continue\" to complete the abort." << G4endl;
+  G4warn << "Type \"continue\" to complete the abort." << G4endl;
 }
 
 ////////////// /vis/abortReviewPlots /////////////////////////////
@@ -94,7 +96,7 @@ G4String G4VisCommandAbortReviewPlots::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandAbortReviewPlots::SetNewValue (G4UIcommand*,
                                                      G4String newValue) {
   fpVisManager->SetAbortReviewPlots(G4UIcommand::ConvertToBool(newValue));
-  G4cout << "Type \"continue\" to complete the abort." << G4endl;
+  G4warn << "Type \"continue\" to complete the abort." << G4endl;
 }
 
 ////////////// /vis/drawOnlyToBeKeptEvents /////////////////////////////
@@ -131,9 +133,9 @@ void G4VisCommandDrawOnlyToBeKeptEvents::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   if (verbosity < G4VisManager::warnings) {
     if (fpVisManager->GetDrawEventOnlyIfToBeKept()) {
-      G4cout << "Only events that have been kept will be drawn." << G4endl;
+      G4warn << "Only events that have been kept will be drawn." << G4endl;
     } else {
-      G4cout << "All events will be drawn." << G4endl;
+      G4warn << "All events will be drawn." << G4endl;
     }
   }
 }
@@ -299,7 +301,7 @@ G4String G4VisCommandReviewKeptEvents::GetCurrentValue (G4UIcommand*)
 void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 {
   if (fpVisManager->GetReviewingKeptEvents()) {
-    G4cout <<
+    G4warn <<
       "\"/vis/reviewKeptEvents\" not allowed within an already started review."
       "\n  No action taken."
 	   << G4endl;
@@ -317,7 +319,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 
   if (!nKeptEvents) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandReviewKeptEvents::SetNewValue: No kept events,"
 	"\n  or kept events not accessible."
 	     << G4endl;
@@ -328,7 +330,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4VViewer* viewer = fpVisManager->GetCurrentViewer();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
              << G4endl;
     }
@@ -338,7 +340,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
+      G4warn << "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -367,13 +369,13 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     for (size_t i = 0; i < nKeptEvents; ++i) {
       const G4Event* event = (*events)[i];
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Drawing event : " << event->GetEventID() <<
+	G4warn << "Drawing event : " << event->GetEventID() <<
 	  ".  At EndOfEvent, enter any command, then \"cont[inue]\"..."
 	       << G4endl;
 	static G4bool first = true;
 	if (first) {
 	  first = false;
-	  G4cout <<
+	  G4warn <<
   "  Useful commands might be:"
   "\n    \"/vis/scene/add/trajectories\" if not already added."
   "\n    \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
@@ -413,7 +415,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
     for (size_t i = 0; i < nKeptEvents; ++i) {
       const G4Event* event = (*events)[i];
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Drawing event : " << event->GetEventID()
+	G4warn << "Drawing event : " << event->GetEventID()
 	       << " with macro file \"" << macroFileName << G4endl;
       }
       fpVisManager->SetRequestedEvent(event);
@@ -496,7 +498,7 @@ namespace {
 void G4VisCommandReviewPlots::SetNewValue (G4UIcommand*, G4String)
 {
   if (fpVisManager->GetReviewingPlots()) {
-    G4cout <<
+    G4warn <<
     "\"/vis/reviewPlots\" not allowed within an already started review."
     "\n  No action taken."
     << G4endl;
@@ -508,7 +510,7 @@ void G4VisCommandReviewPlots::SetNewValue (G4UIcommand*, G4String)
   auto currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
       << G4endl;
     }
@@ -516,7 +518,7 @@ void G4VisCommandReviewPlots::SetNewValue (G4UIcommand*, G4String)
   }
 
   if (currentViewer->GetName().find("TOOLSSG") == std::string::npos) {
-    G4cerr <<
+    G4warn <<
     "WARNING: Current viewer not able to draw plots."
     "\n  Try \"/vis/open TSG\", then \"/vis/reviewPlots\" again."
     << G4endl;
@@ -526,7 +528,7 @@ void G4VisCommandReviewPlots::SetNewValue (G4UIcommand*, G4String)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
+      G4warn << "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }

@@ -43,7 +43,7 @@
 #include "G4HadronicException.hh"
 #include <iomanip>
 
-G4NucLevel::G4NucLevel(size_t ntrans, G4double tgamma,
+G4NucLevel::G4NucLevel(std::size_t ntrans, G4double tgamma,
 		       const std::vector<G4int>&   vTrans,
 		       const std::vector<G4float>& wLevelGamma,
 		       const std::vector<G4float>& wGamma,
@@ -57,7 +57,7 @@ G4NucLevel::G4NucLevel(size_t ntrans, G4double tgamma,
     fGammaProbability.reserve(length);
     fMpRatio.reserve(length);
     fShellProbability.reserve(length);
-    for(size_t i=0; i<length; ++i) {
+    for(std::size_t i=0; i<length; ++i) {
       fTrans.push_back(vTrans[i]);
       fGammaCumProbability.push_back(wLevelGamma[i]);
       fGammaProbability.push_back(wGamma[i]);
@@ -69,15 +69,15 @@ G4NucLevel::G4NucLevel(size_t ntrans, G4double tgamma,
 
 G4NucLevel::~G4NucLevel()
 {
-  for(size_t i=0; i<length; ++i) {
+  for(std::size_t i=0; i<length; ++i) {
     delete fShellProbability[i];
   }
 }
 
 void G4NucLevel::StreamInfo(std::ostream& out) const
 {
-  G4int prec = out.precision(4);
-  for(size_t i=0; i<length; ++i) {
+  G4long prec = out.precision(4);
+  for(std::size_t i=0; i<length; ++i) {
     out << std::setw(12) << FinalExcitationIndex(i) 
 	<< std::setw(4) << TransitionType(i)
 	<< std::setw(7) << fMpRatio[i] 
@@ -86,9 +86,9 @@ void G4NucLevel::StreamInfo(std::ostream& out) const
 	<< "\n";
     const std::vector<G4float>* vec = fShellProbability[i];
     if(vec) {
-      size_t len = vec->size();
+      std::size_t len = vec->size();
       out << "              ";
-      for(size_t j=0; j<len; ++j) { out << std::setw(7) << (*vec)[j]; }
+      for(std::size_t j=0; j<len; ++j) { out << std::setw(7) << (*vec)[j]; }
       out << "\n";
     }
   }

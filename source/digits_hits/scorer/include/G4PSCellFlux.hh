@@ -56,29 +56,23 @@ class G4VSolid;
 
 class G4PSCellFlux : public G4VPrimitivePlotter
 {
- public:  // with description
+ public:
   G4PSCellFlux(G4String name, G4int depth = 0);
   G4PSCellFlux(G4String name, const G4String& unit, G4int depth = 0);
-  virtual ~G4PSCellFlux();
+  ~G4PSCellFlux() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }
   // Multiply track weight
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
-  virtual G4double ComputeVolume(G4Step*, G4int idx);
-
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
 
  protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+  virtual G4double ComputeVolume(G4Step*, G4int idx);
   virtual void DefineUnitAndCategory();
 
  private:

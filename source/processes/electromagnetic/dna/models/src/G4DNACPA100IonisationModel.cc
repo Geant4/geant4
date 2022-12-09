@@ -395,8 +395,8 @@ void G4DNACPA100IonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
         // here we assume that H_{2}O electronic levels are the same of Oxigen.
         // this can be considered true with a rough 10% error in energy on K-shell,
 
-        size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
-        size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
+        std::size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
+        std::size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
 
         G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
 
@@ -412,7 +412,7 @@ void G4DNACPA100IonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
 
           if(secNumberFinal > secNumberInit)
           {
-             for (size_t i=secNumberInit; i<secNumberFinal; ++i)
+             for (std::size_t i=secNumberInit; i<secNumberFinal; ++i)
              {
                 //Check if there is enough residual energy
                 if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
@@ -737,8 +737,8 @@ G4int G4DNACPA100IonisationModel::RandomSelect(G4double k, const G4String& parti
         if (table != 0)
         {
             G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const size_t n(table->NumberOfComponents());
-            size_t i(n);
+            const G4int n = (G4int)table->NumberOfComponents();
+            G4int i(n);
             G4double value = 0.;
 
  //Verification

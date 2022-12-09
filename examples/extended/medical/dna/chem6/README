@@ -230,6 +230,7 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178
 
     root plotG_time.C
     # plot G values as a function of time according to the molecular species by importing Species0.root.
+    # The function (plotG_time()) should have the same name as the file without file extension (plotG_time).
 
     root plotG_LET.C
     # plot G values as a function of LET according to the molecular species by importing Species.txt.

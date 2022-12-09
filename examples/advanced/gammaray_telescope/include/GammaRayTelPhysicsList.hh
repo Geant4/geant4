@@ -36,40 +36,47 @@
 class G4VPhysicsConstructor;
 class GammaRayTelPhysicsListMessenger;
 
-class GammaRayTelPhysicsList: public G4VModularPhysicsList
-{
+class GammaRayTelPhysicsList: public G4VModularPhysicsList {
 public:
+	explicit GammaRayTelPhysicsList();
 
-  GammaRayTelPhysicsList();
-  virtual ~GammaRayTelPhysicsList();
+	~GammaRayTelPhysicsList() override;
 
-  void ConstructParticle();
+	void AddPackage(const G4String &name);
 
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+	void AddPhysicsList(const G4String &name);
 
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+	void ConstructParticle() override;
 
-  void AddPackage(const G4String& name);
+	void ConstructProcess() override;
+
+	void SetCutForElectron(G4double cut);
+
+	void SetCutForGamma(G4double cut);
+
+	void SetCutForPositron(G4double cut);
 
 private:
+	G4EmConfigurator emConfigurator;
 
-  G4EmConfigurator em_config;
+	G4bool helIsRegisted;
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-  G4bool radioactiveDecayIsRegisted;
+	G4bool bicIsRegisted;
 
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+	G4bool biciIsRegisted;
 
-  GammaRayTelPhysicsListMessenger* pMessenger;
+	G4bool locIonIonInelasticIsRegistered;
+
+	G4bool radioactiveDecayIsRegisted;
+
+	G4String emName;
+
+	G4VPhysicsConstructor *emPhysicsList;
+
+	G4VPhysicsConstructor *decPhysicsList;
+
+	std::vector<G4VPhysicsConstructor*> hadronPhys;
+
+	GammaRayTelPhysicsListMessenger *pMessenger;
 };
-
 #endif

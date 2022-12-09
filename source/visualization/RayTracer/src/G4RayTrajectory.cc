@@ -36,7 +36,6 @@
 #include "G4RayTrajectoryPoint.hh"
 #include "G4RayTracerSceneHandler.hh"
 #include "G4Step.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4VisManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"

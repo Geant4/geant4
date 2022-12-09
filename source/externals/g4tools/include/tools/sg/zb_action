@@ -12,13 +12,10 @@
 
 #include "../zb/buffer"
 
+#include "../colorfs"
 #include "../lina/plane"
 #include "../mathf"
-#include "../hls"
-#include "../colorfs"
-#include "../lina/vec2f"
 #include "../lina/vec3d" //ZZ=double
-#include "../lina/geom2"
 
 namespace tools {
 namespace sg {
@@ -54,8 +51,9 @@ public:
   }
 
   virtual void clear_color(float a_r,float a_g,float a_b,float a_a){
-    zb::buffer::ZPixel px = get_pix(colorf(a_r,a_g,a_b,a_a));
-    m_zb.clear_color_buffer(px);
+    zb::buffer::ZPixel pix;
+    zb::buffer::rgba2pix(a_r,a_g,a_b,a_a,pix);
+    m_zb.clear_color_buffer(pix);
   }
   virtual void color4f(float a_r,float a_g,float a_b,float a_a){
     m_rgba.set_value(a_r,a_g,a_b,a_a);
@@ -80,32 +78,38 @@ public:
 
   virtual void load_proj_matrix(const mat4f& a_mtx) {
     m_proj = a_mtx;
-    if(!m_proj.invert(m_proj_1)){}
   }
 
-  virtual void load_model_matrix(const mat4f& a_mtx) {m_model = a_mtx;}
+  virtual void load_model_matrix(const mat4f& a_mtx) {
+    m_model = a_mtx;
+    set_normal_matrix();
+  }
 
   virtual unsigned int max_lights() {return 1000;}
 
   virtual void enable_light(unsigned int,
                             float a_dx,float a_dy,float a_dz,
-                            float a_r,float a_g,float a_b,float a_a){
+                            float a_r,float a_g,float a_b,float a_a,
+                            float a_ar,float a_ag,float a_ab,float a_aa){
     m_light_color.set_value(a_r,a_g,a_b,a_a);
+    m_light_ambient.set_value(a_ar,a_ag,a_ab,a_aa);
     m_light_direction.set_value(a_dx,a_dy,a_dz);
+    m_light_direction.normalize();
     m_light_on = true;
   }
 
-  virtual void set_lighting(bool a_on) {m_light_on = a_on;}
-  virtual void set_blend(bool) {}
+  virtual void set_lighting(bool a_value) {m_light_on = a_value;}
+  virtual void set_blend(bool a_value) {m_blend = a_value;}
 
   virtual void restore_state(unsigned int /*a_ret_num_light*/) {
     const sg::state& _state = state();
     m_proj = _state.m_proj;
     m_model = _state.m_model;
-
-    if(!m_proj.invert(m_proj_1)){}
+    set_normal_matrix();
 
     m_rgba = _state.m_color;
+    m_normal = _state.m_normal;
+
     m_ccw = (_state.m_winding==winding_ccw?true:false);
     m_POLYGON_OFFSET_FILL = _state.m_GL_POLYGON_OFFSET_FILL;
     m_CULL_FACE = _state.m_GL_CULL_FACE;
@@ -115,7 +119,7 @@ public:
     m_point_size = _state.m_point_size;
     m_light_on = _state.m_GL_LIGHTING;
     m_DEPTH_TEST = _state.m_GL_DEPTH_TEST;
-
+    m_blend = _state.m_GL_BLEND;
 
 /*
     if(_state.m_GL_TEXTURE_2D) ::glEnable(GL_TEXTURE_2D);
@@ -166,6 +170,7 @@ public:
   ,m_mgr(a_mgr)
   ,m_pv(get_me())
   ,m_light_color(colorf_white())
+  ,m_light_ambient(colorf_black())
   ,m_light_direction(vec3f(0,0,-1))
   ,m_normal(0,0,1)
 
@@ -178,14 +183,19 @@ public:
   ,m_point_size(1)
   ,m_light_on(false)
   ,m_DEPTH_TEST(true)
+  ,m_blend(false)
   {
     m_vp_mtx.set_identity();
     m_vp_mtx.mul_translate(float(m_ww)/2,float(m_wh)/2,0);
     m_vp_mtx.mul_scale(float(m_ww)/2,float(m_wh)/2,1);
 
     m_zb.change_size(a_ww,a_wh);
-//    m_zb.clear_color_buffer(0);
-//    m_zb.clear_depth_buffer();
+  //m_zb.clear_color_buffer(0);
+  //m_zb.clear_depth_buffer();
+
+    m_proj.set_identity();
+    m_model.set_identity();
+    m_normal_matrix.set_identity();
   }
   virtual ~zb_action(){}
 protected:
@@ -193,15 +203,15 @@ protected:
   :parent(a_from)
   ,m_mgr(a_from.m_mgr)
   ,m_vp_mtx(a_from.m_vp_mtx)
-  //,m_buffer(a_from.m_buffer)
   ,m_pv(a_from.m_pv)
-  ,m_proj_1(a_from.m_proj_1)
   ,m_light_color(a_from.m_light_color)
+  ,m_light_ambient(a_from.m_light_ambient)
   ,m_light_direction(a_from.m_light_direction)
   ,m_normal(a_from.m_normal)
 
   ,m_proj(a_from.m_proj)
   ,m_model(a_from.m_model)
+  ,m_normal_matrix(a_from.m_normal_matrix)
   ,m_rgba(a_from.m_rgba)
   ,m_ccw(a_from.m_ccw)
   ,m_POLYGON_OFFSET_FILL(a_from.m_POLYGON_OFFSET_FILL)
@@ -212,19 +222,20 @@ protected:
   ,m_point_size(a_from.m_point_size)
   ,m_light_on(a_from.m_light_on)
   ,m_DEPTH_TEST(a_from.m_DEPTH_TEST)
+  ,m_blend(a_from.m_blend)
   {}
   zb_action& operator=(const zb_action& a_from){
     parent::operator=(a_from);
     m_vp_mtx = a_from.m_vp_mtx;
-  //m_buffer = a_from.m_buffer;
     m_pv = a_from.m_pv;
-    m_proj_1 = a_from.m_proj_1;
     m_light_color = a_from.m_light_color;
+    m_light_ambient = a_from.m_light_ambient;
     m_light_direction = a_from.m_light_direction;
     m_normal = a_from.m_normal;
 
     m_proj = a_from.m_proj;
     m_model = a_from.m_model;
+    m_normal_matrix = a_from.m_normal_matrix;
     m_rgba = a_from.m_rgba;
     m_ccw = a_from.m_ccw;
     m_POLYGON_OFFSET_FILL = a_from.m_POLYGON_OFFSET_FILL;
@@ -235,148 +246,124 @@ protected:
     m_point_size = a_from.m_point_size;
     m_light_on = a_from.m_light_on;
     m_DEPTH_TEST = a_from.m_DEPTH_TEST;
+    m_blend = a_from.m_blend;
     return *this;
   }
 public:
-  void reset() {
-    m_cmap.clear();
-    m_rcmap.clear();
-  }
+  void reset() {}
 
-  const zb::buffer& zbuffer() const {return m_zb;}
-  zb::buffer& zbuffer() {return m_zb;}
+  void clear_color_buffer(float a_r,float a_g,float a_b,float a_a){
+    clear_color(a_r,a_g,a_b,a_a);
+  }
+  void clear_color_buffer(const colorf& a_color){
+    clear_color(a_color.r(),a_color.g(),a_color.b(),a_color.a());
+  }
+  
+  void clear_depth_buffer() {m_zb.clear_depth_buffer();}
 protected:
-  typedef std::map<colorf,zb::buffer::ZPixel,cmp_colorf> cmap_t;
-public:
-  //const cmap_t& colormap() const {return m_cmap;}
-  //cmap_t& colormap() {return m_cmap;}
-  zb::buffer::ZPixel add_color(float a_r,float a_g,float a_b,float a_a){
-    return add_color(colorf(a_r,a_g,a_b,a_a));
-  }
-  zb::buffer::ZPixel add_color(float a_r,float a_g,float a_b){
-    return add_color(a_r,a_g,a_b,1);
-  }
-  zb::buffer::ZPixel add_color(const colorf& a_col){
-    //::printf("debug : zb_action::add_color : %g %g %g %g : %d\n",
-    //    a_col.r(),a_col.g(),a_col.b(),a_col.a(),m_cmap.size());
-    zb::buffer::ZPixel pix = (zb::buffer::ZPixel)m_cmap.size();
-    m_cmap[a_col] = pix;
-    return pix;
-  }
-
-  zb::buffer::ZPixel get_pix(const colorf& a_rgba) {
-    cmap_t::const_iterator it = m_cmap.find(a_rgba);
-    if(it!=m_cmap.end()) return (*it).second;
-    return add_color(a_rgba);
-  }
-
-  bool find_color(zb::buffer::ZPixel a_pix,colorf& a_rgba) const {
-    cmap_t::const_iterator it;
-    for(it=m_cmap.begin();it!=m_cmap.end();++it){
-      if((*it).second==a_pix) {a_rgba = (*it).first;return true;}
-    }
-    return false;
-  }
-
-  typedef std::map<zb::buffer::ZPixel,colorf> rcmap_t;
-  const rcmap_t& rcolormap() const {return m_rcmap;}
-  rcmap_t& rcolormap() {return m_rcmap;}
+  typedef unsigned char uchar;
 protected:
-  void gen_rcmap() {
-    m_rcmap.clear();
-    cmap_t::const_iterator it;
-    for(it=m_cmap.begin();it!=m_cmap.end();++it){
-      m_rcmap[(*it).second] = (*it).first;
-    }
+  static void color2pix(const colorf& a_rgba,zb::buffer::ZPixel& a_pix) {
+    zb::buffer::rgba2pix(a_rgba.r(),a_rgba.g(),a_rgba.b(),a_rgba.a(),a_pix);
   }
 public:
-  //typedef wps::VCol VCol;
-  typedef float VCol;
+  zb::buffer::ZPixel* get_color_buffer(unsigned int& a_width,unsigned int& a_height) const {return m_zb.get_color_buffer(a_width,a_height);}
 
-  static bool get_rgb(void* a_tag,unsigned int a_col,unsigned int a_row,VCol& a_r,VCol& a_g,VCol& a_b){
-    //used with wps.
-    zb_action* rzb = (zb_action*)a_tag;
-
-    zb::buffer::ZPixel pix;
-    if(!rzb->zbuffer().get_clipped_pixel(a_col,rzb->wh()-1-a_row,pix)){
-      rzb->out() << "get_rgb : can't get zbuffer pixel" << std::endl;
-      a_r = 1;
-      a_g = 0;
-      a_b = 0;
-      return false;
-    }
-
-    if(rzb->rcolormap().empty()) rzb->gen_rcmap();
-
-   {rcmap_t::const_iterator it = rzb->rcolormap().find(pix);
-    if(it==rzb->rcolormap().end()) {
-      rzb->out() << "can't find pixel " << pix
-                 << " in cmap (sz " << rzb->rcolormap().size() << ")."
-                 << std::endl;
-      a_r = 1;
-      a_g = 0;
-      a_b = 0;
-      return false;
-    }
-    a_r = (*it).second.r();
-    a_g = (*it).second.g();
-    a_b = (*it).second.b();}
-
-    return true;
-  }
-
-  unsigned char* get_rgbas(size_t& a_sz) {
+  unsigned char* get_rgbas(size_t& a_sz,bool a_top_to_bottom = true) {
     if(!m_ww || !m_wh) {a_sz = 0;return 0;}
     a_sz = 4 * m_ww * m_wh;
-    typedef unsigned char uchar;
     uchar* rgbas = new uchar[a_sz];
     if(!rgbas) {a_sz = 0;return 0;}
     uchar* pos = rgbas;
-    VCol r,g,b;
-    VCol a = 1;
+    zb::buffer::ZPixel pix;
+    uchar* _pix = 0;
     for(unsigned int row=0;row<m_wh;row++) {
       for(unsigned int col=0;col<m_ww;col++) {
-        get_rgb(this,col,m_wh-row-1,r,g,b);
-        *pos = (uchar)(r*255.0F);pos++;
-        *pos = (uchar)(g*255.0F);pos++;
-        *pos = (uchar)(b*255.0F);pos++;
-        *pos = (uchar)(a*255.0F);pos++;
+        if(!m_zb.get_clipped_pixel(col,a_top_to_bottom?row:m_wh-1-row,pix)){
+          m_out << "tools::sg::zb_action::get_rgbas : can't get zbuffer pixel" << std::endl;
+          *pos = 0xFF;pos++;
+          *pos = 0x00;pos++;
+          *pos = 0x00;pos++;
+          *pos = 0xFF;pos++;
+        } else {
+          _pix = (uchar*)&pix;
+          *pos = *_pix;_pix++;pos++;
+          *pos = *_pix;_pix++;pos++;
+          *pos = *_pix;_pix++;pos++;
+          *pos = *_pix;_pix++;pos++;
+        }
       }
     }
- /*{size_t number = 4 * m_ww * m_wh;
-    size_t count_not_255 = 0;
-    for(size_t item=3;item<number;item+=4) {
-      unsigned char a = rgbas[item];
-      if(a!=255) {
-        ::printf("%lu : %d\n",item,a);
-        count_not_255++;
-	rgbas[item] = 255;
-      }
-    }
-    ::printf("zb_action::rgbas : not_255 : %lu\n",count_not_255);}*/
     return rgbas;
   }
 
-  unsigned char* get_rgbs(size_t& a_sz) {
+  unsigned char* get_rgbs(size_t& a_sz,bool a_top_to_bottom = true) {
     if(!m_ww || !m_wh) {a_sz = 0;return 0;}
     a_sz = 3 * m_ww * m_wh;
-    typedef unsigned char uchar;
     uchar* rgbs = new uchar[a_sz];
     if(!rgbs) {a_sz = 0;return 0;}
     uchar* pos = rgbs;
-    VCol r,g,b;
+    zb::buffer::ZPixel pix;
+    uchar* _pix = 0;
     for(unsigned int row=0;row<m_wh;row++) {
       for(unsigned int col=0;col<m_ww;col++) {
-        get_rgb(this,col,m_wh-row-1,r,g,b);
-        *pos = (uchar)(r*255.0F);pos++;
-        *pos = (uchar)(g*255.0F);pos++;
-        *pos = (uchar)(b*255.0F);pos++;
+        if(!m_zb.get_clipped_pixel(col,a_top_to_bottom?row:m_wh-1-row,pix)){
+          m_out << "tools::sg::zb_action::get_rgbs : can't get zbuffer pixel" << std::endl;
+          *pos = 0xFF;pos++;
+          *pos = 0x00;pos++;
+          *pos = 0x00;pos++;
+        } else {
+          _pix = (uchar*)&pix;
+          *pos = *_pix;_pix++;pos++;
+          *pos = *_pix;_pix++;pos++;
+          *pos = *_pix;_pix++;pos++;
+        }
       }
     }
     return rgbs;
   }
 
+public:
+  static bool get_rgb(void* a_tag,unsigned int a_col,unsigned int a_row,float& a_r,float& a_g,float& a_b){
+    //used with wps.
+    zb_action* rzb = (zb_action*)a_tag;
+    zb::buffer::ZPixel pix;
+    if(!rzb->m_zb.get_clipped_pixel(a_col,rzb->wh()-1-a_row,pix)){
+      rzb->out() << "tools::sg;:zb_action::get_rgb: can't get zbuffer pixel" << std::endl;
+      a_r = 1;
+      a_g = 0;
+      a_b = 0;
+      return false;
+    }
+    float a;
+    zb::buffer::pix2rgba(pix,a_r,a_g,a_b,a);
+    return true;
+  }
+  static bool get_rgba(void* a_tag,unsigned int a_col,unsigned int a_row,float& a_r,float& a_g,float& a_b,float& a_a){
+    zb_action* rzb = (zb_action*)a_tag;
+    zb::buffer::ZPixel pix;
+    if(!rzb->m_zb.get_clipped_pixel(a_col,rzb->wh()-1-a_row,pix)){
+      rzb->out() << "tools::sg;:zb_action::get_rgba : can't get zbuffer pixel" << std::endl;
+      a_r = 1;
+      a_g = 0;
+      a_b = 0;
+      a_a = 1;
+      return false;
+    }
+    zb::buffer::pix2rgba(pix,a_r,a_g,a_b,a_a);
+    return true;
+  }
+
 protected:
+  void set_normal_matrix() {
+    mat4f tmp(m_model);
+    tmp.no_translate();
+    if(!tmp.invert(m_normal_matrix)) {
+      m_out << "tools::sg::zb_action::set_normal_matrix : can't invert model matrix." << std::endl;
+    }
+    m_normal_matrix.transpose();
+  }
+  
   bool project_point(float& a_x,float& a_y,float& a_z,float& a_w) {
     a_w = 1;
     m_model.mul_4f(a_x,a_y,a_z,a_w);
@@ -396,10 +383,10 @@ protected:
   class primvis : public primitive_visitor {
   protected:
     virtual bool project(float& a_x,float& a_y,float& a_z,float& a_w) {
-      return m_zb_action.project_point(a_x,a_y,a_z,a_w);
+      return m_this.project_point(a_x,a_y,a_z,a_w);
     }
     virtual bool add_point(float a_x,float a_y,float a_z,float) {
-      return _add_point(a_x,a_y,a_z,m_zb_action.m_rgba);
+      return _add_point(a_x,a_y,a_z,m_this.m_rgba);
     }
 
     virtual bool add_point(float a_x,float a_y,float a_z,float,
@@ -410,8 +397,8 @@ protected:
 
     virtual bool add_line(float a_bx,float a_by,float a_bz,float,
                           float a_ex,float a_ey,float a_ez,float) {
-      m_zb_action.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
-      m_zb_action.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
+      m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
+      m_this.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
       a_bz *= -1;
       a_ez *= -1;
 
@@ -421,8 +408,12 @@ protected:
       zb::point end;
       zinit(end,a_ex,a_ey,a_ez);
 
-      m_zb_action.m_zb.set_depth_test(m_zb_action.m_DEPTH_TEST);
-      m_zb_action.m_zb.draw_line(beg,end,m_zb_action.get_pix(m_zb_action.m_rgba),npix(m_zb_action.m_line_width));
+      m_this.m_zb.set_depth_test(m_this.m_DEPTH_TEST);
+      m_this.m_zb.set_blend(m_this.m_blend);
+
+      zb::buffer::ZPixel pix;
+      color2pix(m_this.m_rgba,pix);
+      m_this.m_zb.draw_line(beg,end,pix,npix(m_this.m_line_width));
 
       return true;
     }
@@ -431,8 +422,8 @@ protected:
                           float a_br,float a_bg,float a_bb,float a_ba,
                           float a_ex,float a_ey,float a_ez,float,
                           float,float,float,float) {
-      m_zb_action.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
-      m_zb_action.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
+      m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
+      m_this.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
       a_bz *= -1;
       a_ez *= -1;
 
@@ -442,10 +433,13 @@ protected:
       zb::point end;
       zinit(end,a_ex,a_ey,a_ez);
 
-      m_zb_action.m_zb.set_depth_test(m_zb_action.m_DEPTH_TEST);
+      m_this.m_zb.set_depth_test(m_this.m_DEPTH_TEST);
+      m_this.m_zb.set_blend(m_this.m_blend);
 
       // interpolate color with beg,end ?
-      m_zb_action.m_zb.draw_line(beg,end,m_zb_action.get_pix(colorf(a_br,a_bg,a_bb,a_ba)),npix(m_zb_action.m_line_width));
+      zb::buffer::ZPixel pix;
+      zb::buffer::rgba2pix(a_br,a_bg,a_bb,a_ba,pix);
+      m_this.m_zb.draw_line(beg,end,pix,npix(m_this.m_line_width));
 
       return true;
     }
@@ -454,9 +448,18 @@ protected:
                               float a_p2x,float a_p2y,float a_p2z,float a_p2w,
                               float a_p3x,float a_p3y,float a_p3z,float a_p3w){
       return _add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                           m_this.m_normal.x(),
+                           m_this.m_normal.y(),
+                           m_this.m_normal.z(),
                            a_p2x,a_p2y,a_p2z,a_p2w,
+                           m_this.m_normal.x(),
+                           m_this.m_normal.y(),
+                           m_this.m_normal.z(),
                            a_p3x,a_p3y,a_p3z,a_p3w,
-                           m_zb_action.m_rgba);
+                           m_this.m_normal.x(),
+                           m_this.m_normal.y(),
+                           m_this.m_normal.z(),
+                           m_this.m_rgba);
     }
 
     virtual bool add_triangle(
@@ -474,26 +477,33 @@ protected:
       colorf col(r,g,b,a);
 
       return _add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                           m_this.m_normal.x(),
+                           m_this.m_normal.y(),
+                           m_this.m_normal.z(),
                            a_p2x,a_p2y,a_p2z,a_p2w,
+                           m_this.m_normal.x(),
+                           m_this.m_normal.y(),
+                           m_this.m_normal.z(),
                            a_p3x,a_p3y,a_p3z,a_p3w,
+                           m_this.m_normal.x(),
+                           m_this.m_normal.y(),
+                           m_this.m_normal.z(),
                            col);
     }
 
     virtual bool project_normal(float&,float&,float&) {
-      //return m_zb_action.project_normal(a_x,a_y,a_z);
+      //return m_this.project_normal(a_x,a_y,a_z);
       return true;
     }
     virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
                                   float /*a_nx*/,float /*a_ny*/,float /*a_nz*/) {
       add_point(a_x,a_y,a_z,a_w);
-    //m_this.m_points.add_normal(a_nx,a_ny,a_nz);
       return true;
     }
     virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
                                   float /*a_nx*/,float /*a_ny*/,float /*a_nz*/,
                                   float a_r,float a_g,float a_b,float a_a) {
       add_point(a_x,a_y,a_z,a_w,a_r,a_g,a_b,a_a);
-    //m_this.m_points.add_normal(a_nx,a_ny,a_nz);
       return true;
     }
     virtual bool add_line_normal(float a_bx,float a_by,float a_bz,float a_bw,
@@ -501,8 +511,6 @@ protected:
                                  float a_ex,float a_ey,float a_ez,float a_ew,
                                  float /*a_enx*/,float /*a_eny*/,float /*a_enz*/) {
       add_line(a_bx,a_by,a_bz,a_bw, a_ex,a_ey,a_ez,a_ew);
-    //m_this.m_lines.add_normal(a_bnx,a_bny,a_bnz);
-    //m_this.m_lines.add_normal(a_enx,a_eny,a_enz);
       return true;
     }
     virtual bool add_line_normal(float a_bx,float a_by,float a_bz,float a_bw,
@@ -512,53 +520,58 @@ protected:
                                  float /*a_enx*/,float /*a_eny*/,float /*a_enz*/,
                                  float a_er,float a_eg,float a_eb,float a_ea){
       add_line(a_bx,a_by,a_bz,a_bw, a_br,a_bg,a_bb,a_ba, a_ex,a_ey,a_ez,a_ew, a_er,a_eg,a_eb,a_ea);
-    //m_this.m_lines.add_normal(a_bnx,a_bny,a_bnz);
-    //m_this.m_lines.add_normal(a_enx,a_eny,a_enz);
       return true;
     }
     virtual bool add_triangle_normal(
       float a_p1x,float a_p1y,float a_p1z,float a_p1w,
-      float /*a_n1x*/,float /*a_n1y*/,float /*a_n1z*/,
+      float a_n1x,float a_n1y,float a_n1z,
       float a_p2x,float a_p2y,float a_p2z,float a_p2w,
-      float /*a_n2x*/,float /*a_n2y*/,float /*a_n2z*/,
+      float a_n2x,float a_n2y,float a_n2z,
       float a_p3x,float a_p3y,float a_p3z,float a_p3w,
-      float /*a_n3x*/,float /*a_n3y*/,float /*a_n3z*/) {
-      add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
-                   a_p2x,a_p2y,a_p2z,a_p2w,
-                   a_p3x,a_p3y,a_p3z,a_p3w);
-    //m_this.m_triangles.add_normal(a_n1x,a_n1y,a_n1z);
-    //m_this.m_triangles.add_normal(a_n2x,a_n2y,a_n2z);
-    //m_this.m_triangles.add_normal(a_n3x,a_n3y,a_n3z);
+      float a_n3x,float a_n3y,float a_n3z) {
+      
+      return _add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                           a_n1x,a_n1y,a_n1z,
+                           a_p2x,a_p2y,a_p2z,a_p2w,
+                           a_n2x,a_n2y,a_n2z,
+                           a_p3x,a_p3y,a_p3z,a_p3w,
+                           a_n3x,a_n3y,a_n3z,
+			   m_this.m_rgba);
       return true;
     }
     virtual bool add_triangle_normal(
       float a_p1x,float a_p1y,float a_p1z,float a_p1w,
-      float /*a_n1x*/,float /*a_n1y*/,float /*a_n1z*/,
+      float a_n1x,float a_n1y,float a_n1z,
       float a_r1,float a_g1,float a_b1,float a_a1,
       float a_p2x,float a_p2y,float a_p2z,float a_p2w,
-      float /*a_n2x*/,float /*a_n2y*/,float /*a_n2z*/,
+      float a_n2x,float a_n2y,float a_n2z,
       float a_r2,float a_g2,float a_b2,float a_a2,
       float a_p3x,float a_p3y,float a_p3z,float a_p3w,
-      float /*a_n3x*/,float /*a_n3y*/,float /*a_n3z*/,
+      float a_n3x,float a_n3y,float a_n3z,
       float a_r3,float a_g3,float a_b3,float a_a3){
-      add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
-                   a_r1,a_g1,a_b1,a_a1,
-                   a_p2x,a_p2y,a_p2z,a_p2w,
-                   a_r2,a_g2,a_b2,a_a2,
-                   a_p3x,a_p3y,a_p3z,a_p3w,
-                   a_r3,a_g3,a_b3,a_a3);
-    //m_this.m_triangles.add_normal(a_n1x,a_n1y,a_n1z);
-    //m_this.m_triangles.add_normal(a_n2x,a_n2y,a_n2z);
-    //m_this.m_triangles.add_normal(a_n3x,a_n3y,a_n3z);
+      
+      float r = (a_r1+a_r2+a_r3)/3.0f;
+      float g = (a_g1+a_g2+a_g3)/3.0f;
+      float b = (a_b1+a_b2+a_b3)/3.0f;
+      float a = (a_a1+a_a2+a_a3)/3.0f;
+      colorf col(r,g,b,a);
+
+      return _add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                           a_n1x,a_n1y,a_n1z,
+                           a_p2x,a_p2y,a_p2z,a_p2w,
+                           a_n2x,a_n2y,a_n2z,
+                           a_p3x,a_p3y,a_p3z,a_p3w,
+                           a_n3x,a_n3y,a_n3z,
+			   col);
       return true;
     }
   public:
-    primvis(zb_action& a_zb):m_zb_action(a_zb){}
+    primvis(zb_action& a_zb):m_this(a_zb){}
     virtual ~primvis(){}
   public:
     primvis(const primvis& a_from)
     :primitive_visitor(a_from)
-    ,m_zb_action(a_from.m_zb_action)
+    ,m_this(a_from.m_this)
     {}
     primvis& operator=(const primvis& a_from){
       primitive_visitor::operator=(a_from);
@@ -586,55 +599,45 @@ protected:
     }
 
     bool _add_point(float a_x,float a_y,float a_z,const colorf& a_color){
-      m_zb_action.m_zb.set_depth_test(m_zb_action.m_DEPTH_TEST);
+      m_this.m_zb.set_depth_test(m_this.m_DEPTH_TEST);
+      m_this.m_zb.set_blend(m_this.m_blend);
 
-      m_zb_action.m_vp_mtx.mul_3f(a_x,a_y,a_z);
+      m_this.m_vp_mtx.mul_3f(a_x,a_y,a_z);
       a_z *= -1;
 
       zb::point p;
       zinit(p,a_x,a_y,a_z);
 
-      float alpha = a_color.a();
-      zb::buffer::ZPixel px;
-      if(alpha<1.0f) {
-        zb::buffer::ZPixel old_px = 0;
-        if(!m_zb_action.m_zb.get_pixel(p,old_px)) return false;
-        colorf old_color;
-        if(!m_zb_action.find_color(old_px,old_color)) return false;
-        float one_alpha = 1.0f-alpha;
-        colorf _color;
-        _color.set_r(a_color.r()*alpha+old_color.r()*one_alpha);
-        _color.set_g(a_color.g()*alpha+old_color.g()*one_alpha);
-        _color.set_b(a_color.b()*alpha+old_color.b()*one_alpha);
-        px = m_zb_action.get_pix(_color);
-      } else {
-        px = m_zb_action.get_pix(a_color);
-      }
-      m_zb_action.m_zb.draw_point(p,px,npix(m_zb_action.m_point_size));
+      zb::buffer::ZPixel pix;
+      color2pix(a_color,pix);
+      m_this.m_zb.draw_point(p,pix,npix(m_this.m_point_size));
 
       return true;
     }
 
-    bool _add_triangle(float a_p1x,float a_p1y,float a_p1z,float a_p1w,
-                       float a_p2x,float a_p2y,float a_p2z,float a_p2w,
-                       float a_p3x,float a_p3y,float a_p3z,float a_p3w,
+    bool _add_triangle(float a_p1x,float a_p1y,float a_p1z,float /*a_p1w*/,
+                       float a_n1x,float a_n1y,float a_n1z,
+                       float a_p2x,float a_p2y,float a_p2z,float /*a_p2w*/,
+                       float a_n2x,float a_n2y,float a_n2z,
+                       float a_p3x,float a_p3y,float a_p3z,float /*a_p3w*/,
+                       float a_n3x,float a_n3y,float a_n3z,
                        const colorf& a_color){
 
       float p1x = a_p1x;float p1y = a_p1y;float p1z = a_p1z;//float p1w = a_p1w;
       float p2x = a_p2x;float p2y = a_p2y;float p2z = a_p2z;//float p2w = a_p2w;
       float p3x = a_p3x;float p3y = a_p3y;float p3z = a_p3z;//float p3w = a_p3w;
 
-      m_zb_action.m_vp_mtx.mul_3f(p1x,p1y,p1z);
-      m_zb_action.m_vp_mtx.mul_3f(p2x,p2y,p2z);
-      m_zb_action.m_vp_mtx.mul_3f(p3x,p3y,p3z);
+      m_this.m_vp_mtx.mul_3f(p1x,p1y,p1z);
+      m_this.m_vp_mtx.mul_3f(p2x,p2y,p2z);
+      m_this.m_vp_mtx.mul_3f(p3x,p3y,p3z);
       p1z *= -1;
       p2z *= -1;
       p3z *= -1;
 
-      if(m_zb_action.m_POLYGON_OFFSET_FILL){
+      if(m_this.m_POLYGON_OFFSET_FILL){
+        //note : gopaw pawex9,14,15,21 with "lego" (drawing cubes) are sensitive to the below epsil.
         // zs are in [-1,1]
-        float epsil = 1e-5f;
-        //float epsil = 1e-4f;
+        float epsil = 1e-4f;
         p1z -= epsil;
         p2z -= epsil;
         p3z -= epsil;
@@ -654,8 +657,8 @@ protected:
 
       ZZ C = pn.normal()[2];
 
-      if(m_zb_action.m_CULL_FACE){  // check back facing or by the edge :
-        if(m_zb_action.m_ccw) {
+      if(m_this.m_CULL_FACE){
+        if(m_this.m_ccw) {
           if(C<=0) return true;
         } else {
           if(C>=0) return true;
@@ -674,67 +677,50 @@ protected:
       zinit(list[1],p2x,p2y,p2z);
       zinit(list[2],p3x,p3y,p3z);
 
-      m_zb_action.m_zb.set_depth_test(m_zb_action.m_DEPTH_TEST);
+      m_this.m_zb.set_depth_test(m_this.m_DEPTH_TEST);
+      m_this.m_zb.set_blend(m_this.m_blend);
 
-      if(m_zb_action.m_light_on) {
+      colorf frag_color = a_color;
 
-        float _p1x = a_p1x;float _p1y = a_p1y;float _p1z = a_p1z;float _p1w = a_p1w;
-        float _p2x = a_p2x;float _p2y = a_p2y;float _p2z = a_p2z;float _p2w = a_p2w;
-        float _p3x = a_p3x;float _p3y = a_p3y;float _p3z = a_p3z;float _p3w = a_p3w;
+      if(m_this.m_light_on) {  // same logic as toolx/wasm/webgl.js:
 
-        _p1x *= _p1w;_p1y *= _p1w;_p1z *= _p1w;
-        _p2x *= _p2w;_p2y *= _p2w;_p2z *= _p2w;
-        _p3x *= _p3w;_p3y *= _p3w;_p3z *= _p3w;
+        float nx = (a_n1x+a_n2x+a_n3x)/3.0f;
+        float ny = (a_n1y+a_n2y+a_n3y)/3.0f;
+        float nz = (a_n1z+a_n2z+a_n3z)/3.0f;
 
-        m_zb_action.m_proj_1.mul_4f(_p1x,_p1y,_p1z,_p1w);
-        m_zb_action.m_proj_1.mul_4f(_p2x,_p2y,_p2z,_p2w);
-        m_zb_action.m_proj_1.mul_4f(_p3x,_p3y,_p3z,_p3w);
+        m_this.m_normal_matrix.mul_dir_3f(nx,ny,nz);
 
-        plane<vec3d> _pn(
-          vec3<ZZ>(_p1x,_p1y,_p1z),
-          vec3<ZZ>(_p2x,_p2y,_p2z),
-          vec3<ZZ>(_p3x,_p3y,_p3z)
-        );
-        if(_pn.is_valid()) {
-          vec3f npn(float(_pn.normal().x()),
-                    float(_pn.normal().y()),
-                    float(_pn.normal().z()));
-          vec3f d = m_zb_action.m_light_direction;
-          float dx =  m_zb_action.m_light_direction.x();
-          float dy =  m_zb_action.m_light_direction.y();
-          float dz =  m_zb_action.m_light_direction.z();
-          m_zb_action.m_model.mul_3f(dx,dy,dz);
-          d.set_value(dx,dy,dz);
-          if(d.normalize()) {
-            float dot = npn.dot(d);
-            if((-1<=dot)&&(dot<=0)) {
-              dot *= -1;
+        vec3f _normal(nx,ny,nz);_normal.normalize();
 
-//            colorf c
-//              (a_color.r()*dot,a_color.g()*dot,a_color.b()*dot,a_color.a());
+        float _dot = _normal.dot(m_this.m_light_direction);
 
-              float h,l,s;
-              rgb_to_hls(a_color.r(),a_color.g(),a_color.b(),h,l,s);
-              l *= dot;
-              float r,g,b;
-              hls_to_rgb(h,l,s,r,g,b);
+        if(_dot<0.0f) {
+          _dot *= -1.0f;
 
-              colorf c(r,g,b,a_color.a());
+          colorf _tmp = m_this.m_light_color;
+          _tmp *= _dot;
+//        _tmp *= 1.4f;  //to have same intensity as GL on desktops.
+          _tmp += m_this.m_light_ambient;
 
-              m_zb_action.m_zb.draw_polygon(3,list,A,B,C,D,m_zb_action.get_pix(c));
-            //m_zb_action.m_zb.draw_polygon(3,list,A,B,C,D,m_zb_action.get_pix(a_color));
-            }
-          }
-        }
+          frag_color *= _tmp;
 
-      } else {
-        m_zb_action.m_zb.draw_polygon(3,list,A,B,C,D,m_zb_action.get_pix(a_color));
+        } else {
+          frag_color *= m_this.m_light_ambient;
+	}
+
+        frag_color.clamp();
+        frag_color.set_a(a_color.a());
+
       }
+
+      zb::buffer::ZPixel pix;
+      color2pix(frag_color,pix);
+      m_this.m_zb.draw_polygon(3,list,A,B,C,D,pix);
 
       return true;
     }
   protected:
-    zb_action& m_zb_action;
+    zb_action& m_this;
   };
 
 protected:
@@ -742,16 +728,15 @@ protected:
   mat4f m_vp_mtx;
   zb::buffer m_zb;
   primvis m_pv;
-  mat4f m_proj_1; //OPTIMIZE : used if m_light_on true.
-  cmap_t m_cmap;
-  rcmap_t m_rcmap;
   colorf m_light_color;
+  colorf m_light_ambient;
   vec3f m_light_direction;
   vec3f m_normal;
 
   // to be restored in restore_state() :
   mat4f m_proj;
   mat4f m_model;
+  mat4f m_normal_matrix;
   colorf m_rgba;
   bool m_ccw;
   bool m_POLYGON_OFFSET_FILL;
@@ -762,6 +747,7 @@ protected:
   float m_point_size;
   bool m_light_on;
   bool m_DEPTH_TEST;
+  bool m_blend;
 };
 
 }}

@@ -187,7 +187,6 @@ private:
   size_t                       nLowE = 40;
   size_t                       nHighE = 50;
   size_t                       idxEnergy = 0;
-  G4bool                       splineFlag = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

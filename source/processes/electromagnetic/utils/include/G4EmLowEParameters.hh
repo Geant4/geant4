@@ -50,6 +50,7 @@
 
 #include "globals.hh"
 #include "G4DNAModelSubType.hh"
+#include "G4EmFluoDirectory.hh"
 #include <vector>
 
 class G4EmLowEParametersMessenger;
@@ -69,11 +70,12 @@ public:
   void SetFluo(G4bool val);
   G4bool Fluo() const;
 
-  void SetBeardenFluoDir(G4bool val);
-  G4bool BeardenFluoDir() const;
+  G4EmFluoDirectory FluoDirectory() const;
 
+  void SetFluoDirectory(G4EmFluoDirectory val);
+  void SetBeardenFluoDir(G4bool val);
   void SetANSTOFluoDir(G4bool val);
-  G4bool ANSTOFluoDir() const;
+  void SetXDB_EADLFluoDir(G4bool val);
 
   void SetAuger(G4bool val);
   G4bool Auger() const;
@@ -134,8 +136,6 @@ private:
   G4EmLowEParametersMessenger* theMessenger;
 
   G4bool fluo;
-  G4bool beardenFluoDir;
-  G4bool fANSTOFluoDir;
   G4bool auger;
   G4bool pixe;
   G4bool deexIgnoreCut;
@@ -144,7 +144,9 @@ private:
   G4bool dnaStationary;
   G4bool dnaMsc;
   
-  G4DNAModelSubType  dnaElectronSolvation;
+  G4DNAModelSubType dnaElectronSolvation;
+
+  G4EmFluoDirectory fFluoDirectory;
 
   G4String namePIXE;
   G4String nameElectronPIXE;

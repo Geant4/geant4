@@ -5,7 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
-## 2021-03-02 I. Hrivnacova (exampleB3-V11-00-01)
+## 2022-11-29 I. Hrivnacova (exampleB3-V11-00-02)
+- Activated merging ntuples with score ntuple writer
+- Added commented setting in run2.mac:
+  /control/cout/ignoreThreadsExcept 0
+
+## 2022-03-02 I. Hrivnacova (exampleB3-V11-00-01)
 - Set new analysis file name for the second run
   in run2.mac to avoid overwriting the output from
   the first run

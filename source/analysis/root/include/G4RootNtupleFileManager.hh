@@ -35,18 +35,13 @@
 #include "G4VNtupleFileManager.hh"
 
 #include <string_view>
+#include <utility>
 
 class G4RootFileManager;
 class G4RootNtupleManager;
 class G4RootPNtupleManager;
 class G4VNtupleManager;
 class G4NtupleBookingManager;
-
-enum class G4NtupleMergeMode {
-  kNone,
-  kMain,
-  kSlave
-};
 
 class G4RootNtupleFileManager : public G4VNtupleFileManager
 {
@@ -55,27 +50,26 @@ class G4RootNtupleFileManager : public G4VNtupleFileManager
   public:
     explicit G4RootNtupleFileManager(const G4AnalysisManagerState& state);
     G4RootNtupleFileManager() = delete;
-    virtual ~G4RootNtupleFileManager();
+    ~G4RootNtupleFileManager() override;
 
     // MT/MPI
-    virtual void SetNtupleMerging(G4bool mergeNtuples,
-                   G4int nofReducedNtupleFiles = 0) override;
-    virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
-    virtual void SetBasketSize(unsigned int basketSize) override;
-    virtual void SetBasketEntries(unsigned int basketEntries) override;
+    void SetNtupleMerging(G4bool mergeNtuples, G4int nofReducedNtupleFiles = 0) override;
+    void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
+    void SetBasketSize(unsigned int basketSize) override;
+    void SetBasketEntries(unsigned int basketEntries) override;
 
     // virtual methods from base class
-    virtual G4bool ActionAtOpenFile(const G4String& fileName) override;
-    virtual G4bool ActionAtWrite() override;
-    virtual G4bool ActionAtCloseFile(G4bool reset) override;
-    virtual G4bool Reset() override;
-    virtual G4bool IsNtupleMergingSupported() const override;
+    G4bool ActionAtOpenFile(const G4String& fileName) override;
+    G4bool ActionAtWrite() override;
+    G4bool ActionAtCloseFile() override;
+    G4bool Reset() override;
+    G4bool IsNtupleMergingSupported() const override;
 
-    virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
+    std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
 
     void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
 
-    G4NtupleMergeMode GetMergeMode() const;
+    G4NtupleMergeMode GetMergeMode() const override;
     std::shared_ptr<G4RootNtupleManager> GetNtupleManager() const;
 
   private:
@@ -102,7 +96,9 @@ class G4RootNtupleFileManager : public G4VNtupleFileManager
 
 inline void G4RootNtupleFileManager::SetFileManager(
   std::shared_ptr<G4RootFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 inline G4NtupleMergeMode G4RootNtupleFileManager::GetMergeMode() const
 { return fNtupleMergeMode; }

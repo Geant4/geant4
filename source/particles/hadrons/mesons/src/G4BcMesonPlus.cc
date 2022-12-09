@@ -70,7 +70,7 @@ G4BcMesonPlus* G4BcMesonPlus::Definition()
                 false,     0.507e-3*ns,          NULL,
                 false,       "Bc");
   }
-  theInstance = reinterpret_cast<G4BcMesonPlus*>(anInstance);
+  theInstance = static_cast<G4BcMesonPlus*>(anInstance);
   return theInstance;
 }
 

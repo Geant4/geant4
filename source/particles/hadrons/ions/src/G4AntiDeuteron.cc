@@ -52,7 +52,7 @@ G4AntiDeuteron* G4AntiDeuteron::Definition()
   const G4String name = "anti_deuteron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
+  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -81,7 +81,7 @@ G4AntiDeuteron* G4AntiDeuteron::Definition()
 
   }
 
-  theInstance = reinterpret_cast<G4AntiDeuteron*>(anInstance);
+  theInstance = static_cast<G4AntiDeuteron*>(anInstance);
   return theInstance;
 }
 

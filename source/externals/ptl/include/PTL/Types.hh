@@ -21,10 +21,6 @@
 
 #pragma once
 
-#ifndef G4GMAKE
-#    include "PTL/Config.hh"
-#endif
-
 #if defined(__APPLE__) || defined(__MACH__)
 #    if !defined(PTL_MACOS)
 #        define PTL_MACOS 1
@@ -88,76 +84,10 @@
 
 #if !defined(PTL_DEFAULT_OBJECT)
 #    define PTL_DEFAULT_OBJECT(NAME)                                                     \
-        NAME()                       = default;                                          \
-        ~NAME()                      = default;                                          \
-        NAME(const NAME&)            = default;                                          \
-        NAME(NAME&&)                 = default;                                          \
+        NAME()            = default;                                                     \
+        ~NAME()           = default;                                                     \
+        NAME(const NAME&) = default;                                                     \
+        NAME(NAME&&)      = default;                                                     \
         NAME& operator=(const NAME&) = default;                                          \
-        NAME& operator=(NAME&&)      = default;
+        NAME& operator=(NAME&&) = default;
 #endif
-
-#include <atomic>
-#include <complex>
-#include <functional>
-#include <limits>
-#include <memory>
-#include <utility>
-
-namespace PTL
-{
-//--------------------------------------------------------------------------------------//
-//
-namespace api
-{
-struct native
-{};
-struct tbb
-{};
-}  // namespace api
-//
-//--------------------------------------------------------------------------------------//
-//
-template <typename Tp, typename Tag = api::native, typename Ptr = std::shared_ptr<Tp>,
-          typename Pair = std::pair<Ptr, Ptr>>
-Pair&
-GetSharedPointerPair()
-{
-    static auto                 _master = std::make_shared<Tp>();
-    static std::atomic<int64_t> _count(0);
-    static thread_local auto    _inst =
-        Pair(_master, Ptr((_count++ == 0) ? nullptr : new Tp()));
-    return _inst;
-}
-//
-//--------------------------------------------------------------------------------------//
-//
-template <typename Tp, typename Tag = api::native, typename Ptr = std::shared_ptr<Tp>,
-          typename Pair = std::pair<Ptr, Ptr>>
-Ptr
-GetSharedPointerPairInstance()
-{
-    static thread_local auto& _pinst = GetSharedPointerPair<Tp, Tag>();
-    static thread_local auto& _inst  = _pinst.second.get() ? _pinst.second : _pinst.first;
-    return _inst;
-}
-//
-//--------------------------------------------------------------------------------------//
-//
-template <typename Tp, typename Tag = api::native, typename Ptr = std::shared_ptr<Tp>,
-          typename Pair = std::pair<Ptr, Ptr>>
-Ptr
-GetSharedPointerPairMasterInstance()
-{
-    static auto& _pinst = GetSharedPointerPair<Tp, Tag>();
-    static auto  _inst  = _pinst.first;
-    return _inst;
-}
-
-//======================================================================================//
-
-}  // namespace PTL
-
-// Forward declation of void type argument for usage in direct object
-// persistency to define fake default constructors
-//
-class __void__;

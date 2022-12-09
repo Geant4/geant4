@@ -6,6 +6,53 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-26 Gabriele Cosmo (hadr-hpp-V11-00-19)
+- Fixed more compilation warnings for implicit type conversions.
+- Some code cleanup.
+
+## 2022-11-18 Gabriele Cosmo (hadr-hpp-V11-00-18)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-07 Gabriele Cosmo (hadr-hpp-V11-00-17)
+- Fixed compilation warnings on Intel/icx compiler for variable set
+  but not used in G4ParticleHPInelasticCompFS and G4ParticleHPFFFissionFS.
+- Use auto for iterators in G4ParticleHPFFFissionFS::GetAFissionFragment().
+
+## 2022-10-05 Alberto Ribon (hadr-hpp-V11-00-16)
+- G4ParticleHPContAngularPar.cc : added protection against zero probability
+  for both discrete and continuous emission.
+
+## 2022-10-01 Dennis Wright (hadr-hpp-V11-00-15)
+- Remove environment variables G4PHPTEST, G4PHPTEST2 and NeutronHPCapture,
+  associated getenv() calls and associated debug code. They are no longer
+  used and found to slow down the code significantly.
+  This is a fix of bug report #2501.
+
+  Files modified: G4ParticleHPContAngularPar (removed G4PHPTEST, G4PHPTEST2)
+                  G4ParticleHPCapture.cc (removed NeutronHPCapture)
+                  G4ParticleHPEnAngCorrelation.cc (removed G4PHPTEST)
+                  G4ParticleHPContEnergyAngular.cc (  "        " )
+                  G4ParticleHPInelastic.cc         (  "        " )
+                  G4ParticleHPInelasticBaseFS.cc   (  "        " )                   
+                  G4ParticleHPProduct              (  "        " )
+                  G4ParticleHPDeExGammas.hh        (  "        " )
+
+## 2022-07-19 Alberto Ribon (hadr-hpp-V11-00-14)
+- G4ParticleHPThermalScattering.hh : fixed Coverity report (uninitialized
+  variable).
+
+## 2022-07-23 Ben Morgan (hadr-hpp-V11-00-13)
+- Remove unneeded include of `G4FastVector.hh`
+
+## 2022-07-01 Alberto Ribon (hadr-hpp-V11-00-12)
+- G4ParticleHPInelastic.cc, G4ParticleHPCapture.cc, G4ParticleHPFission.cc,
+  G4ParticleHPElastic.cc, G4ParticleHPThermalScattering.cc : replaced
+  the threshold used for checking the absolute energy non-conservation
+  from DLB_MAX (implying no checking at all) to 350 GeV (this value allows
+  for cases where the residual nucleus is not produced, even when super-heavy
+  nuclides are involved).
+- G4ParticleHPContAngularPar.cc : removed unneeded check, reported by Coverity.
+
 ## 2022-06-23 Alberto Ribon (hadr-hpp-V11-00-11)
 - G4ParticleHPContAngularPar.cc : added protections against evaluations of
   arrays at negative index (-1), fixing rare reproducibility problems.

@@ -38,82 +38,88 @@
 #ifndef GammaRayTelAnticoincidenceHit_h
 #define GammaRayTelAnticoincidenceHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelAnticoincidenceHit : public G4VHit
-{
+class GammaRayTelAnticoincidenceHit: public G4VHit {
 public:
-  
-  GammaRayTelAnticoincidenceHit();
-  ~GammaRayTelAnticoincidenceHit();
-  GammaRayTelAnticoincidenceHit(const GammaRayTelAnticoincidenceHit&);
-  const GammaRayTelAnticoincidenceHit& operator=(const
-						GammaRayTelAnticoincidenceHit&);
-  G4bool operator==(const GammaRayTelAnticoincidenceHit&) const;
-  
-  inline void* operator new(size_t);
-  inline void  operator delete(void*);
-  
-  void Draw();
-  void Print();
+	GammaRayTelAnticoincidenceHit();
+
+	~GammaRayTelAnticoincidenceHit() override;
+
+	GammaRayTelAnticoincidenceHit(const GammaRayTelAnticoincidenceHit &right);
+
+	auto operator=(const GammaRayTelAnticoincidenceHit &right) -> const GammaRayTelAnticoincidenceHit&;
+
+	auto operator==(const GammaRayTelAnticoincidenceHit &right) const -> G4bool;
+
+	inline auto operator new(size_t) -> void*;
+
+	inline auto operator delete(void* hit) -> void;
+
+	void Draw() override;
+
+	void Print() override;
+
+	inline void AddEnergy(G4double value) {
+		acdDepositedEnergy += value;
+	}
+
+	inline void SetACDTileNumber(const G4int &value) {
+		acdTileNumber = value;
+	}
+
+	inline void SetACDType(const G4int &value) {
+		isACDPlane = value;
+	}
+
+	inline void SetPosition(const G4ThreeVector &value) {
+		position = value;
+	}
+
+	[[nodiscard]]
+	inline auto GetEdepACD() const -> G4double {
+		return acdDepositedEnergy;
+	}
+
+	[[nodiscard]]
+	inline auto GetACDTileNumber() const -> G4int  {
+		return acdTileNumber;
+	}
+
+	[[nodiscard]]
+	inline auto GetACDType() const -> G4int {
+		return isACDPlane;
+	}
+
+	[[nodiscard]]
+	inline auto GetPosition() const -> G4ThreeVector {
+		return position;
+	}
 
 private:
-  
-  G4double EdepACD;  // Energy deposited on the ACD tile
-  G4ThreeVector pos; // Position of the hit
-  G4int ACDTileNumber; // Number of the ACD tile
-  G4int IsACDPlane;    // Type of the plane (0 top, 1 L-R, 2 F-R)
+	G4int acdTileNumber{0}; // Number of the ACD tile
 
-public:
-  
-  inline void AddEnergy(G4double de) {EdepACD += de;};
-  inline void SetACDTileNumber(G4int i) {ACDTileNumber = i;};
-  inline void SetACDType(G4int i) {IsACDPlane = i;};
-  inline void SetPos(G4ThreeVector xyz){ pos = xyz; }
-  
-  inline G4double GetEdepACD()     { return EdepACD; };
-  inline G4int    GetACDTileNumber()   { return ACDTileNumber; };
-  inline G4int    GetACDType()   {return IsACDPlane;};      
-  inline G4ThreeVector GetPos() { return pos; };
-  
+	G4int isACDPlane{0}; // Type of the plane (0: top, 1: L-R, 2: F-R)
+
+    G4double acdDepositedEnergy{0.}; // Energy deposited on the ACD tile
+
+    G4ThreeVector position{G4ThreeVector(0., 0., 0.)}; // Position of the hit
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+using GammaRayTelAnticoincidenceHitsCollection = G4THitsCollection<GammaRayTelAnticoincidenceHit>;
+extern G4ThreadLocal G4Allocator<GammaRayTelAnticoincidenceHit> *anticoincidenceHitAllocator;
 
-typedef G4THitsCollection<GammaRayTelAnticoincidenceHit> GammaRayTelAnticoincidenceHitsCollection;
-
-extern G4ThreadLocal G4Allocator<GammaRayTelAnticoincidenceHit> *GammaRayTelAnticoincidenceHitAllocator;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void* GammaRayTelAnticoincidenceHit::operator new(size_t)
-{
-  if (!GammaRayTelAnticoincidenceHitAllocator)
-    GammaRayTelAnticoincidenceHitAllocator = new G4Allocator<GammaRayTelAnticoincidenceHit> ;
-  return (void*) GammaRayTelAnticoincidenceHitAllocator->MallocSingle();
+inline auto GammaRayTelAnticoincidenceHit::operator new(size_t) -> void* {
+	if (anticoincidenceHitAllocator == nullptr) {
+	    anticoincidenceHitAllocator = new G4Allocator<GammaRayTelAnticoincidenceHit>;
+	}
+	return (void*) anticoincidenceHitAllocator->MallocSingle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void GammaRayTelAnticoincidenceHit::operator delete(void* aHit)
-{
-  GammaRayTelAnticoincidenceHitAllocator->FreeSingle((GammaRayTelAnticoincidenceHit*) aHit);
+inline auto GammaRayTelAnticoincidenceHit::operator delete(void *hit) -> void {
+    anticoincidenceHitAllocator->FreeSingle((GammaRayTelAnticoincidenceHit*) hit);
 }
-
 #endif
-
-
-
-
-
-
-
-
-
-

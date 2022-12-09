@@ -73,11 +73,11 @@ class G4TransportationManager
        // Set the world volume for tracking
        // This method is to be invoked by G4RunManagerKernel.
 
-     inline size_t GetNoActiveNavigators() const;
+     inline std::size_t GetNoActiveNavigators() const;
      inline std::vector<G4Navigator*>::iterator GetActiveNavigatorsIterator();
        // Return an iterator to the list of active navigators
 
-     inline size_t GetNoWorlds() const;
+     inline std::size_t GetNoWorlds() const;
      inline std::vector<G4VPhysicalVolume*>::iterator GetWorldsIterator();
        // Return an iterator to the list of registered worlds
 

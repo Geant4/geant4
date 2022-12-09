@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G01/include/VG01PrimaryGeneratorAction.hh
-/// \brief Generator with multiple modes: uniform, free, axis, fixed)
+//
+/// \file VG01PrimaryGeneratorAction.hh
+/// \brief Definition of the VG01PrimaryGeneratorAction class
+
+//  Generator with multiple modes: uniform, free, axis, fixed)
 //
 //  Primary generator that can be configured using modes to either:
 //    - 'uniform' direction secondaries       (default)

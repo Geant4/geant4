@@ -77,7 +77,7 @@ G4AntiOmegacZero* G4AntiOmegacZero::Definition()
 
  //Decay Table is not defined here, wth expectation of pre-assigned
   }
-  theInstance = reinterpret_cast<G4AntiOmegacZero*>(anInstance);
+  theInstance = static_cast<G4AntiOmegacZero*>(anInstance);
   return theInstance;
 }
 

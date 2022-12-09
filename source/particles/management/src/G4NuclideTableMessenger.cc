@@ -48,15 +48,26 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
   thisDirectory->SetGuidance("Nuclide table control commands.");
 
   // particle/manage/nuclide/min_halflife
-  lifetimeCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/min_halflife",this);
-  lifetimeCmd->SetGuidance("Set threshold of half-life.");
-  lifetimeCmd->SetGuidance("Unit of the time can be :");
-  lifetimeCmd->SetGuidance(" s, ms, ns (default)");
-  lifetimeCmd->SetParameterName("life",false);
-  lifetimeCmd->SetDefaultValue( 1000.0 );
-  lifetimeCmd->SetRange("life >0.0");
-  lifetimeCmd->SetDefaultUnit("ns");
-  lifetimeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  halflifeCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/min_halflife",this);
+  halflifeCmd->SetGuidance("Set threshold of half-life.");
+  halflifeCmd->SetGuidance("Unit of the time can be :");
+  halflifeCmd->SetGuidance(" s, ms, ns (default)");
+  halflifeCmd->SetParameterName("life",false);
+  halflifeCmd->SetDefaultValue(0.69314718);
+  halflifeCmd->SetRange("halflife > 0.0");
+  halflifeCmd->SetDefaultUnit("ns");
+  halflifeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  // particle/manage/nuclide/min_meanlife
+  meanlifeCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/min_meanlife",this);
+  meanlifeCmd->SetGuidance("Set threshold of mean life.");
+  meanlifeCmd->SetGuidance("Unit of the time can be :");
+  meanlifeCmd->SetGuidance(" s, ms, ns (default)");
+  meanlifeCmd->SetParameterName("life",false);
+  meanlifeCmd->SetDefaultValue(1.0);
+  meanlifeCmd->SetRange("meanlife > 0.0");
+  meanlifeCmd->SetDefaultUnit("ns");
+  meanlifeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // particle/manage/nuclide/level_tolerance
   lToleranceCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/level_tolerance",this);
@@ -73,21 +84,25 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
 G4NuclideTableMessenger::~G4NuclideTableMessenger()
 {
   delete thisDirectory;
-  delete lifetimeCmd;
+  delete halflifeCmd;
+  delete meanlifeCmd;
   delete lToleranceCmd;
 } 
 
 void G4NuclideTableMessenger::
 SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == lifetimeCmd )
-  {
+  if (command == halflifeCmd) {
     // Command   /particle/manage/nuclideTable/min_halflife
-    theNuclideTable->SetThresholdOfHalfLife(lifetimeCmd->GetNewDoubleValue(newValue)); 
-  }
-  else if (command == lToleranceCmd )
-  {
+    theNuclideTable->SetThresholdOfHalfLife(halflifeCmd->GetNewDoubleValue(newValue));
+
+  } else if (command == meanlifeCmd) {
+    // Command   /particle/manage/nuclideTable/min_meanlife
+    theNuclideTable->SetMeanLifeThreshold(meanlifeCmd->GetNewDoubleValue(newValue));
+
+  } else if (command == lToleranceCmd) {
     // Command   /particle/manage/nuclideTable/level_tolerance
     theNuclideTable->SetLevelTolerance(lToleranceCmd->GetNewDoubleValue(newValue)); 
   }
 }
+

@@ -4,6 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-11-11 Alberto Ribon (had-theo-HE-V11-00-02)
+- G4TheoFSGenerator: simplified treatment for low-energy inelastic nuclear
+  reactions of light hypernuclei (because Bertini and Binary intra-nuclear 
+  cascade models are not applicable for these projectiles).
+  Note that for light anti-hypernuclei, FTF works fine down to zero 
+  kinetic energy.
+
 ## 2022-05-25 Alberto Ribon (had-theo-HE-V11-00-01)
 - `G4TheoFSGenerator`: propagate the information on parent resonance
   (in the `ApplyYourself` method, from `G4ReactionProduct` to `G4HadSecondary`)

@@ -29,7 +29,6 @@
 //
 
 #include "G4MIRDLeftKidney.hh"
-
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
@@ -48,51 +47,42 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftKidney::G4MIRDLeftKidney()
-{
-}
-
-G4MIRDLeftKidney::~G4MIRDLeftKidney()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftKidney::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					       const G4String& colourName, G4bool wireFrame, G4bool)
 {
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
   G4double ax= 4.5 *cm; //a
   G4double by= 1.5 *cm; //b
   G4double cz= 5.5 *cm; //c
  
-  G4VSolid* oneLeftKidney = new G4Ellipsoid("OneLeftKidney",ax, by, cz); 
+  auto* oneLeftKidney = new G4Ellipsoid("OneLeftKidney",ax, by, cz); 
  
   G4double xx = 6. * cm; 
   G4double yy = 12.00*cm; 
   G4double zz = 12.00*cm;
-  G4VSolid* subtrLeftKidney = new G4Box("SubtrLeftKidney",xx/2., yy/2., zz/2.);
+  auto* subtrLeftKidney = new G4Box("SubtrLeftKidney",xx/2., yy/2., zz/2.);
  
-  G4SubtractionSolid* leftKidney = new G4SubtractionSolid("LeftKidney",
+  auto* leftKidney = new G4SubtractionSolid("LeftKidney",
 							  oneLeftKidney,
 							  subtrLeftKidney,
-							  0, 
+							  nullptr, 
 							  G4ThreeVector(-6. *cm, // x0
 									0.0 *cm,
 									0.0 * cm));
 
-  G4LogicalVolume* logicLeftKidney = new G4LogicalVolume(leftKidney,
+  auto* logicLeftKidney = new G4LogicalVolume(leftKidney,
 							 soft,
 							 "logical" + volumeName,
-							 0, 0, 0);
+							 nullptr, nullptr, nullptr);
 
-  G4VPhysicalVolume* physLeftKidney = new G4PVPlacement(0 ,G4ThreeVector(6.*cm,  // xo
-									 6. *cm, //yo
-									 -2.50 *cm),//zo
+  G4VPhysicalVolume* physLeftKidney = new G4PVPlacement(nullptr,G4ThreeVector(6.*cm,  // xo
+							 6. *cm, //yo
+							-2.50 *cm),//zo
 							"physicalLeftKidney", logicLeftKidney,
 							mother,
 							false,
@@ -102,9 +92,9 @@ G4VPhysicalVolume* G4MIRDLeftKidney::Construct(const G4String& volumeName,G4VPhy
 
   // Visualization Attributes
   //  G4VisAttributes* LeftKidneyVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LeftKidneyVisAtt = new G4VisAttributes(colour);
+  auto* LeftKidneyVisAtt = new G4VisAttributes(colour);
   LeftKidneyVisAtt->SetForceSolid(wireFrame);
   logicLeftKidney->SetVisAttributes(LeftKidneyVisAtt);
 
@@ -125,7 +115,6 @@ G4VPhysicalVolume* G4MIRDLeftKidney::Construct(const G4String& volumeName,G4VPhy
   // Testing Mass
   G4double LeftKidneyMass = (LeftKidneyVol)*LeftKidneyDensity;
   G4cout << "Mass of LeftKidney = " << LeftKidneyMass/gram << " g" << G4endl;
-
-  
+ 
   return physLeftKidney;
 }

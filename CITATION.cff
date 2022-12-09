@@ -1,0 +1,219 @@
+cff-version: 1.2.0
+# CITATION.cff created with https://github.com/monperrus/bibtexbrowser/
+# wget https://www.sciencedirect.com/sdfe/arp/cite?pii=S0168900216306957&format=text%2Fx-bibtex&withabstract=true
+# php bibtex-to-cff.php S0168900216306957.bib --id ALLISON2016186 > CITATION.cff
+message: "If you use Geant4 toolkit, please cite it using these metadata."
+title: "Geant4"
+authors:
+  - family-names: Geant4
+  - given-names: Collaboration
+preferred-citation:
+  title: "Recent developments in Geant4"
+  doi: "https://doi.org/10.1016/j.nima.2016.06.125"
+  url: "https://www.sciencedirect.com/science/article/pii/S0168900216306957"
+  year: "2016"
+  type: article
+  journal: "Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment"
+  volume: "835"
+  start: "186"
+  end: "225"
+  issn: "0168-9002"
+  authors:
+    - family-names: Allison
+      given-names: J.
+    - family-names: Amako
+      given-names: K.
+    - family-names: Apostolakis
+      given-names: J.
+    - family-names: Arce
+      given-names: P.
+    - family-names: Asai
+      given-names: M.
+    - family-names: Aso
+      given-names: T.
+    - family-names: Bagli
+      given-names: E.
+    - family-names: Bagulya
+      given-names: A.
+    - family-names: Banerjee
+      given-names: S.
+    - family-names: Barrand
+      given-names: G.
+    - family-names: Beck
+      given-names: B.R.
+    - family-names: Bogdanov
+      given-names: A.G.
+    - family-names: Brandt
+      given-names: D.
+    - family-names: Brown
+      given-names: J.M.C.
+    - family-names: Burkhardt
+      given-names: H.
+    - family-names: Canal
+      given-names: Ph.
+    - family-names: Cano-Ott
+      given-names: D.
+    - family-names: Chauvie
+      given-names: S.
+    - family-names: Cho
+      given-names: K.
+    - family-names: Cirrone
+      given-names: G.A.P.
+    - family-names: Cooperman
+      given-names: G.
+    - family-names: Cortés-Giraldo
+      given-names: M.A.
+    - family-names: Cosmo
+      given-names: G.
+    - family-names: Cuttone
+      given-names: G.
+    - family-names: Depaola
+      given-names: G.
+    - family-names: Desorgher
+      given-names: L.
+    - family-names: Dong
+      given-names: X.
+    - family-names: Dotti
+      given-names: A.
+    - family-names: Elvira
+      given-names: V.D.
+    - family-names: Folger
+      given-names: G.
+    - family-names: Francis
+      given-names: Z.
+    - family-names: Galoyan
+      given-names: A.
+    - family-names: Garnier
+      given-names: L.
+    - family-names: Gayer
+      given-names: M.
+    - family-names: Genser
+      given-names: K.L.
+    - family-names: Grichine
+      given-names: V.M.
+    - family-names: Guatelli
+      given-names: S.
+    - family-names: Guèye
+      given-names: P.
+    - family-names: Gumplinger
+      given-names: P.
+    - family-names: Howard
+      given-names: A.S.
+    - family-names: Hřivnáčová
+      given-names: I.
+    - family-names: Hwang
+      given-names: S.
+    - family-names: Incerti
+      given-names: S.
+    - family-names: Ivanchenko
+      given-names: A.
+    - family-names: Ivanchenko
+      given-names: V.N.
+    - family-names: Jones
+      given-names: F.W.
+    - family-names: Jun
+      given-names: S.Y.
+    - family-names: Kaitaniemi
+      given-names: P.
+    - family-names: Karakatsanis
+      given-names: N.
+    - family-names: Karamitros
+      given-names: M.
+    - family-names: Kelsey
+      given-names: M.
+    - family-names: Kimura
+      given-names: A.
+    - family-names: Koi
+      given-names: T.
+    - family-names: Kurashige
+      given-names: H.
+    - family-names: Lechner
+      given-names: A.
+    - family-names: Lee
+      given-names: S.B.
+    - family-names: Longo
+      given-names: F.
+    - family-names: Maire
+      given-names: M.
+    - family-names: Mancusi
+      given-names: D.
+    - family-names: Mantero
+      given-names: A.
+    - family-names: Mendoza
+      given-names: E.
+    - family-names: Morgan
+      given-names: B.
+    - family-names: Murakami
+      given-names: K.
+    - family-names: Nikitina
+      given-names: T.
+    - family-names: Pandola
+      given-names: L.
+    - family-names: Paprocki
+      given-names: P.
+    - family-names: Perl
+      given-names: J.
+    - family-names: Petrović
+      given-names: I.
+    - family-names: Pia
+      given-names: M.G.
+    - family-names: Pokorski
+      given-names: W.
+    - family-names: Quesada
+      given-names: J.M.
+    - family-names: Raine
+      given-names: M.
+    - family-names: Reis
+      given-names: M.A.
+    - family-names: Ribon
+      given-names: A.
+    - family-names: Fira
+      given-names: A. Ristić
+    - family-names: Romano
+      given-names: F.
+    - family-names: Russo
+      given-names: G.
+    - family-names: Santin
+      given-names: G.
+    - family-names: Sasaki
+      given-names: T.
+    - family-names: Sawkey
+      given-names: D.
+    - family-names: Shin
+      given-names: J.I.
+    - family-names: Strakovsky
+      given-names: I.I.
+    - family-names: Taborda
+      given-names: A.
+    - family-names: Tanaka
+      given-names: S.
+    - family-names: Tomé
+      given-names: B.
+    - family-names: Toshito
+      given-names: T.
+    - family-names: Tran
+      given-names: H.N.
+    - family-names: Truscott
+      given-names: P.R.
+    - family-names: Urban
+      given-names: L.
+    - family-names: Uzhinsky
+      given-names: V.
+    - family-names: Verbeke
+      given-names: J.M.
+    - family-names: Verderi
+      given-names: M.
+    - family-names: Wendt
+      given-names: B.L.
+    - family-names: Wenzel
+      given-names: H.
+    - family-names: Wright
+      given-names: D.H.
+    - family-names: Wright
+      given-names: D.M.
+    - family-names: Yamashita
+      given-names: T.
+    - family-names: Yarba
+      given-names: J.
+    - family-names: Yoshida
+      given-names: H.

@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 //
+/// \file ExGflash2ParallelWorld.hh
+/// \brief Definition of the ExGflash2ParallelWorld class
 //
 #ifndef ExGflash2ParallelWorld_h
 #define ExGflash2ParallelWorld_h 1

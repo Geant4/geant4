@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.hh
+/// \file B3/B3b/include/ActionInitialization.hh
 /// \brief Definition of the B3b::ActionInitialization class
 
 #ifndef B3bActionInitialization_h
@@ -42,8 +42,8 @@ namespace B3b
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization();
-    ~ActionInitialization() override;
+    ActionInitialization() = default;
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;

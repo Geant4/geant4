@@ -89,7 +89,7 @@ of nuclear reactions and radioactive decay processes.
 It survey energy deposition and particle's flux.
 It uses PhysicsConstructor objects.
 
-\link ExampleParticleFluence ParticleFluence \endlink
+\link Examples_ParticleFluence ParticleFluence \endlink
 
 This example aims to monitor the particle fluence for various particle types
 and set-ups. The particle fluence at a given position is defined as the

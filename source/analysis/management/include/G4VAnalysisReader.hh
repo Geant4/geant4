@@ -40,16 +40,13 @@
 #include "G4AnalysisManagerState.hh"
 #include "globals.hh"
 
+#include "G4VTBaseHnManager.hh"  // make forward declaration if possible
+
 #include <vector>
 #include <memory>
 #include <string_view>
 
 class G4HnManager;
-class G4VH1Manager;
-class G4VH2Manager;
-class G4VH3Manager;
-class G4VP1Manager;
-class G4VP2Manager;
 class G4VRNtupleManager;
 class G4VRFileManager;
 
@@ -250,11 +247,11 @@ class G4VAnalysisReader
                  G4bool success = true) const;
 
     // Methods
-    void SetH1Manager(G4VH1Manager* h1Manager);
-    void SetH2Manager(G4VH2Manager* h2Manager);
-    void SetH3Manager(G4VH3Manager* h3Manager);
-    void SetP1Manager(G4VP1Manager* p1Manager);
-    void SetP2Manager(G4VP2Manager* p2Manager);
+    void SetH1Manager(G4VTBaseHnManager<1>* h1Manager);
+    void SetH2Manager(G4VTBaseHnManager<2>* h2Manager);
+    void SetH3Manager(G4VTBaseHnManager<3>* h3Manager);
+    void SetP1Manager(G4VTBaseHnManager<2>* p1Manager);
+    void SetP2Manager(G4VTBaseHnManager<3>* p2Manager);
     void SetNtupleManager(std::shared_ptr<G4VRNtupleManager> ntupleManager);
     void SetFileManager(std::shared_ptr<G4VRFileManager> fileManager);
 
@@ -269,11 +266,11 @@ class G4VAnalysisReader
     static constexpr std::string_view fkClass { "G4VAnalysisReader" };
 
     // Data members
-    std::unique_ptr<G4VH1Manager>      fVH1Manager;
-    std::unique_ptr<G4VH2Manager>      fVH2Manager;
-    std::unique_ptr<G4VH3Manager>      fVH3Manager;
-    std::unique_ptr<G4VP1Manager>      fVP1Manager;
-    std::unique_ptr<G4VP2Manager>      fVP2Manager;
+    std::unique_ptr<G4VTBaseHnManager<1>> fVH1Manager;
+    std::unique_ptr<G4VTBaseHnManager<2>> fVH2Manager;
+    std::unique_ptr<G4VTBaseHnManager<3>> fVH3Manager;
+    std::unique_ptr<G4VTBaseHnManager<2>> fVP1Manager;
+    std::unique_ptr<G4VTBaseHnManager<3>> fVP2Manager;
     std::shared_ptr<G4VRNtupleManager> fVNtupleManager { nullptr };
 };
 
@@ -282,4 +279,3 @@ class G4VAnalysisReader
 #include "G4VAnalysisReader.icc"
 
 #endif
-

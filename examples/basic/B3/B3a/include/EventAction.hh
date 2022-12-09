@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.hh
+/// \file B3/B3a/include/EventAction.hh
 /// \brief Definition of the B3a::EventAction class
 
 #ifndef B3aEventAction_h
@@ -48,7 +48,7 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction(RunAction* runAction);
-    ~EventAction() override;
+    ~EventAction() override = default;
 
     void  BeginOfEventAction(const G4Event*) override;
     void    EndOfEventAction(const G4Event*) override;

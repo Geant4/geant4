@@ -32,20 +32,18 @@
 
 #include "SteppingAction.hh"
 
-#include "DetectorConstruction.hh"
-#include "EventAction.hh"
-#include "Run.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
 
+#include "DetectorConstruction.hh"
+#include "EventAction.hh"
+#include "Run.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
-  : G4UserSteppingAction()
-  , fDetector(det)
-  , fEventAct(evt)
+  : G4UserSteppingAction(), fDetector(det), fEventAct(evt)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,8 +59,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // if sum of absorbers do not fill exactly a layer: check material, not
   // volume.
   const G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
-  if(mat == fDetector->GetWorldMaterial())
-    return;
+  if (mat == fDetector->GetWorldMaterial()) return;
 
   const G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition();
 
@@ -72,22 +69,18 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // G4int layerNum  = prePoint->GetTouchableHandle()->GetCopyNumber(1);
 
   // get Run
-  Run* run =
-    static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   // collect energy deposit taking into account track weight
-  G4double edep =
-    aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
+  G4double edep = aStep->GetTotalEnergyDeposit() * aStep->GetTrack()->GetWeight();
 
   // collect step length of charged particles
   G4double stepl = 0.;
-  if(particle->GetPDGCharge() != 0.)
-  {
+  if (particle->GetPDGCharge() != 0.) {
     stepl = aStep->GetStepLength();
     run->AddChargedStep();
   }
-  else
-  {
+  else {
     run->AddNeutralStep();
   }
 

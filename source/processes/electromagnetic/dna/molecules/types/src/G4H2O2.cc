@@ -86,6 +86,6 @@ G4H2O2* G4H2O2::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(7);
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
   }
-  theInstance = reinterpret_cast<G4H2O2*>(anInstance);
+  theInstance = static_cast<G4H2O2*>(anInstance);
   return theInstance;
 }

@@ -86,7 +86,7 @@ void G4ErrorFreeTrajParam::Update(const G4Track* aTrack)
 //------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajParam& tp)
 {
-  G4int oldprc = out.precision(8);
+  G4long oldprc = out.precision(8);
   out << " InvP= " << tp.fInvP << " Theta= " << tp.fLambda
       << " Phi= " << tp.fPhi << " YPerp= " << tp.fYPerp
       << " ZPerp= " << tp.fZPerp << G4endl;

@@ -99,6 +99,9 @@ G4bool G4CsvHnFileManager<HT>::Write(
     return false;
   }
 
+  // Update fileName with cycle number
+  fileName = fFileManager->GetHnFileName(fileName, fFileManager->GetCycle());
+
   auto hnFile = fFileManager->GetTFile(fileName, false);
   if ( ! hnFile ) {
     // If histogram file name was not defined per object
@@ -118,9 +121,8 @@ G4bool G4CsvHnFileManager<HT>::Write(
     if ( ! hnFile ) {
       G4Analysis::Warn("Failed to get Csv file " + fileName, fkClass, "Write");
       return false;
-    } else {
-      fileName = hnFileName;
     }
+    fileName = hnFileName;
   }
 
   return Write(*hnFile, ht);

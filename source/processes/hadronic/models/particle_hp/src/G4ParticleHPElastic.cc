@@ -54,8 +54,7 @@ G4ParticleHPElastic::~G4ParticleHPElastic()
    //the vectror is shared among threads, only master deletes
    if ( ! G4Threading::IsWorkerThread() ) {
       if ( theElastic != nullptr ) {
-         for ( std::vector<G4ParticleHPChannel*>::iterator
-            it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
+         for ( auto it=theElastic->cbegin(); it!=theElastic->cend(); ++it ) {
             delete *it;
          }
          theElastic->clear();
@@ -77,8 +76,8 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
 {
    G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
    const G4Material * theMaterial = aTrack.GetMaterial();
-   G4int n = theMaterial->GetNumberOfElements();
-   G4int index = theMaterial->GetElement(0)->GetIndex();
+   G4int n = (G4int)theMaterial->GetNumberOfElements();
+   std::size_t index = theMaterial->GetElement(0)->GetIndex();
  
    if ( ! isFromTSL ) {
       if ( n != 1 ) {
@@ -88,7 +87,7 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
          const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
          G4double rWeight;
          G4ParticleHPThermalBoost aThermalE;
-         for ( i = 0; i < n; i++ ) {
+         for ( i = 0; i < n; ++i ) {
             index = theMaterial->GetElement(i)->GetIndex();
             rWeight = NumAtomsPerVolume[i];
             xSec[i] = ((*theElastic)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
@@ -99,7 +98,7 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
          }
          G4double random = G4UniformRand();
          G4double running = 0;
-         for ( i = 0; i < n; i++ ) {
+         for ( i = 0; i < n; ++i ) {
            running += xSec[i];
            index = theMaterial->GetElement(i)->GetIndex();
            if ( sum == 0 || random <= running/sum ) break;
@@ -109,7 +108,7 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
    } else {
       G4int i;
       if ( n != 1 ) {
-         for ( i = 0; i < n; i++ ) {
+         for ( i = 0; i < n; ++i ) {
             if ( aNucleus.GetZ_asInt() == (G4int)(theMaterial->GetElement(i)->GetZ()) ) {
                index = theMaterial->GetElement(i)->GetIndex();
             }
@@ -124,8 +123,8 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
    aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
    const G4Element* target_element = (*G4Element::GetElementTable())[index];
    const G4Isotope* target_isotope=nullptr;
-   G4int iele = target_element->GetNumberOfIsotopes();
-   for ( G4int j = 0 ; j != iele ; j++ ) { 
+   G4int iele = (G4int)target_element->GetNumberOfIsotopes();
+   for ( G4int j = 0 ; j != iele ; ++j ) { 
       target_isotope=target_element->GetIsotope( j );
       if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break; 
    }
@@ -138,8 +137,8 @@ G4HadFinalState * G4ParticleHPElastic::ApplyYourself(const G4HadProjectile& aTra
 
 const std::pair<G4double, G4double> G4ParticleHPElastic::GetFatalEnergyCheckLevels() const
 {
-   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
-   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+   // max energy non-conservation is mass of heavy nucleus
+   return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
 }
 
 
@@ -169,7 +168,7 @@ void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
       if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
 
       if ( theElastic->size() == G4Element::GetNumberOfElements() ) {
-         numEle = G4Element::GetNumberOfElements();
+         numEle = (G4int)G4Element::GetNumberOfElements();
          return;
       }
 
@@ -179,7 +178,7 @@ void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
       dirName = G4FindDataDir("G4NEUTRONHPDATA");
       G4String tString = "/Elastic";
       dirName = dirName + tString;
-      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) {
+      for ( G4int i = numEle; i < (G4int)G4Element::GetNumberOfElements(); ++i ) {
          theElastic->push_back( new G4ParticleHPChannel );
          ((*theElastic)[i])->Init((*(G4Element::GetElementTable()))[i], dirName);
          //while(!((*theElastic)[i])->Register(theFS)) ;
@@ -189,7 +188,7 @@ void G4ParticleHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
       hpmanager->RegisterElasticFinalStates( theElastic );
 
    }
-   numEle = G4Element::GetNumberOfElements();
+   numEle = (G4int)G4Element::GetNumberOfElements();
 }
 
 

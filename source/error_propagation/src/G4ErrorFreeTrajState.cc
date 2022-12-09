@@ -301,7 +301,7 @@ G4int G4ErrorFreeTrajState::PropagateError(const G4Track* aTrack)
 
   transf[3][2] = stepLengthCm * sinpPost;
   transf[4][1] = stepLengthCm;
-  for(size_t ii = 0; ii < 5; ii++)
+  for(auto ii = 0; ii < 5; ++ii)
   {
     transf[ii][ii] = 1.;
   }
@@ -854,9 +854,9 @@ void G4ErrorFreeTrajState::CalculateEffectiveZandA(const G4Material* mate,
 {
   effZ = 0.;
   effA = 0.;
-  G4int ii, nelem = mate->GetNumberOfElements();
+  auto nelem = mate->GetNumberOfElements();
   const G4double* fracVec = mate->GetFractionVector();
-  for(ii = 0; ii < nelem; ii++)
+  for(G4int ii = 0; ii < (G4int)nelem; ++ii)
   {
     effZ += mate->GetElement(ii)->GetZ() * fracVec[ii];
     effA += mate->GetElement(ii)->GetA() * fracVec[ii] / g * mole;

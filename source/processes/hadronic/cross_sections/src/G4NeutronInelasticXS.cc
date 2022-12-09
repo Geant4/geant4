@@ -45,6 +45,7 @@
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4IsotopeList.hh"
+#include "G4AutoLock.hh"
 
 #include <fstream>
 #include <sstream>
@@ -53,13 +54,15 @@ G4double G4NeutronInelasticXS::coeff[] = {1.0};
 G4ElementData* G4NeutronInelasticXS::data = nullptr;
 G4String G4NeutronInelasticXS::gDataDirectory = "";
 
-#ifdef G4MULTITHREADED
-  G4Mutex G4NeutronInelasticXS::neutronInelasticXSMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex nInelasticXSMutex = G4MUTEX_INITIALIZER;
+}
 
 G4NeutronInelasticXS::G4NeutronInelasticXS() 
   : G4VCrossSectionDataSet(Default_Name()),
-    neutron(G4Neutron::Neutron())
+    neutron(G4Neutron::Neutron()),
+    elimit(20*CLHEP::MeV)
 {
   verboseLevel = 0;
   if(verboseLevel > 0){
@@ -100,26 +103,30 @@ G4NeutronInelasticXS::IsIsoApplicable(const G4DynamicParticle*,
   return true;
 }
 
-G4double G4NeutronInelasticXS::GetElementCrossSection(
-         const G4DynamicParticle* aParticle,
-	 G4int ZZ, const G4Material*)
+G4double 
+G4NeutronInelasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
+		  			     G4int Z, const G4Material*)
 {
-  G4double xs = 0.0;
-  G4double ekin = aParticle->GetKineticEnergy();
+  return ElementCrossSection(aParticle->GetKineticEnergy(), aParticle->GetLogKineticEnergy(), Z);
+}
 
+G4double
+G4NeutronInelasticXS::ComputeCrossSectionPerElement(G4double ekin, G4double loge,
+						    const G4ParticleDefinition*,
+						    const G4Element* elm,
+						    const G4Material*)
+{
+  return ElementCrossSection(ekin, loge, elm->GetZasInt());
+}
+
+G4double G4NeutronInelasticXS::ElementCrossSection(G4double ekin, G4double loge, G4int ZZ)
+{
   G4int Z = (ZZ >= MAXZINEL) ? MAXZINEL - 1 : ZZ; 
-
   auto pv = GetPhysicsVector(Z);
-  if(pv == nullptr) { return xs; }
-  //  G4cout  << "G4NeutronInelasticXS::GetCrossSection e= " << ekin 
-  //  << " Z= " << Z << G4endl;
 
-  if(ekin <= pv->GetMaxEnergy()) { 
-    xs = pv->LogVectorValue(ekin, aParticle->GetLogKineticEnergy()); 
-  } else {
-    xs = coeff[Z]*ggXsection->GetInelasticElementCrossSection(neutron,
-			      ekin, Z, aeff[Z]);
-  }
+  G4double xs = (ekin <= pv->GetMaxEnergy()) ? pv->LogVectorValue(ekin, loge) 
+    : coeff[Z]*ggXsection->GetInelasticElementCrossSection(neutron, ekin,
+                                                           Z, aeff[Z]);
 
 #ifdef G4VERBOSE
   if(verboseLevel > 1) {
@@ -131,22 +138,32 @@ G4double G4NeutronInelasticXS::GetElementCrossSection(
   return xs;
 }
 
-G4double G4NeutronInelasticXS::GetIsoCrossSection(
-         const G4DynamicParticle* aParticle, 
-	 G4int Z, G4int A,
-	 const G4Isotope*, const G4Element*,
-	 const G4Material*)
+G4double
+G4NeutronInelasticXS::ComputeIsoCrossSection(G4double ekin, G4double loge,
+					     const G4ParticleDefinition*,
+					     G4int Z, G4int A,
+					     const G4Isotope*, const G4Element*,
+					     const G4Material*)
 {
-  return IsoCrossSection(aParticle->GetKineticEnergy(), 
-                         aParticle->GetLogKineticEnergy(), Z, A);
+  return IsoCrossSection(ekin, loge, Z, A); 
 }
 
-G4double 
+G4double
+G4NeutronInelasticXS::GetIsoCrossSection(const G4DynamicParticle* aParticle, 
+					 G4int Z, G4int A,
+					 const G4Isotope*, const G4Element*,
+					 const G4Material*)
+{
+  return IsoCrossSection(aParticle->GetKineticEnergy(), 
+                         aParticle->GetLogKineticEnergy(), Z, A); 
+}
+
+G4double
 G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4double logekin, 
                                       G4int ZZ, G4int A)
 {
   G4double xs = 0.0;
-  G4int Z = (ZZ >= MAXZINEL) ? MAXZINEL - 1 : ZZ; 
+  G4int Z = (ZZ >= MAXZINEL) ? MAXZINEL - 1 : ZZ;
 
   /*
   G4cout << "IsoCrossSection  Z= " << Z << "  A= " << A 
@@ -154,13 +171,11 @@ G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4double logekin,
          << " E(MeV)= " << ekin << G4endl;
   */
   auto pv = GetPhysicsVector(Z);
-  if(pv == nullptr) { return xs; }
 
   // compute isotope cross section if applicable
-  const G4double emax = pv->GetMaxEnergy(); 
-  if(ekin <= emax && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
+  if(ekin <= elimit && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
     auto pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
-    if(pviso) { 
+    if(nullptr != pviso) { 
       xs = pviso->LogVectorValue(ekin, logekin); 
 #ifdef G4VERBOSE
       if(verboseLevel > 1) {
@@ -174,13 +189,10 @@ G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4double logekin,
     }
   }
  
-  // use element x-section
-  if(ekin <= emax) { 
-    xs = pv->LogVectorValue(ekin, logekin); 
-  } else {
-    xs = coeff[Z]*ggXsection->GetInelasticElementCrossSection(neutron,
-			      ekin, Z, aeff[Z]);
-  }
+  // use element x-section 
+  xs = (ekin <= pv->GetMaxEnergy()) ? pv->LogVectorValue(ekin, logekin) 
+    : coeff[Z]*ggXsection->GetInelasticElementCrossSection(neutron, ekin,
+                                                           Z, aeff[Z]);
   xs *= A/aeff[Z];
 #ifdef G4VERBOSE
   if(verboseLevel > 1) {
@@ -195,7 +207,7 @@ G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4double logekin,
 const G4Isotope* G4NeutronInelasticXS::SelectIsotope(
       const G4Element* anElement, G4double kinEnergy, G4double logE)
 {
-  size_t nIso = anElement->GetNumberOfIsotopes();
+  G4int nIso = (G4int)anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
 
   //G4cout << "SelectIsotope NIso= " << nIso << G4endl;
@@ -208,7 +220,7 @@ const G4Isotope* G4NeutronInelasticXS::SelectIsotope(
   const G4double* abundVector = anElement->GetRelativeAbundanceVector();
   G4double q = G4UniformRand();
   G4double sum = 0.0;
-  size_t j;
+  G4int j;
 
   // isotope wise cross section not available
   if(amax[Z] == amin[Z] || Z >= MAXZINEL) {
@@ -223,7 +235,7 @@ const G4Isotope* G4NeutronInelasticXS::SelectIsotope(
   }
 
   // use isotope cross sections
-  size_t nn = temp.size();
+  G4int nn = (G4int)temp.size();
   if(nn < nIso) { temp.resize(nIso, 0.); }
 
   for (j=0; j<nIso; ++j) {
@@ -260,18 +272,14 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 
   if(nullptr == data) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&neutronInelasticXSMutex);
+    G4AutoLock l(&nInelasticXSMutex);
     if(nullptr == data) { 
-#endif
       isMaster = true;
       data = new G4ElementData();
       data->SetName("NeutronInelastic");
       FindDirectoryPath();
-#ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&neutronInelasticXSMutex);
-#endif
+    l.unlock();
   }
 
   // it is possible re-initialisation for the new run
@@ -284,9 +292,9 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     }
   }
   // prepare isotope selection
-  size_t nIso = temp.size();
+  std::size_t nIso = temp.size();
   for ( auto & elm : *table ) {
-    size_t n = elm->GetNumberOfIsotopes();
+    std::size_t n = elm->GetNumberOfIsotopes();
     if(n > nIso) { nIso = n; }
   }
   temp.resize(nIso, 0.0);
@@ -313,15 +321,11 @@ const G4String& G4NeutronInelasticXS::FindDirectoryPath()
 
 void G4NeutronInelasticXS::InitialiseOnFly(G4int Z)
 {
-#ifdef G4MULTITHREADED
-   G4MUTEXLOCK(&neutronInelasticXSMutex);
-   if(nullptr == data->GetElementData(Z)) { 
-#endif
-     Initialise(Z);
-#ifdef G4MULTITHREADED
-   }
-   G4MUTEXUNLOCK(&neutronInelasticXSMutex);
-#endif
+  if(nullptr == data->GetElementData(Z)) {
+    G4AutoLock l(&nInelasticXSMutex);
+    if(nullptr == data->GetElementData(Z)) { Initialise(Z); }
+    l.unlock();
+  }
 }
 
 void G4NeutronInelasticXS::Initialise(G4int Z)
@@ -333,11 +337,11 @@ void G4NeutronInelasticXS::Initialise(G4int Z)
   ost <<  FindDirectoryPath() << Z;
   G4PhysicsVector* v = RetrieveVector(ost, true);
   data->InitialiseForElement(Z, v);
-  /*
-  G4cout << "G4NeutronInelasticXS::Initialise for Z= " << Z 
-	 << " A= " << Amean << "  Amin= " << amin[Z] 
-	 << "  Amax= " << amax[Z] << G4endl;
-  */
+  if(verboseLevel > 1) {
+    G4cout  << "G4NeutronInelasticXS::Initialise for Z= " << Z 
+	    << " A= " << aeff[Z] << "  Amin= " << amin[Z] 
+	    << "  Amax= " << amax[Z] << G4endl;
+  }
   // upload isotope data
   if(amin[Z] < amax[Z]) {
     G4int nmax = amax[Z] - amin[Z] + 1;

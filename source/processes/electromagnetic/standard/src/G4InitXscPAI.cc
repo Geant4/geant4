@@ -78,22 +78,22 @@ G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
  
   fDensity         = matCC->GetMaterial()->GetDensity();
   fElectronDensity = matCC->GetMaterial()->GetElectronDensity();
-  matIndex         = matCC->GetMaterial()->GetIndex();
+  matIndex         = (G4int)matCC->GetMaterial()->GetIndex();
 
   fSandia          = new G4SandiaTable(matIndex);
   fIntervalNumber  = fSandia->GetMaxInterval()-1;
 
   fMatSandiaMatrix = new G4OrderedTable();
  
-  for (i = 0; i < fIntervalNumber; i++)
+  for (i = 0; i < fIntervalNumber; ++i)
   {
     fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
   }	         	
-  for (i = 0; i < fIntervalNumber; i++)
+  for (i = 0; i < fIntervalNumber; ++i)
   {
     (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
 
-    for(j = 1; j < 5 ; j++)
+    for(j = 1; j < 5 ; ++j)
     {
       (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
     }     

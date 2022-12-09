@@ -45,12 +45,16 @@
 #include "G4EmParameters.hh"
 #include "G4HadronicParameters.hh"
 #include "G4NuclearLevelData.hh"
+#include "G4Neutron.hh"
+#include "G4FTFTunings.hh"
 
 void G4PhysListUtil::InitialiseParameters()
 {
   G4NistManager::Instance();
+  G4EmParameters::Instance();
   G4HadronicParameters::Instance();
   G4NuclearLevelData::GetInstance();
+  G4FTFTunings::Instance();
 }
 
 G4VProcess* G4PhysListUtil::FindProcess(const G4ParticleDefinition* part,
@@ -60,8 +64,8 @@ G4VProcess* G4PhysListUtil::FindProcess(const G4ParticleDefinition* part,
   if(nullptr == part) { return proc; }
   G4ProcessVector* pvec = part->GetProcessManager()->GetProcessList();
   if(nullptr == pvec) { return proc; }
-  size_t n = pvec->size();
-  for(size_t i=0; i<n; ++i) {
+  G4int n = (G4int)pvec->size();
+  for(G4int i=0; i<n; ++i) {
     auto ptr = (*pvec)[i];
     if(ptr != nullptr && subtype == ptr->GetProcessSubType()) {
       proc = ptr;
@@ -97,4 +101,15 @@ G4PhysListUtil::FindFissionProcess(const G4ParticleDefinition* p)
 {
   auto proc = FindProcess(p, fFission);
   return dynamic_cast<G4HadronicProcess*>(proc);
+}
+
+G4NeutronGeneralProcess* G4PhysListUtil::FindNeutronGeneralProcess()
+{
+  auto neutron = G4Neutron::Neutron();
+  auto proc = dynamic_cast<G4NeutronGeneralProcess*>(FindProcess(neutron, fNeutronGeneral));
+  if(nullptr == proc) {
+    proc = new G4NeutronGeneralProcess();
+    neutron->GetProcessManager()->AddDiscreteProcess(proc);
+  }
+  return proc;
 }

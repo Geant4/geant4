@@ -33,6 +33,8 @@ geant4_module_link_libraries(G4phys_ctor_decay
     G4mesons
     G4partman
     G4phys_builders
+    G4phys_ctor_em
     G4phys_ctor_factory
+    G4physlist_util
     G4procman
     G4shortlived)

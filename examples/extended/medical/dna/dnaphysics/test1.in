@@ -1,0 +1,31 @@
+/tracking/verbose 0
+/run/verbose 2
+/control/verbose 2
+#/run/numberOfThreads 1
+#
+/dna/test/setMat G4_WATER_MODIFIED
+#/dna/test/setMat G4_WATER
+#
+/dna/test/addPhysics DNA_opt4
+/dna/test/addPhysics raddecay
+#
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true 
+#
+#/process/em/AddDNARegion World DNA_Opt4
+#
+/run/initialize 
+#
+#/gun/particle e-
+/gun/particle proton
+#/gun/particle hydrogen
+#/gun/particle alpha
+#/gun/particle alpha+
+#/gun/particle helium
+#/gun/particle ion
+#/gun/ion 14 28
+/gun/energy 100 keV
+#
+/run/beamOn 2

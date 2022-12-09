@@ -50,7 +50,7 @@ G4bool G4MCTSimEvent::AddParticle(const G4MCTSimParticle* aparticle)
 {
   G4MCTSimParticle* qpart = const_cast<G4MCTSimParticle*>(aparticle);
   G4int trackID           = aparticle->GetTrackID();
-  G4int nc                = particleMap.count(trackID);
+  std::size_t nc          = particleMap.count(trackID);
   if(nc == 0)
   {
     particleMap.insert(std::make_pair(trackID, qpart));
@@ -79,7 +79,7 @@ G4MCTSimParticle* G4MCTSimEvent::FindParticle(G4int tid) const
 // --------------------------------------------------------------------
 G4MCTSimVertex* G4MCTSimEvent::GetVertex(G4int vid) const
 {
-  G4int nv = vertexVec.size();
+  G4int nv = (G4int)vertexVec.size();
   if(vid >= 1 && vid <= nv)
   {
     return vertexVec[vid - 1];

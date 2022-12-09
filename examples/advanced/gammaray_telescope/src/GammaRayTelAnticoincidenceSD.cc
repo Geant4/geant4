@@ -33,204 +33,145 @@
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
 // ************************************************************
-#include "G4RunManager.hh"
+
 #include "GammaRayTelAnticoincidenceSD.hh"
 #include "GammaRayTelAnticoincidenceHit.hh"
 #include "GammaRayTelDetectorConstruction.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4Step.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
-#include "G4SDManager.hh"
 #include "G4ios.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TouchableHistory.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VTouchable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnticoincidenceSD::GammaRayTelAnticoincidenceSD(G4String name)
-:G4VSensitiveDetector(name)
-{
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  Detector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
-  
-  NbOfACDLateralTiles  =  Detector->GetNbOfACDLateralTiles();
-  NbOfACDTopTiles  =  Detector->GetNbOfACDTopTiles(); 
+GammaRayTelAnticoincidenceSD::GammaRayTelAnticoincidenceSD(G4String name) : G4VSensitiveDetector(name) {
+    auto *runManager = G4RunManager::GetRunManager();
+    detector = (GammaRayTelDetectorConstruction*) (runManager->GetUserDetectorConstruction());
 
-  G4cout <<  NbOfACDLateralTiles << " LAT " << G4endl;
-  G4cout <<  NbOfACDTopTiles << " TOP " << G4endl;
-  
-  HitLateralID = new G4int[NbOfACDLateralTiles];
-  HitTopID = new G4int[NbOfACDTopTiles];
-  collectionName.insert("AnticoincidenceCollection");
+    numberOfACDLateralTiles = detector->GetNbOfACDLateralTiles();
+    numberOfACDTopTiles = detector->GetNbOfACDTopTiles();
+
+    G4cout << numberOfACDLateralTiles << " LATERAL " << G4endl;
+    G4cout << numberOfACDTopTiles << " TOP " << G4endl;
+
+    hitLateralID = new G4int[numberOfACDLateralTiles];
+    hitTopID = new G4int[numberOfACDTopTiles];
+    collectionName.insert("AnticoincidenceCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnticoincidenceSD::~GammaRayTelAnticoincidenceSD()
-{
-  delete [] HitLateralID;
-  delete [] HitTopID;
+GammaRayTelAnticoincidenceSD::~GammaRayTelAnticoincidenceSD() {
+    delete[] hitLateralID;
+    delete[] hitTopID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceSD::Initialize(G4HCofThisEvent*)
-{
-  AnticoincidenceCollection = new GammaRayTelAnticoincidenceHitsCollection
-    (SensitiveDetectorName,collectionName[0]);
-  for (G4int i=0;i<NbOfACDLateralTiles;i++)
-    {
-      HitLateralID[i] = -1;
-    };
-  
-  for (G4int j=0;j<NbOfACDTopTiles;j++) 
-    {
-      
-      HitTopID[j] = -1;
-    };
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool GammaRayTelAnticoincidenceSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
-{ 
-  
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
-  
-  // This TouchableHistory is used to obtain the physical volume
-  // of the hit
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-  
-  G4VPhysicalVolume* acd_tile = theTouchable->GetVolume();  
-
-  G4int ACDTileNumber=acd_tile->GetCopyNo();
-  G4String ACDTileName = acd_tile->GetName();
-  
-  //  G4cout << ACDTileName << " " << edep/keV << G4endl;
-
-  if (ACDTileName == "ACT" )
-    // The hit is on an top ACD tile (ACDType 0)
-    {
-      // This is a new hit
-      if (HitTopID[ACDTileNumber]==-1)
-	{       
-	  GammaRayTelAnticoincidenceHit* 
-	    AnticoincidenceHit = new GammaRayTelAnticoincidenceHit;
-	  AnticoincidenceHit->SetACDType(0);
-	  AnticoincidenceHit->AddEnergy(edep);
-	  AnticoincidenceHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  AnticoincidenceHit->SetACDTileNumber(ACDTileNumber);
-	  HitTopID[ACDTileNumber] = 
-	    AnticoincidenceCollection->insert(AnticoincidenceHit) -1;
-	}
-      else // This is not new
-	{
-	  (*AnticoincidenceCollection)
-	    [HitTopID[ACDTileNumber]]->AddEnergy(edep);
-	}
-    }
- 
-  if (ACDTileName == "ACL1")
-    // The hit is on an lateral (left-right) ACD tile (ACDType 1)
-    {   
-      // This is a new hit
-      if (HitLateralID[ACDTileNumber]==-1)
-	{       
-	  GammaRayTelAnticoincidenceHit* 
-	    AnticoincidenceHit = new GammaRayTelAnticoincidenceHit;
-	  AnticoincidenceHit->SetACDType(1);
-	  AnticoincidenceHit->AddEnergy(edep);
-	  AnticoincidenceHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  AnticoincidenceHit->SetACDTileNumber(ACDTileNumber);
-	  HitLateralID[ACDTileNumber] = 
-	    AnticoincidenceCollection->insert(AnticoincidenceHit) -1;
-	}
-      else // This is not new
-	{
-	  (*AnticoincidenceCollection)
-	    [HitLateralID[ACDTileNumber]]->AddEnergy(edep);
-	}
+void GammaRayTelAnticoincidenceSD::Initialize(G4HCofThisEvent*) {
+    anticoincidenceCollection = new GammaRayTelAnticoincidenceHitsCollection(SensitiveDetectorName, collectionName[0]);
+    for (auto i = 0; i < numberOfACDLateralTiles; i++) {
+        hitLateralID[i] = -1;
     }
 
-   if (ACDTileName == "ACL2")
-    // The hit is on an lateral (rear - front) ACD tile (ACDType 2)
-    {   
-      // This is a new hit
-      if (HitLateralID[ACDTileNumber]==-1)
-	{       
-	  GammaRayTelAnticoincidenceHit* 
-	    AnticoincidenceHit = new GammaRayTelAnticoincidenceHit;
-	  AnticoincidenceHit->SetACDType(2);
-	  AnticoincidenceHit->AddEnergy(edep);
-	  AnticoincidenceHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  AnticoincidenceHit->SetACDTileNumber(ACDTileNumber);
-	  HitLateralID[ACDTileNumber] = 
-	    AnticoincidenceCollection->insert(AnticoincidenceHit) -1;
-	}
-      else // This is not new
-	{
-	  (*AnticoincidenceCollection)
-	    [HitLateralID[ACDTileNumber]]->AddEnergy(edep);
-	}
+    for (auto j = 0; j < numberOfACDTopTiles; j++) {
+        hitTopID[j] = -1;
     }
-  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceSD::EndOfEvent(G4HCofThisEvent* HCE)
-{
-  static G4int HCID = -1;
-  if(HCID<0)
-    { 
-      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+auto GammaRayTelAnticoincidenceSD::ProcessHits(G4Step *step, G4TouchableHistory*) -> G4bool {
+    auto depositedEnergy = step->GetTotalEnergyDeposit();
+    if (depositedEnergy / keV == 0.) {
+        return false;
     }
-  HCE->AddHitsCollection(HCID,AnticoincidenceCollection);
 
-  for (G4int i=0;i<NbOfACDLateralTiles;i++)
-    {
-      HitLateralID[i] = -1;
-    };
-  
-  for (G4int j=0;j<NbOfACDTopTiles;j++) 
-    {
-      
-      HitTopID[j] = -1;
-    };
+    // This TouchableHistory is used to obtain the physical volume of the hit
+    auto *theTouchable = (G4TouchableHistory*) (step->GetPreStepPoint()->GetTouchable());
 
+    auto *acdTile = theTouchable->GetVolume();
+    auto acdTileNumber = acdTile->GetCopyNo();
+    auto acdTileName = acdTile->GetName();
+
+    // G4cout << acdTileName << " " << depositedEnergy / keV << G4endl;
+
+    if (acdTileName == "ACT") { // The hit is on a top ACD tile (ACDType: 0)
+        if (hitTopID[acdTileNumber] == -1) { // This is a new hit
+            auto *anticoincidenceHit = new GammaRayTelAnticoincidenceHit;
+            anticoincidenceHit->SetACDType(0);
+            anticoincidenceHit->AddEnergy(depositedEnergy);
+            anticoincidenceHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+            anticoincidenceHit->SetACDTileNumber(acdTileNumber);
+            hitTopID[acdTileNumber] = anticoincidenceCollection->insert(anticoincidenceHit) - 1;
+        } else { // This is not new
+            (*anticoincidenceCollection)[hitTopID[acdTileNumber]]->AddEnergy(depositedEnergy);
+        }
+    }
+
+    if (acdTileName == "ACL1") { // The hit is on a lateral (left-right) ACD tile (ACDType: 1)
+        if (hitLateralID[acdTileNumber] == -1) { // This is a new hit
+            auto *anticoincidenceHit = new GammaRayTelAnticoincidenceHit;
+            anticoincidenceHit->SetACDType(1);
+            anticoincidenceHit->AddEnergy(depositedEnergy);
+            anticoincidenceHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+            anticoincidenceHit->SetACDTileNumber(acdTileNumber);
+            hitLateralID[acdTileNumber] = anticoincidenceCollection->insert(anticoincidenceHit) - 1;
+        } else { // This is not new
+            (*anticoincidenceCollection)[hitLateralID[acdTileNumber]]->AddEnergy(depositedEnergy);
+        }
+    }
+
+    if (acdTileName == "ACL2") { // The hit is on a lateral (rear-front) ACD tile (ACDType: 2)
+        if (hitLateralID[acdTileNumber] == -1) { // This is a new hit
+            auto *anticoincidenceHit = new GammaRayTelAnticoincidenceHit;
+            anticoincidenceHit->SetACDType(2);
+            anticoincidenceHit->AddEnergy(depositedEnergy);
+            anticoincidenceHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+            anticoincidenceHit->SetACDTileNumber(acdTileNumber);
+            hitLateralID[acdTileNumber] = anticoincidenceCollection->insert(anticoincidenceHit) - 1;
+        } else { // This is not new
+            (*anticoincidenceCollection)[hitLateralID[acdTileNumber]]->AddEnergy(depositedEnergy);
+        }
+    }
+
+    return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceSD::clear()
-{} 
+void GammaRayTelAnticoincidenceSD::EndOfEvent(G4HCofThisEvent *collection) {
+    static G4int collectionIdentifier = -1;
+    if (collectionIdentifier < 0) {
+        collectionIdentifier = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    }
+    collection->AddHitsCollection(collectionIdentifier, anticoincidenceCollection);
+
+    for (auto i = 0; i < numberOfACDLateralTiles; i++) {
+        hitLateralID[i] = -1;
+    }
+
+    for (auto j = 0; j < numberOfACDTopTiles; j++) {
+        hitTopID[j] = -1;
+    }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceSD::DrawAll()
-{} 
+void GammaRayTelAnticoincidenceSD::clear() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceSD::PrintAll()
-{} 
+void GammaRayTelAnticoincidenceSD::DrawAll() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelAnticoincidenceSD::PrintAll() {
+}

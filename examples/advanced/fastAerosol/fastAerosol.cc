@@ -58,11 +58,6 @@ int main(int argc,char** argv)
 		ui = new G4UIExecutive(argc, argv);
 	}
 
-	// Choose the random engine
-	//
-	CLHEP::RanecuEngine* randomEngine = new CLHEP::RanecuEngine;
-	G4Random::setTheEngine(randomEngine);
-
 	// Set mandatory initialization classes
 	//
 	//G4ScoringManager* scoringManager =
@@ -116,7 +111,6 @@ int main(int argc,char** argv)
 	// owned and deleted by the run manager, so they should not be deleted 
 	// in the main() program !
 	
-	delete randomEngine;
 	delete visManager;
 	delete runManager;
 	//delete scoringManager;

@@ -120,6 +120,8 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
                                     0,
                                     false,
                                     0 );
+    
+    fWorld_logic->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 #ifdef G4_DCMTK
     ReadPhantomDataNew();
@@ -494,7 +496,7 @@ void DicomDetectorConstruction::ReadPhantomDataNew()
                             "Wrong argument",
                             FatalErrorInArgument,
                             ("Material not found" + mateName).c_str());
-    thePhantomMaterialsOriginal[nmate] = mate;
+    fPhantomMaterialsOriginal[nmate] = mate;
   }
 
   fin >> fNoVoxelsX >> fNoVoxelsY >> fNoVoxelsZ;
@@ -547,7 +549,7 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
   G4String stemp;
   std::map<G4int, std::pair<G4double,G4double> > densiMinMax;
   std::map<G4int, std::pair<G4double,G4double> >::iterator mpite;
-  for( G4int ii = 0; ii < G4int(thePhantomMaterialsOriginal.size()); ++ii )
+  for( G4int ii = 0; ii < G4int(fPhantomMaterialsOriginal.size()); ++ii )
   {
     densiMinMax[ii] = std::pair<G4double,G4double>(DBL_MAX,-DBL_MAX);
   }
@@ -557,7 +559,7 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
   if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
 
   std::map<G4int,G4double> densityDiffs;
-  for( G4int ii = 0; ii < G4int(thePhantomMaterialsOriginal.size()); ++ii )
+  for( G4int ii = 0; ii < G4int(fPhantomMaterialsOriginal.size()); ++ii )
   {
     densityDiffs[ii] = densityDiff; //currently all materials with same step
   }
@@ -583,13 +585,13 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
         //--- Get material from original list of material in file
         G4int mateID = G4int(fMateIDs[copyNo]);
         std::map<G4int,G4Material*>::const_iterator imite = 
-         thePhantomMaterialsOriginal.find(mateID);
+         fPhantomMaterialsOriginal.find(mateID);
 
         //--- Check if density is equal to the original material density
         if(std::fabs(dens - (*imite).second->GetDensity()/CLHEP::g*CLHEP::cm3 )
            < 1.e-9 ) continue;
         
-        //--- Build material name with thePhantomMaterialsOriginal name+density
+        //--- Build material name with fPhantomMaterialsOriginal name+density
         G4int densityBin = (G4int(dens/densityDiffs[mateID]));
 
         G4String mateName = (*imite).second->GetName()
@@ -602,14 +604,14 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
           matInfo* mi = (*mppite).second;
           mi->fSumdens += dens;
           mi->fNvoxels++;
-          fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
+          fMateIDs[copyNo] = fPhantomMaterialsOriginal.size()-1 + mi->fId;
         } else {
           matInfo* mi = new matInfo;
           mi->fSumdens = dens;
           mi->fNvoxels = 1;
           mi->fId = G4int(newMateDens.size()+1);
           newMateDens[matdens] = mi;
-          fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
+          fMateIDs[copyNo] = fPhantomMaterialsOriginal.size()-1 + mi->fId;
         }
       }
     }
@@ -629,8 +631,8 @@ void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
 
   //----- Build the list of phantom materials that go to Parameterisation
   //--- Add original materials
-  for( auto mimite = thePhantomMaterialsOriginal.cbegin();
-       mimite != thePhantomMaterialsOriginal.cend(); ++mimite )
+  for( auto mimite = fPhantomMaterialsOriginal.cbegin();
+       mimite != fPhantomMaterialsOriginal.cend(); ++mimite )
   {
     fMaterials.push_back( (*mimite).second );
   }

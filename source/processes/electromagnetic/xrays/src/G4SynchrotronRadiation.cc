@@ -401,7 +401,7 @@ G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma,
     // mean and rms of photon energy
     G4double Emean = 8. / (15. * std::sqrt(3.)) * Ecr;
     G4double E_rms = std::sqrt(211. / 675.) * Ecr;
-    G4int prec     = G4cout.precision();
+    G4long prec     = G4cout.precision();
     G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n'
            << std::setprecision(4) << "  Ecr   = " << G4BestUnit(Ecr, "Energy")
            << '\n'

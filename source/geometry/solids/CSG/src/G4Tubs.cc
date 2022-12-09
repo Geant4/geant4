@@ -577,7 +577,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
     G4Exception("G4Tubs::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, "Point p is not on surface !?" );
-    G4int oldprc = G4cout.precision(20);
+    G4long oldprc = G4cout.precision(20);
     G4cout<< "G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "
           << G4endl << G4endl;
     G4cout.precision(oldprc) ;
@@ -1541,7 +1541,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl ;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -1577,7 +1577,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-    G4int oldprc = G4cout.precision(16) ;
+    G4long oldprc = G4cout.precision(16) ;
     G4cout << G4endl ;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl ;
@@ -1649,7 +1649,7 @@ G4VSolid* G4Tubs::Clone() const
 
 std::ostream& G4Tubs::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

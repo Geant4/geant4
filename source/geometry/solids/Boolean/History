@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
+## 2022-11-10 Gabriele Cosmo (geom-bool-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-27 Evgueni Tcherniaev (geom-bool-V11-00-06)
+- G4SubtractionSolid::GetCubicVolume(): Fix problem of non-zero volume for
+  null resulting objects. 
+
 ## 2022-05-04 Gabriele Cosmo (geom-bool-V11-00-05)
 - Minor cleanup in headers and G4UnionSolid constructors.
 

@@ -1,8 +1,28 @@
 # Category vis_toolssg History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-25 Gabriele Cosmo (vis_toolssg-V11-00-15)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-28 John Allison (vis_toolssg-V11-00-14)
+- Request kernel visit when cutaway mode changes:
+  - G4ToolsSGViewer.hh
+
+## 2022-10-13 Guy Barrand (vis_toolssg-V11-00-13)
+- new offscreen sub-driver.
+- new files: include/G4ToolsSGOffscreen.hh, include/G4ToolsSGOffscreenViewer.hh and src/G4ToolsSGOffscreen.cc.
+- sources.cmake, GNUmakefile: G4ToolsSGOffscreen .hh and .cc files.
+- G4ToolsSGViewer.hh: handle ambient lightening.
+- G4ToolsSGViewer.hh: for "write paper", handle zb_png, zb_jpeg formats.
+- G4ToolsSGViewer.hh: correct fSGViewer->set_clear_color(). The passed "green" was... blue.
+
+## 2022-09-06 Ben Morgan (vis_toolssg-V11-00-12)
+- Address dependency inconsistencies reported by geant4_module_check
 
 ## 2022-05-18 Guy Barrand (vis_toolssg-V11-00-11)
 - have "toolx" namespace for g4tools code related to "externals", then:

@@ -6,6 +6,32 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-25 Gabriele Cosmo (transport-V11-00-10)
+- Removed debug printouts in G4Transportation.
+
+## 2022-11-23 Gabriele Cosmo (transport-V11-00-09)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-10 John Apostolakis (transport-V11-00-08)
+- New class G4TransporationParameters to hold looper parameters & others.
+  This is a class to be created in master and hold the values of all looper 
+  parameters for G4Transportation and derived classes.
+  * G4Transporation's  constructor checks for the existence of a default 
+    instance. If found, its values will be assigned to the corresponding
+    data members of G4Transporation.
+    This behaviour is inherited by subclasses (using this constructor).
+  * The (default) 'instance' of G4TransportationParameters should be
+    shared by all threads, and used for all particle types.
+    These values could be subsequently changed - e.g. in User Actions.
+  * The G4TransporationParameters object (instance) is current unique.
+    ( Future extensions are envisioned that allow an object of this  
+      to be associated with a separate instance of G4Transportation assigned 
+      to one or more particle types, e.g. electrons, or muons and positrons. )
+
+## 2022-10-05 Gabriele Cosmo (transport-V11-00-07)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used.
+
 ## 2022-05-18 Gabriele Cosmo (transport-V11-00-06)
 - `G4Transportation`, `G4CoupledTransportation`: fixed misuse of bitwise '|'
   operator instead of logical.

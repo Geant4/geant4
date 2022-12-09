@@ -38,6 +38,7 @@
 #include "tools/rcsv_ntuple"
 
 #include <string_view>
+#include <utility>
 
 class G4CsvRFileManager;
 
@@ -48,16 +49,16 @@ class G4CsvRNtupleManager : public G4TRNtupleManager<tools::rcsv::ntuple>
   public:
     explicit G4CsvRNtupleManager(const G4AnalysisManagerState& state);
     G4CsvRNtupleManager() = delete;
-    virtual ~G4CsvRNtupleManager() = default;
+    ~G4CsvRNtupleManager() override = default;
 
   private:
     // Set methods
     void SetFileManager(std::shared_ptr<G4CsvRFileManager> fileManager);
 
     // Methods from the base class
-    virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
-                                  const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::rcsv::ntuple>* ntupleDescription) final;
+    G4int ReadNtupleImpl(const G4String& ntupleName, const G4String& fileName,
+      const G4String& dirName, G4bool isUserFileName) final;
+    G4bool GetTNtupleRow(G4TRNtupleDescription<tools::rcsv::ntuple>* ntupleDescription) final;
 
     // Static data members
     static constexpr std::string_view fkClass { "G4CsvRNtupleManager" };
@@ -68,7 +69,9 @@ class G4CsvRNtupleManager : public G4TRNtupleManager<tools::rcsv::ntuple>
 
 inline void
 G4CsvRNtupleManager::SetFileManager(std::shared_ptr<G4CsvRFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 #endif
 

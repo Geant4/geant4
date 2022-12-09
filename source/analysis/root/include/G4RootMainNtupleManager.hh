@@ -33,13 +33,14 @@
 
 #include "G4BaseAnalysisManager.hh"
 #include "G4NtupleBookingManager.hh"
-#include "G4TNtupleDescription.hh"
-#include "G4RootNtupleManager.hh"
 #include "G4RootFileDef.hh"
+#include "G4RootNtupleManager.hh"
+#include "G4TNtupleDescription.hh"
 #include "globals.hh"
 
-#include <vector>
 #include <string_view>
+#include <utility>
+#include <vector>
 
 class G4RootFileManager;
 class G4RootNtupleManager;
@@ -53,6 +54,7 @@ class ntuple;
 
 // Types alias
 using RootNtupleDescription = G4TNtupleDescription<tools::wroot::ntuple, G4RootFile>;
+using RootMainNtupleDescription = std::pair<RootNtupleDescription*, std::shared_ptr<G4RootFile>>;
 
 class G4RootMainNtupleManager : public G4BaseAnalysisManager
 {
@@ -66,7 +68,9 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
                G4bool rowWise, G4int fileNumber,
                const G4AnalysisManagerState& state);
     G4RootMainNtupleManager() = delete;
-    virtual ~G4RootMainNtupleManager() = default;
+    ~G4RootMainNtupleManager() override = default;
+
+    void CreateNtuplesFromBooking();
 
   protected:
     // Methods to manipulate ntuples
@@ -79,6 +83,10 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
     void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
     void SetRowWise(G4bool rowWise);
     std::shared_ptr<G4RootFile> GetNtupleFile(RootNtupleDescription* ntupleDescription) const;
+
+    // New cycle option
+    void SetNewCycle(G4bool value);
+    G4bool GetNewCycle() const;
 
     // Access functions
     const std::vector<tools::wroot::ntuple*>& GetNtupleVector()
@@ -96,12 +104,15 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
     G4bool  fRowWise;
     G4int  fFileNumber;
     std::vector<tools::wroot::ntuple*>  fNtupleVector;
-    std::vector<RootNtupleDescription*>  fNtupleDescriptionVector;
+    std::vector<RootMainNtupleDescription> fNtupleDescriptionVector;
+    G4bool fNewCycle { false };
 };
 
 inline void  G4RootMainNtupleManager::SetFileManager(
   std::shared_ptr<G4RootFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 inline void G4RootMainNtupleManager::SetRowWise(G4bool rowWise)
 { fRowWise = rowWise; }
@@ -109,5 +120,10 @@ inline void G4RootMainNtupleManager::SetRowWise(G4bool rowWise)
 inline unsigned int G4RootMainNtupleManager::GetBasketEntries() const
 { return fNtupleBuilder->GetBasketEntries(); }
 
-#endif
+inline void G4RootMainNtupleManager::SetNewCycle(G4bool value)
+{ fNewCycle = value; }
 
+inline G4bool G4RootMainNtupleManager::GetNewCycle() const
+{ return fNewCycle; }
+
+#endif

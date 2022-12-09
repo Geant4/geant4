@@ -31,7 +31,7 @@
 
 #include "G4VisAttributes.hh"
 
-G4Square::~G4Square () {}
+G4Square::~G4Square () = default;
 
 std::ostream& operator<< (std::ostream& os, const G4Square& square)
 {

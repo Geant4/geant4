@@ -63,6 +63,7 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
 
 // standard models
 #include "G4LivermorePhotoElectricModel.hh"
@@ -77,6 +78,7 @@
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
+#include "G4DummyModel.hh"
 
 // DNA models
 #include "G4DNAOneStepThermalizationModel.hh"
@@ -97,25 +99,19 @@
 #include "G4DNARuddIonisationExtendedModel.hh"
 #include "G4DNADingfelderChargeDecreaseModel.hh"
 #include "G4DNADingfelderChargeIncreaseModel.hh"
-#include "G4DummyModel.hh"
+#include "G4DNARPWBAExcitationModel.hh"
+#include "G4DNARPWBAIonisationModel.hh"
+
+static const G4double lowEnergyRPWBA = 100*CLHEP::MeV;
+static const G4double lowEnergyMSC = 1*CLHEP::MeV;
+static const G4double lowEnergyProtonIoni = 2*CLHEP::MeV;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmDNABuilder::ConstructDNAParticles()
 {
-  // bosons
-  G4Gamma::Gamma();
-
-  // leptons
-  G4Electron::Electron();
-  G4Positron::Positron();
-  
-  // baryons
-  G4Proton::Proton();
-
-  // generic ions
-  G4GenericIon::GenericIon();
-  G4Alpha::Alpha();
+  // standard particles
+  G4EmBuilder::ConstructMinimalEmSet();
 
   // DNA ions
   G4DNAGenericIonsManager* genericIonsManager
@@ -144,12 +140,12 @@ G4EmDNABuilder::ConstructStandardEmPhysics(const G4double emin_elec,
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
 
   // photoelectric effect - Livermore model 
-  G4PhotoElectricEffect* thePEEffect = new G4PhotoElectricEffect();
+  auto thePEEffect = new G4PhotoElectricEffect();
   thePEEffect->SetEmModel(new G4LivermorePhotoElectricModel());
   ph->RegisterProcess(thePEEffect, gamma);
 
   // Compton scattering - Klein-Nishina
-  G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+  auto theComptonScattering = new G4ComptonScattering();
   theComptonScattering->SetEmModel(new G4KleinNishinaModel());
   auto cModel = new G4LowEPComptonModel();
   cModel->SetHighEnergyLimit(20*CLHEP::MeV);
@@ -157,17 +153,17 @@ G4EmDNABuilder::ConstructStandardEmPhysics(const G4double emin_elec,
   ph->RegisterProcess(theComptonScattering, gamma);
 
   // gamma conversion - 5D model
-  G4GammaConversion* theGammaConversion = new G4GammaConversion();
+  auto theGammaConversion = new G4GammaConversion();
   ph->RegisterProcess(theGammaConversion, gamma);
 
   // Rayleigh scattering - Livermore model
-  G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+  auto theRayleigh = new G4RayleighScattering();
   ph->RegisterProcess(theRayleigh, gamma);
 
   // electron 
-  if(emin_elec < 0.5*MeV) {
+  if(emin_elec < emax) {
     G4ParticleDefinition* elec = G4Electron::Electron();
-    G4eMultipleScattering* msc_el = new G4eMultipleScattering();
+    auto msc_el = new G4eMultipleScattering();
     G4VMscModel* msc_model_el;
     if(mscType == dnaWVI) {
       msc_model_el = new G4LowEWentzelVIModel();
@@ -176,20 +172,18 @@ G4EmDNABuilder::ConstructStandardEmPhysics(const G4double emin_elec,
     } else {
       msc_model_el = new G4UrbanMscModel();
     }
-    msc_model_el->SetActivationLowEnergyLimit(emin_elec);
-    msc_model_el->SetHighEnergyLimit(emax);
+    msc_model_el->SetActivationLowEnergyLimit(lowEnergyMSC);
     msc_el->SetEmModel(msc_model_el);
     ph->RegisterProcess(msc_el, elec);
 
-    G4eIonisation* ioni = new G4eIonisation();
-    G4VEmModel* mb_el = new G4MollerBhabhaModel();
+    auto ioni = new G4eIonisation();
+    auto mb_el = new G4MollerBhabhaModel();
     mb_el->SetActivationLowEnergyLimit(emin_elec);
-    mb_el->SetHighEnergyLimit(emax);
     ioni->SetEmModel(mb_el);
     ph->RegisterProcess(ioni, elec);
 
-    G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-    G4VEmModel* sb_el = new G4SeltzerBergerModel();
+    auto brem = new G4eBremsstrahlung();
+    auto sb_el = new G4SeltzerBergerModel();
     sb_el->SetActivationLowEnergyLimit(emin_elec);
     sb_el->SetHighEnergyLimit(emax);
     sb_el->SetAngularDistribution(new G4Generator2BS());
@@ -199,7 +193,7 @@ G4EmDNABuilder::ConstructStandardEmPhysics(const G4double emin_elec,
 
   // positron
   G4ParticleDefinition* posi = G4Positron::Positron();
-  G4eMultipleScattering* msc_pos = new G4eMultipleScattering();
+  auto msc_pos = new G4eMultipleScattering();
   G4VMscModel* msc_model_pos;
   if(mscType == dnaWVI) {
     msc_model_pos = new G4LowEWentzelVIModel();
@@ -211,99 +205,95 @@ G4EmDNABuilder::ConstructStandardEmPhysics(const G4double emin_elec,
   msc_pos->SetEmModel(msc_model_pos);
   ph->RegisterProcess(msc_pos, posi);
   ph->RegisterProcess(new G4eIonisation(), posi);
-  ph->RegisterProcess(new G4eBremsstrahlung(), posi);
+
+  auto brem = new G4eBremsstrahlung();
+  auto sb = new G4SeltzerBergerModel();
+  sb->SetHighEnergyLimit(emax);
+  sb->SetAngularDistribution(new G4Generator2BS());
+  brem->SetEmModel(sb);
+  ph->RegisterProcess(brem, posi);
+  ph->RegisterProcess(new G4eplusAnnihilation(), posi);
 
   // proton
-  G4ParticleDefinition* part = G4Proton::Proton();
-  if(emin_proton < 0.5*CLHEP::MeV) {
-    G4hMultipleScattering* msc_p = new G4hMultipleScattering();
-    G4VMscModel* msc_model_p;
-    if(mscType == dnaWVI) {
-      msc_model_p = new G4LowEWentzelVIModel();
-    } else {
-      msc_model_p = new G4UrbanMscModel();
-    }
-    msc_model_p->SetActivationLowEnergyLimit(emin_proton);
-    msc_p->SetEmModel(msc_model_p);
-    ph->RegisterProcess(msc_p, part);
-
-    G4hIonisation* ioni = new G4hIonisation();
-    G4VEmModel* br = new G4BraggModel();
-    br->SetActivationLowEnergyLimit(emin_proton);
-    ioni->SetEmModel(br);
-
-    G4VEmModel* be = new G4BetheBlochModel();
-    be->SetActivationLowEnergyLimit(emin_proton);
-    be->SetHighEnergyLimit(emax);
-    ioni->SetEmModel(be);
-    ph->RegisterProcess(ioni, part);
+  if(emin_proton < emax) {
+    G4ParticleDefinition* part = G4Proton::Proton();
+    StandardHadronPhysics(part, lowEnergyMSC, emin_proton, emax,
+                          mscType, false);
   }
 
   // GenericIon
-  if(emin_ion < 0.5*MeV) {
+  if(emin_ion < emax) {
     G4ParticleDefinition* ion = G4GenericIon::GenericIon();
-    G4hMultipleScattering* msc_ion = new G4hMultipleScattering();
-    auto imsc = new G4UrbanMscModel();
-    msc_ion->SetEmModel(imsc);
-    ph->RegisterProcess(msc_ion, ion);
-
-    G4ionIonisation* ioni = new G4ionIonisation();
-    G4VEmModel* br = new G4BraggIonModel();
-    br->SetActivationLowEnergyLimit(emin_ion);
-    ioni->SetEmModel(br);
-
-    G4VEmModel* be = new G4BetheBlochModel();
-    be->SetActivationLowEnergyLimit(emin_ion);
-    be->SetHighEnergyLimit(emax);
-    ioni->SetEmModel(be);
-    ph->RegisterProcess(ioni, ion);
+    StandardHadronPhysics(ion, lowEnergyMSC, emin_ion, emax,
+                          dnaUrban, true);
   }
 
   // alpha
-  part = G4Alpha::Alpha();
   if(emin_alpha < emax) {
-    G4hMultipleScattering* msc_a = new G4hMultipleScattering();
-    G4VMscModel* msc_model_a = new G4UrbanMscModel();
-    msc_model_a->SetActivationLowEnergyLimit(emin_alpha);
-    msc_a->SetEmModel(msc_model_a);
-    ph->RegisterProcess(msc_a, part);
-
-    G4ionIonisation* ioni = new G4ionIonisation();
-    G4VEmModel* br = new G4BraggIonModel();
-    br->SetActivationLowEnergyLimit(emin_alpha);
-    ioni->SetEmModel(br);
-
-    G4VEmModel* be = new G4BetheBlochModel();
-    be->SetActivationLowEnergyLimit(emin_alpha);
-    be->SetHighEnergyLimit(emax);
-    ioni->SetEmModel(be);
-
-    ph->RegisterProcess(ioni, part);
+    G4ParticleDefinition* part = G4Alpha::Alpha();
+    StandardHadronPhysics(part, lowEnergyMSC, emin_alpha, emax,
+                          dnaUrban, true);
+    
+    // alpha+
+    G4DNAGenericIonsManager* genericIonsManager
+      = G4DNAGenericIonsManager::Instance();
+    part = genericIonsManager->GetIon("alpha+");
+    StandardHadronPhysics(part, lowEnergyMSC, emin_alpha, emax,
+                          dnaUrban, false);
   }
+  // list of main standard particles
+  const std::vector<G4int> chargedParticles = {
+    13, -13, 211, -211, 321, -321, -2212,
+    1000010020, 1000010030, 1000020030
+  };
+  auto msc = new G4hMultipleScattering();
+  msc->SetEmModel(new G4WentzelVIModel()); 
+  G4EmBuilder::ConstructBasicEmPhysics(msc, chargedParticles);
+}
 
-  // alpha+
-  G4DNAGenericIonsManager* genericIonsManager
-    = G4DNAGenericIonsManager::Instance();
-  part = genericIonsManager->GetIon("alpha+");
-  if(emin_alpha < emax) {
-    G4hMultipleScattering* msc_a = new G4hMultipleScattering();
-    G4VMscModel* msc_model_a = new G4UrbanMscModel();
-    msc_model_a->SetActivationLowEnergyLimit(emin_alpha);
-    msc_a->SetEmModel(msc_model_a);
-    ph->RegisterProcess(msc_a, part);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    G4hIonisation* ioni = new G4hIonisation();
-    G4VEmModel* br = new G4BraggModel();
-    br->SetActivationLowEnergyLimit(emin_alpha);
-    ioni->SetEmModel(br);
-
-    G4VEmModel* be = new G4BetheBlochModel();
-    be->SetActivationLowEnergyLimit(emin_alpha);
-    be->SetHighEnergyLimit(emax);
-    ioni->SetEmModel(be);
-
-    ph->RegisterProcess(ioni, part);
+void G4EmDNABuilder::StandardHadronPhysics(G4ParticleDefinition* part,
+					   const G4double lowELimitForMSC,
+					   const G4double lowELimitForIoni,
+					   const G4double maxEnergy,
+					   const G4EmDNAMscModelType mscType,
+					   const G4bool isIon)
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4hMultipleScattering* msc = new G4hMultipleScattering();
+  G4VMscModel* msc_model = nullptr;
+  if(mscType == dnaWVI) {
+    msc_model = new G4LowEWentzelVIModel();
+  } else {
+    msc_model = new G4UrbanMscModel();
   }
+  msc_model->SetActivationLowEnergyLimit(lowELimitForMSC);
+  msc_model->SetLowEnergyLimit(lowELimitForMSC);
+  msc_model->SetHighEnergyLimit(maxEnergy);
+  msc->SetEmModel(msc_model);
+  ph->RegisterProcess(msc, part);
+
+  G4VEnergyLossProcess* ioni = nullptr;
+  G4VEmModel* mod1 = nullptr;
+  if(isIon) {
+    ioni = new G4ionIonisation();
+    mod1 = new G4BraggIonModel();
+  } else {
+    ioni = new G4hIonisation();
+    mod1 = new G4BraggModel();
+  }
+  G4double eth = lowEnergyProtonIoni*part->GetPDGMass()/CLHEP::proton_mass_c2;
+  mod1->SetActivationLowEnergyLimit(lowELimitForIoni);
+  mod1->SetHighEnergyLimit(eth);
+  ioni->SetEmModel(mod1);
+
+  G4VEmModel* mod2 = new G4BetheBlochModel();
+  mod2->SetActivationLowEnergyLimit(lowELimitForIoni);
+  mod2->SetLowEnergyLimit(eth);
+  ioni->SetEmModel(mod2);
+ 
+  ph->RegisterProcess(ioni, part);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -350,13 +340,13 @@ G4EmDNABuilder::ConstructDNAElectronPhysics(const G4double emaxDNA,
   } else {
     elast = new G4DNAChampionElasticModel();
   }
-  elast->SetHighEnergyLimit(emaxDNA);
+  elast->SetHighEnergyLimit(lowEnergyMSC);
   pElasticProcess->AddEmModel(-2, elast, reg);
 
   if(nullptr != elast2) {
     elast->SetHighEnergyLimit(emaxCPA100);
     elast2->SetLowEnergyLimit(emaxCPA100);
-    elast2->SetHighEnergyLimit(emaxDNA);
+    elast2->SetHighEnergyLimit(lowEnergyMSC);
     pElasticProcess->AddEmModel(-3, elast2, reg);
   }
 
@@ -446,7 +436,7 @@ G4EmDNABuilder::ConstructDNAElectronPhysics(const G4double emaxDNA,
 
 void 
 G4EmDNABuilder::ConstructDNAProtonPhysics(const G4double e1DNA,
-					  const G4double emaxDNA,
+					  const G4double emaxIonDNA,
                                           const G4int opt,
                                           const G4bool fast,
                                           const G4bool stationary,
@@ -459,22 +449,32 @@ G4EmDNABuilder::ConstructDNAProtonPhysics(const G4double e1DNA,
   // *** Elastic scattering ***
   auto pElasticProcess = FindOrBuildElastic(part, "proton_G4DNAElastic");
   auto modE = new G4DNAIonElasticModel();
-  modE->SetHighEnergyLimit(emaxDNA);
+  modE->SetHighEnergyLimit(lowEnergyMSC);
   modE->SelectStationary(stationary);
   pElasticProcess->AddEmModel(-1, modE, reg);
 
   // *** Excitation ***
+  G4double e2DNA = std::min(e1DNA, lowEnergyRPWBA);
   auto theDNAExc = FindOrBuildExcitation(part, "proton_G4DNAExcitation");
   auto modMGE = new G4DNAMillerGreenExcitationModel();
-  modMGE->SetHighEnergyLimit(e1DNA);
+  modMGE->SetHighEnergyLimit(e2DNA);
   modMGE->SelectStationary(stationary);
   theDNAExc->AddEmModel(-1, modMGE, reg);
 
-  auto modB = new G4DNABornExcitationModel();
-  modB->SelectStationary(stationary);
-  modB->SetLowEnergyLimit(e1DNA);
-  modB->SetHighEnergyLimit(emax);
-  theDNAExc->AddEmModel(-2, modB, reg);
+  if(e2DNA < lowEnergyRPWBA) {
+    auto modB = new G4DNABornExcitationModel();
+    modB->SelectStationary(stationary);
+    modB->SetLowEnergyLimit(e2DNA);
+    modB->SetHighEnergyLimit(lowEnergyRPWBA);
+    theDNAExc->AddEmModel(-2, modB, reg);
+  }
+  if(lowEnergyRPWBA < emaxIonDNA) {
+    auto modC = new G4DNARPWBAExcitationModel();
+    modC->SelectStationary(stationary);
+    modC->SetLowEnergyLimit(lowEnergyRPWBA);
+    modC->SetHighEnergyLimit(emaxIonDNA);
+    theDNAExc->AddEmModel(-3, modC, reg);
+  }
 
   // *** Ionisation ***
   auto theDNAIoni = FindOrBuildIonisation(part, "proton_G4DNAIonisation");
@@ -491,13 +491,22 @@ G4EmDNABuilder::ConstructDNAProtonPhysics(const G4double e1DNA,
   modRI->SetHighEnergyLimit(e1DNA);
   theDNAIoni->AddEmModel(-1, modRI, reg);
 
-  auto modI = new G4DNABornIonisationModel1();
-  theDNAIoni->SetEmModel(modI);
-  modI->SelectFasterComputation(fast);
-  modI->SelectStationary(stationary);
-  modI->SetLowEnergyLimit(e1DNA);
-  modI->SetHighEnergyLimit(emaxDNA);
-  theDNAIoni->AddEmModel(-2, modI, reg);
+  if(e2DNA < lowEnergyRPWBA) {
+    auto modI = new G4DNABornIonisationModel1();
+    modI->SelectFasterComputation(fast);
+    modI->SelectStationary(stationary);
+    modI->SetLowEnergyLimit(e2DNA);
+    modI->SetHighEnergyLimit(lowEnergyRPWBA);
+    theDNAIoni->AddEmModel(-2, modI, reg);
+  }
+  if(lowEnergyRPWBA < emaxIonDNA) {
+    auto modJ = new G4DNARPWBAIonisationModel();
+    modJ->SelectFasterComputation(fast);
+    modJ->SelectStationary(stationary);
+    modJ->SetLowEnergyLimit(lowEnergyRPWBA);
+    modJ->SetHighEnergyLimit(emaxIonDNA);
+    theDNAIoni->AddEmModel(-3, modJ, reg);
+  }
 
   // *** Charge decrease ***
   auto theDNAChargeDecreaseProcess = 
@@ -514,7 +523,7 @@ G4EmDNABuilder::ConstructDNAProtonPhysics(const G4double e1DNA,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
-G4EmDNABuilder::ConstructDNAIonPhysics(const G4double emaxDNA,
+G4EmDNABuilder::ConstructDNAIonPhysics(const G4double emaxIonDNA,
                                        const G4bool stationary,
                                        const G4Region* reg)
 {
@@ -524,7 +533,7 @@ G4EmDNABuilder::ConstructDNAIonPhysics(const G4double emaxDNA,
   auto theDNAIoni = FindOrBuildIonisation(part, "GenericIon_G4DNAIonisation");
   auto mod = new G4DNARuddIonisationExtendedModel();
   mod->SelectStationary(stationary);
-  mod->SetHighEnergyLimit(emaxDNA);
+  mod->SetHighEnergyLimit(emaxIonDNA);
   theDNAIoni->AddEmModel(-1, mod, reg);
 
   FindOrBuildCapture(25.0*CLHEP::keV, part);
@@ -536,7 +545,7 @@ void
 G4EmDNABuilder::ConstructDNALightIonPhysics(G4ParticleDefinition* part,
                                             const G4int charge,
                                             const G4int opt,
-                                            const G4double emaxDNA,
+                                            const G4double emaxIonDNA,
 					    const G4bool,
                                             const G4bool stationary,
                                             const G4Region* reg)
@@ -549,7 +558,7 @@ G4EmDNABuilder::ConstructDNALightIonPhysics(G4ParticleDefinition* part,
   auto theDNAElastic = FindOrBuildElastic(part, name + "_G4DNAElastic");
   auto modEI = new G4DNAIonElasticModel();
   modEI->SelectStationary(stationary);
-  modEI->SetHighEnergyLimit(emaxDNA);
+  modEI->SetHighEnergyLimit(lowEnergyMSC);
   theDNAElastic->AddEmModel(-1, modEI, reg);
 
   // *** Excitation ***
@@ -557,7 +566,7 @@ G4EmDNABuilder::ConstructDNALightIonPhysics(G4ParticleDefinition* part,
   auto modMGE = new G4DNAMillerGreenExcitationModel();
   modMGE->SelectStationary(stationary);
   modMGE->SetLowEnergyLimit(0.0);
-  modMGE->SetHighEnergyLimit(emax);
+  modMGE->SetHighEnergyLimit(emaxIonDNA);
   theDNAExc->AddEmModel(-1, modMGE, reg);
 
   // *** Ionisation ***
@@ -572,7 +581,7 @@ G4EmDNABuilder::ConstructDNALightIonPhysics(G4ParticleDefinition* part,
     mod->SelectStationary(stationary);
     modRI = mod;
   }
-  modRI->SetHighEnergyLimit(emaxDNA);
+  modRI->SetHighEnergyLimit(emaxIonDNA);
   theDNAIoni->AddEmModel(-1, modRI, reg);
 
   // *** Charge increase ***

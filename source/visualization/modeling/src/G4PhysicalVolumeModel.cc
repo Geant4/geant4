@@ -55,6 +55,8 @@
 #include <sstream>
 #include <iomanip>
 
+#define G4warn G4cout
+
 namespace {
   G4int volumeCount = 0;
 }
@@ -340,7 +342,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	    ((G4Tubs*)pSol)->SetOuterRadius(width*(n+1)+offset);
 	  } else {
 	    if (fpMP->IsWarning())
-	      G4cout <<
+	      G4warn <<
 		"G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
 		"\n  built-in replicated volumes replicated in radius for "
 		     << pSol->GetEntityType() <<
@@ -659,7 +661,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // reasons why daughters might not be drawn...
 
   // First, reasons that do not depend on culling policy...
-  G4int nDaughters = pLV->GetNoDaughters();
+  G4int nDaughters = (G4int)pLV->GetNoDaughters();
   G4bool daughtersToBeDrawn = true;
   // 1) There are no daughters...
   if (!nDaughters) daughtersToBeDrawn = false;
@@ -751,89 +753,37 @@ void G4PhysicalVolumeModel::DescribeSolid
 
   } else {
 
-    // Clipping, etc., performed by Boolean operations.
+    G4VSolid* pResultantSolid = nullptr;
 
-    // First, get polyhedron for current solid...
-    if (pVisAttribs->IsForceLineSegmentsPerCircle())
-      G4Polyhedron::SetNumberOfRotationSteps
-	(pVisAttribs->GetForcedLineSegmentsPerCircle());
-    else
-      G4Polyhedron::SetNumberOfRotationSteps(fpMP->GetNoOfSides());
-    const G4Polyhedron* pOriginalPolyhedron = pSol->GetPolyhedron();
-    G4Polyhedron::ResetNumberOfRotationSteps();
-
-    if (!pOriginalPolyhedron) {
-
-      if (fpMP->IsWarning())
-	G4cout <<
-	  "WARNING: G4PhysicalVolumeModel::DescribeSolid: solid\n  \""
-	       << pSol->GetName() <<
-	  "\" has no polyhedron.  Cannot by clipped."
-	       << G4endl;
-      pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
-
-    } else {
-
-      G4VSolid* pResultantSolid = 0;
-
-      if (fpClippingSolid) {
-	switch (fClippingMode) {
-	default:
-	case subtraction:
-	  pResultantSolid = new G4SubtractionSolid
-	    ("subtracted_clipped_solid", pSol, fpClippingSolid, theAT.inverse());
-	  break;
-	case intersection:
-	  pResultantSolid = new G4IntersectionSolid
-	    ("intersected_clipped_solid", pSol, fpClippingSolid, theAT.inverse());
-	  break;
-	}
+    if (fpClippingSolid) {
+      switch (fClippingMode) {
+        default:
+        case subtraction:
+          pResultantSolid = new G4SubtractionSolid
+          ("subtracted_clipped_solid", pSol, fpClippingSolid, theAT.inverse());
+          break;
+        case intersection:
+          pResultantSolid = new G4IntersectionSolid
+          ("intersected_clipped_solid", pSol, fpClippingSolid, theAT.inverse());
+          break;
       }
-
-      if (pSectionSolid) {
-	pResultantSolid = new G4IntersectionSolid
-	  ("sectioned_solid", pSol, pSectionSolid, theAT.inverse());
-      }
-
-      if (pCutawaySolid) {
-        // Follow above...
-	pResultantSolid = new G4SubtractionSolid
-	  ("cutaway_solid", pSol, pCutawaySolid, theAT.inverse());
-      }
-
-      G4Polyhedron* pResultantPolyhedron = pResultantSolid->GetPolyhedron();
-      if (!pResultantPolyhedron) {
-        if (fpMP->IsWarning())
-          G4cout <<
-          "WARNING: G4PhysicalVolumeModel::DescribeSolid: resultant polyhedron for"
-          "\n  solid \"" << pSol->GetName() <<
-          "\" not defined due to error during Boolean processing."
-          << G4endl;
-      } else {
-        // It seems that if the sectioning solid does not intersect the
-        // original solid the Boolean Processor returns the original
-        // polyhedron, or a copy thereof. We do not want it.
-        // Check the number of facets, etc. If same, ignore.
-        // What we need from the Boolean Processor is a null pointer or a
-        // null polyhedron. It seems to return the original or a copy of it.
-        if (pResultantPolyhedron->GetNoFacets() == pOriginalPolyhedron->GetNoFacets())
-          // This works in most cases but I still get a box in test202 with
-          // /vis/viewer/set/sectionPlane on 0 0 0 m 0.1 0.1 1
-        {
-          pResultantPolyhedron = nullptr;
-        }
-      }
-
-      if (pResultantPolyhedron) {
-        // Finally, draw polyhedron...
-        sceneHandler.BeginPrimitives(theAT);
-	pResultantPolyhedron->SetVisAttributes(pVisAttribs);
-        sceneHandler.AddPrimitive(*pResultantPolyhedron);
-        sceneHandler.EndPrimitives();
-      }
-
-      delete pResultantSolid;
     }
+
+    if (pSectionSolid) {
+      pResultantSolid = new G4IntersectionSolid
+      ("sectioned_solid", pSol, pSectionSolid, theAT.inverse());
+    }
+
+    if (pCutawaySolid) {
+      pResultantSolid = new G4SubtractionSolid
+      ("cutaway_solid", pSol, pCutawaySolid, theAT.inverse());
+    }
+
+    sceneHandler.PreAddSolid (theAT, *pVisAttribs);
+    pResultantSolid -> DescribeYourselfTo (sceneHandler);
+    sceneHandler.PostAddSolid ();
+
+    delete pResultantSolid;
   }
 }
 

@@ -33,6 +33,8 @@
 #include "G4UImanager.hh"
 #include "G4UIbatch.hh"
 
+#define G4warn G4cout
+
 G4Qt3D::G4Qt3D():
 G4VGraphicsSystem
 ("Qt3D",
@@ -53,7 +55,7 @@ G4VViewer* G4Qt3D::CreateViewer(G4VSceneHandler& scene,
   new G4Qt3DViewer((G4Qt3DSceneHandler&) scene, name);
   if (pView) {
     if (pView->GetViewId() < 0) {
-      G4cerr <<
+      G4warn <<
       "G4Qt3D::CreateViewer: ERROR flagged by negative"
       " view id in G4Qt3DViewer creation."
       "\n Destroying view and returning null pointer."
@@ -63,7 +65,7 @@ G4VViewer* G4Qt3D::CreateViewer(G4VSceneHandler& scene,
     }
   }
   if (!pView) {
-    G4cerr <<
+    G4warn <<
     "G4Qt3D::CreateViewer: ERROR: null pointer on new G4Qt3DViewer."
     << G4endl;
   }

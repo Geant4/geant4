@@ -123,11 +123,11 @@ void G4ITStepProcessor::DoIt(double timeStep)
   G4TrackManyList* mainList = fpTrackContainer->GetMainList();
   G4TrackManyList::iterator it = mainList->end();
   it--;
-  size_t initialSize = mainList->size();
+  std::size_t initialSize = mainList->size();
 
 //    G4cout << "initialSize = " << initialSize << G4endl;
 
-  for(size_t i = 0 ; i < initialSize ; ++i)
+  for(std::size_t i = 0 ; i < initialSize ; ++i)
   {
 
 //      G4cout << "i = " << i << G4endl;
@@ -221,7 +221,7 @@ void G4ITStepProcessor::ExtractDoItData()
       G4ITReactionSet::Instance()->RemoveReactionSet(fpTrack);
       if (fpSecondary)
       {
-        for (size_t i = 0; i < fpSecondary->size(); ++i)
+        for (std::size_t i = 0; i < fpSecondary->size(); ++i)
         {
           delete (*fpSecondary)[i];
         }
@@ -567,7 +567,7 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
       fpState->fSelectedAtRestDoItVector;
 
   // invoke selected process
-  for(size_t np = 0; np < fpProcessInfo->MAXofAtRestLoops; np++)
+  for(std::size_t np = 0; np < fpProcessInfo->MAXofAtRestLoops; ++np)
   {
     //
     // Note: DoItVector has inverse order against GetPhysIntVector
@@ -576,7 +576,7 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
     if(selectedAtRestDoItVector[fpProcessInfo->MAXofAtRestLoops - np - 1] != InActivated)
     {
       fpCurrentProcess =
-          (G4VITProcess*) (*fpProcessInfo->fpAtRestDoItVector)[np];
+          (G4VITProcess*) (*fpProcessInfo->fpAtRestDoItVector)[(G4int)np];
 
 //      G4cout << " Invoke : "
 //             << fpCurrentProcess->GetProcessName()
@@ -609,7 +609,7 @@ void G4ITStepProcessor::InvokeAtRestDoItProcs()
       fpParticleChange->Clear();
 
     } //if(fSelectedAtRestDoItVector[np] != InActivated){
-  } //for(size_t np=0; np < MAXofAtRestLoops; np++){
+  } //for(std::size_t np=0; np < MAXofAtRestLoops; ++np){
   fpStep->UpdateTrack();
 
   // Modification par rapport au transport standard :
@@ -644,10 +644,10 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
   }
 
   // Invoke the all active continuous processes
-  for(size_t ci = 0; ci < fpProcessInfo->MAXofAlongStepLoops; ci++)
+  for(std::size_t ci = 0; ci < fpProcessInfo->MAXofAlongStepLoops; ++ci)
   {
     fpCurrentProcess =
-        (G4VITProcess*) (*fpProcessInfo->fpAlongStepDoItVector)[ci];
+        (G4VITProcess*) (*fpProcessInfo->fpAlongStepDoItVector)[(G4int)ci];
     if(fpCurrentProcess == 0) continue;
     // NULL means the process is inactivated by a user on fly.
 
@@ -711,13 +711,13 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
 
 void G4ITStepProcessor::InvokePostStepDoItProcs()
 {
-  size_t _MAXofPostStepLoops = fpProcessInfo->MAXofPostStepLoops;
+  std::size_t _MAXofPostStepLoops = fpProcessInfo->MAXofPostStepLoops;
   G4SelectedPostStepDoItVector& selectedPostStepDoItVector = fpState
       ->fSelectedPostStepDoItVector;
   G4StepStatus& stepStatus = fpState->fStepStatus;
 
   // Invoke the specified discrete processes
-  for(size_t np = 0; np < _MAXofPostStepLoops; np++)
+  for(std::size_t np = 0; np < _MAXofPostStepLoops; ++np)
   {
     //
     // Note: DoItVector has inverse order against GetPhysIntVector
@@ -743,7 +743,7 @@ void G4ITStepProcessor::InvokePostStepDoItProcs()
     // but extra treatment for processes with Strongly Forced flag
     if(fpTrack->GetTrackStatus() == fStopAndKill)
     {
-      for(size_t np1 = np + 1; np1 < _MAXofPostStepLoops; np1++)
+      for(std::size_t np1 = np + 1; np1 < _MAXofPostStepLoops; ++np1)
       {
         G4int Cond2 = selectedPostStepDoItVector[_MAXofPostStepLoops
                                                  - np1 - 1];
@@ -754,14 +754,14 @@ void G4ITStepProcessor::InvokePostStepDoItProcs()
       }
       break;
     }
-  } //for(size_t np=0; np < MAXofPostStepLoops; np++){
+  } //for(std::size_t np=0; np < MAXofPostStepLoops; ++np){
 }
 
 //______________________________________________________________________________
 
-void G4ITStepProcessor::InvokePSDIP(size_t np)
+void G4ITStepProcessor::InvokePSDIP(std::size_t np)
 {
-  fpCurrentProcess = (G4VITProcess*) (*fpProcessInfo->fpPostStepDoItVector)[np];
+  fpCurrentProcess = (G4VITProcess*) (*fpProcessInfo->fpPostStepDoItVector)[(G4int)np];
 
   fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess
       ->GetProcessID()));
@@ -862,13 +862,13 @@ void G4ITStepProcessor::FindTransportationStep()
 
 void G4ITStepProcessor::InvokeTransportationProc()
 {
-  size_t _MAXofPostStepLoops = fpProcessInfo->MAXofPostStepLoops;
+  std::size_t _MAXofPostStepLoops = fpProcessInfo->MAXofPostStepLoops;
   G4SelectedPostStepDoItVector& selectedPostStepDoItVector = fpState
       ->fSelectedPostStepDoItVector;
   G4StepStatus& stepStatus = fpState->fStepStatus;
 
   // Invoke the specified discrete processes
-  for(size_t np = 0; np < _MAXofPostStepLoops; np++)
+  for(std::size_t np = 0; np < _MAXofPostStepLoops; ++np)
   {
     //
     // Note: DoItVector has inverse order against GetPhysIntVector
@@ -891,7 +891,7 @@ void G4ITStepProcessor::InvokeTransportationProc()
     // but extra treatment for processes with Strongly Forced flag
     if(fpTrack->GetTrackStatus() == fStopAndKill)
     {
-      for(size_t np1 = np + 1; np1 < _MAXofPostStepLoops; np1++)
+      for(std::size_t np1 = np + 1; np1 < _MAXofPostStepLoops; ++np1)
       {
         G4int Cond2 = selectedPostStepDoItVector[_MAXofPostStepLoops - np1 - 1];
         if(Cond2 == StronglyForced)

@@ -55,7 +55,7 @@ inline bool compress_buffer(std::ostream& a_out,
   //a_out << "toolx::compress_buffer : ok "
   //      << stream.total_out << std::endl;
 
-  a_irep = stream.total_out;
+  a_irep = (unsigned)stream.total_out;
 
   return true;
 }
@@ -97,7 +97,7 @@ inline bool decompress_buffer(std::ostream& a_out,
   //a_out << "toolx::decompress_buffer : zlib : ok "
   //      << stream.total_out << std::endl;
 
-  a_irep = stream.total_out;
+  a_irep = (unsigned)stream.total_out;
 
   return true;
 }
@@ -220,7 +220,7 @@ inline bool gunzip_buffer(std::ostream& a_out,
 
   inflateEnd(&stream);
 
-  a_irep = stream.total_out;
+  a_irep = (unsigned)stream.total_out;
 
   return true;
 }

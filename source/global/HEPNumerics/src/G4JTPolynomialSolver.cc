@@ -302,16 +302,15 @@ G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
         }
         break;
       }
-      else
+      
+      // If the iteration is unsuccessful another quadratic
+      // is chosen after restoring k.
+      //
+      for(i = 0; i < n; ++i)
       {
-        // If the iteration is unsuccessful another quadratic
-        // is chosen after restoring k.
-        //
-        for(i = 0; i < n; ++i)
-        {
-          k[i] = temp[i];
-        }
+        k[i] = temp[i];
       }
+     
     }
   } while(nz != 0);  // End of initial DO loop
 

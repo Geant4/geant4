@@ -4,6 +4,28 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-10-20 Julia Yarba (p8decayer-V11-00-05)
+- Minor cleanups in .README.txt
+
+## 2022-10-19 Julia Yarba (p8decayer-V11-00-04)
+- Update README and .README.txt to include information on comparing
+  contents of Geant4 and Pythia8 Particle Data Tables
+
+## 2022-08-26 Julia Yarba (p8decayer-V11-00-03)
+- Replace ActionInit class with ActionInitialization class
+- Update pythia8_decayer.cc 
+- Cleanup typos
+- Cleanup README
+- Properly update .README.txt 
+
+## 2022-08-25 Julia Yarba (p8decayer-V11-00-02)
+- Add ActionInit class
+- Update pythia8_decayer.cc to use ActionInit
+- Update README to reflect use of Pythia8.3.0.7 
+
+## 2022-07-15 Makoto Asai (p8decayer-V11-00-01)
+- Py8DecayerPhysics.cc: 
+  Code cleanup to avoid potential misleading.
 
 ## 2021-12-10 Ben Morgan (p8decayer-V11-00-00)
 - Change to new Markdown History format

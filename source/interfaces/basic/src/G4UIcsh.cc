@@ -60,7 +60,7 @@ G4String G4UIcsh::GetCommandLineString(const char* msg)
 
   // multi-line
   while( (newCommand.length() > 0) &&
-	 (newCommand[newCommand.length()-1] == '_') ) {
+         (newCommand[G4int(newCommand.length()-1)] == '_') ) {
     G4String newLine;
     newCommand.erase(newCommand.length()-1);
     G4StrUtil::readline(G4cin, newLine, false);
@@ -74,4 +74,3 @@ G4String G4UIcsh::GetCommandLineString(const char* msg)
   
   return newCommand;
 }
-

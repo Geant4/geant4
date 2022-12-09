@@ -34,7 +34,6 @@
 
 #include "G4ParticleHPManager.hh"
 #include "G4Material.hh"
-#include "G4FastVector.hh"
 #include "G4HadFinalState.hh"
 #include "G4ParticleHPNames.hh"
 #include "G4ParticleHPVector.hh"

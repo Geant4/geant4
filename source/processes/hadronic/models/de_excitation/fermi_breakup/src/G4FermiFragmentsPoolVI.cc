@@ -70,7 +70,7 @@ G4FermiFragmentsPoolVI::ClosestChannels(G4int Z, G4int A, G4double e) const
   G4double demax = 1.e+9;
 
   // stable channels
-  for(size_t j=0; j<(list_c[A]).size(); ++j) {
+  for(std::size_t j=0; j<(list_c[A]).size(); ++j) {
     const G4FermiFragment* frag = (list_f[A])[j];
     if(frag->GetZ() != Z) { continue; }
     G4double de = e - frag->GetTotalEnergy();
@@ -117,7 +117,7 @@ G4bool
 G4FermiFragmentsPoolVI::HasChannels(G4int Z, G4int A, G4double exc) const
 {
   // stable fragment
-  for(size_t j=0; j<(list_f[A]).size(); ++j) {
+  for(std::size_t j=0; j<(list_f[A]).size(); ++j) {
     const G4FermiFragment* frag = (list_f[A])[j];
     if(frag->GetZ() == Z) {
       if(exc > frag->GetExcitationEnergy() && 
@@ -161,12 +161,12 @@ void G4FermiFragmentsPoolVI::Initialise()
     for(G4int A=Amin; A<Amax; ++A) {
       const G4LevelManager* man = ndata->GetLevelManager(Z, A);
       if(man) {
-        size_t nn = man->NumberOfTransitions();
+        std::size_t nn = man->NumberOfTransitions();
         // very unstable state
         if(ndata->MaxLevelEnergy(Z, A) == 0.0f && man->LifeTime(0) == 0.0f) { 
           continue;
         }
-        for(size_t i=0; i<=nn; ++i) {
+        for(std::size_t i=0; i<=nn; ++i) {
           G4float exc = man->LevelEnergy(i);
           /*
           G4cout << "Z= " << Z << " A= " << A << " Eex= " << exc 
@@ -183,15 +183,15 @@ void G4FermiFragmentsPoolVI::Initialise()
       }
     }
   }
-  G4int nfrag = fragment_pool.size();
+  G4int nfrag = (G4int)fragment_pool.size();
   // prepare structures per A for normal fragments
-  const size_t lfmax[maxA] = {
+  const std::size_t lfmax[maxA] = {
     0, 2, 1, 2, 1, 2, 8, 19, 28, 56, 70, 104, 74, 109, 143, 212, 160};
   for(G4int A=1; A<maxA; ++A) {
     list_f[A].reserve(lfmax[A]);
     list_c[A].reserve(lfmax[A]);
   }
-  const size_t lfch[maxA] = {
+  const std::size_t lfch[maxA] = {
     0, 0, 0, 0, 0, 1, 4, 8, 6, 13, 27, 40, 29, 21, 31, 32, 30};
 
   for(auto const& f : fragment_pool) {
@@ -241,8 +241,8 @@ void G4FermiFragmentsPoolVI::Initialise()
       // ignore very excited case
       if(exc >= elim) { continue; }
       G4FermiPair* fpair = nullptr;
-      G4int kmax = list_f[A].size();
-      for(G4int k=0; k<kmax; ++k) {
+      std::size_t kmax = list_f[A].size();
+      for(std::size_t k=0; k<kmax; ++k) {
         const G4FermiFragment* f3 = (list_f[A])[k];
         if(Z == f3->GetZ() &&  
            f3->GetTotalEnergy() - minE + tolerance >= 0.0) {
@@ -257,15 +257,15 @@ void G4FermiFragmentsPoolVI::Initialise()
   }
   // compute static probabilities
   for(G4int A=1; A<maxA; ++A) {
-    for(size_t j=0; j<list_c[A].size(); ++j) {
+    for(std::size_t j=0; j<list_c[A].size(); ++j) {
       G4FermiChannels* ch = (list_c[A])[j];
       const G4FermiFragment* frag = (list_f[A])[j];
-      size_t nch = ch->GetNumberOfChannels();
+      std::size_t nch = ch->GetNumberOfChannels();
       if(1 < nch) {
         std::vector<G4double>& prob = ch->GetProbabilities();
         const std::vector<const G4FermiPair*>& pairs = ch->GetChannels();
         G4double ptot = 0.0;
-        for(size_t i=0; i<nch; ++i) {
+        for(std::size_t i=0; i<nch; ++i) {
           ptot += theDecay.ComputeProbability(frag->GetZ(), frag->GetA(),
                                               frag->GetSpin(), 
                                               frag->GetTotalEnergy(), 
@@ -277,7 +277,7 @@ void G4FermiFragmentsPoolVI::Initialise()
           prob[0] = 1.0;
         } else {
           ptot = 1./ptot;
-          for(size_t i=0; i<nch-1; ++i) { prob[i] *= ptot; }
+          for(std::size_t i=0; i<nch-1; ++i) { prob[i] *= ptot; }
           prob[nch-1] = 1.0;
         }
       }
@@ -288,7 +288,7 @@ void G4FermiFragmentsPoolVI::Initialise()
 void G4FermiFragmentsPoolVI::DumpFragment(const G4FermiFragment* f) const
 {
   if(f) {
-    G4int prec = G4cout.precision(6);
+    G4long prec = G4cout.precision(6);
     G4cout << "   Z= " << f->GetZ() << " A= " << std::setw(2) << f->GetA() 
            << " Mass(GeV)= " << std::setw(8) << f->GetFragmentMass()/GeV
            << " Eexc(MeV)= " << std::setw(7) << f->GetExcitationEnergy()
@@ -305,10 +305,10 @@ void G4FermiFragmentsPoolVI::Dump() const
          <<G4endl;
   G4cout << "##### List of Fragments in the Fermi Fragment Pool #####" 
          << G4endl;
-  G4int nfrag = fragment_pool.size();
+  std::size_t nfrag = fragment_pool.size();
   G4cout << "      For stable " << nfrag << " Elim(MeV) = " 
          << elim/CLHEP::MeV << G4endl; 
-  for(G4int i=0; i<nfrag; ++i) {
+  for(std::size_t i=0; i<nfrag; ++i) {
     DumpFragment(fragment_pool[i]);
   }
   G4cout << G4endl;
@@ -318,17 +318,17 @@ void G4FermiFragmentsPoolVI::Dump() const
          << G4endl;
   G4cout << "### G4FermiFragmentPoolVI: fragments sorted by A" << G4endl; 
 
-  G4int prec = G4cout.precision(6);
-  G4int ama[maxA];
+  G4long prec = G4cout.precision(6);
+  std::size_t ama[maxA];
   ama[0] =  0;
   for(G4int A=1; A<maxA; ++A) {
     G4cout << " # A= " << A << G4endl;
-    size_t am(0); 
-    for(size_t j=0; j<list_f[A].size(); ++j) {
+    std::size_t am(0); 
+    for(std::size_t j=0; j<list_f[A].size(); ++j) {
       const G4FermiFragment* f = (list_f[A])[j];
       G4int a1 = f->GetA();
       G4int z1 = f->GetZ();
-      size_t nch = (list_c[A])[j]->GetNumberOfChannels();
+      std::size_t nch = (list_c[A])[j]->GetNumberOfChannels();
       am = std::max(am, nch);
       G4cout << "   ("<<a1<<","<<z1<<");  Eex(MeV)= "
              << f->GetExcitationEnergy() 
@@ -337,7 +337,7 @@ void G4FermiFragmentsPoolVI::Dump() const
              << " MassExcess= " << f->GetTotalEnergy() - 
         (z1*proton_mass_c2 + (a1 - z1)*neutron_mass_c2)
              << G4endl; 
-      for(size_t k=0; k<nch; ++k) {
+      for(std::size_t k=0; k<nch; ++k) {
         const G4FermiPair* fpair = ((list_c[A])[j]->GetChannels())[k];
         G4cout << "         (" << fpair->GetFragment1()->GetZ()
                << ", "  << fpair->GetFragment1()->GetA() 
@@ -359,7 +359,7 @@ void G4FermiFragmentsPoolVI::Dump() const
   G4cout << G4endl;
 
   G4cout << "    Max number of channels per A:" << G4endl; 
-  for (size_t j=0; j<maxA; ++j) { G4cout << ama[j] << ", "; }
+  for (std::size_t j=0; j<maxA; ++j) { G4cout << ama[j] << ", "; }
   G4cout << G4endl;
 
   G4cout << "    Number of fragment pairs per A:" << G4endl;
@@ -373,7 +373,7 @@ void G4FermiFragmentsPoolVI::Dump() const
   prec = G4cout.precision(6);
   for(G4int A=2; A<maxA; ++A) {
     G4cout << "  A= " << A<<G4endl; 
-    for(size_t j=0; j<list_p[A].size(); ++j) {
+    for(std::size_t j=0; j<list_p[A].size(); ++j) {
       const G4FermiFragment* f1 = (list_p[A])[j]->GetFragment1();
       const G4FermiFragment* f2 = (list_p[A])[j]->GetFragment2();
       G4int a1 = f1->GetA();

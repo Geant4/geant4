@@ -47,7 +47,7 @@ int main(int argc,char** argv)
   runManager->SetNumberOfThreads(nThreads);
   
  // Set mandatory initialization classes
-  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();
+  auto* userPhantom = new G4HumanPhantomConstruction();
   runManager->SetUserInitialization(userPhantom);
 
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
@@ -55,7 +55,7 @@ int main(int argc,char** argv)
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
  
-  G4HumanPhantomActionInitialization* actions = new G4HumanPhantomActionInitialization();
+  auto* actions = new G4HumanPhantomActionInitialization();
   runManager->SetUserInitialization(actions);
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -64,11 +64,10 @@ int main(int argc,char** argv)
     { 
 
       G4cout << " UI session starts ..." << G4endl;
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      auto* ui = new G4UIExecutive(argc, argv);
       UImanager->ApplyCommand("/control/execute default.mac");     
       ui->SessionStart();
       delete ui;
-
     }
   else           // Batch mode
     { 

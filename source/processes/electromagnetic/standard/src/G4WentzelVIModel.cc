@@ -130,10 +130,10 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   nelments = 0;
-  for(size_t i=0; i<numOfCouples; ++i) {
-    G4int nelm = theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()->GetNumberOfElements();
+  for(G4int i=0; i<numOfCouples; ++i) {
+    G4int nelm = (G4int)theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()->GetNumberOfElements();
     nelments = std::max(nelments, nelm);
   }
   xsecn.resize(nelments);
@@ -154,11 +154,11 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
     G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
     G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
     if(emin < emax) {
-      size_t n = G4EmParameters::Instance()->NumberOfBinsPerDecade()
+      std::size_t n = G4EmParameters::Instance()->NumberOfBinsPerDecade()
         *G4lrint(std::log10(emax/emin));
       if(n < 3) { n = 3; }
 
-      for(size_t i=0; i<numOfCouples; ++i) {
+      for(G4int i=0; i<numOfCouples; ++i) {
 
         //G4cout<< "i= " << i << " Flag=  " << fSecondMoments->GetFlag(i) 
         //      << G4endl;
@@ -172,7 +172,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
           } else {
             bVector = new G4PhysicsVector(*aVector);
           }
-          for(size_t j=0; j<n; ++j) {
+          for(std::size_t j=0; j<n; ++j) {
             G4double e = bVector->Energy(j); 
             bVector->PutValue(j, ComputeSecondMoment(p, e)*e*e);
           }
@@ -557,7 +557,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
   const G4ElementVector* theElementVector = 
     currentMaterial->GetElementVector();
-  G4int nelm = currentMaterial->GetNumberOfElements();
+  std::size_t nelm = currentMaterial->GetNumberOfElements();
 
   // geometry
   G4double sint, cost, phi;
@@ -606,7 +606,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
     if(singleScat) {
 
       // select element
-      G4int i = 0;
+      std::size_t i = 0;
       if(nelm > 1) {
         G4double qsec = rndmEngine->flat()*xtsec;
         for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
@@ -707,7 +707,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume(G4double cosTheta)
   const G4ElementVector* theElementVector = currentMaterial->GetElementVector();
   const G4double* theAtomNumDensityVector = 
     currentMaterial->GetVecNbOfAtomsPerVolume();
-  G4int nelm = currentMaterial->GetNumberOfElements();
+  G4int nelm = (G4int)currentMaterial->GetNumberOfElements();
   if(nelm > nelments) {
     nelments = nelm;
     xsecn.resize(nelm);
@@ -769,13 +769,13 @@ G4double G4WentzelVIModel::ComputeSecondMoment(const G4ParticleDefinition* p,
   const G4ElementVector* theElementVector = currentMaterial->GetElementVector();
   const G4double* theAtomNumDensityVector = 
     currentMaterial->GetVecNbOfAtomsPerVolume();
-  G4int nelm = currentMaterial->GetNumberOfElements();
+  std::size_t nelm = currentMaterial->GetNumberOfElements();
 
   G4double cut = (*currentCuts)[currentMaterialIndex];
   if(fixedCut > 0.0) { cut = fixedCut; }
 
   // loop over elements
-  for (G4int i=0; i<nelm; ++i) {
+  for (std::size_t i=0; i<nelm; ++i) {
     G4double costm = 
       wokvi->SetupTarget((*theElementVector)[i]->GetZasInt(), cut);
     xs += theAtomNumDensityVector[i]

@@ -53,14 +53,12 @@ class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
   //G4VPhysicalVolume* GetMotherVolume(){return mother;};
  
  private:
-  G4HumanPhantomMaterial* material;
-  G4HumanPhantomMessenger* messenger;
   G4VPhysicalVolume* ConstructWorld();
-
-  G4String                 model;
-  G4String                 sex;
-  std::map<std::string,G4bool> sensitivities;
+  G4HumanPhantomMaterial* fMaterial;
+  G4HumanPhantomMessenger* fMessenger;
+  std::map<std::string,G4bool> fSensitivities;
+  G4String                 fModel;
+  G4String                 fSex;
 };
-
 #endif
 

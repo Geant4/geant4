@@ -156,7 +156,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   // To get replica No: transform local point to the reference system of the
   // param container volume
   //
-  G4int ide = history.GetDepth();
+  G4int ide = (G4int)history.GetDepth();
   G4ThreeVector containerPoint = history.GetTransform(ide)
                                  .InverseTransformPoint(localPoint);
 

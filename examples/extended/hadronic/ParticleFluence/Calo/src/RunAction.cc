@@ -36,16 +36,13 @@
 #include "G4Run.hh"
 #include "Run.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction( SteppingAction* steppingAction ) :
-  G4UserRunAction(), fSteppingAction( steppingAction ) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction() {}
+RunAction::RunAction( SteppingAction* steppingAction, TrackingAction* trackingAction ) :
+  G4UserRunAction(), fSteppingAction( steppingAction ), fTrackingAction( trackingAction ) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,10 +54,15 @@ G4Run* RunAction::GenerateRun() {
 
 void RunAction::BeginOfRunAction( const G4Run* aRun ) {
   G4cout << "### Run " << aRun->GetRunID() << " starts." << G4endl;
-  if ( fSteppingAction ) {
-    fSteppingAction->initialize();
-    Run* run = const_cast< Run* >( static_cast< const Run* >( aRun ) );
-    if ( run != nullptr ) fSteppingAction->setRunPointer( run );
+  Run* run = const_cast< Run* >( static_cast< const Run* >( aRun ) );
+  if ( run == nullptr ) return;
+  if ( fSteppingAction != nullptr ) {
+    fSteppingAction->Initialize();
+    fSteppingAction->SetRunPointer( run );
+  }
+  if ( fTrackingAction != nullptr ) {
+    fTrackingAction->Initialize();
+    fTrackingAction->SetRunPointer( run );
   }
 }
 
@@ -69,7 +71,7 @@ void RunAction::BeginOfRunAction( const G4Run* aRun ) {
 void RunAction::EndOfRunAction( const G4Run* aRun ) {
   const Run* run = static_cast< const Run* >( aRun );
   if ( run == nullptr || run->GetNumberOfEvent() == 0 ) return;
-  if ( IsMaster() ) run->printInfo();
+  if ( IsMaster() ) run->PrintInfo();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

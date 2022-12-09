@@ -119,6 +119,15 @@ public:
 
   static G4LowECapture*
   FindOrBuildCapture(const G4double elim, G4ParticleDefinition* part);
+
+private:
+
+  static void StandardHadronPhysics(G4ParticleDefinition*,
+			            const G4double lowELimitForMSC,
+			            const G4double lowELimitForIoni,
+			            const G4double maxEnergy,
+				    const G4EmDNAMscModelType mscType,
+                                    const G4bool isIon);
 };
 
 #endif

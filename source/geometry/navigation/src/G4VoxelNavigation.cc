@@ -107,7 +107,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
 
   G4bool initialNode, noStep;
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes, contentNo;
+  G4long curNoVolumes, contentNo;
   G4double voxelSafety;
 
   motherPhysical = history.GetTopVolume();
@@ -164,7 +164,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
   }
 #endif
 
-  localNoDaughters = motherLogical->GetNoDaughters();
+  localNoDaughters = (G4int)motherLogical->GetNoDaughters();
 
   fBList.Enlarge(localNoDaughters);
   fBList.Reset();
@@ -178,7 +178,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
     curNoVolumes = curVoxelNode->GetNoContained();
     for (contentNo=curNoVolumes-1; contentNo>=0; contentNo--)
     {
-      sampleNo = curVoxelNode->GetVolume(contentNo);
+      sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
       if ( !fBList.IsBlocked(sampleNo) )
       {
         fBList.BlockVolume(sampleNo);
@@ -601,7 +601,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
           ++fVoxelDepth;
           newHeader = newProxy->GetHeader();
           newHeaderAxis = newHeader->GetAxis();
-          newHeaderNoSlices = newHeader->GetNoSlices();
+          newHeaderNoSlices = (G4int)newHeader->GetNoSlices();
           newHeaderMin = newHeader->GetMinExtent();
           newHeaderNodeWidth = (newHeader->GetMaxExtent()-newHeaderMin)
                              / newHeaderNoSlices;
@@ -651,7 +651,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   G4double motherSafety, ourSafety;
   G4int sampleNo;
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes, contentNo;
+  G4long curNoVolumes, contentNo;
   G4double voxelSafety;
 
   motherPhysical = history.GetTopVolume();
@@ -731,7 +731,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
   {
-    sampleNo = curVoxelNode->GetVolume(contentNo);
+    sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
     samplePhysical = motherLogical->GetDaughter(sampleNo);
 
     G4AffineTransform sampleTf(samplePhysical->GetRotation(),

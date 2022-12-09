@@ -84,7 +84,7 @@ G4DensityEffectCalculator::G4DensityEffectCalculator(const G4Material* mat, G4in
     // and offers a possible alternative. This is one of the sources of
     // uncertainty in the model.
     const G4double frac = fMaterial->GetVecNbOfAtomsPerVolume()[j]/tot;
-    const G4int Z = fMaterial->GetElement(j)->GetZasInt();
+    const G4int Z = fMaterial->GetElement((G4int)j)->GetZasInt();
     const G4int nshell = G4AtomicShells::GetNumberOfShells(Z);
     for(G4int i = 0; i < nshell; ++i) {
       // For conductors, put *all* top shell electrons into the conduction

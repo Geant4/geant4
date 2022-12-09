@@ -37,34 +37,34 @@
 
 namespace utility
 {
-  std::vector<G4String>& split(const G4String&, char, std::vector<G4String>&);
+  std::vector<G4String>& Split(const G4String&, char, std::vector<G4String>&);
 
-  std::vector<G4String> split(const G4String&, char);
+  std::vector<G4String> Split(const G4String&, char);
 
-  G4String get_seperated_element(const G4String&, char, G4int);
+  G4String Get_seperated_element(const G4String&, char, G4int);
 
-  std::array<G4String, 4> get_four_elements(const G4String&, char);
+  std::array<G4String, 4> Get_four_elements(const G4String&, char);
 
-  bool path_exists(const G4String&);
+  G4bool Path_exists(const G4String&);
 
-  [[maybe_unused]] G4String getcwd();
+  G4String Getcwd();
 
-  G4double min(const G4ThreeVector&);
+  G4double Min(const G4ThreeVector&);
 
   // sign function
   template <typename T>
-  [[maybe_unused]] inline constexpr int signum(T, std::false_type);
+  [[maybe_unused]] inline constexpr G4int Signum(T, std::false_type);
 
   template <typename T>
-  inline constexpr int signum(T, std::true_type);
+  inline constexpr int Signum(T, std::true_type);
 
   template <typename T>
-  inline constexpr int signum(T);
+  inline constexpr int Signum(T);
 
   // find last (highest) significant bit
   // linux implementation, copied for portability
   // http://lxr.linux.no/#linux+v2.6.26.5/include/asm-generic/bitops/fls.h
-  static inline int fls(int x)
+  static inline int Fls(int x)
   {
     int r = 32;
 

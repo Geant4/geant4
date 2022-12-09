@@ -114,7 +114,7 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
     EAxis fVoxelAxis = kUndefined;
     G4int fVoxelNoSlices = 0;
     G4double fVoxelSliceWidth = 0.0; 
-    size_t fVoxelNodeNo = 0;  
+    std::size_t fVoxelNodeNo = 0;  
     G4SmartVoxelHeader* fVoxelHeader = nullptr;
 };
 

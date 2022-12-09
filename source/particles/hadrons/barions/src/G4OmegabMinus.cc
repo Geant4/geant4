@@ -75,7 +75,7 @@ G4OmegabMinus* G4OmegabMinus::Definition()
                 false,     1.640e-3*ns,          NULL,
                 false,       "omega_b");
   }
-  theInstance = reinterpret_cast<G4OmegabMinus*>(anInstance);
+  theInstance = static_cast<G4OmegabMinus*>(anInstance);
   return theInstance;
 }
 

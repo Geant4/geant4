@@ -57,7 +57,7 @@ private:
   G4ParticleGun*         fParticleGun;
   DetectorConstruction*  fDetector;
 
-  G4bool                 bPrimPositionDefined;
+  G4bool                 fPrimPositionDefined;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

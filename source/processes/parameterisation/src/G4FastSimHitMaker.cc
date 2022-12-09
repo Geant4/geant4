@@ -29,6 +29,8 @@
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHandle.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 
 #include "G4VFastSimSensitiveDetector.hh"
 
@@ -38,11 +40,23 @@ G4FastSimHitMaker::G4FastSimHitMaker()
   fpNavigator      = new G4Navigator();
   fNaviSetup       = false;
   fWorldWithSdName = "";
+  fpSpotS = new G4Step();
+  fpSpotP = new G4StepPoint();
+  // N.B. Pre and Post step points are common.
+  fpSpotS->SetPreStepPoint(fpSpotP);
+  fpSpotS->SetPostStepPoint(fpSpotP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4FastSimHitMaker::~G4FastSimHitMaker() { delete fpNavigator; }
+G4FastSimHitMaker::~G4FastSimHitMaker() 
+{
+  delete fpNavigator; 
+  delete fpSpotP;
+  fpSpotS->ResetPreStepPoint();
+  fpSpotS->ResetPostStepPoint();
+  delete fpSpotS;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,10 +100,9 @@ void G4FastSimHitMaker::make(const G4FastHit& aHit, const G4FastTrack& aTrack)
   }
   G4VPhysicalVolume* currentVolume = fTouchableHandle()->GetVolume();
 
-  G4VSensitiveDetector* sensitive;
   if(currentVolume != 0)
   {
-    sensitive = currentVolume->GetLogicalVolume()->GetSensitiveDetector();
+    G4VSensitiveDetector* sensitive = currentVolume->GetLogicalVolume()->GetSensitiveDetector();
     G4VFastSimSensitiveDetector* fastSimSensitive =
       dynamic_cast<G4VFastSimSensitiveDetector*>(sensitive);
     if(fastSimSensitive)
@@ -99,13 +112,17 @@ void G4FastSimHitMaker::make(const G4FastHit& aHit, const G4FastTrack& aTrack)
     else if(sensitive &&
             currentVolume->GetLogicalVolume()->GetFastSimulationManager())
     {
-      G4cerr << "ERROR - G4FastSimHitMaker::make()" << G4endl
-             << "        It is required to derive from the " << G4endl
-             << "        G4VFastSimSensitiveDetector in " << G4endl
-             << "        addition to the usual G4VSensitiveDetector class."
-             << G4endl;
-      G4Exception("G4FastSimHitMaker::make()", "InvalidSetup", FatalException,
-                  "G4VFastSimSensitiveDetector interface not implemented.");
+      fpSpotS->SetTotalEnergyDeposit(aHit.GetEnergy());
+      fpSpotS->SetTrack(const_cast<G4Track*>(aTrack.GetPrimaryTrack()));
+      fpSpotP->SetWeight(aTrack.GetPrimaryTrack()->GetWeight());
+      fpSpotP->SetPosition(aHit.GetPosition());
+      fpSpotP->SetGlobalTime(aTrack.GetPrimaryTrack()->GetGlobalTime());
+      fpSpotP->SetLocalTime(aTrack.GetPrimaryTrack()->GetLocalTime());
+      fpSpotP->SetProperTime(aTrack.GetPrimaryTrack()->GetProperTime());
+      fpSpotP->SetTouchableHandle(fTouchableHandle);
+      fpSpotP->SetProcessDefinedStep(fpProcess);
+      fpSpotP->SetStepStatus(fUserDefinedLimit);
+      sensitive->Hit(fpSpotS);
     }
   }
 }

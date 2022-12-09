@@ -105,19 +105,34 @@ public: //with description
                                const G4Element*,
                                const G4Material* mat = nullptr);
 
-  // Implement this method for element-wise cross section 
+  // Implement element cross section, IsApplicable does not checked.
+  // In the default implementation a sum of isotope cross sections is computed
+  virtual
+  G4double ComputeCrossSectionPerElement(G4double kinEnergy, G4double loge,
+                                         const G4ParticleDefinition*, 
+                                         const G4Element*,
+                                         const G4Material* mat = nullptr);
+
+  // Implement these methods for element-wise cross section 
   virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
 				  const G4Material* mat = nullptr);
 
-  // Derived classes should implement this method if they provide isotope-wise
-  // cross sections.  Default arguments G4Element and G4Material are needed to
-  // access low-energy neutron cross sections, but are not required for others. 
+  // Derived classes should implement these methods if they provide isotope-wise
+  // cross sections. Extra arguments G4Isotope, G4Element, and G4Material are 
+  // needed to access low-energy neutron cross sections, but not in other cases. 
   virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
 			      const G4Isotope* iso = nullptr,
 			      const G4Element* elm = nullptr,
 			      const G4Material* mat = nullptr);
+
+  virtual
+  G4double ComputeIsoCrossSection(G4double kinEnergy, G4double loge,
+                                  const G4ParticleDefinition*, G4int Z, G4int A,  
+			          const G4Isotope* iso = nullptr,
+			          const G4Element* elm = nullptr,
+			          const G4Material* mat = nullptr);
 
   //=====================================================================
 

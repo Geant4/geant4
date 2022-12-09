@@ -1,8 +1,7 @@
-
 ///\file "ParticleFluence/.README.txt"
 ///\brief ParticleFluence set-ups
 
-/*! \page Set-ups-ParticleFluence Category "ParticleFluence"
+/*! \page Examples_ParticleFluence Category "hadronic/ParticleFluence"
 
  Examples in this directory demonstrate specific set-ups in
  which to evaluate particle fluence.

@@ -89,14 +89,14 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
              << pd->GetParticleName() << ">" << G4endl;
       G4cout << " ProcessManager : " << pm << " ProcessManagerShadow : " << pmM
              << G4endl;
-      for(std::size_t iv1 = 0; iv1 < procs.size(); ++iv1)
+      for(G4int iv1 = 0; iv1 < (G4int)procs.size(); ++iv1)
       {
         G4cout << "  " << iv1 << " - " << procs[iv1]->GetProcessName()
                << G4endl;
       }
       G4cout << "--------------------------------------------------------------"
              << G4endl;
-      for(std::size_t iv2 = 0; iv2 < procsM.size(); ++iv2)
+      for(G4int iv2 = 0; iv2 < (G4int)procsM.size(); ++iv2)
       {
         G4cout << "  " << iv2 << " - " << procsM[iv2]->GetProcessName()
                << G4endl;
@@ -117,7 +117,7 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
     // process from master. Note that we rely on
     // processes being in the correct order!
     // We could use some checking using process name or type
-    for(std::size_t idx = 0; idx < procs.size(); ++idx)
+    for(G4int idx = 0; idx < (G4int)procs.size(); ++idx)
     {
       procs[idx]->SetMasterProcess(procsM[idx]);
     }

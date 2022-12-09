@@ -5,14 +5,17 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <cmath>	// for std::pow()
-#include "CLHEP/Evaluator/stack.icc"
-#include "CLHEP/Evaluator/string.icc"
-#include "CLHEP/Evaluator/hash_map.icc"
+#include <stack>
+#include <unordered_map>
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>	// for strtod()
+
+using std::string;
+using std::stack;
 
 //---------------------------------------------------------------------------
 // Fix non ISO C++ compliant cast from pointer to function
@@ -33,8 +36,8 @@ struct Item {
   Item(voidfuncptr x) : what(FUNCTION),  variable(0),expression(), function(x) {}
 };
 
-typedef char * pchar;
-typedef hash_map<string,Item> dic_type;
+using pchar = char *;
+using dic_type = std::unordered_map<string, Item>;
 
 struct Struct {
   dic_type theDictionary;

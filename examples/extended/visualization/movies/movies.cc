@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file exampleMovies.cc
+/// \file movies.cc
 /// \brief Main program of the Movies example
 
 #include "MoviesDetectorConstruction.hh"

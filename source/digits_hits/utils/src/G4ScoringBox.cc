@@ -39,7 +39,6 @@
 #include "G4VScoreColorMap.hh"
 
 #include "G4MultiFunctionalDetector.hh"
-#include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
 #include "G4Polyhedron.hh"
 
@@ -61,8 +60,6 @@ G4ScoringBox::G4ScoringBox(G4String wName)
   fDivisionAxisNames[2] = "Z";
 }
 
-G4ScoringBox::~G4ScoringBox() {}
-
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
 {
   if(verboseLevel > 9)
@@ -80,15 +77,10 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   if(verboseLevel > 9)
     G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid* boxSolid = new G4Box(boxName + "0", fSize[0], fSize[1], fSize[2]);
-  G4LogicalVolume* boxLogical =
-    new G4LogicalVolume(boxSolid, 0, boxName + "_0");
+  auto  boxLogical =
+    new G4LogicalVolume(boxSolid, nullptr, boxName + "_0");
   new G4PVPlacement(fRotationMatrix, fCenterPosition, boxLogical, boxName + "0",
                     worldLogical, false, 0);
-
-  // G4double fsegment[3][3];
-  // G4int segOrder[3];
-  // GetSegmentOrder(fSegmentDirection, fNSegment, segOrder, fsegment);
-  // EAxis axis[3] = {kXAxis, kYAxis, kZAxis};
 
   G4String layerName[2] = { boxName + "_1", boxName + "_2" };
   G4VSolid* layerSolid[2];
@@ -99,7 +91,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
     G4cout << "layer 1 :" << G4endl;
   layerSolid[0] =
     new G4Box(layerName[0], fSize[0] / fNSegment[0], fSize[1], fSize[2]);
-  layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
+  layerLogical[0] = new G4LogicalVolume(layerSolid[0], nullptr, layerName[0]);
   if(fNSegment[0] > 1)
   {
     if(verboseLevel > 9)
@@ -120,7 +112,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   {
     if(verboseLevel > 9)
       G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
-    new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), layerLogical[0],
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), layerLogical[0],
                       layerName[0], boxLogical, false, 0);
   }
   else
@@ -141,7 +133,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
     G4cout << "layer 2 :" << G4endl;
   layerSolid[1]   = new G4Box(layerName[1], fSize[0] / fNSegment[0],
                             fSize[1] / fNSegment[1], fSize[2]);
-  layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
+  layerLogical[1] = new G4LogicalVolume(layerSolid[1], nullptr, layerName[1]);
   if(fNSegment[1] > 1)
   {
     if(verboseLevel > 9)
@@ -162,7 +154,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   {
     if(verboseLevel > 9)
       G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
-    new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), layerLogical[1],
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), layerLogical[1],
                       layerName[1], layerLogical[0], false, 0);
   }
   else
@@ -185,7 +177,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   G4VSolid* elementSolid =
     new G4Box(elementName, fSize[0] / fNSegment[0], fSize[1] / fNSegment[1],
               fSize[2] / fNSegment[2]);
-  fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
+  fMeshElementLogical = new G4LogicalVolume(elementSolid, nullptr, elementName);
   if(fNSegment[2] > 1)
   {
     if(verboseLevel > 9)
@@ -207,7 +199,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   {
     if(verboseLevel > 9)
       G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
-    new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), fMeshElementLogical,
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fMeshElementLogical,
                       elementName, layerLogical[1], false, 0);
   }
   else
@@ -227,7 +219,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   fMeshElementLogical->SetSensitiveDetector(fMFD);
 
   // vis. attributes
-  G4VisAttributes* visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
+  auto  visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
   visatt->SetVisibility(false);
   layerLogical[0]->SetVisAttributes(visatt);
   layerLogical[1]->SetVisAttributes(visatt);
@@ -247,7 +239,7 @@ void G4ScoringBox::List() const
 void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
 {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVisManager)
+  if(pVisManager != nullptr)
   {
     // cell vectors
     std::vector<std::vector<std::vector<double>>> cell;  // cell[X][Y][Z]
@@ -277,7 +269,7 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
 
     // projections
     G4int q[3];
-    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    auto itr = map->GetMap()->begin();
     for(; itr != map->GetMap()->end(); itr++)
     {
       GetXYZ(itr->first, q);
@@ -342,7 +334,7 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           G4ThreeVector pos2(GetReplicaPosition(x, y, fNSegment[2] - 1) +
                              zhalf);
           G4Transform3D trans, trans2;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans = G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(pos);
             trans = G4Translate3D(fCenterPosition) * trans;
@@ -371,27 +363,6 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           poly2->Transform(trans2);
           poly2->SetVisAttributes(&att);
           pVisManager->Draw(*poly2);
-
-          /*
-          G4double nodes[][3] =
-            {{-fSize[0]/fNSegment[0], -fSize[1]/fNSegment[1], 0.},
-             { fSize[0]/fNSegment[0], -fSize[1]/fNSegment[1], 0.},
-             { fSize[0]/fNSegment[0],  fSize[1]/fNSegment[1], 0.},
-             {-fSize[0]/fNSegment[0],  fSize[1]/fNSegment[1], 0.}};
-          G4int facets[][4] = {{4, 3, 2, 1}};
-          G4int facets2[][4] = {{1, 2, 3, 4}};
-
-          G4Polyhedron poly, poly2;
-          poly.createPolyhedron(4, 1, nodes, facets);
-          poly.Transform(trans);
-          poly.SetVisAttributes(att);
-          pVisManager->Draw(poly);
-
-          poly2.createPolyhedron(4, 1, nodes, facets2);
-          poly2.Transform(trans2);
-          poly2.SetVisAttributes(att);
-          pVisManager->Draw(poly2);
-          */
         }
       }
       pVisManager->EndDraw();
@@ -415,7 +386,7 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           G4ThreeVector pos2(GetReplicaPosition(fNSegment[0] - 1, y, z) +
                              xhalf);
           G4Transform3D trans, trans2;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans = G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(pos);
             trans = G4Translate3D(fCenterPosition) * trans;
@@ -444,27 +415,6 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           poly2->Transform(trans2);
           poly2->SetVisAttributes(&att);
           pVisManager->Draw(*poly2);
-
-          /*
-          G4double nodes[][3] =
-          {{0., -fSize[1]/fNSegment[1], -fSize[2]/fNSegment[2]},
-           {0.,  fSize[1]/fNSegment[1], -fSize[2]/fNSegment[2]},
-           {0.,  fSize[1]/fNSegment[1],  fSize[2]/fNSegment[2]},
-           {0., -fSize[1]/fNSegment[1],  fSize[2]/fNSegment[2]}};
-          G4int facets[][4] = {{4, 3, 2, 1}};
-          G4int facets2[][4] = {{1, 2, 3, 4}};
-
-          G4Polyhedron poly, poly2;
-          poly.createPolyhedron(4, 1, nodes, facets);
-          poly.Transform(trans);
-          poly.SetVisAttributes(att);
-          pVisManager->Draw(poly);
-
-          poly2.createPolyhedron(4, 1, nodes, facets2);
-          poly2.Transform(trans2);
-          poly2.SetVisAttributes(att);
-          pVisManager->Draw(poly2);
-          */
         }
       }
       pVisManager->EndDraw();
@@ -488,7 +438,7 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           G4ThreeVector pos2(GetReplicaPosition(x, fNSegment[1] - 1, z) +
                              yhalf);
           G4Transform3D trans, trans2;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans = G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(pos);
             trans = G4Translate3D(fCenterPosition) * trans;
@@ -518,27 +468,6 @@ void G4ScoringBox::Draw(RunScore* map, G4VScoreColorMap* colorMap, G4int axflg)
           poly2->Transform(trans2);
           poly2->SetVisAttributes(&att);
           pVisManager->Draw(*poly2);
-
-          /*
-          G4double nodes[][3] =
-          {{-fSize[1]/fNSegment[1], 0., -fSize[2]/fNSegment[2]},
-           { fSize[1]/fNSegment[1], 0., -fSize[2]/fNSegment[2]},
-           { fSize[1]/fNSegment[1], 0.,  fSize[2]/fNSegment[2]},
-           {-fSize[1]/fNSegment[1], 0.,  fSize[2]/fNSegment[2]}};
-          G4int facets[][4] = {{1, 2, 3, 4}};
-          G4int facets2[][4] = {{4, 3, 2, 1}};
-
-          G4Polyhedron poly, poly2;
-          poly.createPolyhedron(4, 1, nodes, facets);
-          poly.Transform(trans);
-          poly.SetVisAttributes(att);
-          pVisManager->Draw(poly);
-
-          poly2.createPolyhedron(4, 1, nodes, facets2);
-          poly2.Transform(trans2);
-          poly2.SetVisAttributes(att);
-          pVisManager->Draw(poly2);
-          */
         }
       }
       pVisManager->EndDraw();
@@ -584,7 +513,7 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
     return;
   }
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVisManager)
+  if(pVisManager != nullptr)
   {
     pVisManager->BeginDraw();
 
@@ -616,7 +545,7 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
 
     // projections
     G4int q[3];
-    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    auto itr = map->GetMap()->begin();
     for(; itr != map->GetMap()->end(); itr++)
     {
       GetXYZ(itr->first, q);
@@ -687,7 +616,7 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
 
           G4ThreeVector pos(GetReplicaPosition(x, y, idxColumn));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans = G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(pos);
             trans = G4Translate3D(fCenterPosition) * trans;
@@ -724,7 +653,7 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
 
           G4ThreeVector pos(GetReplicaPosition(idxColumn, y, z));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans = G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(pos);
             trans = G4Translate3D(fCenterPosition) * trans;
@@ -761,7 +690,7 @@ void G4ScoringBox::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
 
           G4ThreeVector pos(GetReplicaPosition(x, idxColumn, z));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans = G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(pos);
             trans = G4Translate3D(fCenterPosition) * trans;

@@ -65,7 +65,8 @@ enum G4SurfaceType
   dielectric_LUTDAVIS,    // dielectric-Look-Up-Table DAVIS interface
   dielectric_dichroic,    // dichroic filter interface
   firsov,                 // for Firsov Process
-  x_ray                   // for x-ray mirror process
+  x_ray,                  // for x-ray mirror process
+  coated                 // coated_dielectric-dielectric interface
 };
 
 class G4SurfaceProperty

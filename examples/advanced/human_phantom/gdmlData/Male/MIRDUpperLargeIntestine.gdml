@@ -53,8 +53,8 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="AscendingColonUpperLargeIntestine" dx="2.16" dy="2.45" dz="4.3" />
-  <eltube aunit="cm" lunit="cm" name="TransverseColonUpperLargeIntestine" dx="2.45" dy="1.35" dz="9.06" />
+  <eltube lunit="cm" name="AscendingColonUpperLargeIntestine" dx="2.16" dy="2.45" dz="4.3" />
+  <eltube lunit="cm" name="TransverseColonUpperLargeIntestine" dx="2.45" dy="1.35" dz="9.06" />
   <union name="UpperLargeIntestine">
    <first ref="AscendingColonUpperLargeIntestine" />
    <second ref="TransverseColonUpperLargeIntestine" />

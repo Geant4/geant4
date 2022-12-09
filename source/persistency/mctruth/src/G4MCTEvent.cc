@@ -87,7 +87,7 @@ G4int G4MCTEvent::AddPrimaryPair(const G4MCTGenParticle& genp,
   sim2genParticleMap.insert(std::make_pair(
     const_cast<G4MCTSimParticle*>(simp), const_cast<G4MCTGenParticle&>(genp)));
 
-  return gen2simParticleMap.size();
+  return (G4int)gen2simParticleMap.size();
 }
 
 // --------------------------------------------------------------------

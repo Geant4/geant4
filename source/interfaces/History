@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-24 Gabriele Cosmo (interfaces-V11-00-10)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-08 Gabriele Cosmo (interfaces-V11-00-09)
+- Avoid use of temporaries introduced in previous tag.
+
+## 2022-10-07 Gabriele Cosmo (interfaces-V11-00-08)
+- Fixed compilation warnings on Intel/icc for deprecated conversion of string
+  literal to char* in G4UIXm.
+
+## 2022-09-22 Ben Morgan (interfaces-V11-00-07)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+
 ## 2022-05-03 Ben Morgan (interfaces-V11-00-06)
 - Preliminary build support for Qt5 and Qt6
 

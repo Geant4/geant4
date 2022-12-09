@@ -41,6 +41,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmCalculator.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -128,7 +129,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
        countTot += count;
      }
   }
-  G4cout << G4endl;
   
   //compute totalCrossSection, meanFreePath and massicCrossSection
   //
@@ -151,6 +151,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       G4String procName = (*fProcCounter)[i]->GetName();
       if (procName != "Transportation") {
         totalCrossSection += ComputeTheory(procName, NbOfEvents);
+        FillCrossSectionHisto(procName, NbOfEvents);
       }
     }
   
@@ -184,6 +185,7 @@ G4double RunAction::ComputeTheory(const G4String& process, G4int NbOfMu)
 {   
   const G4Material* material = fDetector->GetMaterial();
   G4double ekin = fPrimary->GetParticleGun()->GetParticleEnergy();
+  G4double particleMass = fPrimary->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
 
   G4int id = 0; G4double cut = 1.e-10*ekin;
   if (process == "muIoni")          {id = 11; cut =  GetEnergyCut(material,1);}
@@ -191,6 +193,7 @@ G4double RunAction::ComputeTheory(const G4String& process, G4int NbOfMu)
                                                       + electron_mass_c2); }
   else if (process == "muBrems")    {id = 13; cut =  GetEnergyCut(material,0);}
   else if (process == "muonNuclear"){id = 14; cut = 100*MeV;}
+  else if (process == "muToMuonPairProd"){id = 18; cut = 2*particleMass;}
   if (id == 0) { return 0.; }
   
   G4int nbOfBins = 100;
@@ -240,6 +243,53 @@ G4double RunAction::ComputeTheory(const G4String& process, G4int NbOfMu)
   //return integrated crossSection
   //
   return sigmaTot;   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::FillCrossSectionHisto(const G4String& process, G4int)
+{
+  const G4Material* material = fDetector->GetMaterial();
+  G4double ekin = fPrimary->GetParticleGun()->GetParticleEnergy();
+  G4ParticleDefinition *particle = fPrimary->GetParticleGun()->GetParticleDefinition();
+  G4double particleMass = particle->GetPDGMass();
+  
+  G4EmCalculator emCal;
+
+  G4int id = 0; G4double cut = 1.e-10*ekin;
+  if (process == "muIoni")          {id = 21; cut = GetEnergyCut(material,1);}
+  else if (process == "muPairProd") {id = 22; cut = 2*(GetEnergyCut(material,1)
+                                                      + electron_mass_c2); }
+  else if (process == "muBrems")    {id = 23; cut = GetEnergyCut(material,0);}
+  else if (process == "muonNuclear"){id = 24; cut = 100*MeV;}
+  else if (process == "muToMuonPairProd"){id = 28; cut = 2*particleMass;}
+  if (id == 0) { return; }
+
+  G4int nbOfBins = 100;
+  G4double binMin = cut;
+  G4double binMax = ekin;
+  G4double binWidth = (binMax-binMin)/G4double(nbOfBins);
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    
+  G4H1* histoTh = 0;
+  if (fHistoManager->HistoExist(id)) {
+    histoTh  = analysisManager->GetH1(fHistoManager->GetHistoID(id));  
+    nbOfBins = fHistoManager->GetNbins(id);
+    binMin   = fHistoManager->GetVmin (id);
+    binMax   = fHistoManager->GetVmax (id);
+    binWidth = fHistoManager->GetBinWidth(id);    
+  }
+
+  G4double sigma, primaryEnergy;
+
+  for(G4int ibin=0; ibin<nbOfBins; ibin++){
+    primaryEnergy = binMin + (ibin+0.5)*binWidth;
+    sigma = emCal.GetCrossSectionPerVolume(primaryEnergy, particle, process, material);
+    if (histoTh) {
+      histoTh->fill(primaryEnergy, sigma);
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

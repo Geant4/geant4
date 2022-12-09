@@ -42,26 +42,12 @@
 
 class G4PSStepChecker : public G4VPrimitiveScorer
 {
- public:  // with description
+ public:
   G4PSStepChecker(G4String name, G4int depth = 0);
+  ~G4PSStepChecker() override = default;
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
- public:
-  virtual ~G4PSStepChecker();
-
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-
- public:
-  virtual void DrawAll();
-  virtual void PrintAll();
-
- private:
- public:
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 };
 
 #endif

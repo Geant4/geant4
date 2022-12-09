@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.cc
+/// \file B3/B3b/src/ActionInitialization.cc
 /// \brief Implementation of the B3b::ActionInitialization class
 
 #include "ActionInitialization.hh"
@@ -36,16 +36,6 @@ using namespace B3;
 
 namespace B3b
 {
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

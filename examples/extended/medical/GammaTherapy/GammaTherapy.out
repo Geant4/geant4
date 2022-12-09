@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -175,6 +175,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
@@ -202,7 +203,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -253,8 +254,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=   10 GeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 10 eV  to 100 keV, 10 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 10 GeV in 50 bins 
+      Lambda table from 10 eV  to 150 keV, 10 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 10 GeV in 48 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=   10 GeV  CullenGenerator
 
@@ -661,20 +662,20 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.500000s Real=3.569560s Sys=0.000000s
+  User=3.750000s Real=3.775916s Sys=0.000000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         32.92
-Average number of gamma                      19.57
-Average number of e+                         0.7624
-Average number of steps in the phantom       11.24
-Average number of e- steps in the target     18.11
-Average number of g  produced in the target  18.77
-Average number of e- produced in the target  20.85
-Average number of g produced in the phantom  0.4563
-Average number of e- produced in the phantom 5.836
-Total fGamma fluence in front of the phantom 7.909 MeV 
+Average number of e-                         33.09
+Average number of gamma                      19.5
+Average number of e+                         0.7681
+Average number of steps in the phantom       11.66
+Average number of e- steps in the target     17.95
+Average number of g  produced in the target  18.65
+Average number of e- produced in the target  20.82
+Average number of g produced in the phantom  0.5056
+Average number of e- produced in the phantom 5.975
+Total fGamma fluence in front of the phantom 8.093 MeV 
 ========================================================
 
 
@@ -682,7 +683,7 @@ Total fGamma fluence in front of the phantom 7.909 MeV
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={551469840210652686, 931304531749890588, 1559392848246602973, 1589415920349687284, 449137953970971601, 1514188602336070177, 1903842264725045022, 336138728218742688, 1306596764992836420, 2138700843793407392, 1646806847015501266, 479487824669320891, 2077705427316833062, 1027017685125927136, 84651419175896762, 2304104818778394831, 1170786853269476675} counter= 9sumtot= 318162091022011895
+N=17 V[N]={868811246491154990, 305116273861624973, 763889555670262191, 1543227937352160365, 59551185052207865, 490056457312732075, 1169937754278509350, 1519540221460173381, 695242014668347949, 2280252941837865889, 233727860707683078, 1428385833700401411, 1232250928138607945, 1423991102878068020, 2297706300400700002, 1583295553813983302, 1667585771871221555} counter= 8sumtot= 1115824865786152733
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

@@ -73,7 +73,7 @@ G4OpticalPhoton*  G4OpticalPhoton::Definition()
 	        false,        "photon",               0
 	     );
   }
-  theInstance = reinterpret_cast<G4OpticalPhoton*>(anInstance);
+  theInstance = static_cast<G4OpticalPhoton*>(anInstance);
   return theInstance;
 }
 

@@ -93,10 +93,10 @@ G4AssemblyVolume::G4AssemblyVolume( G4LogicalVolume* volume,
 //
 G4AssemblyVolume::~G4AssemblyVolume()
 {
-  unsigned int howmany = fTriplets.size();
+  std::size_t howmany = fTriplets.size();
   if( howmany != 0 )
   {
-    for( unsigned int i = 0; i < howmany; ++i )
+    for( std::size_t i = 0; i < howmany; ++i )
     {
       G4RotationMatrix* pRotToClean = fTriplets[i].GetRotation();
       if( pRotToClean != 0 )
@@ -242,7 +242,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
                                     G4int copyNumBase,
                                     G4bool surfCheck )
 {
-  unsigned int  numberOfDaughters;
+  std::size_t numberOfDaughters;
     
   if( copyNumBase == 0 )
   {
@@ -255,7 +255,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
 
   // We start from the first available index
   //
-  numberOfDaughters++;
+  ++numberOfDaughters;
 
   ImprintsCountPlus();
   
@@ -264,7 +264,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
   // store the transformation in a container (for GDML persistency)
   fImprintsTransf[GetImprintsCount()] = transformation;
 
-  for( unsigned int i = 0; i < triplets.size(); ++i )
+  for( std::size_t i = 0; i < triplets.size(); ++i )
   {
     G4Transform3D Ta( *(triplets[i].GetRotation()),
                       triplets[i].GetTranslation() );
@@ -305,7 +305,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
                                                   triplets[i].GetVolume(),
                                                   pMotherLV,
                                                   false,
-                                                  numberOfDaughters + i,
+                                                  G4int(numberOfDaughters+i),
                                                   surfCheck );
 
       // Register the physical volume created by us so we can delete it later
@@ -322,7 +322,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
       // Place volumes in this assembly with composed transformation
       //
       MakeImprint( triplets[i].GetAssembly(), pMotherLV,
-                   Tfinal, i*100+copyNumBase, surfCheck ); 
+                   Tfinal, (G4int)i*100+copyNumBase, surfCheck ); 
     }
     else
     {

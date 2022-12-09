@@ -545,18 +545,14 @@ PlaceFuelPlate(double x,
                G4LogicalVolume* const myLogicalVolume,
                G4LogicalVolume* const parentLogicalVolume)
 {
-    char copyName[64];
     G4ThreeVector position(x, y);
-    
-    sprintf(copyName,
-            "Plate@Location    X:%.2f    Y:%.2f",
-            x / inch,
-            y / inch);
+    std::ostringstream copyName;
+    copyName << "Plate@Location    X:" << std::setprecision(2) << x / inch << "    Y:" << y / inch; 
     
     new G4PVPlacement(NULL,                 // no rotation
                       position,             // position
                       myLogicalVolume,      // the logical volume
-                      copyName,             // the name
+                      copyName.str(),       // the name
                       parentLogicalVolume,  // the mother volume
                       false,                // no boolean ops
                       fCopyNumber++,        // copy number

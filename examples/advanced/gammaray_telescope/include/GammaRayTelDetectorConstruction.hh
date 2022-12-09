@@ -37,309 +37,419 @@
 #ifndef GammaRayTelDetectorConstruction_h
 #define GammaRayTelDetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "G4Cache.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class G4Box;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class G4Material;
-class G4UniformMagField;
-class G4Region;
-class GammaRayTelDetectorMessenger;
-class GammaRayTelTrackerSD;
 class GammaRayTelAnticoincidenceSD;
 class GammaRayTelCalorimeterSD;
+class GammaRayTelDetectorMessenger;
+class GammaRayTelTrackerSD;
+
+class G4Box;
 class G4GlobalMagFieldMessenger;
+class G4LogicalVolume;
+class G4Material;
+class G4Region;
+class G4UniformMagField;
+class G4VPhysicalVolume;
 
-//class GammaRayTelTrackerROGeometry;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelDetectorConstruction : public G4VUserDetectorConstruction
-{
+class GammaRayTelDetectorConstruction: public G4VUserDetectorConstruction {
 public:
-  
-  GammaRayTelDetectorConstruction();
-  ~GammaRayTelDetectorConstruction();
-  
-public:
-  
-  void SetNbOfTKRLayers (G4int); // TKR number of layers, material, detector
-  void SetTKRTileSizeXY (G4double);
-  void SetNbOfTKRTiles (G4int);
-  void SetTKRSiliconThickness(G4double);
-  void SetTKRSiliconPitch(G4double);
-  
-  void SetTKRLayerDistance (G4double);
-  void SetTKRViewsDistance (G4double);
+    explicit GammaRayTelDetectorConstruction();
 
-  void SetConverterMaterial (G4String); // TKR Converter material & thickness
-  void SetConverterThickness(G4double);     
-  
-  void SetNbOfCALLayers (G4int); // CAL material, lenght, thickness
-  void SetNbOfCALBars (G4int);
-  void SetCALBarThickness(G4double);
-  
-  void SetACDThickness (G4double); //ACD Thickness
+	~GammaRayTelDetectorConstruction() override;
 
-  void SetMagField(G4double); // Magnetic Field
+	void SetNbOfTKRLayers(G4int value); // tracker (TKR) number of layers
 
-     
-  G4VPhysicalVolume* Construct();
-  void UpdateGeometry();
-  void ConstructSDandField();
-  
-public:
-  
-  void PrintPayloadParameters();
-                    
+	void SetTKRTileSizeXY(G4double value);
 
-  G4double GetWorldSizeZ()  const     {return WorldSizeZ;}; 
-  G4double GetWorldSizeXY() const     {return WorldSizeXY;};
-  
-  G4double GetPayloadSizeZ() const    {return PayloadSizeZ;}; 
-  G4double GetPayloadSizeXY() const   {return PayloadSizeXY;};
+	void SetNbOfTKRTiles(G4int value); // tracker (TKR) number of tiles
 
-  G4double GetTKRSizeZ() const         {return TKRSizeZ;}; 
-  G4double GetTKRSizeXY() const        {return TKRSizeXY;};
+	void SetTKRSiliconThickness(G4double value);
 
-  G4double GetCALSizeZ() const         {return CALSizeZ;}; 
-  G4double GetCALTKRDistance() const   {return CALTKRDistance;}; 
-     
-  G4double GetTKRSiliconThickness() const   {return TKRSiliconThickness;}; 
-  G4double GetTKRSiliconTileXY() const {return TKRSiliconTileXY;}; 
-  G4double GetTKRSiliconPitch() const  {return TKRSiliconPitch;}; 
-  G4int    GetNbOfTKRLayers() const    {return NbOfTKRLayers;}; 
-  G4int    GetNbOfTKRTiles() const     {return NbOfTKRTiles;}; 
-  G4int    GetNbOfTKRStrips() const    {return NbOfTKRStrips;}; 
-  G4double GetTKRLayerDistance() const {return TKRLayerDistance;};
-  G4double GetTKRViewsDistance() const {return TKRViewsDistance;};
+	void SetTKRSiliconPitch(G4double value);
 
-  G4double GetTKRActiveTileXY() const  {return TKRActiveTileXY;};
-  G4double GetTKRActiveTileZ() const   {return TKRActiveTileZ;};
-  G4double GetSiliconGuardRing() const {return SiliconGuardRing;}
-  G4double GetTilesSeparation() const  {return TilesSeparation;};
-  
-  G4Material* GetConverterMaterial() const  {return ConverterMaterial;};
-  G4double    GetConverterThickness() const {return ConverterThickness;};      
-  
-  G4double GetCALBarThickness()  const  {return CALBarThickness;};
-  G4int GetNbOfCALLayers() const       {return NbOfCALLayers;}; 
-  G4int GetNbOfCALBars() const         {return NbOfCALBars;}; 
-  
-  G4double GetACDThickness() const     {return ACDThickness;};
-  G4int GetNbOfACDTopTiles() const     {return NbOfACDTopTiles;}; 
-  G4int GetNbOfACDLateralTiles() const {return NbOfACDLateralTiles;};
-              
-private:
-  
-  G4Material*        ConverterMaterial;
-  G4double           ConverterThickness;
-  
-  G4double TKRSiliconThickness; 
-  G4double TKRSiliconTileXY; 
-  G4double TKRSiliconPitch; 
+	void SetTKRLayerDistance(G4double value);
 
-  G4double TKRSizeXY;
-  G4double TKRSizeZ;
+	void SetTKRViewsDistance(G4double value);
 
-  G4double TKRLayerDistance;
-  G4double TKRViewsDistance;
-  G4double TKRSupportThickness;
+	void SetConverterMaterial(G4String materialChoice); // tracker (TKR) converter material
 
-  G4int    NbOfTKRLayers; 
-  G4int    NbOfTKRTiles; 
-  
-  G4double CALBarThickness;
-  G4int NbOfCALLayers; 
-  G4int NbOfCALBars; 
-  G4double CALSizeXY; 
-  G4double CALSizeZ;
+	void SetConverterThickness(G4double value); // tracker (TKR) converter thickness
 
-  G4double CALBarX;
-  G4double CALBarY;
-  G4double CALBarZ;
+	void SetNbOfCALLayers(G4int value); // calorimeter (CAL) material, length, thickness
 
-  G4double ACDThickness;
-  G4double ACTSizeXY; 
-  G4double ACTSizeZ; 
+	void SetNbOfCALBars(G4int value);
 
-  G4double ACL1SizeX; 
-  G4double ACL1SizeY;
-  G4double ACL1SizeZ;  
+	void SetCALBarThickness(G4double value);
 
-  G4double ACL2SizeX; 
-  G4double ACL2SizeY;
-  G4double ACL2SizeZ;  
+	void SetACDThickness(G4double value); // anticoincidence (ACD) thickness
 
+	void SetMagField(G4double fieldValue); // magnetic field
 
-  G4int NbOfACDLateralTiles;
-  G4int NbOfACDTopTiles;
+	auto Construct() -> G4VPhysicalVolume* override;
 
-  G4double TilesSeparation;
-  G4double ACDTKRDistance;
-  G4double CALTKRDistance;
-  G4double TKRActiveTileXY;
-  G4double TKRActiveTileZ;
+	void ConstructSDandField() override;
 
-  G4double SiliconGuardRing;
-  G4int    NbOfTKRStrips;
+	void PrintPayloadParameters();
 
-  G4double TKRXStripX;
-  G4double TKRYStripX;
-  G4double TKRXStripY;
-  G4double TKRYStripY;
-  G4double TKRZStrip;
+	void UpdateGeometry();
 
-  G4double PayloadSizeZ;
-  G4double PayloadSizeXY;
-  
-  G4Material*        defaultMaterial;
-  G4Material*        CALMaterial;
-  G4Material*        TKRMaterial;
-  G4Material*        ACDMaterial;
-  G4double           WorldSizeXY;
-  G4double           WorldSizeZ;
-            
-  G4Box*             solidWorld;        // World 
-  G4LogicalVolume*   logicWorld;    
-  G4VPhysicalVolume* physiWorld;    
+	[[nodiscard]]
+	auto GetWorldSizeZ() const -> G4double {
+		return worldSizeZ;
+	}
 
-  G4Box*             solidPayload;      // Payload 
-  G4LogicalVolume*   logicPayload;    
-  G4VPhysicalVolume* physiPayload;    
-     
-  G4Box*             solidTKR;          // Tracker 
-  G4LogicalVolume*   logicTKR;    
-  G4VPhysicalVolume* physiTKR;    
+	[[nodiscard]]
+	auto GetWorldSizeXY() const -> G4double {
+		return worldSizeXY;
+	}
 
-  G4Box*             solidCAL;          // Calorimeter 
-  G4LogicalVolume*   logicCAL;    
-  G4VPhysicalVolume* physiCAL;    
+	[[nodiscard]]
+	auto GetPayloadSizeZ() const -> G4double {
+		return payloadSizeZ;
+	}
 
-  G4Box*             solidACT;          // Top Anticoincidence 
-  G4LogicalVolume*   logicACT;    
-  G4VPhysicalVolume* physiACT;    
+	[[nodiscard]]
+	auto GetPayloadSizeXY() const -> G4double {
+		return payloadSizeXY;
+	}
 
-  G4Box*             solidACL1;          // Lateral Anticoincidence 
-  G4LogicalVolume*   logicACL1;    
-  G4VPhysicalVolume* physiACL1;    
+	[[nodiscard]]
+	auto GetTKRSizeZ() const -> G4double {
+		return tkrSizeZ;
+	}
 
-  G4Box*             solidACL2;           
-  G4LogicalVolume*   logicACL2;    
-  G4VPhysicalVolume* physiACL2;    
+	[[nodiscard]]
+	auto GetTKRSizeXY() const -> G4double {
+		return tkrSizeXY;
+	}
 
-  G4Box*             solidTKRDetectorX;  // Tracker PLANE X
-  G4LogicalVolume*   logicTKRDetectorX;
-  G4VPhysicalVolume* physiTKRDetectorX;    
+	[[nodiscard]]
+	auto GetCALSizeZ() const -> G4double {
+		return calSizeZ;
+	}
 
-  G4Box*             solidTKRDetectorY;  // Tracker PLANE Y
-  G4LogicalVolume*   logicTKRDetectorY;
-  G4VPhysicalVolume* physiTKRDetectorY;    
+	[[nodiscard]]
+	auto GetCALTKRDistance() const -> G4double {
+		return calTKRDistance;
+	}
 
-  G4Box*             solidCALLayerX;  // Calorimeter PLANE X 
-  G4LogicalVolume*   logicCALLayerX;
-  G4VPhysicalVolume* physiCALLayerX;    
+	[[nodiscard]]
+	auto GetTKRSiliconThickness() const -> G4double {
+		return tkrSiliconThickness;
+	}
 
-  G4Box*             solidCALLayerY;  // Calorimeter PLANE Y
-  G4LogicalVolume*   logicCALLayerY;
-  G4VPhysicalVolume* physiCALLayerY;    
+	[[nodiscard]]
+	auto GetTKRSiliconTileXY() const -> G4double {
+		return tkrSiliconTileXY;
+	}
 
-  G4Box*             solidCALDetectorX;  // Calorimeter DETECTOR X
-  G4LogicalVolume*   logicCALDetectorX;
-  G4VPhysicalVolume* physiCALDetectorX;    
+	[[nodiscard]]
+	auto GetTKRSiliconPitch() const -> G4double {
+		return tkrSiliconPitch;
+	}
 
-  G4Box*             solidCALDetectorY;  // Calorimeter DETECTOR Y
-  G4LogicalVolume*   logicCALDetectorY;
-  G4VPhysicalVolume* physiCALDetectorY;    
+	[[nodiscard]]
+	auto GetNbOfTKRLayers() const -> G4int {
+		return numberOfTKRLayers;
+	}
 
-  G4Box*             solidPlane;  // Support Plane 
-  G4LogicalVolume*   logicPlane;
-  G4VPhysicalVolume* physiPlane;
-    
-  G4Box*             solidConverter;  // Converter 
-  G4LogicalVolume*   logicConverter;
-  G4VPhysicalVolume* physiConverter;         
+	auto GetNbOfTKRTiles() const -> G4int {
+		return numberOfTKRTiles;
+	}
 
-  G4LogicalVolume* logicTKRStripX;
-  G4LogicalVolume* logicTKRStripY;
+	[[nodiscard]]
+	auto GetNbOfTKRStrips() const -> G4int {
+		return numberOfTKRStrips;
+	}
 
-  // magnetic field messenger
-  static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
-                                           
-  GammaRayTelDetectorMessenger* detectorMessenger;  //pointer to the Messenger
-  
- 
-  G4Cache<GammaRayTelTrackerSD*> trackerSD;  //pointer to the sensitive detector
-  G4Cache<GammaRayTelCalorimeterSD*> calorimeterSD;  //pointer to the sensitive detector
-  G4Cache<GammaRayTelAnticoincidenceSD*> anticoincidenceSD;  //pointer to the sensitive detector
+	[[nodiscard]]
+	auto GetTKRLayerDistance() const -> G4double {
+		return tkrLayerDistance;
+	}
 
-  //G4Region* aTKRRegion; // TKR cut region
-  //G4Region* aCALRegion; // CAL cut region
+	[[nodiscard]]
+	auto GetTKRViewsDistance() const -> G4double {
+		return tkrViewsDistance;
+	}
+
+	[[nodiscard]]
+	auto GetTKRActiveTileXY() const -> G4double {
+		return tkrActiveTileXY;
+	}
+
+	[[nodiscard]]
+	auto GetTKRActiveTileZ() const -> G4double {
+		return tkrActiveTileZ;
+	}
+
+	[[nodiscard]]
+	auto GetSiliconGuardRing() const -> G4double {
+		return siliconGuardRing;
+	}
+
+	[[nodiscard]]
+	auto GetTilesSeparation() const -> G4double {
+		return tilesSeparation;
+	}
+
+	[[nodiscard]]
+	auto GetConverterMaterial() const -> G4Material* {
+		return converterMaterial;
+	}
+
+	[[nodiscard]]
+	auto GetConverterThickness() const -> G4double {
+		return converterThickness;
+	}
+
+	[[nodiscard]]
+	auto GetCALBarThickness() const -> G4double {
+		return calBarThickness;
+	}
+
+	[[nodiscard]]
+	auto GetNbOfCALLayers() const -> G4int {
+		return numberOfCALLayers;
+	}
+
+	[[nodiscard]]
+	auto GetNbOfCALBars() const -> G4int {
+		return numberOfCALBars;
+	}
+
+	[[nodiscard]]
+	auto GetACDThickness() const -> G4double {
+		return acdThickness;
+	}
+
+	[[nodiscard]]
+	auto GetNbOfACDTopTiles() const -> G4int {
+		return numberOfACDTopTiles;
+	}
+
+	[[nodiscard]]
+	auto GetNbOfACDLateralTiles() const -> G4int {
+		return numberOfACDLateralTiles;
+	}
 
 private:
-    
-  void DefineMaterials();
-  void ComputePayloadParameters();
-  G4VPhysicalVolume* ConstructPayload();     
+	G4Material *converterMaterial;
+	G4double converterThickness{300. * micrometer};
+
+	// Tracker (TKR)
+
+	G4double tkrSiliconThickness{400. * micrometer};
+	G4double tkrSiliconTileXY{9. * cm};
+	G4double tkrSiliconPitch{200. * micrometer};
+
+	G4double tkrSizeXY;
+	G4double tkrSizeZ;
+	G4double tkrLayerDistance{3. * cm};
+	G4double tkrViewsDistance{1. * mm};
+	G4double tkrSupportThickness;
+
+	G4int numberOfTKRLayers{15};
+	G4int numberOfTKRTiles{4};
+
+	// Calorimeter (CAL)
+
+	G4double calBarThickness{1.5 * cm};
+
+	G4int numberOfCALLayers{5};
+	G4int numberOfCALBars{12};
+
+	G4double calSizeXY;
+	G4double calSizeZ;
+	G4double calBarX;
+	G4double calBarY;
+	G4double calBarZ;
+
+	// Anticoincidence (ACD)
+
+	G4double acdThickness{1. * cm};
+
+	G4double actSizeXY;
+	G4double actSizeZ;
+
+	G4double acl1SizeX;
+	G4double acl1SizeY;
+	G4double acl1SizeZ;
+
+	G4double acl2SizeX;
+	G4double acl2SizeY;
+	G4double acl2SizeZ;
+
+	G4int numberOfACDTopTiles{1};
+	G4int numberOfACDLateralTiles{2};
+
+	G4double tilesSeparation{100. * micrometer};
+	G4double acdTKRDistance{5. * cm};
+	G4double calTKRDistance{1.5 * cm};
+	G4double tkrActiveTileXY;
+	G4double tkrActiveTileZ;
+
+	G4double siliconGuardRing{1.5 * mm};
+	G4int numberOfTKRStrips;
+
+	G4double tkrXStripX;
+	G4double tkrYStripX;
+	G4double tkrXStripY;
+	G4double tkrYStripY;
+	G4double tkrZStrip;
+
+	G4double payloadSizeZ;
+	G4double payloadSizeXY;
+
+	G4double worldSizeXY;
+	G4double worldSizeZ;
+
+	// Material
+    G4Material *defaultMaterial;
+    G4Material *calMaterial;
+    G4Material *tkrMaterial;
+    G4Material *acdMaterial;
+
+	// World
+	G4Box *solidWorld{nullptr};
+	G4LogicalVolume *logicWorld{nullptr};
+	G4VPhysicalVolume *physiWorld{nullptr};
+
+	// Payload
+	G4Box *solidPayload{nullptr};
+	G4LogicalVolume *logicPayload{nullptr};
+	G4VPhysicalVolume *physiPayload{nullptr};
+
+	// Tracker
+	G4Box *solidTKR{nullptr};
+	G4LogicalVolume *logicTKR{nullptr};
+	G4VPhysicalVolume *physiTKR{nullptr};
+
+	// Calorimeter
+	G4Box *solidCAL{nullptr};
+	G4LogicalVolume *logicCAL{nullptr};
+	G4VPhysicalVolume *physiCAL{nullptr};
+
+	// Top Anticoincidence
+	G4Box *solidACT{nullptr};
+	G4LogicalVolume *logicACT{nullptr};
+	G4VPhysicalVolume *physiACT{nullptr};
+
+	// Lateral Anticoincidence
+	G4Box *solidACL1{nullptr};
+	G4LogicalVolume *logicACL1{nullptr};
+	G4VPhysicalVolume *physiACL1{nullptr};
+
+	G4Box *solidACL2{nullptr};
+	G4LogicalVolume *logicACL2{nullptr};
+	G4VPhysicalVolume *physiACL2{nullptr};
+
+	// Tracker PLANE X
+	G4Box *solidTKRDetectorX{nullptr};
+	G4LogicalVolume *logicTKRDetectorX{nullptr};
+	G4VPhysicalVolume *physiTKRDetectorX{nullptr};
+
+	// Tracker PLANE Y
+	G4Box *solidTKRDetectorY{nullptr};
+	G4LogicalVolume *logicTKRDetectorY{nullptr};
+	G4VPhysicalVolume *physiTKRDetectorY{nullptr};
+
+	// Calorimeter PLANE X
+	G4Box *solidCALLayerX{nullptr};
+	G4LogicalVolume *logicCALLayerX{nullptr};
+	G4VPhysicalVolume *physiCALLayerX{nullptr};
+
+	// Calorimeter PLANE Y
+	G4Box *solidCALLayerY{nullptr};
+	G4LogicalVolume *logicCALLayerY{nullptr};
+	G4VPhysicalVolume *physiCALLayerY{nullptr};
+
+	// Calorimeter DETECTOR X
+	G4Box *solidCALDetectorX{nullptr};
+	G4LogicalVolume *logicCALDetectorX{nullptr};
+	G4VPhysicalVolume *physiCALDetectorX{nullptr};
+
+	// Calorimeter DETECTOR Y
+	G4Box *solidCALDetectorY{nullptr};
+	G4LogicalVolume *logicCALDetectorY{nullptr};
+	G4VPhysicalVolume *physiCALDetectorY{nullptr};
+
+	// Support Plane
+	G4Box *solidPlane{nullptr};
+	G4LogicalVolume *logicPlane{nullptr};
+	G4VPhysicalVolume *physiPlane{nullptr};
+
+	// Converter
+	G4Box *solidConverter{nullptr};
+	G4LogicalVolume *logicConverter{nullptr};
+	G4VPhysicalVolume *physiConverter{nullptr};
+
+	G4LogicalVolume *logicTKRStripX{nullptr};
+	G4LogicalVolume *logicTKRStripY{nullptr};
+
+	// magnetic field messenger
+	static G4ThreadLocal G4GlobalMagFieldMessenger* fMagFieldMessenger;
+
+	GammaRayTelDetectorMessenger *detectorMessenger;  // pointer to the messenger
+
+	G4Cache<GammaRayTelTrackerSD*> trackerSD; // pointer to the sensitive detector, tracker (TRK)
+	G4Cache<GammaRayTelCalorimeterSD*> calorimeterSD; // pointer to the sensitive detector, calorimeter (CAL)
+	G4Cache<GammaRayTelAnticoincidenceSD*> anticoincidenceSD; // pointer to the sensitive detector, anticoincidence (ACD)
+
+//    G4Region* trackerCutRegion; // tracker (TKR) cut region
+//    G4Region* calorimeterCutRegion; // calorimeter (CAL) cut region
+
+	void ComputePayloadParameters();
+
+	auto ConstructPayload() -> G4VPhysicalVolume*;
+
+	void DefineMaterials();
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+inline auto GammaRayTelDetectorConstruction::ComputePayloadParameters() -> void {
+	// Compute derived parameters of the payload
 
-inline void GammaRayTelDetectorConstruction::ComputePayloadParameters()
-{
-  // Compute derived parameters of the payload
+	tkrSupportThickness = tkrLayerDistance - 2 * tkrSiliconThickness - tkrViewsDistance - converterThickness;
+	tkrSizeXY = numberOfTKRTiles * tkrSiliconTileXY + (numberOfTKRTiles + 1) * tilesSeparation;
+	tkrSizeZ = numberOfTKRLayers * tkrLayerDistance;
 
-  TKRSupportThickness =TKRLayerDistance -2.*TKRSiliconThickness 
-    - TKRViewsDistance - ConverterThickness;
-  TKRSizeXY = NbOfTKRTiles*TKRSiliconTileXY + (NbOfTKRTiles+1)*TilesSeparation;
-  TKRSizeZ = NbOfTKRLayers*TKRLayerDistance; 
-  
-  TKRActiveTileXY = TKRSiliconTileXY - 2*SiliconGuardRing;
-  TKRActiveTileZ = TKRSiliconThickness;
-  NbOfTKRStrips = G4int(TKRActiveTileXY/TKRSiliconPitch);
+	tkrActiveTileXY = tkrSiliconTileXY - 2 * siliconGuardRing;
+	tkrActiveTileZ = tkrSiliconThickness;
+	numberOfTKRStrips = G4int(tkrActiveTileXY / tkrSiliconPitch);
 
-  SiliconGuardRing = TKRActiveTileXY - NbOfTKRStrips*TKRSiliconPitch;
-  TKRActiveTileXY = TKRSiliconTileXY - 2*SiliconGuardRing;
+	siliconGuardRing = tkrActiveTileXY - numberOfTKRStrips * tkrSiliconPitch;
+	tkrActiveTileXY = tkrSiliconTileXY - 2 * siliconGuardRing;
 
-  TKRXStripX = TKRYStripY = TKRSiliconPitch;
-  TKRYStripX = TKRXStripY = TKRActiveTileXY;
-  TKRZStrip = TKRSiliconThickness;
-  
-  CALSizeXY = TKRSizeXY;
-  CALSizeZ = 2.*NbOfCALLayers*CALBarThickness;
- 
-  CALBarX = CALSizeXY;
-  CALBarY = CALSizeXY/(NbOfCALBars);
-  CALBarZ = CALBarThickness;
-  
-  ACTSizeXY = TKRSizeXY + 2*ACDTKRDistance + 2*ACDThickness;
-  ACTSizeZ = ACDThickness;
+	tkrXStripX = tkrYStripY = tkrSiliconPitch;
+	tkrYStripX = tkrXStripY = tkrActiveTileXY;
+	tkrZStrip = tkrSiliconThickness;
 
-  ACL1SizeX = TKRSizeXY + 2*ACDTKRDistance + ACDThickness;
-  ACL1SizeY = ACDThickness;
-  ACL1SizeZ = TKRSizeZ + CALSizeZ + ACDTKRDistance + CALTKRDistance;
+	calSizeXY = tkrSizeXY;
+	calSizeZ = 2 * numberOfCALLayers * calBarThickness;
 
-  ACL2SizeX = ACDThickness;
-  ACL2SizeY = TKRSizeXY + 2*ACDTKRDistance + ACDThickness;
-  ACL2SizeZ = TKRSizeZ + CALSizeZ + ACDTKRDistance + CALTKRDistance;
+	calBarX = calSizeXY;
+	calBarY = calSizeXY / (numberOfCALBars);
+	calBarZ = calBarThickness;
 
-  PayloadSizeZ = 1.1*(ACL1SizeZ + ACTSizeZ);
-  PayloadSizeXY = (ACTSizeXY);
-  
-  WorldSizeZ = 1.5*PayloadSizeZ; WorldSizeXY = 1.5*PayloadSizeXY;
+	actSizeXY = tkrSizeXY + 2 * acdTKRDistance + 2 * acdThickness;
+	actSizeZ = acdThickness;
 
+	acl1SizeX = tkrSizeXY + 2 * acdTKRDistance + acdThickness;
+	acl1SizeY = acdThickness;
+	acl1SizeZ = tkrSizeZ + calSizeZ + acdTKRDistance + calTKRDistance;
+
+	acl2SizeX = acdThickness;
+	acl2SizeY = tkrSizeXY + 2 * acdTKRDistance + acdThickness;
+	acl2SizeZ = tkrSizeZ + calSizeZ + acdTKRDistance + calTKRDistance;
+
+	payloadSizeZ = 1.1 * (acl1SizeZ + actSizeZ);
+	payloadSizeXY = (actSizeXY);
+
+	worldSizeZ = 1.5 * payloadSizeZ;
+	worldSizeXY = 1.5 * payloadSizeXY;
 }
-
 #endif
-
-
-
-
-
-
-
-
-

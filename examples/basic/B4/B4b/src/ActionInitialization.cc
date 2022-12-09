@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.cc
+/// \file B4/B4b/src/ActionInitialization.cc
 /// \brief Implementation of the B4b::ActionInitialization class
 
 #include "ActionInitialization.hh"
@@ -42,14 +42,8 @@ namespace B4b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization
-                            (DetectorConstruction* detConstruction)
+ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
  : fDetConstruction(detConstruction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

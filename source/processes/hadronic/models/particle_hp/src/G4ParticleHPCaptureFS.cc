@@ -61,7 +61,7 @@ G4ParticleHPCaptureFS::G4ParticleHPCaptureFS()
   G4HadFinalState * G4ParticleHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
 
-   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
+   if ( theResult.Get() == nullptr ) theResult.Put( new G4HadFinalState );
    theResult.Get()->Clear();
 
     G4int i;
@@ -115,9 +115,8 @@ G4ParticleHPCaptureFS::G4ParticleHPCaptureFS()
       // T. K. add
       photonEvaporation.SetICM( TRUE );
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
-      G4FragmentVector::iterator it;
       thePhotons = new G4ReactionProductVector;
-      for(it=products->begin(); it!=products->end(); it++)
+      for(auto it=products->cbegin(); it!=products->cend(); ++it)
       {
         G4ReactionProduct * theOne = new G4ReactionProduct;
         // T. K. add 
@@ -150,7 +149,7 @@ G4ParticleHPCaptureFS::G4ParticleHPCaptureFS()
 
     // Add them to the final state
     G4int nPhotons = 0;
-    nPhotons=thePhotons->size();
+    nPhotons=(G4int)thePhotons->size();
 
 ///*
     if ( ! G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) {
@@ -168,7 +167,7 @@ G4ParticleHPCaptureFS::G4ParticleHPCaptureFS()
        G4ThreeVector direction(sinth*std::cos(phi), sinth*std::sin(phi), costheta);
        theOne->SetMomentum(direction);
        thePhotons->push_back(theOne);
-       nPhotons++; // 0 -> 1
+       ++nPhotons; // 0 -> 1
     }
 //One photon case: energy set to Q-value 
 //101203 TK

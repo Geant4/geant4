@@ -109,11 +109,11 @@ void G4KokoulinMuonNuclearXS::BuildCrossSectionTable()
   G4double energy, A, Value;
   G4int Z;
 
-  G4int nEl = G4Element::GetNumberOfElements(); 
+  std::size_t nEl = G4Element::GetNumberOfElements(); 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   G4NistManager* nistManager = G4NistManager::Instance();
 
-  for (G4int j = 0; j < nEl; j++) {
+  for (std::size_t j = 0; j < nEl; ++j) {
     Z = G4lrint((*theElementTable)[j]->GetZ());
 
     //AR-24Apr2018 Switch to treat transuranic elements as uranium  

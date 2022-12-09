@@ -29,79 +29,66 @@
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelTrackerHit  ------
+//      ------------ GammaRayTelTrackerHit ------
 //           by R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "GammaRayTelTrackerHit.hh"
 
-G4ThreadLocal G4Allocator<GammaRayTelTrackerHit> *GammaRayTelTrackerHitAllocator = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ThreadLocal G4Allocator<GammaRayTelTrackerHit> *trackerHitAllocator{nullptr};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelTrackerHit::GammaRayTelTrackerHit()
-{
-  EdepSil = 0.; 
-  NStrip = 0; NSilPlane = 0; IsXPlane = 0;
-  pos = G4ThreeVector(0.,0.,0.);
+GammaRayTelTrackerHit::GammaRayTelTrackerHit() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelTrackerHit::~GammaRayTelTrackerHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-GammaRayTelTrackerHit::GammaRayTelTrackerHit(const GammaRayTelTrackerHit& right)
-  :G4VHit()
-{
-  EdepSil = right.EdepSil; 
-  NStrip = right.NStrip; NSilPlane = right.NSilPlane;
-  IsXPlane = right.IsXPlane;
-  pos = right.pos;
+GammaRayTelTrackerHit::~GammaRayTelTrackerHit() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const GammaRayTelTrackerHit& GammaRayTelTrackerHit::operator=(const GammaRayTelTrackerHit& right)
-{
-  EdepSil = right.EdepSil; 
-  NStrip = right.NStrip; NSilPlane = right.NSilPlane;
-  IsXPlane = right.IsXPlane;
-  pos =right.pos;
-  return *this;
+GammaRayTelTrackerHit::GammaRayTelTrackerHit(const GammaRayTelTrackerHit &right) {
+    stripNumber = right.stripNumber;
+    siliconPlaneNumber = right.siliconPlaneNumber;
+    isXPlane = right.isXPlane;
+    siliconDepositedEnergy = right.siliconDepositedEnergy;
+    position = right.position;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit& right) const
-{
-  return((EdepSil==right.EdepSil)&&(NStrip==right.NStrip)&&(IsXPlane==right.IsXPlane)&& (pos==right.pos));
+auto GammaRayTelTrackerHit::operator=(const GammaRayTelTrackerHit &right) -> const GammaRayTelTrackerHit& {
+    stripNumber = right.stripNumber;
+    siliconPlaneNumber = right.siliconPlaneNumber;
+    isXPlane = right.isXPlane;
+    siliconDepositedEnergy = right.siliconDepositedEnergy;
+    position = right.position;
+
+    return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerHit::Draw()
-{;}
+auto GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit &right) const -> G4bool {
+    return (
+        (stripNumber == right.stripNumber) &&
+        (isXPlane == right.isXPlane) &&
+        (siliconDepositedEnergy == right.siliconDepositedEnergy) &&
+        (position == right.position)
+    );
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerHit::Print()
-{;}
+void GammaRayTelTrackerHit::Draw() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelTrackerHit::Print() {
+}

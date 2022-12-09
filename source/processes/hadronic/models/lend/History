@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-26 Gabriele Cosmo (hadr-lend-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-12 Gabriele Cosmo (hadr-lend-V11-00-06)
+- Replaced use of sprintf() with snprintf(), to fix deprecation compilation
+  warnings on macOS-13 SDK.
+
+## 2022-09-22 Ben Morgan (hadr-lend-V11-00-05)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+
 ## 2022-05-23 Gabriele Cosmo (hadr-lend-V11-00-04)
 - Fixed potential use of pointer after free in nf_utilities/nfu_realloc(..)
   function.

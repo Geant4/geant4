@@ -88,7 +88,6 @@ class G4DNAPolyNucleotideReactionProcess : public G4VITDiscreteProcess
   G4int fVerbose;
   G4double fRCutOff;
   G4VDNAHitModel* fpDamageModel;
-  const G4DNAMolecularReactionTable* fMolecularReactionTable;
   G4DNAPolyNucleotideReactionProcess(const G4DNAPolyNucleotideReactionProcess&);
 };
 inline void G4DNAPolyNucleotideReactionProcess::SetVerbose(G4int verbose)

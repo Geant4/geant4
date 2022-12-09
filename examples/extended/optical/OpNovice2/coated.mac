@@ -1,0 +1,41 @@
+/control/verbose 2
+/tracking/verbose 0
+/run/verbose 1
+/process/optical/verbose 1
+/control/cout/ignoreThreadsExcept 0
+
+/opnovice2/boxProperty RINDEX    0.000002 1.4     0.000008 1.4
+/opnovice2/boxProperty ABSLENGTH 0.000002 100 0.000005 200 0.000008 300
+
+/opnovice2/worldProperty RINDEX    0.000002 1.0    0.000008 1.0
+/opnovice2/worldProperty ABSLENGTH 0.000002 1000000 0.000005 2000000 0.000008 3000000
+
+/opnovice2/surfaceModel unified
+/opnovice2/surfaceType coated
+
+/opnovice2/surfaceProperty REFLECTIVITY  0.000002 1.0 0.000008 1.0
+/opnovice2/surfaceProperty COATEDRINDEX  0.000002 1.7 0.000008 1.7
+/opnovice2/surfaceConstProperty COATEDTHICKNESS  100e-6 # 100 nm
+
+/run/initialize
+#
+/gun/particle opticalphoton
+/gun/energy 5 eV
+/gun/position 99.99 0 0 cm
+/gun/direction 1 0 0
+/opnovice2/gun/optPhotonPolar 0. deg
+
+
+#
+/analysis/setFileName coated_0
+/analysis/h1/set 20 90 0 90  # deg
+/analysis/h1/set 21 90 0 90  # deg
+/analysis/h1/set 22 90 0 90  # deg
+/analysis/h1/set 23 90 0 90  # deg
+/run/printProgress 100000
+/run/beamOn 500000
+
+/analysis/setFileName coated_90
+/opnovice2/gun/optPhotonPolar 90. deg
+/run/beamOn 500000
+

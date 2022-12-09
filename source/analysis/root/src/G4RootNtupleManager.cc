@@ -66,9 +66,9 @@ G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state,
 void G4RootNtupleManager::CreateTNtupleFromBooking(
   RootNtupleDescription* ntupleDescription)
 {
-  if ( ! fMainNtupleManagers.size() ) {
+  if (fMainNtupleManagers.size() == 0u) {
     // No merging
-    if ( ntupleDescription->fNtuple ) {
+    if (ntupleDescription->GetNtuple() != nullptr) {
       Warn("Cannot create ntuple. Ntuple already exists.",
         fkClass, "CreateTNtupleFromBooking");
       return;
@@ -83,16 +83,16 @@ void G4RootNtupleManager::CreateTNtupleFromBooking(
     }
 
     auto directory = std::get<2>(*ntupleFile);
-    ntupleDescription->fNtuple
-      = new tools::wroot::ntuple(
-              *directory, ntupleDescription->fNtupleBooking, fRowWise);
+    ntupleDescription->SetNtuple(
+      new tools::wroot::ntuple(
+            *directory, ntupleDescription->GetNtupleBooking(), fRowWise));
 
     auto basketSize = fFileManager->GetBasketSize();
-    ntupleDescription->fNtuple->set_basket_size(basketSize);
+    ntupleDescription->GetNtuple()->set_basket_size(basketSize);
 
-    ntupleDescription->fIsNtupleOwner = false;
+    ntupleDescription->SetIsNtupleOwner(false);
            // ntuple object is deleted automatically when closing a file
-    fNtupleVector.push_back(ntupleDescription->fNtuple);
+    fNtupleVector.push_back(ntupleDescription->GetNtuple());
   }
   else {
     // Merging activated
@@ -168,6 +168,16 @@ void G4RootNtupleManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode)
 
   for (auto& mainNtupleManager : fMainNtupleManagers ) {
     mainNtupleManager->SetRowWise(rowWise);
+  }
+}
+
+//_____________________________________________________________________________
+void G4RootNtupleManager::SetNewCycle(G4bool value)
+{
+  G4TNtupleManager<tools::wroot::ntuple, G4RootFile>::SetNewCycle(value);
+
+  for ( const auto& manager : fMainNtupleManagers ) {
+    manager->SetNewCycle(value);
   }
 }
 

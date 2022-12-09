@@ -52,7 +52,7 @@ G4He3* G4He3::Definition()
   const G4String name = "He3";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
+  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0) 
   {
   // create particle
@@ -81,7 +81,7 @@ G4He3* G4He3::Definition()
 
   }
 
-  theInstance = reinterpret_cast<G4He3*>(anInstance);
+  theInstance = static_cast<G4He3*>(anInstance);
   return theInstance;
 }
 

@@ -39,7 +39,7 @@
 // 24.04.2014 A.Ribon: switched on muon-nuclear by default
 // 29.01.2018 V.Grichine, adding neutrinos 
 // 07.05.2019 V.Grichine, adding muon neutrino nucleus interactions 
-//
+// 03.11.2022 V. Grichne update for tau-neutrino nucleus processes
 //
 ///////////////////////////////////////////////////////////////
 
@@ -86,6 +86,7 @@
 #include "G4GammaConversionToMuons.hh"
 #include "G4AnnihiToMuPair.hh"
 #include "G4eeToHadrons.hh"
+#include "G4MuonToMuonPairProduction.hh"
 
 #include "G4HadronInelasticProcess.hh"
 #include "G4ElectronNuclearProcess.hh"
@@ -97,15 +98,23 @@
 #include "G4NeutrinoElectronNcModel.hh"
 
 #include "G4MuNeutrinoNucleusProcess.hh"
+#include "G4TauNeutrinoNucleusProcess.hh"
 #include "G4ElNeutrinoNucleusProcess.hh"
 
 #include "G4MuNeutrinoNucleusTotXsc.hh"
+#include "G4TauNeutrinoNucleusTotXsc.hh"
 #include "G4ElNeutrinoNucleusTotXsc.hh"
 
 #include "G4NuMuNucleusCcModel.hh"
 #include "G4NuMuNucleusNcModel.hh"
 #include "G4ANuMuNucleusCcModel.hh"
 #include "G4ANuMuNucleusNcModel.hh"
+
+#include "G4NuTauNucleusCcModel.hh"
+#include "G4NuTauNucleusNcModel.hh"
+#include "G4ANuTauNucleusCcModel.hh"
+#include "G4ANuTauNucleusNcModel.hh"
+
 #include "G4NuElNucleusCcModel.hh"
 #include "G4NuElNucleusNcModel.hh"
 #include "G4ANuElNucleusCcModel.hh"
@@ -130,26 +139,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"),
-  gnActivated (true),
-  eActivated  (true),
-  gLENDActivated(false),
-  munActivated(true),
-  synActivated(false),
-  synActivatedForAll(false),
-  gmumuActivated(false),
-  pmumuActivated(false),
-  phadActivated (false),
-  fNuActivated (false),
-  fNuETotXscActivated (false),
-  fUseGammaNuclearXS(true),
-  gmumuFactor (1.0),
-  pmumuFactor (1.0),
-  phadFactor  (1.0),
-  fNuEleCcBias(1.0),
-  fNuEleNcBias(1.0),
-  fNuNucleusBias(1.0),
   fGNLowEnergyLimit(200*CLHEP::MeV),
-  fNuDetectorName("0"),
   verbose(ver)
 {
   theMessenger = new G4EmMessenger(this);
@@ -203,6 +193,11 @@ void G4EmExtraPhysics::MuonNuclear(G4bool val)
 void G4EmExtraPhysics::GammaToMuMu(G4bool val)
 {
   gmumuActivated = val;
+}
+
+void G4EmExtraPhysics::MuonToMuMu(G4bool val)
+{
+  mmumuActivated = val;
 }
 
 void G4EmExtraPhysics::PositronToMuMu(G4bool val)
@@ -328,6 +323,11 @@ void G4EmExtraPhysics::ConstructProcess()
       ph->RegisterProcess(theGammaToMuMu, gamma);
     }
   }  
+  if(mmumuActivated) {
+    auto proc = new G4MuonToMuonPairProduction();
+    ph->RegisterProcess(proc, muonplus);
+    ph->RegisterProcess(proc, muonminus);
+  }
   if(pmumuActivated) {
     G4AnnihiToMuPair* thePosiToMuMu = new G4AnnihiToMuPair();
     thePosiToMuMu->SetCrossSecFactor(pmumuFactor);
@@ -416,6 +416,30 @@ void G4EmExtraPhysics::ConstructProcess()
 
     ph->RegisterProcess(theNuMuNucleusProcess, anumuon);
     ph->RegisterProcess(theNuMuNucleusProcess, numuon);    
+
+    // nu_tau nucleus interactions
+
+    G4TauNeutrinoNucleusProcess* theNuTauNucleusProcess = new G4TauNeutrinoNucleusProcess(fNuDetectorName);
+    G4TauNeutrinoNucleusTotXsc* theNuTauNucleusTotXsc = new G4TauNeutrinoNucleusTotXsc();
+    
+    if(fNuETotXscActivated)
+    {
+      theNuTauNucleusProcess->SetBiasingFactor(fNuNucleusBias);
+    }
+    theNuTauNucleusProcess->AddDataSet(theNuTauNucleusTotXsc);
+
+    G4NuTauNucleusCcModel* nutaunuclcc = new G4NuTauNucleusCcModel();
+    G4NuTauNucleusNcModel* nutaunuclnc = new G4NuTauNucleusNcModel();
+    G4ANuTauNucleusCcModel* anutaunuclcc = new G4ANuTauNucleusCcModel();
+    G4ANuTauNucleusNcModel* anutaunuclnc = new G4ANuTauNucleusNcModel();
+    
+    theNuTauNucleusProcess->RegisterMe(nutaunuclcc);
+    theNuTauNucleusProcess->RegisterMe(nutaunuclnc);
+    theNuTauNucleusProcess->RegisterMe(anutaunuclcc);
+    theNuTauNucleusProcess->RegisterMe(anutaunuclnc);
+
+    ph->RegisterProcess(theNuTauNucleusProcess, anutau);
+    ph->RegisterProcess(theNuTauNucleusProcess, nutau);    
 
     // nu_e nucleus interactions
 

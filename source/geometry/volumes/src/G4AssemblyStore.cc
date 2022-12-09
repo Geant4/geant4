@@ -85,26 +85,13 @@ void G4AssemblyStore::Clean()
   //
   locked = true;  
 
-  size_t i=0;
   G4AssemblyStore* store = GetInstance();
-
-#ifdef G4DEBUG_NAVIGATION
-  G4cout << "Deleting Assemblies ... ";
-#endif
 
   for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
     if (*pos) { delete *pos; }
-    ++i;
   }
-
-#ifdef G4DEBUG_NAVIGATION
-  if (store->size() < i-1)
-    { G4cout << "No assembly deleted. Already deleted by user ?" << G4endl; }
-  else
-    { G4cout << i-1 << " assemblies deleted !" << G4endl; }
-#endif
 
   locked = false;
   store->clear();

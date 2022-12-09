@@ -1,8 +1,156 @@
 # Category analysis History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-28  I. Hrivnacova (analysis-V11-00-27)
+- Implemented analysis manager list command (missing in analysis-V11-00-10):
+  /analysis/ntuple/list  [onlyIfActive]
+
+## 2022-11-25 Gabriele Cosmo (analysis-V11-00-26)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-14 I. Hrivnacova (analysis-V11-00-25)
+- Added a protection against nullptr in G4VAnalysisManager::GetNofNtuples()
+  - addressing the problem report #2518.
+
+## 2022-11-09 I. Hrivnacova (analysis-V11-00-24)
+- Restored G4RootNtupleFileManager::CloseNtupleFiles()
+  used in MPI overriding class
+
+## 2022-11-03 I. Hrivnacova (analysis-V11-00-23)
+- Removed debug printing from G4XmlFileManager
+
+## 2022-11-02 I. Hrivnacova (analysis-V11-00-22)
+- Coverity fixes:
+  - Dead code (G4THnMessenger, G4RootFileManager)
+  - Resource leak (G4NtupleMessenger)
+  - Recursion in included headers (G4THnToolsManager, G4THnMessenger)
+
+## 2022-10-28 I. Hrivnacova (analysis-V11-00-21)
+- Removed debug printing from G4AnalysisMessenger constructor
+
+## 2022-10-21 I. Hrivnacova (analysis-V11-00-20)
+- Added new UI commands for analysis file management:
+
+  - New commands in G4AnalysisMessenger class:
+    /analysis/openFile, write, closeFile and reset
+    New command in new G4GenericAnalysisMessenger class:
+     /analysis/setDefaultFileType
+  - Support also multiple write with/without calling write and/or reset
+    in between two runs
+  - Demonstrated (and tested) in new analysis example AnaEx03
+
+  - Implementation details:
+    - Do not broadcast commands for actions called at the end of run
+      (write, reset and closeFile) and let master to execute action on workers
+      and master in the right order
+    - Added alternative private methods for Write, Reset and CloseFile
+      with the name suffix FromUI, executed only on master
+      and taking care of processing on workers in the right order
+      - Make G4AnalyssMessenger friend class to give access to these functions
+    - Added G4AnalysisState::fThreadId and its getter needed for
+      accessing thread Id when triggering workers actions from master
+    - Added a protection from calling OpenFile twice
+    - Reset histograms on workers (G4THnManager.icc) after they were merged
+      in master (otherwise they contribute again in the accumulation of data
+      when successive write is called without previous reset)
+
+## 2022-10-15 I. Hrivnacova (analysis-V11-00-19)
+- Corrected multiple write for ntuples with set file and activated merging
+  (files n1.root and ntuples.root in test32)
+
+## 2022-10-14 I. Hrivnacova (analysis-V11-00-18)
+- Implemented support for writing ntuples in a file multiple times:
+  - The object cycle number is attributed in the same way as for histograms
+  - fCycle data and its functions moved from Hn information objects in G4AnalysisState
+  - Fixed development in analysis-V11-00-16: corrected updating Csv file names per histograms
+    with cycle number
+
+## 2022-10-13 I. Hrivnacova (analysis-V11-00-17)
+- Replaced G4TNtupleDescription, G4RootPNtupleDescription structures with classes
+  more suitable for adding members for handling ntuple cycles
+
+## 2022-10-10 I. Hrivnacova (analysis-V11-00-16)
+- Implemented support for writing histograms in a file multiple times:
+  - With the Root output type the object cycle number is attributed automatically
+  - With other output types ,that do not support object cycles, the object name
+    is appended with _vN, where N is the number of the write cycle, when the object
+    is written more than once.
+    No extension is added when the object is written for the first time (cycle 0).
+
+## 2022-10-05 I. Hrivnacova (analysis-V11-00-15)
+- Fix in applying units in "create" and "set" commands
+
+## 2022-09-08 Ben Morgan (analysis-V11-00-14)
+- Resolve inconsistent dependency in hntools
+
+## 2022-08-31 I. Hrivnacova (analysis-V11-00-13)
+
+- Introduced a common implementation for histogram/profiles manager:
+  - New classes:
+    - G4VTBaseHnManager<DIM> - replaces G4VHn|PnManager
+    - G4THnToolsManager<DIM,HT> - replaces G4H*|P*Manager classes
+    - G4THnMessenger - replaces G4H*|P*Messenger class
+    - G4HnDimension - helper type to manipulate ndim, xmin, xmake parameters
+      together
+  - Updated classes:
+    - G4THnManager: added a vector of pairs of histogram and information
+      as a data member to simplify the access when both objects are used
+    - Updated HnInformation structures functions to use compacted
+      parameters
+    - Updated functions in G4AnalysisUtilities:
+      - Moved Check*, UpdateTitle functions in appropriate classes
+      - Added G4Analysis::IsProfile<T>()
+    - All messenger classes: replaced the usage of the analysis messenger helper
+      with private helper functions
+    - G4Plot* classes moved from managent in hntools
+  - Removed classes
+    - G4VH1Manager, etc. for H2, H3, P1, P2
+    - G4H1Manager, etc. for H2, H3, P1, P2
+    - G4H1Messenger, etc. for H2, H3, P1, P2
+    - G4ToolsAnalysisMassenger, G4FileMessenger
+    - G4BaseHistoUtilities
+
+## 2022-08-25 G. Cosmo (analysis-V11-00-12)
+- Attempt to fix compilation warning on gcc-12.1 in function ObjectType()
+  in G4AnalysisMessengerHelper.
+
+## 2022-08-24 I. Hrivnacova (analysis-V11-00-11)
+- Fix in deleting files (root):
+  do not delete the final (merged) file when only ntuples are present
+
+## 2022-08-22 I. Hrivnacova (analysis-V11-00-10)
+- Implemented new analysis manager List functions and associated commands:
+  /analysis/list [onlyIfActive]
+  /analysis/xy/list  [onlyIfActive]
+      where xy = h1, h2, h3, p1, p2, ntuple
+
+## 2022-08-09 I. Hrivnacova (analysis-V11-00-09)
+- Refactored the of the analysis manager methods for file handlling from 
+  the output specific managers in the common implementation in G4ToolsAnalysisManger. 
+  Besides code simplification, this guaranties identical behavior with generic analysis 
+  manager.
+- Reviewed/fixed resetting data when postponed after CloseFile (for plotting)
+- Fixes in deleting files: 
+  do not delete (not empty) main ntuple files with generic analysis manager,
+  delete empty ntuple csv and xml files created on the main thread
+
+## 2022-08-01 I. Hrivnacova (analysis-V11-00-08)
+- clang-tidy fixes - checks recommended in CODING_GUIDELINES.rst
+
+## 2022-07-27 I. Hrivnacova (analysis-V11-00-07)
+- Fix Coverity: use auto& to avoid copying of shared_ptr and pair objects
+
+## 2022-07-13 I. Hrivnacova (analysis-V11-00-06)
+- Added G4RootRFile type = a tuple for the Root read file including its directories,
+  analogic to G4RootRFile for Root output, used now in the G4RootRfileManager::fRFiles
+  map instead of tools::rroot::file.
+  This allows deleting file directories in the class dtor, and should fix
+  the Coverity defect (deleting local variable 'newDir' in G4RootRNtupleManager)
 
 ## 2022-05-18 Guy Barrand (analysis-V11-00-05)
 - have "toolx" namespace for g4tools classes related to "externals", then:

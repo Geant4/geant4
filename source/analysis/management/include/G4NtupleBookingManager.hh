@@ -42,7 +42,7 @@
 
 struct G4NtupleBooking
 {
-  G4NtupleBooking() {}
+  G4NtupleBooking() = default;
   ~G4NtupleBooking() = default;
 
   tools::ntuple_booking fNtupleBooking;
@@ -60,7 +60,7 @@ class G4NtupleBookingManager : public G4BaseAnalysisManager
   public:
     explicit G4NtupleBookingManager(const G4AnalysisManagerState& state);
     G4NtupleBookingManager() = delete;
-    ~G4NtupleBookingManager();
+    ~G4NtupleBookingManager() override;
 
     const std::vector<G4NtupleBooking*>& GetNtupleBookingVector() const;
 
@@ -132,6 +132,8 @@ class G4NtupleBookingManager : public G4BaseAnalysisManager
                                         G4int id,
                                         std::string_view function,
                                         G4bool warn = true) const;
+
+    G4bool CheckName(const G4String& name, const G4String& objectType) const;
     template <typename T>
     G4int CreateNtupleTColumn(G4int ntupleId,
                     const G4String& name, std::vector<T>* vector);

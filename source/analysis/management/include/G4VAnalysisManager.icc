@@ -26,11 +26,6 @@
 
 #include "G4HnManager.hh"
 #include "G4NtupleBookingManager.hh"
-#include "G4VH1Manager.hh"
-#include "G4VH2Manager.hh"
-#include "G4VH3Manager.hh"
-#include "G4VP1Manager.hh"
-#include "G4VP2Manager.hh"
 #include "G4VNtupleManager.hh"
 #include "G4VFileManager.hh"
 
@@ -47,7 +42,7 @@ void G4VAnalysisManager::Message(
 inline
 G4bool G4VAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
-  return fVH1Manager->FillH1(id, value, weight);
+  return fVH1Manager->Fill(id, {{value}}, weight);
 }
 
 //_____________________________________________________________________________
@@ -56,7 +51,7 @@ G4bool G4VAnalysisManager::FillH2(G4int id,
                                   G4double xvalue, G4double yvalue,
                                   G4double weight)
 {
-  return fVH2Manager->FillH2(id, xvalue, yvalue, weight);
+  return fVH2Manager->Fill(id, {{xvalue, yvalue}}, weight);
 }
 
 //_____________________________________________________________________________
@@ -65,7 +60,7 @@ G4bool G4VAnalysisManager::FillH3(G4int id,
                              G4double xvalue, G4double yvalue, G4double zvalue,
                              G4double weight)
 {
-  return fVH3Manager->FillH3(id, xvalue, yvalue, zvalue, weight);
+  return fVH3Manager->Fill(id, { {xvalue, yvalue, zvalue}}, weight);
 }
 
 //_____________________________________________________________________________
@@ -73,7 +68,7 @@ inline
 G4bool G4VAnalysisManager::FillP1(G4int id, G4double xvalue, G4double yvalue,
                                   G4double weight)
 {
-  return fVP1Manager->FillP1(id, xvalue, yvalue, weight);
+  return fVP1Manager->Fill(id, {{xvalue, yvalue}}, weight);
 }
 
 //_____________________________________________________________________________
@@ -82,7 +77,7 @@ G4bool G4VAnalysisManager::FillP2(G4int id,
                              G4double xvalue, G4double yvalue, G4double zvalue,
                              G4double weight)
 {
-  return fVP2Manager->FillP2(id, xvalue, yvalue, zvalue, weight);
+  return fVP2Manager->Fill(id, {{xvalue, yvalue, zvalue}}, weight);
 }
 
 //_____________________________________________________________________________
@@ -169,42 +164,42 @@ G4bool G4VAnalysisManager::GetActivation() const
 inline
 G4int G4VAnalysisManager::GetH1Id(const G4String& name, G4bool warn) const
 {
-  return fVH1Manager->GetH1Id(name, warn);
+  return fVH1Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH2Id(const G4String& name, G4bool warn) const
 {
-  return fVH2Manager->GetH2Id(name, warn);
+  return fVH2Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH3Id(const G4String& name, G4bool warn) const
 {
-  return fVH3Manager->GetH3Id(name, warn);
+  return fVH3Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetP1Id(const G4String& name, G4bool warn) const
 {
-  return fVP1Manager->GetP1Id(name, warn);
+  return fVP1Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetP2Id(const G4String& name, G4bool warn) const
 {
-  return fVP2Manager->GetP2Id(name, warn);
+  return fVP2Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH1Nbins(G4int id) const
 {
-  return fVH1Manager->GetH1Nbins(id);
+  return fVH1Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -213,28 +208,28 @@ G4double G4VAnalysisManager::GetH1Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH1Manager->GetH1Xmin(id);
+  return fVH1Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH1Xmax(G4int id) const
 {
-  return fVH1Manager->GetH1Xmax(id);
+  return fVH1Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH1Width(G4int id) const
 {
-  return fVH1Manager->GetH1Width(id);
+  return fVH1Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH2Nxbins(G4int id) const
 {
-  return fVH2Manager->GetH2Nxbins(id);
+  return fVH2Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -243,28 +238,28 @@ G4double G4VAnalysisManager::GetH2Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH2Manager->GetH2Xmin(id);
+  return fVH2Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH2Xmax(G4int id) const
 {
-  return fVH2Manager->GetH2Xmax(id);
+  return fVH2Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH2XWidth(G4int id) const
 {
-  return fVH2Manager->GetH2XWidth(id);
+  return fVH2Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH2Nybins(G4int id) const
 {
-  return fVH2Manager->GetH2Nybins(id);
+  return fVH2Manager->GetNbins(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -273,28 +268,28 @@ G4double G4VAnalysisManager::GetH2Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH2Manager->GetH2Ymin(id);
+  return fVH2Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH2Ymax(G4int id) const
 {
-  return fVH2Manager->GetH2Ymax(id);
+  return fVH2Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH2YWidth(G4int id) const
 {
-  return fVH2Manager->GetH2YWidth(id);
+  return fVH2Manager->GetWidth(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH3Nxbins(G4int id) const
 {
-  return fVH3Manager->GetH3Nxbins(id);
+  return fVH3Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -303,28 +298,28 @@ G4double G4VAnalysisManager::GetH3Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH3Manager->GetH3Xmin(id);
+  return fVH3Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3Xmax(G4int id) const
 {
-  return fVH3Manager->GetH3Xmax(id);
+  return fVH3Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3XWidth(G4int id) const
 {
-  return fVH3Manager->GetH3XWidth(id);
+  return fVH3Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH3Nybins(G4int id) const
 {
-  return fVH3Manager->GetH3Nybins(id);
+  return fVH3Manager->GetNbins(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -333,28 +328,28 @@ G4double G4VAnalysisManager::GetH3Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH3Manager->GetH3Ymin(id);
+  return fVH3Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3Ymax(G4int id) const
 {
-  return fVH3Manager->GetH3Ymax(id);
+  return fVH3Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3YWidth(G4int id) const
 {
-  return fVH3Manager->GetH3YWidth(id);
+  return fVH3Manager->GetWidth(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetH3Nzbins(G4int id) const
 {
-  return fVH3Manager->GetH3Nzbins(id);
+  return fVH3Manager->GetNbins(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
@@ -363,28 +358,28 @@ G4double G4VAnalysisManager::GetH3Zmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH3Manager->GetH3Zmin(id);
+  return fVH3Manager->GetMinValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3Zmax(G4int id) const
 {
-  return fVH3Manager->GetH3Zmax(id);
+  return fVH3Manager->GetMaxValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3ZWidth(G4int id) const
 {
-  return fVH3Manager->GetH3ZWidth(id);
+  return fVH3Manager->GetWidth(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetP1Nbins(G4int id) const
 {
-  return fVP1Manager->GetP1Nbins(id);
+  return fVP1Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -393,21 +388,21 @@ G4double G4VAnalysisManager::GetP1Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP1Manager->GetP1Xmin(id);
+  return fVP1Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP1Xmax(G4int id) const
 {
-  return fVP1Manager->GetP1Xmax(id);
+  return fVP1Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP1XWidth(G4int id) const
 {
-  return fVP1Manager->GetP1XWidth(id);
+  return fVP1Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -416,21 +411,21 @@ G4double G4VAnalysisManager::GetP1Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP1Manager->GetP1Ymin(id);
+  return fVP1Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP1Ymax(G4int id) const
 {
-  return fVP1Manager->GetP1Ymax(id);
+  return fVP1Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetP2Nxbins(G4int id) const
 {
-  return fVP2Manager->GetP2Nxbins(id);
+  return fVP2Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -439,28 +434,28 @@ G4double G4VAnalysisManager::GetP2Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP2Manager->GetP2Xmin(id);
+  return fVP2Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2Xmax(G4int id) const
 {
-  return fVP2Manager->GetP2Xmax(id);
+  return fVP2Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2XWidth(G4int id) const
 {
-  return fVP2Manager->GetP2XWidth(id);
+  return fVP2Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisManager::GetP2Nybins(G4int id) const
 {
-  return fVP2Manager->GetP2Nybins(id);
+  return fVP2Manager->GetNbins(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -469,21 +464,21 @@ G4double G4VAnalysisManager::GetP2Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP2Manager->GetP2Ymin(id);
+  return fVP2Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2Ymax(G4int id) const
 {
-  return fVP2Manager->GetP2Ymax(id);
+  return fVP2Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2YWidth(G4int id) const
 {
-  return fVP2Manager->GetP2YWidth(id);
+  return fVP2Manager->GetWidth(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -492,14 +487,14 @@ G4double G4VAnalysisManager::GetP2Zmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP2Manager->GetP2Zmin(id);
+  return fVP2Manager->GetMinValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2Zmax(G4int id) const
 {
-  return fVP2Manager->GetP2Zmax(id);
+  return fVP2Manager->GetMaxValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
@@ -513,7 +508,7 @@ G4String G4VAnalysisManager::GetH1Name(G4int id) const
 inline
 G4double G4VAnalysisManager::GetH1Unit(G4int id) const
 {
-  return fH1HnManager->GetXUnit(id);
+  return fH1HnManager->GetUnit(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -548,14 +543,14 @@ G4String G4VAnalysisManager::GetH2Name(G4int id) const
 inline
 G4double G4VAnalysisManager::GetH2XUnit(G4int id) const
 {
-  return fH2HnManager->GetXUnit(id);
+  return fH2HnManager->GetUnit(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH2YUnit(G4int id) const
 {
-  return fH2HnManager->GetYUnit(id);
+  return fH2HnManager->GetUnit(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -590,21 +585,21 @@ G4String G4VAnalysisManager::GetH3Name(G4int id) const
 inline
 G4double G4VAnalysisManager::GetH3XUnit(G4int id) const
 {
-  return fH3HnManager->GetXUnit(id);
+  return fH3HnManager->GetUnit(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3YUnit(G4int id) const
 {
-  return fH3HnManager->GetYUnit(id);
+  return fH3HnManager->GetUnit(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetH3ZUnit(G4int id) const
 {
-  return fH3HnManager->GetZUnit(id);
+  return fH3HnManager->GetUnit(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
@@ -639,14 +634,14 @@ G4String G4VAnalysisManager::GetP1Name(G4int id) const
 inline
 G4double G4VAnalysisManager::GetP1XUnit(G4int id) const
 {
-  return fP1HnManager->GetXUnit(id);
+  return fP1HnManager->GetUnit(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP1YUnit(G4int id) const
 {
-  return fP1HnManager->GetYUnit(id);
+  return fP1HnManager->GetUnit(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -681,21 +676,21 @@ G4String G4VAnalysisManager::GetP2Name(G4int id) const
 inline
 G4double G4VAnalysisManager::GetP2XUnit(G4int id) const
 {
-  return fP2HnManager->GetXUnit(id);
+  return fP2HnManager->GetUnit(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2YUnit(G4int id) const
 {
-  return fP2HnManager->GetYUnit(id);
+  return fP2HnManager->GetUnit(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisManager::GetP2ZUnit(G4int id) const
 {
-  return fP2HnManager->GetZUnit(id);
+  return fP2HnManager->GetUnit(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
@@ -725,444 +720,442 @@ G4bool G4VAnalysisManager::GetNtupleActivation(G4int id) const
 {
   if ( fVNtupleManager ) {
     return fVNtupleManager->GetActivation(id);
-  } else {
-    return fNtupleBookingManager->GetActivation(id);
-
   }
+  return fNtupleBookingManager->GetActivation(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH1Title(G4int id, const G4String& title)
 {
-  return fVH1Manager->SetH1Title(id, title);
+  return fVH1Manager->SetTitle(id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH1XAxisTitle(G4int id, const G4String& title)
 {
-  return fVH1Manager->SetH1XAxisTitle(id, title);
+  return fVH1Manager->SetAxisTitle(G4Analysis::kX, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH1YAxisTitle(G4int id, const G4String& title)
 {
-  return fVH1Manager->SetH1YAxisTitle(id, title);
+  return fVH1Manager->SetAxisTitle(G4Analysis::kY, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH1XAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH1HnManager->SetXAxisIsLog(id, isLog);
+  return fH1HnManager->SetAxisIsLog(G4Analysis::kX, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH1YAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH1HnManager->SetYAxisIsLog(id, isLog);
+  return fH1HnManager->SetAxisIsLog(G4Analysis::kY, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2Title(G4int id, const G4String& title)
 {
-  return fVH2Manager->SetH2Title(id, title);
+  return fVH2Manager->SetTitle(id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2XAxisTitle(G4int id, const G4String& title)
 {
-  return fVH2Manager->SetH2XAxisTitle(id, title);
+  return fVH2Manager->SetAxisTitle(G4Analysis::kX, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2YAxisTitle(G4int id, const G4String& title)
 {
-  return fVH2Manager->SetH2YAxisTitle(id, title);
+  return fVH2Manager->SetAxisTitle(G4Analysis::kY, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2ZAxisTitle(G4int id, const G4String& title)
 {
-  return fVH2Manager->SetH2ZAxisTitle(id, title);
+  return fVH2Manager->SetAxisTitle(G4Analysis::kZ, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2XAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH2HnManager->SetXAxisIsLog(id, isLog);
+  return fH2HnManager->SetAxisIsLog(G4Analysis::kX, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2YAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH2HnManager->SetYAxisIsLog(id, isLog);
+  return fH2HnManager->SetAxisIsLog(G4Analysis::kY, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH2ZAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH2HnManager->SetZAxisIsLog(id, isLog);
+  return fH2HnManager->SetAxisIsLog(G4Analysis::kZ, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3Title(G4int id, const G4String& title)
 {
-  return fVH3Manager->SetH3Title(id, title);
+  return fVH3Manager->SetTitle(id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3XAxisTitle(G4int id, const G4String& title)
 {
-  return fVH3Manager->SetH3XAxisTitle(id, title);
+  return fVH3Manager->SetAxisTitle(G4Analysis::kX, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3YAxisTitle(G4int id, const G4String& title)
 {
-  return fVH3Manager->SetH3YAxisTitle(id, title);
+  return fVH3Manager->SetAxisTitle(G4Analysis::kY, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3ZAxisTitle(G4int id, const G4String& title)
 {
-  return fVH3Manager->SetH3ZAxisTitle(id, title);
+  return fVH3Manager->SetAxisTitle(G4Analysis::kZ, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3XAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH3HnManager->SetXAxisIsLog(id, isLog);
+  return fH3HnManager->SetAxisIsLog(G4Analysis::kX, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3YAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH3HnManager->SetYAxisIsLog(id, isLog);
+  return fH3HnManager->SetAxisIsLog(G4Analysis::kY, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetH3ZAxisIsLog(G4int id, G4bool isLog)
 {
-  return fH3HnManager->SetZAxisIsLog(id, isLog);
+  return fH3HnManager->SetAxisIsLog(G4Analysis::kZ, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP1Title(G4int id, const G4String& title)
 {
-  return fVP1Manager->SetP1Title(id, title);
+  return fVP1Manager->SetTitle(id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP1XAxisTitle(G4int id, const G4String& title)
 {
-  return fVP1Manager->SetP1XAxisTitle(id, title);
+  return fVP1Manager->SetAxisTitle(G4Analysis::kX, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP1YAxisTitle(G4int id, const G4String& title)
 {
-  return fVP1Manager->SetP1YAxisTitle(id, title);
+  return fVP1Manager->SetAxisTitle(G4Analysis::kY, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP1XAxisIsLog(G4int id, G4bool isLog)
 {
-  return fP1HnManager->SetXAxisIsLog(id, isLog);
+  return fP1HnManager->SetAxisIsLog(G4Analysis::kX, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP1YAxisIsLog(G4int id, G4bool isLog)
 {
-  return fP1HnManager->SetYAxisIsLog(id, isLog);
+  return fP1HnManager->SetAxisIsLog(G4Analysis::kY, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2Title(G4int id, const G4String& title)
 {
-  return fVP2Manager->SetP2Title(id, title);
+  return fVP2Manager->SetTitle(id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2XAxisTitle(G4int id, const G4String& title)
 {
-  return fVP2Manager->SetP2XAxisTitle(id, title);
+  return fVP2Manager->SetAxisTitle(G4Analysis::kX, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2YAxisTitle(G4int id, const G4String& title)
 {
-  return fVP2Manager->SetP2YAxisTitle(id, title);
+  return fVP2Manager->SetAxisTitle(G4Analysis::kY, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2ZAxisTitle(G4int id, const G4String& title)
 {
-  return fVP2Manager->SetP2ZAxisTitle(id, title);
+  return fVP2Manager->SetAxisTitle(G4Analysis::kZ, id, title);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2XAxisIsLog(G4int id, G4bool isLog)
 {
-  return fP2HnManager->SetXAxisIsLog(id, isLog);
+  return fP2HnManager->SetAxisIsLog(G4Analysis::kX, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2YAxisIsLog(G4int id, G4bool isLog)
 {
-  return fP2HnManager->SetYAxisIsLog(id, isLog);
+  return fP2HnManager->SetAxisIsLog(G4Analysis::kY, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::SetP2ZAxisIsLog(G4int id, G4bool isLog)
 {
-  return fP2HnManager->SetZAxisIsLog(id, isLog);
+  return fP2HnManager->SetAxisIsLog(G4Analysis::kZ, id, isLog);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH1Title(G4int id) const
 {
-  return fVH1Manager->GetH1Title(id);
+  return fVH1Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH1XAxisTitle(G4int id) const
 {
-  return fVH1Manager->GetH1XAxisTitle(id);
+  return fVH1Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH1YAxisTitle(G4int id) const
 {
-  return fVH1Manager->GetH1YAxisTitle(id);
+  return fVH1Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH1XAxisIsLog(G4int id) const
 {
-  return fH1HnManager->GetXAxisIsLog(id);
+  return fH1HnManager->GetAxisIsLog(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH1YAxisIsLog(G4int id) const
 {
-  return fH1HnManager->GetYAxisIsLog(id);
+  return fH1HnManager->GetAxisIsLog(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH2Title(G4int id) const
 {
-  return fVH2Manager->GetH2Title(id);
+  return fVH2Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH2XAxisTitle(G4int id) const
 {
-  return fVH2Manager->GetH2XAxisTitle(id);
+  return fVH2Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH2YAxisTitle(G4int id) const
 {
-  return fVH2Manager->GetH2YAxisTitle(id);
+  return fVH2Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH2ZAxisTitle(G4int id) const
 {
-  return fVH2Manager->GetH2ZAxisTitle(id);
+  return fVH2Manager->GetAxisTitle(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH2XAxisIsLog(G4int id) const
 {
-  return fH2HnManager->GetXAxisIsLog(id);
+  return fH2HnManager->GetAxisIsLog(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH2YAxisIsLog(G4int id) const
 {
-  return fH2HnManager->GetYAxisIsLog(id);
+  return fH2HnManager->GetAxisIsLog(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH2ZAxisIsLog(G4int id) const
 {
-  return fH2HnManager->GetZAxisIsLog(id);
+  return fH2HnManager->GetAxisIsLog(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH3Title(G4int id) const
 {
-  return fVH3Manager->GetH3Title(id);
+  return fVH3Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH3XAxisTitle(G4int id) const
 {
-  return fVH3Manager->GetH3XAxisTitle(id);
+  return fVH3Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH3YAxisTitle(G4int id) const
 {
-  return fVH3Manager->GetH3YAxisTitle(id);
+  return fVH3Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetH3ZAxisTitle(G4int id) const
 {
-  return fVH3Manager->GetH3ZAxisTitle(id);
+  return fVH3Manager->GetAxisTitle(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH3XAxisIsLog(G4int id) const
 {
-  return fH3HnManager->GetXAxisIsLog(id);
+  return fH3HnManager->GetAxisIsLog(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH3YAxisIsLog(G4int id) const
 {
-  return fH3HnManager->GetYAxisIsLog(id);
+  return fH3HnManager->GetAxisIsLog(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetH3ZAxisIsLog(G4int id) const
 {
-  return fH3HnManager->GetZAxisIsLog(id);
+  return fH3HnManager->GetAxisIsLog(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP1Title(G4int id) const
 {
-  return fVP1Manager->GetP1Title(id);
+  return fVP1Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP1XAxisTitle(G4int id) const
 {
-  return fVP1Manager->GetP1XAxisTitle(id);
+  return fVP1Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP1YAxisTitle(G4int id) const
 {
-  return fVP1Manager->GetP1YAxisTitle(id);
+  return fVP1Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetP1XAxisIsLog(G4int id) const
 {
-  return fP1HnManager->GetXAxisIsLog(id);
+  return fP1HnManager->GetAxisIsLog(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetP1YAxisIsLog(G4int id) const
 {
-  return fP1HnManager->GetYAxisIsLog(id);
+  return fP1HnManager->GetAxisIsLog(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP2Title(G4int id) const
 {
-  return fVP2Manager->GetP2Title(id);
+  return fVP2Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP2XAxisTitle(G4int id) const
 {
-  return fVP2Manager->GetP2XAxisTitle(id);
+  return fVP2Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP2YAxisTitle(G4int id) const
 {
-  return fVP2Manager->GetP2YAxisTitle(id);
+  return fVP2Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisManager::GetP2ZAxisTitle(G4int id) const
 {
-  return fVP2Manager->GetP2ZAxisTitle(id);
+  return fVP2Manager->GetAxisTitle(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetP2XAxisIsLog(G4int id) const
 {
-  return fP2HnManager->GetXAxisIsLog(id);
+  return fP2HnManager->GetAxisIsLog(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetP2YAxisIsLog(G4int id) const
 {
-  return fP2HnManager->GetYAxisIsLog(id);
+  return fP2HnManager->GetAxisIsLog(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::GetP2ZAxisIsLog(G4int id) const
 {
-  return fP2HnManager->GetZAxisIsLog(id);
+  return fP2HnManager->GetAxisIsLog(G4Analysis::kZ, id);
 }
 
 

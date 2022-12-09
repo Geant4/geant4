@@ -24,13 +24,22 @@
 //  ---------------------------------------------------------------
 
 #include "PTL/UserTaskQueue.hh"
-#include "PTL/Task.hh"
+
+#include "PTL/AutoLock.hh"
 #include "PTL/TaskGroup.hh"
+#include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
 #include "PTL/Utility.hh"
 
 #include <cassert>
+#include <chrono>
+#include <functional>
+#include <iostream>
+#include <map>
 #include <stdexcept>
+#include <system_error>
+#include <thread>
+#include <utility>
 
 using namespace PTL;
 
@@ -38,7 +47,7 @@ using namespace PTL;
 
 UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
 : VUserTaskQueue(nworkers)
-, m_is_clone((parent) ? true : false)
+, m_is_clone((parent) != nullptr)
 , m_thread_bin((parent) ? (ThreadPool::get_this_thread_id() % (nworkers + 1)) : 0)
 , m_insert_bin((parent) ? (ThreadPool::get_this_thread_id() % (nworkers + 1)) : 0)
 , m_hold((parent) ? parent->m_hold : new std::atomic_bool(false))

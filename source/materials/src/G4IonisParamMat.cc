@@ -215,7 +215,7 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   // or is assign to one of data set in this table
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
-  G4int nelm= fMaterial->GetNumberOfElements();
+  G4int nelm= (G4int)fMaterial->GetNumberOfElements();
   G4int Z0  = ((*(fMaterial->GetElementVector()))[0])->GetZasInt();
   const G4Material* bmat = fMaterial->GetBaseMaterial();
   G4NistManager* nist = G4NistManager::Instance();
@@ -436,7 +436,7 @@ void G4IonisParamMat::ComputeIonParameters()
   const G4ElementVector* theElementVector = fMaterial->GetElementVector() ;
   const G4double* theAtomicNumDensityVector =
                          fMaterial->GetAtomicNumDensityVector() ;
-  const G4int NumberOfElements = fMaterial->GetNumberOfElements() ;
+  const G4int NumberOfElements = (G4int)fMaterial->GetNumberOfElements() ;
 
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF
@@ -548,7 +548,7 @@ void G4IonisParamMat::ComputeDensityEffectOnFly(G4bool val)
     if(nullptr == fDensityEffectCalc) { 
       G4int n = 0;
       for(size_t i=0; i<fMaterial->GetNumberOfElements(); ++i) {
-	const G4int Z = fMaterial->GetElement(i)->GetZasInt();
+	const G4int Z = fMaterial->GetElement((G4int)i)->GetZasInt();
         n += G4AtomicShells::GetNumberOfShells(Z);
       }
       // The last level is the conduction level.  If this is *not* a conductor,

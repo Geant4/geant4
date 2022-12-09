@@ -209,7 +209,7 @@ void G4EmTableUtil::BuildLambdaTable(G4VEmProcess* proc,
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4PhysicsLogVector* aVector = nullptr;
   G4PhysicsLogVector* aVectorPrim = nullptr;
@@ -217,12 +217,12 @@ void G4EmTableUtil::BuildLambdaTable(G4VEmProcess* proc,
 
   G4double emax1 = std::min(maxKinEnergy, minKinEnergyPrim);
     
-  for(size_t i=0; i<numOfCouples; ++i) {
+  for(std::size_t i=0; i<numOfCouples; ++i) {
 
     if (bld->GetFlag(i)) {
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
-        theCoupleTable->GetMaterialCutsCouple(i);
+        theCoupleTable->GetMaterialCutsCouple((G4int)i);
 
       // build main table
       if(nullptr != theLambdaTable) {
@@ -297,14 +297,14 @@ void  G4EmTableUtil::BuildLambdaTable(G4VEnergyLossProcess* proc,
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4PhysicsLogVector* aVector = nullptr;
-  for(size_t i=0; i<numOfCouples; ++i) {
+  for(std::size_t i=0; i<numOfCouples; ++i) {
     if (bld->GetFlag(i)) {
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
-        theCoupleTable->GetMaterialCutsCouple(i);
+        theCoupleTable->GetMaterialCutsCouple((G4int)i);
 
       delete (*theLambdaTable)[i];
       G4bool startNull = true;
@@ -359,8 +359,8 @@ G4EmTableUtil::CheckIon(G4VEnergyLossProcess* proc,
       if(particle != theGIon) {
         G4ProcessManager* pm = theGIon->GetProcessManager();
         G4ProcessVector* v = pm->GetAlongStepProcessVector();
-        size_t n = v->size();
-        for(size_t j=0; j<n; ++j) {
+        G4int n = (G4int)v->size();
+        for(G4int j=0; j<n; ++j) {
           if((*v)[j] == proc) {
             particle = theGIon;
             break;
@@ -453,7 +453,7 @@ void G4EmTableUtil::BuildDEDXTable(G4VEnergyLossProcess* proc,
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   if(1 < verbose) {
     G4cout << numOfCouples << " couples" << " minKinEnergy(MeV)= " << emin
@@ -462,7 +462,7 @@ void G4EmTableUtil::BuildDEDXTable(G4VEnergyLossProcess* proc,
   G4PhysicsLogVector* aVector = nullptr;
   G4PhysicsLogVector* bVector = nullptr;
 
-  for(size_t i=0; i<numOfCouples; ++i) {
+  for(std::size_t i=0; i<numOfCouples; ++i) {
 
     if(1 < verbose) {
       G4cout << "G4VEnergyLossProcess::BuildDEDXVector idx= " << i 
@@ -473,7 +473,7 @@ void G4EmTableUtil::BuildDEDXTable(G4VEnergyLossProcess* proc,
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
-        theCoupleTable->GetMaterialCutsCouple(i);
+        theCoupleTable->GetMaterialCutsCouple((G4int)i);
       delete (*table)[i];
       if(nullptr != bVector) {
         aVector = new G4PhysicsLogVector(*bVector);

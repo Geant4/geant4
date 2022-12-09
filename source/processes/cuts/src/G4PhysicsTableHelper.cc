@@ -103,7 +103,7 @@ G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTable)
 
   for (std::size_t idx = 0; idx <numberOfMCC; ++idx)
   {
-    const G4MaterialCutsCouple* mcc = cutTable->GetMaterialCutsCouple(idx);
+    const G4MaterialCutsCouple* mcc = cutTable->GetMaterialCutsCouple((G4int)idx);
 
     // check if re-calculation of the physics vector is needed 
     // MCC is not used

@@ -30,12 +30,12 @@
 
 #include "G4Polyline.hh"
 
-G4Polyline::G4Polyline () {}
+G4Polyline::G4Polyline () = default;
 
-G4Polyline::~G4Polyline () {}
+G4Polyline::~G4Polyline () = default;
 
 G4Polyline& G4Polyline::transform (const G4Transform3D& transformation) {
-  for (iterator i = begin(); i != end(); ++i) i->transform(transformation);
+  for (auto & i : *this) i.transform(transformation);
   return *this;
 }
 

@@ -344,7 +344,7 @@ void G4MTRunManager::CreateAndStartWorkers()
 
       std::stringstream ss;
       ss.fill('=');
-      ss << std::setw(msg.str().length()) << "";
+      ss << std::setw(G4int(msg.str().length())) << "";
       G4cout << "\n"
              << ss.str() << "\n"
              << msg.str() << "\n"
@@ -522,11 +522,11 @@ void G4MTRunManager::ConstructScoringWorlds()
   G4RunManager::ConstructScoringWorlds();
 
   masterWorlds.clear();
-  std::size_t nWorlds =
+  G4int nWorlds = (G4int)
     G4TransportationManager::GetTransportationManager()->GetNoWorlds();
   auto itrW =
     G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
-  for(std::size_t iWorld = 0; iWorld < nWorlds; ++iWorld)
+  for(G4int iWorld = 0; iWorld < nWorlds; ++iWorld)
   {
     addWorld(iWorld, *itrW);
     ++itrW;
@@ -744,7 +744,7 @@ void G4MTRunManager::AbortEvent()
 // --------------------------------------------------------------------
 void G4MTRunManager::WaitForReadyWorkers()
 {
-  beginOfEventLoopBarrier.Wait(GetNumberActiveThreads());
+  beginOfEventLoopBarrier.Wait((G4int)GetNumberActiveThreads());
   endOfEventLoopBarrier.ResetCounter();
   beginOfEventLoopBarrier.ReleaseBarrier();
 }
@@ -758,7 +758,7 @@ void G4MTRunManager::ThisWorkerReady()
 // --------------------------------------------------------------------
 void G4MTRunManager::WaitForEndEventLoopWorkers()
 {
-  endOfEventLoopBarrier.Wait(GetNumberActiveThreads());
+  endOfEventLoopBarrier.Wait((G4int)GetNumberActiveThreads());
   beginOfEventLoopBarrier.ResetCounter();
   endOfEventLoopBarrier.ReleaseBarrier();
 }
@@ -773,7 +773,7 @@ void G4MTRunManager::ThisWorkerEndEventLoop()
 void G4MTRunManager::NewActionRequest(
   G4MTRunManager::WorkerActionRequest newRequest)
 {
-  nextActionRequestBarrier.Wait(GetNumberActiveThreads());
+  nextActionRequestBarrier.Wait((G4int)GetNumberActiveThreads());
   // nextActionRequest is a shared resource, but there is no
   // data-race thanks to the barrier: all threads are waiting
   nextActionRequest = newRequest;
@@ -793,7 +793,7 @@ void G4MTRunManager::RequestWorkersProcessCommandsStack()
 {
   PrepareCommandsStack();
   NewActionRequest(WorkerActionRequest::PROCESSUI);
-  processUIBarrier.SetActiveThreads(GetNumberActiveThreads());
+  processUIBarrier.SetActiveThreads((G4int)GetNumberActiveThreads());
   processUIBarrier.WaitForReadyWorkers();
 }
 

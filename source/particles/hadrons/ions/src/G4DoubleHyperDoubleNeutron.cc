@@ -47,7 +47,7 @@ G4DoubleHyperDoubleNeutron* G4DoubleHyperDoubleNeutron::Definition() {
   const G4String name = "doublehyperdoubleneutron";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast< G4Ions* >( pTable->FindParticle( name ) );
+  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -85,8 +85,10 @@ G4DoubleHyperDoubleNeutron* G4DoubleHyperDoubleNeutron::Definition() {
     mode[2] = new G4PhaseSpaceDecayChannel( "doublehyperdoubleneutron", br_lambda_to_n_piz, 5,
    					    "neutron", "neutron", "lambda", "neutron", "pi0" );
     for ( G4int index = 0; index < 3; ++index ) table->Insert( mode[index] );
+    delete [] mode;
+    anInstance->SetDecayTable( table );
   }
-  theInstance = reinterpret_cast< G4DoubleHyperDoubleNeutron* >( anInstance );
+  theInstance = static_cast< G4DoubleHyperDoubleNeutron* >( anInstance );
   return theInstance;
 }
 

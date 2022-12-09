@@ -1,8 +1,96 @@
 # Category visman History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-25 Gabriele Cosmo (visman-V11-00-31)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-05 John Allison (visman-V11-00-30)
+- Eliminate G4cerr and introduce G4warn in remaining visman files.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where `verbosity >= warnings`.
+
+## 2022-11-04 John Allison (visman-V11-00-29)
+- G4VisManager.cc: Eliminate G4cerr and introduce G4warn.
+  - Only for G4VisManager.cc for now to test the principle.
+    - Other vis files will be migrated if this MR is successful.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where `verbosity >= warnings`.
+
+## 2022-10-30 John Allison (visman-V11-00-28)
+- Implement void G4VisManager::DrawGeometry
+  (G4VPhysicalVolume* v, const G4Transform3D& t)
+  - Draws a geometry tree starting at the specified physical volume.
+
+## 2022-10-28 John Allison (visman-V11-00-27)
+- Implement generic cutaway.
+  - Prior to this tag, cutaways were implemented only in OpenGL by using
+    OpenGL's clipping plane feature. This still pertains for OpenGL because
+    it is very fast, but this tag implements cutaways using Boolean operations.
+    Evgueni Tcherniaev and I have found a way to make this reasonably
+    robust and reliable. The initial motivation and implementation on the
+    management side (G4VSceneHandler) came from a Geant4 user,
+    Pooria Heidary, via a GitHub pull request.
+  - G4VSceneHandler::CreateCutawaySolid:
+    - The initial implementation is by Pooria Heidary.
+  - G4VSceneHandler::RequestPrimitives:
+    - Check validity of Boolean solids. This is particularly pertinent
+      for cutaways, because the cutting volume (the subtractor) is
+      large and general and often the target volume is entirely within
+      or entirely outside. But it is a check that now applies to all
+      geometries, with or without cutaways, so it is a bug fix.
+      - Sometimes solids that have no substance get requested. They may
+        be part of the geometry tree but have been "spirited away", for
+        example by a Boolean subtraction in which the original volume
+        is entirely inside the subtractor.
+      - The problem is that the Boolean Processor still returns a
+        polyhedron in these cases (IMHO it should not), so the
+        workaround is to return before the damage is done.
+      - The check involves seeking a point inside the resulting
+        Boolean solid. If it cannot be found within a large number
+        of attempts, it is assumed to be invalid.
+  - G4VisCommandsViewer.cc:
+    - Make sure the normal to the cutaway plane is normalised (unit vector).
+  - G4VisCommandsViewerSet.cc:
+    - Make sure the normal to the sectioning plane is normalised (unit vector).
+
+## 2022-10-13 Guy Barrand (visman-V11-00-26)
+- G4VisExecutive.icc: add TOOLSSG_OFFSCREEN.
+
+## 2022-09-19 John Allison (visman-V11-00-25)
+- G4VSceneHandler.cc::StandardSpecialMeshRendering():
+  - Draw container if not marked invisible.
+
+## 2022-09-13 Evgueni Tcherniaev (visman-V11-00-24)
+- G4VSceneHandler: implemented GetPointInBox() and GetPointInTet()
+  to sample a random point inside a box and a tetrahedron.
+
+## 2022-09-10 Ben Morgan (visman-V11-00-23)
+- Mark compile time only and buildmode-specific headers as "no_geant4_module_check"
+
+## 2022-09-03 Ben Morgan (visman-V11-00-22)
+- Add PRIVATE dependency on G4volumes for multithreaded builds only.
+
+## 2022-08-17 John Allison (visman-V11-00-21)
+- Back out code that forces /vis/verbose and /control/verbose
+- G4VisCommandsCompound.cc, G4VisCommandsSceneAdd.cc,
+  G4VisCommandsTouchable.cc, G4VisCommandsViewer.cc:
+  - Sometimes the vis system forced extra vis messages or the echoing of
+    commands. Not sure why this was done - perhaps with a thought to
+    providing useful information - but it causes surprises, for example,
+    when the control verbosity is zero (no command echoing) a command is
+    still echoed. With this patch, there will be no such surprises - what
+    the user sets as vis and/or control verbosity will apply at all times.
 
 ## 2022-06-13 Laurie Nevay (visman-V11-00-20)
 - G4VisCommandsSceneAdd - changed the default width of axes added to the scene with

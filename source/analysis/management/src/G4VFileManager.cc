@@ -47,7 +47,7 @@ G4bool G4VFileManager::SetFileName(const G4String& fileName)
   // Check extension
   auto name = fileName;
   auto extension = G4Analysis::GetExtension(fileName);
-  if ( extension.size() && GetFileType().size() && extension != GetFileType() ) {
+  if ((extension.size() != 0u) && (GetFileType().size() != 0u) && extension != GetFileType()) {
     // replace extension
     name = G4Analysis::GetBaseName(fileName) + "." + GetFileType();
     Warn(fileName + " file extension is not valid for " + GetFileType() + " output.\n" +

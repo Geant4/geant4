@@ -88,14 +88,16 @@ public:
 
 private:
 
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-  G4ParticleChangeForGamma* fParticleChange;
-  G4VAtomDeexcitation*      fAtomDeexcitation;
+  G4ParticleDefinition* theGamma;
+  G4ParticleDefinition* theElectron;
+  G4ParticleChangeForGamma* fParticleChange = nullptr;
+  G4VAtomDeexcitation* fAtomDeexcitation = nullptr;
 
-  G4double                  fminimalEnergy;
-  std::vector<G4double>     fSandiaCof;
-  std::vector<G4double>     fMatEnergyTh;
+  G4bool fPEBelowKShell = true;
+
+  G4double fminimalEnergy;
+  std::vector<G4double> fSandiaCof;
+  std::vector<G4double> fMatEnergyTh;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

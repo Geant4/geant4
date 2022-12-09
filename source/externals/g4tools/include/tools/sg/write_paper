@@ -14,9 +14,9 @@
 //    gl2ps_tex: gl2ps producing tex
 //    gl2ps_pgf: gl2ps producing pgf
 // By using the zb_action (zb for zbuffer):
-//    zb_ps: tools::sg offscreen zbuffer put in a PostScript file.
-//    zb_png: zbuffer put in a png file. It needs to provide a "png_writer" function.
-//    zb_jpeg: zbuffer put in a jpeg file. It needs to provide a "jpeg_writer" function.
+//    inzb_ps: tools::sg offscreen zbuffer put in a PostScript file.
+//    inzb_png: zbuffer put in a png file. It needs to provide a "png_writer" function.
+//    inzb_jpeg: zbuffer put in a jpeg file. It needs to provide a "jpeg_writer" function.
 
 #include "zb_action"
 #include "node"
@@ -40,25 +40,70 @@ inline bool write_paper(std::ostream& a_out,
                         float a_back_r,float a_back_g,float a_back_b,float a_back_a,
                         node& a_scene_graph,
                         unsigned int a_width,unsigned int a_height,
-                        const std::string& a_file,const std::string& a__format) {
+                        const std::string& a_file,const std::string& a__format,
+                        bool a_do_transparency,
+                        bool a_top_to_bottom,
+                        const std::string& a_opts_1,const std::string& a_opts_2) {
   if(!a_width || !a_height) return false;
   std::string a_format = a__format;
   tolowercase(a_format);  //handle legacy.
   int gl2ps_format;
-  if(s2format(a_format,gl2ps_format)) {
+  if(gl2ps_s2format(a_format,gl2ps_format)) {
+    int sort = -1;
+    if(a_opts_1.size() && !gl2ps_s2sort(a_opts_1,sort)) {
+      a_out << "tools::sg::write_paper: bad gl2ps sort " << sout(a_opts_1) << "." << std::endl;
+      return false;
+    }
+    int options = -1;
+    if(a_opts_2.size() && !gl2ps_s2options(a_opts_2,options)) {
+      a_out << "tools::sg::write_paper: bad gl2ps options " << sout(a_opts_2) << "." << std::endl;
+      return false;
+    }
     gl2ps_action action(a_gl2ps_mgr,a_out,a_width,a_height);
     action.clear_color(a_back_r,a_back_g,a_back_b,a_back_a);
-    if(!action.open(a_file,gl2ps_format)) return false;
+    if(!action.open(a_file,gl2ps_format,sort,options)) return false;
+    action.set_do_transparency(false);
+    action.set_have_to_do_transparency(false);
     a_scene_graph.render(action);
+    if(!action.end()) { //check that matrices stack are ok.
+      a_out << "tools::sg::write_paper: bad gl2ps_action end." << std::endl;
+      action.close();
+      return false;
+    } else if(a_do_transparency) {
+      if(action.have_to_do_transparency()) {
+        //a_out << "tools::sg::write_paper: warning: gl2ps does not handle transparency." << std::endl;
+        action.set_do_transparency(true);
+        a_scene_graph.render(action);
+        if(!action.end()) { //check that matrices stack are ok.
+          a_out << "tools::sg::write_paper: bad gl2ps_action end." << std::endl;
+          action.close();
+          return false;
+        }
+      }
+    }
     action.close();
     return true;
   }
 
   zb_action action(a_zb_mgr,a_out,a_width,a_height);
-  action.zbuffer().clear_color_buffer(0);
-  action.add_color(a_back_r,a_back_g,a_back_b,a_back_a);
-  action.zbuffer().clear_depth_buffer();
+  action.clear_color_buffer(a_back_r,a_back_g,a_back_b,a_back_a);
+  action.clear_depth_buffer();
+  action.set_do_transparency(false);
+  action.set_have_to_do_transparency(false);
   a_scene_graph.render(action);
+  if(!action.end()) { //check that matrices stack are ok.
+    a_out << "tools::sg::write_paper: bad zb_action end." << std::endl;
+    return false;
+  } else if(a_do_transparency) {
+    if(action.have_to_do_transparency()) {
+      action.set_do_transparency(true);
+      a_scene_graph.render(action);
+      if(!action.end()) { //check that matrices stack are ok.
+        a_out << "tools::sg::write_paper: bad zb_action end." << std::endl;
+        return false;
+      }
+    }
+  }
 
   if((a_format=="zb_ps")||(a_format=="inzb_ps")) {
     wps wps(a_out);
@@ -81,7 +126,7 @@ inline bool write_paper(std::ostream& a_out,
     }
 
     size_t sz;
-    unsigned char* buffer = action.get_rgbas(sz);
+    unsigned char* buffer = action.get_rgbas(sz,a_top_to_bottom);
     if(!buffer) {
       a_out << "tools::sg::write_paper : can't get rgba image." << std::endl;
       return false;
@@ -104,7 +149,7 @@ inline bool write_paper(std::ostream& a_out,
     }
 
     size_t sz;
-    unsigned char* buffer = action.get_rgbs(sz);
+    unsigned char* buffer = action.get_rgbs(sz,a_top_to_bottom);
     if(!buffer) {
       a_out << "tools::sg::write_paper : can't get rgb image." << std::endl;
       return false;
@@ -121,6 +166,36 @@ inline bool write_paper(std::ostream& a_out,
 
   a_out << "tools::sg::write_paper : unknown format " << a_format << std::endl;
   return false;
+}
+
+inline bool write_paper(std::ostream& a_out,
+                        gl2ps_manager& a_gl2ps_mgr,zb_manager& a_zb_mgr,
+                        png_writer a_png_writer,jpeg_writer a_jpeg_writer,
+                        const tools::colorf& a_back,
+                        node& a_scene_graph,
+                        unsigned int a_width,unsigned int a_height,
+                        const std::string& a_file,const std::string& a_format,
+                        bool a_do_transparency,bool a_top_to_bottom,
+                        const std::string& a_opts_1,const std::string& a_opts_2) {
+  return tools::sg::write_paper(a_out,a_gl2ps_mgr,a_zb_mgr,
+                                a_png_writer,a_jpeg_writer,
+                                a_back.r(),a_back.g(),a_back.b(),a_back.a(),
+                                a_scene_graph,a_width,a_height,a_file,a_format,
+                                a_do_transparency,a_top_to_bottom,a_opts_1,a_opts_2);
+}
+
+inline bool write_paper(std::ostream& a_out,
+                        gl2ps_manager& a_gl2ps_mgr,zb_manager& a_zb_mgr,
+                        png_writer a_png_writer,jpeg_writer a_jpeg_writer,
+                        const tools::colorf& a_back,
+                        node& a_scene_graph,
+                        unsigned int a_width,unsigned int a_height,
+                        const std::string& a_file,const std::string& a_format) {
+  return tools::sg::write_paper(a_out,a_gl2ps_mgr,a_zb_mgr,
+                                a_png_writer,a_jpeg_writer,
+                                a_back.r(),a_back.g(),a_back.b(),a_back.a(),
+                                a_scene_graph,a_width,a_height,a_file,a_format,
+                                true,true,std::string(),std::string());
 }
 
 }}

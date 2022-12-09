@@ -143,7 +143,7 @@ G4int G4ProcessTable::Insert(G4VProcess* aProcess,
 #endif
 
   G4int idxTbl = 0;
-  G4int nidx = fProcTblVector->size();
+  G4int nidx = (G4int)fProcTblVector->size();
   G4ProcTblElement* anElement = nullptr;
   // loop over all elements
   for (; idxTbl < nidx; ++idxTbl)
@@ -208,7 +208,7 @@ G4int G4ProcessTable::Remove( G4VProcess* aProcess,
 #endif
 
   G4int idxTbl = 0;
-  G4int nidx = fProcTblVector->size();
+  G4int nidx = (G4int)fProcTblVector->size();
   G4ProcTblElement* anElement =nullptr;
   // loop over all elements
   for (; idxTbl < nidx; ++idxTbl)
@@ -269,8 +269,8 @@ void G4ProcessTable::RegisterProcess(G4VProcess* ptr)
 //
 void G4ProcessTable::DeRegisterProcess(G4VProcess* ptr)
 {  
-  G4int nn = fListProcesses.size();
-  for(G4int i=0; i<nn; ++i)
+  std::size_t nn = fListProcesses.size();
+  for(std::size_t i=0; i<nn; ++i)
   {
     if(ptr == fListProcesses[i])
     { 
@@ -611,7 +611,7 @@ void G4ProcessTable::SetProcessActivation( G4ProcessType   processType,
 #endif
   
   G4ProcessVector* procList =  processManager->GetProcessList();
-  for (std::size_t idx = 0; idx < procList->length(); ++idx)
+  for (G4int idx = 0; idx < (G4int)procList->length(); ++idx)
   {
     G4VProcess* process = (*procList)(idx);
     if ( process->GetProcessType() == processType)

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -59,6 +59,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -86,7 +87,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -118,6 +119,16 @@ Upper energy limit for e+- multiple scattering     100 MeV
 Type of electron single scattering model           0
 Type of nuclear form-factor                        1
 Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Directory in G4LEDATA for fluorescence data files  fluor
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 #
 ##/globalField/setValue 0 0 5 tesla
@@ -137,6 +148,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -164,7 +176,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -197,6 +209,21 @@ Type of electron single scattering model           0
 Type of nuclear form-factor                        1
 Screening factor                                   1
 =======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Directory in G4LEDATA for fluorescence data files  fluor
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -215,8 +242,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -332,15 +359,16 @@ ionIoni:  for GenericIon  XStype:1  SubType=2
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-min MeanLife (from G4NuclideTable)                0.14427 ps 
+min MeanLife (from G4NuclideTable)                1 ps 
 Max life time (from G4DeexPrecoParameters)        1 ns 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           0
+Enabled atomic relaxation mode                    1
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
-Atomic de-excitation enabled                      0
-Auger electron emission enabled                   0
-Check EM cuts disabled for atomic de-excitation   0
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
 Threshold for very long decay time at rest        3.171e+10 y  
@@ -622,31 +650,31 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.220000s Real=1.243710s Sys=0.000000s
+  User=1.800000s Real=1.819667s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit:   99.812 MeV
+ Total energy deposit:   99.817 MeV
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:  25.463   charged:  138.26
- Nb  steps/event   neutral:  140.51   charged:  204.32
+ Nb tracks/event   neutral:  26.266   charged:  213.24
+ Nb  steps/event   neutral:  140.46   charged:  279.25
 
  Process calls frequency :
-          CoulombScat=      1                  Rayl=  17705        Transportation=   1877
-              annihil=   2855                 compt= 212384                  conv=   2843
-                eBrem=  46343                 eIoni= 359084                   msc=    341
-                 phot=  46218 
+          CoulombScat=      1                  Rayl=  17869        Transportation=   1803
+              annihil=   2770                 compt= 210513                  conv=   2755
+                eBrem=  46487                 eIoni= 508883                   msc=    349
+                 phot=  47979 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.015 cm    rms = 3.7708 cm 
- proj Range = 9.5256 cm    rms = 3.4716 cm 
- proj/true  = 0.86482
- transverse dispersion at end = 1.6495 cm 
-      mass true Range from simulation = 29.739 g/cm2 
+ true Range = 11.053 cm    rms = 3.8363 cm 
+ proj Range = 9.6034 cm    rms = 3.5551 cm 
+ proj/true  = 0.86882
+ transverse dispersion at end = 1.6103 cm 
+      mass true Range from simulation = 29.844 g/cm2 
        from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
@@ -654,7 +682,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={298195347322050362, 377162314956681423, 1447041953751850220, 820017327307924846, 563394911621704075, 1779362139862319236, 1119598109281490304, 943712282904557481, 574987401755135719, 1300561144833418332, 10746752241443683, 246367271859313009, 2118032409884854416, 2151255124739040337, 525695242994713200, 485469822262530518, 35667118537042959} counter= 13sumtot= 962208620833906414
+N=17 V[N]={690198723536179998, 579348065020758353, 1232261265139153084, 165787043733624689, 748937011550919510, 879415774404578847, 2110754935832426187, 1748976034684396008, 1365227957530309923, 1135855280823101212, 359509110872997255, 2259881656703777725, 1810625495170997845, 2089662706748706929, 1984193456088473829, 1436347530539347210, 1011961977761377040} counter= 15sumtot= 856356943217880085
 ---------------------------------------
 #
 /gun/particle proton
@@ -676,7 +704,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={298195347322050362, 377162314956681423, 1447041953751850220, 820017327307924846, 563394911621704075, 1779362139862319236, 1119598109281490304, 943712282904557481, 574987401755135719, 1300561144833418332, 10746752241443683, 246367271859313009, 2118032409884854416, 2151255124739040337, 525695242994713200, 485469822262530518, 35667118537042959} counter= 13sumtot= 962208620833906414
+N=17 V[N]={690198723536179998, 579348065020758353, 1232261265139153084, 165787043733624689, 748937011550919510, 879415774404578847, 2110754935832426187, 1748976034684396008, 1365227957530309923, 1135855280823101212, 359509110872997255, 2259881656703777725, 1810625495170997845, 2089662706748706929, 1984193456088473829, 1436347530539347210, 1011961977761377040} counter= 15sumtot= 856356943217880085
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -691,28 +719,28 @@ N=17 V[N]={298195347322050362, 377162314956681423, 1447041953751850220, 82001732
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.070000s Real=0.065042s Sys=0.000000s
+  User=0.080000s Real=0.074767s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 168.91 eV 
+ NIEL energy calculated: 168.14 eV 
 
- Nb tracks/event   neutral:       0   charged:   1.008
- Nb  steps/event   neutral:       0   charged:  19.076
+ Nb tracks/event   neutral:       0   charged:  1.0065
+ Nb  steps/event   neutral:       0   charged:  19.073
 
  Process calls frequency :
-          CoulombScat=     40             NoProcess=     16                 hIoni=  38081
-              ionIoni=     16 
+          CoulombScat=     46             NoProcess=     13                 hIoni=  38074
+              ionIoni=     13 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7109 cm    rms = 414.55 um 
- proj Range = 3.7027 cm    rms = 421.77 um 
- proj/true  = 0.99778
- transverse dispersion at end = 1.1102 mm 
+ true Range = 3.7109 cm    rms = 415.06 um 
+ proj Range = 3.7026 cm    rms = 431.69 um 
+ proj/true  = 0.99775
+ transverse dispersion at end = 1.1267 mm 
       mass true Range from simulation = 10.019 g/cm2 
        from PhysicsTable (csda range) = 10.012 g/cm2 
 ---------------------------------------------------------
@@ -721,7 +749,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1963692197878496392, 622168023948953357, 2089546183435143766, 753496098915486054, 2242623049372405584, 1955456684500380770, 206222095247760546, 227210730902721457, 1492029148174856020, 2036465380689031490, 2102770914763652064, 1950838336433853929, 128057754058570785, 681315585358317074, 1619110221249686914, 1008309735332188886, 1939323789642781919} counter= 15sumtot= 2266048846981041448
+N=17 V[N]={1022057284471871571, 2182122990961787818, 22661610049818286, 1167058904645161636, 1057523812732912072, 448833241231062584, 265784209780802524, 272334288315472262, 2207680454799403809, 1653502782966459341, 1990026467855209068, 1157980319271137565, 496108903690270821, 1002644507988024922, 1781101410953333273, 759600882143407906, 1560436312506735844} counter= 8sumtot= 600714310653319694
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

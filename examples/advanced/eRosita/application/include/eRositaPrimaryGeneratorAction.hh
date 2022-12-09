@@ -23,44 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #ifndef eRositaPrimaryGeneratorAction_h
 #define eRositaPrimaryGeneratorAction_h 1
 
 #include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-class G4ParticleGun;
 class G4Event;
+class G4ParticleGun;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-class eRositaPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-{
+class eRositaPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 public:
-  eRositaPrimaryGeneratorAction();  
-  
-  virtual ~eRositaPrimaryGeneratorAction();
+    explicit eRositaPrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+    ~eRositaPrimaryGeneratorAction() override;
+
+    void GeneratePrimaries(G4Event* event) override;
 
 private:
-  G4ParticleGun* particleGun;
+    G4ParticleGun* particleGun;
 
-  G4double xposition;     // x position of vertex
-  G4double yposition;     // y      -"-
-  G4double zposition;     // z
+    G4double positionX; // x position of a vertex
 
-  G4double xdirection;    // x component of initial momentum vector
-  G4double ydirection;    // y              -"-
-  G4double zdirection;    // z              -"-
-  
+    G4double positionY; // y position of a vertex
+
+    G4double positionZ; // z position of a vertex
+
+    static constexpr auto INITIAL_MOMENTUM_DIRECTION_X{0.0};
+    G4double momentumDirectionX{INITIAL_MOMENTUM_DIRECTION_X}; // x component of initial momentum vector
+
+    static constexpr auto INITIAL_MOMENTUM_DIRECTION_Y{-0.5};
+    G4double momentumDirectionY{INITIAL_MOMENTUM_DIRECTION_Y}; // y component of initial momentum vector
+
+    static constexpr auto INITIAL_MOMENTUM_DIRECTION_Z{-1.0};
+    G4double momentumDirectionZ{INITIAL_MOMENTUM_DIRECTION_Z}; // z component of initial momentum vector
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

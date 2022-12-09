@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -169,10 +169,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
        2.10          0k         1       10         18         0.00    calorimeter
 ### Run 0 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
 --> Event 2000 starts.
@@ -186,7 +187,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.160000s Real=6.248297s Sys=0.000000s
+  User=7.520000s Real=7.589100s Sys=0.000000s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -209,107 +210,108 @@ Run Summary
 
              total Energy          (rms/mean)      visible Energy        (rms/mean)
 
-   layer 1: 1.5863 MeV +- 3.074 MeV  (1.9e+02 %)     164.82 keV +- 1.129 MeV  (6.9e+02 %)
-   layer 2: 1.5596 MeV +- 2.499 MeV  (1.6e+02 %)     151.77 keV +- 495.4 keV  (3.3e+02 %)
-   layer 3: 1.5195 MeV +- 2.178 MeV  (1.4e+02 %)     161.87 keV +- 648.9 keV  (4e+02 %)
-   layer 4: 1.5254 MeV +- 2.204 MeV  (1.4e+02 %)     168.06 keV +- 901.7 keV  (5.4e+02 %)
-   layer 5: 1.5383 MeV +- 2.478 MeV  (1.6e+02 %)     169.56 keV +- 1.004 MeV  (5.9e+02 %)
-   layer 6: 1.5433 MeV +- 2.264 MeV  (1.5e+02 %)     167.06 keV +- 1.007 MeV  (6e+02 %)
-   layer 7: 1.5073 MeV +- 2.445 MeV  (1.6e+02 %)     159.39 keV +-   595 keV  (3.7e+02 %)
-   layer 8: 1.5125 MeV +- 2.227 MeV  (1.5e+02 %)     155.04 keV +- 683.9 keV  (4.4e+02 %)
-   layer 9: 1.5523 MeV +- 2.679 MeV  (1.7e+02 %)     177.31 keV +-  1.14 MeV  (6.4e+02 %)
-   layer 10: 1.5289 MeV +- 2.243 MeV  (1.5e+02 %)     155.57 keV +- 581.1 keV  (3.7e+02 %)
-   layer 11: 1.5873 MeV +- 2.917 MeV  (1.8e+02 %)     158.89 keV +- 751.5 keV  (4.7e+02 %)
-   layer 12:  1.553 MeV +- 2.423 MeV  (1.6e+02 %)     160.96 keV +- 502.9 keV  (3.1e+02 %)
-   layer 13: 1.5199 MeV +-  2.19 MeV  (1.4e+02 %)      157.8 keV +- 828.9 keV  (5.3e+02 %)
-   layer 14: 1.5448 MeV +- 2.593 MeV  (1.7e+02 %)     158.88 keV +-   509 keV  (3.2e+02 %)
-   layer 15: 1.5587 MeV +- 2.632 MeV  (1.7e+02 %)      162.9 keV +- 1.032 MeV  (6.3e+02 %)
-   layer 16: 1.4985 MeV +- 2.019 MeV  (1.3e+02 %)     144.08 keV +-   286 keV  (2e+02 %)
-   layer 17: 1.5221 MeV +-  2.21 MeV  (1.5e+02 %)     156.61 keV +- 631.8 keV  (4e+02 %)
-   layer 18: 1.5181 MeV +- 2.301 MeV  (1.5e+02 %)     150.23 keV +- 330.2 keV  (2.2e+02 %)
-   layer 19: 1.4889 MeV +- 2.015 MeV  (1.4e+02 %)      151.8 keV +- 428.6 keV  (2.8e+02 %)
-   layer 20:  1.534 MeV +- 2.157 MeV  (1.4e+02 %)     157.92 keV +- 420.3 keV  (2.7e+02 %)
-   layer 21: 1.5643 MeV +- 2.566 MeV  (1.6e+02 %)     167.41 keV +- 1.122 MeV  (6.7e+02 %)
-   layer 22: 1.5119 MeV +- 2.048 MeV  (1.4e+02 %)     160.78 keV +- 944.9 keV  (5.9e+02 %)
-   layer 23: 1.5166 MeV +- 2.039 MeV  (1.3e+02 %)     151.43 keV +- 412.4 keV  (2.7e+02 %)
-   layer 24: 1.5151 MeV +- 1.953 MeV  (1.3e+02 %)     153.58 keV +- 622.2 keV  (4.1e+02 %)
-   layer 25: 1.5095 MeV +- 2.175 MeV  (1.4e+02 %)     154.65 keV +- 531.5 keV  (3.4e+02 %)
-   layer 26:  1.495 MeV +-  2.05 MeV  (1.4e+02 %)     160.13 keV +- 696.3 keV  (4.3e+02 %)
-   layer 27: 1.5732 MeV +- 2.744 MeV  (1.7e+02 %)     171.47 keV +- 1.177 MeV  (6.9e+02 %)
-   layer 28:  1.533 MeV +- 2.285 MeV  (1.5e+02 %)     157.02 keV +- 564.9 keV  (3.6e+02 %)
-   layer 29: 1.5386 MeV +- 2.278 MeV  (1.5e+02 %)     157.14 keV +- 635.3 keV  (4e+02 %)
-   layer 30: 1.5372 MeV +- 2.518 MeV  (1.6e+02 %)     157.16 keV +- 436.1 keV  (2.8e+02 %)
-   layer 31: 1.5471 MeV +- 2.493 MeV  (1.6e+02 %)     164.82 keV +- 1.045 MeV  (6.3e+02 %)
-   layer 32: 1.4968 MeV +- 1.763 MeV  (1.2e+02 %)     171.11 keV +- 961.5 keV  (5.6e+02 %)
-   layer 33: 1.5266 MeV +- 2.165 MeV  (1.4e+02 %)     161.95 keV +- 745.2 keV  (4.6e+02 %)
-   layer 34: 1.5132 MeV +- 2.107 MeV  (1.4e+02 %)     166.25 keV +- 1.024 MeV  (6.2e+02 %)
-   layer 35: 1.4895 MeV +- 1.756 MeV  (1.2e+02 %)     167.36 keV +- 1.068 MeV  (6.4e+02 %)
-   layer 36: 1.5094 MeV +- 1.903 MeV  (1.3e+02 %)     158.72 keV +- 561.1 keV  (3.5e+02 %)
-   layer 37:  1.562 MeV +- 2.524 MeV  (1.6e+02 %)     165.23 keV +- 919.4 keV  (5.6e+02 %)
-   layer 38: 1.5108 MeV +- 2.138 MeV  (1.4e+02 %)     153.62 keV +- 625.6 keV  (4.1e+02 %)
-   layer 39: 1.5184 MeV +- 2.147 MeV  (1.4e+02 %)     161.04 keV +- 910.1 keV  (5.7e+02 %)
-   layer 40: 1.5718 MeV +- 2.785 MeV  (1.8e+02 %)      168.4 keV +-   973 keV  (5.8e+02 %)
-   layer 41: 1.5246 MeV +- 2.343 MeV  (1.5e+02 %)     153.97 keV +- 407.8 keV  (2.6e+02 %)
-   layer 42: 1.5272 MeV +- 2.188 MeV  (1.4e+02 %)     164.79 keV +- 951.7 keV  (5.8e+02 %)
-   layer 43: 1.5407 MeV +- 2.618 MeV  (1.7e+02 %)     160.51 keV +- 625.1 keV  (3.9e+02 %)
-   layer 44: 1.5215 MeV +- 2.236 MeV  (1.5e+02 %)     158.39 keV +- 666.4 keV  (4.2e+02 %)
-   layer 45: 1.5432 MeV +- 2.264 MeV  (1.5e+02 %)     157.11 keV +- 576.3 keV  (3.7e+02 %)
-   layer 46: 1.5033 MeV +- 2.067 MeV  (1.4e+02 %)     150.38 keV +- 312.9 keV  (2.1e+02 %)
-   layer 47: 1.4749 MeV +- 1.737 MeV  (1.2e+02 %)     157.35 keV +- 516.6 keV  (3.3e+02 %)
-   layer 48: 1.5441 MeV +- 2.467 MeV  (1.6e+02 %)     174.41 keV +- 902.7 keV  (5.2e+02 %)
-   layer 49: 1.5401 MeV +- 2.339 MeV  (1.5e+02 %)     153.42 keV +- 516.7 keV  (3.4e+02 %)
-   layer 50: 1.5045 MeV +- 2.154 MeV  (1.4e+02 %)     149.99 keV +- 340.4 keV  (2.3e+02 %)
-   layer 51: 1.5345 MeV +- 2.187 MeV  (1.4e+02 %)     162.47 keV +-   873 keV  (5.4e+02 %)
-   layer 52: 1.5163 MeV +- 2.036 MeV  (1.3e+02 %)     165.41 keV +- 834.4 keV  (5e+02 %)
-   layer 53: 1.5159 MeV +- 2.107 MeV  (1.4e+02 %)     157.26 keV +- 630.8 keV  (4e+02 %)
-   layer 54: 1.5311 MeV +- 2.162 MeV  (1.4e+02 %)     155.52 keV +- 573.3 keV  (3.7e+02 %)
-   layer 55: 1.5228 MeV +-  2.16 MeV  (1.4e+02 %)     156.19 keV +- 581.6 keV  (3.7e+02 %)
-   layer 56:  1.532 MeV +- 2.192 MeV  (1.4e+02 %)     157.56 keV +- 505.1 keV  (3.2e+02 %)
-   layer 57: 1.5365 MeV +- 2.254 MeV  (1.5e+02 %)     164.29 keV +- 788.4 keV  (4.8e+02 %)
-   layer 58: 1.5162 MeV +- 2.189 MeV  (1.4e+02 %)     163.68 keV +- 686.6 keV  (4.2e+02 %)
-   layer 59: 1.5219 MeV +- 2.056 MeV  (1.4e+02 %)     163.47 keV +- 862.5 keV  (5.3e+02 %)
-   layer 60:  1.467 MeV +- 1.708 MeV  (1.2e+02 %)     158.27 keV +-   734 keV  (4.6e+02 %)
-   layer 61: 1.5124 MeV +- 2.083 MeV  (1.4e+02 %)     163.26 keV +- 635.7 keV  (3.9e+02 %)
-   layer 62: 1.5096 MeV +-  2.12 MeV  (1.4e+02 %)     163.55 keV +- 833.3 keV  (5.1e+02 %)
-   layer 63: 1.4956 MeV +- 1.745 MeV  (1.2e+02 %)     155.59 keV +-   458 keV  (2.9e+02 %)
-   layer 64: 1.4978 MeV +-  1.96 MeV  (1.3e+02 %)     155.54 keV +- 680.7 keV  (4.4e+02 %)
-   layer 65: 1.4971 MeV +- 1.758 MeV  (1.2e+02 %)     154.93 keV +- 468.1 keV  (3e+02 %)
-   layer 66: 1.5236 MeV +- 1.989 MeV  (1.3e+02 %)     161.81 keV +- 772.2 keV  (4.8e+02 %)
-   layer 67: 1.5035 MeV +- 2.026 MeV  (1.3e+02 %)     161.19 keV +- 960.7 keV  (6e+02 %)
-   layer 68: 1.5429 MeV +- 2.453 MeV  (1.6e+02 %)     160.36 keV +- 532.5 keV  (3.3e+02 %)
-   layer 69: 1.5305 MeV +- 2.105 MeV  (1.4e+02 %)     154.75 keV +- 672.1 keV  (4.3e+02 %)
-   layer 70: 1.4951 MeV +- 1.865 MeV  (1.2e+02 %)      150.4 keV +- 484.5 keV  (3.2e+02 %)
-   layer 71: 1.5377 MeV +- 2.392 MeV  (1.6e+02 %)     160.08 keV +- 616.9 keV  (3.9e+02 %)
-   layer 72: 1.5049 MeV +- 2.101 MeV  (1.4e+02 %)     148.15 keV +- 430.5 keV  (2.9e+02 %)
-   layer 73: 1.5231 MeV +-  2.14 MeV  (1.4e+02 %)     149.51 keV +- 416.4 keV  (2.8e+02 %)
-   layer 74: 1.5324 MeV +- 2.313 MeV  (1.5e+02 %)     152.98 keV +- 426.6 keV  (2.8e+02 %)
-   layer 75: 1.5608 MeV +-  2.33 MeV  (1.5e+02 %)     163.99 keV +-   797 keV  (4.9e+02 %)
-   layer 76: 1.5359 MeV +- 2.343 MeV  (1.5e+02 %)     162.78 keV +- 535.5 keV  (3.3e+02 %)
-   layer 77: 1.4973 MeV +- 2.025 MeV  (1.4e+02 %)     158.43 keV +- 807.4 keV  (5.1e+02 %)
-   layer 78: 1.4759 MeV +- 1.572 MeV  (1.1e+02 %)     146.14 keV +- 254.3 keV  (1.7e+02 %)
-   layer 79: 1.5384 MeV +- 2.385 MeV  (1.6e+02 %)     162.86 keV +- 771.1 keV  (4.7e+02 %)
-   layer 80: 1.5079 MeV +- 2.163 MeV  (1.4e+02 %)     153.33 keV +- 566.6 keV  (3.7e+02 %)
-   layer 81: 1.5174 MeV +- 2.076 MeV  (1.4e+02 %)      151.6 keV +- 478.9 keV  (3.2e+02 %)
-   layer 82:   1.48 MeV +- 1.611 MeV  (1.1e+02 %)     152.35 keV +- 322.6 keV  (2.1e+02 %)
-   layer 83: 1.5351 MeV +- 2.243 MeV  (1.5e+02 %)     153.91 keV +- 700.2 keV  (4.5e+02 %)
-   layer 84: 1.5436 MeV +-  2.35 MeV  (1.5e+02 %)     150.05 keV +- 516.2 keV  (3.4e+02 %)
-   layer 85: 1.4804 MeV +- 1.733 MeV  (1.2e+02 %)     156.73 keV +- 577.2 keV  (3.7e+02 %)
-   layer 86: 1.5107 MeV +- 2.002 MeV  (1.3e+02 %)     153.42 keV +- 521.3 keV  (3.4e+02 %)
-   layer 87: 1.5117 MeV +- 2.039 MeV  (1.3e+02 %)     155.55 keV +- 438.4 keV  (2.8e+02 %)
-   layer 88: 1.5299 MeV +- 2.245 MeV  (1.5e+02 %)      174.7 keV +- 1.018 MeV  (5.8e+02 %)
-   layer 89: 1.5103 MeV +- 1.881 MeV  (1.2e+02 %)     162.68 keV +- 759.7 keV  (4.7e+02 %)
-   layer 90: 1.5124 MeV +- 2.075 MeV  (1.4e+02 %)     152.15 keV +-   547 keV  (3.6e+02 %)
+   layer 1: 1.5386 MeV +- 2.425 MeV  (1.6e+02 %)     163.89 keV +-   924 keV  (5.6e+02 %)
+   layer 2: 1.5388 MeV +- 2.498 MeV  (1.6e+02 %)     149.71 keV +- 380.1 keV  (2.5e+02 %)
+   layer 3:  1.533 MeV +- 2.418 MeV  (1.6e+02 %)     169.49 keV +- 1.113 MeV  (6.6e+02 %)
+   layer 4: 1.5627 MeV +- 2.633 MeV  (1.7e+02 %)     160.87 keV +-   652 keV  (4.1e+02 %)
+   layer 5: 1.5383 MeV +- 2.425 MeV  (1.6e+02 %)     155.45 keV +- 543.3 keV  (3.5e+02 %)
+   layer 6: 1.5163 MeV +- 2.035 MeV  (1.3e+02 %)     157.65 keV +- 678.1 keV  (4.3e+02 %)
+   layer 7: 1.5337 MeV +- 2.311 MeV  (1.5e+02 %)     158.32 keV +- 845.1 keV  (5.3e+02 %)
+   layer 8: 1.5101 MeV +- 2.381 MeV  (1.6e+02 %)        158 keV +- 964.1 keV  (6.1e+02 %)
+   layer 9: 1.4988 MeV +- 1.838 MeV  (1.2e+02 %)     155.81 keV +- 393.3 keV  (2.5e+02 %)
+   layer 10: 1.5506 MeV +- 2.725 MeV  (1.8e+02 %)     153.94 keV +- 521.6 keV  (3.4e+02 %)
+   layer 11: 1.5293 MeV +- 2.258 MeV  (1.5e+02 %)     166.47 keV +- 766.2 keV  (4.6e+02 %)
+   layer 12: 1.5054 MeV +-  2.11 MeV  (1.4e+02 %)     151.91 keV +- 542.2 keV  (3.6e+02 %)
+   layer 13: 1.5072 MeV +- 2.428 MeV  (1.6e+02 %)     159.41 keV +- 953.7 keV  (6e+02 %)
+   layer 14: 1.5472 MeV +- 2.878 MeV  (1.9e+02 %)     147.51 keV +- 398.3 keV  (2.7e+02 %)
+   layer 15: 1.5635 MeV +- 2.664 MeV  (1.7e+02 %)     190.42 keV +- 1.344 MeV  (7.1e+02 %)
+   layer 16: 1.5194 MeV +- 2.224 MeV  (1.5e+02 %)     155.02 keV +- 580.4 keV  (3.7e+02 %)
+   layer 17: 1.5258 MeV +- 2.253 MeV  (1.5e+02 %)     172.58 keV +- 1.119 MeV  (6.5e+02 %)
+   layer 18: 1.5555 MeV +- 2.743 MeV  (1.8e+02 %)     152.53 keV +- 576.5 keV  (3.8e+02 %)
+   layer 19: 1.5429 MeV +- 2.608 MeV  (1.7e+02 %)     160.42 keV +- 570.4 keV  (3.6e+02 %)
+   layer 20: 1.5183 MeV +- 2.109 MeV  (1.4e+02 %)     149.55 keV +- 289.7 keV  (1.9e+02 %)
+   layer 21: 1.5314 MeV +- 1.982 MeV  (1.3e+02 %)     165.21 keV +- 819.2 keV  (5e+02 %)
+   layer 22: 1.5307 MeV +-  2.17 MeV  (1.4e+02 %)     160.96 keV +- 708.5 keV  (4.4e+02 %)
+   layer 23: 1.5429 MeV +-  2.24 MeV  (1.5e+02 %)     155.03 keV +- 483.5 keV  (3.1e+02 %)
+   layer 24: 1.5556 MeV +- 2.484 MeV  (1.6e+02 %)     175.37 keV +- 940.8 keV  (5.4e+02 %)
+   layer 25: 1.5541 MeV +- 2.771 MeV  (1.8e+02 %)     155.19 keV +- 929.4 keV  (6e+02 %)
+   layer 26:   1.52 MeV +- 1.991 MeV  (1.3e+02 %)      151.9 keV +- 438.9 keV  (2.9e+02 %)
+   layer 27: 1.4936 MeV +- 1.953 MeV  (1.3e+02 %)     160.97 keV +- 646.4 keV  (4e+02 %)
+   layer 28:   1.54 MeV +- 2.489 MeV  (1.6e+02 %)     162.98 keV +- 1.122 MeV  (6.9e+02 %)
+   layer 29: 1.5327 MeV +- 2.102 MeV  (1.4e+02 %)     164.27 keV +- 808.3 keV  (4.9e+02 %)
+   layer 30: 1.5196 MeV +- 2.166 MeV  (1.4e+02 %)     159.31 keV +- 595.3 keV  (3.7e+02 %)
+   layer 31: 1.5132 MeV +-  2.12 MeV  (1.4e+02 %)     154.17 keV +- 559.4 keV  (3.6e+02 %)
+   layer 32: 1.5359 MeV +- 2.163 MeV  (1.4e+02 %)     156.92 keV +- 625.2 keV  (4e+02 %)
+   layer 33: 1.5554 MeV +- 2.879 MeV  (1.9e+02 %)      151.1 keV +- 567.2 keV  (3.8e+02 %)
+   layer 34: 1.4905 MeV +- 2.014 MeV  (1.4e+02 %)      158.7 keV +- 514.4 keV  (3.2e+02 %)
+   layer 35: 1.5505 MeV +- 2.363 MeV  (1.5e+02 %)     158.98 keV +- 745.2 keV  (4.7e+02 %)
+   layer 36:  1.512 MeV +- 2.168 MeV  (1.4e+02 %)     153.41 keV +- 799.9 keV  (5.2e+02 %)
+   layer 37: 1.5127 MeV +- 1.986 MeV  (1.3e+02 %)     160.91 keV +- 773.4 keV  (4.8e+02 %)
+   layer 38: 1.5198 MeV +- 2.137 MeV  (1.4e+02 %)     155.91 keV +- 384.6 keV  (2.5e+02 %)
+   layer 39: 1.5144 MeV +- 2.024 MeV  (1.3e+02 %)     159.16 keV +- 803.6 keV  (5e+02 %)
+   layer 40:  1.507 MeV +- 1.983 MeV  (1.3e+02 %)     160.04 keV +- 504.3 keV  (3.2e+02 %)
+   layer 41:  1.548 MeV +- 2.547 MeV  (1.6e+02 %)     156.64 keV +- 709.2 keV  (4.5e+02 %)
+   layer 42: 1.5304 MeV +- 2.323 MeV  (1.5e+02 %)     155.54 keV +- 692.4 keV  (4.5e+02 %)
+   layer 43:  1.546 MeV +-  2.36 MeV  (1.5e+02 %)     159.33 keV +- 692.8 keV  (4.3e+02 %)
+   layer 44: 1.5293 MeV +- 2.318 MeV  (1.5e+02 %)     156.77 keV +- 534.3 keV  (3.4e+02 %)
+   layer 45:  1.536 MeV +- 2.394 MeV  (1.6e+02 %)     156.87 keV +- 652.3 keV  (4.2e+02 %)
+   layer 46: 1.5268 MeV +- 2.291 MeV  (1.5e+02 %)     157.28 keV +- 634.6 keV  (4e+02 %)
+   layer 47:  1.525 MeV +- 2.399 MeV  (1.6e+02 %)     159.36 keV +- 986.9 keV  (6.2e+02 %)
+   layer 48: 1.5502 MeV +-  2.54 MeV  (1.6e+02 %)     154.22 keV +- 521.3 keV  (3.4e+02 %)
+   layer 49: 1.5152 MeV +-  2.13 MeV  (1.4e+02 %)     171.52 keV +- 1.085 MeV  (6.3e+02 %)
+   layer 50:  1.515 MeV +- 2.043 MeV  (1.3e+02 %)     162.14 keV +- 928.1 keV  (5.7e+02 %)
+   layer 51: 1.5503 MeV +- 2.477 MeV  (1.6e+02 %)     164.36 keV +- 855.2 keV  (5.2e+02 %)
+   layer 52: 1.5315 MeV +- 2.365 MeV  (1.5e+02 %)     163.31 keV +- 885.2 keV  (5.4e+02 %)
+   layer 53: 1.4863 MeV +- 1.822 MeV  (1.2e+02 %)     156.84 keV +- 455.3 keV  (2.9e+02 %)
+   layer 54: 1.5383 MeV +-  2.65 MeV  (1.7e+02 %)     157.28 keV +- 652.4 keV  (4.1e+02 %)
+   layer 55: 1.5017 MeV +- 2.048 MeV  (1.4e+02 %)     159.53 keV +- 876.4 keV  (5.5e+02 %)
+   layer 56: 1.5507 MeV +- 2.345 MeV  (1.5e+02 %)     147.02 keV +- 304.1 keV  (2.1e+02 %)
+   layer 57: 1.5189 MeV +- 2.152 MeV  (1.4e+02 %)     150.35 keV +- 566.3 keV  (3.8e+02 %)
+   layer 58: 1.5213 MeV +- 2.002 MeV  (1.3e+02 %)     154.44 keV +- 434.3 keV  (2.8e+02 %)
+   layer 59: 1.5384 MeV +- 2.412 MeV  (1.6e+02 %)     152.59 keV +- 617.9 keV  (4e+02 %)
+   layer 60: 1.4874 MeV +- 1.737 MeV  (1.2e+02 %)     148.41 keV +- 342.2 keV  (2.3e+02 %)
+   layer 61: 1.5576 MeV +- 2.602 MeV  (1.7e+02 %)     169.01 keV +- 984.9 keV  (5.8e+02 %)
+   layer 62: 1.5516 MeV +- 2.342 MeV  (1.5e+02 %)     175.14 keV +- 1.023 MeV  (5.8e+02 %)
+   layer 63: 1.5224 MeV +- 1.872 MeV  (1.2e+02 %)     153.04 keV +- 496.8 keV  (3.2e+02 %)
+   layer 64: 1.5257 MeV +- 2.528 MeV  (1.7e+02 %)     169.49 keV +-   970 keV  (5.7e+02 %)
+   layer 65: 1.5492 MeV +- 2.439 MeV  (1.6e+02 %)     156.66 keV +- 860.9 keV  (5.5e+02 %)
+   layer 66:  1.508 MeV +- 1.968 MeV  (1.3e+02 %)     173.97 keV +-   895 keV  (5.1e+02 %)
+   layer 67:  1.511 MeV +- 1.884 MeV  (1.2e+02 %)      159.8 keV +- 634.4 keV  (4e+02 %)
+   layer 68: 1.5033 MeV +- 2.047 MeV  (1.4e+02 %)     165.92 keV +- 947.1 keV  (5.7e+02 %)
+   layer 69:  1.559 MeV +- 2.691 MeV  (1.7e+02 %)     150.91 keV +- 470.6 keV  (3.1e+02 %)
+   layer 70: 1.5047 MeV +- 2.208 MeV  (1.5e+02 %)     167.81 keV +- 858.4 keV  (5.1e+02 %)
+   layer 71: 1.5242 MeV +- 2.236 MeV  (1.5e+02 %)     160.42 keV +- 745.2 keV  (4.6e+02 %)
+   layer 72: 1.5242 MeV +- 2.036 MeV  (1.3e+02 %)     166.61 keV +- 894.7 keV  (5.4e+02 %)
+   layer 73:  1.518 MeV +- 2.189 MeV  (1.4e+02 %)     166.79 keV +- 889.1 keV  (5.3e+02 %)
+   layer 74: 1.4742 MeV +- 1.757 MeV  (1.2e+02 %)     152.92 keV +-   507 keV  (3.3e+02 %)
+   layer 75: 1.5192 MeV +- 2.319 MeV  (1.5e+02 %)     150.52 keV +- 497.9 keV  (3.3e+02 %)
+   layer 76: 1.5287 MeV +- 2.121 MeV  (1.4e+02 %)     159.93 keV +- 633.8 keV  (4e+02 %)
+   layer 77: 1.4751 MeV +-  1.77 MeV  (1.2e+02 %)     157.96 keV +-   709 keV  (4.5e+02 %)
+   layer 78:  1.518 MeV +-  2.19 MeV  (1.4e+02 %)     157.57 keV +- 769.8 keV  (4.9e+02 %)
+   layer 79: 1.5345 MeV +- 2.186 MeV  (1.4e+02 %)     158.19 keV +-   618 keV  (3.9e+02 %)
+   layer 80: 1.5095 MeV +- 2.141 MeV  (1.4e+02 %)     148.96 keV +- 469.3 keV  (3.2e+02 %)
+   layer 81: 1.5318 MeV +- 2.204 MeV  (1.4e+02 %)     165.25 keV +- 712.3 keV  (4.3e+02 %)
+   layer 82: 1.5066 MeV +- 1.946 MeV  (1.3e+02 %)     155.61 keV +- 538.5 keV  (3.5e+02 %)
+   layer 83: 1.4948 MeV +- 2.071 MeV  (1.4e+02 %)     158.54 keV +- 618.4 keV  (3.9e+02 %)
+   layer 84: 1.4945 MeV +- 1.896 MeV  (1.3e+02 %)        155 keV +- 596.4 keV  (3.8e+02 %)
+   layer 85: 1.5235 MeV +- 2.172 MeV  (1.4e+02 %)     169.61 keV +- 1.073 MeV  (6.3e+02 %)
+   layer 86: 1.4913 MeV +- 1.855 MeV  (1.2e+02 %)     156.85 keV +- 753.7 keV  (4.8e+02 %)
+   layer 87: 1.5127 MeV +- 1.772 MeV  (1.2e+02 %)     164.97 keV +- 801.4 keV  (4.9e+02 %)
+   layer 88: 1.4829 MeV +- 1.718 MeV  (1.2e+02 %)     173.25 keV +- 939.3 keV  (5.4e+02 %)
+   layer 89: 1.4951 MeV +- 1.687 MeV  (1.1e+02 %)     157.29 keV +- 662.9 keV  (4.2e+02 %)
+   layer 90: 1.5451 MeV +-  2.37 MeV  (1.5e+02 %)     169.28 keV +- 1.046 MeV  (6.2e+02 %)
 
-   total calor :  149.6 MeV +- 21.42 MeV  ( 14 %)     14.307 MeV +- 6.755 MeV  ( 47 %)
+   total calor : 149.66 MeV +- 21.97 MeV  ( 15 %)     14.361 MeV +- 7.053 MeV  ( 49 %)
 ------------------------------------------------------------
 
-   Leakage :  850.4 MeV +- 21.42 MeV
-   Eleak/Ebeam =  85 %  ( forward =  85 %   backward =   0 %   lateral =   0 %)
+   Leakage : 850.34 MeV +- 21.97 MeV
+   Eleak/Ebeam =  85 %  ( forward =  85 %   backward =   0 %   lateral =0.0057 %)
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1013644840, 1220674325
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={688842632812770893, 493744256964668609, 2014998788919770078, 555486352909931968, 527426544983729244, 1626671489998783318, 256016924732933596, 1122832362623961, 92813431543576012, 782427591811683370, 499713687443503297, 87179051965860853, 795185337074364343, 1991060270564532244, 1246127010838719190, 1117806037430592056, 830205479497239372} counter= 14sumtot= 2077612675786812649
+---------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -334,11 +336,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.000961 MB
+Pool ID '7G4Track', size : 0.00192 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.062 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.063 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

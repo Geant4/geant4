@@ -134,12 +134,12 @@ private:
   // Minimum and maximum Z in EADL table containing identities and binding
   // energies of shells
   G4int zMin = 1; 
-  G4int zMax = 100;
+  G4int zMax = 104;
   
   // Minimum and maximum Z in EADL table containing identities, transition 
   // energies and transition probabilities of shells
   G4int infTableLimit = 6;
-  G4int supTableLimit = 100;
+  G4int supTableLimit = 104;
   G4int verboseLevel;
   G4bool isInitialized;
 };

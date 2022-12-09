@@ -281,7 +281,7 @@ class HepPolyhedron {
 
  public:
   // Default constructor
-  HepPolyhedron() : nvert(0), nface(0), pV(0), pF(0) {}
+  HepPolyhedron() : nvert(0), nface(0), pV(nullptr), pF(nullptr) {}
 
   // Constructor with allocation of memory
   HepPolyhedron(G4int Nvert, G4int Nface);
@@ -345,15 +345,15 @@ class HepPolyhedron {
 
   // Get face by index
   void GetFacet(G4int iFace, G4int &n, G4int *iNodes,
-                G4int *edgeFlags = 0, G4int *iFaces = 0) const;
+                G4int *edgeFlags = nullptr, G4int *iFaces = nullptr) const;
 
   // Get face by index
   void GetFacet(G4int iFace, G4int &n, G4Point3D *nodes,
-                G4int *edgeFlags=0, G4Normal3D *normals=0) const;
+                G4int *edgeFlags=nullptr, G4Normal3D *normals=nullptr) const;
 
   // Get next face with normals at the nodes
-  G4bool GetNextFacet(G4int &n, G4Point3D *nodes, G4int *edgeFlags=0,
-                      G4Normal3D *normals=0) const;
+  G4bool GetNextFacet(G4int &n, G4Point3D *nodes, G4int *edgeFlags=nullptr,
+                      G4Normal3D *normals=nullptr) const;
 
   // Get normal of the face given by index
   G4Normal3D GetNormal(G4int iFace) const;
@@ -442,7 +442,7 @@ class HepPolyhedronTrd2 : public HepPolyhedron
  public:
   HepPolyhedronTrd2(G4double Dx1, G4double Dx2,
                     G4double Dy1, G4double Dy2, G4double Dz);
-  virtual ~HepPolyhedronTrd2();
+  ~HepPolyhedronTrd2() override;
 };
 
 class HepPolyhedronTrd1 : public HepPolyhedronTrd2
@@ -450,14 +450,14 @@ class HepPolyhedronTrd1 : public HepPolyhedronTrd2
  public:
   HepPolyhedronTrd1(G4double Dx1, G4double Dx2,
                     G4double Dy, G4double Dz);
-  virtual ~HepPolyhedronTrd1();
+  ~HepPolyhedronTrd1() override;
 };
 
 class HepPolyhedronBox : public HepPolyhedronTrd2
 {
  public:
   HepPolyhedronBox(G4double Dx, G4double Dy, G4double Dz);
-  virtual ~HepPolyhedronBox();
+  ~HepPolyhedronBox() override;
 };
 
 class HepPolyhedronTrap : public HepPolyhedron
@@ -468,7 +468,7 @@ class HepPolyhedronTrap : public HepPolyhedron
                     G4double Dx1, G4double Dx2, G4double Alp1,
                     G4double Dy2,
                     G4double Dx3, G4double Dx4, G4double Alp2);
-  virtual ~HepPolyhedronTrap();
+  ~HepPolyhedronTrap() override;
 };
 
 class HepPolyhedronPara : public HepPolyhedronTrap
@@ -476,7 +476,7 @@ class HepPolyhedronPara : public HepPolyhedronTrap
  public:
   HepPolyhedronPara(G4double Dx, G4double Dy, G4double Dz,
                     G4double Alpha, G4double Theta, G4double Phi);
-  virtual ~HepPolyhedronPara();
+  ~HepPolyhedronPara() override;
 };
 
 class HepPolyhedronParaboloid : public HepPolyhedron
@@ -487,7 +487,7 @@ class HepPolyhedronParaboloid : public HepPolyhedron
                           G4double dz,
                           G4double Phi1,
                           G4double Dphi);
-  virtual ~HepPolyhedronParaboloid();
+  ~HepPolyhedronParaboloid() override;
 };
 
 class HepPolyhedronHype : public HepPolyhedron
@@ -498,7 +498,7 @@ class HepPolyhedronHype : public HepPolyhedron
                     G4double tan1,
                     G4double tan2,
                     G4double halfZ);
-  virtual ~HepPolyhedronHype();
+  ~HepPolyhedronHype() override;
 };
 
 class HepPolyhedronCons : public HepPolyhedron
@@ -507,7 +507,7 @@ class HepPolyhedronCons : public HepPolyhedron
   HepPolyhedronCons(G4double Rmn1, G4double Rmx1,
                     G4double Rmn2, G4double Rmx2, G4double Dz,
                     G4double Phi1, G4double Dphi);
-  virtual ~HepPolyhedronCons();
+  ~HepPolyhedronCons() override;
 };
 
 class HepPolyhedronCone : public HepPolyhedronCons
@@ -515,7 +515,7 @@ class HepPolyhedronCone : public HepPolyhedronCons
  public:
   HepPolyhedronCone(G4double Rmn1, G4double Rmx1,
                     G4double Rmn2, G4double Rmx2, G4double Dz);
-  virtual ~HepPolyhedronCone();
+  ~HepPolyhedronCone() override;
 };
 
 class HepPolyhedronTubs : public HepPolyhedronCons
@@ -523,14 +523,14 @@ class HepPolyhedronTubs : public HepPolyhedronCons
  public:
   HepPolyhedronTubs(G4double Rmin, G4double Rmax, G4double Dz,
                     G4double Phi1, G4double Dphi);
-  virtual ~HepPolyhedronTubs();
+  ~HepPolyhedronTubs() override;
 };
 
 class HepPolyhedronTube : public HepPolyhedronCons
 {
  public:
   HepPolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz);
-  virtual ~HepPolyhedronTube();
+  ~HepPolyhedronTube() override;
 };
 
 class HepPolyhedronPgon : public HepPolyhedron
@@ -542,7 +542,7 @@ class HepPolyhedronPgon : public HepPolyhedron
                     const G4double *rmax);
   HepPolyhedronPgon(G4double phi, G4double dphi, G4int npdv,
                     const std::vector<G4TwoVector> &rz);
-  virtual ~HepPolyhedronPgon();
+  ~HepPolyhedronPgon() override;
 };
 
 class HepPolyhedronPcon : public HepPolyhedronPgon
@@ -554,7 +554,7 @@ class HepPolyhedronPcon : public HepPolyhedronPgon
                     const G4double *rmax);
   HepPolyhedronPcon(G4double phi, G4double dphi,
                     const std::vector<G4TwoVector> &rz);
-  virtual ~HepPolyhedronPcon();
+  ~HepPolyhedronPcon() override;
 };
 
 class HepPolyhedronSphere : public HepPolyhedron
@@ -563,7 +563,7 @@ class HepPolyhedronSphere : public HepPolyhedron
   HepPolyhedronSphere(G4double rmin, G4double rmax,
                       G4double phi, G4double dphi,
                       G4double the, G4double dthe);
-  virtual ~HepPolyhedronSphere();
+  ~HepPolyhedronSphere() override;
 };
 
 class HepPolyhedronTorus : public HepPolyhedron
@@ -571,7 +571,7 @@ class HepPolyhedronTorus : public HepPolyhedron
  public:
   HepPolyhedronTorus(G4double rmin, G4double rmax, G4double rtor,
                      G4double phi, G4double dphi);
-  virtual ~HepPolyhedronTorus();
+  ~HepPolyhedronTorus() override;
 };
 
 class HepPolyhedronTet : public HepPolyhedron
@@ -581,7 +581,7 @@ class HepPolyhedronTet : public HepPolyhedron
                    const G4double p1[3],
                    const G4double p2[3],
                    const G4double p3[3]);
-  virtual ~HepPolyhedronTet();
+  ~HepPolyhedronTet() override;
 };
 
 class HepPolyhedronEllipsoid : public HepPolyhedron
@@ -589,7 +589,7 @@ class HepPolyhedronEllipsoid : public HepPolyhedron
  public:
   HepPolyhedronEllipsoid(G4double dx, G4double dy, G4double dz,
                          G4double zcut1, G4double zcut2);
-  virtual ~HepPolyhedronEllipsoid();
+  ~HepPolyhedronEllipsoid() override;
 };
 
 class HepPolyhedronEllipticalCone : public HepPolyhedron
@@ -597,21 +597,21 @@ class HepPolyhedronEllipticalCone : public HepPolyhedron
  public:
   HepPolyhedronEllipticalCone(G4double dx, G4double dy, G4double z,
                               G4double zcut1);
-  virtual ~HepPolyhedronEllipticalCone();
+  ~HepPolyhedronEllipticalCone() override;
 };
 
 class HepPolyhedronHyperbolicMirror : public HepPolyhedron
 {
  public:
   HepPolyhedronHyperbolicMirror(G4double a, G4double h, G4double r);
-  virtual ~HepPolyhedronHyperbolicMirror();
+  ~HepPolyhedronHyperbolicMirror() override;
 };
 
 class HepPolyhedronTetMesh : public HepPolyhedron
 {
  public:
   HepPolyhedronTetMesh(const std::vector<G4ThreeVector>& tetrahedra);
-  virtual ~HepPolyhedronTetMesh();
+  ~HepPolyhedronTetMesh() override;
 };
 
 class HepPolyhedronBoxMesh : public HepPolyhedron
@@ -619,7 +619,7 @@ class HepPolyhedronBoxMesh : public HepPolyhedron
  public:
   HepPolyhedronBoxMesh(G4double sizeX, G4double sizeY, G4double sizeZ,
                        const std::vector<G4ThreeVector>& positions);
-  virtual ~HepPolyhedronBoxMesh();
+  ~HepPolyhedronBoxMesh() override;
 };
 
 #endif /* HEP_POLYHEDRON_HH */

@@ -136,7 +136,7 @@ G4VParticleChange* G4MuonMinusAtomicCapture::AtRestDoIt(const G4Track& track,
   result = fEmCascade->ApplyYourself(thePro, *nucleus);
   G4double ebound = result->GetLocalEnergyDeposit(); // may need to carry this over; review
   G4double edep = 0.0;
-  G4int nSecondaries = result->GetNumberOfSecondaries();
+  G4int nSecondaries = (G4int)result->GetNumberOfSecondaries();
   thePro.SetBoundEnergy(ebound);
 
   // creating the muonic atom

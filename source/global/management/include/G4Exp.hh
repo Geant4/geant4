@@ -64,8 +64,9 @@
 #else
 
 #  include "G4Types.hh"
+
+#  include <cstdint>
 #  include <limits>
-#  include <stdint.h>
 
 namespace G4ExpConsts
 {
@@ -102,7 +103,7 @@ namespace G4ExpConsts
   //
   union ieee754
   {
-    ieee754(){};
+    ieee754()= default;
     ieee754(G4double thed) { d = thed; };
     ieee754(uint64_t thell) { ll = thell; };
     ieee754(G4float thef) { f[0] = thef; };

@@ -33,6 +33,9 @@
 #ifdef USE_INFERENCE_LWTNN
 #include "Par04LwtnnInference.hh"       // for Par04LwtnnInference
 #endif
+#ifdef USE_INFERENCE_TORCH
+#include "Par04TorchInference.hh"    // for Par04TorchInference
+#endif
 #include <CLHEP/Units/SystemOfUnits.h>  // for pi, GeV, deg
 #include <CLHEP/Vector/Rotation.h>      // for HepRotation
 #include <CLHEP/Vector/ThreeVector.h>   // for Hep3Vector
@@ -82,6 +85,12 @@ void Par04InferenceSetup::SetInferenceLibrary(G4String aName)
     fInferenceInterface =
       std::unique_ptr<Par04InferenceInterface>(new Par04LwtnnInference(fModelPathName));
 #endif
+#ifdef USE_INFERENCE_TORCH
+  if(fInferenceLibrary == "TORCH")
+    fInferenceInterface =
+      std::unique_ptr<Par04InferenceInterface>(new Par04TorchInference(fModelPathName));
+#endif
+
   CheckInferenceLibrary();
 }
 
@@ -94,7 +103,10 @@ void Par04InferenceSetup::CheckInferenceLibrary()
   msg += "ONNX,";
 #endif
 #ifdef USE_INFERENCE_LWTNN
-  msg += "LWTNN";
+  msg += "LWTNN,";
+#endif
+#ifdef USE_INFERENCE_TORCH
+  msg += "TORCH";
 #endif
   if(fInferenceInterface == nullptr)
     G4Exception("Par04InferenceSetup::CheckInferenceLibrary()", "InvalidSetup", FatalException,

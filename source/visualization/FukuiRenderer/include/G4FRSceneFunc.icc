@@ -57,7 +57,7 @@ void G4FRSCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
   FRBeginModeling();
 
   //----- local working variables
-  G4int nPoints = polyline.size();
+  G4int nPoints = (G4int)polyline.size();
   G4int i;
   const G4VisAttributes* pVA =
     fpViewer->GetApplicableVisAttributes(polyline.GetVisAttributes());
@@ -127,10 +127,10 @@ void G4FRSCENEHANDLER::AddPrimitive(const G4Text& text)
 
   //----- get string to be visualized and Calc its length
   const char* vis_text = text.GetText();
-  const int STR_LENGTH = strlen(vis_text);
+  const G4int STR_LENGTH = (G4int)strlen(vis_text);
 
   //----- create buffer and copy the string there
-  int MAX_STR_LENGTH = COMMAND_BUF_SIZE - 100;
+  G4int MAX_STR_LENGTH = COMMAND_BUF_SIZE - 100;
   if(MAX_STR_LENGTH <= 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1140,7 +1140,7 @@ void G4FRSCENEHANDLER::SendStrInt(const char* char_string, G4int ival)
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %d", char_string, ival);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %d", char_string, ival);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1158,8 +1158,8 @@ void G4FRSCENEHANDLER::SendStrInt3(const char* char_string, G4int ival1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char =
-    sprintf(command, "%s  %d  %d  %d", char_string, ival1, ival2, ival3);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %d  %d  %d",
+                      char_string, ival1, ival2, ival3);
 
   if(num_char < 0)
   {
@@ -1179,8 +1179,8 @@ void G4FRSCENEHANDLER::SendStrInt4(const char* char_string, G4int ival1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %d  %d  %d  %d", char_string, ival1, ival2,
-                     ival3, ival4);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %d  %d  %d  %d",
+                      char_string, ival1, ival2, ival3, ival4);
 
   if(num_char < 0)
   {
@@ -1199,7 +1199,8 @@ void G4FRSCENEHANDLER::SendStrDouble(const char* char_string, G4double dval)
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g", char_string, fPrec2, fPrec, dval);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g",
+                      char_string, fPrec2, fPrec, dval);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1218,8 +1219,8 @@ void G4FRSCENEHANDLER::SendStrDouble2(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g  %*.*g", char_string, fPrec2, fPrec,
-                     dval1, fPrec2, fPrec, dval2);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g  %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1238,8 +1239,9 @@ void G4FRSCENEHANDLER::SendStrDouble3(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g  %*.*g  %*.*g", char_string, fPrec2,
-                     fPrec, dval1, fPrec2, fPrec, dval2, fPrec2, fPrec, dval3);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g  %*.*g  %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2,
+                      fPrec, dval2, fPrec2, fPrec, dval3);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1259,9 +1261,10 @@ void G4FRSCENEHANDLER::SendStrDouble4(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g  %*.*g  %*.*g  %*.*g", char_string,
-                     fPrec2, fPrec, dval1, fPrec2, fPrec, dval2, fPrec2, fPrec,
-                     dval3, fPrec2, fPrec, dval4);
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g  %*.*g  %*.*g  %*.*g", char_string,
+                      fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1281,10 +1284,10 @@ void G4FRSCENEHANDLER::SendStrDouble5(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char =
-    sprintf(command, "%s  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g", char_string,
-            fPrec2, fPrec, dval1, fPrec2, fPrec, dval2, fPrec2, fPrec, dval3,
-            fPrec2, fPrec, dval4, fPrec2, fPrec, dval5);
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g", char_string,
+                      fPrec2, fPrec, dval1, fPrec2, fPrec, dval2, fPrec2,
+                      fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec, dval5);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1305,10 +1308,11 @@ void G4FRSCENEHANDLER::SendStrDouble6(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g",
-                     char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
-                     fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
-                     dval5, fPrec2, fPrec, dval6);
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
+                      dval5, fPrec2, fPrec, dval6);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1329,10 +1333,11 @@ void G4FRSCENEHANDLER::SendStrDouble7(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g",
-                     char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
-                     fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
-                     dval5, fPrec2, fPrec, dval6, fPrec2, fPrec, dval7);
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
+                      dval5, fPrec2, fPrec, dval6, fPrec2, fPrec, dval7);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1355,8 +1360,7 @@ void G4FRSCENEHANDLER::SendStrDouble11(const char* char_string, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(
-    command,
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
     "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g",
     char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2, fPrec2, fPrec,
     dval3, fPrec2, fPrec, dval4, fPrec2, fPrec, dval5, fPrec2, fPrec, dval6,
@@ -1380,8 +1384,9 @@ void G4FRSCENEHANDLER::SendIntDouble3(G4int ival, G4double dval1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%d  %*.*g  %*.*g  %*.*g", ival, fPrec2, fPrec,
-                     dval1, fPrec2, fPrec, dval2, fPrec2, fPrec, dval3);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d  %*.*g  %*.*g  %*.*g",
+                      ival, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1399,7 +1404,8 @@ void G4FRSCENEHANDLER::SendInt3Str(G4int ival1, G4int ival2, G4int ival3,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%d %d %d %s", ival1, ival2, ival3, char_string);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d %d %d %s",
+                      ival1, ival2, ival3, char_string);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1417,8 +1423,8 @@ void G4FRSCENEHANDLER::SendInt4Str(G4int ival1, G4int ival2, G4int ival3,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char =
-    sprintf(command, "%d %d %d %d %s", ival1, ival2, ival3, ival4, char_string);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d %d %d %d %s",
+                      ival1, ival2, ival3, ival4, char_string);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1438,9 +1444,9 @@ void G4FRSCENEHANDLER::SendStrDouble3Str(const char* char_string1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char =
-    sprintf(command, "%s  %*.*g %*.*g %*.*g %s", char_string1, fPrec2, fPrec,
-            dval1, fPrec2, fPrec, dval2, fPrec2, fPrec, dval3, char_string2);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g %*.*g %*.*g %s",
+                      char_string1, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, char_string2);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1461,10 +1467,11 @@ void G4FRSCENEHANDLER::SendStrDouble6Str(const char* char_string1,
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %s",
-                     char_string1, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
-                     fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
-                     dval5, fPrec2, fPrec, dval6, char_string2);
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %s",
+                      char_string1, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
+                      dval5, fPrec2, fPrec, dval6, char_string2);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1481,7 +1488,7 @@ void G4FRSCENEHANDLER::SendInt(G4int val)
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%d", val);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d", val);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
@@ -1498,7 +1505,7 @@ void G4FRSCENEHANDLER::SendDouble(G4double val)
   G4int num_char;
   char* command = new char[COMMAND_BUF_SIZE];
 
-  num_char = sprintf(command, "%*.*g", fPrec2, fPrec, val);
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%*.*g", fPrec2, fPrec, val);
   if(num_char < 0)
   {
     if(G4VisManager::GetVerbosity() >= G4VisManager::errors)

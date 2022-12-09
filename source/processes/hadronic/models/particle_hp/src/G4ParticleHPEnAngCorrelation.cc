@@ -120,7 +120,6 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     //-    if( nParticles[i] == 0 ) continue;
     it = theProducts[i].Sample(anEnergy,nPart); 
     G4double aMeanEnergy = theProducts[i].MeanEnergyOfThisInteraction();
-    //    if( getenv("G4PHPTEST") ) G4cout << " EnAnG energy sampled " << it->operator[](0)->GetKineticEnergy() << " aMeanEnergy " << aMeanEnergy << G4endl; // GDEB
     //if(aMeanEnergy>0)
     //151120 TK Modified for solving reproducibility problem 
     //This change may have side effect. 
@@ -140,10 +139,8 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
 	G4LorentzVector pTmp1 (it->operator[](ii)->GetMomentum(),
 			       it->operator[](ii)->GetTotalEnergy());
 	pTmp1 = toLab*pTmp1;
-    if( std::getenv("G4PHPTEST") )	G4cout << " G4particleHPEnAngCorrelation COS THETA " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 	it->operator[](ii)->SetMomentum(pTmp1.vect());
 	it->operator[](ii)->SetTotalEnergy(pTmp1.e());
-	if( std::getenv("G4PHPTEST") ) G4cout << " G4particleHPEnAngCorrelation COS THETA after toLab " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 
 	if(frameFlag==1) // target rest //TK 100413 should be LAB?
 	{
@@ -195,7 +192,6 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
 	{
 	  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");
 	}
-	      if( std::getenv("G4PHPTEST") ) G4cout << frameFlag << " G4particleHPEnAngCorrelation COS THETA after Lorentz " <<  std::cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 
 	// }//getenv("G4PHP_NO_LORENTZ_BOOST")) 
 	//	G4cout <<  ii << " EnAnG energy after boost " << it->operator[](ii)->GetKineticEnergy() << G4endl; //GDEB

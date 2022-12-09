@@ -53,6 +53,7 @@ class LXeSteppingAction : public G4UserSteppingAction
   G4bool fOneStepPrimaries;
   LXeSteppingMessenger* fSteppingMessenger;
   LXeEventAction* fEventAction;
+  G4OpBoundaryProcess* fBoundary = nullptr;
 
   G4OpBoundaryProcessStatus fExpectedNextStatus;
 };

@@ -23,50 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
 
-#include "eRositaRunAction.hh"
 #include "AnalysisManager.hh"
+#include "eRositaRunAction.hh"
 
 #include "G4Run.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 eRositaRunAction::eRositaRunAction()
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 eRositaRunAction::~eRositaRunAction()
 {
 }
 
-void eRositaRunAction::BeginOfRunAction(const G4Run* run)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void eRositaRunAction::BeginOfRunAction(const G4Run *run)
 {
     timerRun.Start();
     
     if (IsMaster()) {
         G4cout << "--- Run " << run->GetRunID() << " (master) start." << G4endl;
         AnalysisManager::Instance();
-    }
-    else
-    {
+    } else {
         G4cout << "--- Run " << run->GetRunID() << " (worker) start." << G4endl;
     }
 }
 
-void eRositaRunAction::EndOfRunAction(const G4Run* run)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void eRositaRunAction::EndOfRunAction(const G4Run *run)
 {
     if (IsMaster()) {
         G4cout << "--- Run " << run->GetRunID() << " (master) end."
-            << "Event total count = " << run->GetNumberOfEvent() << "."
+            << " Total number of events: " << run->GetNumberOfEvent() << "."
             << G4endl;
         AnalysisManager::Instance()->Destroy();
-    }
-    else
-    {
+    } else {
         G4cout << "--- Run " << run->GetRunID() << " (worker) end." << G4endl;
     }
     
     timerRun.Stop();
-    std::cout << "  "  << timerRun << std::endl;
+    G4cout << "  "  << timerRun << G4endl;
 }

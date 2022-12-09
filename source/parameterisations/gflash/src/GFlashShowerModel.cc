@@ -239,8 +239,6 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
   G4ThreeVector NewPositionShower    = PositionShower;   
   G4double      StepLenght           = 0.00;
   
-  G4int NSpotDeposited =0;
-  
   //--------------------------
   /// Begin Longitudinal Loop
   //-------------------------
@@ -299,9 +297,8 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
     StepLenght        = Dz/2.00;
     
     //generate spots & hits:
-    for (int i = 0; i < DNsp; i++)
+    for (G4int i = 0; i < DNsp; ++i)
     { 
-      NSpotDeposited++;
       GFlashEnergySpot Spot;      
       
       //Spot energy: the same for all spots

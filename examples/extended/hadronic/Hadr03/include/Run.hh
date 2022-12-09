@@ -40,6 +40,9 @@
 
 class DetectorConstruction;
 class G4ParticleDefinition;
+class G4HadronicProcessStore;
+class G4Material;
+class G4Element;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,6 +66,11 @@ class Run : public G4Run
     void EndOfRun(G4bool); 
    
   private:
+
+    void PrintXS(const G4VProcess*, const G4Material*, const G4Element*,
+                 G4HadronicProcessStore*, G4double dens,
+                 G4double& sum1, G4double& sum2);
+           
     struct ParticleData {
      ParticleData()
        : fCount(0), fEmean(0.), fEmin(0.), fEmax(0.) {}

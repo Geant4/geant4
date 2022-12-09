@@ -122,7 +122,7 @@ G4TauMinus* G4TauMinus::Definition()
 
   anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4TauMinus*>(anInstance);
+  theInstance = static_cast<G4TauMinus*>(anInstance);
   return theInstance;
 }
 

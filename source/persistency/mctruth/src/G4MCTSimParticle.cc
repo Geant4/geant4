@@ -80,19 +80,19 @@ G4int G4MCTSimParticle::AssociateParticle(G4MCTSimParticle* p)
 {
   associatedParticleList.push_back(p);
   p->SetParentParticle(this);
-  return associatedParticleList.size();
+  return (G4int)associatedParticleList.size();
 }
 
 // --------------------------------------------------------------------
 G4int G4MCTSimParticle::GetNofAssociatedParticles() const
 {
-  return associatedParticleList.size();
+  return (G4int)associatedParticleList.size();
 }
 
 // --------------------------------------------------------------------
 G4MCTSimParticle* G4MCTSimParticle::GetAssociatedParticle(G4int i) const
 {
-  G4int size = associatedParticleList.size();
+  G4int size = (G4int)associatedParticleList.size();
   if(i >= 0 && i < size)
     return associatedParticleList[i];
   else

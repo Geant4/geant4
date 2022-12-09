@@ -75,7 +75,7 @@
 
 G4_DECLARE_PHYSCONSTR_FACTORY( HadronPhysicsCRMC_FTFP_BERT );
 
-const std::array< std::string, 13 > HadronPhysicsCRMC_FTFP_BERT::modelNames = {
+const std::array< std::string, 13 > HadronPhysicsCRMC_FTFP_BERT::fModelNames = {
   "EPOS-LHC", "EPOS-1.99", "QGSJET-01", "", "", "",
   "SIBYLL-2.3", "QGSJETII-04", "", "", "", "QGSJETII-03", "DPMJET-3.06" };          
 
@@ -86,10 +86,10 @@ HadronPhysicsCRMC_FTFP_BERT::HadronPhysicsCRMC_FTFP_BERT( G4int )
 
 HadronPhysicsCRMC_FTFP_BERT::HadronPhysicsCRMC_FTFP_BERT( const G4String& name, G4bool qe )
   : G4HadronPhysicsFTFP_BERT( name, qe ) {
-  model   = 0;          //***LOOKHERE*** CRMC model: 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
+  fModel   = 0;          //***LOOKHERE*** CRMC model: 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
                         //                           7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
-  minCRMC = 100.0*GeV;  //***LOOKHERE*** CRMC model is applied only above this projectile lab energy
-  maxFTFP = 110.0*GeV;  //***LOOKHERE*** FTFP model is applied only below this projectile lab energy
+  fMinCRMC = 100.0*GeV;  //***LOOKHERE*** CRMC model is applied only above this projectile lab energy
+  fMaxFTFP = 110.0*GeV;  //***LOOKHERE*** FTFP model is applied only below this projectile lab energy
 }
 
 
@@ -101,15 +101,15 @@ void HadronPhysicsCRMC_FTFP_BERT::Neutron() {
   AddBuilder( neutronBuilder );
   auto ftfpnBuilder = new G4FTFPNeutronBuilder( QuasiElastic );
   ftfpnBuilder->SetMinEnergy( minFTFP_neutron );
-  ftfpnBuilder->SetMaxEnergy( maxFTFP );
+  ftfpnBuilder->SetMaxEnergy( fMaxFTFP );
   AddBuilder( ftfpnBuilder );
   neutronBuilder->RegisterMe( ftfpnBuilder );
   auto bertnBuilder = new G4BertiniNeutronBuilder;
   bertnBuilder->SetMaxEnergy( maxBERT_neutron );
   AddBuilder( bertnBuilder );
   neutronBuilder->RegisterMe( bertnBuilder );
-  auto crmcnBuilder = new CRMCNeutronBuilder( model, modelNames[model] );
-  crmcnBuilder->SetMinEnergy( minCRMC );
+  auto crmcnBuilder = new CRMCNeutronBuilder( fModel, fModelNames[fModel] );
+  crmcnBuilder->SetMinEnergy( fMinCRMC );
   AddBuilder( crmcnBuilder );
   neutronBuilder->RegisterMe( crmcnBuilder );
   neutronBuilder->Build();
@@ -126,15 +126,15 @@ void HadronPhysicsCRMC_FTFP_BERT::Proton() {
   AddBuilder( protonBuilder );
   auto ftfppBuilder = new G4FTFPProtonBuilder( QuasiElastic );
   ftfppBuilder->SetMinEnergy( minFTFP_proton );
-  ftfppBuilder->SetMaxEnergy( maxFTFP );
+  ftfppBuilder->SetMaxEnergy( fMaxFTFP );
   AddBuilder( ftfppBuilder );
   protonBuilder->RegisterMe( ftfppBuilder );
   auto bertpBuilder = new G4BertiniProtonBuilder;
   bertpBuilder->SetMaxEnergy( maxBERT_proton );
   AddBuilder( bertpBuilder );
   protonBuilder->RegisterMe( bertpBuilder );
-  auto crmcpBuilder = new CRMCProtonBuilder( model, modelNames[model] );
-  crmcpBuilder->SetMinEnergy( minCRMC );
+  auto crmcpBuilder = new CRMCProtonBuilder( fModel, fModelNames[fModel] );
+  crmcpBuilder->SetMinEnergy( fMinCRMC );
   AddBuilder( crmcpBuilder );
   protonBuilder->RegisterMe( crmcpBuilder );
   protonBuilder->Build();
@@ -146,15 +146,15 @@ void HadronPhysicsCRMC_FTFP_BERT::Pion() {
   AddBuilder( pionBuilder );
   auto ftfppiBuilder = new G4FTFPPionBuilder( QuasiElastic );
   ftfppiBuilder->SetMinEnergy( minFTFP_pion );
-  ftfppiBuilder->SetMaxEnergy( maxFTFP );
+  ftfppiBuilder->SetMaxEnergy( fMaxFTFP );
   AddBuilder( ftfppiBuilder );
   pionBuilder->RegisterMe( ftfppiBuilder );
   auto bertpiBuilder = new G4BertiniPionBuilder;
   bertpiBuilder->SetMaxEnergy( maxBERT_pion );
   AddBuilder( bertpiBuilder );
   pionBuilder->RegisterMe( bertpiBuilder );
-  auto crmcpiBuilder = new CRMCPionBuilder( model, modelNames[model] );
-  crmcpiBuilder->SetMinEnergy( minCRMC );
+  auto crmcpiBuilder = new CRMCPionBuilder( fModel, fModelNames[fModel] );
+  crmcpiBuilder->SetMinEnergy( fMinCRMC );
   AddBuilder( crmcpiBuilder );
   pionBuilder->RegisterMe( crmcpiBuilder );
   pionBuilder->Build();
@@ -166,15 +166,15 @@ void HadronPhysicsCRMC_FTFP_BERT::Kaon() {
   AddBuilder( kaonBuilder );
   auto ftfpkBuilder = new G4FTFPKaonBuilder( QuasiElastic );
   ftfpkBuilder->SetMinEnergy( minFTFP_kaon );
-  ftfpkBuilder->SetMaxEnergy( maxFTFP );  
+  ftfpkBuilder->SetMaxEnergy( fMaxFTFP );
   AddBuilder( ftfpkBuilder );
   kaonBuilder->RegisterMe( ftfpkBuilder );
   auto bertkBuilder = new G4BertiniKaonBuilder;
   bertkBuilder->SetMaxEnergy( maxBERT_kaon );
   AddBuilder( bertkBuilder );
   kaonBuilder->RegisterMe( bertkBuilder );
-  auto crmckBuilder = new CRMCKaonBuilder( model, modelNames[model] );
-  crmckBuilder->SetMinEnergy( minCRMC );
+  auto crmckBuilder = new CRMCKaonBuilder( fModel, fModelNames[fModel] );
+  crmckBuilder->SetMinEnergy( fMinCRMC );
   AddBuilder( crmckBuilder );
   kaonBuilder->RegisterMe( crmckBuilder );  
   kaonBuilder->Build();

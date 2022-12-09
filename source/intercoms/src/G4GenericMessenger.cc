@@ -159,7 +159,7 @@ G4GenericMessenger::Command& G4GenericMessenger::DeclareMethod(
   }
   for(std::size_t i = 0; i < fun.NArg(); ++i)
   {
-    G4String argNam = "arg" + ItoS(i);
+    G4String argNam = "arg" + ItoS((G4int)i);
     char ptype = 's';
     auto& tInfo = fun.ArgType(i);
     if(tInfo == typeid(int) || tInfo == typeid(long) ||
@@ -306,7 +306,7 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(
   std::vector<G4String> guidance;
   G4String par_name   = command->GetParameter(0)->GetParameterName();
   G4bool par_omitable = command->GetParameter(0)->IsOmittable();
-  for(std::size_t i = 0; i < command->GetGuidanceEntries(); ++i)
+  for(G4int i = 0; i < (G4int)command->GetGuidanceEntries(); ++i)
   {
     guidance.push_back(command->GetGuidanceLine(i));
   }

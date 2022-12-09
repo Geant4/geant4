@@ -62,7 +62,7 @@ G4PhononTransSlow*  G4PhononTransSlow::Definition()
                 false,        "phononTS",       0
              );
   }
-  theInstance = reinterpret_cast<G4PhononTransSlow*>(anInstance);
+  theInstance = static_cast<G4PhononTransSlow*>(anInstance);
   return theInstance;
 }
 

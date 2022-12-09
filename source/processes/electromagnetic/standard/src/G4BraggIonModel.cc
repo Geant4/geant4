@@ -124,9 +124,6 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 	}
       }
     }
-    if(particle->GetPDGCharge() > CLHEP::eplus || pname == "GenericIon") {
-      isIon = true;
-    }
     if(pname == "alpha") { isAlpha = true; }
 
     if(UseAngularGeneratorFlag() && nullptr == GetAngularDistribution()) {
@@ -152,8 +149,7 @@ G4double G4BraggIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                                const G4Material* mat,
                                                G4double kineticEnergy)
 {
-  return 
-    (!isAlpha) ? corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy) : 1.0;
+  return corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -247,7 +243,7 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double T = kineticEnergy;
   const G4double zeff = material->GetTotNbOfElectPerVolume()/
     material->GetTotNbOfAtomsPerVolume();
-  effChargeSquare = HeEffChargeSquare(zeff, T/CLHEP::MeV);
+  heChargeSquare = HeEffChargeSquare(zeff, T/CLHEP::MeV);
   if(!isAlpha) { T *= rateMassHe2p; }
 
   if(T < lowestKinEnergy) {
@@ -255,7 +251,7 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
   } else {
     dedx = DEDX(material, T);
   }
-  if(!isAlpha) { dedx /= effChargeSquare; }
+  if(!isAlpha) { dedx /= heChargeSquare; }
   if (tmin < tmax) {
     const G4double tau = kineticEnergy/mass;
     const G4double x   = tmin/tmax;
@@ -263,7 +259,7 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double del = 
       (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) * 
       CLHEP::twopi_mc2_rcl2*material->GetElectronDensity();
-    if(isAlpha) { del *= effChargeSquare; }
+    if(isAlpha) { del *= heChargeSquare; }
     dedx += del;
   }
   dedx = std::max(dedx, 0.0);
@@ -282,26 +278,31 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                            const G4double&,
                                            G4double& eloss)
 {
-  // no correction at the last step
-  const G4double preKinEnergy = dp->GetKineticEnergy();
-  if(eloss >= preKinEnergy) { return; }
+  // no correction for alpha
+  if(isAlpha) { return; }
 
+  // no correction at a small step at the last step
+  const G4double preKinEnergy = dp->GetKineticEnergy();
+  if(eloss >= preKinEnergy || eloss < preKinEnergy*0.05) { return; }
+
+  // corrections only for ions
   const G4ParticleDefinition* p = dp->GetDefinition();
   if(p != particle) { SetParticle(p); }
-  if(!isIon) { return; }
 
-  // this method is called only for ions
+  // effective energy and charge at a step
   const G4Material* mat = couple->GetMaterial();
-  G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
-
-  G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
-  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  if(!isAlpha) {
-    eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/chargeSquare;
-  }
-
-  //G4cout << "G4BraggIonModel::CorrectionsAlongStep e= " <<  e 
-  //         << " qfactor= " << qfactor << " " << p->GetParticleName() <<G4endl;
+  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
+  const G4double q20 = corr->EffectiveChargeSquareRatio(p, mat, preKinEnergy);
+  const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
+  const G4double qfactor = q2/q20;
+  /*    
+    G4cout << "G4BraggIonModel::CorrectionsAlongStep: Epre(MeV)="
+    << preKinEnergy << " Eeff(MeV)=" << e
+    << " eloss=" << eloss << " elossnew=" << eloss*qfactor 
+    << " qfactor=" << qfactor << " Qpre=" << q20 
+    << p->GetParticleName() <<G4endl;
+  */  
+  eloss *= qfactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -402,8 +403,7 @@ void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   G4double q = particle->GetPDGCharge()/CLHEP::eplus;
-  if(!isIon && q > 1.1) { isIon = true; }
-  effChargeSquare = chargeSquare = q*q;
+  chargeSquare = q*q;
   massRate = mass/CLHEP::proton_mass_c2;
   ratio = CLHEP::electron_mass_c2/mass;
 }
@@ -417,7 +417,7 @@ G4int G4BraggIonModel::HasMaterial(const G4Material* mat) const
 
   // ICRU Report N49, 1993. Ziegler model for He.
   
-  static const size_t numberOfMolecula = 11;
+  static const G4int numberOfMolecula = 11;
   static const G4String molName[numberOfMolecula] = {
     "CaF_2",  "Cellulose_Nitrate",  "LiF", "Policarbonate",  
     "(C_2H_4)_N-Polyethylene",  "(C_2H_4)_N-Polymethly_Methacralate",
@@ -425,7 +425,7 @@ G4int G4BraggIonModel::HasMaterial(const G4Material* mat) const
     "Graphite" };
 
   // Search for the material in the table
-  for (size_t i=0; i<numberOfMolecula; ++i) {
+  for (G4int i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {  
       return i;
     }
@@ -498,7 +498,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
     ionloss = std::max(ionloss, 0.0);
 
     // He effective charge
-    ionloss /= (effChargeSquare*atomicWeight[iMolecula]);
+    ionloss /= (heChargeSquare*atomicWeight[iMolecula]);
 
   // pure material (normally not the case for this function)
   } else if(1 == (material->GetNumberOfElements())) {
@@ -661,7 +661,7 @@ G4BraggIonModel::ElectronicStoppingPower(const G4double z,
   ionloss = std::max(ionloss, 0.0);
 
   // He effective charge
-  // ionloss /= effChargeSquare;
+  // ionloss /= heChargeSquare;
   // G4cout << ionloss << G4endl;
   return ionloss;
 }
@@ -708,7 +708,7 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
     if(eloss > 0.0) { return eloss*material->GetDensity(); }
   }
 
-  const G4int numberOfElements = material->GetNumberOfElements();
+  const std::size_t numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
     material->GetAtomicNumDensityVector();
 
@@ -728,7 +728,7 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
     const G4ElementVector* theElmVector = material->GetElementVector();
 
     //  loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; ++i) {
+    for (std::size_t i=0; i<numberOfElements; ++i) {
       const G4Element* element = (*theElmVector)[i];
       eloss += ElectronicStoppingPower(element->GetZ(), aEnergy)
 	* theAtomicNumDensityVector[i];

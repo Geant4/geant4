@@ -192,7 +192,9 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       (vp.GetVisAttributesModifiers() !=
        fVP.GetVisAttributesModifiers())                       ||
       (vp.IsSpecialMeshRendering() !=
-       fVP.IsSpecialMeshRendering())
+       fVP.IsSpecialMeshRendering())                          ||
+      (vp.GetSpecialMeshRenderingOption() !=
+       fVP.GetSpecialMeshRenderingOption())
       )
     return true;
 
@@ -210,6 +212,7 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
     return true;
 
   if (vp.IsCutaway ()) {
+    if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
     if (vp.GetCutawayPlanes ().size () !=
 	fVP.GetCutawayPlanes ().size ()) return true;
     for (size_t i = 0; i < vp.GetCutawayPlanes().size(); ++i)

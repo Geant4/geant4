@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DriftChamberSD.cc
+/// \file B5/src/DriftChamberSD.cc
 /// \brief Implementation of the B5::DriftChamber class
 
 #include "DriftChamberSD.hh"
@@ -47,11 +47,6 @@ DriftChamberSD::DriftChamberSD(G4String name)
 {
   collectionName.insert("driftChamberColl");
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DriftChamberSD::~DriftChamberSD()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

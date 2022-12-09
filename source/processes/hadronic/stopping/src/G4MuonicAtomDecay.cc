@@ -418,7 +418,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
     } while(result == nullptr);
 
     // add delay time of capture (inter + intra)
-    G4int nsec = result->GetNumberOfSecondaries();
+    G4int nsec = (G4int)result->GetNumberOfSecondaries();
     for(G4int i=0; i<nsec; ++i) {
       G4HadSecondary* sec = result->GetSecondary(i);
       G4double ctime = sec->GetTime();
@@ -499,7 +499,7 @@ void G4MuonicAtomDecay::FillResult(G4HadFinalState * aR, const G4Track & aT)
   //	 << "  fKill= " << fStopAndKill << G4endl;
 
   // check secondaries: apply rotation and Lorentz transformation
-  G4int nSec = aR->GetNumberOfSecondaries();
+  G4int nSec = (G4int)aR->GetNumberOfSecondaries();
   theTotalResult.SetNumberOfSecondaries(nSec);
   G4double weight = aT.GetWeight();
 

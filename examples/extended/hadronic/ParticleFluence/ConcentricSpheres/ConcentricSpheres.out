@@ -1,0 +1,2136 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
+    Default Physics Lists FTFP_BERT is instantiated
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+
+DetectorConstruction::ConstructSphere() : 
+	 World (box) size: 
+	 	 x : -/+ 1870 mm 	 y : -/+ 1870 mm 	 z : -/+ 1870 mm 
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_Si
+ MaterialEmCalo  = G4_PbWO4
+ MaterialHadCalo = G4_Fe
+ InnerRadiusTracker = 100 mm
+ OuterRadiusTracker = 200 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_POLYSTYRENE
+ MaterialEmCalo  = G4_PbWO4
+ MaterialHadCalo = G4_Cu
+ InnerRadiusTracker = 50 mm
+ OuterRadiusTracker = 250 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+DetectorConstruction::ConstructSphere() : 
+	 World (box) size: 
+	 	 x : -/+ 1870 mm 	 y : -/+ 1870 mm 	 z : -/+ 1870 mm 
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_POLYSTYRENE
+ MaterialEmCalo  = G4_PbWO4
+ MaterialHadCalo = G4_Cu
+ InnerRadiusTracker = 50 mm
+ OuterRadiusTracker = 250 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                1
+Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           epics_2017
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Urban
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for proton  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+hBrems:  for proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for GenericIon  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      Stopping Power data for 17 ion/material pairs
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for alpha  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV
+          BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for anti_proton  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+hBrems:  for anti_proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for anti_proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for kaon+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
+
+hBrems:  for kaon+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for kaon-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
+
+hBrems:  for kaon-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+muIoni:  for mu+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=  200 keV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+
+muBrems:  for mu+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+muIoni:  for mu-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+
+muBrems:  for mu-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for pi+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV
+
+hBrems:  for pi+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for pi-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV
+
+hBrems:  for pi-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy                  100 keV
+Pre-compound excitation high energy                 30 MeV
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy                               10 eV 
+Min energy per nucleon for multifragmentation       200 GeV
+Limit excitation energy for Fermi BreakUp           20 MeV
+Level density (1/MeV)                               0.075
+Use simple level density model                      1
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1 ns 
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : G4_PbWO4
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  75.7749 keV    e-  842.468 keV    e+  797.806 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 0 starts.
+### Run 0 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=68.800000s Real=69.454921s Sys=0.040000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 0
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Tracker material = G4_POLYSTYRENE
+ EmCalo  material = G4_PbWO4
+ HadCalo material = G4_Cu
+ Cubic-volume scoring tracker shell = 8.17233e+06 mm^3
+ Cubic-volume scoring emCalo  shell = 4.59971e+07 mm^3
+ Cubic-volume scoring hadCalo shell = 3.65309e+08 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0        tracker                       forward            all   0.0851809
+   case=  1        tracker                       forward       electron   0.000837738
+   case=  2        tracker                       forward          gamma   0.0186186
+   case=  3        tracker                       forward           muon          0
+   case=  4        tracker                       forward       neutrino   0.000444505
+   case=  5        tracker                       forward           pion   0.000582824
+   case=  6        tracker                       forward        neutron   0.064463
+   case=  7        tracker                       forward         proton   0.000193429
+   case=  8        tracker                       forward            ion   7.84278e-06
+   case=  9        tracker                       forward     otherMeson   3.19398e-05
+   case= 10        tracker                       forward    otherBaryon   9.84876e-07
+   case= 11        tracker                      backward            all   0.0112405
+   case= 12        tracker                      backward       electron   0.000106299
+   case= 13        tracker                      backward          gamma   0.0039838
+   case= 14        tracker                      backward           muon          0
+   case= 15        tracker                      backward       neutrino   0.000164771
+   case= 16        tracker                      backward           pion   7.50046e-06
+   case= 17        tracker                      backward        neutron   0.00697543
+   case= 18        tracker                      backward         proton   2.69502e-06
+   case= 19        tracker                      backward            ion          0
+   case= 20        tracker                      backward     otherMeson          0
+   case= 21        tracker                      backward    otherBaryon          0
+   case= 22        tracker   below 20 MeV        forward            all   0.0821334
+   case= 23        tracker   below 20 MeV        forward       electron   0.000698093
+   case= 24        tracker   below 20 MeV        forward          gamma   0.0181768
+   case= 25        tracker   below 20 MeV        forward           muon          0
+   case= 26        tracker   below 20 MeV        forward       neutrino   2.50762e-05
+   case= 27        tracker   below 20 MeV        forward           pion   1.34871e-05
+   case= 28        tracker   below 20 MeV        forward        neutron   0.0632096
+   case= 29        tracker   below 20 MeV        forward         proton   1.03328e-05
+   case= 30        tracker   below 20 MeV        forward            ion          0
+   case= 31        tracker   below 20 MeV        forward     otherMeson          0
+   case= 32        tracker   below 20 MeV        forward    otherBaryon          0
+   case= 33        tracker   below 20 MeV       backward            all   0.0108498
+   case= 34        tracker   below 20 MeV       backward       electron   0.000103588
+   case= 35        tracker   below 20 MeV       backward          gamma   0.00397543
+   case= 36        tracker   below 20 MeV       backward           muon          0
+   case= 37        tracker   below 20 MeV       backward       neutrino          0
+   case= 38        tracker   below 20 MeV       backward           pion          0
+   case= 39        tracker   below 20 MeV       backward        neutron   0.00677078
+   case= 40        tracker   below 20 MeV       backward         proton          0
+   case= 41        tracker   below 20 MeV       backward            ion          0
+   case= 42        tracker   below 20 MeV       backward     otherMeson          0
+   case= 43        tracker   below 20 MeV       backward    otherBaryon          0
+   case= 44        tracker   above 20 MeV        forward            all   0.00304746
+   case= 45        tracker   above 20 MeV        forward       electron   0.000139645
+   case= 46        tracker   above 20 MeV        forward          gamma   0.000441843
+   case= 47        tracker   above 20 MeV        forward           muon          0
+   case= 48        tracker   above 20 MeV        forward       neutrino   0.000419429
+   case= 49        tracker   above 20 MeV        forward           pion   0.000569336
+   case= 50        tracker   above 20 MeV        forward        neutron   0.00125334
+   case= 51        tracker   above 20 MeV        forward         proton   0.000183096
+   case= 52        tracker   above 20 MeV        forward            ion   7.84278e-06
+   case= 53        tracker   above 20 MeV        forward     otherMeson   3.19398e-05
+   case= 54        tracker   above 20 MeV        forward    otherBaryon   9.84876e-07
+   case= 55        tracker   above 20 MeV       backward            all   0.000390699
+   case= 56        tracker   above 20 MeV       backward       electron   2.7111e-06
+   case= 57        tracker   above 20 MeV       backward          gamma   8.37372e-06
+   case= 58        tracker   above 20 MeV       backward           muon          0
+   case= 59        tracker   above 20 MeV       backward       neutrino   0.000164771
+   case= 60        tracker   above 20 MeV       backward           pion   7.50046e-06
+   case= 61        tracker   above 20 MeV       backward        neutron   0.000204647
+   case= 62        tracker   above 20 MeV       backward         proton   2.69502e-06
+   case= 63        tracker   above 20 MeV       backward            ion          0
+   case= 64        tracker   above 20 MeV       backward     otherMeson          0
+   case= 65        tracker   above 20 MeV       backward    otherBaryon          0
+   case= 66         emCalo                       forward            all   0.089244
+   case= 67         emCalo                       forward       electron   0.0011056
+   case= 68         emCalo                       forward          gamma   0.0211333
+   case= 69         emCalo                       forward           muon   1.64497e-06
+   case= 70         emCalo                       forward       neutrino   0.000443906
+   case= 71         emCalo                       forward           pion   0.000240364
+   case= 72         emCalo                       forward        neutron   0.0662049
+   case= 73         emCalo                       forward         proton   9.13863e-05
+   case= 74         emCalo                       forward            ion   1.09918e-06
+   case= 75         emCalo                       forward     otherMeson   1.766e-05
+   case= 76         emCalo                       forward    otherBaryon   4.11051e-06
+   case= 77         emCalo                      backward            all   0.00508325
+   case= 78         emCalo                      backward       electron   4.97347e-05
+   case= 79         emCalo                      backward          gamma   0.000734114
+   case= 80         emCalo                      backward           muon          0
+   case= 81         emCalo                      backward       neutrino   9.03014e-05
+   case= 82         emCalo                      backward           pion          0
+   case= 83         emCalo                      backward        neutron   0.0042091
+   case= 84         emCalo                      backward         proton          0
+   case= 85         emCalo                      backward            ion          0
+   case= 86         emCalo                      backward     otherMeson          0
+   case= 87         emCalo                      backward    otherBaryon          0
+   case= 88         emCalo   below 20 MeV        forward            all   0.0870195
+   case= 89         emCalo   below 20 MeV        forward       electron   0.000936301
+   case= 90         emCalo   below 20 MeV        forward          gamma   0.0207932
+   case= 91         emCalo   below 20 MeV        forward           muon   4.53229e-07
+   case= 92         emCalo   below 20 MeV        forward       neutrino   3.91836e-05
+   case= 93         emCalo   below 20 MeV        forward           pion   5.67218e-07
+   case= 94         emCalo   below 20 MeV        forward        neutron   0.0652469
+   case= 95         emCalo   below 20 MeV        forward         proton   2.27279e-06
+   case= 96         emCalo   below 20 MeV        forward            ion          0
+   case= 97         emCalo   below 20 MeV        forward     otherMeson          0
+   case= 98         emCalo   below 20 MeV        forward    otherBaryon   5.71762e-07
+   case= 99         emCalo   below 20 MeV       backward            all   0.00498158
+   case=100         emCalo   below 20 MeV       backward       electron   4.97347e-05
+   case=101         emCalo   below 20 MeV       backward          gamma   0.000734114
+   case=102         emCalo   below 20 MeV       backward           muon          0
+   case=103         emCalo   below 20 MeV       backward       neutrino   5.40952e-06
+   case=104         emCalo   below 20 MeV       backward           pion          0
+   case=105         emCalo   below 20 MeV       backward        neutron   0.00419232
+   case=106         emCalo   below 20 MeV       backward         proton          0
+   case=107         emCalo   below 20 MeV       backward            ion          0
+   case=108         emCalo   below 20 MeV       backward     otherMeson          0
+   case=109         emCalo   below 20 MeV       backward    otherBaryon          0
+   case=110         emCalo   above 20 MeV        forward            all   0.00222449
+   case=111         emCalo   above 20 MeV        forward       electron   0.000169296
+   case=112         emCalo   above 20 MeV        forward          gamma   0.00034007
+   case=113         emCalo   above 20 MeV        forward           muon   1.19174e-06
+   case=114         emCalo   above 20 MeV        forward       neutrino   0.000404722
+   case=115         emCalo   above 20 MeV        forward           pion   0.000239796
+   case=116         emCalo   above 20 MeV        forward        neutron   0.000958001
+   case=117         emCalo   above 20 MeV        forward         proton   8.91135e-05
+   case=118         emCalo   above 20 MeV        forward            ion   1.09918e-06
+   case=119         emCalo   above 20 MeV        forward     otherMeson   1.766e-05
+   case=120         emCalo   above 20 MeV        forward    otherBaryon   3.53875e-06
+   case=121         emCalo   above 20 MeV       backward            all   0.000101676
+   case=122         emCalo   above 20 MeV       backward       electron          0
+   case=123         emCalo   above 20 MeV       backward          gamma          0
+   case=124         emCalo   above 20 MeV       backward           muon          0
+   case=125         emCalo   above 20 MeV       backward       neutrino   8.48919e-05
+   case=126         emCalo   above 20 MeV       backward           pion          0
+   case=127         emCalo   above 20 MeV       backward        neutron   1.67842e-05
+   case=128         emCalo   above 20 MeV       backward         proton          0
+   case=129         emCalo   above 20 MeV       backward            ion          0
+   case=130         emCalo   above 20 MeV       backward     otherMeson          0
+   case=131         emCalo   above 20 MeV       backward    otherBaryon          0
+   case=132        hadCalo                       forward            all   0.000196657
+   case=133        hadCalo                       forward       electron   9.0197e-07
+   case=134        hadCalo                       forward          gamma   4.43055e-05
+   case=135        hadCalo                       forward           muon          0
+   case=136        hadCalo                       forward       neutrino   6.32157e-05
+   case=137        hadCalo                       forward           pion   9.63814e-07
+   case=138        hadCalo                       forward        neutron   8.66164e-05
+   case=139        hadCalo                       forward         proton   5.4266e-07
+   case=140        hadCalo                       forward            ion          0
+   case=141        hadCalo                       forward     otherMeson   1.10581e-07
+   case=142        hadCalo                       forward    otherBaryon          0
+   case=143        hadCalo                      backward            all   2.41825e-05
+   case=144        hadCalo                      backward       electron          0
+   case=145        hadCalo                      backward          gamma          0
+   case=146        hadCalo                      backward           muon          0
+   case=147        hadCalo                      backward       neutrino   2.39823e-05
+   case=148        hadCalo                      backward           pion          0
+   case=149        hadCalo                      backward        neutron   2.0019e-07
+   case=150        hadCalo                      backward         proton          0
+   case=151        hadCalo                      backward            ion          0
+   case=152        hadCalo                      backward     otherMeson          0
+   case=153        hadCalo                      backward    otherBaryon          0
+   case=154        hadCalo   below 20 MeV        forward            all   0.000126012
+   case=155        hadCalo   below 20 MeV        forward       electron   6.31663e-07
+   case=156        hadCalo   below 20 MeV        forward          gamma   4.32368e-05
+   case=157        hadCalo   below 20 MeV        forward           muon          0
+   case=158        hadCalo   below 20 MeV        forward       neutrino   5.36065e-06
+   case=159        hadCalo   below 20 MeV        forward           pion          0
+   case=160        hadCalo   below 20 MeV        forward        neutron   7.67828e-05
+   case=161        hadCalo   below 20 MeV        forward         proton          0
+   case=162        hadCalo   below 20 MeV        forward            ion          0
+   case=163        hadCalo   below 20 MeV        forward     otherMeson          0
+   case=164        hadCalo   below 20 MeV        forward    otherBaryon          0
+   case=165        hadCalo   below 20 MeV       backward            all   1.75549e-06
+   case=166        hadCalo   below 20 MeV       backward       electron          0
+   case=167        hadCalo   below 20 MeV       backward          gamma          0
+   case=168        hadCalo   below 20 MeV       backward           muon          0
+   case=169        hadCalo   below 20 MeV       backward       neutrino   1.5553e-06
+   case=170        hadCalo   below 20 MeV       backward           pion          0
+   case=171        hadCalo   below 20 MeV       backward        neutron   2.0019e-07
+   case=172        hadCalo   below 20 MeV       backward         proton          0
+   case=173        hadCalo   below 20 MeV       backward            ion          0
+   case=174        hadCalo   below 20 MeV       backward     otherMeson          0
+   case=175        hadCalo   below 20 MeV       backward    otherBaryon          0
+   case=176        hadCalo   above 20 MeV        forward            all   7.06447e-05
+   case=177        hadCalo   above 20 MeV        forward       electron   2.70307e-07
+   case=178        hadCalo   above 20 MeV        forward          gamma   1.06871e-06
+   case=179        hadCalo   above 20 MeV        forward           muon          0
+   case=180        hadCalo   above 20 MeV        forward       neutrino   5.7855e-05
+   case=181        hadCalo   above 20 MeV        forward           pion   9.63814e-07
+   case=182        hadCalo   above 20 MeV        forward        neutron   9.83361e-06
+   case=183        hadCalo   above 20 MeV        forward         proton   5.4266e-07
+   case=184        hadCalo   above 20 MeV        forward            ion          0
+   case=185        hadCalo   above 20 MeV        forward     otherMeson   1.10581e-07
+   case=186        hadCalo   above 20 MeV        forward    otherBaryon          0
+   case=187        hadCalo   above 20 MeV       backward            all   2.24271e-05
+   case=188        hadCalo   above 20 MeV       backward       electron          0
+   case=189        hadCalo   above 20 MeV       backward          gamma          0
+   case=190        hadCalo   above 20 MeV       backward           muon          0
+   case=191        hadCalo   above 20 MeV       backward       neutrino   2.24271e-05
+   case=192        hadCalo   above 20 MeV       backward           pion          0
+   case=193        hadCalo   above 20 MeV       backward        neutron          0
+   case=194        hadCalo   above 20 MeV       backward         proton          0
+   case=195        hadCalo   above 20 MeV       backward            ion          0
+   case=196        hadCalo   above 20 MeV       backward     otherMeson          0
+   case=197        hadCalo   above 20 MeV       backward    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0        tracker                           all     209.57    64.1336    13440.5
+   case=  1        tracker                      electron     112.73     3.8799    437.381
+   case=  2        tracker                         gamma      11.63    259.191     3014.4
+   case=  3        tracker                          muon       0.07    10.7165   0.750153
+   case=  4        tracker                      neutrino       0.21    30.7859    6.46504
+   case=  5        tracker                          pion       2.39    3094.89    7396.78
+   case=  6        tracker                       neutron       2.24    169.817    380.391
+   case=  7        tracker                        proton      58.15     4.6722    271.689
+   case=  8        tracker                           ion      21.77    1.15216    25.0826
+   case=  9        tracker                    otherMeson       0.35    5436.19    1902.67
+   case= 10        tracker                   otherBaryon       0.03    162.825    4.88476
+   case= 11        tracker   below 20 MeV            all      202.5   0.557331     112.86
+   case= 12        tracker   below 20 MeV       electron     112.09   0.299827    33.6076
+   case= 13        tracker   below 20 MeV          gamma       9.67    1.47189    14.2332
+   case= 14        tracker   below 20 MeV           muon       0.06    4.11981   0.247189
+   case= 15        tracker   below 20 MeV       neutrino          0          0          0
+   case= 16        tracker   below 20 MeV           pion       0.02    6.71123   0.134225
+   case= 17        tracker   below 20 MeV        neutron       1.52    5.68488    8.64102
+   case= 18        tracker   below 20 MeV         proton      57.54   0.657313    37.8218
+   case= 19        tracker   below 20 MeV            ion       21.6   0.841415    18.1746
+   case= 20        tracker   below 20 MeV     otherMeson          0          0          0
+   case= 21        tracker   below 20 MeV    otherBaryon          0          0          0
+   case= 22        tracker   above 20 MeV            all       7.07     1885.1    13327.6
+   case= 23        tracker   above 20 MeV       electron       0.64    630.896    403.773
+   case= 24        tracker   above 20 MeV          gamma       1.96     1530.7    3000.16
+   case= 25        tracker   above 20 MeV           muon       0.01    50.2964   0.502964
+   case= 26        tracker   above 20 MeV       neutrino       0.21    30.7859    6.46504
+   case= 27        tracker   above 20 MeV           pion       2.37    3120.95    7396.64
+   case= 28        tracker   above 20 MeV        neutron       0.72    516.319     371.75
+   case= 29        tracker   above 20 MeV         proton       0.61    383.388    233.867
+   case= 30        tracker   above 20 MeV            ion       0.17    40.6353    6.90801
+   case= 31        tracker   above 20 MeV     otherMeson       0.35    5436.19    1902.67
+   case= 32        tracker   above 20 MeV    otherBaryon       0.03    162.825    4.88476
+   case= 33         emCalo                           all    27745.1    5.34977     148430
+   case= 34         emCalo                      electron    16795.4    2.79687    46974.5
+   case= 35         emCalo                         gamma    9113.63    5.01288    45685.5
+   case= 36         emCalo                          muon       1.92    11.4481    21.9804
+   case= 37         emCalo                      neutrino       5.67    35.4292    200.883
+   case= 38         emCalo                          pion      24.51    1382.85    33893.6
+   case= 39         emCalo                       neutron     648.65    12.0462    7813.74
+   case= 40         emCalo                        proton      54.84    88.2711    4840.79
+   case= 41         emCalo                           ion    1098.01   0.689781    757.386
+   case= 42         emCalo                    otherMeson       2.01    3706.65    7450.36
+   case= 43         emCalo                   otherBaryon       0.45    1757.79    791.004
+   case= 44         emCalo   below 20 MeV            all    27107.2   0.978029    26511.6
+   case= 45         emCalo   below 20 MeV       electron    16532.9   0.797402    13183.4
+   case= 46         emCalo   below 20 MeV          gamma    8864.31    1.29636    11491.3
+   case= 47         emCalo   below 20 MeV           muon        1.8    4.19274    7.54694
+   case= 48         emCalo   below 20 MeV       neutrino       0.42    14.5053    6.09225
+   case= 49         emCalo   below 20 MeV           pion       0.38    12.8725    4.89156
+   case= 50         emCalo   below 20 MeV        neutron     593.64    2.04585     1214.5
+   case= 51         emCalo   below 20 MeV         proton         23    10.0106    230.243
+   case= 52         emCalo   below 20 MeV            ion     1090.7    0.34211     373.14
+   case= 53         emCalo   below 20 MeV     otherMeson       0.03    2.73453   0.0820359
+   case= 54         emCalo   below 20 MeV    otherBaryon       0.03     14.787    0.44361
+   case= 55         emCalo   above 20 MeV            all     637.86    191.136     121918
+   case= 56         emCalo   above 20 MeV       electron     262.48    128.738    33791.1
+   case= 57         emCalo   above 20 MeV          gamma     249.32     137.15    34194.2
+   case= 58         emCalo   above 20 MeV           muon       0.12    120.279    14.4334
+   case= 59         emCalo   above 20 MeV       neutrino       5.25    37.1031    194.791
+   case= 60         emCalo   above 20 MeV           pion      24.13    1404.42    33888.7
+   case= 61         emCalo   above 20 MeV        neutron      55.01    119.964    6599.24
+   case= 62         emCalo   above 20 MeV         proton      31.84    144.803    4610.54
+   case= 63         emCalo   above 20 MeV            ion       7.31    52.5645    384.246
+   case= 64         emCalo   above 20 MeV     otherMeson       1.98    3762.77    7450.28
+   case= 65         emCalo   above 20 MeV    otherBaryon       0.42    1882.29    790.561
+   case= 66        hadCalo                           all    37856.4    2.83801     107437
+   case= 67        hadCalo                      electron    27952.2    1.13352    31684.3
+   case= 68        hadCalo                         gamma    7836.81    3.82466    29973.1
+   case= 69        hadCalo                          muon       2.82    16.5554    46.6861
+   case= 70        hadCalo                      neutrino       8.57    38.4193    329.254
+   case= 71        hadCalo                          pion      23.82    880.919    20983.5
+   case= 72        hadCalo                       neutron     760.37     14.909    11336.3
+   case= 73        hadCalo                        proton     161.97    50.6531    8204.28
+   case= 74        hadCalo                           ion    1106.91    0.67393    745.979
+   case= 75        hadCalo                    otherMeson       2.13    1802.14    3838.55
+   case= 76        hadCalo                   otherBaryon       0.78    377.608    294.534
+   case= 77        hadCalo   below 20 MeV            all    37355.3   0.640941    23942.5
+   case= 78        hadCalo   below 20 MeV       electron    27784.1   0.417476    11599.2
+   case= 79        hadCalo   below 20 MeV          gamma     7691.3    1.22202    9398.94
+   case= 80        hadCalo   below 20 MeV           muon       2.54    4.11981    10.4643
+   case= 81        hadCalo   below 20 MeV       neutrino       0.73    15.3072    11.1743
+   case= 82        hadCalo   below 20 MeV           pion       0.38    11.4153    4.33782
+   case= 83        hadCalo   below 20 MeV        neutron      666.8    2.49369    1662.79
+   case= 84        hadCalo   below 20 MeV         proton     109.25    7.93603    867.012
+   case= 85        hadCalo   below 20 MeV            ion    1099.94   0.351589    386.727
+   case= 86        hadCalo   below 20 MeV     otherMeson       0.14    6.55783   0.918096
+   case= 87        hadCalo   below 20 MeV    otherBaryon       0.09    11.0093   0.990838
+   case= 88        hadCalo   above 20 MeV            all     501.09    166.625      83494
+   case= 89        hadCalo   above 20 MeV       electron     168.08    119.498    20085.1
+   case= 90        hadCalo   above 20 MeV          gamma     145.51    141.394    20574.2
+   case= 91        hadCalo   above 20 MeV           muon       0.28    129.364    36.2218
+   case= 92        hadCalo   above 20 MeV       neutrino       7.84    40.5713    318.079
+   case= 93        hadCalo   above 20 MeV           pion      23.44    895.015    20979.2
+   case= 94        hadCalo   above 20 MeV        neutron      93.57    103.383    9673.55
+   case= 95        hadCalo   above 20 MeV         proton      52.72    139.174    7337.27
+   case= 96        hadCalo   above 20 MeV            ion       6.97    51.5426    359.252
+   case= 97        hadCalo   above 20 MeV     otherMeson       1.99    1928.46    3837.64
+   case= 98        hadCalo   above 20 MeV    otherBaryon       0.69    425.425    293.543
+ ============================================================= 
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_lAr
+ MaterialEmCalo  = G4_Pb
+ MaterialHadCalo = G4_Fe
+ InnerRadiusTracker = 50 mm
+ OuterRadiusTracker = 250 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+DetectorConstruction::ConstructSphere() : 
+	 World (box) size: 
+	 	 x : -/+ 1870 mm 	 y : -/+ 1870 mm 	 z : -/+ 1870 mm 
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_lAr
+ MaterialEmCalo  = G4_Pb
+ MaterialHadCalo = G4_Fe
+ InnerRadiusTracker = 50 mm
+ OuterRadiusTracker = 250 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_PbWO4
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  75.7749 keV    e-  842.468 keV    e+  797.806 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+
+Index : 4     used in the geometry : Yes
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Pb
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  94.6952 keV    e-  1.00699 MeV    e+  946.936 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 6     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 1 starts.
+### Run 1 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=80.160000s Real=80.963734s Sys=0.040000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 1
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Tracker material = G4_lAr
+ EmCalo  material = G4_Pb
+ HadCalo material = G4_Fe
+ Cubic-volume scoring tracker shell = 8.17233e+06 mm^3
+ Cubic-volume scoring emCalo  shell = 4.59971e+07 mm^3
+ Cubic-volume scoring hadCalo shell = 3.65309e+08 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0        tracker                       forward            all    0.33316
+   case=  1        tracker                       forward       electron   0.00100795
+   case=  2        tracker                       forward          gamma   0.0170347
+   case=  3        tracker                       forward           muon          0
+   case=  4        tracker                       forward       neutrino   0.000541752
+   case=  5        tracker                       forward           pion   0.000647622
+   case=  6        tracker                       forward        neutron   0.313804
+   case=  7        tracker                       forward         proton   9.35813e-05
+   case=  8        tracker                       forward            ion          0
+   case=  9        tracker                       forward     otherMeson   2.48895e-05
+   case= 10        tracker                       forward    otherBaryon   5.40746e-06
+   case= 11        tracker                      backward            all   0.215067
+   case= 12        tracker                      backward       electron   0.000123598
+   case= 13        tracker                      backward          gamma   0.00340055
+   case= 14        tracker                      backward           muon          0
+   case= 15        tracker                      backward       neutrino   0.000210702
+   case= 16        tracker                      backward           pion   8.1476e-06
+   case= 17        tracker                      backward        neutron   0.211324
+   case= 18        tracker                      backward         proton          0
+   case= 19        tracker                      backward            ion          0
+   case= 20        tracker                      backward     otherMeson          0
+   case= 21        tracker                      backward    otherBaryon          0
+   case= 22        tracker   below 20 MeV        forward            all   0.329304
+   case= 23        tracker   below 20 MeV        forward       electron   0.000605434
+   case= 24        tracker   below 20 MeV        forward          gamma   0.0162981
+   case= 25        tracker   below 20 MeV        forward           muon          0
+   case= 26        tracker   below 20 MeV        forward       neutrino   3.72042e-05
+   case= 27        tracker   below 20 MeV        forward           pion          0
+   case= 28        tracker   below 20 MeV        forward        neutron   0.312363
+   case= 29        tracker   below 20 MeV        forward         proton          0
+   case= 30        tracker   below 20 MeV        forward            ion          0
+   case= 31        tracker   below 20 MeV        forward     otherMeson          0
+   case= 32        tracker   below 20 MeV        forward    otherBaryon          0
+   case= 33        tracker   below 20 MeV       backward            all    0.21451
+   case= 34        tracker   below 20 MeV       backward       electron   0.000113461
+   case= 35        tracker   below 20 MeV       backward          gamma   0.00338203
+   case= 36        tracker   below 20 MeV       backward           muon          0
+   case= 37        tracker   below 20 MeV       backward       neutrino   1.0362e-05
+   case= 38        tracker   below 20 MeV       backward           pion          0
+   case= 39        tracker   below 20 MeV       backward        neutron   0.211004
+   case= 40        tracker   below 20 MeV       backward         proton          0
+   case= 41        tracker   below 20 MeV       backward            ion          0
+   case= 42        tracker   below 20 MeV       backward     otherMeson          0
+   case= 43        tracker   below 20 MeV       backward    otherBaryon          0
+   case= 44        tracker   above 20 MeV        forward            all   0.0038565
+   case= 45        tracker   above 20 MeV        forward       electron   0.000402518
+   case= 46        tracker   above 20 MeV        forward          gamma   0.000736619
+   case= 47        tracker   above 20 MeV        forward           muon          0
+   case= 48        tracker   above 20 MeV        forward       neutrino   0.000504548
+   case= 49        tracker   above 20 MeV        forward           pion   0.000647622
+   case= 50        tracker   above 20 MeV        forward        neutron   0.00144132
+   case= 51        tracker   above 20 MeV        forward         proton   9.35813e-05
+   case= 52        tracker   above 20 MeV        forward            ion          0
+   case= 53        tracker   above 20 MeV        forward     otherMeson   2.48895e-05
+   case= 54        tracker   above 20 MeV        forward    otherBaryon   5.40746e-06
+   case= 55        tracker   above 20 MeV       backward            all   0.000557482
+   case= 56        tracker   above 20 MeV       backward       electron   1.01379e-05
+   case= 57        tracker   above 20 MeV       backward          gamma   1.85236e-05
+   case= 58        tracker   above 20 MeV       backward           muon          0
+   case= 59        tracker   above 20 MeV       backward       neutrino   0.00020034
+   case= 60        tracker   above 20 MeV       backward           pion   8.1476e-06
+   case= 61        tracker   above 20 MeV       backward        neutron   0.000320333
+   case= 62        tracker   above 20 MeV       backward         proton          0
+   case= 63        tracker   above 20 MeV       backward            ion          0
+   case= 64        tracker   above 20 MeV       backward     otherMeson          0
+   case= 65        tracker   above 20 MeV       backward    otherBaryon          0
+   case= 66         emCalo                       forward            all   0.190296
+   case= 67         emCalo                       forward       electron   0.00103238
+   case= 68         emCalo                       forward          gamma   0.0183174
+   case= 69         emCalo                       forward           muon   2.25472e-06
+   case= 70         emCalo                       forward       neutrino   0.00037232
+   case= 71         emCalo                       forward           pion   0.00021805
+   case= 72         emCalo                       forward        neutron   0.170245
+   case= 73         emCalo                       forward         proton   8.42116e-05
+   case= 74         emCalo                       forward            ion   3.31968e-06
+   case= 75         emCalo                       forward     otherMeson   1.94623e-05
+   case= 76         emCalo                       forward    otherBaryon   1.66162e-06
+   case= 77         emCalo                      backward            all   0.0432873
+   case= 78         emCalo                      backward       electron   6.76045e-05
+   case= 79         emCalo                      backward          gamma   0.00188426
+   case= 80         emCalo                      backward           muon          0
+   case= 81         emCalo                      backward       neutrino   7.8128e-05
+   case= 82         emCalo                      backward           pion          0
+   case= 83         emCalo                      backward        neutron   0.0412573
+   case= 84         emCalo                      backward         proton          0
+   case= 85         emCalo                      backward            ion          0
+   case= 86         emCalo                      backward     otherMeson          0
+   case= 87         emCalo                      backward    otherBaryon          0
+   case= 88         emCalo   below 20 MeV        forward            all   0.188062
+   case= 89         emCalo   below 20 MeV        forward       electron   0.000890266
+   case= 90         emCalo   below 20 MeV        forward          gamma   0.017974
+   case= 91         emCalo   below 20 MeV        forward           muon          0
+   case= 92         emCalo   below 20 MeV        forward       neutrino   3.73935e-05
+   case= 93         emCalo   below 20 MeV        forward           pion   6.61133e-07
+   case= 94         emCalo   below 20 MeV        forward        neutron   0.169157
+   case= 95         emCalo   below 20 MeV        forward         proton   2.9394e-06
+   case= 96         emCalo   below 20 MeV        forward            ion          0
+   case= 97         emCalo   below 20 MeV        forward     otherMeson          0
+   case= 98         emCalo   below 20 MeV        forward    otherBaryon          0
+   case= 99         emCalo   below 20 MeV       backward            all   0.0432034
+   case=100         emCalo   below 20 MeV       backward       electron   6.76045e-05
+   case=101         emCalo   below 20 MeV       backward          gamma   0.00188426
+   case=102         emCalo   below 20 MeV       backward           muon          0
+   case=103         emCalo   below 20 MeV       backward       neutrino   7.27976e-06
+   case=104         emCalo   below 20 MeV       backward           pion          0
+   case=105         emCalo   below 20 MeV       backward        neutron   0.0412443
+   case=106         emCalo   below 20 MeV       backward         proton          0
+   case=107         emCalo   below 20 MeV       backward            ion          0
+   case=108         emCalo   below 20 MeV       backward     otherMeson          0
+   case=109         emCalo   below 20 MeV       backward    otherBaryon          0
+   case=110         emCalo   above 20 MeV        forward            all   0.00223426
+   case=111         emCalo   above 20 MeV        forward       electron   0.000142117
+   case=112         emCalo   above 20 MeV        forward          gamma   0.000343449
+   case=113         emCalo   above 20 MeV        forward           muon   2.25472e-06
+   case=114         emCalo   above 20 MeV        forward       neutrino   0.000334926
+   case=115         emCalo   above 20 MeV        forward           pion   0.000217389
+   case=116         emCalo   above 20 MeV        forward        neutron   0.00108841
+   case=117         emCalo   above 20 MeV        forward         proton   8.12722e-05
+   case=118         emCalo   above 20 MeV        forward            ion   3.31968e-06
+   case=119         emCalo   above 20 MeV        forward     otherMeson   1.94623e-05
+   case=120         emCalo   above 20 MeV        forward    otherBaryon   1.66162e-06
+   case=121         emCalo   above 20 MeV       backward            all   8.38769e-05
+   case=122         emCalo   above 20 MeV       backward       electron          0
+   case=123         emCalo   above 20 MeV       backward          gamma          0
+   case=124         emCalo   above 20 MeV       backward           muon          0
+   case=125         emCalo   above 20 MeV       backward       neutrino   7.08483e-05
+   case=126         emCalo   above 20 MeV       backward           pion          0
+   case=127         emCalo   above 20 MeV       backward        neutron   1.30286e-05
+   case=128         emCalo   above 20 MeV       backward         proton          0
+   case=129         emCalo   above 20 MeV       backward            ion          0
+   case=130         emCalo   above 20 MeV       backward     otherMeson          0
+   case=131         emCalo   above 20 MeV       backward    otherBaryon          0
+   case=132        hadCalo                       forward            all   0.000383517
+   case=133        hadCalo                       forward       electron   4.56475e-06
+   case=134        hadCalo                       forward          gamma   0.000105424
+   case=135        hadCalo                       forward           muon          0
+   case=136        hadCalo                       forward       neutrino   5.6943e-05
+   case=137        hadCalo                       forward           pion   1.50294e-06
+   case=138        hadCalo                       forward        neutron   0.000213692
+   case=139        hadCalo                       forward         proton   1.04952e-06
+   case=140        hadCalo                       forward            ion          0
+   case=141        hadCalo                       forward     otherMeson   2.8668e-07
+   case=142        hadCalo                       forward    otherBaryon   5.47507e-08
+   case=143        hadCalo                      backward            all   2.21463e-05
+   case=144        hadCalo                      backward       electron          0
+   case=145        hadCalo                      backward          gamma   3.45784e-07
+   case=146        hadCalo                      backward           muon          0
+   case=147        hadCalo                      backward       neutrino   1.90812e-05
+   case=148        hadCalo                      backward           pion          0
+   case=149        hadCalo                      backward        neutron   2.71933e-06
+   case=150        hadCalo                      backward         proton          0
+   case=151        hadCalo                      backward            ion          0
+   case=152        hadCalo                      backward     otherMeson          0
+   case=153        hadCalo                      backward    otherBaryon          0
+   case=154        hadCalo   below 20 MeV        forward            all   0.00031002
+   case=155        hadCalo   below 20 MeV        forward       electron   3.25502e-06
+   case=156        hadCalo   below 20 MeV        forward          gamma   0.000101185
+   case=157        hadCalo   below 20 MeV        forward           muon          0
+   case=158        hadCalo   below 20 MeV        forward       neutrino   5.57734e-06
+   case=159        hadCalo   below 20 MeV        forward           pion          0
+   case=160        hadCalo   below 20 MeV        forward        neutron   0.000199937
+   case=161        hadCalo   below 20 MeV        forward         proton   6.64341e-08
+   case=162        hadCalo   below 20 MeV        forward            ion          0
+   case=163        hadCalo   below 20 MeV        forward     otherMeson          0
+   case=164        hadCalo   below 20 MeV        forward    otherBaryon          0
+   case=165        hadCalo   below 20 MeV       backward            all   4.94378e-06
+   case=166        hadCalo   below 20 MeV       backward       electron          0
+   case=167        hadCalo   below 20 MeV       backward          gamma   3.45784e-07
+   case=168        hadCalo   below 20 MeV       backward           muon          0
+   case=169        hadCalo   below 20 MeV       backward       neutrino   1.87867e-06
+   case=170        hadCalo   below 20 MeV       backward           pion          0
+   case=171        hadCalo   below 20 MeV       backward        neutron   2.71933e-06
+   case=172        hadCalo   below 20 MeV       backward         proton          0
+   case=173        hadCalo   below 20 MeV       backward            ion          0
+   case=174        hadCalo   below 20 MeV       backward     otherMeson          0
+   case=175        hadCalo   below 20 MeV       backward    otherBaryon          0
+   case=176        hadCalo   above 20 MeV        forward            all   7.34972e-05
+   case=177        hadCalo   above 20 MeV        forward       electron   1.30973e-06
+   case=178        hadCalo   above 20 MeV        forward          gamma   4.23919e-06
+   case=179        hadCalo   above 20 MeV        forward           muon          0
+   case=180        hadCalo   above 20 MeV        forward       neutrino   5.13657e-05
+   case=181        hadCalo   above 20 MeV        forward           pion   1.50294e-06
+   case=182        hadCalo   above 20 MeV        forward        neutron   1.37552e-05
+   case=183        hadCalo   above 20 MeV        forward         proton   9.83086e-07
+   case=184        hadCalo   above 20 MeV        forward            ion          0
+   case=185        hadCalo   above 20 MeV        forward     otherMeson   2.8668e-07
+   case=186        hadCalo   above 20 MeV        forward    otherBaryon   5.47507e-08
+   case=187        hadCalo   above 20 MeV       backward            all   1.72025e-05
+   case=188        hadCalo   above 20 MeV       backward       electron          0
+   case=189        hadCalo   above 20 MeV       backward          gamma          0
+   case=190        hadCalo   above 20 MeV       backward           muon          0
+   case=191        hadCalo   above 20 MeV       backward       neutrino   1.72025e-05
+   case=192        hadCalo   above 20 MeV       backward           pion          0
+   case=193        hadCalo   above 20 MeV       backward        neutron          0
+   case=194        hadCalo   above 20 MeV       backward         proton          0
+   case=195        hadCalo   above 20 MeV       backward            ion          0
+   case=196        hadCalo   above 20 MeV       backward     otherMeson          0
+   case=197        hadCalo   above 20 MeV       backward    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0        tracker                           all      253.3    63.7711    16153.2
+   case=  1        tracker                      electron     144.09    9.19894    1325.48
+   case=  2        tracker                         gamma      42.58    93.1016    3964.27
+   case=  3        tracker                          muon       0.07    4.11981   0.288387
+   case=  4        tracker                      neutrino       0.22    42.7858    9.41289
+   case=  5        tracker                          pion       2.83    3066.17    8677.25
+   case=  6        tracker                       neutron      11.17    60.2235    672.697
+   case=  7        tracker                        proton       1.14    385.192    439.119
+   case=  8        tracker                           ion      50.94   0.580762     29.584
+   case=  9        tracker                    otherMeson       0.22    4482.29    986.105
+   case= 10        tracker                   otherBaryon       0.04    1225.77    49.0307
+   case= 11        tracker   below 20 MeV            all     242.04   0.596307     144.33
+   case= 12        tracker   below 20 MeV       electron     142.03     0.3557      50.52
+   case= 13        tracker   below 20 MeV          gamma      38.77    1.26482    49.0369
+   case= 14        tracker   below 20 MeV           muon       0.07    4.11981   0.288387
+   case= 15        tracker   below 20 MeV       neutrino       0.04    17.2397   0.689589
+   case= 16        tracker   below 20 MeV           pion       0.04    8.33597   0.333439
+   case= 17        tracker   below 20 MeV        neutron       9.93    2.38498    23.6829
+   case= 18        tracker   below 20 MeV         proton       0.57      8.798    5.01486
+   case= 19        tracker   below 20 MeV            ion      50.59    0.29184    14.7642
+   case= 20        tracker   below 20 MeV     otherMeson          0          0          0
+   case= 21        tracker   below 20 MeV    otherBaryon          0          0          0
+   case= 22        tracker   above 20 MeV            all      11.26    1421.75    16008.9
+   case= 23        tracker   above 20 MeV       electron       2.06    618.911    1274.96
+   case= 24        tracker   above 20 MeV          gamma       3.81    1027.62    3915.23
+   case= 25        tracker   above 20 MeV           muon          0          0          0
+   case= 26        tracker   above 20 MeV       neutrino       0.18    48.4628     8.7233
+   case= 27        tracker   above 20 MeV           pion       2.79    3110.01    8676.91
+   case= 28        tracker   above 20 MeV        neutron       1.24    523.398    649.014
+   case= 29        tracker   above 20 MeV         proton       0.57    761.586    434.104
+   case= 30        tracker   above 20 MeV            ion       0.35    42.3424    14.8198
+   case= 31        tracker   above 20 MeV     otherMeson       0.22    4482.29    986.105
+   case= 32        tracker   above 20 MeV    otherBaryon       0.04    1225.77    49.0307
+   case= 33         emCalo                           all    28862.3     5.4322     156786
+   case= 34         emCalo                      electron    17490.1    3.00391    52538.7
+   case= 35         emCalo                         gamma    10135.9    5.11754    51870.7
+   case= 36         emCalo                          muon       1.59    17.1215    27.2232
+   case= 37         emCalo                      neutrino       4.72    37.3244    176.171
+   case= 38         emCalo                          pion      22.24    1381.39    30722.1
+   case= 39         emCalo                       neutron      760.5     11.536    8773.11
+   case= 40         emCalo                        proton      52.92    95.6619    5062.43
+   case= 41         emCalo                           ion     391.95    1.65605    649.087
+   case= 42         emCalo                    otherMeson       1.98    3276.62     6487.7
+   case= 43         emCalo                   otherBaryon       0.45    1063.85    478.734
+   case= 44         emCalo   below 20 MeV            all    28160.9    1.02531    28873.5
+   case= 45         emCalo   below 20 MeV       electron      17201   0.838896    14429.8
+   case= 46         emCalo   below 20 MeV          gamma    9859.12    1.26668    12488.4
+   case= 47         emCalo   below 20 MeV           muon       1.49    4.11981    6.13852
+   case= 48         emCalo   below 20 MeV       neutrino       0.45    15.2633    6.86848
+   case= 49         emCalo   below 20 MeV           pion       0.29    12.0521    3.49511
+   case= 50         emCalo   below 20 MeV        neutron     697.79    2.20283    1537.11
+   case= 51         emCalo   below 20 MeV         proton      17.36    12.6019    218.769
+   case= 52         emCalo   below 20 MeV            ion     383.36   0.475821    182.411
+   case= 53         emCalo   below 20 MeV     otherMeson       0.07    6.77866   0.474506
+   case= 54         emCalo   below 20 MeV    otherBaryon       0.01    4.82934   0.0482934
+   case= 55         emCalo   above 20 MeV            all     701.43     182.36     127912
+   case= 56         emCalo   above 20 MeV       electron     289.16    131.792    38108.9
+   case= 57         emCalo   above 20 MeV          gamma     276.74    142.308    39382.3
+   case= 58         emCalo   above 20 MeV           muon        0.1    210.846    21.0846
+   case= 59         emCalo   above 20 MeV       neutrino       4.27    39.6494    169.303
+   case= 60         emCalo   above 20 MeV           pion      21.95    1399.48    30718.6
+   case= 61         emCalo   above 20 MeV        neutron      62.71    115.388    7235.99
+   case= 62         emCalo   above 20 MeV         proton      35.56    136.211    4843.66
+   case= 63         emCalo   above 20 MeV            ion       8.59    54.3279    466.677
+   case= 64         emCalo   above 20 MeV     otherMeson       1.91    3396.45    6487.23
+   case= 65         emCalo   above 20 MeV    otherBaryon       0.44    1087.92    478.686
+   case= 66        hadCalo                           all    37312.1    2.38229    88888.3
+   case= 67        hadCalo                      electron    27779.5   0.947622    26324.4
+   case= 68        hadCalo                         gamma    7187.88    3.39078    24372.5
+   case= 69        hadCalo                          muon       2.47    17.7903     43.942
+   case= 70        hadCalo                      neutrino       7.44    37.4213    278.414
+   case= 71        hadCalo                          pion      20.71    815.743      16894
+   case= 72        hadCalo                       neutron     776.03    12.9795    10072.5
+   case= 73        hadCalo                        proton     129.52    55.2379    7154.41
+   case= 74        hadCalo                           ion    1406.29   0.484056    680.723
+   case= 75        hadCalo                    otherMeson        1.8    1472.51    2650.52
+   case= 76        hadCalo                   otherBaryon       0.47    886.797    416.795
+   case= 77        hadCalo   below 20 MeV            all    36897.2   0.615275    22701.9
+   case= 78        hadCalo   below 20 MeV       electron    27643.5   0.394879    10915.8
+   case= 79        hadCalo   below 20 MeV          gamma    7071.86    1.30767    9247.64
+   case= 80        hadCalo   below 20 MeV           muon       2.27    4.13109    9.37757
+   case= 81        hadCalo   below 20 MeV       neutrino       0.75    14.1082    10.5811
+   case= 82        hadCalo   below 20 MeV           pion       0.36    10.9993    3.95973
+   case= 83        hadCalo   below 20 MeV        neutron     692.83    2.13252    1477.47
+   case= 84        hadCalo   below 20 MeV         proton      85.19    7.78904    663.548
+   case= 85        hadCalo   below 20 MeV            ion     1400.3   0.266095    372.613
+   case= 86        hadCalo   below 20 MeV     otherMeson       0.12    6.20879   0.745054
+   case= 87        hadCalo   below 20 MeV    otherBaryon       0.01    14.6236   0.146236
+   case= 88        hadCalo   above 20 MeV            all      414.9    159.524    66186.3
+   case= 89        hadCalo   above 20 MeV       electron     135.98    113.315    15408.6
+   case= 90        hadCalo   above 20 MeV          gamma     116.02    130.364    15124.9
+   case= 91        hadCalo   above 20 MeV           muon        0.2    172.822    34.5644
+   case= 92        hadCalo   above 20 MeV       neutrino       6.69    40.0349    267.833
+   case= 93        hadCalo   above 20 MeV           pion      20.35    829.979    16890.1
+   case= 94        hadCalo   above 20 MeV        neutron       83.2    103.305    8594.98
+   case= 95        hadCalo   above 20 MeV         proton      44.33    146.422    6490.87
+   case= 96        hadCalo   above 20 MeV            ion       5.99    51.4374     308.11
+   case= 97        hadCalo   above 20 MeV     otherMeson       1.68    1577.24    2649.77
+   case= 98        hadCalo   above 20 MeV    otherBaryon       0.46    905.757    416.648
+ ============================================================= 
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_Si
+ MaterialEmCalo  = G4_W
+ MaterialHadCalo = G4_W
+ InnerRadiusTracker = 50 mm
+ OuterRadiusTracker = 250 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+DetectorConstruction::ConstructSphere() : 
+	 World (box) size: 
+	 	 x : -/+ 1870 mm 	 y : -/+ 1870 mm 	 z : -/+ 1870 mm 
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ MaterialTracker = G4_Si
+ MaterialEmCalo  = G4_W
+ MaterialHadCalo = G4_W
+ InnerRadiusTracker = 50 mm
+ OuterRadiusTracker = 250 mm
+ InnerRadiusEmCalo  = 300 mm
+ OuterRadiusEmCalo  = 600 mm
+ InnerRadiusHadCalo = 700 mm
+ OuterRadiusHadCalo = 1700 mm
+ ScoringThickness   = 10 mm
+ -------------------------------------------------------- 
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_PbWO4
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  75.7749 keV    e-  842.468 keV    e+  797.806 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+
+Index : 4     used in the geometry : No 
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+
+Index : 5     used in the geometry : No 
+ Material : G4_Pb
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  94.6952 keV    e-  1.00699 MeV    e+  946.936 keV proton 70 keV
+
+Index : 6     used in the geometry : No 
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+
+Index : 7     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 8     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  97.7189 keV    e-  1.64904 MeV    e+  1.53897 MeV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 2 starts.
+### Run 2 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=117.080000s Real=118.219177s Sys=0.030000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 2
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Tracker material = G4_Si
+ EmCalo  material = G4_W
+ HadCalo material = G4_W
+ Cubic-volume scoring tracker shell = 8.17233e+06 mm^3
+ Cubic-volume scoring emCalo  shell = 4.59971e+07 mm^3
+ Cubic-volume scoring hadCalo shell = 3.65309e+08 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0        tracker                       forward            all   0.230712
+   case=  1        tracker                       forward       electron   0.00279036
+   case=  2        tracker                       forward          gamma   0.0453559
+   case=  3        tracker                       forward           muon   3.37032e-05
+   case=  4        tracker                       forward       neutrino   0.000844672
+   case=  5        tracker                       forward           pion   0.000808899
+   case=  6        tracker                       forward        neutron   0.180586
+   case=  7        tracker                       forward         proton   0.00023326
+   case=  8        tracker                       forward            ion   4.80925e-06
+   case=  9        tracker                       forward     otherMeson   4.66431e-05
+   case= 10        tracker                       forward    otherBaryon   7.44343e-06
+   case= 11        tracker                      backward            all   0.0752165
+   case= 12        tracker                      backward       electron   0.000313203
+   case= 13        tracker                      backward          gamma   0.00686052
+   case= 14        tracker                      backward           muon          0
+   case= 15        tracker                      backward       neutrino   0.000254968
+   case= 16        tracker                      backward           pion          0
+   case= 17        tracker                      backward        neutron   0.067782
+   case= 18        tracker                      backward         proton   5.77131e-06
+   case= 19        tracker                      backward            ion          0
+   case= 20        tracker                      backward     otherMeson          0
+   case= 21        tracker                      backward    otherBaryon          0
+   case= 22        tracker   below 20 MeV        forward            all   0.224298
+   case= 23        tracker   below 20 MeV        forward       electron   0.00187149
+   case= 24        tracker   below 20 MeV        forward          gamma   0.0436345
+   case= 25        tracker   below 20 MeV        forward           muon   3.12251e-05
+   case= 26        tracker   below 20 MeV        forward       neutrino   7.93177e-05
+   case= 27        tracker   below 20 MeV        forward           pion          0
+   case= 28        tracker   below 20 MeV        forward        neutron   0.178659
+   case= 29        tracker   below 20 MeV        forward         proton   1.81515e-05
+   case= 30        tracker   below 20 MeV        forward            ion   4.80925e-06
+   case= 31        tracker   below 20 MeV        forward     otherMeson          0
+   case= 32        tracker   below 20 MeV        forward    otherBaryon          0
+   case= 33        tracker   below 20 MeV       backward            all   0.0746825
+   case= 34        tracker   below 20 MeV       backward       electron   0.000310475
+   case= 35        tracker   below 20 MeV       backward          gamma   0.00684879
+   case= 36        tracker   below 20 MeV       backward           muon          0
+   case= 37        tracker   below 20 MeV       backward       neutrino   2.12397e-05
+   case= 38        tracker   below 20 MeV       backward           pion          0
+   case= 39        tracker   below 20 MeV       backward        neutron   0.067502
+   case= 40        tracker   below 20 MeV       backward         proton          0
+   case= 41        tracker   below 20 MeV       backward            ion          0
+   case= 42        tracker   below 20 MeV       backward     otherMeson          0
+   case= 43        tracker   below 20 MeV       backward    otherBaryon          0
+   case= 44        tracker   above 20 MeV        forward            all   0.0064135
+   case= 45        tracker   above 20 MeV        forward       electron   0.000918869
+   case= 46        tracker   above 20 MeV        forward          gamma   0.00172136
+   case= 47        tracker   above 20 MeV        forward           muon   2.47808e-06
+   case= 48        tracker   above 20 MeV        forward       neutrino   0.000765355
+   case= 49        tracker   above 20 MeV        forward           pion   0.000808899
+   case= 50        tracker   above 20 MeV        forward        neutron   0.00192734
+   case= 51        tracker   above 20 MeV        forward         proton   0.000215109
+   case= 52        tracker   above 20 MeV        forward            ion          0
+   case= 53        tracker   above 20 MeV        forward     otherMeson   4.66431e-05
+   case= 54        tracker   above 20 MeV        forward    otherBaryon   7.44343e-06
+   case= 55        tracker   above 20 MeV       backward            all   0.000533954
+   case= 56        tracker   above 20 MeV       backward       electron   2.72774e-06
+   case= 57        tracker   above 20 MeV       backward          gamma   1.17324e-05
+   case= 58        tracker   above 20 MeV       backward           muon          0
+   case= 59        tracker   above 20 MeV       backward       neutrino   0.000233728
+   case= 60        tracker   above 20 MeV       backward           pion          0
+   case= 61        tracker   above 20 MeV       backward        neutron   0.000279994
+   case= 62        tracker   above 20 MeV       backward         proton   5.77131e-06
+   case= 63        tracker   above 20 MeV       backward            ion          0
+   case= 64        tracker   above 20 MeV       backward     otherMeson          0
+   case= 65        tracker   above 20 MeV       backward    otherBaryon          0
+   case= 66         emCalo                       forward            all   0.0749008
+   case= 67         emCalo                       forward       electron   0.000445632
+   case= 68         emCalo                       forward          gamma   0.00925643
+   case= 69         emCalo                       forward           muon   2.81048e-06
+   case= 70         emCalo                       forward       neutrino   0.00053084
+   case= 71         emCalo                       forward           pion   0.000128325
+   case= 72         emCalo                       forward        neutron   0.0644486
+   case= 73         emCalo                       forward         proton   7.35379e-05
+   case= 74         emCalo                       forward            ion   5.15417e-07
+   case= 75         emCalo                       forward     otherMeson   1.41576e-05
+   case= 76         emCalo                       forward    otherBaryon          0
+   case= 77         emCalo                      backward            all   0.00249643
+   case= 78         emCalo                      backward       electron   3.48218e-05
+   case= 79         emCalo                      backward          gamma   0.000261131
+   case= 80         emCalo                      backward           muon          0
+   case= 81         emCalo                      backward       neutrino   0.000110462
+   case= 82         emCalo                      backward           pion          0
+   case= 83         emCalo                      backward        neutron   0.00209002
+   case= 84         emCalo                      backward         proton          0
+   case= 85         emCalo                      backward            ion          0
+   case= 86         emCalo                      backward     otherMeson          0
+   case= 87         emCalo                      backward    otherBaryon          0
+   case= 88         emCalo   below 20 MeV        forward            all   0.0732333
+   case= 89         emCalo   below 20 MeV        forward       electron   0.000418273
+   case= 90         emCalo   below 20 MeV        forward          gamma   0.00919298
+   case= 91         emCalo   below 20 MeV        forward           muon          0
+   case= 92         emCalo   below 20 MeV        forward       neutrino   4.72255e-05
+   case= 93         emCalo   below 20 MeV        forward           pion   5.38302e-07
+   case= 94         emCalo   below 20 MeV        forward        neutron   0.0635715
+   case= 95         emCalo   below 20 MeV        forward         proton   2.35703e-06
+   case= 96         emCalo   below 20 MeV        forward            ion          0
+   case= 97         emCalo   below 20 MeV        forward     otherMeson   4.58508e-07
+   case= 98         emCalo   below 20 MeV        forward    otherBaryon          0
+   case= 99         emCalo   below 20 MeV       backward            all   0.00239275
+   case=100         emCalo   below 20 MeV       backward       electron   3.48218e-05
+   case=101         emCalo   below 20 MeV       backward          gamma   0.000261131
+   case=102         emCalo   below 20 MeV       backward           muon          0
+   case=103         emCalo   below 20 MeV       backward       neutrino   9.19449e-06
+   case=104         emCalo   below 20 MeV       backward           pion          0
+   case=105         emCalo   below 20 MeV       backward        neutron   0.0020876
+   case=106         emCalo   below 20 MeV       backward         proton          0
+   case=107         emCalo   below 20 MeV       backward            ion          0
+   case=108         emCalo   below 20 MeV       backward     otherMeson          0
+   case=109         emCalo   below 20 MeV       backward    otherBaryon          0
+   case=110         emCalo   above 20 MeV        forward            all   0.0016675
+   case=111         emCalo   above 20 MeV        forward       electron   2.73585e-05
+   case=112         emCalo   above 20 MeV        forward          gamma   6.34538e-05
+   case=113         emCalo   above 20 MeV        forward           muon   2.81048e-06
+   case=114         emCalo   above 20 MeV        forward       neutrino   0.000483615
+   case=115         emCalo   above 20 MeV        forward           pion   0.000127787
+   case=116         emCalo   above 20 MeV        forward        neutron   0.000877082
+   case=117         emCalo   above 20 MeV        forward         proton   7.11808e-05
+   case=118         emCalo   above 20 MeV        forward            ion   5.15417e-07
+   case=119         emCalo   above 20 MeV        forward     otherMeson   1.36991e-05
+   case=120         emCalo   above 20 MeV        forward    otherBaryon          0
+   case=121         emCalo   above 20 MeV       backward            all   0.000103681
+   case=122         emCalo   above 20 MeV       backward       electron          0
+   case=123         emCalo   above 20 MeV       backward          gamma          0
+   case=124         emCalo   above 20 MeV       backward           muon          0
+   case=125         emCalo   above 20 MeV       backward       neutrino   0.000101267
+   case=126         emCalo   above 20 MeV       backward           pion          0
+   case=127         emCalo   above 20 MeV       backward        neutron   2.414e-06
+   case=128         emCalo   above 20 MeV       backward         proton          0
+   case=129         emCalo   above 20 MeV       backward            ion          0
+   case=130         emCalo   above 20 MeV       backward     otherMeson          0
+   case=131         emCalo   above 20 MeV       backward    otherBaryon          0
+   case=132        hadCalo                       forward            all   5.91072e-05
+   case=133        hadCalo                       forward       electron          0
+   case=134        hadCalo                       forward          gamma   2.2472e-06
+   case=135        hadCalo                       forward           muon          0
+   case=136        hadCalo                       forward       neutrino   4.60432e-05
+   case=137        hadCalo                       forward           pion   5.83966e-08
+   case=138        hadCalo                       forward        neutron   1.0701e-05
+   case=139        hadCalo                       forward         proton   5.74172e-08
+   case=140        hadCalo                       forward            ion          0
+   case=141        hadCalo                       forward     otherMeson          0
+   case=142        hadCalo                       forward    otherBaryon          0
+   case=143        hadCalo                      backward            all   2.48726e-05
+   case=144        hadCalo                      backward       electron          0
+   case=145        hadCalo                      backward          gamma          0
+   case=146        hadCalo                      backward           muon          0
+   case=147        hadCalo                      backward       neutrino   2.48726e-05
+   case=148        hadCalo                      backward           pion          0
+   case=149        hadCalo                      backward        neutron          0
+   case=150        hadCalo                      backward         proton          0
+   case=151        hadCalo                      backward            ion          0
+   case=152        hadCalo                      backward     otherMeson          0
+   case=153        hadCalo                      backward    otherBaryon          0
+   case=154        hadCalo   below 20 MeV        forward            all   1.61711e-05
+   case=155        hadCalo   below 20 MeV        forward       electron          0
+   case=156        hadCalo   below 20 MeV        forward          gamma   2.2472e-06
+   case=157        hadCalo   below 20 MeV        forward           muon          0
+   case=158        hadCalo   below 20 MeV        forward       neutrino   4.05185e-06
+   case=159        hadCalo   below 20 MeV        forward           pion          0
+   case=160        hadCalo   below 20 MeV        forward        neutron   9.87202e-06
+   case=161        hadCalo   below 20 MeV        forward         proton          0
+   case=162        hadCalo   below 20 MeV        forward            ion          0
+   case=163        hadCalo   below 20 MeV        forward     otherMeson          0
+   case=164        hadCalo   below 20 MeV        forward    otherBaryon          0
+   case=165        hadCalo   below 20 MeV       backward            all   2.03498e-06
+   case=166        hadCalo   below 20 MeV       backward       electron          0
+   case=167        hadCalo   below 20 MeV       backward          gamma          0
+   case=168        hadCalo   below 20 MeV       backward           muon          0
+   case=169        hadCalo   below 20 MeV       backward       neutrino   2.03498e-06
+   case=170        hadCalo   below 20 MeV       backward           pion          0
+   case=171        hadCalo   below 20 MeV       backward        neutron          0
+   case=172        hadCalo   below 20 MeV       backward         proton          0
+   case=173        hadCalo   below 20 MeV       backward            ion          0
+   case=174        hadCalo   below 20 MeV       backward     otherMeson          0
+   case=175        hadCalo   below 20 MeV       backward    otherBaryon          0
+   case=176        hadCalo   above 20 MeV        forward            all   4.29361e-05
+   case=177        hadCalo   above 20 MeV        forward       electron          0
+   case=178        hadCalo   above 20 MeV        forward          gamma          0
+   case=179        hadCalo   above 20 MeV        forward           muon          0
+   case=180        hadCalo   above 20 MeV        forward       neutrino   4.19914e-05
+   case=181        hadCalo   above 20 MeV        forward           pion   5.83966e-08
+   case=182        hadCalo   above 20 MeV        forward        neutron   8.28946e-07
+   case=183        hadCalo   above 20 MeV        forward         proton   5.74172e-08
+   case=184        hadCalo   above 20 MeV        forward            ion          0
+   case=185        hadCalo   above 20 MeV        forward     otherMeson          0
+   case=186        hadCalo   above 20 MeV        forward    otherBaryon          0
+   case=187        hadCalo   above 20 MeV       backward            all   2.28376e-05
+   case=188        hadCalo   above 20 MeV       backward       electron          0
+   case=189        hadCalo   above 20 MeV       backward          gamma          0
+   case=190        hadCalo   above 20 MeV       backward           muon          0
+   case=191        hadCalo   above 20 MeV       backward       neutrino   2.28376e-05
+   case=192        hadCalo   above 20 MeV       backward           pion          0
+   case=193        hadCalo   above 20 MeV       backward        neutron          0
+   case=194        hadCalo   above 20 MeV       backward         proton          0
+   case=195        hadCalo   above 20 MeV       backward            ion          0
+   case=196        hadCalo   above 20 MeV       backward     otherMeson          0
+   case=197        hadCalo   above 20 MeV       backward    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0        tracker                           all     715.85     38.294    27412.7
+   case=  1        tracker                      electron     528.79    6.55755    3467.57
+   case=  2        tracker                         gamma     111.61    56.9898    6360.63
+   case=  3        tracker                          muon       0.07    4.11981   0.288387
+   case=  4        tracker                      neutrino       0.23    34.0577    7.83327
+   case=  5        tracker                          pion       4.84    2549.78    12340.9
+   case=  6        tracker                       neutron      12.71     46.079    585.664
+   case=  7        tracker                        proton        6.1    130.092    793.558
+   case=  8        tracker                           ion      50.86    1.11597    56.7582
+   case=  9        tracker                    otherMeson       0.55    6574.52    3615.99
+   case= 10        tracker                   otherBaryon       0.09    2039.29    183.536
+   case= 11        tracker   below 20 MeV            all     687.65   0.627996    431.841
+   case= 12        tracker   below 20 MeV       electron     522.27   0.356473    186.175
+   case= 13        tracker   below 20 MeV          gamma     100.91    1.50369    151.737
+   case= 14        tracker   below 20 MeV           muon       0.07    4.11981   0.288387
+   case= 15        tracker   below 20 MeV       neutrino       0.02    7.90007   0.158001
+   case= 16        tracker   below 20 MeV           pion       0.05    11.4057   0.570283
+   case= 17        tracker   below 20 MeV        neutron       9.92    3.56168    35.3319
+   case= 18        tracker   below 20 MeV         proton       4.13    6.52568    26.9511
+   case= 19        tracker   below 20 MeV            ion      50.28   0.609172    30.6292
+   case= 20        tracker   below 20 MeV     otherMeson          0          0          0
+   case= 21        tracker   below 20 MeV    otherBaryon          0          0          0
+   case= 22        tracker   above 20 MeV            all       28.2     956.77    26980.9
+   case= 23        tracker   above 20 MeV       electron       6.52    503.281    3281.39
+   case= 24        tracker   above 20 MeV          gamma       10.7    580.271     6208.9
+   case= 25        tracker   above 20 MeV           muon          0          0          0
+   case= 26        tracker   above 20 MeV       neutrino       0.21    36.5489    7.67527
+   case= 27        tracker   above 20 MeV           pion       4.79    2576.27    12340.4
+   case= 28        tracker   above 20 MeV        neutron       2.79    197.252    550.332
+   case= 29        tracker   above 20 MeV         proton       1.97    389.141    766.607
+   case= 30        tracker   above 20 MeV            ion       0.58    45.0501    26.1291
+   case= 31        tracker   above 20 MeV     otherMeson       0.55    6574.52    3615.99
+   case= 32        tracker   above 20 MeV    otherBaryon       0.09    2039.29    183.536
+   case= 33         emCalo                           all    56092.2    3.69368     207187
+   case= 34         emCalo                      electron    33448.7    2.05098    68602.4
+   case= 35         emCalo                         gamma    17751.3    3.78385    67168.1
+   case= 36         emCalo                          muon       2.99    16.6849     49.888
+   case= 37         emCalo                      neutrino       8.92     38.222     340.94
+   case= 38         emCalo                          pion       31.7    1209.87    38352.8
+   case= 39         emCalo                       neutron    2373.01    6.04043      14334
+   case= 40         emCalo                        proton      90.87    97.0965    8823.16
+   case= 41         emCalo                           ion    2380.65   0.432616    1029.91
+   case= 42         emCalo                    otherMeson       3.32     2384.3    7915.86
+   case= 43         emCalo                   otherBaryon       0.78    730.159    569.524
+   case= 44         emCalo   below 20 MeV            all    55156.3   0.893831    49300.4
+   case= 45         emCalo   below 20 MeV       electron    33080.7   0.718055    23753.8
+   case= 46         emCalo   below 20 MeV          gamma    17406.1    1.25308    21811.2
+   case= 47         emCalo   below 20 MeV           muon       2.72    4.17363    11.3523
+   case= 48         emCalo   below 20 MeV       neutrino       0.69    15.3339    10.5804
+   case= 49         emCalo   below 20 MeV           pion       0.53    11.9547    6.33597
+   case= 50         emCalo   below 20 MeV        neutron    2265.58    1.31524    2979.77
+   case= 51         emCalo   below 20 MeV         proton      32.22    12.3636    398.355
+   case= 52         emCalo   below 20 MeV            ion    2367.49   0.138056    326.847
+   case= 53         emCalo   below 20 MeV     otherMeson        0.2     6.9195     1.3839
+   case= 54         emCalo   below 20 MeV    otherBaryon       0.06    12.9413   0.776478
+   case= 55         emCalo   above 20 MeV            all     935.87    168.705     157886
+   case= 56         emCalo   above 20 MeV       electron     367.97    121.881    44848.6
+   case= 57         emCalo   above 20 MeV          gamma     345.15    131.412    45356.9
+   case= 58         emCalo   above 20 MeV           muon       0.27    142.725    38.5357
+   case= 59         emCalo   above 20 MeV       neutrino       8.23    40.1409     330.36
+   case= 60         emCalo   above 20 MeV           pion      31.17    1230.24    38346.5
+   case= 61         emCalo   above 20 MeV        neutron     107.43     105.69    11354.2
+   case= 62         emCalo   above 20 MeV         proton      58.65    143.645     8424.8
+   case= 63         emCalo   above 20 MeV            ion      13.16     53.424     703.06
+   case= 64         emCalo   above 20 MeV     otherMeson       3.12    2536.69    7914.48
+   case= 65         emCalo   above 20 MeV    otherBaryon       0.72    789.927    568.748
+   case= 66        hadCalo                           all    17306.5    2.06085    35666.2
+   case= 67        hadCalo                      electron    9942.69    1.10785      11015
+   case= 68        hadCalo                         gamma    5069.55    2.21778    11243.1
+   case= 69        hadCalo                          muon       1.08    15.5641    16.8092
+   case= 70        hadCalo                      neutrino       3.25    37.3996    121.549
+   case= 71        hadCalo                          pion       6.83    700.356    4783.43
+   case= 72        hadCalo                       neutron    1067.89    4.47515    4778.97
+   case= 73        hadCalo                        proton      30.48    80.2354    2445.58
+   case= 74        hadCalo                           ion    1183.88   0.256978    304.231
+   case= 75        hadCalo                    otherMeson       0.67     1370.2    918.033
+   case= 76        hadCalo                   otherBaryon       0.23    171.398    39.4216
+   case= 77        hadCalo   below 20 MeV            all      17141   0.783043    13422.2
+   case= 78        hadCalo   below 20 MeV       electron    9895.11   0.606078    5997.21
+   case= 79        hadCalo   below 20 MeV          gamma    5026.23    1.18587    5960.44
+   case= 80        hadCalo   below 20 MeV           muon       0.99    4.11981    4.07861
+   case= 81        hadCalo   below 20 MeV       neutrino       0.35    14.9468    5.23136
+   case= 82        hadCalo   below 20 MeV           pion       0.14    11.7551    1.64571
+   case= 83        hadCalo   below 20 MeV        neutron     1027.3    1.18445    1216.79
+   case= 84        hadCalo   below 20 MeV         proton      10.72    12.6794    135.924
+   case= 85        hadCalo   below 20 MeV            ion    1180.08   0.0850336    100.346
+   case= 86        hadCalo   below 20 MeV     otherMeson       0.05    3.45016   0.172508
+   case= 87        hadCalo   below 20 MeV    otherBaryon       0.04    7.97247   0.318899
+   case= 88        hadCalo   above 20 MeV            all     165.54    134.372      22244
+   case= 89        hadCalo   above 20 MeV       electron      47.58     105.46    5017.79
+   case= 90        hadCalo   above 20 MeV          gamma      43.32    121.946     5282.7
+   case= 91        hadCalo   above 20 MeV           muon       0.09    141.451    12.7306
+   case= 92        hadCalo   above 20 MeV       neutrino        2.9    40.1094    116.317
+   case= 93        hadCalo   above 20 MeV           pion       6.69    714.766    4781.78
+   case= 94        hadCalo   above 20 MeV        neutron      40.59      87.76    3562.18
+   case= 95        hadCalo   above 20 MeV         proton      19.76    116.885    2309.65
+   case= 96        hadCalo   above 20 MeV            ion        3.8    53.6538    203.884
+   case= 97        hadCalo   above 20 MeV     otherMeson       0.62    1480.42    917.861
+   case= 98        hadCalo   above 20 MeV    otherBaryon       0.19    205.804    39.1027
+ ============================================================= 
+
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.15 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

@@ -76,24 +76,23 @@ G4bool G4PartialWidthTable::operator!=(const G4PartialWidthTable &right) const
 
 G4int G4PartialWidthTable::NumberOfChannels() const
 {
-  return widths.size();
+  return (G4int)widths.size();
 }
 
 
 const G4PhysicsVector* G4PartialWidthTable::Width(const G4String& name1, const G4String& name2) const
 {
   // Returned pointer is not owned by the client
-  G4int i;
   G4PhysicsVector* width = 0;
-  G4int n = 0;
-  G4int entries = widths.size();
-  for (i=0; i<entries; i++)
+  std::size_t n = 0;
+  std::size_t entries = widths.size();
+  for (std::size_t i=0; i<entries; ++i)
     {
       if ( (daughter1[i] == name1 && daughter2[i] == name2) ||
 	   (daughter2[i] == name1 && daughter1[i] == name2) )
 	{
 	  width = (G4PhysicsVector*) (widths[i]);
-	  n++;
+	  ++n;
 	}
     }
   if (n > 1) throw G4HadronicException(__FILE__, __LINE__, "G4PartialWidthTable::Width - ambiguity");
@@ -124,16 +123,14 @@ void G4PartialWidthTable::AddWidths(const G4double* channelWidth,
 
 void G4PartialWidthTable::Dump() const
 {
-  G4int entries = widths.size();
+  std::size_t entries = widths.size();
 
-  G4int i;
-  for (i=0; i<entries; i++)
+  for (std::size_t i=0; i<entries; ++i)
     {
       G4cout << " Channel " << i  << ": " 
-	   << daughter1[i] << " " << daughter2[i] << G4endl;
+             << daughter1[i] << " " << daughter2[i] << G4endl;
       G4PhysicsFreeVector* width = widths[i];
-      G4int j;
-      for (j=0; j<nEnergies; j++)
+      for (G4int j=0; j<nEnergies; ++j)
 	{
 	  G4bool dummy = false;
 	  G4double e = energy[i];

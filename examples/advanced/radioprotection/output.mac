@@ -1,0 +1,4 @@
+# Uncomment the following line to disable ROOT output
+# and enable plaintext csv instead
+#/analysis/useRoot false
+

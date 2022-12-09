@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HadCalorimeterHit.cc
+/// \file B5/src/HadCalorimeterHit.cc
 /// \brief Implementation of the B5::HadCalorimeterHit class
 
 #include "HadCalorimeterHit.hh"
@@ -51,43 +51,9 @@ G4ThreadLocal G4Allocator<HadCalorimeterHit>* HadCalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HadCalorimeterHit::HadCalorimeterHit()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 HadCalorimeterHit::HadCalorimeterHit(G4int columnID,G4int rowID)
 : fColumnID(columnID), fRowID(rowID)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HadCalorimeterHit::~HadCalorimeterHit()
-{}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// HadCalorimeterHit::HadCalorimeterHit(const HadCalorimeterHit &right)
-// : G4VHit(),
-//   fColumnID(right.fColumnID),
-//   fRowID(right.fRowID),
-//   fEdep(right.fEdep),
-//   fPos(right.fPos),
-//   fRot(right.fRot)
-// {}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// const HadCalorimeterHit& HadCalorimeterHit::operator=(
-//         const HadCalorimeterHit &right)
-// {
-//   fColumnID = right.fColumnID;
-//   fRowID = right.fRowID;
-//   fEdep = right.fEdep;
-//   fPos = right.fPos;
-//   fRot = right.fRot;
-//   return *this;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

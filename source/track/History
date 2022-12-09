@@ -1,8 +1,44 @@
 # Category track History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-16 Gabriele Cosmo (track-V11-00-11)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-31 Vladimir Ivanchenko (track-V11-00-10)
+- G4ParticleChangeForMSC - fixed crash in "/tracking/verbose 6"
+
+## 2022-09-13 Vladimir Ivanchenko (track-V11-00-09)
+- 2nd round of particle change classes cleanup: improved diagnostic for 
+    problems with primary track parameters or with secondary tracks; ensure
+    kinetic energy to be positive after a step; improved comments
+
+## 2022-09-08 Makoto Asai (track-V11-00-08)
+- G4Step.hh, G4Step.icc - Adding ResetPre/PostStepPoint methods to replace
+  StepPoint object without deleting the previous object.
+
+## 2022-09-02 Vladimir Ivanchenko (track-V11-00-07)
+- G4ParticleChangeForMSC - substitute virtual initialisation by inline
+    method
+
+## 2022-08-24 Vladimir Ivanchenko (track-V11-00-06)
+- General clean-up of all ParticleChange classes:
+   1) delete copy constructors and operators
+   2) removed unused methods
+   3) removed tracking cut 1 eV implemented inside G4ParticleChangeForLoss
+   4) make more effective handling of secondary tracks
+   5) substitute G4ParticleChangeForRadDecay by G4ParticleChangeForDecay
+   6) make all derived classes/methods final
+   7) removed commented code and useless or incorrect comments, added
+      improved comments
+   8) removed duplicated code
+
+## 2022-06-24 Ben Morgan (track-V11-00-05)
+- Initial `clang-tidy` fixes and minor simplifications
 
 ## 2022-05-25 Alberto Ribon (track-V11-00-04)
 - `G4Track`: add methods to get/set information on (short-lived) parent resonance

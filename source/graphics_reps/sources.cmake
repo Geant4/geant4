@@ -75,4 +75,6 @@ geant4_add_module(G4graphics_reps
     HepPolyhedronProcessor.src)
 
 geant4_module_compile_definitions(G4graphics_reps PRIVATE G4GREPS_ALLOC_EXPORT)
-geant4_module_link_libraries(G4graphics_reps PUBLIC G4globman G4hepgeometry G4intercoms)
+geant4_module_link_libraries(G4graphics_reps
+  PUBLIC G4globman G4hepgeometry 
+  PRIVATE G4intercoms)

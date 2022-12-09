@@ -38,7 +38,7 @@
 #include "G4HadronicException.hh"
 #include "G4Exception.hh"
 
-G4ParticleHPManager* G4ParticleHPManager::instance = 0;
+G4ParticleHPManager* G4ParticleHPManager::instance = nullptr;
 
 G4ParticleHPManager::G4ParticleHPManager()
 : verboseLevel(1)
@@ -49,18 +49,18 @@ G4ParticleHPManager::G4ParticleHPManager()
 ,PRODUCE_FISSION_FRAGMENTS(false)
 ,USE_WENDT_FISSION_MODEL(false)
 ,USE_NRESP71_MODEL(false)
-,theElasticCrossSections(0)
-,theCaptureCrossSections(0)
-,theFissionCrossSections(0)
-,theElasticFSs(0)
-,theCaptureFSs(0)
-,theFissionFSs(0)
-,theTSCoherentCrossSections(0)
-,theTSIncoherentCrossSections(0)
-,theTSInelasticCrossSections(0)
-,theTSCoherentFinalStates(0)
-,theTSIncoherentFinalStates(0)
-,theTSInelasticFinalStates(0)
+,theElasticCrossSections(nullptr)
+,theCaptureCrossSections(nullptr)
+,theFissionCrossSections(nullptr)
+,theElasticFSs(nullptr)
+,theCaptureFSs(nullptr)
+,theFissionFSs(nullptr)
+,theTSCoherentCrossSections(nullptr)
+,theTSIncoherentCrossSections(nullptr)
+,theTSInelasticCrossSections(nullptr)
+,theTSCoherentFinalStates(nullptr)
+,theTSIncoherentFinalStates(nullptr)
+,theTSInelasticFinalStates(nullptr)
 {
    messenger = new G4ParticleHPMessenger( this );
 }
@@ -73,7 +73,7 @@ G4ParticleHPManager::~G4ParticleHPManager()
 G4ParticleHPManager* G4ParticleHPManager::GetInstance()
 {
   static G4ParticleHPManager manager;
-  if (!instance)
+  if (instance == nullptr)
   {
     instance = &manager;
   }
@@ -104,7 +104,7 @@ void G4ParticleHPManager::GetDataStream( G4String filename , std::istringstream&
    if ( in->good() )
    {
       // Use the compressed file 
-      G4int file_size = in->tellg();
+      std::streamoff file_size = in->tellg();
       in->seekg( 0 , std::ios::beg );
       Bytef* compdata = new Bytef[ file_size ];
 
@@ -133,7 +133,7 @@ void G4ParticleHPManager::GetDataStream( G4String filename , std::istringstream&
       std::ifstream thefData( filename , std::ios::in | std::ios::ate );
       if ( thefData.good() )
       {
-         G4int file_size = thefData.tellg();
+         std::streamoff file_size = thefData.tellg();
          thefData.seekg( 0 , std::ios::beg );
          char* filedata = new char[ file_size ];
          while ( thefData )
@@ -218,8 +218,7 @@ void G4ParticleHPManager::DumpDataSource()
 {
 
    G4cout << "Data source of this Partile HP calculation are " << G4endl;
-   for (  std::map< G4String , G4String >::iterator 
-          it = mDataEvaluation.begin() ; it != mDataEvaluation.end() ; it++ )
+   for (auto it = mDataEvaluation.cbegin(); it != mDataEvaluation.cend(); ++it)
    {
       G4cout << it->first << " " << it->second << G4endl;
    }
@@ -231,7 +230,7 @@ G4PhysicsTable* G4ParticleHPManager::GetInelasticCrossSections(const G4ParticleD
    if ( theInelasticCrossSections.end() !=  theInelasticCrossSections.find( particle ) )
       return theInelasticCrossSections.find( particle )->second; 
    else 
-      return 0; 
+      return nullptr; 
 }
 
 void G4ParticleHPManager::RegisterInelasticCrossSections( const G4ParticleDefinition* particle, G4PhysicsTable* val )
@@ -244,7 +243,7 @@ std::vector<G4ParticleHPChannelList*>* G4ParticleHPManager::GetInelasticFinalSta
    if ( theInelasticFSs.end() != theInelasticFSs.find( particle ) )
       return theInelasticFSs.find( particle )->second;
    else 
-      return 0;
+      return nullptr;
 }
 
 void G4ParticleHPManager::RegisterInelasticFinalStates( const G4ParticleDefinition* particle , std::vector<G4ParticleHPChannelList*>* val )
@@ -253,7 +252,8 @@ void G4ParticleHPManager::RegisterInelasticFinalStates( const G4ParticleDefiniti
 }
 
 
-void G4ParticleHPManager::DumpSetting() {
+void G4ParticleHPManager::DumpSetting()
+{
   G4cout << G4endl
          << "=======================================================" << G4endl
          << "======       ParticleHP Physics Parameters     ========" << G4endl

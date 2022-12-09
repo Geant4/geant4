@@ -69,7 +69,7 @@ F04TrajectoryPoint::F04TrajectoryPoint(const G4Step* aStep)
          fVolumeName = aStep->GetPostStepPoint()->
                               GetPhysicalVolume()->GetName();
       } else {
-         fVolumeName = " ";
+         fVolumeName = G4String(" ");
       }
 }
 

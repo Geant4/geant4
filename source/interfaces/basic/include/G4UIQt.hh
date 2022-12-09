@@ -85,15 +85,15 @@ class QToolButton;
 class G4QTabWidget : public QTabWidget {
 public :
   G4QTabWidget();
-  G4QTabWidget(QWidget* aParent, int sizeX, int sizeY);
+  G4QTabWidget(QWidget* aParent, G4int sizeX, G4int sizeY);
   void paintEvent  ( QPaintEvent * event );
-  inline void setTabSelected(bool a) { fTabSelected = a; };
-  inline void setLastTabCreated(int a) { fLastCreated = a; };
+  inline void setTabSelected(G4bool a) { fTabSelected = a; };
+  inline void setLastTabCreated(G4int a) { fLastCreated = a; };
   inline bool isTabSelected() { return fTabSelected; };
-  bool fTabSelected;
-  int fLastCreated;
-  int fPreferedSizeX;
-  int fPreferedSizeY;
+  G4bool fTabSelected;
+  G4int fLastCreated;
+  G4int fPreferedSizeX;
+  G4int fPreferedSizeY;
   inline void setPreferredSize(QSize s) {
     fPreferedSizeX = s.width() + 6; // tab label height + margin left+right
     fPreferedSizeY = s.height() + 58; // margin left+right
@@ -124,7 +124,7 @@ class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSessio
   Q_OBJECT
 
 public: // With description
-  G4UIQt(int,char**);
+  G4UIQt(G4int,char**);
   // (argv, argc) or (0, NULL) had to be given.
   G4UIsession* SessionStart();
   // To enter interactive X loop ; waiting/executing command,...
@@ -152,16 +152,16 @@ public: // With description
   // Second argument is the style (fixed proportional)
   // Third argument highlights commands if "highlight" (and if /control/verbose > 0)
 
-  void NativeMenu(bool aVal);
+  void NativeMenu(G4bool aVal);
   // Enable/Disable the native Menu Bar in Qt
 
   void ClearMenu();
   // Clear Menu Bar, remove all actions
 
-  void DefaultIcons(bool aVal);
+  void DefaultIcons(G4bool aVal);
   // Enable/Disable the default icon ToolBar in Qt
 
-  bool AddTabWidget(QWidget*,QString);
+  G4bool AddTabWidget(QWidget*,QString);
   // To add a tab for vis openGL Qt driver
   
   inline QTabWidget* GetViewerTabWidget() {
@@ -177,21 +177,21 @@ public: // With description
   QWidget* GetPickInfosWidget();
   // Get the Pick Widget
 
-  bool IsSplitterReleased();
+  G4bool IsSplitterReleased();
 
-  inline bool IsIconMoveSelected() {
+  inline G4bool IsIconMoveSelected() {
     return fMoveSelected;
   };
-  inline bool IsIconRotateSelected() {
+  inline G4bool IsIconRotateSelected() {
     return fRotateSelected;
   };
-  inline bool IsIconPickSelected() {
+  inline G4bool IsIconPickSelected() {
     return fPickSelected;
   };
-  inline bool IsIconZoomInSelected() {
+  inline G4bool IsIconZoomInSelected() {
     return fZoomInSelected;
   };
-  inline bool IsIconZoomOutSelected() {
+  inline G4bool IsIconZoomOutSelected() {
     return fZoomOutSelected;
   };
 
@@ -252,10 +252,10 @@ public: // With description
   }
   // return the help widget
   
-  bool AddViewerTab(QWidget* w, std::string title);
+  G4bool AddViewerTab(QWidget* w, std::string title);
   // Add a new tab in the viewer, could be used to add your own component
   
-  bool AddViewerTabFromFile(std::string fileName, std::string title);
+  G4bool AddViewerTabFromFile(std::string fileName, std::string title);
   // Add a new tab in the viewer containing the content of the file in a QLabel
 
 public:
@@ -286,9 +286,9 @@ private:
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
 #if QT_VERSION < 0x050F00
-  QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+  QMap<G4int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
 #else
-  QMultiMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+  QMultiMap<G4int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
 #endif
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
@@ -301,8 +301,8 @@ private:
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
   G4bool IsGUICommand(const G4UIcommand*);
-  bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
-  bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
+  G4bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, G4int, G4bool isDialog);
+  G4bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, G4bool isDialog);
   void CreateViewerPropertiesDialog();
   void CreatePickInfosDialog();
 #ifdef G4MULTITHREADED
@@ -311,7 +311,7 @@ private:
   void FilterAllOutputTextArea();
   QString FilterOutput(const G4UIOutputString&,const QString&,const QString&);
   G4String GetThreadPrefix();
-  bool CheckG4EnvironmentVariable(char* txt, char* version);
+  G4bool CheckG4EnvironmentVariable(char* txt, char* version);
   QStandardItemModel* CreateCompleterModel(G4String aCmd);
   void CreateEmptyViewerPropertiesWidget();
   void CreateEmptyPickInfosWidget();
@@ -325,7 +325,7 @@ private:
   std::vector <G4UIOutputString> fG4OutputString;
   QLineEdit * fCoutFilter;
   QCompleter* fCompleter;
-  bool fDefaultIcons;
+  G4bool fDefaultIcons;
   
   QListWidget *fHistoryTBTableList;
   QTreeWidget *fHelpTreeWidget;
@@ -382,11 +382,11 @@ private:
   QDialog* fViewerPropertiesDialog;
   QDialog* fPickInfosDialog;
   QString fLastCompleteCommand;
-  bool fMoveSelected;
-  bool fRotateSelected;
-  bool fPickSelected;
-  bool fZoomInSelected;
-  bool fZoomOutSelected;
+  G4bool fMoveSelected;
+  G4bool fRotateSelected;
+  G4bool fPickSelected;
+  G4bool fZoomInSelected;
+  G4bool fZoomOutSelected;
   struct G4UIQtStyle {
     G4bool fixed, highlight;
   };
@@ -404,19 +404,19 @@ private Q_SLOTS :
   void ShowHelpCallback();
   void CommandHistoryCallback();
   void LookForHelpStringCallback();
-  void UpdateTabWidget(int);
+  void UpdateTabWidget(G4int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
-  void ThreadComboBoxCallback(int);
-  void TabCloseCallback(int);
-  void ToolBoxActivated(int);
+  void ThreadComboBoxCallback(G4int);
+  void TabCloseCallback(G4int);
+  void ToolBoxActivated(G4int);
   void VisParameterCallback(QWidget*);
   void ChangeColorCallback(QWidget*);
   void ChangeCursorAction(const QString&);
   void ChangeSurfaceStyle(const QString&);
   void OpenIconCallback(const QString&);
   void SaveIconCallback(const QString&);
-  void ViewerPropertiesIconCallback(int);
+  void ViewerPropertiesIconCallback(G4int);
   void ChangePerspectiveOrtho(const QString&);
 };
 

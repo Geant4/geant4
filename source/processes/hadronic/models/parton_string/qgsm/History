@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-10-07 Gabriele Cosmo (hadr-qgsm-V11-00-03)
+- Fixed compilation warning on Intel/icx compiler for variables set
+  but not used in G4QGSMSplitableHadron and G4QGSParticipants.
 
 ## 2022-05-06 Vladimir Ivanchenko (hadr-qgsm-V11-00-02)
 - G4QGSParticipants - do not print warning in the case of precision loss;

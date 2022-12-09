@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file CalorHit.cc
+/// \file B4/B4c/src/CalorHit.cc
 /// \brief Implementation of the B4c::CalorHit class
 
 #include "CalorHit.hh"
@@ -40,34 +40,6 @@ namespace B4c
 {
 
 G4ThreadLocal G4Allocator<CalorHit>* CalorHitAllocator = nullptr;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-CalorHit::CalorHit()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-CalorHit::~CalorHit() {}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// CalorHit::CalorHit(const CalorHit& right)
-//   : G4VHit()
-// {
-//   fEdep        = right.fEdep;
-//   fTrackLength = right.fTrackLength;
-// }
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// const CalorHit& CalorHit::operator=(const CalorHit& right)
-// {
-//   fEdep        = right.fEdep;
-//   fTrackLength = right.fTrackLength;
-
-//   return *this;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

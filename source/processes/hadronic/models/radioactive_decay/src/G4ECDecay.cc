@@ -121,28 +121,28 @@ G4DecayProducts* G4ECDecay::DecayIt(G4double)
   std::vector<G4DynamicParticle*> armProducts;
 
   if (applyARM) {
-    if (atomDeex) {
+    if (nullptr != atomDeex) {
       G4int aZ = G4MT_daughters[0]->GetAtomicNumber();
       G4int nShells = G4AtomicShells::GetNumberOfShells(aZ);
       if (shellIndex >= nShells) shellIndex = nShells;
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellIndex);
       const G4AtomicShell* shell = atomDeex->GetAtomicShell(aZ, as);
       eBind = shell->BindingEnergy(); 
-      if (atomDeex->IsFluoActive() && aZ > 5 && aZ < 100) {
+      if (atomDeex->IsFluoActive() && aZ > 5 && aZ < 105) {
         // Do atomic relaxation
-          // VI, SI
-          // Allows fixing of Bugzilla 1727
-          //const G4double deexLimit = 0.1*keV;
-          G4double deexLimit = 0.1*keV;
-          if (G4EmParameters::Instance()->DeexcitationIgnoreCut())  deexLimit =0.;
-          //
+	// VI, SI
+	// Allows fixing of Bugzilla 1727
+	//const G4double deexLimit = 0.1*keV;
+	G4double deexLimit = 0.1*keV;
+	if (G4EmParameters::Instance()->DeexcitationIgnoreCut()) deexLimit = 0.;
+
         atomDeex->GenerateParticles(&armProducts, shell, aZ, deexLimit, deexLimit);
       }
 
       G4double productEnergy = 0.;
-      for (G4int i = 0; i < G4int(armProducts.size()); i++)
+      for (std::size_t i = 0; i < armProducts.size(); ++i) {
         productEnergy += armProducts[i]->GetKineticEnergy();
-
+      }
       G4double deficit = shell->BindingEnergy() - productEnergy;
       if (deficit > 0.0) {
         // Add a dummy electron to make up extra energy
@@ -163,7 +163,12 @@ G4DecayProducts* G4ECDecay::DecayIt(G4double)
   G4double daughterMass = G4MT_daughters[0]->GetPDGMass();
 
   // CM momentum using Q value corrected for binding energy of captured electron
-  G4double Q = transitionQ - eBind; 
+  G4double Q = transitionQ - eBind;
+
+  // Negative transitionQ values for some rare nuclides require this
+  // Absolute values in these cases are small 
+  if (Q < 0.0) Q = 0.0;
+
   G4double cmMomentum = Q*(Q + 2.*daughterMass)/(Q + daughterMass)/2.;
 
   G4double costheta = 2.*G4UniformRand() - 1.0;
@@ -181,10 +186,10 @@ G4DecayProducts* G4ECDecay::DecayIt(G4double)
     new G4DynamicParticle(G4MT_daughters[0], -1.0*direction, KE, daughterMass);
   products->PushProducts(daughterParticle);
 
-  G4int nArm = armProducts.size();
+  std::size_t nArm = armProducts.size();
   if (nArm > 0) {
     G4ThreeVector bst = daughterParticle->Get4Momentum().boostVector();
-    for (G4int i = 0; i < nArm; ++i) {
+    for (std::size_t i = 0; i < nArm; ++i) {
       G4DynamicParticle* dp = armProducts[i];
       G4LorentzVector lv = dp->Get4Momentum().boost(bst);
       dp->Set4Momentum(lv);

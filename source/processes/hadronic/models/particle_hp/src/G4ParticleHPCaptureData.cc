@@ -46,6 +46,7 @@
 #include "G4ParticleHPManager.hh"
 #include "G4Threading.hh"
 #include "G4HadronicParameters.hh"
+#include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 
 G4ParticleHPCaptureData::G4ParticleHPCaptureData()
@@ -61,8 +62,8 @@ G4ParticleHPCaptureData::G4ParticleHPCaptureData()
       instanceOfWorker = true;
    }
 
-   element_cache = NULL;
-   material_cache = NULL;
+   element_cache = nullptr;
+   material_cache = nullptr;
    ke_cache = 0.0; 
    xs_cache = 0.0; 
     
@@ -71,10 +72,10 @@ G4ParticleHPCaptureData::G4ParticleHPCaptureData()
    
 G4ParticleHPCaptureData::~G4ParticleHPCaptureData()
 {
-   if ( theCrossSections != NULL && instanceOfWorker != true ) {
+   if ( theCrossSections != nullptr && instanceOfWorker != true ) {
      theCrossSections->clearAndDestroy();
      delete theCrossSections;
-     theCrossSections = NULL;
+     theCrossSections = nullptr;
    }
 }
    
@@ -127,11 +128,11 @@ void G4ParticleHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       return;
    }
   
-  size_t numberOfElements = G4Element::GetNumberOfElements();
+  std::size_t numberOfElements = G4Element::GetNumberOfElements();
   // G4cout << "CALLED G4ParticleHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
    // TKDB
    //if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
-   if ( theCrossSections == NULL ) 
+   if ( theCrossSections == nullptr ) 
       theCrossSections = new G4PhysicsTable( numberOfElements );
    else
       theCrossSections->clearAndDestroy();
@@ -139,12 +140,12 @@ void G4ParticleHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   // make a PhysicsVector for each element
 
   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
-  for( size_t i=0; i<numberOfElements; ++i )
+  for( std::size_t i=0; i<numberOfElements; ++i )
   {
      #ifdef G4VERBOSE
      if(std::getenv("CaptureDataIndexDebug"))
      {
-       G4int index_debug = ((*theElementTable)[i])->GetIndex();
+       std::size_t index_debug = ((*theElementTable)[i])->GetIndex();
        if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) G4cout << "IndexDebug "<< i <<" "<<index_debug<<G4endl;
      }
      #endif
@@ -180,17 +181,18 @@ void G4ParticleHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    G4cout << "Energy[eV]  XS[barn]" << G4endl;
    G4cout << G4endl;
 
-   size_t numberOfElements = G4Element::GetNumberOfElements();
-   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
+   std::size_t numberOfElements = G4Element::GetNumberOfElements();
+   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ;
+   if (!theElementTable) theElementTable= G4Element::GetElementTable();
 
-   for ( size_t i = 0 ; i < numberOfElements ; ++i )
+   for ( std::size_t i = 0 ; i < numberOfElements ; ++i )
    {
 
       G4cout << (*theElementTable)[i]->GetName() << G4endl;
 
       G4int ie = 0;
 
-      for ( ie = 0 ; ie < 130 ; ie++ )
+      for ( ie = 0 ; ie < 130 ; ++ie )
       {
          G4double eKinetic = 1.0e-5 * G4Pow::GetInstance()->powA ( 10.0 , ie/10.0 ) *eV;
          G4bool outOfRange = false;
@@ -209,14 +211,12 @@ void G4ParticleHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    #endif
 }
 
-#include "G4NucleiProperties.hh"
-
 G4double G4ParticleHPCaptureData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 {
   G4double result = 0;
   G4bool outOfRange;
-  G4int index = anE->GetIndex();
+  G4int index = (G4int)anE->GetIndex();
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
@@ -262,7 +262,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
     if(counter) buffer = result/counter;
     while (counter<size) // Loop checking, 11.05.2015, T. Koi
     {
-      counter ++;
+      ++counter;
       G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(eleMass, aT);
       boosted.Lorentz(theNeutron, aThermalNuc);
       G4double theEkin = boosted.GetKineticEnergy();
@@ -288,10 +288,12 @@ G4int G4ParticleHPCaptureData::GetVerboseLevel() const
 {
    return G4ParticleHPManager::GetInstance()->GetVerboseLevel();
 }
+
 void G4ParticleHPCaptureData::SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
 }
+
 void G4ParticleHPCaptureData::CrossSectionDescription(std::ostream& outFile) const
 {
    outFile << "High Precision cross data based on Evaluated Nuclear Data Files (ENDF) for radiative capture reaction of neutrons below 20MeV\n" ;

@@ -55,16 +55,16 @@ The geometry is built from text files for cylinders (cylinders.mac),
 ecoli (ecoli.mac) and human cell (human_cell.mac) geometries.
 
 - cylinders.mac : to build a 3 μm sphere filled with 200,000 individual 216 bp
-long straight DNA segments in a 100×30×30 nm placement volume
+  long straight DNA segments in a 100×30×30 nm placement volume
 - human_cell.mac : to model a fibroblast cell geometry
 - ecoli.mac : to demonstrate a simple model where the bacterial DNA follows a
-large scale fractal ‘Hilbert curve’ geometry
+  large scale fractal ‘Hilbert curve’ geometry
 
 For the details, please see documentation:
 - To construct DNA geometry models:
-http://natl.github.io/fractaldna/
+  http://natl.github.io/fractaldna/
 - To simulate radiation-induced DNA damage with these geometries
-and define damage parameters:https://natl.github.io/molecular-docs/
+  and define damage parameters: https://natl.github.io/molecular-docs/
 
 Macro commands can be used to control the geometry parameters
 
@@ -114,6 +114,15 @@ Macro commands can be used to control the geometry parameters
 
 # DNA geometries are only ever placed in a chromosome
 /chromosome/add cylinder sphere 3000 0 0 0 nm
+
+# For the visualisation of DNA geometries, the following line can be used
+/control/execute vis.mac
+# More specifically, start moleculardna using the command ./molecular, to
+# to open the Qt visualiser. Then use the mac file that you want, e.g.
+# /control/execute cylinders.mac
+# For the visualization, large amount of RAM is needed. For example
+# using cylinders DNA geometries, to visualize 200 cylinders, ~2.5 GB
+# are needed. For 2000 cylinders, ~11 GB are needed.
 \endverbatim
 
 \section MOLECULARDNA_s2 PHYSICS LIST
@@ -189,6 +198,23 @@ python createSDD.py
 # to use it, insert the command "python3 createSDD.py".
 # If error with root, simply source /path/to/root/bin/thisroot.(c)sh,
 # do "pip install pyroot" and try again.
+
+# A python macro file to calculate repair kinetics is located in the folder 
+# repair_survival_models. This script can be used with the output of the mac
+# file human_cell (10^5 primaries) to reproduced data published in 
+# https://arxiv.org/abs/2210.01564 
+molecularDNArepair.py
+# to use it, insert the command "python3 molecularDNArepair.py".
+# The molecular-dna.root is also needed to run it, as produced by 
+# the human-cell.mac.
+    
+# A python macro file to calculate the survival probability of cells is located 
+# in the folder repair_survival_models. This script is early released and needs to be optimized 
+# to fit any data.
+molecularDNAsurvival.py 
+# to use it, insert the command "python3 molecularDNAsurnival.py".
+# The molecular-dna.root is needed to run it, as produced by 
+# the human-cell.mac.
 \endverbatim
 
 */

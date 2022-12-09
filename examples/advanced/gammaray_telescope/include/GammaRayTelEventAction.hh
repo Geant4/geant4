@@ -36,10 +36,6 @@
 //  20.11.01 G.Santin: new analysis management, modified according to GammaRayTelAnalysis
 // ************************************************************
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef GammaRayTelEventAction_h
 #define GammaRayTelEventAction_h 1
 
@@ -47,37 +43,29 @@
 #include "globals.hh"
 #include "GammaRayTelRunAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelEventAction : public G4UserEventAction
-{
+class GammaRayTelEventAction: public G4UserEventAction {
 public:
+	explicit GammaRayTelEventAction(GammaRayTelRunAction *runAction = nullptr);
 
-  GammaRayTelEventAction(GammaRayTelRunAction* runAction=0);
-  virtual ~GammaRayTelEventAction();
-  
-public:
-  virtual void   BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
-  
-  void SetDrawFlag   (G4String val)  {drawFlag = val;};
-  
+	~GammaRayTelEventAction() override;
+
+	void BeginOfEventAction(const G4Event *event) override;
+
+	void EndOfEventAction(const G4Event *event) override;
+
+	void SetDrawFlag(G4String value) {
+		drawFlag = value;
+	};
+
 private:
+    G4int anticoincidenceCollectionID{-1};
 
-  G4int       trackerCollID;                
-  G4int       calorimeterCollID;                
-  G4int       anticoincidenceCollID;                
-  G4String    drawFlag;
+    G4int calorimeterCollectionID{-1};
 
-  GammaRayTelRunAction* theRunAction;
+	G4int trackerCollectionID{-1};
 
+	G4String drawFlag{"all"};
+
+	GammaRayTelRunAction *theRunAction;
 };
-
 #endif
-
-    
-
-
-
-
-

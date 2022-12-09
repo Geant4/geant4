@@ -5,6 +5,17 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-09-07 Vladimir Ivanchenko (exhadr08-V11-00-02)
+- BiasingOperation - used the Bertini cascade instead of pre-compound 
+    model, the last was not applicable for pion interactions. The Bertini
+    cascade is applied from 0 to 41 MeV, INCLXX from 40 MeV to 12 GeV
+
+## 2022-09-05 Vladimir Ivanchenko (exhadr08-V11-00-01)
+- BiasingOperation - transition from pre-compound model to INCL++
+    is changed from 1-2 MeV to 20-21 MeV in order to fix infinite
+    loops happens in nightly tests
+- Hadr08.cc - run initialisation is moved to macro files
+
 ## 2021-12-10 Ben Morgan (exhadr08-V11-00-00)
 - Change to new Markdown History format
 

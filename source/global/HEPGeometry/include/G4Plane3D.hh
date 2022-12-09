@@ -28,11 +28,9 @@
 #ifndef G4PLANE3D_HH
 #define G4PLANE3D_HH
 
-#include "G4Normal3D.hh"
-#include "G4Point3D.hh"
 #include "globals.hh"
 #include <CLHEP/Geometry/Plane3D.h>
 
-typedef HepGeom::Plane3D<G4double> G4Plane3D;
+using G4Plane3D = HepGeom::Plane3D<G4double>;
 
 #endif /* G4PLANE3D_HH */

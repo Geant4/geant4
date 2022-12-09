@@ -48,7 +48,7 @@ class G4VPrimitivePlotter : public G4VPrimitiveScorer
   std::map<G4int, G4int> hitIDMap;
 
  public:
-  G4int GetNumberOfHist() const { return hitIDMap.size(); }
+  G4int GetNumberOfHist() const { return (G4int)hitIDMap.size(); }
 };
 
 #endif

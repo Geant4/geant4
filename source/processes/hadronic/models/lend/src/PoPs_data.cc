@@ -43,7 +43,7 @@ int PoPs_particleReadDatabase( statusMessageReporting *smr, char const * /*name*
         if( ( pop = PoPs_particleCreateLoadInfo( smr, PoPDatas[i1].name ) ) == NULL ) return( 1 );
         if( PoPs_addParticleIfNeeded( smr, pop ) == pop ) {
             if( ( pop->genre == PoPs_genre_atom ) && ( pop->Z < 110 ) ) {
-                sprintf( ZAName, "%d%.3d", pop->Z, pop->A );
+                snprintf( ZAName, sizeof ZAName, "%d%.3d", pop->Z, pop->A );
                 if( lPoPs_addParticleIfNeeded( smr, ZAName, "LLNL" ) < 0 ) return( 1 );
             } }
         else {

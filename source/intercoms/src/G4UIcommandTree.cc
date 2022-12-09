@@ -46,9 +46,7 @@ G4UIcommandTree::G4UIcommandTree(const char* thePathName)
 // --------------------------------------------------------------------
 G4UIcommandTree::~G4UIcommandTree()
 {
-  G4int i;
-  G4int n_treeEntry = tree.size();
-  for(i = 0; i < n_treeEntry; ++i)
+  for(std::size_t i = 0; i < tree.size(); ++i)
   {
     delete tree[i];
   }
@@ -91,12 +89,12 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
     auto* dir = static_cast<G4UIdirectory*>(guidance);
     ifSort = dir->IfSort();
   }
-  G4int i = remainingPath.find('/');
-  if(i == G4int(std::string::npos))
+  std::size_t i = remainingPath.find('/');
+  if(i == std::string::npos)
   {
     // Adding a new command to this directory
-    G4int n_commandEntry = command.size();
-    for(G4int i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
+    std::size_t n_commandEntry = command.size();
+    for(std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
     {
       if(remainingPath == command[i_thCommand]->GetCommandName())
       {
@@ -119,8 +117,8 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
     { newCommand->SetWorkerThreadOnly(); }
     if(ifSort)
     {
-      auto j = command.begin();
-      for(; j != command.end(); ++j) {
+      auto j = command.cbegin();
+      for(; j != command.cend(); ++j) {
         if (newCommand->GetCommandPath() < (*j)->GetCommandPath()) { break; }
       }
       command.insert(j,newCommand);
@@ -134,8 +132,8 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
     // Adding a new command to a sub-directory
     G4String nextPath = pathName;
     nextPath.append(remainingPath.substr(0, i + 1));
-    G4int n_treeEntry = tree.size();
-    for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+    std::size_t n_treeEntry = tree.size();
+    for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
     {
       if(nextPath == tree[i_thTree]->GetPathName())
       {
@@ -151,8 +149,8 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand* newCommand,
     auto* newTree = new G4UIcommandTree(nextPath);
     if(ifSort)
     {
-      auto j = tree.begin();
-      for(; j != tree.end(); ++j) {
+      auto j = tree.cbegin();
+      for(; j != tree.cend(); ++j) {
         if (newTree->GetPathName() < (*j)->GetPathName()) { break; }
       }
       tree.insert(j,newTree);
@@ -186,12 +184,12 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand* aCommand,
   }
   else
   {
-    G4int i = remainingPath.find('/');
-    if(i == G4int(std::string::npos))
+    std::size_t i = remainingPath.find('/');
+    if(i == std::string::npos)
     {
       // Find command
-      G4int n_commandEntry = command.size();
-      for(G4int i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
+      std::size_t n_commandEntry = command.size();
+      for(std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
       {
         if(remainingPath == command[i_thCommand]->GetCommandName())
         {
@@ -205,8 +203,8 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand* aCommand,
       // Find path
       G4String nextPath = pathName;
       nextPath.append(remainingPath.substr(0, i + 1));
-      G4int n_treeEntry = tree.size();
-      for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+      std::size_t n_treeEntry = tree.size();
+      for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
       {
         if(nextPath == tree[i_thTree]->GetPathName())
         {
@@ -237,12 +235,12 @@ G4UIcommand* G4UIcommandTree::FindPath(const char* commandPath) const
     return nullptr;
   }
   remainingPath.erase(0, pathName.length());
-  G4int i = remainingPath.find('/');
-  if(i == G4int(std::string::npos))
+  std::size_t i = remainingPath.find('/');
+  if(i == std::string::npos)
   {
     // Find command
-    G4int n_commandEntry = command.size();
-    for(G4int i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
+    std::size_t n_commandEntry = command.size();
+    for(std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
     {
       if(remainingPath == command[i_thCommand]->GetCommandName())
       {
@@ -255,8 +253,8 @@ G4UIcommand* G4UIcommandTree::FindPath(const char* commandPath) const
     // Find path
     G4String nextPath = pathName;
     nextPath.append(remainingPath.substr(0, i + 1));
-    G4int n_treeEntry = tree.size();
-    for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+    std::size_t n_treeEntry = tree.size();
+    for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
     {
       if(nextPath == tree[i_thTree]->GetPathName())
       {
@@ -280,14 +278,14 @@ G4UIcommandTree* G4UIcommandTree::FindCommandTree(const char* commandPath)
     return nullptr;
   }
   remainingPath.erase(0, pathName.length());
-  G4int i = remainingPath.find('/');
-  if(i != G4int(std::string::npos))
+  std::size_t i = remainingPath.find('/');
+  if(i != std::string::npos)
   {
     // Find path
     G4String nextPath = pathName;
     nextPath.append(remainingPath.substr(0, i + 1));
-    G4int n_treeEntry = tree.size();
-    for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+    std::size_t n_treeEntry = tree.size();
+    for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
     {
       if(tree[i_thTree]->GetPathName() == commandPath)
       {
@@ -410,13 +408,13 @@ G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
 G4String G4UIcommandTree::GetFirstMatchedString(const G4String& str1,
                                                 const G4String& str2) const
 {
-  G4int nlen1 = str1.length();
-  G4int nlen2 = str2.length();
+  std::size_t nlen1 = str1.length();
+  std::size_t nlen2 = str2.length();
 
-  G4int nmin = nlen1 < nlen2 ? nlen1 : nlen2;
+  std::size_t nmin = nlen1 < nlen2 ? nlen1 : nlen2;
 
   G4String strMatched;
-  for(size_t i = 0; G4int(i) < nmin; ++i)
+  for(G4int i = 0; i < (G4int)nmin; ++i)
   {
     if(str1[i] == str2[i])
     {
@@ -440,8 +438,8 @@ void G4UIcommandTree::ListCurrent() const
     guidance->List();
   }
   G4cout << " Sub-directories : " << G4endl;
-  G4int n_treeEntry = tree.size();
-  for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+  std::size_t n_treeEntry = tree.size();
+  for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
   {
     G4cout << "   " << tree[i_thTree]->GetPathName();
     if((tree[i_thTree]->GetGuidance() != nullptr) &&
@@ -456,8 +454,8 @@ void G4UIcommandTree::ListCurrent() const
     G4cout << tree[i_thTree]->GetTitle() << G4endl;
   }
   G4cout << " Commands : " << G4endl;
-  G4int n_commandEntry = command.size();
-  for(G4int i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
+  std::size_t n_commandEntry = command.size();
+  for(std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
   {
     G4cout << "   " << command[i_thCommand]->GetCommandName();
     if(command[i_thCommand]->IsWorkerThreadOnly())
@@ -482,16 +480,16 @@ void G4UIcommandTree::ListCurrentWithNum() const
   }
   G4int i = 0;
   G4cout << " Sub-directories : " << G4endl;
-  G4int n_treeEntry = tree.size();
-  for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+  std::size_t n_treeEntry = tree.size();
+  for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
   {
     ++i;
     G4cout << " " << i << ") " << tree[i_thTree]->GetPathName() << "   "
            << tree[i_thTree]->GetTitle() << G4endl;
   }
   G4cout << " Commands : " << G4endl;
-  G4int n_commandEntry = command.size();
-  for(G4int i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
+  std::size_t n_commandEntry = command.size();
+  for(std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
   {
     ++i;
     G4cout << " " << i << ") " << command[i_thCommand]->GetCommandName()
@@ -503,13 +501,13 @@ void G4UIcommandTree::ListCurrentWithNum() const
 void G4UIcommandTree::List() const
 {
   ListCurrent();
-  G4int n_commandEntry = command.size();
-  for(G4int i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
+  std::size_t n_commandEntry = command.size();
+  for(std::size_t i_thCommand = 0; i_thCommand < n_commandEntry; ++i_thCommand)
   {
     command[i_thCommand]->List();
   }
-  G4int n_treeEntry = tree.size();
-  for(G4int i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
+  std::size_t n_treeEntry = tree.size();
+  for(std::size_t i_thTree = 0; i_thTree < n_treeEntry; ++i_thTree)
   {
     tree[i_thTree]->List();
   }
@@ -519,10 +517,10 @@ void G4UIcommandTree::List() const
 G4String G4UIcommandTree::CreateFileName(const char* pName)
 {
   G4String fn = pName;
-  G4int idxs;
-  while((idxs = fn.find("/")) != G4int(std::string::npos))
+  std::size_t idxs;
+  while((idxs = fn.find("/")) != std::string::npos)
   {
-    fn[idxs] = '_';
+    fn[(G4int)idxs] = '_';
   }
   fn += ".html";
   return fn;
@@ -643,7 +641,7 @@ void G4UIcommandTree::CreateHTML(const G4String& sideBar)
 
   if(guidance != nullptr)
   {
-    for(std::size_t i = 0; i < guidance->GetGuidanceEntries(); ++i)
+    for(G4int i = 0; i < (G4int)guidance->GetGuidanceEntries(); ++i)
     {
       oF << ModStr(guidance->GetGuidanceLine(i)) << "<br>" << G4endl;
     }
@@ -698,7 +696,7 @@ void G4UIcommandTree::CreateHTML(const G4String& sideBar)
       oF << "<h3 id=\"c" << i_thCommand << "\">" << ModStr(cmd->GetCommandName());
       if(cmd->GetParameterEntries() > 0)
       {
-        for(std::size_t i_thParam = 0; i_thParam < cmd->GetParameterEntries();
+        for(G4int i_thParam = 0; i_thParam < (G4int)cmd->GetParameterEntries();
             ++i_thParam)
         {
           oF << " [<i>"
@@ -708,7 +706,7 @@ void G4UIcommandTree::CreateHTML(const G4String& sideBar)
       }
       oF << "</h3>" << G4endl;
       oF << "<p>" << G4endl;
-      for(std::size_t i = 0; i < cmd->GetGuidanceEntries(); ++i)
+      for(G4int i = 0; i < (G4int)cmd->GetGuidanceEntries(); ++i)
       {
         oF << ModStr(cmd->GetGuidanceLine(i)) << "<br>" << G4endl;
       }
@@ -733,7 +731,7 @@ void G4UIcommandTree::CreateHTML(const G4String& sideBar)
       if(cmd->GetParameterEntries() > 0)
       {
         oF << "<p>Parameters<table border=1>" << G4endl;
-        for(std::size_t i_thParam = 0; i_thParam < cmd->GetParameterEntries();
+        for(G4int i_thParam = 0; i_thParam < (G4int)cmd->GetParameterEntries();
             ++i_thParam)
         {
           G4UIparameter* prm = cmd->GetParameter(i_thParam);

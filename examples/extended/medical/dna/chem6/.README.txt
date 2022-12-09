@@ -232,10 +232,11 @@ const G4String& moleculeName = thisIsMyMolecule->GetName();
   Two root macros can be used:
 
 \verbatim
-root plotG_time.root
+root plotG_time.C
 # plot G values as a function of time according to the molecular species by importing Species0.root.
+# The function (plotG_time()) should have the same name as the file without file extension (plotG_time).
   
-root plotG_LET.root
+root plotG_LET.C
 # plot G values as a function of LET according to the molecular species by importing Species.txt.
 \endverbatim
 */

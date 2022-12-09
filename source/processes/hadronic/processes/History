@@ -6,6 +6,40 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-26 Gabriele Cosmo (hadr-proc-V11-00-11)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-02 Vladimir Grichine (hadr-proc-V11-00-10)
+- G4TauNeutrinoNucleusProcess - added for tau-neutrino hadronic inelastic processes 
+
+## 2022-09-25 Vladimir Ivanchenko (hadr-proc-V11-00-09)
+- G4NeutronGeneralProcess - added SetTimeLimit(..) method 
+
+## 2022-09-05 Ben Morgan (hadr-proc-V11-00-08)
+- Update dependencies to address warnings from consistency check
+
+## 2022-08-30 Vladimir Ivanchenko (hadr-proc-V11-00-07)
+- G4NeutronGeneralProcess - added fatal G4Exception at initialisation 
+    in the case of incomplete configuration of the process
+
+## 2022-08-22 Vladimir Ivanchenko (hadr-proc-V11-00-06)
+- G4NeutronGeneralProcess - use enumerator for neutron general process
+    instead of hard-coded number; do not apply energy cut
+
+## 2022-08-22 Vladimir Ivanchenko (hadr-proc-V11-00-05)
+- G4NeutronGeneralProcess - make it work with QBBC physics list
+- G4HadronElasticProcess - extended debug printout 
+
+## 2022-08-18 Vladimir Ivanchenko (hadr-proc-V11-00-04)
+- G4NeutronGeneralProcess - improved the code, added possible cut on
+    neutron kinetic energy, always elastic initialisation/printout 
+    before the inelastic
+- G4NeutronCaptureProcess - avoid double instantiation of the cross 
+    section
+
+## 2022-08-13 Vladimir Ivanchenko (hadr-proc-V11-00-03)
+- G4NeutronGeneralProcess - new combined process
+
 ## 2022-02-09 Gabriele Cosmo (hadr-proc-V11-00-02)
 - Fixed compilation warning on Intel compilers for unused variables.
 

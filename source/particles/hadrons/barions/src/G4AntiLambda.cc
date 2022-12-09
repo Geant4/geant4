@@ -95,7 +95,7 @@ G4AntiLambda* G4AntiLambda::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiLambda*>(anInstance);
+  theInstance = static_cast<G4AntiLambda*>(anInstance);
   return theInstance;
 }
 

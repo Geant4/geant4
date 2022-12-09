@@ -47,5 +47,4 @@ geant4_module_link_libraries(G4had_fission
     G4hadronic_util
     G4heprandom
     G4leptons
-    G4materials
     G4track)

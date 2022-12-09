@@ -33,7 +33,9 @@
 /vis/viewer/set/viewpointThetaPhi 90. 180.
 #
 # Specify zoom value:
-/vis/viewer/zoom 1.4
+#/vis/viewer/zoom 1.4
+/vis/viewer/zoomTo 150
+/vis/viewer/panTo -720 -320 nm
 #
 # Specify style (surface, wireframe, auxiliary edges,...)
 #/vis/viewer/set/style wireframe

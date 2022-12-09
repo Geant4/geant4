@@ -83,7 +83,7 @@
     //delete [] theCapture;
     //vector is shared, only master deletes
     if ( ! G4Threading::IsWorkerThread() ) {
-        if ( theCapture != NULL ) {
+        if ( theCapture != nullptr ) {
             for ( std::vector<G4ParticleHPChannel*>::iterator
                 ite = theCapture->begin() ; ite != theCapture->end() ; ite++ ) {
                 delete *ite;
@@ -100,10 +100,9 @@
     //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
 
     G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
-    if(std::getenv("NeutronHPCapture")) G4cout <<" ####### G4ParticleHPCapture called"<<G4endl;
-    const G4Material * theMaterial = aTrack.GetMaterial();
-    G4int n = theMaterial->GetNumberOfElements();
-    G4int index = theMaterial->GetElement(0)->GetIndex();
+    const G4Material* theMaterial = aTrack.GetMaterial();
+    G4int n = (G4int)theMaterial->GetNumberOfElements();
+    std::size_t index = theMaterial->GetElement(0)->GetIndex();
     if(n!=1)
     {
       G4double* xSec = new G4double[n];
@@ -112,7 +111,7 @@
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    
       G4ParticleHPThermalBoost aThermalE;
-      for (i=0; i<n; i++)
+      for (i=0; i<n; ++i)
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
@@ -125,7 +124,7 @@
       }
       G4double random = G4UniformRand();
       G4double running = 0;
-      for (i=0; i<n; i++)
+      for (i=0; i<n; ++i)
       {
         running += xSec[i];
         index = theMaterial->GetElement(i)->GetIndex();
@@ -143,9 +142,9 @@
     //Overwrite target parameters
     aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
     const G4Element* target_element = (*G4Element::GetElementTable())[index];
-    const G4Isotope* target_isotope=NULL;
-    G4int iele = target_element->GetNumberOfIsotopes();
-    for ( G4int j = 0 ; j != iele ; j++ ) { 
+    const G4Isotope* target_isotope=nullptr;
+    G4int iele = (G4int)target_element->GetNumberOfIsotopes();
+    for ( G4int j = 0 ; j != iele ; ++j ) { 
        target_isotope=target_element->GetIsotope( j );
        if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break; 
     }
@@ -160,8 +159,8 @@
 
 const std::pair<G4double, G4double> G4ParticleHPCapture::GetFatalEnergyCheckLevels() const
 {
-   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
-   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+   // max energy non-conservation is mass of heavy nucleus
+   return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
 }
 
 /*
@@ -198,12 +197,12 @@ void G4ParticleHPCapture::BuildPhysicsTable(const G4ParticleDefinition&)
 
    if ( G4Threading::IsMasterThread() ) {
 
-      if ( theCapture == NULL ) theCapture = new std::vector<G4ParticleHPChannel*>;
+      if ( theCapture == nullptr ) theCapture = new std::vector<G4ParticleHPChannel*>;
 
       if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
 
       if ( theCapture->size() == G4Element::GetNumberOfElements() ) {
-         numEle = G4Element::GetNumberOfElements();
+         numEle = (G4int)G4Element::GetNumberOfElements();
          return;
       }
 
@@ -214,7 +213,7 @@ void G4ParticleHPCapture::BuildPhysicsTable(const G4ParticleDefinition&)
       dirName = dirName + tString;
 
       G4ParticleHPCaptureFS * theFS = new G4ParticleHPCaptureFS;
-      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
+      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; ++i ) 
       {
          theCapture->push_back( new G4ParticleHPChannel );
          ((*theCapture)[i])->Init((*(G4Element::GetElementTable()))[i], dirName);
@@ -223,7 +222,7 @@ void G4ParticleHPCapture::BuildPhysicsTable(const G4ParticleDefinition&)
       delete theFS;
       hpmanager->RegisterCaptureFinalStates( theCapture );
    }
-   numEle = G4Element::GetNumberOfElements();
+   numEle = (G4int)G4Element::GetNumberOfElements();
 }
 
 void G4ParticleHPCapture::ModelDescription(std::ostream& outFile) const

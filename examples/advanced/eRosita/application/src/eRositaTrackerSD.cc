@@ -23,90 +23,96 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
-
+#include "AnalysisManager.hh"
 #include "eRositaTrackerSD.hh"
 #include "eRositaTrackerHit.hh"
 
+#include <fstream>
+#include <iostream>
+
 #include "G4HCofThisEvent.hh"
-#include "G4Step.hh"
-#include "G4ThreeVector.hh"
-#include "G4SDManager.hh"
 #include "G4ios.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SDManager.hh"
+#include "G4Step.hh"
+#include "G4ThreeVector.hh"
 
-#include <iostream>
-#include <fstream>
-
-#include "AnalysisManager.hh"
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 eRositaTrackerSD::eRositaTrackerSD(G4String name) : G4VSensitiveDetector(name)
 {
-  G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
+    constexpr auto TRACKER_COLLECTION_NAME = "TrackerCollection";
+    collectionName.insert(TRACKER_COLLECTION_NAME);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 eRositaTrackerSD::~eRositaTrackerSD()
 {
 }
 
-void eRositaTrackerSD::Initialize(G4HCofThisEvent* HCE)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void eRositaTrackerSD::Initialize(G4HCofThisEvent* collection)
 {
-  trackerCollection = 
-    new eRositaTrackerHitsCollection(SensitiveDetectorName, collectionName[0]); 
-  static G4int HCID = -1;
-  if (HCID < 0)
-  { 
-      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); 
-  }
-  HCE->AddHitsCollection( HCID, trackerCollection); 
+    trackerCollection = new eRositaTrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
+    static G4int collectionIdentifier = -1;
+
+    if (collectionIdentifier < 0) {
+        collectionIdentifier = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+    }
+    collection->AddHitsCollection(collectionIdentifier, trackerCollection);
 }
 
-G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+auto eRositaTrackerSD::ProcessHits(G4Step* step, G4TouchableHistory*) -> G4bool
 {
-  if(aStep->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) return false;
+    if (step->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) {
+        return false;
+    }
 
-//   G4double edep = aStep->GetTotalEnergyDeposit();
-  G4double edep = aStep->GetPreStepPoint()->GetKineticEnergy();
-  if (edep == 0.) return false;
+    // auto depositedEnergy = step->GetTotalEnergyDeposit();
+    auto depositedEnergy = step->GetPreStepPoint()->GetKineticEnergy();
+    if (depositedEnergy == 0.) {
+        return false;
+    }
 
-  eRositaTrackerHit* newHit = new eRositaTrackerHit();
-  newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
-  //newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
-  //                                             ->GetCopyNumber());
-  newHit->SetEdep(edep);
-  newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
-  trackerCollection->insert(newHit);
-  
-  //newHit->Print();
-  //newHit->Draw();
+    auto *newHit = new eRositaTrackerHit();
+    newHit->SetTrackIdentifier(step->GetTrack()->GetTrackID());
+    // newHit->SetChamberNumber(step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber());
+    newHit->SetDepositedEnergy(depositedEnergy);
+    newHit->SetPosition(step->GetPostStepPoint()->GetPosition());
+    trackerCollection->insert(newHit);
 
-  //ofstream out("ASCII");
-  //newHit->PrintToFile(out);
-  //out.close();
+    // newHit->Print();
+    // newHit->Draw();
 
-  return true;
+    // std::ofstream dataFile("ASCII");
+    // newHit->PrintToFile(dataFile);
+    // dataFile.close();
+
+    return true;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void eRositaTrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
-  G4int NbHits = trackerCollection->entries();
- 
-  if (verboseLevel > 0) 
-    { 
-      
-      G4cout << std::endl
-	     << "Hits Collection: in this event they are " << NbHits 
-	     << " hits in the tracker chambers: " << G4endl;
-      for (G4int i=0;i<NbHits;i++) (*trackerCollection)[i]->Print();
-      
-    } 
+    G4int numberOfHits = trackerCollection->entries();
 
-  for (G4int i=0; i<NbHits; i++)
-    {
-      (*trackerCollection)[i]->PrintToFile();
+    if (verboseLevel > 0) {
+        G4cout << G4endl
+            << "Hits collection: in this event there are " << numberOfHits
+            << " hits in the tracker chambers: " << G4endl;
+
+        for (G4int i = 0; i < numberOfHits; i++) {
+            (*trackerCollection)[i]->Print();
+        }
     }
+
+    for (G4int i = 0; i < numberOfHits; i++) {
+        (*trackerCollection)[i]->PrintToFile();
+    };
 }

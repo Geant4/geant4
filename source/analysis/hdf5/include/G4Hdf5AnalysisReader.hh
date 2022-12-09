@@ -51,7 +51,7 @@ class G4Hdf5AnalysisReader : public G4ToolsAnalysisReader
   friend class G4ThreadLocalSingleton<G4Hdf5AnalysisReader>;
 
   public:
-    virtual ~G4Hdf5AnalysisReader();
+    ~G4Hdf5AnalysisReader() override;
 
     // Static methods
     static G4Hdf5AnalysisReader* Instance();
@@ -63,7 +63,7 @@ class G4Hdf5AnalysisReader : public G4ToolsAnalysisReader
 
   protected:
     // Virtual methods from base class
-    virtual G4bool CloseFilesImpl(G4bool reset) final;
+    G4bool CloseFilesImpl(G4bool reset) final;
 
   private:
     G4Hdf5AnalysisReader();

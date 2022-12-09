@@ -47,7 +47,6 @@
 #include "globals.hh"
 #include "G4ElementData.hh"
 #include "G4PhysicsVector.hh"
-#include "G4Threading.hh"
 #include <vector>
 #include <iostream>
 
@@ -73,7 +72,19 @@ public:
 
   G4double GetElementCrossSection(const G4DynamicParticle*, 
 				  G4int Z, const G4Material*) final;
+
+  G4double ComputeCrossSectionPerElement(G4double kinEnergy, G4double loge,
+                                         const G4ParticleDefinition*,
+                                         const G4Element*,
+                                         const G4Material*) final;
   
+  G4double ComputeIsoCrossSection(G4double kinEnergy, G4double loge,
+                                  const G4ParticleDefinition*,
+                                  G4int Z, G4int A,
+                                  const G4Isotope* iso,
+                                  const G4Element* elm,
+                                  const G4Material* mat) final;
+
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                               const G4Isotope* iso,
                               const G4Element* elm,
@@ -85,6 +96,8 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
   void CrossSectionDescription(std::ostream&) const final;
+
+  G4double ElementCrossSection(G4double kinEnergy, G4double loge, G4int Z);
 
   G4double IsoCrossSection(G4double ekin, G4double logekin, G4int Z, G4int A);
 
@@ -114,10 +127,6 @@ private:
   static const G4int MAXZCAPTURE = 93;
   static G4ElementData* data;
   static G4String gDataDirectory;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex neutronCaptureXSMutex;
-#endif
 };
 
 inline

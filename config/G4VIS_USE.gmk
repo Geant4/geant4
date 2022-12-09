@@ -32,6 +32,9 @@ VISLIBS  += -lG4RayTracer
 CPPFLAGS += -DG4VIS_USE_VRMLFILE
 VISLIBS  += -lG4VRML
 
+CPPFLAGS += -DG4VIS_USE_TOOLSSG_OFFSCREEN
+VISLIBS  += -lG4ToolsSG
+
 ifneq ($(G4INCLUDE_EXEC),1)
   CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
   CPPFLAGS += -I$(G4BASE)/visualization/gMocren/include
@@ -39,6 +42,7 @@ ifneq ($(G4INCLUDE_EXEC),1)
   CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
   CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
   CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
+  CPPFLAGS += -I$(G4BASE)/visualization/ToolsSG/include
 endif
 
 ifdef G4VIS_USE_OPENGLX
@@ -133,13 +137,6 @@ endif
 ifdef G4VIS_USE_VRML
   CPPFLAGS += -DG4VIS_USE_VRML
   # CPPFLAGS += -I... and VISLIBS += set above.
-endif
-
-ifdef G4LIB_USE_GL2PS
-  ifneq ($(G4INCLUDE_EXEC),1)
-    CPPFLAGS += -I$(G4BASE)/visualization/externals/gl2ps/include
-  endif
-  VISLIBS += -lG4gl2ps
 endif
 
 ########################### and finally... #######################

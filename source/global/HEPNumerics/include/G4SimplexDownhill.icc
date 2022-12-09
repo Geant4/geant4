@@ -69,8 +69,7 @@ G4double G4SimplexDownhill<T>::GetMinimum()
   doDownhill();
   // G4cout << "End First Trials" << G4endl;
 
-  std::vector<G4double>::const_iterator it_minh =
-    std::min_element(currentHeights.cbegin(), currentHeights.cend());
+  auto it_minh = std::min_element(currentHeights.cbegin(), currentHeights.cend());
   G4int imin = 0;
   G4int i    = 0;
   for(auto it = currentHeights.cbegin(); it != currentHeights.cend(); ++it)
@@ -137,13 +136,13 @@ std::vector<G4double> G4SimplexDownhill<T>::calCentroid(G4int ih)
   std::vector<G4double> centroid(numberOfVariable, 0.0);
 
   G4int i = 0;
-  for(auto it = currentSimplex.cbegin(); it != currentSimplex.cend(); ++it)
+  for(const auto & it : currentSimplex)
   {
     if(i != ih)
     {
       for(G4int j = 0; j < numberOfVariable; ++j)
       {
-        centroid[j] += (*it)[j] / numberOfVariable;
+        centroid[j] += it[j] / numberOfVariable;
       }
     }
     ++i;
@@ -235,10 +234,8 @@ void G4SimplexDownhill<T>::doDownhill()
       break;
     }
 
-    std::vector<G4double>::const_iterator it_maxh =
-      std::max_element(currentHeights.cbegin(), currentHeights.cend());
-    std::vector<G4double>::const_iterator it_minh =
-      std::min_element(currentHeights.cbegin(), currentHeights.cend());
+    auto it_maxh = std::max_element(currentHeights.cbegin(), currentHeights.cend());
+    auto it_minh = std::min_element(currentHeights.cbegin(), currentHeights.cend());
 
     G4double h_H = *it_maxh;
     G4double h_L = *it_minh;
@@ -342,13 +339,12 @@ void G4SimplexDownhill<T>::doDownhill()
 template <class T>
 std::vector<G4double> G4SimplexDownhill<T>::GetMinimumPoint()
 {
-  if(minimized != true)
+  if(!minimized)
   {
     GetMinimum();
   }
 
-  std::vector<G4double>::const_iterator it_minh =
-    std::min_element(currentHeights.cbegin(), currentHeights.cend());
+  auto it_minh = std::min_element(currentHeights.cbegin(), currentHeights.cend());
 
   G4int imin = 0;
   G4int i    = 0;

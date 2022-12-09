@@ -6,6 +6,78 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-05 Ben Morgan (cmake-V11-00-50)
+- Revert VecGeom minimum version to 1.2.0 due to issues with 1.2.1 reported by
+  CMS but not yet triaged in VecGeom itself.
+
+## 2022-11-29 Ben Morgan (cmake-V11-00-49)
+- Stamp minimum versions of CLHEP and VecGeom required for 11.1 release
+
+## 2022-11-21 Ben Morgan (cmake-V11-00-48)
+- Only support Qt5. Code updates to support Qt6 did not make release deadline, so
+  remove find of Qt6, retaining other support structures to enable quick updates
+  later.
+
+## 2022-11-15 Ben Morgan (cmake-V11-00-47)
+- Remove Geant4Py from toolkit build, pointing users to upstream repo if they
+  set GEANT4_USE_PYTHON in the CMake arguments.
+
+## 2022-11-07 Ben Morgan (cmake-V11-00-46)
+- Keep file timestamps from unpacked data libraries in CMake 3.24 and newer.
+
+## 2022-10-27 Ben Morgan (cmake-V11-00-45)
+- Fix bug in Qt3D activation as [reported on the Forum](https://geant4-forum.web.cern.ch/t/compiling-geant4-11-1-0-beta-failed-on-built-target-g4physicslist-s/9064/8) 
+
+## 2022-10-20 Guy Barrand (cmake-V11-00-44)
+- Modules/G4InterfaceOptions.cmake: remove usage of GEANT4_USE_TOOLSSG since ToolsSG
+  is now "always on" on all platforms.
+- Templates/Geant4Config.cmake.in: remove usage of _geant4_use_toolssg_library, and
+  setup of -DG4VIS_USE_TOOLSSG for compilation.
+
+## 2022-10-13 Ben Morgan (cmake-V11-00-43)
+- Find, use and re-find Qt OpenGLWidgets component when Qt6 is in use.
+
+## 2022-10-12 Gunter Folger (cmake-V11-00-42)
+- add new dataset G4EMLOW 8.2 as provided by Vladimir:
+    This modification include additions for atomic de-excitation for Z=101-104 
+    and N2 DNA data. No change for existing tests is expected.
+
+## 2022-10-07 Gabriele Cosmo (cmake-V11-00-41)
+- Added "-diag-disable=10441" CXX option to Intel compilers, to disable
+  icc compiler deprecation message.
+
+## 2022-09-27 Ben Morgan (cmake-V11-00-40)
+- Promote INTERFACE module properties to PUBLIC when merging them into a non-INTERFACE
+  final target.
+
+## 2022-09-25 Ben Morgan (cmake-V11-00-39)
+- Fix bug causing failure in `do_provides` function of geant4_module_check.py
+
+## 2022-09-10 Ben Morgan (cmake-V11-00-38)
+- Implement mechanism to filter out headers in geant4_module_check with linting comment
+
+## 2022-09-09 Ben Morgan (cmake-V11-00-37)
+- Fix geant4_module_check returning 1 on successful run
+- Filter out C++ filesystem library from checks
+
+## 2022-09-03 Ben Morgan (cmake-V11-00-36)
+- Filter out Vis driver modules from consistency check for G4vis_management
+  - G4VisExecutive is a user level compile time interface to "plugin" drivers.
+  - Driver headers need filtering out as they are not linked to in Geant4 itself
+    to avoid circular dependencies.
+
+## 2022-08-31 Ben Morgan (cmake-V11-00-35)
+- New geant4_module_check.py script to provide convenient interface for developers
+  and testing to check module/library cycles and dependency inconsistencies.
+
+## 2022-07-14 Ben Morgan (cmake-V11-00-34)
+- Remove obsolete and now longer built G4gl2ps target
+
+## 2022-07-14 Ben Morgan (cmake-V11-00-33)
+- Address [Bugzilla 2485](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2485)
+  - Update extraction of include paths from VecGeom to use imported target
+    property.
+
 ## 2022-06-09 Igor Semeniouk (cmake-V11-00-32)
 - G4ConfigureGNUMakeHelpers.cmake (geant4.[c]sh, geant4.bat generation )
    - use the environment variable GEANT4_DATA_DIR as top data dir

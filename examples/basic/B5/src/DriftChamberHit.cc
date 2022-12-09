@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DriftChamberHit.cc
+/// \file B5/src/DriftChamberHit.cc
 /// \brief Implementation of the B5::DriftChamberHit class
 
 #include "DriftChamberHit.hh"
@@ -50,40 +50,9 @@ G4ThreadLocal G4Allocator<DriftChamberHit>* DriftChamberHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DriftChamberHit::DriftChamberHit()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 DriftChamberHit::DriftChamberHit(G4int layerID)
 : fLayerID(layerID)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DriftChamberHit::~DriftChamberHit()
-{}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// DriftChamberHit::DriftChamberHit(const DriftChamberHit &right)
-// : G4VHit(),
-//   fLayerID(right.fLayerID),
-//   fTime(right.fTime),
-//   fLocalPos(right.fLocalPos),
-//   fWorldPos(right.fWorldPos)
-// {}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// const DriftChamberHit& DriftChamberHit::operator=(const DriftChamberHit &right)
-// {
-//   fLayerID = right.fLayerID;
-//   fTime = right.fTime;
-//   fLocalPos = right.fLocalPos;
-//   fWorldPos = right.fWorldPos;
-//   return *this;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

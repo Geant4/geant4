@@ -289,10 +289,8 @@ G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* 
 G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
-  fParticleChange.ProposeMomentumDirection(
-    step.GetPostStepPoint()->GetMomentumDirection());
-  fNewPosition = step.GetPostStepPoint()->GetPosition();
-  fParticleChange.ProposePosition(fNewPosition);
+  fParticleChange.InitialiseMSC(track, step);
+  fNewPosition = fParticleChange.GetProposedPosition();
   fPositionChanged = false;
 
   G4double geomLength = step.GetStepLength();
@@ -369,15 +367,6 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
     }
   }
   fParticleChange.ProposeTrueStepLength(tPathLength);
-  return &fParticleChange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VParticleChange* 
-G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step&)
-{
-  fParticleChange.Initialize(track);
   return &fParticleChange;
 }
 

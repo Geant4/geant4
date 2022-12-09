@@ -241,13 +241,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 				      NULL);
 
   //*********Create a menu bar for the window********
-  style_str = XmStringCreateLocalized ((char*)"Style");
-  actions_str = XmStringCreateLocalized ((char*)"Actions");
-  misc_str = XmStringCreateLocalized ((char*)"Miscellany");
-  spec_str = XmStringCreateLocalized ((char*)"Special");
+  style_str = XmStringCreateLocalized ((char*)menu_str[0].c_str());
+  actions_str = XmStringCreateLocalized ((char*)menu_str[2].c_str());
+  misc_str = XmStringCreateLocalized ((char*)menu_str[4].c_str());
+  spec_str = XmStringCreateLocalized ((char*)menu_str[6].c_str());
 
   menubar = XmVaCreateSimpleMenuBar (main_win,
-				     (char*)"menubar",
+				     (char*)menu_str[8].c_str(),
 				     XmVaCASCADEBUTTON, style_str,   (KeySym)XK_S,  /*G.Barrand : cast to KeySym and use XK_*/
 				     XmVaCASCADEBUTTON, actions_str, (KeySym)XK_A,
 				     XmVaCASCADEBUTTON, misc_str,    (KeySym)XK_M,
@@ -268,12 +268,12 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
 
   //*********Create style pulldown menu on menubar*********
-  draw_str = XmStringCreateLocalized ((char*)"Drawing");
-  bgnd_str = XmStringCreateLocalized ((char*)"Background color");
+  draw_str = XmStringCreateLocalized ((char*)menu_str[9].c_str());
+  bgnd_str = XmStringCreateLocalized ((char*)menu_str[10].c_str());
 
   style_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     (char*)"style",
+     (char*)menu_str[1].c_str(),
      0,
      NULL,
      XmVaCASCADEBUTTON, draw_str, (KeySym)XK_D,
@@ -291,14 +291,14 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Style pulldown menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
-  wireframe_str = XmStringCreateLocalized ((char*)"Wireframe");
-  hlr_str = XmStringCreateLocalized ((char*)"Hidden line removal");
-  hsr_str = XmStringCreateLocalized ((char*)"Hidden surface removal");
-  hlhsr_str = XmStringCreateLocalized ((char*)"Hidden line and surface removal");
+  wireframe_str = XmStringCreateLocalized ((char*)menu_str[11].c_str());
+  hlr_str = XmStringCreateLocalized ((char*)menu_str[12].c_str());
+  hsr_str = XmStringCreateLocalized ((char*)menu_str[13].c_str());
+  hlhsr_str = XmStringCreateLocalized ((char*)menu_str[14].c_str());
 
   drawing_style_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
-     (char*)"drawing_style",
+     (char*)menu_str[15].c_str(),
      1,
      drawing_style_callback,
      XmVaRADIOBUTTON, wireframe_str, (KeySym)XK_W, NULL, NULL,
@@ -355,12 +355,12 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Drawing pullright menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
-  white_str = XmStringCreateLocalized ((char*)"White");
-  black_str = XmStringCreateLocalized ((char*)"Black");
+  white_str = XmStringCreateLocalized ((char*)menu_str[16].c_str());
+  black_str = XmStringCreateLocalized ((char*)menu_str[17].c_str());
 
   background_color_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
-     (char*)"background_color",
+     (char*)menu_str[18].c_str(),
      2,
      background_color_callback,
      XmVaRADIOBUTTON, white_str, (KeySym)XK_W, NULL, NULL,
@@ -395,13 +395,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Background color pullright menu" << G4endl;
 
   //*********Create actions pulldown menu on menubar*********
-  rot_str = XmStringCreateLocalized ((char*)"Rotation control panel");
-  pan_str = XmStringCreateLocalized ((char*)"Panning control panel");
-  set_str = XmStringCreateLocalized ((char*)"Set control panel limits");
+  rot_str = XmStringCreateLocalized ((char*)menu_str[19].c_str());
+  pan_str = XmStringCreateLocalized ((char*)menu_str[20].c_str());
+  set_str = XmStringCreateLocalized ((char*)menu_str[21].c_str());
 
   actions_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     (char*)"actions",
+     (char*)menu_str[3].c_str(),
      1,
      actions_callback,
      XmVaPUSHBUTTON, rot_str, (KeySym)XK_R, NULL, NULL,
@@ -420,14 +420,14 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (set_str);
   G4cout << "Created Actions pulldown menu" << G4endl;
 
-  misc_str = XmStringCreateLocalized ((char*)"Miscellany control panel");
-  exit_str = XmStringCreateLocalized ((char*)"Exit to G4Vis>");
-  print_str = XmStringCreateLocalized ((char*)"Create .eps file");
+  misc_str = XmStringCreateLocalized ((char*)menu_str[22].c_str());
+  exit_str = XmStringCreateLocalized ((char*)menu_str[23].c_str());
+  print_str = XmStringCreateLocalized ((char*)menu_str[24].c_str());
 
   //*********Create miscellany pulldown menu on menubar*********
   misc_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     (char*)"miscellany",
+     (char*)menu_str[5].c_str(),
      2,
      misc_callback,
      XmVaPUSHBUTTON, misc_str,  (KeySym)XK_M, NULL, NULL,
@@ -446,15 +446,15 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   XmStringFree (print_str);
   G4cout << "Created Miscellany pulldown menu" << G4endl;
 
-  trans_str = XmStringCreateLocalized ((char*)"Transparency");
-  anti_str = XmStringCreateLocalized ((char*)"Antialiasing");
-  halo_str = XmStringCreateLocalized ((char*)"Haloing");
-  aux_edge_str = XmStringCreateLocalized ((char*)"Auxiliary edges");
+  trans_str = XmStringCreateLocalized ((char*)menu_str[25].c_str());
+  anti_str = XmStringCreateLocalized ((char*)menu_str[27].c_str());
+  halo_str = XmStringCreateLocalized ((char*)menu_str[29].c_str());
+  aux_edge_str = XmStringCreateLocalized ((char*)menu_str[31].c_str());
 
   //*********Create special pulldown menu on menubar*********
   spec_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     (char*)"special",
+     (char*)menu_str[7].c_str(),
      3,
      NULL,
      XmVaCASCADEBUTTON, trans_str,    (KeySym)XK_T,
@@ -476,12 +476,12 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //  G4cout << "Created Special pulldown menu" << G4endl;
 
   //Add Transparency pullright menu to special cascade...
-  off_str = XmStringCreateLocalized ((char*)"Off");
-  on_str = XmStringCreateLocalized ((char*)"On");
+  off_str = XmStringCreateLocalized ((char*)menu_str[33].c_str());
+  on_str = XmStringCreateLocalized ((char*)menu_str[34].c_str());
 
   transparency_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     (char*)"transparency",
+     (char*)menu_str[26].c_str(),
      0,
      transparency_callback,
      XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
@@ -516,7 +516,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //Add antialias pullright menu to special cascade...
   antialias_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     (char*)"antialias",
+     (char*)menu_str[28].c_str(),
      1,
      antialias_callback,
      XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
@@ -551,7 +551,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //Add Haloing pullright menu to special cascade...
   haloing_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     (char*)"haloing",
+     (char*)menu_str[30].c_str(),
      2,
      haloing_callback,
      XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
@@ -586,7 +586,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //Add Aux_Edge pullright menu to special cascade...
   aux_edge_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     (char*)"aux_edge",
+     (char*)menu_str[32].c_str(),
      3,
      aux_edge_callback,
      XmVaRADIOBUTTON, off_str, (KeySym)XK_f, NULL, NULL,
@@ -614,7 +614,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   }
 
   XtManageChild (menubar);
-  frame = XtVaCreateManagedWidget ((char*)"frame",
+  frame = XtVaCreateManagedWidget ((char*)menu_str[35].c_str(),
 				   xmFrameWidgetClass, main_win,
 				   XtNvisual, vi -> visual, 
 				   XtNdepth, vi -> depth, 
@@ -623,7 +623,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 				   XtNbackground, bgnd,
 				   NULL);
 
-  glxarea = XtVaCreateManagedWidget ((char*)"glxarea", 
+  glxarea = XtVaCreateManagedWidget ((char*)menu_str[36].c_str(), 
 				     xmDrawingAreaWidgetClass,
 				     frame,
 				     XtNvisual, vi -> visual, 

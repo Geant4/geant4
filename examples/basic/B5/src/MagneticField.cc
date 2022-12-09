@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file MagneticField.cc
+/// \file B5/src/MagneticField.cc
 /// \brief Implementation of the B5::MagneticField class
 
 #include "MagneticField.hh"

@@ -82,6 +82,16 @@ void G4DNAPTBElasticModel::Initialise(const G4ParticleDefinition* particle,
     {
         G4String particleName = particle->GetParticleName();
 
+        // MPietrzak, adding paths for N2
+        AddCrossSectionData("N2",
+                            particleName,
+                            "dna/sigma_elastic_e-_PTB_N2",
+                            "dna/sigmadiff_cumulated_elastic_e-_PTB_N2",
+                            scaleFactor);
+        SetLowELimit("N2", particleName, 10*eV);
+        SetHighELimit("N2", particleName, 1.02*MeV);
+        // MPietrzak
+
         AddCrossSectionData("THF",
                             particleName,
                             "dna/sigma_elastic_e-_PTB_THF",

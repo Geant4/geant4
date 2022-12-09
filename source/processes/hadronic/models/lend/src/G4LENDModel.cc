@@ -97,19 +97,19 @@ void G4LENDModel::create_used_target_map()
 
    lend_manager->RequestChangeOfVerboseLevel( verboseLevel );
 
-   size_t numberOfElements = G4Element::GetNumberOfElements();
+   std::size_t numberOfElements = G4Element::GetNumberOfElements();
    static const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
-   for ( size_t i = 0 ; i < numberOfElements ; ++i )
+   for ( std::size_t i = 0 ; i < numberOfElements ; ++i )
    {
 
       const G4Element* anElement = (*theElementTable)[i];
-      G4int numberOfIsotope = anElement->GetNumberOfIsotopes(); 
+      G4int numberOfIsotope = (G4int)anElement->GetNumberOfIsotopes(); 
 
       if ( numberOfIsotope > 0 )
       {
       // User Defined Abundances   
-         for ( G4int i_iso = 0 ; i_iso < numberOfIsotope ; i_iso++ )
+         for ( G4int i_iso = 0 ; i_iso < numberOfIsotope ; ++i_iso )
          {
             G4int iZ = anElement->GetIsotope( i_iso )->GetZ();
             G4int iA = anElement->GetIsotope( i_iso )->GetN();

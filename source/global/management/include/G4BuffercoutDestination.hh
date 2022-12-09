@@ -46,10 +46,10 @@ class G4BuffercoutDestination : public G4coutDestination
 {
  public:
   explicit G4BuffercoutDestination(std::size_t maxSize = 0);
-  virtual ~G4BuffercoutDestination();
+  ~G4BuffercoutDestination() override;
 
-  virtual G4int ReceiveG4cout(const G4String& msg) override;
-  virtual G4int ReceiveG4cerr(const G4String& msg) override;
+  G4int ReceiveG4cout(const G4String& msg) override;
+  G4int ReceiveG4cerr(const G4String& msg) override;
   // Flush buffer to std output
   virtual G4int FlushG4cout();
   // Flush buffer to std error

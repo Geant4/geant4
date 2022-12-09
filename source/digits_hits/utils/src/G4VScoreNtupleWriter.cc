@@ -30,8 +30,8 @@
 #include "G4VScoreNtupleWriter.hh"
 
 //_____________________________________________________________________________
-G4VScoreNtupleWriter* G4VScoreNtupleWriter::fgMasterInstance         = 0;
-G4ThreadLocal G4VScoreNtupleWriter* G4VScoreNtupleWriter::fgInstance = 0;
+G4VScoreNtupleWriter* G4VScoreNtupleWriter::fgMasterInstance         = nullptr;
+G4ThreadLocal G4VScoreNtupleWriter* G4VScoreNtupleWriter::fgInstance = nullptr;
 
 //_____________________________________________________________________________
 G4VScoreNtupleWriter* G4VScoreNtupleWriter::Instance()
@@ -42,9 +42,9 @@ G4VScoreNtupleWriter* G4VScoreNtupleWriter::Instance()
 
   G4bool isMaster = !G4Threading::IsWorkerThread();
 
-  if((!isMaster) && (!fgInstance))
+  if((!isMaster) && (fgInstance == nullptr))
   {
-    if(fgMasterInstance)
+    if(fgMasterInstance != nullptr)
     {
       fgInstance = fgMasterInstance->CreateInstance();
     }
@@ -53,16 +53,12 @@ G4VScoreNtupleWriter* G4VScoreNtupleWriter::Instance()
   return fgInstance;
 }
 
-//
-// ctor, dtor
-//
-
 //_____________________________________________________________________________
 G4VScoreNtupleWriter::G4VScoreNtupleWriter()
 {
   G4bool isMaster = !G4Threading::IsWorkerThread();
 
-  if(isMaster && fgMasterInstance)
+  if(isMaster && (fgMasterInstance != nullptr))
   {
     G4ExceptionDescription description;
     description << "      "
@@ -71,7 +67,7 @@ G4VScoreNtupleWriter::G4VScoreNtupleWriter()
     G4Exception("G4VScoreNtupleWriter::G4VScoreNtupleWriter()", "Analysis_F001",
                 FatalException, description);
   }
-  if(fgInstance)
+  if(fgInstance != nullptr)
   {
     G4ExceptionDescription description;
     description << "      "
@@ -86,4 +82,4 @@ G4VScoreNtupleWriter::G4VScoreNtupleWriter()
 }
 
 //_____________________________________________________________________________
-G4VScoreNtupleWriter::~G4VScoreNtupleWriter() { fgInstance = 0; }
+G4VScoreNtupleWriter::~G4VScoreNtupleWriter() { fgInstance = nullptr; }

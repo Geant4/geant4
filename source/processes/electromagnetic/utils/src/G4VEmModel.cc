@@ -154,8 +154,8 @@ void G4VEmModel::InitialiseForMaterial(const G4ParticleDefinition* part,
                                        const G4Material* material)
 {
   if(material != nullptr) {
-    size_t n = material->GetNumberOfElements();
-    for(size_t i=0; i<n; ++i) {
+    G4int n = (G4int)material->GetNumberOfElements();
+    for(G4int i=0; i<n; ++i) {
       G4int Z = material->GetElement(i)->GetZasInt();
       InitialiseForElement(part, Z);
     }
@@ -186,7 +186,7 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* mat,
 {
   SetupForMaterial(p, mat, ekin);
   const G4double* theAtomNumDensityVector = mat->GetVecNbOfAtomsPerVolume();
-  G4int nelm = mat->GetNumberOfElements(); 
+  G4int nelm = (G4int)mat->GetNumberOfElements(); 
   if(nelm > nsec) {
     xsec.resize(nelm);
     nsec = nelm;
@@ -222,12 +222,12 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* mat,
                                               G4double tcut,
                                               G4double tmax)
 {
-  size_t n = mat->GetNumberOfElements();
+  G4int n = (G4int)mat->GetNumberOfElements();
   fCurrentElement = mat->GetElement(0);
   if (n > 1) {
     const G4double x = G4UniformRand()*
       G4VEmModel::CrossSectionPerVolume(mat,pd,kinEnergy,tcut,tmax);
-    for(size_t i=0; i<n; ++i) {
+    for(G4int i=0; i<n; ++i) {
       if (x <= xsec[i]) {
         fCurrentElement = mat->GetElement(i);
         break;

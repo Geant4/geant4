@@ -41,14 +41,14 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
   G4String astream = G4StrUtil::strip_copy(stream);
 
   // tokenize...
-  G4int indx=0;
+  std::size_t indx=0;
   while(1) {
-    G4int jc= astream.find(" ", indx);
+    std::size_t jc= astream.find(" ", indx);
     nElement++;
-    if(jc == G4int(G4String::npos)) break;
+    if(jc == G4String::npos) break;
     jc++; // fix a tiny mistake...
-    for(; jc< G4int(astream.length()); ) {  // skip continuing spaces
-      if(astream[(size_t)(jc)]==' ') jc++;
+    for(; jc< astream.length(); ) {  // skip continuing spaces
+      if(astream[(G4int)jc]==' ') jc++;
       else break;
     }
     indx= jc;
@@ -59,16 +59,16 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
 
   // push...
   indx=0;
-  for(G4int i=0; i<nElement; i++){
-    G4int jc= astream.find(" ", indx);
-    if(jc != G4int(G4String::npos))
+  for(G4int i=0; i<nElement; ++i){
+    std::size_t jc= astream.find(" ", indx);
+    if(jc != G4String::npos)
       stringArray[i]= astream.substr(indx, jc-indx);
     else {  // last token
       jc= astream.length()+1;
       stringArray[i]= astream.substr(indx, jc-indx);
     }
-    for(G4int j=1; jc+j< G4int(astream.length()); j++ ) { // skip continuing spaces
-      if(astream[jc+j]==' ') jc++;
+    for(std::size_t j=1; jc+j< astream.length(); ++j ) { // skip continuing spaces
+      if(astream[G4int(jc+j)]==' ') jc++;
       else break;
     }
     indx= jc+1;
@@ -116,21 +116,20 @@ G4int G4UIArrayString::GetNRow(int icol) const
 G4int G4UIArrayString::GetNField(int icol) const
 ////////////////////////////////////////////////
 {
-  G4int maxWidth=0;
+  std::size_t maxWidth=0;
   for (G4int iy=1; iy<= GetNRow(icol); iy++) {
-    G4int ilen= GetElement(icol,iy)-> length();
+    std::size_t ilen= GetElement(icol,iy)->length();
     // care for color code
     // if(GetElement(icol,iy)-> index(strESC,0) != G4String::npos) {
     // if(strESC == (*GetElement(icol,iy))[0] ) {
-    const char tgt = (*GetElement(icol,iy))[(size_t)0];
+    const char tgt = (*GetElement(icol,iy))[(std::size_t)0];
     if(strESC == tgt) {
       ilen-= 5;
-      if(ilen<0) G4cout << "length(c) cal. error." << G4endl;
     }
     if(ilen> maxWidth) maxWidth= ilen;
   }
 
-  return maxWidth;
+  return (G4int)maxWidth;
 }
 
 /////////////////////////////////////////////////
@@ -172,7 +171,7 @@ void G4UIArrayString::Show(G4int ncol)
 
       // care for color code
       G4String colorWord;
-      const char tgt = word[(size_t)0];
+      const char tgt = word[(std::size_t)0];
       if(strESC == tgt) {
         colorWord= word.substr(0,5);
         word.erase(0,5);

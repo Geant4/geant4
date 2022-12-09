@@ -97,7 +97,7 @@ void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(Energy5DLimit > 0.0 && nullptr != f5Dmodel) { 
     f5Dmodel = new G4BetheHeitler5DModel();
     f5Dmodel->SetLeptonPair(theMuonPlus, theMuonMinus);
-    const size_t numElems = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
+    const std::size_t numElems = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
     const G4DataVector cuts(numElems);
     f5Dmodel->Initialise(&p, cuts);
   }
@@ -141,7 +141,7 @@ G4GammaConversionToMuons::ComputeMeanFreePath(G4double GammaEnergy,
     e = LimitEnergy;
   } 
 
-  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements(); ++i)
+  for ( std::size_t i=0 ; i < aMaterial->GetNumberOfElements(); ++i)
   {
     SIGMA += NbOfAtomsPerVolume[i] * fact *
       ComputeCrossSectionPerAtom(e, (*theElementVector)[i]->GetZasInt());
@@ -243,7 +243,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     std::vector<G4DynamicParticle*> fvect;
     f5Dmodel->SampleSecondaries(&fvect, aTrack.GetMaterialCutsCouple(), 
 				aTrack.GetDynamicParticle(), 0.0, DBL_MAX);
-    aParticleChange.SetNumberOfSecondaries(fvect.size());
+    aParticleChange.SetNumberOfSecondaries((G4int)fvect.size());
     for(auto dp : fvect) { aParticleChange.AddSecondary(dp); }
     return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
   }  
@@ -427,7 +427,7 @@ const G4Element* G4GammaConversionToMuons::SelectRandomAtom(
 {
   // select randomly 1 element within the material, invoked by PostStepDoIt
 
-  const G4int NumberOfElements            = aMaterial->GetNumberOfElements();
+  const std::size_t NumberOfElements      = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
   const G4Element* elm = (*theElementVector)[0];
 
@@ -437,7 +437,7 @@ const G4Element* G4GammaConversionToMuons::SelectRandomAtom(
     G4double PartialSumSigma = 0.;
     G4double rval = G4UniformRand()/MeanFreePath;
 
-    for (G4int i=0; i<NumberOfElements; ++i)
+    for (std::size_t i=0; i<NumberOfElements; ++i)
     { 
       elm = (*theElementVector)[i];
       PartialSumSigma += NbOfAtomsPerVolume[i]

@@ -36,105 +36,136 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4AccumulableManager.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-: G4UserRunAction(),
-  fHistoManager(histo),
-  fSumEAbs(0.), fSum2EAbs(0.),
-  fSumEGap(0.), fSum2EGap(0.),
-  fSumLAbs(0.), fSum2LAbs(0.),
-  fSumLGap(0.), fSum2LGap(0.)    
-{}
+: fHistoManager(histo)
+{
+  // Register accumulable to the accumulable manager
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->RegisterAccumulable(fSumEAbs);
+  accumulableManager->RegisterAccumulable(fSum2EAbs);
+  accumulableManager->RegisterAccumulable(fSumEGap);
+  accumulableManager->RegisterAccumulable(fSum2EGap);
+  accumulableManager->RegisterAccumulable(fSumLAbs);
+  accumulableManager->RegisterAccumulable(fSum2LAbs);
+  accumulableManager->RegisterAccumulable(fSumLGap);
+  accumulableManager->RegisterAccumulable(fSum2LGap);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
+RunAction::~RunAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
-{ 
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-    
-  //initialize cumulative quantities
-  //
-  fSumEAbs = fSum2EAbs =fSumEGap = fSum2EGap = 0.;
-  fSumLAbs = fSum2LAbs =fSumLGap = fSum2LGap = 0.;
-  
+
+  // reset accumulables to their initial values
+  G4AccumulableManager::Instance()->Reset();
+
   //histograms
   //
-  fHistoManager->Book(); 
+  fHistoManager->Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::FillPerEvent(G4double EAbs, G4double EGap,
-                                  G4double LAbs, G4double LGap)
+                             G4double LAbs, G4double LGap)
 {
   //accumulate statistic
   //
   fSumEAbs += EAbs;  fSum2EAbs += EAbs*EAbs;
   fSumEGap += EGap;  fSum2EGap += EGap*EGap;
-  
+
   fSumLAbs += LAbs;  fSum2LAbs += LAbs*LAbs;
-  fSumLGap += LGap;  fSum2LGap += LGap*LGap;  
+  fSumLGap += LGap;  fSum2LGap += LGap*LGap;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4int NbOfEvents = aRun->GetNumberOfEvent();
-  if (NbOfEvents == 0) {
+  // Merge accumulables
+  G4AccumulableManager::Instance()->Merge();
+
+  G4int nofEvents = aRun->GetNumberOfEvent();
+  if (nofEvents == 0) {
     // close open files
     fHistoManager->Save();
     return;
   }
-  
+
   //compute statistics: mean and rms
   //
-  fSumEAbs /= NbOfEvents; fSum2EAbs /= NbOfEvents;
-  G4double rmsEAbs = fSum2EAbs - fSumEAbs*fSumEAbs;
-  if (rmsEAbs >0.) rmsEAbs = std::sqrt(rmsEAbs); else rmsEAbs = 0.;
-  
-  fSumEGap /= NbOfEvents; fSum2EGap /= NbOfEvents;
-  G4double rmsEGap = fSum2EGap - fSumEGap*fSumEGap;
-  if (rmsEGap >0.) rmsEGap = std::sqrt(rmsEGap); else rmsEGap = 0.;
-  
-  fSumLAbs /= NbOfEvents; fSum2LAbs /= NbOfEvents;
-  G4double rmsLAbs = fSum2LAbs - fSumLAbs*fSumLAbs;
-  if (rmsLAbs >0.) rmsLAbs = std::sqrt(rmsLAbs); else rmsLAbs = 0.;
-  
-  fSumLGap /= NbOfEvents; fSum2LGap /= NbOfEvents;
-  G4double rmsLGap = fSum2LGap - fSumLGap*fSumLGap;
-  if (rmsLGap >0.) rmsLGap = std::sqrt(rmsLGap); else rmsLGap = 0.;
-  
+  auto sumEAbs = fSumEAbs.GetValue();
+  auto sum2EAbs = fSum2EAbs.GetValue();
+  sumEAbs /= nofEvents; sum2EAbs /= nofEvents;
+  auto rmsEAbs = sum2EAbs - sumEAbs*sumEAbs;
+  if (rmsEAbs >0.) {
+    rmsEAbs = std::sqrt(rmsEAbs);
+  } else {
+    rmsEAbs = 0.;
+  }
+
+  auto sumEGap = fSumEGap.GetValue();
+  auto sum2EGap = fSum2EGap.GetValue();
+  sumEGap /= nofEvents; sum2EGap /= nofEvents;
+  auto rmsEGap = sum2EGap - sumEGap*sumEGap;
+  if (rmsEGap >0.) {
+    rmsEGap = std::sqrt(rmsEGap);
+  } else {
+    rmsEGap = 0.;
+  }
+
+  auto sumLAbs = fSumLAbs.GetValue();
+  auto sum2LAbs = fSum2LAbs.GetValue();
+  sumLAbs /= nofEvents; sum2LAbs /= nofEvents;
+  auto rmsLAbs = sum2LAbs - sumLAbs*sumLAbs;
+  if (rmsLAbs >0.) {
+    rmsLAbs = std::sqrt(rmsLAbs);
+  } else {
+    rmsLAbs = 0.;
+  }
+
+  auto sumLGap = fSumLGap.GetValue();
+  auto sum2LGap = fSum2LGap.GetValue();
+  sumLGap /= nofEvents; sum2LGap /= nofEvents;
+  G4double rmsLGap = sum2LGap - sumLGap*sumLGap;
+  if (rmsLGap >0.) {
+    rmsLGap = std::sqrt(rmsLGap);
+  } else {
+    rmsLGap = 0.;
+  }
+
   //print
   //
   G4cout
      << "\n--------------------End of Run------------------------------\n"
-     << "\n mean Energy in Absorber : " << G4BestUnit(fSumEAbs,"Energy")
-     << " +- "                          << G4BestUnit(rmsEAbs,"Energy")  
-     << "\n mean Energy in Gap      : " << G4BestUnit(fSumEGap,"Energy")
+     << "\n mean Energy in Absorber : " << G4BestUnit(sumEAbs,"Energy")
+     << " +- "                          << G4BestUnit(rmsEAbs,"Energy")
+     << "\n mean Energy in Gap      : " << G4BestUnit(sumEGap,"Energy")
      << " +- "                          << G4BestUnit(rmsEGap,"Energy")
      << G4endl;
-     
+
   G4cout
-     << "\n mean trackLength in Absorber : " << G4BestUnit(fSumLAbs,"Length")
-     << " +- "                               << G4BestUnit(rmsLAbs,"Length")  
-     << "\n mean trackLength in Gap      : " << G4BestUnit(fSumLGap,"Length")
+     << "\n mean trackLength in Absorber : " << G4BestUnit(sumLAbs,"Length")
+     << " +- "                               << G4BestUnit(rmsLAbs,"Length")
+     << "\n mean trackLength in Gap      : " << G4BestUnit(sumLGap,"Length")
      << " +- "                               << G4BestUnit(rmsLGap,"Length")
      << "\n------------------------------------------------------------\n"
      << G4endl;
-     
+
   //save histograms
   //
   fHistoManager->PrintStatistic();
-  fHistoManager->Save();   
+  fHistoManager->Save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

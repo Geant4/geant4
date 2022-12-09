@@ -69,8 +69,6 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*CLHEP::eV;
   SetDeexcitationFlag(true);
-  fParticleChange = nullptr;
-  fAtomDeexcitation = nullptr;
 
   fSandiaCof.resize(4,0.0);
 
@@ -88,12 +86,13 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 				     const G4DataVector&)
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  fPEBelowKShell = G4EmParameters::Instance()->PhotoeffectBelowKShell();
   if(nullptr == fParticleChange) { 
     fParticleChange = GetParticleChangeForGamma(); 
   }
-  size_t nmat = G4Material::GetNumberOfMaterials();
+  std::size_t nmat = G4Material::GetNumberOfMaterials();
   fMatEnergyTh.resize(nmat, 0.0);
-  for(size_t i=0; i<nmat; ++i) { 
+  for(std::size_t i=0; i<nmat; ++i) { 
     fMatEnergyTh[i] = (*(G4Material::GetMaterialTable()))[i]
       ->GetSandiaTable()->GetSandiaCofForMaterial(0, 0);
     //G4cout << "G4PEEffectFluoModel::Initialise Eth(eV)= " 
@@ -176,16 +175,17 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 
   G4double edep = energy;
 
-  // Normally one shell is available 
-  if (i < nShells) { 
-  
+  // photo-electron is not sampled if shell is not found or 
+  // the flag of photoeffect is "false" and shell is no K 
+  if ( (fPEBelowKShell || 0 == i) && i < nShells ) {
+
     G4double bindingEnergy = anElement->GetAtomicShell(i);
     edep = bindingEnergy;
     G4double esec = 0.0;
 
-    // sample deexcitation
+    // sample deexcitation cascade
     //
-    if(fAtomDeexcitation) {
+    if(nullptr != fAtomDeexcitation) {
       G4int index = couple->GetIndex();
       if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
 	G4int Z = G4lrint(anElement->GetZ());
@@ -196,10 +196,10 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
           bindingEnergy = eshell;
           edep = eshell;
 	}
-	G4int nbefore = fvect->size();
+	std::size_t nbefore = fvect->size();
 	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-	G4int nafter = fvect->size();
-	for (G4int j=nbefore; j<nafter; ++j) {
+	std::size_t nafter = fvect->size();
+	for (std::size_t j=nbefore; j<nafter; ++j) {
 	  G4double e = ((*fvect)[j])->GetKineticEnergy();
 	  if(esec + e > edep) {
 	    // correct energy in order to have energy balance
@@ -217,7 +217,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 		     << G4endl;
 	    */
 	    // delete the rest of secondaries (should not happens)
-	    for (G4int jj=nafter-1; jj>j; --jj) { 
+	    for (std::size_t jj=nafter-1; jj>j; --jj) { 
 	      delete (*fvect)[jj]; 
 	      fvect->pop_back(); 
 	    }

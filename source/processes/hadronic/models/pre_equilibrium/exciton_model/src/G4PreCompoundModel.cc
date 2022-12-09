@@ -201,14 +201,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   G4ReactionProductVector * Result = new G4ReactionProductVector;
   G4double U = aFragment.GetExcitationEnergy();
   G4int Z = aFragment.GetZ_asInt(); 
-  G4int A = aFragment.GetA_asInt(); 
+  G4int A = aFragment.GetA_asInt();
 
   //G4cout << "### G4PreCompoundModel::DeExcite" << G4endl;
   //G4cout << aFragment << G4endl;
 
-  // Perform Equilibrium Emission 
+  // Conditions to skip pre-compound and perform equilibrium emission 
   if (!isActive || (Z < minZ && A < minA) || 
-      U < fLowLimitExc*A || U > A*fHighLimitExc) {
+      U < fLowLimitExc*A || U > A*fHighLimitExc || 0 <  aFragment.GetNumberOfLambdas()) {
     PerformEquilibriumEmission(aFragment, Result);
     return Result;
   }

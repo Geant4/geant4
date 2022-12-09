@@ -35,16 +35,14 @@
 #include "G4THnManager.hh"
 #include "globals.hh"
 
+#include "G4THnToolsManager.hh"  // TO DO: make forward declaration if possible
+
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
 #include "tools/histo/h3d"
 #include "tools/histo/p1d"
 #include "tools/histo/p2d"
 
-class G4H1ToolsManager;
-class G4H2ToolsManager;
-class G4H3ToolsManager;
-class G4P1ToolsManager;
 class G4P2ToolsManager;
 
 namespace tools {
@@ -56,7 +54,7 @@ class hmpi;
 class G4ToolsAnalysisReader : public  G4VAnalysisReader
 {
   public:
-    virtual ~G4ToolsAnalysisReader() = default;
+    ~G4ToolsAnalysisReader() override = default;
 
     // Access methods
     tools::histo::h1d*  GetH1(G4int id, G4bool warn = true) const;
@@ -69,16 +67,16 @@ class G4ToolsAnalysisReader : public  G4VAnalysisReader
     explicit G4ToolsAnalysisReader(const G4String& type);
 
     // Virtual methods from base class
-    virtual G4int  ReadH1Impl(const G4String& h1Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadH2Impl(const G4String& h2Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadH3Impl(const G4String& h3Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadP1Impl(const G4String& p1Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
-    virtual G4int  ReadP2Impl(const G4String& p2Name,  const G4String& fileName,
-                              const G4String& dirName, G4bool isUserFileName) final;
+    G4int ReadH1Impl(const G4String& h1Name, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
+    G4int ReadH2Impl(const G4String& h2Name, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
+    G4int ReadH3Impl(const G4String& h3Name, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
+    G4int ReadP1Impl(const G4String& p1Name, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
+    G4int ReadP2Impl(const G4String& p2Name, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
 
     // Fuction specific to output type
     template <typename HT>
@@ -93,14 +91,13 @@ class G4ToolsAnalysisReader : public  G4VAnalysisReader
     static constexpr std::string_view fkClass { "G4ToolsAnalysisReader" };
 
     // Data members
-    G4H1ToolsManager*  fH1Manager { nullptr };
-    G4H2ToolsManager*  fH2Manager { nullptr };
-    G4H3ToolsManager*  fH3Manager { nullptr };
-    G4P1ToolsManager*  fP1Manager { nullptr };
-    G4P2ToolsManager*  fP2Manager { nullptr };
+    G4THnToolsManager<1, tools::histo::h1d>* fH1Manager { nullptr };
+    G4THnToolsManager<2, tools::histo::h2d>* fH2Manager { nullptr };
+    G4THnToolsManager<3, tools::histo::h3d>* fH3Manager { nullptr };
+    G4THnToolsManager<2, tools::histo::p1d>* fP1Manager { nullptr };
+    G4THnToolsManager<3, tools::histo::p2d>* fP2Manager { nullptr };
  };
 
 #include "G4ToolsAnalysisReader.icc"
 
 #endif
-

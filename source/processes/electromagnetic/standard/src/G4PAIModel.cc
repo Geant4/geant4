@@ -124,8 +124,8 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   
     // Prepare initialization
     const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    size_t numOfMat   = G4Material::GetNumberOfMaterials();
-    size_t numRegions = fPAIRegionVector.size();
+    std::size_t numOfMat   = G4Material::GetNumberOfMaterials();
+    std::size_t numRegions = fPAIRegionVector.size();
 
     // protect for unit tests
     if(0 == numRegions) {
@@ -140,14 +140,14 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       G4cout << "G4PAIModel is defined for " << numRegions << " regions "   
 	     << "; number of materials " << numOfMat << G4endl;
     } 
-    for(size_t iReg = 0; iReg<numRegions; ++iReg) {
+    for(std::size_t iReg = 0; iReg<numRegions; ++iReg) {
       const G4Region* curReg = fPAIRegionVector[iReg];
       G4Region* reg = const_cast<G4Region*>(curReg);
 
-      for(size_t jMat = 0; jMat<numOfMat; ++jMat) {
+      for(std::size_t jMat = 0; jMat<numOfMat; ++jMat) {
 	G4Material* mat = (*theMaterialTable)[jMat];
 	const G4MaterialCutsCouple* cutCouple = reg->FindCouple(mat);
-	size_t n = fMaterialCutsCoupleVector.size();
+	std::size_t n = fMaterialCutsCoupleVector.size();
 	/*
 	G4cout << "Region: " << reg->GetName() << "  " << reg
 	       << " Couple " << cutCouple 
@@ -166,7 +166,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 	  // check if this couple is not already initialized
 	  G4bool isnew = true;
 	  if(0 < n) {
-	    for(size_t i=0; i<n; ++i) {
+	    for(std::size_t i=0; i<n; ++i) {
 	      G4cout << i << G4endl;
 	      if(cutCouple == fMaterialCutsCoupleVector[i]) {
 		isnew = false;

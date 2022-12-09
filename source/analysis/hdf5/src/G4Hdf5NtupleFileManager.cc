@@ -44,24 +44,6 @@ G4Hdf5NtupleFileManager::G4Hdf5NtupleFileManager(const G4AnalysisManagerState& s
 {}
 
 //
-// private methods
-//
-
-//_____________________________________________________________________________
-G4bool G4Hdf5NtupleFileManager::CloseNtupleFiles()
-{
- // Close ntuple files
-
-  auto result = true;
-  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
-  for ( auto ntupleDescription : ntupleVector) {
-    result &= fFileManager->CloseNtupleFile(ntupleDescription);
-  }
-
-  return result;
-}
-
-//
 // public methods
 //
 
@@ -95,19 +77,14 @@ G4bool G4Hdf5NtupleFileManager::ActionAtWrite()
 }
 
 //_____________________________________________________________________________
-G4bool G4Hdf5NtupleFileManager::ActionAtCloseFile(G4bool reset)
+G4bool G4Hdf5NtupleFileManager::ActionAtCloseFile()
 {
   auto result = true;
 
   // Close ntuple files
-  result &= CloseNtupleFiles();
-
-  if ( ! reset ) {
-    // The ntuples must be always reset when closing file)
-    result = Reset();
-    if ( ! result ) {
-      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
-    }
+  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
+  for ( auto ntupleDescription : ntupleVector) {
+    result &= fFileManager->CloseNtupleFile(ntupleDescription);
   }
 
   return result;

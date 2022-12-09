@@ -25,7 +25,6 @@ geant4_add_module(G4detutils
     G4ScoreLogColorMap.cc
     G4VScoreNtupleWriter.cc
     G4ScoreQuantityMessenger.cc
-    G4ScoreQuantityMessengerQCmd.cc
     G4ScoringBox.cc
     G4ScoringCylinder.cc
     G4ScoringManager.cc

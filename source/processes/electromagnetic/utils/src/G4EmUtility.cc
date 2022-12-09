@@ -66,12 +66,12 @@ G4EmUtility::FindRegion(const G4String& regionName, const G4int verbose)
 const G4Element* G4EmUtility::SampleRandomElement(const G4Material* mat)
 {
   const G4Element* elm = mat->GetElement(0);
-  size_t nElements = mat->GetNumberOfElements();
+  std::size_t nElements = mat->GetNumberOfElements();
   if(1 < nElements) {
     G4double x = mat->GetTotNbOfElectPerVolume()*G4UniformRand();
     const G4double* y = mat->GetVecNbOfAtomsPerVolume();
-    for(size_t i=0; i<nElements; ++i) {
-      elm = mat->GetElement(i);
+    for(std::size_t i=0; i<nElements; ++i) {
+      elm = mat->GetElement((G4int)i);
       x -= y[i]*elm->GetZ();
       if(x <= 0.0) { break; }
     }
@@ -83,15 +83,15 @@ const G4Element* G4EmUtility::SampleRandomElement(const G4Material* mat)
 
 const G4Isotope* G4EmUtility::SampleRandomIsotope(const G4Element* elm)
 {
-  const size_t ni = elm->GetNumberOfIsotopes();
+  const std::size_t ni = elm->GetNumberOfIsotopes();
   const G4Isotope* iso = elm->GetIsotope(0);
   if(ni > 1) {
     const G4double* ab = elm->GetRelativeAbundanceVector();
     G4double x = G4UniformRand();
-    for(size_t idx=0; idx<ni; ++idx) {
+    for(std::size_t idx=0; idx<ni; ++idx) {
       x -= ab[idx];
       if (x <= 0.0) { 
-	iso = elm->GetIsotope(idx);
+	iso = elm->GetIsotope((G4int)idx);
 	break; 
       }
     }
@@ -106,7 +106,7 @@ std::vector<G4double>* G4EmUtility::FindCrossSectionMax(G4PhysicsTable* p)
   std::vector<G4double>* ptr = nullptr;
   if(nullptr == p) { return ptr; }
 
-  const G4int n = p->length();
+  const std::size_t n = p->length();
   ptr = new std::vector<G4double>;
   ptr->resize(n, DBL_MAX);
 
@@ -114,11 +114,11 @@ std::vector<G4double>* G4EmUtility::FindCrossSectionMax(G4PhysicsTable* p)
   G4double e, ss, ee, xs;
 
   // first loop on existing vectors
-  for (G4int i=0; i<n; ++i) {
+  for (std::size_t i=0; i<n; ++i) {
     const G4PhysicsVector* pv = (*p)[i];
     xs = ee = 0.0;
     if(nullptr != pv) {
-      G4int nb = pv->GetVectorLength();
+      G4int nb = (G4int)pv->GetVectorLength();
       for (G4int j=0; j<nb; ++j) {
 	e = pv->Energy(j);
 	ss = (*pv)(j);
@@ -161,7 +161,7 @@ G4EmUtility::FindCrossSectionMax(G4VDiscreteProcess* p,
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t n = theCoupleTable->GetTableSize();
+  std::size_t n = theCoupleTable->GetTableSize();
   ptr = new std::vector<G4double>;
   ptr->resize(n, DBL_MAX);
 
@@ -171,8 +171,8 @@ G4EmUtility::FindCrossSectionMax(G4VDiscreteProcess* p,
   G4double e, sig, ee, x, sm, em, emin, emax;
 
   // first loop on existing vectors
-  for (size_t i=0; i<n; ++i) {
-    auto couple = theCoupleTable->GetMaterialCutsCouple(i);
+  for (std::size_t i=0; i<n; ++i) {
+    auto couple = theCoupleTable->GetMaterialCutsCouple((G4int)i);
     emin = std::max(p->MinPrimaryEnergy(part, couple->GetMaterial()), tmin);
     emax = std::max(tmax, 2*emin);
     ee = G4Log(emax/emin);
@@ -213,7 +213,7 @@ G4EmUtility::FillPeaksStructure(G4PhysicsTable* p, G4LossTableBuilder* bld)
   std::vector<G4TwoPeaksXS*>* ptr = nullptr;
   if(nullptr == p) { return ptr; }
 
-  const G4int n = p->length();
+  const G4int n = (G4int)p->length();
   ptr = new std::vector<G4TwoPeaksXS*>;
   ptr->resize(n, nullptr);
 
@@ -227,7 +227,7 @@ G4EmUtility::FillPeaksStructure(G4PhysicsTable* p, G4LossTableBuilder* bld)
     ee = xs = 0.0;
     e1peak = e1deep = e2peak = e2deep = e3peak = DBL_MAX;
     if(nullptr != pv) {
-      G4int nb = pv->GetVectorLength();
+      G4int nb = (G4int)pv->GetVectorLength();
       for (G4int j=0; j<nb; ++j) {
 	e = pv->Energy(j);
 	ss = (*pv)(j);
@@ -344,28 +344,28 @@ void G4EmUtility::InitialiseElementSelectors(G4VEmModel* mod,
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   // prepare vector
   auto elmSelectors = mod->GetElementSelectors();
   if(nullptr == elmSelectors) {
     elmSelectors = new std::vector<G4EmElementSelector*>;
   }
-  G4int nSelectors = elmSelectors->size();
+  std::size_t nSelectors = elmSelectors->size();
   if(numOfCouples > nSelectors) { 
-    for(G4int i=nSelectors; i<numOfCouples; ++i) { 
+    for(std::size_t i=nSelectors; i<numOfCouples; ++i) { 
       elmSelectors->push_back(nullptr); 
     }
     nSelectors = numOfCouples;
   }
 
   // initialise vector
-  for(G4int i=0; i<numOfCouples; ++i) {
+  for(std::size_t i=0; i<numOfCouples; ++i) {
 
     // no need in element selectors for infinite cuts
     if(cuts[i] == DBL_MAX) { continue; }
    
-    auto couple = theCoupleTable->GetMaterialCutsCouple(i); 
+    auto couple = theCoupleTable->GetMaterialCutsCouple((G4int)i); 
     auto mat = couple->GetMaterial();
     mod->SetCurrentCouple(couple);
 

@@ -67,7 +67,7 @@ hid_t G4Hdf5FileManager::CreateDirectory(hid_t& file,
 // Method for both histograms and ntuples directories.
 
   // return if no file provided
-  if ( file < 0 ) return false;
+  if (file < 0) return kInvalidId;
 
   // use default directory name if not provided
   auto newDirectoryName = directoryName;
@@ -110,11 +110,12 @@ hid_t G4Hdf5FileManager::CreateDirectory(hid_t& file,
 G4String G4Hdf5FileManager::GetNtupleFileName(Hdf5NtupleDescription* ntupleDescription)
 {
   // get ntuple file name
-  auto ntupleFileName = ntupleDescription->fFileName;
-  if ( ntupleFileName.size() ) {
+  auto ntupleFileName = ntupleDescription->GetFileName();
+  if (ntupleFileName.size() != 0u) {
     // update filename per object per thread
     ntupleFileName = GetTnFileName(ntupleFileName, GetFileType());
-  } else {
+  }
+  else {
     // get default file name
     ntupleFileName = GetFullFileName();
   }
@@ -227,24 +228,22 @@ G4bool G4Hdf5FileManager::CreateNtupleFile(
   if (! file) {
     file = CreateTFile(ntupleFileName);
   }
-  ntupleDescription->fFile = file;
+  ntupleDescription->SetFile(file);
 
-  return (ntupleDescription->fFile != nullptr);
+  return (ntupleDescription->GetFile() != nullptr);
 }
 
 //_____________________________________________________________________________
 G4bool G4Hdf5FileManager::CloseNtupleFile(
   Hdf5NtupleDescription* ntupleDescription)
 {
-  // Do nothing if there is no file
-  if ( ntupleDescription->fFile == nullptr ) return true;
-
-  // Ntuple files will be closed with CloseFiles() calls
-  ntupleDescription->fFile.reset();
-
   // Notify not empty file
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
-  auto result = SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
+  auto result = SetIsEmpty(ntupleFileName, ! ntupleDescription->GetHasFill());
+
+  // Ntuple files are registered in file manager map.
+  // they will be closed with CloseFiles() calls
+  ntupleDescription->GetFile().reset();
 
   return result;
 }

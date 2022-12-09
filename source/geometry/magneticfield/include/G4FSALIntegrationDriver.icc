@@ -173,13 +173,10 @@ OneGoodStep(G4double y[],
     // Set stepsize to the initial trial value
     G4double hstep = htry;
 
-    static G4ThreadLocal G4int tot_no_trials = 0;
     const G4int max_trials = 100;
 
     for (G4int iter = 0; iter < max_trials; ++iter)
     {
-        ++tot_no_trials;
-
         Base::GetStepper()->Stepper(y, dydx, hstep, yOut, yError, dydxOut);
         error2 = field_utils::relativeError2(y, yError, hstep, eps_rel_max);
 

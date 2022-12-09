@@ -45,12 +45,12 @@ class G4XmlRFileManager : public G4VRFileManager
   public:
     explicit G4XmlRFileManager(const G4AnalysisManagerState& state);
     G4XmlRFileManager() = delete;
-    virtual ~G4XmlRFileManager();
+    ~G4XmlRFileManager() override;
 
-    virtual G4String GetFileType() const final { return "xml"; }
+    G4String GetFileType() const final { return "xml"; }
 
     // Methods from base class
-    virtual void CloseFiles() final {}
+    void CloseFiles() final {}
 
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName);

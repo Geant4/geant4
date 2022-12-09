@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file EmDNAChemistry.hh
-/// \brief Definition of the EmDNAChemistry class
+/// \file scavenger/include/EmDNAChemistry.hh
+/// \brief Definition of the scavenger::EmDNAChemistry class
 
 #ifndef EmDNAChemistry_hh
 #define EmDNAChemistry_hh 1

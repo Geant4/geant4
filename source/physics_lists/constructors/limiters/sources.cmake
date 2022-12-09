@@ -39,11 +39,13 @@ geant4_module_link_libraries(G4phys_ctor_limiters
     G4biasing_gen
     G4emutils
     G4hadronic_mgt
+    G4hadronic_proc
     G4navigation
     G4parameterisation
     G4partman
     G4phys_builders
     G4phys_ctor_factory
+    G4physlist_util
     G4scoring
     G4track
     G4transportation)

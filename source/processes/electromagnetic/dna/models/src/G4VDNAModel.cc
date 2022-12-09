@@ -195,13 +195,13 @@ G4int G4VDNAModel::RandomSelectShell(G4double k, const G4String& particle, const
         if (table != 0)
         {
             G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const size_t n(table->NumberOfComponents());
-            size_t i(n);
+            const G4int n = (G4int)table->NumberOfComponents();
+            G4int i(n);
             G4double value = 0.;
 
             while (i>0)
             {
-                i--;
+                --i;
                 valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
                 value += valuesBuffer[i];
             }
@@ -212,7 +212,7 @@ G4int G4VDNAModel::RandomSelectShell(G4double k, const G4String& particle, const
 
             while (i > 0)
             {
-                i--;
+                --i;
 
                 if (valuesBuffer[i] > value)
                 {

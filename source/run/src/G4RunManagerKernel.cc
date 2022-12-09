@@ -121,7 +121,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList != nullptr)
-    numberOfStaticAllocators = allocList->Size();
+    numberOfStaticAllocators = (G4int)allocList->Size();
 
   if(G4StateManager::GetStateManager()->GetExceptionHandler() == nullptr)
   {  
@@ -1171,7 +1171,7 @@ void G4RunManagerKernel::SetupShadowProcess() const
     if(pm != nullptr)
     {
       G4ProcessVector& procs = *(pm->GetProcessList());
-      for(std::size_t idx = 0; idx < procs.size(); ++idx)
+      for(G4int idx = 0; idx < (G4int)procs.size(); ++idx)
       {
         const G4VProcess* masterP = procs[idx]->GetMasterProcess();
         if(masterP == nullptr)

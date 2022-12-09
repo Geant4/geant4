@@ -162,8 +162,8 @@ void G4TaskRunManagerKernel::InitializeWorker()
   // Initliazie per-thread stream-output
   // The following line is needed before we actually do IO initialization
   // becasue the constructor of UI manager resets the IO destination.
-  context()->SetNumberThreads(mrm->GetThreadPool()->size());
-  context()->SetThreadId(G4ThreadPool::get_this_thread_id() - 1);
+  context()->SetNumberThreads((G4int)mrm->GetThreadPool()->size());
+  context()->SetThreadId(G4int(G4ThreadPool::get_this_thread_id() - 1));
   G4int thisID = context()->GetThreadId();
   G4Threading::G4SetThreadId(thisID);
   G4UImanager::GetUIpointer()->SetUpForAThread(thisID);

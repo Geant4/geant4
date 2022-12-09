@@ -97,7 +97,7 @@ G4OmegaMinus* G4OmegaMinus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4OmegaMinus*>(anInstance);
+  theInstance = static_cast<G4OmegaMinus*>(anInstance);
   return theInstance;
 }
 

@@ -156,7 +156,6 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   G4ProcessTable::G4ProcNameVector* procNameVector 
                          = theProcessTable->GetNameList(); 
-  G4int idx;
   G4int type = -1;
   G4ExceptionDescription ed;
 
@@ -181,10 +180,8 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       }
     }    
     G4int counter = 0;
-    idx = 0;
     for (auto itr=procNameVector->cbegin(); itr!=procNameVector->cend(); ++itr)
     {
-      ++idx;
       G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
       if ( (type <0) || ( ((*tmpVector)(0)->GetProcessType()) == type) )
       {
@@ -233,10 +230,8 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
         currentProcessTypeName = "";
       }
     }  
-    idx = 0;
     for (auto itr=procNameVector->cbegin(); itr!=procNameVector->cend(); ++itr)
     {
-      ++idx;
       G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
       G4VProcess* p = (*tmpVector)(0);
       if ( isAll || 
@@ -322,7 +317,7 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       {
         tmpVector = theProcessTable->FindProcesses(G4ProcessType(type));
       }
-      for (std::size_t i=0; i<tmpVector->length(); ++i)
+      for (G4int i=0; i<(G4int)tmpVector->length(); ++i)
       {
         theProcessTable->DumpInfo( (*tmpVector)(i), currentParticle );
       }

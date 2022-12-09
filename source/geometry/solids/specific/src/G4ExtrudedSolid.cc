@@ -93,7 +93,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
                 FatalErrorInArgument, message);
   }
      
-  for ( G4int i=0; i<fNz-1; ++i ) 
+  for ( std::size_t i=0; i<fNz-1; ++i ) 
   {
     if ( zsections[i].fZ > zsections[i+1].fZ ) 
     {
@@ -124,13 +124,13 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
                                        2*kCarTolerance);
   if (removedVertices.size() != 0)
   {
-    G4int nremoved = removedVertices.size();
+    std::size_t nremoved = removedVertices.size();
     std::ostringstream message;
     message << "The following "<< nremoved 
             << " vertices have been removed from polygon in " << pName 
             << "\nas collinear or coincident with other vertices: "
             << removedVertices[0];
-    for (G4int i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
+    for (std::size_t i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
                 JustWarning, message);
   }
@@ -219,13 +219,13 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
                                        2*kCarTolerance);
   if (removedVertices.size() != 0)
   {
-    G4int nremoved = removedVertices.size();
+    std::size_t nremoved = removedVertices.size();
     std::ostringstream message;
     message << "The following "<< nremoved 
             << " vertices have been removed from polygon in " << pName 
             << "\nas collinear or coincident with other vertices: "
             << removedVertices[0];
-    for (G4int i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
+    for (std::size_t i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
                 JustWarning, message);
   }
@@ -347,7 +347,7 @@ void G4ExtrudedSolid::ComputeProjectionParameters()
   // p0 = (p(z) - offset(z))/scale(z);
   //
 
-  for ( G4int iz=0; iz<fNz-1; ++iz)
+  for (std::size_t iz=0; iz<fNz-1; ++iz)
   {
     G4double z1      = fZSections[iz].fZ;
     G4double z2      = fZSections[iz+1].fZ;
@@ -374,9 +374,9 @@ void G4ExtrudedSolid::ComputeLateralPlanes()
 {
   // Compute lateral planes: a*x + b*y + c*z + d = 0
   //
-  G4int Nv = fPolygon.size();
+  std::size_t Nv = fPolygon.size();
   fPlanes.resize(Nv);
-  for (G4int i=0, k=Nv-1; i<Nv; k=i++)
+  for (std::size_t i=0, k=Nv-1; i<Nv; k=i++)
   {
     G4TwoVector norm = (fPolygon[i] - fPolygon[k]).unit();
     fPlanes[i].a = -norm.y();
@@ -390,7 +390,7 @@ void G4ExtrudedSolid::ComputeLateralPlanes()
   //
   fLines.resize(Nv);
   fLengths.resize(Nv);
-  for (G4int i=0, k=Nv-1; i<Nv; k=i++)
+  for (std::size_t i=0, k=Nv-1; i<Nv; k=i++)
   {
     if (fPolygon[k].y() == fPolygon[i].y())
     {
@@ -431,7 +431,7 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
   
   // Select projection (z-segment of the solid) according to p.z()
   //
-  G4int iz = 0;
+  std::size_t iz = 0;
   while ( point.z() > fZSections[iz+1].fZ && iz < fNz-2 ) { ++iz; }
       // Loop checking, 13.08.2015, G.Cosmo
   
@@ -607,9 +607,9 @@ G4ExtrudedSolid::MakeUpFacet(G4int ind1, G4int ind2, G4int ind3) const
   // forming the upper side ( z>0 )
 
   std::vector<G4ThreeVector> vertices;
-  vertices.push_back(GetVertex(fNz-1, ind1));
-  vertices.push_back(GetVertex(fNz-1, ind2));
-  vertices.push_back(GetVertex(fNz-1, ind3));
+  vertices.push_back(GetVertex((G4int)fNz-1, ind1));
+  vertices.push_back(GetVertex((G4int)fNz-1, ind2));
+  vertices.push_back(GetVertex((G4int)fNz-1, ind3));
   
   // first vertex most left
   //
@@ -646,7 +646,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
   // Fill one more vector
   //
   std::vector< Vertex > verticesToBeDone;
-  for ( G4int i=0; i<fNv; ++i )
+  for ( G4int i=0; i<(G4int)fNv; ++i )
   {
     verticesToBeDone.push_back(Vertex(fPolygon[i], i));
   }
@@ -671,7 +671,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
    
     //G4cout << "angle " << angle  << G4endl;
 
-    G4int counter = 0;
+    std::size_t counter = 0;
     while ( angle >= (pi-kAngTolerance) )  // Loop checking, 13.08.2015, G.Cosmo
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
@@ -692,7 +692,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       
       ++counter;
       
-      if ( counter > fNv)
+      if ( counter > fNv )
       {
         G4Exception("G4ExtrudedSolid::AddGeneralPolygonFacets",
                     "GeomSolids0003", FatalException,
@@ -772,9 +772,9 @@ G4bool G4ExtrudedSolid::MakeFacets()
                                             GetVertex(0, 2), ABSOLUTE) );
     if ( ! good ) { return false; }
 
-    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2),
-                                            GetVertex(fNz-1, 1),
-                                            GetVertex(fNz-1, 0),
+    good = AddFacet( new G4TriangularFacet( GetVertex((G4int)fNz-1, 2),
+                                            GetVertex((G4int)fNz-1, 1),
+                                            GetVertex((G4int)fNz-1, 0),
                                             ABSOLUTE) );
     if ( ! good ) { return false; }
     
@@ -792,10 +792,10 @@ G4bool G4ExtrudedSolid::MakeFacets()
                                               ABSOLUTE) );
     if ( ! good ) { return false; }
 
-    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3),
-                                              GetVertex(fNz-1, 2), 
-                                              GetVertex(fNz-1, 1),
-                                              GetVertex(fNz-1, 0),
+    good = AddFacet( new G4QuadrangularFacet( GetVertex((G4int)fNz-1, 3),
+                                              GetVertex((G4int)fNz-1, 2), 
+                                              GetVertex((G4int)fNz-1, 1),
+                                              GetVertex((G4int)fNz-1, 0),
                                               ABSOLUTE) );
     if ( ! good ) { return false; }
 
@@ -819,9 +819,9 @@ G4bool G4ExtrudedSolid::MakeFacets()
     
   // The quadrangular sides
   //
-  for ( G4int iz = 0; iz < fNz-1; ++iz ) 
+  for ( G4int iz = 0; iz < (G4int)fNz-1; ++iz ) 
   {
-    for ( G4int i = 0; i < fNv; ++i )
+    for ( G4int i = 0; i < (G4int)fNv; ++i )
     {
       G4int j = (i+1) % fNv;
       good = AddFacet( new G4QuadrangularFacet
@@ -863,8 +863,8 @@ EInside G4ExtrudedSolid::Inside(const G4ThreeVector &p) const
       G4double dist = std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
       if (dist > kCarToleranceHalf)  { return kOutside; }
 
-      G4int np = fPlanes.size();
-      for (G4int i=0; i<np; ++i)
+      std::size_t np = fPlanes.size();
+      for (std::size_t i=0; i<np; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
         if (dd > dist)  { dist = dd; }
@@ -915,7 +915,7 @@ EInside G4ExtrudedSolid::Inside(const G4ThreeVector &p) const
   
   // Check if on surface of polygon
   //
-  for ( G4int i=0; i<fNv; ++i )
+  for ( G4int i=0; i<(G4int)fNv; ++i )
   {
     G4int j = (i+1) % fNv;
     if ( IsSameLineSegment(pscaled, fPolygon[i], fPolygon[j]) )
@@ -966,7 +966,7 @@ EInside G4ExtrudedSolid::Inside(const G4ThreeVector &p) const
 G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
 {
   G4int nsurf = 0;
-  G4double nx = 0, ny = 0, nz = 0;
+  G4double nx = 0., ny = 0., nz = 0.;
   switch (fSolidType)
   {
     case 1: // convex right prism
@@ -979,7 +979,7 @@ G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
       {
         nz =  1; ++nsurf;
       }
-      for (G4int i=0; i<fNv; ++i)
+      for (std::size_t i=0; i<fNv; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
         if (std::abs(dd) > kCarToleranceHalf) continue;
@@ -1001,7 +1001,7 @@ G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
       }
 
       G4double sqrCarToleranceHalf = kCarToleranceHalf*kCarToleranceHalf;
-      for (G4int i=0, k=fNv-1; i<fNv; k=i++)
+      for (std::size_t i=0, k=fNv-1; i<fNv; k=i++)
       {
         G4double ix = p.x() - fPolygon[i].x();
         G4double iy = p.y() - fPolygon[i].y();
@@ -1049,7 +1049,7 @@ G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
     //
 #ifdef G4CSGDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:\n";
@@ -1083,9 +1083,9 @@ G4ThreeVector G4ExtrudedSolid::ApproxSurfaceNormal(const G4ThreeVector& p) const
 
     // Find nearest lateral side and distance to it
     //
-    G4int iside = 0;
+    std::size_t iside = 0;
     G4double dd = DBL_MAX;
-    for (G4int i=0, k=fNv-1; i<fNv; k=i++)
+    for (std::size_t i=0, k=fNv-1; i<fNv; k=i++)
     {
       G4double ix = p.x() - fPolygon[i].x();
       G4double iy = p.y() - fPolygon[i].y();
@@ -1179,9 +1179,9 @@ G4double G4ExtrudedSolid::DistanceToIn(const G4ThreeVector& p,
 
       // Intersection with lateral planes
       //
-      G4int np = fPlanes.size();
+      std::size_t np = fPlanes.size();
       G4double txmin = tzmin, txmax = tzmax;
-      for (G4int i=0; i<np; ++i)
+      for (std::size_t i=0; i<np; ++i)
       { 
         G4double cosa = fPlanes[i].a*v.x()+fPlanes[i].b*v.y();
         G4double dist = fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].d;
@@ -1223,8 +1223,8 @@ G4double G4ExtrudedSolid::DistanceToIn (const G4ThreeVector& p) const
     case 1: // convex right prism
     {
       G4double dist = std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
-      G4int np = fPlanes.size();
-      for (G4int i=0; i<np; ++i)
+      std::size_t np = fPlanes.size();
+      for (std::size_t i=0; i<np; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
         if (dd > dist) dist = dd;
@@ -1292,8 +1292,8 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p,
 
       // Intersection with lateral planes
       //
-      G4int np = fPlanes.size();
-      for (G4int i=0; i<np; ++i)
+      std::size_t np = fPlanes.size();
+      for (std::size_t i=0; i<np; ++i)
       {
         G4double cosa = fPlanes[i].a*v.x()+fPlanes[i].b*v.y();
         if (cosa > 0)
@@ -1305,7 +1305,7 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p,
             return 0;
           }
           G4double tmp = -dist/cosa;
-          if (tmax > tmp) { tmax = tmp; iside = i; }
+          if (tmax > tmp) { tmax = tmp; iside = (G4int)i; }
         }
       }
 
@@ -1344,8 +1344,8 @@ G4double G4ExtrudedSolid::DistanceToOut(const G4ThreeVector& p) const
     case 1: // convex right prism
     {
       G4double dist = std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
-      G4int np = fPlanes.size();
-      for (G4int i=0; i<np; ++i)
+      std::size_t np = fPlanes.size();
+      for (std::size_t i=0; i<np; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
         if (dd > dist) dist = dd;
@@ -1474,7 +1474,7 @@ G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
   // main loop along triangles
   pMin =  kInfinity;
   pMax = -kInfinity;
-  G4int ntria = triangles.size()/3;
+  G4int ntria = (G4int)triangles.size()/3;
   for (G4int i=0; i<ntria; ++i)
   {
     G4int i3 = i*3;
@@ -1518,7 +1518,7 @@ G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
 
 std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1529,7 +1529,7 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
   else  
     { os << " Concave polygon; list of vertices:" << G4endl; }
   
-  for ( G4int i=0; i<fNv; ++i )
+  for ( std::size_t i=0; i<fNv; ++i )
   {
     os << std::setw(5) << "#" << i 
        << "   vx = " << fPolygon[i].x()/mm << " mm" 
@@ -1537,7 +1537,7 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
   }
   
   os << " Sections:" << G4endl;
-  for ( G4int iz=0; iz<fNz; ++iz ) 
+  for ( std::size_t iz=0; iz<fNz; ++iz ) 
   {
     os << "   z = "   << fZSections[iz].fZ/mm          << " mm  "
        << "  x0= "    << fZSections[iz].fOffset.x()/mm << " mm  "

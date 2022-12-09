@@ -24,7 +24,7 @@ J. Davis and D. Bolst - University of Wollongong, NSW, Australia
 ----> Introduction.                                                     
                                                                        
 Radioprotection example models different detectors for microdosimetry in space applications. The example lets the user
-choose between the models of a simplified diamond (1), a micro-diamond (2) and a silicon microdosimeter (3):
+choose between the models of a simplified diamond (1), a micro-diamond (2), a simplified silicon (3), a silicon microdosimeter (4), and a two-stage diamond detector (5):
 
 1) A semplified diamond microdosimeter is based on the detector developed by Prof. Anatoly Rosenfeld and his team at the Centre For Medical Radiation Physics, CMRP, University of Wollongong, NSW, Australia. The design of the device is documented in J. Davis, et al., "Characterisation of a novel diamond-based microdosimeter prototype 
 for radioprotection applications in space environments",IEEE Transactions on Nuclear Science, 
@@ -32,32 +32,41 @@ Vol. 59, pp. 3110-3116, 2012.
 
 2) The microdiamond detector is based on the detectors developed by the Research Group of The University of Rome "Tor Vergata". The design and performances of the detector are documented in C. Verona et al., "Spectroscopic properties and radiation damage investigation of a diamond based Schottky diode for ion-beam therapy microdosimetry", Journal of Applied Physics, vol. 118, 2015, and in C. Verona et al., "Toward the use of single crystal diamond based detector for ion-beam therapy microdosimetry", Radiation Measurements, vol. 110, 2018.
 
+3-4) Both silicon microdosimeters are based on the "Bridge" microdosimeter, developed by the Centre For Medical Radiation physics, University of Wollongong, documented in chapter 7 of the PhD Thesis of D. Bolst “Silicon microdosimetry in hadron therapy using Geant4”, https://ro.uow.edu.au/theses1/619/ . (3) contains a simplified geometry with only four sensitive volumes, while (4) includes the complete design.
 
-3) The silicon microdosimeter is based on the "Bridge" microdosimeter, developed by the Centre For Medical Radiation physics, University of Wollongong, documented in chapter 7 of the PhD Thesis of D. Bolst “Silicon microdosimetry in hadron therapy using Geant4”, https://ro.uow.edu.au/theses1/619/ 
+5) The diamond telescope is based on the detector developed by University of Rome "Tor Vergata". Its design and characterisation are documented in Cesaroni et al., "", Nucl. Instrum. Methods. Phys. Res. A, vol.947, 2019, DOI:https://doi.org/10.1016/j.nima.2019.162744 , and in C. Verona et al., "Characterisation of a monolithic ΔE-E diamond telescope detector using low energy ion microbeams", Radiation Measurements, vol. 159, 2022, DOI:https://doi.org/10.1016/j.radmeas.2022.106875 .
 
+The type of detectors, its shape, and its position can be set via the included "geometry.mac" macro.
+This macro is called in both the vis.mac and run.mac macro files, and include the following options:
+- a macro command to choose the type of detector between the above (/geometrySetup/selectDetector "...")
+- two macro commands to customise the width and thickness of the sensitive volumes (/geometrySetup/detectorDimension/setWidth "...", /geometrySetup/detectorDimension/setThinckness "..."). It won't take effect when using (1) and (4), as these are finalised designs
+- two equivalent macro commands (/geometrySetup/detectorDimension/secondStage/...) to customise the second stage of the detector, if (5) is used
+- a macro command to choose whether to place the detector in vacuum or inside a water phantom (/geometrySetup/enableWaterPhantom "true/false")
+- a macro command for use with the water phantom to set the detector's width in water (/geometrySetup/detectorPosition/setDepth "...")
+The above only take effect only if the macro command /geometrySetup/applyChanges is applied. If the user forgets to run this last command a warning is issued at runtime.
 
-All the microdosimeters are set in vacuum and it is possible to select among the avilable detectors 
-via a macro command (/geometrySetup/selectDetector "..."), which is included in the "geometry.mac" macro.
-This macro is, in turn, called in both the vis.mac and run.mac macro files.
 An isotropic field of Galactic Cosmic Rays (GCR) protons is incident on the device. 
 The energy deposition is calculated in the sensitive detectors. 
  
 In particular in this example it is shown how to:
 - model a realistic isotropic field of GCRs by means of the General Particle Source   
 - model a realistic detector in Geant4
+- customise the detector's geometry and its position at runtime via macros
 - retrieve the information of secondary particles originated in the SV
 - define the physics by means of a Geant4 Modular Physics List
-- characterise the response of a realistic detector.
-- save results in an analysis ROOT file using the Geant4 analysis component.               
+- characterise the response of a realistic detector
+- save results in an analysis ROOT or plaintext csv file using the Geant4 analysis component.             
 
 The example can be executed in multithreading mode
 
 ------------------------------------------------------------------------
 ----> 1.Experimental set-up.                                            
 
-The diamond microdosimeter is set in the center of the world. The world is a box with size 1 m, filled with vacuum.
+The diamond microdosimeter can be set either in vacuum (for space radioprotection applications) or at a user-defined depth within a water phantom (for clinical applications).
+- if placing the detector in a vacuum, its centre coincides with the centre of the world volume. The world is a box with size 10 cm, filled with vacuum.
+- if placing the detector in a water phantom, its centre coincides with the chosen depth inside the water phantom. The water phantom is a water box of width 5 cm and length equal to the detector depth + 2 cm. It's placed in a world volume filled with air having twice its size, located so that a depth equal to 0 cm corresponds to the centre of the world.
 
-Four SV structures are modelled, but only one has been made active (SV_phys1)
+All SV structures are active.
 
 The primary radiation field is defined by means of the GeneralParticleSource in the file
 primary.mac
@@ -71,11 +80,16 @@ Setup for analysis:
 By default, the example has no analysis component. 
 
 To compile and use the application with the analysis on, build the example with the following command:
-cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=/path/to/Geant4_installation /path/to/radioprotection example                                                   
+cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=/path/to/Geant4_installation /path/to/radioprotection example     
+
+When the analysis is enables, the default output format is one compatible with ROOT
+The user can switch to a plaintext csv by uncommenting the corresponding macro command in output.mac (/analysis/useRoot false)
           
-plot.C is provided to plot the results of the simulation, contained
-in the radioprotection.root file. If the user intends to use this macro, ROOT must be installed 
-(http://root.cern.ch/drupal/).
+Two data analysis scripts are provided for use with each output format:
+- for ROOT output (radioprotection.root), plot.C is provided. If the user intends to use this macro, ROOT must be installed (http://root.cern.ch/drupal/)
+- for csv output (radioprotection_*.csv), 1_plot_distributions.py and 2_calculate_means_rbe.py (in this order). If the user intends to use these macros, Python 3 must be installed (https://www.python.org/)
+Both scripts plot the microdosimetric spectrum resulting from the simulation, calculate the microdosimetric means, and provide one or more RBE estimates (this is just provided as an example, and the user is encouraged to look into RBE modelling himself)
+
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         
 
@@ -93,6 +107,9 @@ The radiation field is defined with the General Particle Source.
 Look at the macro primary.mac .
 
 NOTE: To maximise efficiency the field has been modelled with a limiting angle to reduce redundant events.
+
+This macro contains a proton field of Galactic Cosmic Rays (GCR)
+If this example is used for medical applications (with a water phantom) the user is encouraged to replace this macro with one that might simulate a therapeutic beam of interest
                                                                        
 ------------------------------------------------------------------------
 ----> 5. Simulation output                                               
@@ -103,6 +120,12 @@ The output is radioprotection.root, containing
   - an ntuple withe the energy spectrum (in MeV) of primary particles.
   - an ntuple with the energy deposition per event(in keV)  in the SV.                                                          
 
+When outputting to plaintext csv a separate file is used for each ntuple, following the naming scheme:
+radioprotection_nt_10?.csv
+
+where ? is the number of the ntuple
+
+
 **** MULTITHREAD mode
 output files:
 radioprotection.root_t0
@@ -112,7 +135,15 @@ radioprotection.root_t#
 
 where # is the number of threads
 
-type: source MergeFiles to merge the output of each thread in a single one
+When outputting to plaintext csv a separate file is used for each ntuple, following the naming scheme:
+radioprotection_nt_10?_t#.csv
+
+where ? is the number of the ntuple
+
+
+when using ROOT type: source MergeFiles to merge the output of each thread in a single one
+when using Python, the first script takes care of parsing and merging the ntuples
+
 -------------------------------------------------------------------------------
 ----> 6.Visualisation                                                     
 
@@ -122,20 +153,23 @@ For any problem or question please contact Susanna Guatelli, susanna@uow.edu.au
 
 -------------------------------------------------------------------------------
 ----> 7. Analysis                                                     
-A macro: ProcessMicro.C
-This macro performs analysis of the energy deposition stored in the ntuple of the ROOT file and performs the following microdosimetry operations:
+Two sets of macro:
+- ProcessMicro.C for ROOT output
+- 1_plot_distributions.py and 2_calculate_means_rbe.py (to be executed in this order) for csv output
+
+Each macro performs analysis of the energy deposition stored in the ntuple and performs the following microdosimetry operations:
 -Bins the event by event energy deposition stored in the ntuple into a histogram (both with linear and logarithmic binning) and converts to lineal energy 
 -Calculates the quantities: mean lineal energy (yF), the dose mean lineal energy (yD), the quality factor (Q) using the weighting factors from the ICRP 60 report
 -In addition to these quantities the macro also calculates an estimate for the RBE using the modified MK model. This model is not generally used for shielding/radiation proction but in hadron therapy, but is provided for interest.
--The macro also generates the common "microdosimetric spectra" or yd(y) in a semi-log plot and is saved as an image by default
+-The Python macro also includes an RBE estimate via weight function. For more info about this RBE model, see T. Loncol et al, “Radiobiological Effectiveness of Radiation Beams with Broad
+LET Spectra: Microdosimetric Analysis Using Biological Weighting Functions”, Radiation Protection Dosimetry 52.1-4, pp. 347–352, 1994
+-The macro also generates the common "microdosimetric spectra" or yd(y) in a semi-log plot
+
+When using the two-stage detector (5), no analysis script is currently included for the second stage
 
 ------------------------------------------------------------------------------
 -----> Future developments
 
-1) The code will be refined and analysis improved
-2) scripts for micorodosimetric spectra analysis will be implemented
-3) Different models of detectors will be also included
-
-
-
-
+1) Further macros will be included for placing a variable number of sensitive volumes
+2) A new macro messenger will be included to allow the user to stop the simulation after a given number of recorded events, in order to have more control over the statistics of the simulation
+3) A new script will be added to provide a dE-E plot for use with the telescope detector (5)

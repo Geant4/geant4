@@ -27,6 +27,9 @@
 
 #include "PTL/VUserTaskQueue.hh"
 #include "PTL/TaskRunManager.hh"
+#include "PTL/Utility.hh"  // for PTL
+#include <cstdint>         // for intmax_t
+#include <thread>          // for thread
 
 using namespace PTL;
 

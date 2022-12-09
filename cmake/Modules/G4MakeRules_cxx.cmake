@@ -81,7 +81,7 @@ endif()
 # Sufficient id on all platforms?
 if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   # Warnings
-  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -fp-model precise")
+  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -fp-model precise -diag-disable=10441")
   # Use pipes rather than temp files
   set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -pipe")
 

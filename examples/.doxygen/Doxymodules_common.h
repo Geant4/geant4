@@ -9,16 +9,10 @@
  *  @{
  */
 
-  class ExG4DetectorConstruction01{};
-  class ExG4DetectorConstruction01Messenger{};
-  class ExG4DetectorConstruction02{};
-  class ExG4DetectorConstruction02Messenger{};
-  class ExG4EventAction01{};
-  class ExG4EventAction01Messenger{};
-  class ExG4PhysicsList00{};
-  class ExG4PrimaryGeneratorAction01{};
-  class ExG4PrimaryGeneratorAction02{};
-  class ExG4RunAction01{};
-  class ExG4RunAction01Messenger{};
+  class Common::DetectorConstruction{};
+  class Common::DetectorConstruction0{};
+  class Common::GeantinoPhysicsList{};
+  class Common::GpsPrimaryGeneratorAction{};
+  class Common::GunPrimaryGeneratorAction{};
 
 /** @} */

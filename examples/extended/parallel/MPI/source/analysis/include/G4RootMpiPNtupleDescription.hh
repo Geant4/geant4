@@ -64,7 +64,7 @@ struct G4RootMpiPNtupleDescription
 
   ~G4RootMpiPNtupleDescription()
       {
-         if ( fDescription.fIsNtupleOwner ) delete fNtuple;
+         if ( fDescription.GetIsNtupleOwner() ) delete fNtuple;
       }    
 
   RootNtupleDescription fDescription;

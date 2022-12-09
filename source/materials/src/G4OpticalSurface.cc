@@ -438,7 +438,7 @@ void G4OpticalSurface::ReadCompressedFile(const G4String& filename,
   if(in.good())
   {
     // get current position in the stream (was set to the end)
-    int fileSize = in.tellg();
+    G4int fileSize = (G4int)in.tellg();
     // set current position being the beginning of the stream
     in.seekg(0, std::ios::beg);
     // create (zlib) byte buffer for the data
@@ -522,8 +522,8 @@ void G4OpticalSurface::ReadDichroicFile()
 
   G4cout << " *** Dichroic surface data file *** " << G4endl;
 
-  G4int numberOfXNodes = DichroicVector->GetLengthX();
-  G4int numberOfYNodes = DichroicVector->GetLengthY();
+  G4int numberOfXNodes = (G4int)DichroicVector->GetLengthX();
+  G4int numberOfYNodes = (G4int)DichroicVector->GetLengthY();
 
   G4cout << "numberOfXNodes: " << numberOfXNodes << G4endl;
   G4cout << "numberOfYNodes: " << numberOfYNodes << G4endl;

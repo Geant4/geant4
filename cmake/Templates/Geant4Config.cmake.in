@@ -527,7 +527,6 @@ if(Geant4_vis_toolssg_x11_gles_FOUND)
 
   if(("vis_toolssg_x11_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_X11_GLES)
-    set(_geant4_use_toolssg_library ON)
   endif()
 endif()
 
@@ -537,7 +536,6 @@ if(Geant4_vis_toolssg_windows_gles_FOUND)
   find_dependency(OpenGL)
   if(("vis_toolssg_windows_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_WINDOWS_GLES)
-    set(_geant4_use_toolssg_library ON)
   endif()
 endif()
 
@@ -554,7 +552,6 @@ if(Geant4_vis_toolssg_xt_gles_FOUND)
 
   if(("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_XT_GLES)
-    set(_geant4_use_toolssg_library ON)
   endif()
 endif()
 
@@ -564,7 +561,6 @@ if(Geant4_vis_toolssg_qt_gles_FOUND)
   find_dependency(OpenGL)
   if(("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_QT_GLES)
-    set(_geant4_use_toolssg_library ON)
   endif()
 endif()
 
@@ -627,13 +623,12 @@ set(_geant4_internal_libraries
   Geant4::G4GMocren${_geant4_lib_use_suffix}
   Geant4::G4visHepRep${_geant4_lib_use_suffix}
   Geant4::G4RayTracer${_geant4_lib_use_suffix}
-  Geant4::G4VRML${_geant4_lib_use_suffix})
+  Geant4::G4VRML${_geant4_lib_use_suffix}
+  Geant4::G4ToolsSG${_geant4_lib_use_suffix})
 
 # - G4OpenGL if it's requested.
 if(_geant4_use_opengl_library)
-  list(APPEND _geant4_internal_libraries
-    Geant4::G4OpenGL${_geant4_lib_use_suffix}
-    Geant4::G4gl2ps${_geant4_lib_use_suffix})
+  list(APPEND _geant4_internal_libraries Geant4::G4OpenGL${_geant4_lib_use_suffix})
   list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGL)
 endif()
 
@@ -646,12 +641,6 @@ endif()
 # - G4OpenInventor if it's requested.
 if(_geant4_use_inventor_library)
   list(APPEND _geant4_internal_libraries Geant4::G4OpenInventor${_geant4_lib_use_suffix})
-endif()
-
-# - G4ToolsSG if it's requested.
-if(_geant4_use_toolssg_library)
-  list(APPEND _geant4_internal_libraries Geant4::G4ToolsSG${_geant4_lib_use_suffix})
-  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG)
 endif()
 
 if(_geant4_use_vtk_library)

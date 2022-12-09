@@ -601,6 +601,13 @@ public:
     xyzs.add(a_y);
     xyzs.add(a_z);
   }
+  void add_allocated(size_t& a_pos,float a_x,float a_y,float a_z) {
+    std::vector<float>& v = xyzs.values();
+    v[a_pos] = a_x;a_pos++;
+    v[a_pos] = a_y;a_pos++;
+    v[a_pos] = a_z;a_pos++;
+    xyzs.touch();
+  }
   bool add(const std::vector<float>& a_v) {
     std::vector<float>::size_type _number = a_v.size()/3;
     if(3*_number!=a_v.size()) return false;

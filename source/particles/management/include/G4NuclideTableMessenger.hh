@@ -63,7 +63,8 @@ class G4NuclideTableMessenger : public G4UImessenger
     G4NuclideTable* theNuclideTable = nullptr;
 
     G4UIdirectory* thisDirectory = nullptr;
-    G4UIcmdWithADoubleAndUnit* lifetimeCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* halflifeCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* meanlifeCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* lToleranceCmd = nullptr; 
 };
 

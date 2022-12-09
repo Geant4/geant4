@@ -32,6 +32,7 @@
 #define G4RootPNtupleManager_h 1
 
 #include "G4BaseNtupleManager.hh"
+#include "G4RootMainNtupleManager.hh"
 #include "G4RootPNtupleDescription.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
@@ -57,20 +58,25 @@ class imt_ntuple;
 class mutex : public virtual tools::wroot::imutex {
   using parent = tools::wroot::imutex;
 public:
-  virtual bool lock() {
+  bool lock() override
+  {
     // G4cout << "!!! Mutex lock" << G4endl;
     m_mutex.lock();
-    return true;}
-  virtual bool unlock() {
+    return true;
+  }
+  bool unlock() override
+  {
     m_mutex.unlock();
     // G4cout << "!!! Mutex unlock" << G4endl;
-    return true; }
+    return true;
+  }
   //virtual bool trylock() {return m_mutex.trylock();}
 public:
   mutex(G4AutoLock& a_mutex):m_mutex(a_mutex){}
-  virtual ~mutex() = default;
+  ~mutex() override = default;
+
 protected:
-  mutex(const mutex& a_from):parent(a_from),m_mutex(a_from.m_mutex){}
+  mutex(const mutex& a_from) = default;
   mutex& operator=(const mutex&){return *this;}
 protected:
   G4AutoLock& m_mutex;
@@ -87,19 +93,19 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
                          std::shared_ptr<G4RootMainNtupleManager> main,
                          G4bool rowWise, G4bool rowMode);
     G4RootPNtupleManager() = delete;
-    virtual ~G4RootPNtupleManager();
+    ~G4RootPNtupleManager() override;
 
   private:
     // Methods to manipulate ntuples
     void CreateNtupleFromMain(G4RootPNtupleDescription* ntupleDescription,
                               tools::wroot::ntuple* mainNtuple);
-    // void CreateNtupleFromMain(G4NtupleBooking* g4NtupleBooking,
-    //                           tools::wroot::ntuple* mainNtuple);
+    void CreateNtupleDescriptionsFromBooking();
     void CreateNtuplesFromMain();
+    void CreateNtuplesIfNeeded();
 
     // Methods to create ntuples
     //
-    virtual G4int CreateNtuple(G4NtupleBooking* booking) final;
+    G4int CreateNtuple(G4NtupleBooking* booking) final;
 
     // Methods to fill ntuples
     // Methods for ntuple with id = FirstNtupleId (from base class)
@@ -109,28 +115,34 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     using G4BaseNtupleManager::FillNtupleSColumn;
     using G4BaseNtupleManager::AddNtupleRow;
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)
-    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) final;
-    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) final;
-    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) final;
-    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId,
-                                     const G4String& value) final;
-    virtual G4bool AddNtupleRow(G4int ntupleId) final;
+    G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) final;
+    G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) final;
+    G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) final;
+    G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, const G4String& value) final;
+    G4bool AddNtupleRow(G4int ntupleId) final;
     virtual G4bool Merge() final;
 
-    // Clear all data
-    virtual void Clear() final;
+    virtual G4bool Reset();
+    void Clear() final;
 
     // Activation option
     //
-    virtual void  SetActivation(G4bool activation) final;
-    virtual void  SetActivation(G4int ntupleId, G4bool activation) final;
-    virtual G4bool  GetActivation(G4int ntupleId) const final;
+    void SetActivation(G4bool activation) final;
+    void SetActivation(G4int ntupleId, G4bool activation) final;
+    G4bool GetActivation(G4int ntupleId) const final;
+
+    // New cycle option
+    void SetNewCycle(G4bool value) final;
+    G4bool GetNewCycle() const final;
 
     // Access methods
-    virtual G4int GetNofNtuples() const final;
+    G4int GetNofNtuples() const final;
 
     // Set methods
     void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
+
+    // List ntuples
+    G4bool List(std::ostream& output, G4bool onlyIfActive = true) final;
 
   private:
     G4RootPNtupleDescription*
@@ -157,6 +169,7 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     G4bool fRowWise;
     G4bool fRowMode;
     G4bool fCreateNtuples { true };
+    G4bool fNewCycle { false };
 };
 
 #include "G4RootPNtupleManager.icc"

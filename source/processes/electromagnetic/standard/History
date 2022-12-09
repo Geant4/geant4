@@ -1,9 +1,56 @@
 # Category emstand History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-23 Gabriele Cosmo (emstand-V11-00-21)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (emstand-V11-00-20)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-10 V.Ivanchenko (emstand-V11-00-19)
+  Fixed stopping power problem identified by T. Toshita
+- G4IonICRU73Data - fixed stopping power parameterisation below lowest
+    energy point; apply unit factor to material vector and not to
+    data inside each element vector; include debug printouts protected
+    by verbosity; implement data tables for materials and not 
+    material-cut-couples; provide non-zero dEdx for ions with Z > 80
+- G4LindhardSorensenIonModel - fixed CorrectionAlongStep() computations
+    at low energy
+
+## 2022-10-18 V.Ivanchenko (emstand-V11-00-18)
+- G4UrbanMscModel - L.Urban remove computation and use of rangecut for
+    step limitation; this affect only EM option3 physics making 
+    results more close to option4 and there is some CPU advantage
+
+## 2022-10-18 V.Ivanchenko (emstand-V11-00-17)
+- G4PEEffectFluoModel - implement usage PhotoeffectBelowKShell flag, allowing
+    enable/disable photo-electron production below K-shell of an atom;
+    by default this is enabled, so effect on results; if it will be disabled
+    some CPU improvement may be expected
+- G4BetheBlochModel, G4BraggIonModel, G4LindhardSorensenIonModel -
+    use the same computation of effective charge and energy at a step
+    inside CorrectionAlongStep(..) method; improved range of ions in the default
+    EM physics configuration
+
+## 2022-10-12 V.Ivanchenko (emstand-V11-00-16)
+- G4hIonisation, G4ionIonisation - updated initialisation to be coherent with
+    possible creation of combined DNA/standard Physics List: do not modify
+    low energy limit for a model; define high energy limit considering
+    high energy limit set in the Physics List and the mass of the particle
+
+## 2022-10-07 V.Ivanchenko (emstand-V11-00-15)
+- G4AtimaEnergyLossModel, G4BetheBlochModel, G4BraggIonModel,
+  G4LindhardSorensenIonModel - do not set effective charge to the model
+    of energy loss fluctuation inside CorrectionAlongStep(...) method,
+    it is done by G4VEnergyLossProcess, this addresses problem #2495
+
+## 2022-08-16 V.Ivanchenko (emstand-V11-00-14)
+- G4UrbanMscModel - L.Urban optimized the code keeping algorithms unchaged
 
 ## 2022-05-24 V.Ivanchenko (emstand-V11-00-13)
 - G4EmStandUtil - new utility class

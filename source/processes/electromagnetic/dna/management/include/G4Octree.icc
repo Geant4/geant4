@@ -277,7 +277,7 @@ G4bool OCTREE::Node::radiusNeighbors(const Point& query,
     else if (fNodeType == NodeTypes::MAX_DEPTH_LEAF)
     {
         NodeVector& children = *static_cast<NodeVector*>(fpValue);
-        for (auto child : children)
+        for (auto & child : children)
         {
             const Point& point = std::get<1>(child);
             //if (this->fBigVolume.contains(query, point, radius))

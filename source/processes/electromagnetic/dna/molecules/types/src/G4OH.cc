@@ -77,7 +77,7 @@ G4OH* G4OH::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(3, 3);
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName("OH");
   }
-  theInstance = reinterpret_cast<G4OH*>(anInstance);
+  theInstance = static_cast<G4OH*>(anInstance);
   return theInstance;
 }
 

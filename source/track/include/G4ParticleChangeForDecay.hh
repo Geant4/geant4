@@ -44,29 +44,26 @@
 
 class G4DynamicParticle;
 
-class G4ParticleChangeForDecay : public G4VParticleChange
+class G4ParticleChangeForDecay final : public G4VParticleChange
 {
   public:
 
     G4ParticleChangeForDecay();
-      // Default constructor
 
-    virtual ~G4ParticleChangeForDecay();
-      // Destructor
+    ~G4ParticleChangeForDecay() override = default;
 
-    G4bool operator==(const G4ParticleChangeForDecay& right) const;
-    G4bool operator!=(const G4ParticleChangeForDecay& right) const;
-      // Equality operators
+    G4ParticleChangeForDecay(const G4ParticleChangeForDecay& right) = delete;
+    G4ParticleChangeForDecay& operator=(const G4ParticleChangeForDecay& right) = delete;
 
   // --- the following methods are for updating G4Step -----
   // Return the pointer to the G4Step after updating the step information
   // by using final state information of the track given by a physics process
   // !!! No effect for  AlongSteyp
 
-    virtual G4Step* UpdateStepForAtRest(G4Step* Step);
-    virtual G4Step* UpdateStepForPostStep(G4Step* Step);
+    G4Step* UpdateStepForAtRest(G4Step* Step) final;
+    G4Step* UpdateStepForPostStep(G4Step* Step) final;
 
-    virtual void Initialize(const G4Track&);
+    void Initialize(const G4Track&) final;
       // Initialize all properties by using G4Track information
 
     void ProposeGlobalTime(G4double t);
@@ -87,15 +84,11 @@ class G4ParticleChangeForDecay : public G4VParticleChange
 
   // --- Dump and debug methods ---
 
-    virtual void DumpInfo() const;
+    void DumpInfo() const final;
 
-    virtual G4bool CheckIt(const G4Track&);
+    G4bool CheckIt(const G4Track&) final;
 
-  protected:
-
-    G4ParticleChangeForDecay(const G4ParticleChangeForDecay& right);
-    G4ParticleChangeForDecay& operator=(const G4ParticleChangeForDecay& right);
-      // Hidden copy constructor and assignment operator
+  private:
 
     G4double theGlobalTime0 = 0.0;
       // The global time at Initial

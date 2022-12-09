@@ -588,7 +588,7 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     }
     if(x)
     {
-      UI->ExecuteMacroFile(mac);
+      UI->ExecuteMacroFile(UI->FindMacroPath(mac));
     }
   }
   if(command == doifCommand)
@@ -727,7 +727,7 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     }
     if(x)
     {
-      UI->ExecuteMacroFile(mac);
+      UI->ExecuteMacroFile(UI->FindMacroPath(mac));
     }
   }
   if(command == strdoifCommand)

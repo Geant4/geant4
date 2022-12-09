@@ -78,6 +78,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   else if (procName == "hIoni")      id = 5; 
   else if (procName == "hPairProd")  id = 6;
   else if (procName == "hBrems")     id = 7;
+  else if (procName == "muToMuonPairProd") id = 8;
   fHistoManager->FillHisto(id,lgepsE);                       
 }
 

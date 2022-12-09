@@ -136,12 +136,14 @@ void G4WorkerTaskRunManager::RunInitialization()
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
-  if(fSDM)
+  if(fSDM != nullptr)
+  {
     currentRun->SetHCtable(fSDM->GetHCtable());
+  }
 
   if(G4VScoreNtupleWriter::Instance())
   {
-    auto hce            = fSDM->PrepareNewEvent();
+    auto hce            = (fSDM != nullptr) ? fSDM->PrepareNewEvent() : nullptr;
     isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
     delete hce;
   }

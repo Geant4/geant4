@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -74,6 +74,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -101,7 +102,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -152,8 +153,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -542,24 +543,24 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.770000s Real=0.808605s Sys=0.000000s
+  User=0.990000s Real=1.022767s Sys=0.010000s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.947 MeV +- 207.171 keV
+ Total Energy deposited        = 3.944 MeV +- 210.924 keV
 
- Track length of primary track = 2.045 cm  +- 2.788 mm 
+ Track length of primary track = 2.046 cm  +- 2.800 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.325 cm  +- 3.644 mm 
+ Projected range               = 1.321 cm  +- 3.669 mm 
 
- Nb of steps of primary track  = 16.53 +- 3.06	 Step size= 1.274 mm  +- 274.285 um 
+ Nb of steps of primary track  = 16.53 +- 3.03	 Step size= 1.274 mm  +- 274.282 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1731519801, 1589337773
+ Current couple of seeds = 967874980, 672079861
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

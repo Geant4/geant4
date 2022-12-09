@@ -61,8 +61,9 @@ int main(int argc, char **argv) {
   else runManager->SetNumberOfThreads(2);
 
   // Set mandatory user initialization classes
-  runManager->SetUserInitialization(new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList);
+  auto physlist = new PhysicsList();
+  runManager->SetUserInitialization(new DetectorConstruction(physlist));
+  runManager->SetUserInitialization(physlist);
 
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization());

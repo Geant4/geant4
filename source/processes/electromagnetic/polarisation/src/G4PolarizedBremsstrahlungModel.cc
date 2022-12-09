@@ -66,7 +66,7 @@ void G4PolarizedBremsstrahlungModel::SampleSecondaries(
   const G4DynamicParticle* dp, G4double tmin, G4double maxEnergy)
 {
   G4SeltzerBergerModel::SampleSecondaries(vdp, couple, dp, tmin, maxEnergy);
-  G4int num = vdp->size();
+  std::size_t num = vdp->size();
 
   if(num > 0)
   {
@@ -107,7 +107,7 @@ void G4PolarizedBremsstrahlungModel::SampleSecondaries(
       G4Exception("G4PolarizedBremsstrahlungModel::SampleSecondaries", "pol001",
                   JustWarning, ed);
     }
-    for(G4int i = 0; i < num; ++i)
+    for(std::size_t i = 0; i < num; ++i)
     {
       G4StokesVector photonPol = fCrossSectionCalculator->GetPol3();
       photonPol.SetPhoton();

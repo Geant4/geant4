@@ -41,6 +41,8 @@
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 
 class DetectorMessenger: public G4UImessenger
 {
@@ -49,10 +51,49 @@ public:
   ~DetectorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
+  
+  // functions to read parameters
+  G4String GetDetectorType() { return detectorType; }
+  G4double GetDetectorSizeWidth() { return detectorWidth; }
+  G4double GetDetectorSizeThickness() { return detectorThickness; }
+  G4double GetSecondStageSizeWidth() { return secondStageWidth; }
+  G4double GetSecondStageSizeThickness() { return secondStageThickness; }
+  
+  G4bool IsPhantomEnabled() { return phantomEnabled; }
+  G4double GetDetectorPositionDepth() { return detectorDepth; }
+  
+  G4bool AreTherePendingChanges() { return geometryHasChanged; }
     
 private:
-  G4UIdirectory *changeTheGeometryDir;      ///> UI directory for the geometry control
-  G4UIcmdWithAString *changeTheDetectorCmd; ///> Select the detector type
+  G4UIdirectory* changeTheGeometryDir;      // UI directory for the geometry control
+  // subdirectories
+  G4UIdirectory* changeDetectorDimensionDir;
+  G4UIdirectory* changeDetectorPositionDir;
+  G4UIdirectory* changeSecondStageDimensionDir;
+  
+  // commands
+  G4UIcmdWithAString* changeTheDetectorCmd;
+  G4UIcmdWithADoubleAndUnit* changeDetectorSizeWidthCmd;
+  G4UIcmdWithADoubleAndUnit* changeDetectorSizeThicknessCmd;
+  G4UIcmdWithADoubleAndUnit* changeSecondStageSizeWidthCmd;
+  G4UIcmdWithADoubleAndUnit* changeSecondStageSizeThicknessCmd;
+  
+  G4UIcmdWithABool* enableWaterPhantomCmd;
+  
+  G4UIcmdWithADoubleAndUnit* changeDetectorPositionDepthCmd;
+  
+  G4UIcmdWithoutParameter *applyChangesToGeometryCmd;	// applies changes to detector
+  
+  // parameters to store
+  G4String detectorType;
+  G4double detectorWidth;
+  G4double detectorThickness;
+  G4double secondStageWidth;
+  G4double secondStageThickness;
+  G4bool phantomEnabled;
+  G4double detectorDepth;
+  
+  G4bool geometryHasChanged;
   
   AnalysisManager* analysis;
 };

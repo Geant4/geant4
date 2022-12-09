@@ -73,12 +73,12 @@ G4CrossSectionDataStore::ComputeCrossSection(const G4DynamicParticle* dp,
   matKinEnergy = dp->GetKineticEnergy();
   matCrossSection = 0.0;
 
-  size_t nElements = mat->GetNumberOfElements();
+  std::size_t nElements = mat->GetNumberOfElements();
   const G4double* nAtomsPerVolume = mat->GetVecNbOfAtomsPerVolume();
 
   if(xsecelm.size() < nElements) { xsecelm.resize(nElements); }
 
-  for(size_t i=0; i<nElements; ++i) {
+  for(G4int i=0; i<(G4int)nElements; ++i) {
     G4double xs = 
       nAtomsPerVolume[i]*GetCrossSection(dp, mat->GetElement(i), mat);
     matCrossSection += std::max(xs, 0.0); 
@@ -105,7 +105,7 @@ G4double G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* dp,
   }
 
   // isotope wise cross section
-  size_t nIso = elm->GetNumberOfIsotopes();
+  G4int nIso = (G4int)elm->GetNumberOfIsotopes();
 
   // user-defined isotope abundances
   const G4double* abundVector = elm->GetRelativeAbundanceVector();
@@ -113,7 +113,7 @@ G4double G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* dp,
   G4double sigma = 0.0;
 
   // isotope and element wise cross sections
-  for(size_t j = 0; j < nIso; ++j) 
+  for(G4int j = 0; j < nIso; ++j) 
   {
     const G4Isotope* iso = elm->GetIsotope(j);
     sigma += abundVector[j] *
@@ -193,15 +193,16 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* dp,
                                      const G4Material* mat,
 				     G4Nucleus& target)
 {
-  size_t nElements = mat->GetNumberOfElements();
+  if(nullptr != forcedElement) { return forcedElement; }
+  std::size_t nElements = mat->GetNumberOfElements();
   const G4Element* anElement = mat->GetElement(0);
 
   // select element from a compound 
   if(1 < nElements) {
     G4double cross = matCrossSection*G4UniformRand();
-    for(size_t i=0; i<nElements; ++i) {
+    for(G4int i=0; i<(G4int)nElements; ++i) {
       if(cross <= xsecelm[i]) {
-	anElement = mat->GetElement(i);
+        anElement = mat->GetElement(i);
         break;
       }
     }
@@ -217,7 +218,7 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* dp,
     // element-wise cross section
     // isotope cross section is not computed
     //----------------------------------------------------------------
-    size_t nIso = anElement->GetNumberOfIsotopes();
+    std::size_t nIso = anElement->GetNumberOfIsotopes();
     iso = anElement->GetIsotope(0);
 
     // more than 1 isotope
@@ -232,7 +233,7 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* dp,
     // isotope-wise cross section
     // isotope cross section is computed
     //----------------------------------------------------------------
-    size_t nIso = anElement->GetNumberOfIsotopes();
+    std::size_t nIso = anElement->GetNumberOfIsotopes();
     iso = anElement->GetIsotope(0);
 
     // more than 1 isotope
@@ -241,8 +242,8 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* dp,
       if(xseciso.size() < nIso) { xseciso.resize(nIso); }
 
       G4double cross = 0.0;
-      size_t j;
-      for (j = 0; j<nIso; ++j) {
+      G4int j;
+      for (j = 0; j<(G4int)nIso; ++j) {
 	G4double xsec = 0.0;
 	if(abundVector[j] > 0.0) {
 	  iso = anElement->GetIsotope(j);
@@ -253,7 +254,7 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* dp,
 	xseciso[j] = cross;
       }
       cross *= G4UniformRand();
-      for (j = 0; j<nIso; ++j) {
+      for (j = 0; j<(G4int)nIso; ++j) {
 	if(cross <= xseciso[j]) {
 	  iso = anElement->GetIsotope(j);
 	  break;
@@ -283,12 +284,12 @@ G4CrossSectionDataStore::BuildPhysicsTable(const G4ParticleDefinition& part)
     dataSetList[i]->BuildPhysicsTable(part);
   }
   const G4MaterialTable* theMatTable = G4Material::GetMaterialTable();
-  size_t nelm = 0;
-  size_t niso = 0;
+  std::size_t nelm = 0;
+  std::size_t niso = 0;
   for(auto mat : *theMatTable) {
-    size_t nElements = mat->GetNumberOfElements();
+    std::size_t nElements = mat->GetNumberOfElements();
     nelm = std::max(nelm, nElements);
-    for(size_t j=0; j<nElements; ++j) {
+    for(G4int j=0; j<(G4int)nElements; ++j) {
       niso = std::max(niso, mat->GetElement(j)->GetNumberOfIsotopes());
     }
   }
@@ -406,7 +407,7 @@ void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p, size_t i)
+void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p, std::size_t i)
 {
   if(p->ForAllAtomsAndEnergies()) {
     dataSetList.clear();

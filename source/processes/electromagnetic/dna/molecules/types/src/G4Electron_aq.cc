@@ -76,6 +76,6 @@ G4Electron_aq* G4Electron_aq::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
 
   }
-  theInstance = reinterpret_cast<G4Electron_aq*>(anInstance);
+  theInstance = static_cast<G4Electron_aq*>(anInstance);
   return theInstance;
 }

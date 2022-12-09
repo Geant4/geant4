@@ -60,130 +60,149 @@ protected:
   void GetXmConnection ();
   virtual void CreateMainWindow ();
 
-  XtAppContext                      app;
-  XtWorkProcId                      workId;
-  Widget                            toplevel, 
-                                    shell,
-                                    main_win, 
-                                    menubar,
-                                    style_cascade,
-                                    actions_cascade,
-                                    misc_cascade,
-                                    spec_cascade,
-                                    drawing_style_pullright,
-                                    background_color_pullright, 
-                                    transparency_pullright, 
-                                    antialias_pullright, 
-                                    haloing_pullright, 
-                                    aux_edge_pullright, 
-                                    frame, 
-                                    glxarea;
+  XtAppContext                app;
+  XtWorkProcId                workId;
+  Widget                      toplevel, 
+                              shell,
+                              main_win, 
+                              menubar,
+                              style_cascade,
+                              actions_cascade,
+                              misc_cascade,
+                              spec_cascade,
+                              drawing_style_pullright,
+                              background_color_pullright, 
+                              transparency_pullright, 
+                              antialias_pullright, 
+                              haloing_pullright, 
+                              aux_edge_pullright, 
+                              frame, 
+                              glxarea;
   
-  XmString                          style_str,
-                                    actions_str,
-                                    misc_str,
-                                    spec_str,
-                                    draw_str,
-                                    polyhedron_str,
-                                    wireframe_str,
-                                    hlr_str,
-                                    hsr_str,
-                                    hlhsr_str,
-                                    set_str,
-				    rot_str,
-				    pan_str,
-				    exit_str,
-				    quit_str,
-                                    print_str,
-				    white_str,
-				    black_str,
-				    anti_str,
-				    trans_str,
-				    halo_str,
-				    aux_edge_str,
-				    bgnd_str,
-				    off_str,
-				    on_str;
+  XmString                    style_str,
+                              actions_str,
+                              misc_str,
+                              spec_str,
+                              draw_str,
+                              polyhedron_str,
+                              wireframe_str,
+                              hlr_str,
+                              hsr_str,
+                              hlhsr_str,
+                              set_str,
+                              rot_str,
+                              pan_str,
+                              exit_str,
+                              quit_str,
+                              print_str,
+                              white_str,
+                              black_str,
+                              anti_str,
+                              trans_str,
+                              halo_str,
+                              aux_edge_str,
+                              bgnd_str,
+                              off_str,
+                              on_str;
 
-  G4double                          zoom_high,
-                                    zoom_low,
-                                    pan_low,
-                                    pan_high,
-                                    dolly_low,
-                                    dolly_high,
-                                    fov,
-                                    rot_sens_limit,
-                                    pan_sens_limit,
-                                    wob_high,
-                                    wob_low,
-                                    wob_sens;
+  G4double                    zoom_high,
+                              zoom_low,
+                              pan_low,
+                              pan_high,
+                              dolly_low,
+                              dolly_high,
+                              fov,
+                              rot_sens_limit,
+                              pan_sens_limit,
+                              wob_high,
+                              wob_low,
+                              wob_sens;
 
-  Pixel                             bgnd, 
-                                    borcol;
+  Pixel                       bgnd, 
+                              borcol;
 
-  G4bool                            pan_right,
-                                    rotate_right,
-                                    pan_up,
-                                    rotate_up;
+  G4bool                      pan_right,
+                              rotate_right,
+                              pan_up,
+                              rotate_up;
 
-  XtIntervalId                      rotation_timer,
-                                    pan_timer,
-                                    wobble_timer;
+  XtIntervalId                rotation_timer,
+                              pan_timer,
+                              wobble_timer;
 
-  G4Vector3D                        original_vp;
+  G4Vector3D                  original_vp;
 
-  G4int                             frameNo;
+  G4int                       frameNo;
+  static const G4String       e_str;
+  G4String menu_str[37] = { "Style", "style",
+                            "Actions", "actions",
+                            "Miscellany", "miscellany",
+                            "Special", "special",
+                            "menubar", "Drawing",
+                            "Background color", "Wireframe",
+                            "Hidden line removal", "Hidden surface removal",
+                            "Hidden line and surface removal", "drawing_style",
+                            "White", "Black",
+                            "background_color", "Rotation control panel",
+                            "Panning control panel", "Set control panel limits",
+                            "Miscellany control panel",
+                            "Exit to G4Vis>", "Create .eps file",
+                            "Transparency", "transparency",
+                            "Antialiasing", "antialias",
+                            "Haloing", "haloing",
+                            "Auxiliary edges", "aux_edge",
+                            "Off", "On", "frame", "glxarea" };
 
-  G4OpenGLXmTopLevelShell*          fprotation_top;
-  G4OpenGLXmBox*                    fprotation_button_box;
-  G4OpenGLXmRadioButton*            fprotation_button1;
-  G4OpenGLXmRadioButton*            fprotation_button2;
-  G4OpenGLXmBox*                    fprotation_slider_box;
-  G4OpenGLXmSliderBar*              fprotation_slider;
-  G4OpenGLXmBox*                    fprotation_arrow_box;
-  G4OpenGLXmFourArrowButtons*       fprotation_arrow;
+  G4OpenGLXmTopLevelShell*    fprotation_top;
+  G4OpenGLXmBox*              fprotation_button_box;
+  G4OpenGLXmRadioButton*      fprotation_button1;
+  G4OpenGLXmRadioButton*      fprotation_button2;
+  G4OpenGLXmBox*              fprotation_slider_box;
+  G4OpenGLXmSliderBar*        fprotation_slider;
+  G4OpenGLXmBox*              fprotation_arrow_box;
+  G4OpenGLXmFourArrowButtons* fprotation_arrow;
 
-  G4OpenGLXmTopLevelShell*          fppanning_top; 
-  G4OpenGLXmFramedBox*              fppanning_box;
-  G4OpenGLXmFourArrowButtons*       fppanning_arrows;
-  G4OpenGLXmSliderBar*              fppanning_slider;
-  G4OpenGLXmFramedBox*              fpzoom_box;
-  G4OpenGLXmSliderBar*              fpzoom_slider;
-  G4OpenGLXmFramedBox*              fpdolly_box;
-  G4OpenGLXmSliderBar*              fpdolly_slider;
+  G4OpenGLXmTopLevelShell*    fppanning_top; 
+  G4OpenGLXmFramedBox*        fppanning_box;
+  G4OpenGLXmFourArrowButtons* fppanning_arrows;
+  G4OpenGLXmSliderBar*        fppanning_slider;
+  G4OpenGLXmFramedBox*        fpzoom_box;
+  G4OpenGLXmSliderBar*        fpzoom_slider;
+  G4OpenGLXmFramedBox*        fpdolly_box;
+  G4OpenGLXmSliderBar*        fpdolly_slider;
 
-  G4OpenGLXmTopLevelShell*          fpsetting_top;
-  G4OpenGLXmFramedBox*              fpsetting_box;
-  G4OpenGLXmTextField*              fppan_set;
-  G4OpenGLXmTextField*              fprot_set;
-  G4OpenGLXmTextField*              fpzoom_upper;
-  G4OpenGLXmTextField*              fpzoom_lower;
-  G4OpenGLXmTextField*              fpdolly_upper;
-  G4OpenGLXmTextField*              fpdolly_lower;
-  G4OpenGLXmPushButton*             fpok_button;
+  G4OpenGLXmTopLevelShell*    fpsetting_top;
+  G4OpenGLXmFramedBox*        fpsetting_box;
+  G4OpenGLXmTextField*        fppan_set;
+  G4OpenGLXmTextField*        fprot_set;
+  G4OpenGLXmTextField*        fpzoom_upper;
+  G4OpenGLXmTextField*        fpzoom_lower;
+  G4OpenGLXmTextField*        fpdolly_upper;
+  G4OpenGLXmTextField*        fpdolly_lower;
+  G4OpenGLXmPushButton*       fpok_button;
 
-  G4OpenGLXmTopLevelShell*          fpmiscellany_top;
-  G4OpenGLXmFramedBox*              fpwobble_box;
-  G4OpenGLXmPushButton*             fpwobble_button;
-  G4OpenGLXmSliderBar*              fpwobble_slider;
-  G4OpenGLXmFramedBox*              fpreset_box;
-  G4OpenGLXmPushButton*             fpreset_button;
-  G4OpenGLXmFramedBox*              fpproj_style_box;
-  G4OpenGLXmRadioButton*            fporthogonal_button;
-  G4OpenGLXmRadioButton*            fpperspective_button;
-  G4OpenGLXmTextField*              fpfov_text;
+  G4OpenGLXmTopLevelShell*    fpmiscellany_top;
+  G4OpenGLXmFramedBox*        fpwobble_box;
+  G4OpenGLXmPushButton*       fpwobble_button;
+  G4OpenGLXmSliderBar*        fpwobble_slider;
+  G4OpenGLXmFramedBox*        fpreset_box;
+  G4OpenGLXmPushButton*       fpreset_button;
+  G4OpenGLXmFramedBox*        fpproj_style_box;
+  G4OpenGLXmRadioButton*      fporthogonal_button;
+  G4OpenGLXmRadioButton*      fpperspective_button;
+  G4OpenGLXmTextField*        fpfov_text;
 
-  G4OpenGLXmTopLevelShell*          fpprint_top;
-  G4OpenGLXmFramedBox*              fpprint_box;
-  G4OpenGLXmFramedBox*              fpprint_col_box;
-  G4OpenGLXmFramedBox*              fpprint_style_box;
-  G4OpenGLXmTextField*              fpprint_text;
-  G4OpenGLXmPushButton*             fpprint_button;
-  G4OpenGLXmSeparator*              fpprint_line;
-  G4OpenGLXmRadioButton*            fpprint_col_radio1;
-  G4OpenGLXmRadioButton*            fpprint_col_radio2;
-  G4OpenGLXmRadioButton*            fpprint_style_radio1;
-  G4OpenGLXmRadioButton*            fpprint_style_radio2;
+  G4OpenGLXmTopLevelShell*    fpprint_top;
+  G4OpenGLXmFramedBox*        fpprint_box;
+  G4OpenGLXmFramedBox*        fpprint_col_box;
+  G4OpenGLXmFramedBox*        fpprint_style_box;
+  G4OpenGLXmTextField*        fpprint_text;
+  G4OpenGLXmPushButton*       fpprint_button;
+  G4OpenGLXmSeparator*        fpprint_line;
+  G4OpenGLXmRadioButton*      fpprint_col_radio1;
+  G4OpenGLXmRadioButton*      fpprint_col_radio2;
+  G4OpenGLXmRadioButton*      fpprint_style_radio1;
+  G4OpenGLXmRadioButton*      fpprint_style_radio2;
 
 public:
 

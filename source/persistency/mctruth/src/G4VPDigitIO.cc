@@ -44,7 +44,7 @@ void G4VPDigitIO::SetVerboseLevel(G4int v)
   m_verbose = v;
 
   // Loop through the registered Digit I/O managers
-  for(std::size_t i = 0; i < f_catalog->NumberOfDCIOmanager(); ++i)
+  for(G4int i = 0; i < (G4int)f_catalog->NumberOfDCIOmanager(); ++i)
   {
     G4VPDigitsCollectionIO* digitIOman = f_catalog->GetDCIOmanager(i);
     digitIOman->SetVerboseLevel(v);

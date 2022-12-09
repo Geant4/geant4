@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file GunPrimaryGeneratorAction.cc
-/// \brief Implementation of the GunPrimaryGeneratorAction class
+/// \file common/src/GunPrimaryGeneratorAction.cc
+/// \brief Implementation of the Common::GunPrimaryGeneratorAction class
 
 #include "GunPrimaryGeneratorAction.hh"
 
@@ -34,15 +34,16 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
+namespace Common
+{
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GunPrimaryGeneratorAction::GunPrimaryGeneratorAction(      
-                                const G4String& particleName, 
+GunPrimaryGeneratorAction::GunPrimaryGeneratorAction(
+                                const G4String& particleName,
                                 G4double energy,
-                                G4ThreeVector position, 
+                                G4ThreeVector position,
                                 G4ThreeVector momentumDirection)
-  : G4VUserPrimaryGeneratorAction(),
-    fParticleGun(nullptr)
 {
   G4int nofParticles = 1;
   fParticleGun  = new G4ParticleGun(nofParticles);
@@ -71,5 +72,9 @@ void GunPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // this function is called at the begining of event
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 }
 

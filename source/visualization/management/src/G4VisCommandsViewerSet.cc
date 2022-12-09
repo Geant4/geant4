@@ -44,6 +44,8 @@
 #include <sstream>
 #include <iomanip>
 
+#define G4warn G4cout
+
 G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 fLightsVector    (G4ThreeVector(1.,1.,1.)),
 fUpVector        (G4ThreeVector(0.,1.,0.)),
@@ -686,7 +688,7 @@ void G4VisCommandsViewerSet::SetNewValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsViewerSet::SetNewValue: no current viewer."
       << G4endl;
     }
@@ -699,7 +701,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4VViewer* fromViewer = fpVisManager->GetViewer(newValue);
     if (!fromViewer) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
+        G4warn <<
         "ERROR: G4VisCommandsViewerSet::SetNewValue: all:"
         "\n  unrecognised from-viewer."
         << G4endl;
@@ -708,7 +710,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     if (fromViewer == currentViewer) {
       if (verbosity >= G4VisManager::warnings) {
-        G4cout <<
+        G4warn <<
         "WARNING: G4VisCommandsViewerSet::SetNewValue: all:"
         "\n  from-viewer and current viewer are identical."
         << G4endl;
@@ -737,7 +739,7 @@ void G4VisCommandsViewerSet::SetNewValue
       << G4endl;
     }
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "You may need \"/vis/viewer/rebuild\"."
+      G4warn << "You may need \"/vis/viewer/rebuild\"."
       << G4endl;
     }
   }
@@ -748,7 +750,7 @@ void G4VisCommandsViewerSet::SetNewValue
     currentViewer->GetDefaultViewParameters();
     if (autoRefresh && !defaultVP.IsAutoRefresh()) {
       if (verbosity >= G4VisManager::warnings) {
-        G4cout
+        G4warn
         << "WARNING: "
         << currentViewer->GetName() << " is NOT auto-refesh by default"
         << "\n  so cannot be set to auto-refresh."
@@ -868,7 +870,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
+        G4warn <<
         "ERROR: G4VisCommandsViewerSet::SetNewValue: culling:"
         "\n  option not recognised."
         << G4endl;
@@ -1061,7 +1063,7 @@ void G4VisCommandsViewerSet::SetNewValue
       vp.SetLightsMoveWithCamera(false);
     else {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: \"" << newValue << "\" not recognised."
+        G4warn << "ERROR: \"" << newValue << "\" not recognised."
         "  Looking for \"cam\" or \"obj\" in string." << G4endl;
       }
     }
@@ -1101,7 +1103,7 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandLineWidth) {
     if (verbosity >= G4VisManager::errors) {
       // A do-nothing command
-      G4cerr << command->GetGuidanceLine(0) << G4endl;
+      G4warn << command->GetGuidanceLine(0) << G4endl;
     }
   }
 
@@ -1134,7 +1136,7 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << G4endl;
     }
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "You may need to issue \"/vis/viewer/update\"."
+      G4warn << "You may need to issue \"/vis/viewer/update\"."
       << G4endl;
     }
   }
@@ -1153,16 +1155,16 @@ void G4VisCommandsViewerSet::SetNewValue
       fieldHalfAngle *= G4UIcommand::ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
         if (verbosity >= G4VisManager::errors) {
-          G4cerr <<
+          G4warn <<
           "ERROR: Field half angle should be 0 < angle <= 89.5 degrees.";
-          G4cout << G4endl;
+          G4warn << G4endl;
         }
         return;
       }
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: \"" << newValue << "\" not recognised."
+        G4warn << "ERROR: \"" << newValue << "\" not recognised."
         "  Looking for 'o' or 'p' first character." << G4endl;
       }
       return;
@@ -1190,7 +1192,7 @@ void G4VisCommandsViewerSet::SetNewValue
       style = G4ViewParameters::freeRotation;
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cerr << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
+	G4warn << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
       }
       return;
     }
@@ -1214,7 +1216,7 @@ void G4VisCommandsViewerSet::SetNewValue
         G4UIcommand::ConvertToBool(choice)) iSelector = 1;
     if (iSelector < 0) {
       if (verbosity >= G4VisManager::errors) {
-        G4cout << "Choice not recognised (on/true or off/false)." << G4endl;
+        G4warn << "Choice not recognised (on/true or off/false)." << G4endl;
       }
       goto write_result;
     }
@@ -1228,10 +1230,11 @@ void G4VisCommandsViewerSet::SetNewValue
         x *= F; y *= F; z *= F;
         if (nx == 0. && ny == 0. && nz == 0.) {
           if (verbosity >= G4VisManager::errors) {
-            G4cout << "Null normal." << G4endl;
+            G4warn << "Null normal." << G4endl;
           }
           break;;
         }
+        // Make sure normal is normalised
         const G4Normal3D& normal = G4Normal3D(nx,ny,nz).unit();
         vp.SetSectionPlane(G4Plane3D(normal, G4Point3D(x,y,z)));
         vp.SetViewpointDirection(normal);
@@ -1300,7 +1303,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	iBegin = newValue.find_first_not_of(' ',iEnd);
 	if (iBegin == G4String::npos) {
 	  if (verbosity >= G4VisManager::warnings) {
-	    G4cout <<
+	    G4warn <<
 	    "WARNING: G4VisCommandsViewerSet::SetNewValue: /vis/viewer/set/specialMeshVolumes"
 	    "\n  A pair not found.  (There should be an even number of parameters.)"
 	    "\n  Command ignored."
@@ -1316,7 +1319,7 @@ void G4VisCommandsViewerSet::SetNewValue
 	std::istringstream iss(newValue.substr(iBegin,iEnd-iBegin));
 	if (!(iss >> copyNo)) {
 	  if (verbosity >= G4VisManager::warnings) {
-	    G4cout <<
+	    G4warn <<
 	    "WARNING: G4VisCommandsViewerSet::SetNewValue: /vis/viewer/set/specialMeshVolumes"
 	    "\n  Error reading copy number - it was not numeric?"
 	    "\n  Command ignored."
@@ -1402,7 +1405,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: \"" << newValue << "\" not recognised."
+        G4warn << "ERROR: \"" << newValue << "\" not recognised."
         "  Looking for 'w' or 's' or 'c' first character." << G4endl;
       }
       return;
@@ -1479,7 +1482,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4ThreeVector viewpointVector = G4UIcommand::ConvertTo3Vector(newValue);
     if (viewpointVector.mag2() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: Null viewpoint vector. No action taken." << G4endl;
+        G4warn << "ERROR: Null viewpoint vector. No action taken." << G4endl;
       }
     } else {
       fViewpointVector = viewpointVector.unit();
@@ -1608,7 +1611,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsViewerSet::SetNewValue: unrecognised command."
       << G4endl;
     }

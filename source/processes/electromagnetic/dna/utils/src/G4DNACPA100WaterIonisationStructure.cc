@@ -53,7 +53,7 @@ G4DNACPA100WaterIonisationStructure::G4DNACPA100WaterIonisationStructure(): nLev
   UConstant.push_back(70.71*eV);
   UConstant.push_back(796.2*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

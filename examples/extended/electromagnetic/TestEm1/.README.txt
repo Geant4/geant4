@@ -115,6 +115,8 @@ Idle> exit
   - radioactive.mac: use radioactive ion as primary particle
   - range.mac: compute the csda range of the primary particle
                with or without fluctuations
+  - erange.mac, pRange.mac, alphaRange.mac, ionRange.mac: variants of range.mac
+               to play with StepFunction()	       	       
   - runs.mac: electron 100 MeV; all processes
 
   Macros to be run interactively:

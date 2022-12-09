@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file CalorHit.hh
+/// \file B4/B4c/include/CalorHit.hh
 /// \brief Definition of the B4c::CalorHit class
 
 #ifndef B4cCalorHit_h
@@ -48,9 +48,9 @@ namespace B4c
 class CalorHit : public G4VHit
 {
   public:
-    CalorHit();
+    CalorHit() = default;
     CalorHit(const CalorHit&) = default;
-    ~CalorHit() override;
+    ~CalorHit() override = default;
 
     // operators
     CalorHit& operator=(const CalorHit&) = default;

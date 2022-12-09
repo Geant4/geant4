@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file PhysicsList.hh
-/// \brief Definition of the PhysicsList class
+/// \file scavenger/include/PhysicsList.hh
+/// \brief Definition of the scavenger::PhysicsList class
 
 #ifndef SCAVENGER_PhysicsList_h
 #define SCAVENGER_PhysicsList_h 1

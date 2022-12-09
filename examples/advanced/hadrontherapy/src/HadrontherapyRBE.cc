@@ -678,7 +678,7 @@ G4bool HadrontherapyRBE::LinearLookup(G4double E, G4double LET, G4int Z)
 void HadrontherapyRBE::interpolation_onE(G4int k, G4int l, G4int indexE, G4double E, G4int Z)
 {
     // k=(indexE*column) identifies the position of E1 known the value of E (identifies the group of 8 elements in the array at position E1)
-    // Z-1 identifies the vector ion position relative to the group of 8 values ​​found
+    // Z-1 identifies the vector ion position relative to the group of 8 values found
 
     k = k + (Z - 1);
     l = l + (Z - 1);
@@ -697,7 +697,7 @@ G4bool HadrontherapyRBE::interpolation_onLET1_onLET2_onE(G4int k, G4int l, G4int
     size_t i;
     if ( (LET >= vecLET[k + column - 1] && LET >= vecLET[l + column - 1]) || (LET < vecLET[k] && LET < vecLET[l]) ) return false; //out of table!
 
-    //Find the value of E1 is detected the value of LET among the 8 possible values ​​corresponding to E1
+    //Find the value of E1 is detected the value of LET among the 8 possible values corresponding to E1
     for (i = 0; i < column - 1; i++)
     {
 
@@ -710,7 +710,7 @@ G4bool HadrontherapyRBE::interpolation_onLET1_onLET2_onE(G4int k, G4int l, G4int
     indexLET1 = k;
     indexLET2 = k + 1;
 
-    //Find the value of E2 is detected the value of LET among the 8 possible values ​​corresponding to E2
+    //Find the value of E2 is detected the value of LET among the 8 possible values corresponding to E2
     for (i = 0; i < column - 1; i++)
     {
 

@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-26 Gabriele Cosmo (hadr-casc-V11-00-05)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-13 Alberto Ribon (hadr-casc-V11-00-04)
+(Two bug-fixes found and suggested by Sven Menke)
+- G4NumIntTwoBodyAngDst.hh : corrected the incomplete initialization of the
+  vector angDist (fixing bug #2515).
+- G4TwoBodyAngularDist.cc : corrected the charge exchange reaction of pion+ on
+  neutron producing in the final state pion0 and proton (fixing bug #2516)
+
+## 2022-08-26 Gabriele Cosmo (hadr-casc-V11-00-03)
+- Attempt to fix compilation warning on gcc-12.1 for
+  G4CascadeParamMessenger::CreateDirectory().
+
 ## 2022-05-23 Gabriele Cosmo (hadr-casc-V11-00-02)
 - Fixed wrong comparison between two arrays in findCrossSection(..)
   for G4CascadePPChannel, G4CascadeNPChanneland G4CascadeNNChannel.

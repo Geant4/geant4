@@ -65,7 +65,6 @@ int main(int argc, char** argv)
 
   //Set the random number seed
 /* 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   G4long seed=time(0);
   CLHEP::HepRandom::setTheSeed(seed);
   G4cout << "***********************" << G4endl;

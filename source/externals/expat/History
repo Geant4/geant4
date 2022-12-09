@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-10-07 Ben Morgan (expat-V11-00-01)
+- Update source/build with Expat 2.4.9 sources from upstream
+
 ## 2021-12-10 Ben Morgan (expat-V11-00-00)
 - Change to new Markdown History format
 

@@ -93,7 +93,6 @@ Molecule * PDBlib::Load(const std::string& filename,
   }
   else
   {
-    int nbAtomTot = 0; // total number of atoms
     int nbAtom = 0; // total number of atoms in a residue
     int numAtomInRes = 0; // number of an atom in a residue
     int nbResidue = 0; // total number of residues
@@ -329,8 +328,6 @@ Molecule * PDBlib::Load(const std::string& filename,
         }
 
         {
-          nbAtomTot++;
-
           //resName :
           resName = sLine.substr(17, 3);
           //resSeq :
@@ -726,14 +723,12 @@ void PDBlib::ComputeNbNucleotidsPerStrand(Molecule * moleculeListTemp)
 {
   Residue *residueListTemp;
 
-  int k = 0;
   int j_old = 0;
 
   while(moleculeListTemp)
   {
     residueListTemp = moleculeListTemp->GetFirst();
 
-    k++;
     int j = 0;
 
     while(residueListTemp)

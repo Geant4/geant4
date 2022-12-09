@@ -46,7 +46,7 @@ G4DNAEmfietzoglouWaterExcitationStructure::G4DNAEmfietzoglouWaterExcitationStruc
   energyConstant.push_back(12.61*eV);
   energyConstant.push_back(13.77*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

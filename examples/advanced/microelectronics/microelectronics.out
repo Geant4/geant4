@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -35,6 +35,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -87,6 +89,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 meV
@@ -114,7 +117,7 @@ Lowest e+e- kinetic energy                         0 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -150,8 +153,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     1
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -336,7 +338,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0xe3cae0
+##### Create analysis manager   0x1562090
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -348,17 +350,17 @@ Si
 Reading TCS file
 Elastic Total Cross file : Elastic/elsepa_elastic_cross_e_Si
 loaddata : Elastic/elsepa_elastic_cross_e_Si
-Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.1/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
+Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.2/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
 MicroElasticModel, Material 2 / 2 : G4_Si
 Si
 Reading TCS file
 Elastic Total Cross file : Elastic/elsepa_elastic_cross_e_Si
 loaddata : Elastic/elsepa_elastic_cross_e_Si
-Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.1/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
+Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.2/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.330000s Real=0.408881s Sys=0.010000s
+  User=0.330000s Real=0.386700s Sys=0.050000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done

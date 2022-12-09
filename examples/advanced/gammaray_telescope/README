@@ -6,35 +6,35 @@
 
                             gammaray_telescope
                             ------------------
-                     F.Longo, R.Giannitrapani & G.Santin
+                     F. Longo, R. Giannitrapani & G. Santin
                      June 2003
 
---------------------------------------------------------------
-Acknowledgments to GEANT4 people, in particular to R.Nartallo, 
-A.Pfeiffer, M.G.Pia and G.Cosmo 
---------------------------------------------------------------
+---------------------------------------------------------------
+Acknowledgments to GEANT4 people, in particular to R. Nartallo,
+A. Pfeiffer, M. G. Pia and G. Cosmo
+---------------------------------------------------------------
 
 GammaRayTel is an example of application of Geant4 in a space
-envinronment. It simulates a typical telescope for gamma ray analysis;
+environment. It simulates a typical telescope for gamma ray analysis;
 the detector setup is composed by a tracker made with silicon planes,
 subdivided in ladders and strips, a CsI calorimeter and an
 anticoincidence system. In this version, the three detectors are made
-sensitive but only the hits on the tracker strips are registered and relevant 
-information (energy deposition, position etc) are dumped to an external
-ASCII file for subsequent analysis. 
+sensitive but only the hits on the tracker strips are registered and relevant
+information (energy deposition, position etc.) are dumped to an external
+ASCII file for subsequent analysis.
 
 Relevant information from the simulation is processed in the GammarayTelAnalysis
-class and saved, through the G4AnalysisManager interface, to Histograms and 
-Tuples. 
+class and saved, through the G4AnalysisManager interface, to Histograms and
+Tuples.
 
-  a) Macros for the visualization of geometry and tracks with 
-     OpenGL, VRML and DAWN drivers 
+  a) Macros for the visualization of geometry and tracks with
+     OpenGL, VRML and DAWN drivers
 
-  b) Implementation of messengers to change some parameters of 
-     the detector geometry, the particle generator and the analysis 
+  b) Implementation of messengers to change some parameters of
+     the detector geometry, the particle generator and the analysis
      manager (if present) runtime
 
-  c) Readout geometry mechanism to describe an high number of 
+  c) Readout geometry mechanism to describe an high number of
      subdivisions of the planes of the tracker (strips) without
      affecting in a relevant way the simulation performances
 
@@ -42,55 +42,55 @@ Tuples.
 
   e) User interfaces via Xmotif or normal terminal provided
 
-  
+
 1. Setting up the environment variables
 ---------------------------------------
 
- - Setup for storing ASCII data 
+ - Setup for storing ASCII data
 
   If you want to store the output data in an ASCII file 'Tracks_x.dat'
-  where x stays for the run number. You should specify the environment 
+  where x stays for the run number. You should specify the environment
   variable:
 
   setenv G4STORE_DATA 1
 
- - Setup for Visualization 
+ - Setup for Visualization
 
-  IMPORTANT: be sure that your Geant4 installation has been done 
-  with the proper visualization drivers; for details please see the 
-  file geant4/source/visualization/README. 
+  IMPORTANT: be sure that your Geant4 installation has been done
+  with the proper visualization drivers; for details please see the
+  file geant4/source/visualization/README.
 
-  To use the visualization drivers set the following variables in 
-  your local environment: 
+  To use the visualization drivers set the following variables in
+  your local environment:
 
-  setenv G4VIS_USE_OPENGLX      1  # OpenGL visualization
-  setenv G4VIS_USE_DAWNFILE     1  # DAWN file
-  setenv G4VIS_USE_VRMLFILE     1  # VRML file
-  setenv G4VRMLFILE_VIEWER  vrmlview  # If installed
+  setenv G4VIS_USE_OPENGLX 1  # OpenGL visualization
+  setenv G4VIS_USE_DAWNFILE 1  # DAWN file
+  setenv G4VIS_USE_VRMLFILE 1  # VRML file
+  setenv G4VRMLFILE_VIEWER vrmlview  # If installed
 
  - Setup for Xmotif user interface
-  
-   setenv G4UI_USE_XM  1    
 
- - Set up for analysis 
+   setenv G4UI_USE_XM  1
 
-  To compile the GammaRayTel example with the analysis tools activated, 
-  set the following variables 
+ - Set up for analysis
 
-  setenv G4ANALYSIS_USE               1 # Use the analysis tools
+  To compile the GammaRayTel example with the analysis tools activated,
+  set the following variables
+
+  setenv G4ANALYSIS_USE 1 # Use the analysis tools
 
 2. Sample run
 -------------
 
- To run a sample simulation with gamma tracks interacting with 
+ To run a sample simulation with gamma tracks interacting with
  the detector in its standard configuration and without any
- visualization, execute the following command in the example main 
+ visualization, execute the following command in the example main
  directory:
 
- $G4WORKDIR/bin/$G4SYSTEM/GammaRayTel 
+ $G4WORKDIR/bin/$G4SYSTEM/GammaRayTel
 
- It is possible also to run three different configuration defined in 
- macro1.mac, macro2.mac and macro3.mac for visualization (OpenGL, VRML 
+ It is possible also to run three different configuration defined in
+ macro1.mac, macro2.mac and macro3.mac for visualization (OpenGL, VRML
  and DAWN respectively) with the following command
 
  $G4WORKDIR/bin/$G4SYSTEM/GammaRayTel macroX.mac
@@ -100,43 +100,43 @@ Tuples.
  your local G4 installation (see geant4/source/visualization/README for
  more information).
 
-	
+
 3. Detector description
 -----------------------
 
  The detector is defined in GammaRayTelDetectorConstruction.cc
  It is composed of a Payload with three main detectors, a Tracker (TKR), a
- Calorimeter (CAL) and an Anticoincidence system (ACD). 
+ Calorimeter (CAL) and an Anticoincidence system (ACD).
 
  The standard configuration is made of a TKR of 15 Layers of 2 views made of
- 4*4 Si single sided silicon detectors with Lead converter, and a CAL of 
+ 4 * 4 Si single sided silicon detectors with Lead converter, and a CAL of
  5 layers of CsI, each made of 2 views of 12 CsI bars orthogonally posed.
- 4 lateral panels and a top layer of plastic scintillator (ACL and ACT) 
+ 4 lateral panels and a top layer of plastic scintillator (ACL and ACT)
  complete the configuration.
  The Si detectors are composed of two silicon planes subdivided in strips
  aligned along the X axis in one plane and along the Y axis for the other.
 
  The following baseline configuration is adopted:
- 
- GEOMETRICAL PARAMETER 			VALUE
 
- Converter thickness 			300 microns  
- Silicon Thickness 			400 microns
- Silicon Tile Size XY                   9   cm
- Silicon Pitch                          200.micrometer 
- Views Distance                         1.  mm
- CAL Bar Thickness  			1.5 cm
- ACD Thickness                          1.  cm
+ GEOMETRICAL PARAMETER      VALUE
 
- It is possible to modify in some way this configuration using the 
- commands defined in GammaRayTelDetectorMessenger. 
- This feature is available in the UI throught the commands subtree 
+ Converter Thickness        300 micron
+ Silicon Thickness          400 micron
+ Silicon Tile Size XY       9 cm
+ Silicon Pitch              200. micrometer
+ Views Distance             1. mm
+ CAL Bar Thickness          1.5 cm
+ ACD Thickness              1. cm
+
+ It is possible to modify in some way this configuration using the
+ commands defined in GammaRayTelDetectorMessenger.
+ This feature is available in the UI through the commands subtree
  "/payload/" (see the help command in the UI for more information).
 
 4. Physics processes
 --------------------
 
- This example uses a modular physics list, with a sample of Hadronic processes 
+ This example uses a modular physics list, with a sample of Hadronic processes
  (see the web page http://cmsdoc.cern.ch/~hpw/GHAD/HomePage/ for more adeguate
  physics lists), the Standard or the LowEnergy Electromagnetic processes.
 
@@ -144,148 +144,138 @@ Tuples.
 ---------------------
 
  The GammaRayTelParticleGenerationAction and its Messenger let the user define
- the incident flux of particles, from a specific direction or from an 
- isotropic background. In the first case particles are generated on a spherical 
+ the incident flux of particles, from a specific direction or from an
+ isotropic background. In the first case particles are generated on a spherical
  surface which diameter is perpendicular to the arrival direction. In the second
  case the arrival directions are isotropic.
 
  The user can define also between two spectral options:
  monochromatic or with a power-law dependence. The particle
- generator parameters are accessible throught the UI tree "/gun/" (use the
+ generator parameters are accessible through the UI tree "/gun/" (use the
  UI help for more information). We are planning to include, in the next
  releases of this example, the General Particle Source module of G4.
- 
+
 6. Hit
 ------
 
- In this version the hits from the TKR the CAL and the ACD are generated. 
- Only the hit from the TRK are saved. Each TKR hit contains the following 
+ In this version the hits from the TKR the CAL and the ACD are generated.
+ Only the hit from the TRK are saved. Each TKR hit contains the following
  information
 
   a) ID of the event (this is important for multiple events run)
   b) Energy deposition of the particle in the strip (keV)
-  c) Number of the strip 
+  c) Number of the strip
   d) Number of the plane
   e) Type of the plane (1=X  0=Y)
-  f) Position of the hit (x,y,z) in the reference frame of the payload
+  f) Position of the hit (x, y, z) in the reference frame of the payload
 
- The hit information are saved on an ASCII file named Tracks_N.dat, where 
- N is the progressive ID number associated to the run. 
+ The hit information are saved on an ASCII file named Tracks_N.dat, where
+ N is the progressive ID number associated to the run.
 
 7. Analysis
-----------------
- 
+-----------
+
 Relevant information from the simulation is processed in the GammarayTelAnalysis
-class and saved, through the G4AnalysisManager interface, to Histograms and 
-Tuples. The output file is written in ROOT format, but one can easily switch to 
+class and saved, through the G4AnalysisManager interface, to Histograms and
+Tuples. The output file is written in ROOT format, but one can easily switch to
 XML (or Hbook) by changing the appropriate #include in GammarayTelAnalysis.hh
-No external software is required (apart from the hbook case, in which the CERNLIB 
+No external software is required (apart from the hbook case, in which the CERNLIB
 must be installed and a FORTRAN compiler must be present)
 
  Keep in mind that the actual implementation of the analysis tools in GammaRayTel
- is of a pedagogical nature, so we kept it as simple as possible. 
+ is of a pedagogical nature, so we kept it as simple as possible.
 
- The actual analysis produces some histograms (see next section) and an ntuple. 
- Both the histograms and the ntuple are saved at the end of the run in the file 
- "gammaraytel.root". Please note that in a multiple run session, 
+ The actual analysis produces some histograms (see next section) and an ntuple.
+ Both the histograms and the ntuple are saved at the end of the run in the file
+ "gammaraytel.root". Please note that in a multiple run session,
 the last run always override the root file.
 
 8. Histogramming
 ----------------
 
- The 1D histograms contain the energy deposition in the last X plane of 
- the TKR and the hits distribution along the X planes of the TKR 
- (note again that these histograms have been chosen more for pedagogical 
+ The 1D histograms contain the energy deposition in the last X plane of
+ the TKR and the hits distribution along the X planes of the TKR
+ (note again that these histograms have been chosen more for pedagogical
  motivation than for physical one).
 
- These histograms are filled and updated at every event and are initialized 
- with each new run; the scale of the histograms is automatically derived from 
- the detector geometry. 
+ These histograms are filled and updated at every event and are initialized
+ with each new run; the scale of the histograms is automatically derived from
+ the detector geometry.
 
- Throught a messenger it is possible to set some options with
- the UI subtree "/analysis/" (use the UI help for more info); 
+ Through a messenger it is possible to set some options with
+ the UI subtree "/analysis/" (use the UI help for more info);
 
- In this example we only show the use of very basic feature of this new 
+ In this example we only show the use of very basic feature of this new
  simulation/analysis framework.
 
 9. Digi
---------
+-------
 
- For the TKR also the digits corresponding to the Hits are generated. 
- A digi is generated when the hit energy deposit is greater than a threshold 
- (in this example setted at 120 keV). 
+ For the TKR also the digits corresponding to the Hits are generated.
+ A digi is generated when the hit energy deposit is greater than a threshold
+ (in this example setted at 120 keV).
  The TKR digi information are stored on the same file Tracks_N.dat and contain:
 
   a) ID of the event (this is important for multiple events run)
-  b) Number of the strip 
+  b) Number of the strip
   c) Number of the plane
   d) Type of the plane (1=X  0=Y)
 
 10. Classes Overview
--------------------
+--------------------
 
  This is the overview of the classes defined in this example
- 
-  GammaRayTelPrimaryGeneratorAction 
-	User action for primaries generator	 
+
+  GammaRayTelPrimaryGeneratorAction
+    User action for primaries generator
 
   GammaRayTelPrimaryGeneratorMessenger
-	Messenger for interactive particle generator 
-	parameters modification via the User Interface
-	
+    Messenger for interactive particle generator
+    parameters modification via the User Interface
+
   GammaRayTelPhysicsList
-	Determination of modular physics classes
+    Determination of modular physics classes
 
   GammaRayTelDetectorConstruction
-	Geometry and material definitions for the detector
- 	
+    Geometry and material definitions for the detector
+
   GammaRayTelDetectorMessenger
-	Messenger for interactive geometry parameters 
-	modification via the User Interface
-	
+    Messenger for interactive geometry parameters
+    modification via the User Interface
+
   GammaRayTelAnalysis
-	Analysis manager class (experimental)
+    Analysis manager class (experimental)
 
   GammaRayTelAnalysisMessenger
-	Messenger for interactive analysis options modification
-	via the User Interface
+    Messenger for interactive analysis options modification
+    via the User Interface
 
   GammaRayTelRunAction
-	User run action class
+    User run action class
 
   GammaRayTelEventAction
-	User event action class
+    User event action class
 
   GammaRayTelTrackerHit
-	Description of the hits on the tracker
+    Description of the hits on the tracker
 
   GammaRayTelDigi
-	Description of the digi on the tracker
+    Description of the digi on the tracker
 
   GammaRayTelDigitizer
-	Description of the digitizer for the tracker
+    Description of the digitizer for the tracker
 
   GammaRayTelTrackerSD
-	Description of the TKR sensitive detector
+    Description of the TKR sensitive detector
 
   GammaRayTelAnticoincidenceHit
-	Description of the hits on the anticoincidence
+    Description of the hits on the anticoincidence
 
   GammaRayTelAnticoincidenceSD
-	Description of the ACD sensitive detector
+    Description of the ACD sensitive detector
 
   GammaRayTelCalorimeterHit
-	Description of the hits on the calorimeter
+    Description of the hits on the calorimeter
 
   GammaRayTelCalorimeterSD
-	Description of the CAL sensitive detector
-
-
-
-
-
-
-
-
-
-
+    Description of the CAL sensitive detector

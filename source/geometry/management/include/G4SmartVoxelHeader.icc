@@ -76,13 +76,13 @@ G4double G4SmartVoxelHeader::GetMinExtent() const
 }
 
 inline
-size_t G4SmartVoxelHeader::GetNoSlices() const
+std::size_t G4SmartVoxelHeader::GetNoSlices() const
 {
   return fslices.size();
 }
 
 inline
-G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(G4int n) const
+G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(std::size_t n) const
 {
   return fslices[n];
 }

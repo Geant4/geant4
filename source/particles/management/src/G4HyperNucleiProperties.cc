@@ -34,17 +34,18 @@
 #include "G4HyperNucleiProperties.hh"
 #include "G4NucleiProperties.hh"
 #include "G4ParticleTable.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
+
 
 G4double G4HyperNucleiProperties::GetNuclearMass(G4int A, G4int Z, G4int LL)
-{
-  if (LL==0) return  G4NucleiProperties::GetNuclearMass(A, Z);
-  
-  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+{ 
+  if ( LL == 0 ) return  G4NucleiProperties::GetNuclearMass(A, Z);
 
-  if (A < 2 || Z < 0 || Z > A-LL || LL>A )
+  if ( A < 2 || Z < 0 || Z > A-LL || LL > A )
   {
 #ifdef G4VERBOSE
-    if (pTable->GetVerboseLevel()>0)
+    if ( G4ParticleTable::GetParticleTable()->GetVerboseLevel() > 0 )
     {
       G4cout << "G4HyperNucleiProperties::GetNuclearMass: "
              << " Wrong values for A = " << A 
@@ -55,10 +56,10 @@ G4double G4HyperNucleiProperties::GetNuclearMass(G4int A, G4int Z, G4int LL)
 #endif
     return 0.0;
   }
-  else if( A==2 )
+  else if ( A == 2 )
   {
 #ifdef G4VERBOSE
-    if (pTable->GetVerboseLevel()>0)
+    if ( G4ParticleTable::GetParticleTable()->GetVerboseLevel() > 0 )
     {
       G4cout << "G4HyperNucleiProperties::GetNuclearMass: "
              << " No boud state for A = " << A 
@@ -69,59 +70,34 @@ G4double G4HyperNucleiProperties::GetNuclearMass(G4int A, G4int Z, G4int LL)
 #endif
     return 0.0;
   }
-
   
-  G4ParticleDefinition* lambda = pTable->FindParticle("lambda");
-  if (lambda ==0)
-  {
-#ifdef G4VERBOSE
-    if (pTable->GetVerboseLevel()>0)
-    {
-      G4cout << "G4HyperNucleiProperties::GetNuclearMass: "
-             << " Lambda is not defined " << G4endl;
-    }
-#endif
-    return 0.0;
-  }
-  const G4double mLL= lambda->GetPDGMass(); // mLambda
+  static const G4double b7  = 25.0*MeV;
+  static const G4double b8  = 10.5;         // Slope
+  static const G4double a2  = 0.13*MeV;     // BindingEnergy for d+Lambda(MeV)
+  static const G4double a3  = 2.2*MeV;      // BindingEnergy for (t/He3)+Lamb(MeV)
+  static const G4double eps = 0.0001*MeV;   // security value (MeV)
 
-  static const G4double b7=25.*MeV;
-  static const G4double b8=10.5; // Slope
-  static const G4double a2=0.13*MeV; // BindingEnergy for d+Lambda(MeV)
-  static const G4double a3=2.2*MeV;  // BindingEnergy for (t/He3)+Lamb(MeV)
-  static const G4double eps =0.0001*MeV; // security value (MeV)
+  G4double mass = G4NucleiProperties::GetNuclearMass(A-LL, Z);  // A non-"strange" nucleus
 
-  G4double mass = G4NucleiProperties::GetNuclearMass(A-LL, Z); 
-  // A non-"strange" nucleus
-  G4double bs=0.;
-  if     (A-LL ==2) bs=a2;         // for nnL,npL,ppL
-  else if(A-LL ==3) bs=a3;         // for 3nL,2npL,n2pL,3pL
-  else if(A-LL >3)  bs=b7*std::exp(-b8/(A-LL+1.));
+  // Temporarily, the mass of the Lambda below is copied from G4Lambda.cc,
+  // but it should be added in CLHEP/Units/PhysicalConstants.h
+  const G4double mLL = 1.115683*CLHEP::GeV;
+
+  G4double bs = 0.0;
+  if      ( A - LL == 2 ) bs = a2;          // for nnL,npL,ppL
+  else if ( A - LL == 3 ) bs = a3;          // for 3nL,2npL,n2pL,3pL
+  else if ( A - LL > 3  ) bs = b7*G4Exp(-b8/(A-LL+1.0));
   mass += LL*(mLL-bs) + eps;
 
   return mass;
 }
 
+
 G4double G4HyperNucleiProperties::GetAtomicMass(G4int A, G4int Z, G4int LL)
 {
-  if (A < 1 || Z < 0 || Z > A-LL || LL > A || LL <0 )
-  {
-#ifdef G4VERBOSE
-    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>0)
-    {
-      G4cout << "G4HyperNucleiProperties::GetAtomicMass: " 
-             << " Wrong values for A = "  << A 
-             << "  Z = " << Z 
-             << "  L = " << LL  << G4endl;
-    }
-#endif
-    return 0.0;
-    
+  G4double mass = GetNuclearMass(A, Z, LL);
+  if ( mass > 0.0 ) {
+    mass += Z*electron_mass_c2 - 1.433e-5*MeV*G4Pow::GetInstance()->powZ(Z, 2.39);
   }
-  else
-  {
-    G4double nuclearMass = GetNuclearMass(A, Z, LL);
-    return nuclearMass + Z*electron_mass_c2
-         - 1.433e-5*MeV*std::pow(G4double(Z),2.39);
-  }
+  return mass;
 }

@@ -29,7 +29,31 @@
 // --------------------------------------------------------------------
 
 #include "G4Exception.hh"
+#include "G4ios.hh"
 #include "G4StateManager.hh"
+#include "G4VExceptionHandler.hh"
+
+namespace {
+
+inline const G4String G4ExceptionErrBannerStart()
+{
+  return "\n-------- EEEE ------- G4Exception-START -------- EEEE -------\n";
+}
+inline const G4String G4ExceptionWarnBannerStart()
+{
+  return "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
+}
+
+inline const G4String G4ExceptionErrBannerEnd()
+{
+  return "\n-------- EEEE ------- G4Exception-END -------- EEEE -------\n";
+}
+inline const G4String G4ExceptionWarnBannerEnd()
+{
+  return "\n-------- WWWW ------- G4Exception-END -------- WWWW -------\n";
+}
+
+} // namespace
 
 // --------------------------------------------------------------------
 void G4Exception(const char* originOfException, const char* exceptionCode,

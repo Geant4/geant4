@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -34,6 +34,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -107,7 +109,6 @@ Checking overlaps for volume Detector:99 (G4Tubs) ... OK!
             e+ : fastSimProcess_massGeom[geom:World] 
             e- : fastSimProcess_massGeom[geom:World] 
          gamma : fastSimProcess_massGeom[geom:World] 
-Set file name: Par03_fastsim_100events.root
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -241,6 +242,11 @@ Set file name: Par03_fastsim_100events.root
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -513,8 +519,6 @@ Par03EMShowerModel:
 Gaussian distribution (transverse plane): 	mu = 0, sigma = 9.87274 mm 
 Gamma distribution (along shower axis): 	alpha = 4.3593, beta = 0.5, max depth = 30 X0
 Number of created energy deposits: 100
-Set file name: Par03_fastsimModified_100events.root
 Model model inactivated.
-Set file name: Par03_fullsim_100events.root
 Graphics systems deleted.
 Visualization Manager deleting...

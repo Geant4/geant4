@@ -51,7 +51,7 @@ G4GenericIon* G4GenericIon::Definition()
   const G4String name = "GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance = reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
+  G4Ions* anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -79,7 +79,7 @@ G4GenericIon* G4GenericIon::Definition()
               );
   }
 
-  theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
+  theInstance = static_cast<G4GenericIon*>(anInstance);
   pTable->SetGenericIon(theInstance);
   return theInstance;
 }

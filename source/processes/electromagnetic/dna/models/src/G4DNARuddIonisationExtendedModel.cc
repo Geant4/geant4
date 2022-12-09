@@ -56,9 +56,6 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
                                                                    const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-    //  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
-    fpWaterDensity = 0;
-
     slaterEffectiveCharge[0]=0.;
     slaterEffectiveCharge[1]=0.;
     slaterEffectiveCharge[2]=0.;
@@ -94,8 +91,6 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 
     // Mark this model as "applicable" for atomic deexcitation
     SetDeexcitationFlag(true);
-    fAtomDeexcitation = 0;
-    fParticleChangeForGamma = 0;
 
     // Selection of stationary mode
 
@@ -106,19 +101,16 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 
 G4DNARuddIonisationExtendedModel::~G4DNARuddIonisationExtendedModel()
 {  
-    // Cross section
-
+  if(isIon) {
     std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
     for (pos = tableData.begin(); pos != tableData.end(); ++pos)
     {
         G4DNACrossSectionDataSet* table = pos->second;
         delete table;
     }
-
-    // The following removal is forbidden G4VEnergyLossModel takes care of deletion
-    // however coverity will signal this as an error
-    // if (fAtomDeexcitation) {delete  fAtomDeexcitation;}
-
+  } else {
+    delete mainTable;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -126,24 +118,23 @@ G4DNARuddIonisationExtendedModel::~G4DNARuddIonisationExtendedModel()
 void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* particle,
                                                   const G4DataVector& /*cuts*/)
 {
+    if (isInitialised) { return; }
     if (verboseLevel > 3)
         G4cout << "Calling G4DNARuddIonisationExtendedModel::Initialise()" << G4endl;
 
     // Energy limits
-
     G4String fileProton("dna/sigma_ionisation_p_rudd");
     G4String fileHydrogen("dna/sigma_ionisation_h_rudd");
     G4String fileAlphaPlusPlus("dna/sigma_ionisation_alphaplusplus_rudd");
     G4String fileAlphaPlus("dna/sigma_ionisation_alphaplus_rudd");
     G4String fileHelium("dna/sigma_ionisation_he_rudd");
-    //G4String fileLithium("dna/sigma_ionisation_li_rudd");
-    //G4String fileBeryllium("dna/sigma_ionisation_be_rudd");
-    //G4String fileBoron("dna/sigma_ionisation_b_rudd");
     G4String fileCarbon("dna/sigma_ionisation_c_rudd");
     G4String fileNitrogen("dna/sigma_ionisation_n_rudd");
     G4String fileOxygen("dna/sigma_ionisation_o_rudd");
     G4String fileSilicon("dna/sigma_ionisation_si_rudd");
     G4String fileIron("dna/sigma_ionisation_fe_rudd");
+
+    G4String pname = particle->GetParticleName();
 
     G4DNAGenericIonsManager *instance;
     instance = G4DNAGenericIonsManager::Instance();
@@ -158,18 +149,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     oxygenDef = instance->GetIon("oxygen");
     siliconDef = instance->GetIon("silicon");
     ironDef = instance->GetIon("iron");
-    //lithiumDef =  G4IonTable::GetIonTable()->GetIon(3,7);
-    //berylliumDef =  G4IonTable::GetIonTable()->GetIon(4,9);
-    //boronDef =  G4IonTable::GetIonTable()->GetIon(5,11);
 
-    G4String proton;
-    G4String hydrogen;
-    G4String alphaPlusPlus;
-    G4String alphaPlus;
-    G4String helium;
-    //G4String lithium;
-    //G4String beryllium;
-    //G4String boron;
     G4String carbon;
     G4String nitrogen;
     G4String oxygen;
@@ -177,355 +157,137 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4String iron;
 
     G4double scaleFactor = 1 * m*m;
+    massC12 = carbonDef->GetPDGMass();
 
     // LIMITS AND DATA
 
     // **********************************************************************************************
 
-    proton = protonDef->GetParticleName();
-    tableFile[proton] = fileProton;
-    lowEnergyLimit[proton] = lowEnergyLimitForA[1];
-    highEnergyLimit[proton] = 500. * keV;
+    if(pname == "proton") {
+      localMinEnergy = lowEnergyLimitForA[1];
 
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableProton = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableProton->LoadData(fileProton);
-    tableData[proton] = tableProton;
+      // Cross section
+      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
+      mainTable->LoadData(fileProton);
 
     // **********************************************************************************************
     
-    hydrogen = hydrogenDef->GetParticleName();
-    tableFile[hydrogen] = fileHydrogen;
+    } else if(pname == "hydrogen") {
 
-    lowEnergyLimit[hydrogen] = lowEnergyLimitForA[1];
-    highEnergyLimit[hydrogen] = 100. * MeV;
+      localMinEnergy = lowEnergyLimitForA[1];
 
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableHydrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                           eV,
-                                                                           scaleFactor );
-    tableHydrogen->LoadData(fileHydrogen);
-
-    tableData[hydrogen] = tableHydrogen;
+      // Cross section
+      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
+      mainTable->LoadData(fileHydrogen);
 
     // **********************************************************************************************
     
-    alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
-    tableFile[alphaPlusPlus] = fileAlphaPlusPlus;
+    } else if(pname == "alpha") {
 
-    lowEnergyLimit[alphaPlusPlus] = lowEnergyLimitForA[4];
-    highEnergyLimit[alphaPlusPlus] = 400. * MeV;
+      localMinEnergy = lowEnergyLimitForA[4];
 
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableAlphaPlusPlus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                                eV,
-                                                                                scaleFactor );
-    tableAlphaPlusPlus->LoadData(fileAlphaPlusPlus);
-
-    tableData[alphaPlusPlus] = tableAlphaPlusPlus;
+      // Cross section
+      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
+      mainTable->LoadData(fileAlphaPlusPlus);
 
     // **********************************************************************************************
     
-    alphaPlus = alphaPlusDef->GetParticleName();
-    tableFile[alphaPlus] = fileAlphaPlus;
+    } else if(pname == "alpha+") {
 
-    lowEnergyLimit[alphaPlus] = lowEnergyLimitForA[4];
-    highEnergyLimit[alphaPlus] = 400. * MeV;
+      localMinEnergy = lowEnergyLimitForA[4];
 
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableAlphaPlus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                            eV,
-                                                                            scaleFactor );
-    tableAlphaPlus->LoadData(fileAlphaPlus);
-    tableData[alphaPlus] = tableAlphaPlus;
-
-    // **********************************************************************************************
-    
-    helium = heliumDef->GetParticleName();
-    tableFile[helium] = fileHelium;
-
-    lowEnergyLimit[helium] = lowEnergyLimitForA[4];
-    highEnergyLimit[helium] = 400. * MeV;
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableHelium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableHelium->LoadData(fileHelium);
-    tableData[helium] = tableHelium;
-
-    // **********************************************************************************************
-    /*
-    lithium = lithiumDef->GetParticleName();
-    tableFile[lithium] = fileLithium;
-
-    //SI
-    //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
-    //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
-    lowEnergyLimit[lithium] = 0.5*7*MeV;
-    highEnergyLimit[lithium] = 1e6*7*MeV;
-    //
-    
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableLithium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableLithium->LoadData(fileLithium);
-    tableData[lithium] = tableLithium;
-    
-    // **********************************************************************************************
-    
-    beryllium = berylliumDef->GetParticleName();
-    tableFile[beryllium] = fileBeryllium;
-
-    //SI
-    //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
-    //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
-    lowEnergyLimit[beryllium] = 0.5*9*MeV;
-    highEnergyLimit[beryllium] = 1e6*9*MeV;
-    //
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableBeryllium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableBeryllium->LoadData(fileBeryllium);
-    tableData[beryllium] = tableBeryllium;
-
-    // **********************************************************************************************
-    
-    boron = boronDef->GetParticleName();
-    tableFile[boron] = fileBoron;
-
-    //SI
-    //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
-    //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
-    lowEnergyLimit[boron] = 0.5*11*MeV;
-    highEnergyLimit[boron] = 1e6*11*MeV;
-    //
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableBoron = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableBoron->LoadData(fileBoron);
-    tableData[boron] = tableBoron;
-    */
-    // **********************************************************************************************
-    
-    carbon = carbonDef->GetParticleName();
-    tableFile[carbon] = fileCarbon;
-
-    //SI
-    //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
-    //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
-    lowEnergyLimit[carbon] = 0.5*12*MeV;
-    highEnergyLimit[carbon] = 1e6*12*MeV;
-    //
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableCarbon = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableCarbon->LoadData(fileCarbon);
-    tableData[carbon] = tableCarbon;
-
-    // **********************************************************************************************
-    
-    oxygen = oxygenDef->GetParticleName();
-    tableFile[oxygen] = fileOxygen;
-
-    //SI
-    //lowEnergyLimit[oxygen] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
-    //highEnergyLimit[oxygen] = 1e6* particle->GetAtomicMass()* MeV;
-    lowEnergyLimit[oxygen] = 0.5*16*MeV;
-    highEnergyLimit[oxygen] = 1e6*16*MeV;
-    //
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableOxygen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV,
-                                                                         scaleFactor );
-    tableOxygen->LoadData(fileOxygen);
-    tableData[oxygen] = tableOxygen;
-
-    // **********************************************************************************************
-    
-    nitrogen = nitrogenDef->GetParticleName();
-    tableFile[nitrogen] = fileNitrogen;
-
-    //SI
-    //lowEnergyLimit[nitrogen] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
-    //highEnergyLimit[nitrogen] = 1e6* particle->GetAtomicMass()* MeV;
-    lowEnergyLimit[nitrogen] = 0.5*14*MeV;
-    highEnergyLimit[nitrogen] = 1e6*14*MeV;
-    //
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableNitrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                           eV,
-                                                                           scaleFactor );
-    tableNitrogen->LoadData(fileNitrogen);
-    tableData[nitrogen] = tableNitrogen;
+      // Cross section
+      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
+      mainTable->LoadData(fileAlphaPlus);
 
     // **********************************************************************************************
 
-    silicon = siliconDef->GetParticleName();
-    tableFile[silicon] = fileSilicon;
+    } else if(pname == "helium") {
+
+      localMinEnergy = lowEnergyLimitForA[4];
+
+      // Cross section
+      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
+      mainTable->LoadData(fileHelium);
+
+    // **********************************************************************************************
+
+    } else if(pname == "GenericIon") {
     
-    //lowEnergyLimit[silicon] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
-    //highEnergyLimit[silicon] = 1e6* particle->GetAtomicMass()* MeV;
-    lowEnergyLimit[silicon] = 0.5*28*MeV;
-    highEnergyLimit[silicon] = 1e6*28*MeV;
-    //
+      isIon = true;
+      carbon = carbonDef->GetParticleName();
+      localMinEnergy = lowEnergyLimitForA[5]*massC12/proton_mass_c2;
+
+      // Cross section
+      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
+      mainTable->LoadData(fileCarbon);
+
+      tableData[carbon] = mainTable;
+
+    // **********************************************************************************************
     
-    // Cross section
+      oxygen = oxygenDef->GetParticleName();
+      tableFile[oxygen] = fileOxygen;
+
+      // Cross section
+      G4DNACrossSectionDataSet* tableOxygen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+                                                                           eV, scaleFactor );
+      tableOxygen->LoadData(fileOxygen);
+      tableData[oxygen] = tableOxygen;
+
+    // **********************************************************************************************
     
-    G4DNACrossSectionDataSet* tableSilicon = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                          eV,
-                                                                          scaleFactor );
-    tableSilicon->LoadData(fileSilicon);
-    tableData[silicon] = tableSilicon;
+      nitrogen = nitrogenDef->GetParticleName();
+      tableFile[nitrogen] = fileNitrogen;
+
+      // Cross section
+      G4DNACrossSectionDataSet* tableNitrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+                                                                             eV, scaleFactor );
+      tableNitrogen->LoadData(fileNitrogen);
+      tableData[nitrogen] = tableNitrogen;
+
+    // **********************************************************************************************
+
+      silicon = siliconDef->GetParticleName();
+      tableFile[silicon] = fileSilicon;
+    
+      // Cross section
+      G4DNACrossSectionDataSet* tableSilicon = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+                                                                            eV, scaleFactor );
+      tableSilicon->LoadData(fileSilicon);
+      tableData[silicon] = tableSilicon;
      
     // **********************************************************************************************
     
-    iron = ironDef->GetParticleName();
-    tableFile[iron] = fileIron;
+      iron = ironDef->GetParticleName();
+      tableFile[iron] = fileIron;
 
-    //SI
-    //lowEnergyLimit[iron] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
-    //highEnergyLimit[iron] = 1e6* particle->GetAtomicMass()* MeV;
-    lowEnergyLimit[iron] = 0.5*56*MeV;
-    highEnergyLimit[iron] = 1e6*56*MeV;
-    //
+      // Cross section
 
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableIron = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                       eV,
-                                                                       scaleFactor );
-    tableIron->LoadData(fileIron);
-    tableData[iron] = tableIron;
-
+      G4DNACrossSectionDataSet* tableIron = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+                                                                         eV, scaleFactor );
+      tableIron->LoadData(fileIron);
+      tableData[iron] = tableIron;
+    }
     // **********************************************************************************************
-
-    // SI: not anymore
-    // ZF Following lines can be replaced by:
-    // SetLowEnergyLimit(lowEnergyLimit[particle->GetParticleName()]);
-    // SetHighEnergyLimit(highEnergyLimit[particle->GetParticleName()]);
-    // at least for HZE
-    
-    if (particle==protonDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[proton]);
-      SetHighEnergyLimit(highEnergyLimit[proton]);
-    }
-
-    if (particle==hydrogenDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[hydrogen]);
-      SetHighEnergyLimit(highEnergyLimit[hydrogen]);
-    }
-
-    if (particle==heliumDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[helium]);
-      SetHighEnergyLimit(highEnergyLimit[helium]);
-    }
-
-    if (particle==alphaPlusDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[alphaPlus]);
-      SetHighEnergyLimit(highEnergyLimit[alphaPlus]);
-    }
-
-    if (particle==alphaPlusPlusDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[alphaPlusPlus]);
-      SetHighEnergyLimit(highEnergyLimit[alphaPlusPlus]);
-    }
-    /*
-    if (particle==lithiumDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[lithium]);
-      SetHighEnergyLimit(highEnergyLimit[lithium]);
-    }
-
-    if (particle==berylliumDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[beryllium]);
-      SetHighEnergyLimit(highEnergyLimit[beryllium]);
-    }
-
-    if (particle==boronDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[boron]);
-      SetHighEnergyLimit(highEnergyLimit[boron]);
-    }
-    */
-    if (particle==carbonDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[carbon]);
-      SetHighEnergyLimit(highEnergyLimit[carbon]);
-    }
-
-    if (particle==nitrogenDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[nitrogen]);
-      SetHighEnergyLimit(highEnergyLimit[nitrogen]);
-    }
-
-    if (particle==oxygenDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[oxygen]);
-      SetHighEnergyLimit(highEnergyLimit[oxygen]);
-    }
-
-    if (particle==siliconDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[silicon]);
-      SetHighEnergyLimit(highEnergyLimit[silicon]);
-    }
-
-    if (particle==ironDef)
-    {
-      SetLowEnergyLimit(lowEnergyLimit[iron]);
-      SetHighEnergyLimit(highEnergyLimit[iron]);
-    }
-
-    //----------------------------------------------------------------------
 
     if( verboseLevel>0 )
     {
-        G4cout << "Rudd ionisation model is initialized " << G4endl
-               << "Energy range: "
-               << LowEnergyLimit() / eV << " eV - "
-               << HighEnergyLimit() / keV << " keV for "
-               << particle->GetParticleName()
-               << G4endl;
+      G4cout << "Rudd ionisation model is initialized " << G4endl
+	     << "Energy range for model: "
+	     << LowEnergyLimit() / keV << " keV - "
+	     << HighEnergyLimit() / keV << " keV for "
+	     << pname
+	     << " internal low energy limit E(keV)=" << localMinEnergy / keV
+	     << G4endl;
     }
 
     // Initialize water density pointer
     fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
     //
-
     fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
 
-    if (isInitialised) { return; }
     fParticleChangeForGamma = GetParticleChangeForGamma();
     isInitialised = true;
 }
@@ -538,134 +300,50 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
                                                                  G4double,
                                                                  G4double)
 {
-    //SI:  particleDefinition->GetParticleName() is for eg. Fe56
-    //     particleDefinition->GetPDGMass() is correct
-    //     particleDefinition->GetAtomicNumber() is correct
-
     if (verboseLevel > 3)
         G4cout << "Calling CrossSectionPerVolume() of G4DNARuddIonisationExtendedModel" << G4endl;
 
-    auto particleDefinition = GetDNAIonParticleDefinition(partDef);
+    currParticle = GetDNAIonParticleDefinition(partDef);
+    currentScaledEnergy = k;
+    G4double e = k;
+    G4double q2 = 1.0;
+    currentTable = mainTable;
 
-    // Calculate total cross section for model
-
-    if (
-            particleDefinition != protonDef
-            &&
-            particleDefinition != hydrogenDef
-            &&
-            particleDefinition != alphaPlusPlusDef
-            &&
-            particleDefinition != alphaPlusDef
-            &&
-            particleDefinition != heliumDef
-            &&
-            // SI
-            //particleDefinition != instance->GetIon("carbon")
-            //&&
-            //particleDefinition != instance->GetIon("nitrogen")
-            //&&
-            //particleDefinition != instance->GetIon("oxygen")
-            //&&
-            //particleDefinition != instance->GetIon("iron")
-            /*
-            particleDefinition != lithiumDef
-            &&
-            particleDefinition != berylliumDef
-            &&
-            particleDefinition != boronDef
-            &&
-            */
-            particleDefinition != carbonDef
-            &&
-            particleDefinition != nitrogenDef
-            &&
-            particleDefinition != oxygenDef
-            &&
-            particleDefinition != siliconDef
-            &&
-            particleDefinition != ironDef
-            //
-            )
-
-        return 0;
-
-    G4double lowLim = 0;
-
-    if (     particleDefinition == protonDef
-             ||  particleDefinition == hydrogenDef
-             )
-
-        lowLim = lowEnergyLimitOfModelForA[1];
-
-    else if (     particleDefinition == alphaPlusPlusDef
-                  ||       particleDefinition == alphaPlusDef
-                  ||       particleDefinition == heliumDef
-                  )
-
-        lowLim = lowEnergyLimitOfModelForA[4];
-
-    else lowLim = lowEnergyLimitOfModelForA[5];
-
-    G4double highLim = 0;
-    G4double sigma=0;
-
+    if (isIon){
+      if (currParticle == nullptr) {//not DNA particle
+        currentScaledEnergy *= massC12/partDef->GetPDGMass();
+        G4double q = partDef->GetPDGCharge()/(eplus*6);
+        q2 *= q*q;
+        e = currentScaledEnergy;
+        currParticle = carbonDef;
+      }
+      G4String pname = currParticle->GetParticleName();
+      auto goodTable = tableData.find(pname);
+      currentTable = goodTable->second;
+    }
+    // below low the ion should be stopped
+    if (currentScaledEnergy < localMinEnergy) { return DBL_MAX; }
 
     G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
-
-    const G4String& particleName = particleDefinition->GetParticleName();
-
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
-
-    if (pos2 != highEnergyLimit.end())
-    {
-        highLim = pos2->second;
+    G4double sigma = 0.0;
+    if (nullptr != currentTable) {
+      sigma = currentTable->FindValue(e)*q2;
+    } else {
+      G4cout << "G4DNARuddIonisationExtendedModel - no data table for " 
+	     << partDef->GetParticleName() << G4endl;
+      G4Exception("G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(...)","em0002",
+		  FatalException,"Data table is not available for the model.");
     }
-
-    if (k <= highLim)
-    {
-
-        //SI : XS must not be zero otherwise sampling of secondaries method ignored
-
-        if (k < lowLim) k = lowLim;
-
-        //
-
-        std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-        pos = tableData.find(particleName);
-
-        if (pos != tableData.end())
-        {
-            G4DNACrossSectionDataSet* table = pos->second;
-            if (table != 0)
-            {
-                sigma = table->FindValue(k);
-            }
-        }
-        else
-        {
-            G4Exception("G4DNARuddIonisationExtendedModel::CrossSectionPerVolume","em0002",
-                            FatalException,"Model not applicable to particle type.");
-        }
-
-    } // if (k >= lowLim && k < highLim)
-
     if (verboseLevel > 2)
     {
-        G4cout << "__________________________________" << G4endl;
-        G4cout << "G4DNARuddIonisationExtendedModel - XS INFO START" << G4endl;
-        G4cout << "Kinetic energy(eV)=" << k/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-        G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-        G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-        //G4cout << " - Cross section per water molecule (cm^-1)=" 
-        //<< sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-        G4cout << "G4DNARuddIonisationExtendedModel - XS INFO END" << G4endl;
-
+      G4cout << "__________________________________" << G4endl;
+      G4cout << "G4DNARuddIonisationExtendedModel - XS INFO START" << G4endl;
+      G4cout << "Kinetic energy(eV)=" << k/eV << " particle : " << partDef->GetParticleName() << G4endl;
+      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+      G4cout << "G4DNARuddIonisationExtendedModel - XS INFO END" << G4endl;
     }
-
     return sigma*waterDensity;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -676,91 +354,39 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
                                                          G4double,
                                                          G4double)
 {
-    //SI:  particle->GetDefinition()->GetParticleName() is for eg. Fe56
-    //     particle->GetDefinition()->GetPDGMass() is correct
-    //     particle->GetDefinition()->GetAtomicNumber() is correct
-    //     particle->GetDefinition()->GetAtomicMass() is correct
-
     if (verboseLevel > 3)
         G4cout << "Calling SampleSecondaries() of G4DNARuddIonisationExtendedModel" << G4endl;
-    auto particleDefinition = GetDNAIonParticleDefinition(particle->GetDefinition());
 
-    G4double lowLim = 0;
-    G4double highLim = 0;
+    // stop ion with energy below low energy limit
+    G4double k = particle->GetKineticEnergy();
+    if (currentScaledEnergy < localMinEnergy) {
+      fParticleChangeForGamma->SetProposedKineticEnergy(0.);
+      fParticleChangeForGamma->ProposeTrackStatus(fStopButAlive);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
+      return;
+    }
 
-    // ZF: the following line summarizes the commented part
+    // sampling of final state
+    G4ParticleDefinition* definition = particle->GetDefinition();
+    const G4ThreeVector& primaryDirection = particle->GetMomentumDirection();
 
-    if(particle->GetDefinition()->GetAtomicMass() <= 4) lowLim = killBelowEnergyForA[particleDefinition->GetAtomicMass()];
-    
-    else lowLim = killBelowEnergyForA[5]*particleDefinition->GetAtomicMass();
+    G4int ionizationShell = RandomSelect(currentScaledEnergy);
 
-    /* 
+    // sample deexcitation
+    // here we assume that H_{2}O electronic levels are the same as Oxygen.
+    // this can be considered true with a rough 10% error in energy on K-shell,
 
-    if(particle->GetDefinition()->GetAtomicMass() >= 5) lowLim = killBelowEnergyForA[5]*particle->GetDefinition()->GetAtomicMass();
-    
-    if (     particle->GetDefinition() == protonDef
-       ||  particle->GetDefinition() == hydrogenDef
-       )
+    G4double bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
-       lowLim = killBelowEnergyForA[1];
-       
-    if (     particle->GetDefinition() == alphaPlusPlusDef
-       ||  particle->GetDefinition() == alphaPlusDef
-       ||  particle->GetDefinition() == heliumDef
-       )
-
-       lowLim = killBelowEnergyForA[4];
-    
-    */
+    //SI: additional protection if tcs interpolation method is modified
+    if (k < bindingEnergy) return;
     //
 
-    G4double k = particle->GetKineticEnergy();
+    G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
 
-    const G4String& particleName = particleDefinition->GetParticleName();
-
-    // SI - the following is useless since lowLim is already defined
-    /*
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-    pos1 = lowEnergyLimit.find(particleName);
-
-    if (pos1 != lowEnergyLimit.end())
-    {
-      lowLim = pos1->second;
-    }
-    */
-
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
-
-    if (pos2 != highEnergyLimit.end()) highLim = pos2->second;
-
-    if (k >= lowLim && k <= highLim) 
-    
-    // SI: no strict limits, like in the non extended version of the model
-    {
-        G4ParticleDefinition* definition = particleDefinition;
-        G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
-        /*
-        G4double particleMass = definition->GetPDGMass();
-        G4double totalEnergy = k + particleMass;
-        G4double pSquare = k*(totalEnergy+particleMass);
-        G4double totalMomentum = std::sqrt(pSquare);
-        */
-
-        G4int ionizationShell = RandomSelect(k,particleName);
-
-        // sample deexcitation
-        // here we assume that H_{2}O electronic levels are the same as Oxygen.
-        // this can be considered true with a rough 10% error in energy on K-shell,
-
-        G4double bindingEnergy = 0;
-        bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
-
-        //SI: additional protection if tcs interpolation method is modified
-        if (k<bindingEnergy) return;
-        //
-
-        G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
+    // is ionisation possible?
+    G4double scatteredEnergy = k - bindingEnergy - secondaryKinetic;
+    if(scatteredEnergy < 0.0) { return; }
 
         G4int Z = 8;
 	
@@ -773,46 +399,12 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         fvect->push_back(dp);
 
         fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
-	
-        // SI: the following lines are not needed anymore
-        /*
-        G4double cosTheta = 0.;
-        G4double phi = 0.;
-        RandomizeEjectedElectronDirection(definition, k,secondaryKinetic, cosTheta, phi, ionizationShell);
-
-        G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-        G4double dirX = sinTheta*std::cos(phi);
-        G4double dirY = sinTheta*std::sin(phi);
-        G4double dirZ = cosTheta;
-        G4ThreeVector deltaDirection(dirX,dirY,dirZ);
-        deltaDirection.rotateUz(primaryDirection);
-        */
-  
-        // Ignored for ions on electrons
-        /*
-        G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
-
-        G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
-        G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
-        G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-        G4double finalMomentum = std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-        finalPx /= finalMomentum;
-        finalPy /= finalMomentum;
-        finalPz /= finalMomentum;
-
-        G4ThreeVector direction;
-        direction.set(finalPx,finalPy,finalPz);
-
-        fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
-        */
-	
+		
         size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
         size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
 
-        G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
-
         // SI: only atomic deexcitation from K shell is considered
-        if(fAtomDeexcitation && ionizationShell == 4)
+        if(fAtomDeexcitation != nullptr && ionizationShell == 4)
         {
           const G4AtomicShell* shell 
             = fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
@@ -839,14 +431,8 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
               }
 	    } 
           }
-
         }
 
-        //This should never happen
-        if(bindingEnergy < 0.0) 
-        G4Exception("G4DNAEmfietzoglouIonisatioModel1::SampleSecondaries()",
-                 "em2050",FatalException,"Negative local energy deposit");	 
- 
         //bindingEnergy has been decreased 
         //by the amount of energy taken away by deexc. products
         if (!statCode)
@@ -856,8 +442,8 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         }
         else
         {
-         fParticleChangeForGamma->SetProposedKineticEnergy(k);
-         fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
+          fParticleChangeForGamma->SetProposedKineticEnergy(k);
+          fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
         }
 
         // TEST //////////////////////////
@@ -871,17 +457,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
                                                                ionizationShell,
                                                                theIncomingTrack);
-    }
-
     // SI - not useful since low energy of model is 0 eV
-
-    if (k < lowLim)
-    {
-        fParticleChangeForGamma->SetProposedKineticEnergy(0.);
-        fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-        fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
-    }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -913,49 +489,6 @@ G4double G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronEnergy(G4Part
 
     return(proposed_energy);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// The following section is not used anymore but is kept for memory
-// GetAngularDistribution()->SampleDirectionForShell is used instead
-
-/*
-void G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
-                                                                         G4double k,
-                                                                         G4double secKinetic,
-                                                                         G4double & cosTheta,
-                                                                         G4double & phi,
-                                                                         G4int shell )
-{
-    G4double maxSecKinetic = 0.;
-    G4double maximumEnergyTransfer = 0.;
-
-    // ZF. generalized & relativistic version
-
-    if( (k/MeV)/(particleDefinition->GetPDGMass()/MeV)  <= 0.1 )
-    {
-        maximumEnergyTransfer= 4.* (electron_mass_c2 / particleDefinition->GetPDGMass()) * k;
-        maximumEnergyTransfer+=waterStructure.IonisationEnergy(shell);
-    }
-    else
-    {
-        G4double approx_nuc_number = particleDefinition->GetPDGMass() / proton_mass_c2;
-        G4double en_per_nucleon = k/approx_nuc_number;
-        G4double beta2 = 1. - 1./pow( (1.+(en_per_nucleon/electron_mass_c2)*(electron_mass_c2/proton_mass_c2)), 2.);
-        G4double gamma = 1./sqrt(1.-beta2);
-        maximumEnergyTransfer = 2.*electron_mass_c2*(gamma*gamma-1.)/(1.+2.*gamma*(electron_mass_c2/particleDefinition->GetPDGMass())+pow(electron_mass_c2/particleDefinition->GetPDGMass(), 2.) );
-        maximumEnergyTransfer+=waterStructure.IonisationEnergy(shell);
-    }
-
-    maxSecKinetic = maximumEnergyTransfer-waterStructure.IonisationEnergy(shell);
-
-    phi = twopi * G4UniformRand();
-
-    if (secKinetic>100*eV) cosTheta = std::sqrt(secKinetic / maxSecKinetic);
-    else cosTheta = (2.*G4UniformRand())-1.;
-
-}
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -1029,7 +562,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
     {
         G4double Z = particleDefinition->GetAtomicNumber();
 
-        G4double x = 100.*std::sqrt(beta2)/gpow->powA(Z,(2./3.));
+        G4double x = 100.*std::sqrt(beta2)/gpow->powA(Z, 2./3.);
         G4double Zeffion = Z*(1.-G4Exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
         rejection_term*=Zeffion*Zeffion;
     }
@@ -1068,11 +601,6 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[1]=0.25;
         sCoefficient[2]=0.25;
     }
-
-   //    if (    particleDefinition == heliumDef
-   //            || particleDefinition == alphaPlusDef
-   //            || particleDefinition == alphaPlusPlusDef
-   //            )
 
     if (isHelium)
     {
@@ -1296,31 +824,25 @@ G4double G4DNARuddIonisationExtendedModel::CorrectionFactor(G4ParticleDefinition
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4DNARuddIonisationExtendedModel::RandomSelect(G4double k, const G4String& particle )
+G4int G4DNARuddIonisationExtendedModel::RandomSelect(G4double k)
 {   
-
     G4int level = 0;
-
+ 
     // Retrieve data table corresponding to the current particle type
 
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    pos = tableData.find(particle);
+    G4DNACrossSectionDataSet* table = currentTable;
 
-    if (pos != tableData.end())
-    {
-        G4DNACrossSectionDataSet* table = pos->second;
-
-        if (table != 0)
+    if (table != nullptr)
         {
             G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
 
-            const size_t n(table->NumberOfComponents());
-            size_t i(n);
+            const G4int n = (G4int)table->NumberOfComponents();
+            G4int i(n);
             G4double value = 0.;
 
             while (i>0)
             {
-                i--;
+                --i;
                 valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
 
                 value += valuesBuffer[i];
@@ -1332,7 +854,7 @@ G4int G4DNARuddIonisationExtendedModel::RandomSelect(G4double k, const G4String&
 
             while (i > 0)
             {
-                i--;
+                --i;
 
                 if (valuesBuffer[i] > value)
                 {
@@ -1345,13 +867,6 @@ G4int G4DNARuddIonisationExtendedModel::RandomSelect(G4double k, const G4String&
             if (valuesBuffer) delete[] valuesBuffer;
 
         }
-    }
-    else
-    {
-        G4Exception("G4DNARuddIonisationExtendedModel::RandomSelect","em0002",
-                    FatalException,"Model not applicable to particle type.");
-    }
-
     return level;
 }
 
@@ -1439,10 +954,7 @@ G4ParticleDefinition* G4DNARuddIonisationExtendedModel::GetDNAIonParticleDefinit
     }else if(PDGEncoding == 1000060120){
       return instance->GetIon("carbon");
     }
-    G4ExceptionDescription description;
-    description << "DNA physics does not support this ion : "<<particleDefinition->GetParticleName()<< G4endl;
-    G4Exception("G4DNARuddIonisationExtendedModel::GetDNAIonParticleDefinition()",
-                "em2051",FatalException,description);
+    //if there is no DNA particle, get nullptr
     return nullptr;
   }
 }

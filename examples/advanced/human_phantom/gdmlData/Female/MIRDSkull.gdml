@@ -58,13 +58,13 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="CraniumOut" ax="7.68" by="9.67" cz="6.83" zcut1="-6.83" zcut2="6.83" />
+  <ellipsoid lunit="cm" name="CraniumOut" ax="7.68" by="9.67" cz="6.83" zcut1="-6.83" zcut2="6.83" />
 
-  <ellipsoid aunit="cm" lunit="cm" name="CraniumIn" ax="7.18" by="9.17" cz="6.33" zcut1="-6.33" zcut2="6.33" />
+  <ellipsoid lunit="cm" name="CraniumIn" ax="7.18" by="9.17" cz="6.33" zcut1="-6.33" zcut2="6.33" />
 
-  <eltube aunit="cm" lunit="cm" name="FacialSkeletonOut" dx="6.92" dy="8.91" dz="5.13" />
-  <eltube aunit="cm" lunit="cm" name="FacialSkeletonIn" dx="5.82" dy="7.81" dz="6.13" />
-  <box aunit="cm" lunit="cm" name="SubtrFacialSkeleton" x="14.84" y="18.82" z="11.26" /> 
+  <eltube lunit="cm" name="FacialSkeletonOut" dx="6.92" dy="8.91" dz="5.13" />
+  <eltube lunit="cm" name="FacialSkeletonIn" dx="5.82" dy="7.81" dz="6.13" />
+  <box lunit="cm" name="SubtrFacialSkeleton" x="14.84" y="18.82" z="11.26" /> 
 
   <subtraction name="FirstFacialSkeleton">
    <first ref="FacialSkeletonOut" />

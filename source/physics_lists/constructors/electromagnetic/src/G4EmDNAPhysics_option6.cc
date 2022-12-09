@@ -71,7 +71,7 @@ void G4EmDNAPhysics_option6::ConstructProcess()
   // parameters
   G4EmParameters* param = G4EmParameters::Instance();
   const G4double emaxDNA = 1.*CLHEP::MeV;
-  const G4double emaxIonDNA = 100.*CLHEP::MeV;
+  const G4double emaxIonDNA = 300.*CLHEP::MeV;
   const G4double eminBorn = 500.*CLHEP::keV;
   const G4bool fast = param->DNAFast();
   const G4bool st = param->DNAStationary();
@@ -85,7 +85,7 @@ void G4EmDNAPhysics_option6::ConstructProcess()
     = G4DNAGenericIonsManager::Instance();
 
   // standard physics
-  G4EmDNABuilder::ConstructStandardEmPhysics(emaxDNA, emaxDNA, 
+  G4EmDNABuilder::ConstructStandardEmPhysics(emaxDNA, emaxIonDNA, 
                                              emaxIonDNA, emaxIonDNA,
                                              dnaUrban, fast);
 

@@ -100,13 +100,6 @@ public:
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;
-    if( std::getenv("G4PHPTEST") )
-      G4cout << " G4ParticleHPProduct :: Init MassCode "
-             << theMassCode << " " << theMass << " theActualStateQValue "
-             << theActualStateQValue << G4endl;// GDEB
-    if( std::getenv("G4PHPTEST") )
-      G4cout << " G4ParticleHPProduct :: Init theActualStateQValue "
-             << theActualStateQValue << G4endl;// GDEB
     theGroundStateQValue*= CLHEP::eV;
     theActualStateQValue*= CLHEP::eV;
     theYield.Init(aDataFile, CLHEP::eV);

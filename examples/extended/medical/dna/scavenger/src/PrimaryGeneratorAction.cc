@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file PrimaryGeneratorAction.cc
-/// \brief Implementation of the PrimaryGeneratorAction class
+/// \file scavenger/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the scavenger::PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
 #include "G4GeneralParticleSource.hh"

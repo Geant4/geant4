@@ -12,6 +12,7 @@ geant4_add_module(G4transportation
     G4Transportation.icc
     G4VTrackTerminator.hh
     G4TransportationLogger.hh
+    G4TransportationParameters.hh
     G4TransportationProcessType.hh
   SOURCES
     G4CoupledTransportation.cc
@@ -19,6 +20,7 @@ geant4_add_module(G4transportation
     G4NeutronKillerMessenger.cc
     G4StepLimiter.cc
     G4Transportation.cc
+    G4TransportationParameters.cc    
     G4TransportationLogger.cc
     G4VTrackTerminator.cc)
 

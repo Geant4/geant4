@@ -37,6 +37,7 @@
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4VProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,22 +47,18 @@ EventAction::EventAction()
  fTrakLenCharged(0.), fTrakLenNeutral(0.),
  fNbStepsCharged(0), fNbStepsNeutral(0),
  fTransmitFlag(0), fReflectFlag(0)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{ }
+{
+  fTypes[0] = fTypes[1] = fTypes[2] = fTypes[3] = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event* )
 {
- // initialisation per event
- fEnergyDeposit  = 0.;
- fTrakLenCharged = fTrakLenNeutral = 0.; 
- fNbStepsCharged = fNbStepsNeutral = 0;
- fTransmitFlag   = fReflectFlag    = 0;    
+  // initialisation per event
+  fEnergyDeposit = fTrakLenCharged = fTrakLenNeutral = 0.; 
+  fNbStepsCharged = fNbStepsNeutral = fTransmitFlag = fReflectFlag = 0;    
+  fTypes[0] = fTypes[1] = fTypes[2] = fTypes[3] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,11 +75,26 @@ void EventAction::EndOfEventAction(const G4Event*)
  run->CountStepsCharg(fNbStepsCharged);
  run->CountStepsNeutr(fNbStepsNeutral);
 
- run->CountTransmit (fTransmitFlag);
- run->CountReflect  (fReflectFlag);
- 
+ run->CountTransmit(fTransmitFlag);
+ run->CountReflect(fReflectFlag);
+ run->CountGammaProcesses(fTypes);
+
  if (fEnergyDeposit > 0.)
     G4AnalysisManager::Instance()->FillH1(1,fEnergyDeposit);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::CountStepsNeutr(const G4VProcess* ptr)
+{
+  ++fNbStepsNeutral;
+  if(nullptr != ptr) {
+    G4int type = ptr->GetProcessSubType();
+    if(type == 11) { ++fTypes[3]; }
+    else if(type == 12) { ++fTypes[0]; }
+    else if(type == 13) { ++fTypes[1]; }
+    else if(type == 14) { ++fTypes[2]; }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

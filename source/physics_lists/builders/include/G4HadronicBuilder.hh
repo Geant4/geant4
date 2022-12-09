@@ -84,6 +84,17 @@ public:
 
   // method to create some decays for heavy hadrons
   static void BuildDecayTableForBCHadrons();
+
+  // methods for nuclear interactions of light hypernuclei and anti-hypernuclei projectiles
+  // (note that: QGS cannot handle nuclei projectiles of any kind; INCLXX is currently
+  // the only intra-nuclear cascade model capable of handling light hypernuclei - but not
+  // light anti-hypernuclei - so only the two reference physics lists FTFP_BERT and 
+  // FTFP_INCLXX are able to simulate nuclear interactions of light hypernuclei and
+  //  anti-hypernuclei).
+  static void BuildHyperNucleiFTFP_BERT();
+  static void BuildHyperAntiNucleiFTFP_BERT();
+  static void BuildHyperNucleiFTFP_INCLXX();
+  static void BuildFTFP_INCLXX( const std::vector< G4int >& partList, const G4String& xsName );
 };
 
 #endif

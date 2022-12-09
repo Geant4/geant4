@@ -34,6 +34,7 @@
 #include <string>
 #include <iostream>
 
+#include "G4String.hh"
 #include "G4Types.hh"
 #include "G4LorentzVector.hh"
 

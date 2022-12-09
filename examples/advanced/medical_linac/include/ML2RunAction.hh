@@ -29,8 +29,8 @@
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
 //	with the contribute of Alessandro Occhigrossi*
 //
-// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanit�, Italy
-// *Istituto Superiore di Sanit� and INFN Roma, gruppo collegato Sanit�, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
 //  fax (39) 06 49387075

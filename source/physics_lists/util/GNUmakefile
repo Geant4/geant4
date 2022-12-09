@@ -16,6 +16,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/materials/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/particles/management/include \
@@ -28,8 +29,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
+            -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/materials/include
+            -I$(G4BASE)/run/include
 
 include $(G4INSTALL)/config/common.gmk

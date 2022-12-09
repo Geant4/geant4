@@ -90,7 +90,7 @@ G4AntiKaonZero* G4AntiKaonZero::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiKaonZero*>(anInstance);
+  theInstance = static_cast<G4AntiKaonZero*>(anInstance);
   return theInstance;
 }
 

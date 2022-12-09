@@ -244,7 +244,7 @@ void G4SandiaTable::PrintErrorV(const G4String& ss)
 void G4SandiaTable::ComputeMatSandiaMatrix()
 {  
   //get list of elements
-  const G4int NbElm = fMaterial->GetNumberOfElements();
+  const G4int NbElm = (G4int)fMaterial->GetNumberOfElements();
   const G4ElementVector* ElementVector = fMaterial->GetElementVector();
   
   G4int* Z = new G4int[NbElm];               //Atomic number
@@ -379,12 +379,12 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   G4int MaxIntervals = 0;
   G4int elm, c, i, j, jj, k, k1, k2, c1, n1, z;    
 
-  const G4int noElm = fMaterial->GetNumberOfElements();
+  const G4int noElm = (G4int)fMaterial->GetNumberOfElements();
   const G4ElementVector* ElementVector = fMaterial->GetElementVector();
   
   std::vector<G4int> Z(noElm);               //Atomic number
 
-  for ( elm = 0; elm < noElm; elm++ )
+  for ( elm = 0; elm < noElm; ++elm )
   { 
     z = G4lrint((*ElementVector)[elm]->GetZ());
     if(z < 1) { z = 1; }
@@ -428,7 +428,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 
     G4int n2 = n1 + fNbOfIntervals[Z[i]];
     
-    for( k1 = n1; k1 < n2; k1++ )
+    for( k1 = n1; k1 < n2; ++k1 )
     {
       if( I1  > fSandiaTable[k1][0] )
       {
@@ -438,7 +438,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
     }
     G4int flag = 0;
     
-    for( c1 = 1; c1 < c; c1++ )
+    for( c1 = 1; c1 < c; ++c1 )
     {
       if( fPhotoAbsorptionCof0[c1] == I1 ) // this value already has existed
       {
@@ -451,11 +451,11 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
       fPhotoAbsorptionCof0[c] = I1;
       ++c;
     }
-    for( k2 = k1; k2 < n2; k2++ )
+    for( k2 = k1; k2 < n2; ++k2 )
     {
       flag = 0;
 
-      for( c1 = 1; c1 < c; c1++ )
+      for( c1 = 1; c1 < c; ++c1 )
       {
         if( fPhotoAbsorptionCof0[c1] == fSandiaTable[k2][0] )
         {
@@ -517,7 +517,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
       G4double B1 = fSandiaTable[k][0];
       G4double B2 = fSandiaTable[k+1][0];
 
-      for(G4int q = 1; q < fMaxInterval-1; q++)
+      for(G4int q = 1; q < fMaxInterval-1; ++q)
       {
 	G4double E1 = fPhotoAbsorptionCof0[q];
 	G4double E2 = fPhotoAbsorptionCof0[q+1];
@@ -680,7 +680,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
   fSandiaCofPerAtom.resize(4,0.0);
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numberOfMat = G4Material::GetNumberOfMaterials();
+  G4int numberOfMat = (G4int)G4Material::GetNumberOfMaterials();
 
   if ( matIndex >= 0 && matIndex < numberOfMat)
     {
@@ -1087,7 +1087,7 @@ void G4SandiaTable::ComputeMatTable()
 {
   G4int elm, c, i, j, jj, k, kk, k1, k2, c1, n1;    
 
-  const G4int noElm = fMaterial->GetNumberOfElements();
+  const G4int noElm = (G4int)fMaterial->GetNumberOfElements();
   const G4ElementVector* ElementVector = fMaterial->GetElementVector();  
   G4int* Z = new G4int[noElm];               //Atomic number
 

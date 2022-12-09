@@ -364,7 +364,7 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   //
   std::vector<G4Navigator*>::iterator pNavigatorIter; 
 
-  fNoActiveNavigators = fpTransportManager-> GetNoActiveNavigators();
+  fNoActiveNavigators = (G4int)fpTransportManager-> GetNoActiveNavigators();
   if( fNoActiveNavigators > fMaxNav )
   {
     std::ostringstream message;
@@ -1110,7 +1110,7 @@ void G4PathFinder::PrintLimited()
     { 
       stepLen = fTrueMinStep;     // did not limit (went as far as asked)
     }
-    G4int oldPrec = G4cout.precision(9); 
+    G4long oldPrec = G4cout.precision(9); 
 
     G4cout << std::setw(5) << fCurrentStepNo  << " " 
            << std::setw(5) << num  << " "

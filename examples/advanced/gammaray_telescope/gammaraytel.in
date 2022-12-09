@@ -1,7 +1,7 @@
-# Macro file for the test of
-# GammaRayTel
 #
+# Macro file for the test of GammaRayTel
 #
+
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
@@ -9,7 +9,6 @@
 
 /run/initialize
 
-#
 /gun/sourceGen true
 
 /gun/particle proton
@@ -26,4 +25,3 @@
 /gun/energy 1 GeV
 /gun/sourceType 2
 /run/beamOn 100
-

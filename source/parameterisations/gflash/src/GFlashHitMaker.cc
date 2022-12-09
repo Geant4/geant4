@@ -41,6 +41,8 @@
 
 #include "GFlashHitMaker.hh"
 #include "G4GFlashSpot.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 
 GFlashHitMaker::GFlashHitMaker()
 {
@@ -48,11 +50,20 @@ GFlashHitMaker::GFlashHitMaker()
   fpNavigator        = new G4Navigator();
   fNaviSetup         = false;
   fWorldWithSdName   = "";
+  fpSpotS = new G4Step();
+  fpSpotP = new G4StepPoint();
+  // N.B. Pre and Post step points are common.
+  fpSpotS->SetPreStepPoint(fpSpotP);
+  fpSpotS->SetPostStepPoint(fpSpotP);
 }
 
 GFlashHitMaker::~GFlashHitMaker()
 {
   delete fpNavigator;
+  delete fpSpotP;
+  fpSpotS->ResetPreStepPoint();
+  fpSpotS->ResetPostStepPoint();
+  delete fpSpotS;
 }
 
 void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
@@ -81,13 +92,6 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
   }
   
   //--------------------------------------
-  // Fills attribute of the G4Step needed
-  // by our sensitive detector:
-  //-------------------------------------
-  // set spot information:
-  G4GFlashSpot theSpot(aSpot, aT, fTouchableHandle);
-  ///Navigator
-  //--------------------------------------
   // Produce Hits
   // call sensitive part: taken/adapted from the stepping:
   // Send G4Step information to Hit/Dig if the volume is sensitive
@@ -102,21 +106,23 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
                    dynamic_cast<G4VGFlashSensitiveDetector * > (pSensitive);
     if( gflashSensitive )
     {
+      // set spot information:
+      G4GFlashSpot theSpot(aSpot, aT, fTouchableHandle);
       gflashSensitive->Hit(&theSpot);
     }
-    else if (( pSensitive ) && 
-             ( pCurrentVolume->GetLogicalVolume()->GetFastSimulationManager() )
-            ) // Using gflash without implementing the 
-              // gflashSensitive detector interface -> not allowed!
-    
-    {    
-      G4cerr << "ERROR - GFlashHitMaker::make()" << G4endl
-             << "        It is required to implement the "<< G4endl
-             << "        G4VGFlashSensitiveDetector interface in "<< G4endl
-             << "        addition to the usual SensitiveDetector class."
-             << G4endl;
-      G4Exception("GFlashHitMaker::make()", "InvalidSetup", FatalException, 
-                  "G4VGFlashSensitiveDetector interface not implemented.");
+    else if( pSensitive )
+    {
+      fpSpotS->SetTotalEnergyDeposit(aSpot->GetEnergy());
+      fpSpotS->SetTrack(const_cast<G4Track*>(aT->GetPrimaryTrack()));
+      fpSpotP->SetWeight(aT->GetPrimaryTrack()->GetWeight());
+      fpSpotP->SetPosition(aSpot->GetPosition());
+      fpSpotP->SetGlobalTime(aT->GetPrimaryTrack()->GetGlobalTime());
+      fpSpotP->SetLocalTime(aT->GetPrimaryTrack()->GetLocalTime());
+      fpSpotP->SetProperTime(aT->GetPrimaryTrack()->GetProperTime());
+      fpSpotP->SetTouchableHandle(fTouchableHandle);
+      fpSpotP->SetProcessDefinedStep(fpProcess);
+      fpSpotP->SetStepStatus(fUserDefinedLimit);
+      pSensitive->Hit(fpSpotS);
     }
   }
   else

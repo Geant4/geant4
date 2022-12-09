@@ -75,7 +75,7 @@ G4double G4GeomTools::QuadArea(const G4TwoVector& A,
 
 G4double G4GeomTools::PolygonArea(const G4TwoVectorList& p)
 {
-  G4int n = p.size();
+  G4int n = (G4int)p.size();
   if (n < 3) return 0.0; // degenerate polygon
   G4double area = p[n-1].x()*p[0].y() - p[0].x()*p[n-1].y();
   for(G4int i=1; i<n; ++i)
@@ -145,7 +145,7 @@ G4bool G4GeomTools::PointInTriangle(const G4TwoVector& A,
 G4bool G4GeomTools::PointInPolygon(const G4TwoVector& p,
                                    const G4TwoVectorList& v)
 {
-  G4int Nv = v.size();
+  G4int Nv = (G4int)v.size();
   G4bool in = false;
   for (G4int i = 0, k = Nv - 1; i < Nv; k = i++)
   {
@@ -169,7 +169,7 @@ G4bool G4GeomTools::IsConvex(const G4TwoVectorList& polygon)
 
   G4bool gotNegative = false;
   G4bool gotPositive = false;
-  G4int n = polygon.size();
+  G4int n = (G4int)polygon.size();
   if (n <= 0) return false;
   for (G4int icur=0; icur<n; ++icur)
   {
@@ -197,7 +197,7 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
   std::vector<G4int> triangles;
   G4bool reply = TriangulatePolygon(polygon,triangles);
 
-  G4int n = triangles.size();
+  G4int n = (G4int)triangles.size();
   for (G4int i=0; i<n; ++i) result.push_back(polygon[triangles[i]]);
   return reply;
 }
@@ -213,7 +213,7 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
 
   // allocate and initialize list of Vertices in polygon
   //
-  G4int n = polygon.size();
+  G4int n = (G4int)polygon.size();
   if (n < 3) return false;
 
   // we want a counter-clockwise polygon in V
@@ -312,7 +312,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
   // set special value to mark vertices for removal
   G4double removeIt = kInfinity;
 
-  G4int nv = polygon.size();
+  G4int nv = (G4int)polygon.size();
 
   // Main loop: check every three consecutive points, if the points
   // are collinear then mark middle point for removal
@@ -620,7 +620,7 @@ G4ThreeVector G4GeomTools::QuadAreaNormal(const G4ThreeVector& A,
 
 G4ThreeVector G4GeomTools::PolygonAreaNormal(const G4ThreeVectorList& p)
 {
-  G4int n = p.size();
+  G4int n = (G4int)p.size();
   if (n < 3) return G4ThreeVector(0,0,0); // degerate polygon
   G4ThreeVector normal = p[n-1].cross(p[0]);
   for(G4int i=1; i<n; ++i)

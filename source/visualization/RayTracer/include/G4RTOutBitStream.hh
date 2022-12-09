@@ -51,7 +51,7 @@ class G4OutBitStream
         void CopyByte(const char* src, int n);
 
         u_char* GetStreamAddress(void){return mHeadOfBuf;};
-        int GetStreamSize(void){return mBuf - mHeadOfBuf;};
+        int GetStreamSize(void){return int(mBuf - mHeadOfBuf);};
 
 
   protected:

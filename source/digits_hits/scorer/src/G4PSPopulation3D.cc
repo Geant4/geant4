@@ -42,12 +42,8 @@ G4PSPopulation3D::G4PSPopulation3D(G4String name, G4int ni, G4int nj, G4int nk,
   , fDepthj(depj)
   , fDepthk(depk)
 {
-  fNi = ni;
-  fNj = nj;
-  fNk = nk;
+  SetNijk(ni, nj, nk);
 }
-
-G4PSPopulation3D::~G4PSPopulation3D() { ; }
 
 G4int G4PSPopulation3D::GetIndex(G4Step* aStep)
 {

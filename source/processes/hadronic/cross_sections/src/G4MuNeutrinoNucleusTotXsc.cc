@@ -65,7 +65,7 @@ G4MuNeutrinoNucleusTotXsc::G4MuNeutrinoNucleusTotXsc()
   fCutEnergy = 0.; // default value
 
   fBiasingFactor = 1.; // default as physics
-
+  fEmc = 0.2*GeV;
   fIndex = 50;
 
   fTotXsc = 0.;
@@ -73,8 +73,8 @@ G4MuNeutrinoNucleusTotXsc::G4MuNeutrinoNucleusTotXsc()
   fCcFactor = fNcFactor = 1.;
   fQEratio = 0.5; // mean in the 1 GeV range
 
-  theMuonMinus = G4MuonMinus::MuonMinus(); 
-  theMuonPlus  = G4MuonPlus::MuonPlus(); 
+  // theMuonMinus = G4MuonMinus::MuonMinus(); 
+  // theMuonPlus  = G4MuonPlus::MuonPlus(); 
 }
 
 G4MuNeutrinoNucleusTotXsc::~G4MuNeutrinoNucleusTotXsc() 
@@ -87,8 +87,9 @@ G4MuNeutrinoNucleusTotXsc::IsIsoApplicable( const G4DynamicParticle* aPart, G4in
 {
   G4bool result  = false;
   G4String pName = aPart->GetDefinition()->GetParticleName();
-
-  if(      pName == "nu_mu"   || pName == "anti_nu_mu"  ) 
+  G4double tKin = aPart->GetKineticEnergy();
+  
+  if(      ( pName == "nu_mu"   || pName == "anti_nu_mu")  && tKin >= fEmc ) 
   {
     result = true;
   }
@@ -166,14 +167,14 @@ G4double G4MuNeutrinoNucleusTotXsc::GetIsoCrossSection(const G4DynamicParticle* 
   ccanuXsc = GetANuMuTotCsXsc(index, energy, Z, A);
   ccanuXsc *= fCcFactor;
 
-  if( pName == "nu_mu")
+  if( pName == "nu_mu" )
   {
     ncXsc = fCofL*ccnuXsc + fCofS*ccanuXsc;
     ncXsc *= fNcFactor/fCcFactor;
     totXsc = ccnuXsc + ncXsc;
     if( totXsc > 0.) fCcTotRatio = ccnuXsc/totXsc;
   }
-  else if( pName == "anti_nu_mu")
+  else if( pName == "anti_nu_mu" )
   {
     ncXsc = fCofL*ccanuXsc + fCofS*ccnuXsc;
     ncXsc *= fNcFactor/fCcFactor;
@@ -224,7 +225,8 @@ G4double G4MuNeutrinoNucleusTotXsc::GetNuMuTotCsXsc(G4int index, G4double energy
   G4int nn = aa - zz;
   if(nn < 1) nn = 0;
 
-  if( index <= 0 || energy < theMuonMinus->GetPDGMass() ) xsc = aa*fNuMuInXsc[0] + nn*fNuMuQeXsc[0];
+  // if( index <= 0 || energy < theMuonMinus->GetPDGMass() ) xsc = aa*fNuMuInXsc[0] + nn*fNuMuQeXsc[0];
+  if( index <= 0 || energy < fEmc ) xsc = aa*fNuMuInXsc[0] + nn*fNuMuQeXsc[0];
   else if (index >= fIndex) xsc = aa*fNuMuInXsc[fIndex-1] + nn*fNuMuQeXsc[fIndex-1];
   else
   {
@@ -259,7 +261,8 @@ G4double G4MuNeutrinoNucleusTotXsc::GetANuMuTotCsXsc(G4int index, G4double energ
 {
   G4double xsc(0.), qexsc(0.), inxsc(0.);
 
-  if( index <= 0 || energy < theMuonPlus->GetPDGMass() ) xsc = aa*fANuMuInXsc[0] + zz*fANuMuQeXsc[0];
+  // if( index <= 0 || energy < theMuonPlus->GetPDGMass() ) xsc = aa*fANuMuInXsc[0] + zz*fANuMuQeXsc[0];
+  if( index <= 0 || energy < fEmc ) xsc = aa*fANuMuInXsc[0] + zz*fANuMuQeXsc[0];
   else if (index >= fIndex) xsc = aa*fANuMuInXsc[fIndex-1] + zz*fANuMuQeXsc[fIndex-1];
   else
   {
@@ -293,7 +296,7 @@ G4double G4MuNeutrinoNucleusTotXsc::GetANuMuTotCsXsc(G4int index, G4double energ
 
 G4double G4MuNeutrinoNucleusTotXsc::GetNuMuTotCsArray( G4int index)
 {
-  if( index >= 0 && index < fIndex) return fNuMuInXsc[index] + fNuMuInXsc[index];
+  if( index >= 0 && index < fIndex) return fNuMuInXsc[index] + fNuMuQeXsc[index];
   else 
   {
     G4cout<<"Improper index of fNuMuTotXsc array"<<G4endl;

@@ -184,17 +184,17 @@ void G4TriangularFacet::CopyFrom (const G4TriangularFacet& rhs)
 //
 void G4TriangularFacet::MoveFrom (G4TriangularFacet& rhs)
 {
-  fSurfaceNormal = move(rhs.fSurfaceNormal);
-  fArea = move(rhs.fArea);
-  fCircumcentre = move(rhs.fCircumcentre);
-  fRadius = move(rhs.fRadius);
-  fIndices = move(rhs.fIndices);
-  fA = move(rhs.fA); fB = move(rhs.fB); fC = move(rhs.fC);
-  fDet = move(rhs.fDet);
-  fSqrDist = move(rhs.fSqrDist);
-  fE1 = move(rhs.fE1); fE2 = move(rhs.fE2);
-  fIsDefined = move(rhs.fIsDefined);
-  fVertices = move(rhs.fVertices);
+  fSurfaceNormal = std::move(rhs.fSurfaceNormal);
+  fArea = std::move(rhs.fArea);
+  fCircumcentre = std::move(rhs.fCircumcentre);
+  fRadius = std::move(rhs.fRadius);
+  fIndices = std::move(rhs.fIndices);
+  fA = std::move(rhs.fA); fB = std::move(rhs.fB); fC = std::move(rhs.fC);
+  fDet = std::move(rhs.fDet);
+  fSqrDist = std::move(rhs.fSqrDist);
+  fE1 = std::move(rhs.fE1); fE2 = std::move(rhs.fE2);
+  fIsDefined = std::move(rhs.fIsDefined);
+  fVertices = std::move(rhs.fVertices);
   rhs.fVertices = nullptr;
 }
 

@@ -70,7 +70,7 @@ public:
   QApplication* qapp() const {return m_qapp;}
   QWidget* create_window(const char* a_title,int a_x,int a_y,unsigned int a_width,unsigned int a_height) {
     if(!m_qapp) return 0;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     if(a_y<=0) a_y = 60;
 #endif
     QWidget* top = new QWidget();

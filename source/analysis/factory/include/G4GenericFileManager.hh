@@ -53,30 +53,30 @@ class G4GenericFileManager : public G4VFileManager
 {
   public:
     explicit G4GenericFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4GenericFileManager() = default;
+    ~G4GenericFileManager() override = default;
 
     // Method to manipulate a default file
-    virtual G4bool OpenFile(const G4String& fileName) final;
+    G4bool OpenFile(const G4String& fileName) final;
 
     // Methods applied to all registered files
     virtual G4bool OpenFiles() final;
-    virtual G4bool WriteFiles() final;
-    virtual G4bool CloseFiles() final;
-    virtual G4bool DeleteEmptyFiles() final;
+    G4bool WriteFiles() final;
+    G4bool CloseFiles() final;
+    G4bool DeleteEmptyFiles() final;
 
     // Clear all data
-    virtual void Clear() final;
+    void Clear() final;
 
     // Methods applied to file per name
-    virtual G4bool CreateFile(const G4String& fileName) final;
-    virtual G4bool WriteFile(const G4String& fileName) final;
-    virtual G4bool CloseFile(const G4String& fileName) final;
-    virtual G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) final;
+    G4bool CreateFile(const G4String& fileName) final;
+    G4bool WriteFile(const G4String& fileName) final;
+    G4bool CloseFile(const G4String& fileName) final;
+    G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) final;
 
-    virtual G4bool SetHistoDirectoryName(const G4String& dirName);
-    virtual G4bool SetNtupleDirectoryName(const G4String& dirName);
+    G4bool SetHistoDirectoryName(const G4String& dirName) override;
+    G4bool SetNtupleDirectoryName(const G4String& dirName) override;
 
-    virtual G4String GetFileType() const final { return ""; }
+    G4String GetFileType() const final { return ""; }
 
     // Set default output type (backward compatibility)
     // this type will be used for file names without extension

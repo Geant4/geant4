@@ -91,7 +91,7 @@ class EmStandardPhysicsTrackingManager : public G4VTrackingManager
     G4RayleighScattering* rayleigh;
   } fGammaProcs;
 
-  static EmStandardPhysicsTrackingManager* masterTrackingManager;
+  static EmStandardPhysicsTrackingManager* fMasterTrackingManager;
 };
 
 #endif

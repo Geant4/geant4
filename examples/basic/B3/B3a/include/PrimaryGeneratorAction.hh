@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file PrimaryGeneratorAction.hh
+/// \file B3/B3a/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the B3::PrimaryGeneratorAction class
 
 #ifndef B3PrimaryGeneratorAction_h

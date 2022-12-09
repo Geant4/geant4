@@ -46,8 +46,8 @@ class G4FieldTrackUpdator
 
   private:
 
-    G4FieldTrackUpdator() {}
-   ~G4FieldTrackUpdator() {}
+    G4FieldTrackUpdator() = default;
+   ~G4FieldTrackUpdator() = default;
 };
 
 #endif

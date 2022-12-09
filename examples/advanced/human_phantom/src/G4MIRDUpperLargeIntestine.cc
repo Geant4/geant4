@@ -45,15 +45,6 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDUpperLargeIntestine::G4MIRDUpperLargeIntestine()
-{
-}
-
-G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeName,
 							G4VPhysicalVolume* mother,
 							const G4String& colourName
@@ -61,38 +52,38 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeNa
 {
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double dx = 2.5 * cm; // aU
   G4double dy = 2.5* cm; //bU
   G4double dz = 4.775 * cm; //dzU
 
-  G4VSolid* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
+  auto* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
  
   dx = 2.5 * cm;//bt
   dy = 1.5 *cm;//ct
   dz = 10.5* cm;//x1t
 
-  G4VSolid* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
+  auto* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
 
-  G4RotationMatrix* relative_rm =  new G4RotationMatrix();
+  auto* relative_rm =  new G4RotationMatrix();
   relative_rm -> rotateX(90. * degree);
   relative_rm -> rotateZ(0. * degree);
   relative_rm -> rotateY(90. * degree);
-  G4UnionSolid* upperLargeIntestine = new G4UnionSolid("UpperLargeIntestine",
+  auto* upperLargeIntestine = new G4UnionSolid("UpperLargeIntestine",
 						       AscendingColonUpperLargeIntestine,
 						       TraverseColonUpperLargeIntestine,
 						       relative_rm, 
 						       G4ThreeVector(8.0 *cm, 0.0,6.275 * cm)); //,0,dzU + ct transverse
   
 
-  G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
+   auto* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
 								  "logical" + volumeName, 
-								  0, 0, 0);
+								  nullptr, nullptr, nullptr);
  
-  G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,
+  G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(nullptr,
 								 G4ThreeVector(-8.0 * cm, -2.36 *cm,-15.775 *cm),
 								 "physicalUpperLargeIntestine",                 //xo, yo, zo ascending colon
 								 logicUpperLargeIntestine,
@@ -100,13 +91,12 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeNa
 								 false,
 								 0, true);
 
-  
 
   // Visualization Attributes
   //  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(colour);
+  auto* UpperLargeIntestineVisAtt = new G4VisAttributes(colour);
   UpperLargeIntestineVisAtt->SetForceSolid(wireFrame);
   logicUpperLargeIntestine->SetVisAttributes(UpperLargeIntestineVisAtt);
 
@@ -127,7 +117,6 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeNa
   // Testing Mass
   G4double UpperLargeIntestineMass = (UpperLargeIntestineVol)*UpperLargeIntestineDensity;
   G4cout << "Mass of UpperLargeIntestine = " << UpperLargeIntestineMass/gram << " g" << G4endl;
-
-  
+ 
   return physUpperLargeIntestine;
 }

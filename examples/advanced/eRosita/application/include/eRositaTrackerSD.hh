@@ -23,38 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef eRositaTrackerSD_h
 #define eRositaTrackerSD_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "eRositaTrackerHit.hh"
 
-class G4Step;
+#include "G4VSensitiveDetector.hh"
+
 class G4HCofThisEvent;
+class G4Step;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class eRositaTrackerSD : public G4VSensitiveDetector {
+public:    
+    explicit eRositaTrackerSD(G4String name);
+    
+    ~eRositaTrackerSD() override;
 
-class eRositaTrackerSD : public G4VSensitiveDetector
-{
-  public:
-      eRositaTrackerSD(G4String);
-     ~eRositaTrackerSD();
+    void EndOfEvent(G4HCofThisEvent* collection) override;
+    
+    void Initialize(G4HCofThisEvent* collection) override;
+    
+    auto ProcessHits(G4Step* step, G4TouchableHistory* history) -> G4bool override;
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
-
-  private:
-      eRositaTrackerHitsCollection* trackerCollection;
-
+private:
+    eRositaTrackerHitsCollection* trackerCollection;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-

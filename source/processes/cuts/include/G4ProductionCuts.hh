@@ -91,7 +91,7 @@ class G4ProductionCuts
     void SetProductionCuts(std::vector<G4double>&);
       // Set the vector of production cuts in range for all particles
 
-    const std::vector<G4double>&   GetProductionCuts() const;
+    const std::vector<G4double>& GetProductionCuts() const;
       // Get the vector of production cuts in range for all particles
 
     G4bool IsModified() const;
@@ -107,14 +107,7 @@ class G4ProductionCuts
   protected:
 
     std::vector<G4double> fRangeCuts;
-    G4bool                isModified = true;
-
-  private:
-
-    static G4ThreadLocal G4ParticleDefinition* gammaDef;
-    static G4ThreadLocal G4ParticleDefinition* electDef;
-    static G4ThreadLocal G4ParticleDefinition* positDef;
-    static G4ThreadLocal G4ParticleDefinition* protonDef; // for proton
+    G4bool isModified = true;
 };
 
 #endif

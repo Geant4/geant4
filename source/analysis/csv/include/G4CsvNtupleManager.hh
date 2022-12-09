@@ -38,6 +38,7 @@
 
 #include <memory>
 #include <string_view>
+#include <utility>
 
 // Types alias
 using CsvNtupleDescription = G4TNtupleDescription<tools::wcsv::ntuple, std::ofstream>;
@@ -53,7 +54,7 @@ class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple,
   public:
     explicit G4CsvNtupleManager(const G4AnalysisManagerState& state);
     G4CsvNtupleManager() = delete;
-    virtual ~G4CsvNtupleManager() = default;
+    ~G4CsvNtupleManager() override = default;
 
   private:
     // Functions specific to the output type
@@ -69,12 +70,9 @@ class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple,
 
     // Methods from the templated base class
     //
-    virtual void CreateTNtupleFromBooking(
-                    CsvNtupleDescription*  ntupleDescription) final;
+    void CreateTNtupleFromBooking(CsvNtupleDescription* ntupleDescription) final;
 
-    virtual void FinishTNtuple(
-                    CsvNtupleDescription*  ntupleDescription,
-                    G4bool fromBooking) final;
+    void FinishTNtuple(CsvNtupleDescription* ntupleDescription, G4bool fromBooking) final;
 
     G4bool WriteHeader(tools::wcsv::ntuple* ntuple) const;
 
@@ -91,7 +89,9 @@ class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple,
 
 inline void
 G4CsvNtupleManager::SetFileManager(std::shared_ptr<G4CsvFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 inline const std::vector<G4TNtupleDescription<tools::wcsv::ntuple, std::ofstream>*>&
 G4CsvNtupleManager::GetNtupleDescriptionVector() const

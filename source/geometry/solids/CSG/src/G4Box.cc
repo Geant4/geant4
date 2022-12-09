@@ -479,7 +479,7 @@ G4GeometryType G4Box::GetEntityType() const
 
 std::ostream& G4Box::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

@@ -173,8 +173,8 @@ void G4TessellatedSolid::Initialize()
 //
 void G4TessellatedSolid::DeleteObjects()
 {
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)  { delete fFacets[i]; }
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)  { delete fFacets[i]; }
   fFacets.clear();
   delete fpPolyhedron; fpPolyhedron = nullptr;
 }
@@ -220,7 +220,7 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet* aFacet)
       = fFacetList.begin(), end = fFacetList.end(), pos, it;
     G4ThreeVector p = aFacet->GetCircumcentre();
     G4VertexInfo value;
-    value.id = fFacetList.size();
+    value.id = (G4int)fFacetList.size();
     value.mag2 = p.x() + p.y() + p.z();
 
     G4bool found = false;
@@ -284,7 +284,6 @@ G4int G4TessellatedSolid::SetAllUsingStack(const std::vector<G4int>& voxel,
   stack<vector<G4int> > pos;
   pos.push(xyz);
   G4int filled = 0;
-  G4int cc = 0, nz = 0;
 
   vector<G4int> candidates;
 
@@ -296,7 +295,6 @@ G4int G4TessellatedSolid::SetAllUsingStack(const std::vector<G4int>& voxel,
     if (!checked[index])
     {
       checked.SetBitNumber(index, true);
-      ++cc;
 
       if (fVoxels.IsEmpty(index))
       {
@@ -321,10 +319,6 @@ G4int G4TessellatedSolid::SetAllUsingStack(const std::vector<G4int>& voxel,
           }
         }
       }
-      else
-      {
-        ++nz;
-      }
     }
   }
   return filled;
@@ -335,7 +329,8 @@ G4int G4TessellatedSolid::SetAllUsingStack(const std::vector<G4int>& voxel,
 void G4TessellatedSolid::PrecalculateInsides()
 {
   vector<G4int> voxel(3), maxVoxels(3);
-  for (auto i = 0; i <= 2; ++i) maxVoxels[i] = fVoxels.GetBoundary(i).size();
+  for (auto i = 0; i <= 2; ++i)
+    maxVoxels[i] = (G4int)fVoxels.GetBoundary(i).size();
   G4int size = maxVoxels[0] * maxVoxels[1] * maxVoxels[2];
 
   G4SurfBits checked(size-1);
@@ -398,9 +393,9 @@ void G4TessellatedSolid::Voxelize ()
 void G4TessellatedSolid::SetExtremeFacets()
 {
   // Copy vertices to local array
-  G4int vsize = fVertexList.size();
+  std::size_t vsize = fVertexList.size();
   std::vector<G4ThreeVector> vertices(vsize);
-  for (G4int i = 0; i < vsize; ++i) { vertices[i] = fVertexList[i]; }
+  for (std::size_t i = 0; i < vsize; ++i) { vertices[i] = fVertexList[i]; }
 
   // Shuffle vertices
   std::mt19937 gen(12345678);
@@ -409,7 +404,7 @@ void G4TessellatedSolid::SetExtremeFacets()
   // Select six extreme vertices in different directions
   G4ThreeVector points[6];
   for (G4int i=0; i < 6; ++i) { points[i] = vertices[0]; }
-  for (G4int i=1; i < vsize; ++i)
+  for (std::size_t i=1; i < vsize; ++i)
   {
     if (vertices[i].x() < points[0].x()) points[0] = vertices[i];
     if (vertices[i].x() > points[1].x()) points[1] = vertices[i];
@@ -420,8 +415,8 @@ void G4TessellatedSolid::SetExtremeFacets()
   }
 
   // Find extreme facets
-  G4int size = fFacets.size();
-  for (G4int j = 0; j < size; ++j)
+  std::size_t size = fFacets.size();
+  for (std::size_t j = 0; j < size; ++j)
   {
     G4VFacet &facet = *fFacets[j];
 
@@ -435,7 +430,7 @@ void G4TessellatedSolid::SetExtremeFacets()
 
     // Check vertices
     G4bool isExtreme = true;
-    for (G4int i=0; i < vsize; ++i)
+    for (std::size_t i=0; i < vsize; ++i)
     {
       if (!facet.IsInside(vertices[i]))
       {
@@ -468,13 +463,13 @@ void G4TessellatedSolid::CreateVertexList()
   G4VertexInfo value;
 
   fVertexList.clear();
-  G4int size = fFacets.size();
+  std::size_t size = fFacets.size();
 
   G4double kCarTolerance24 = kCarTolerance * kCarTolerance / 4.0;
   G4double kCarTolerance3 = 3 * kCarTolerance;
   vector<G4int> newIndex(100);
 
-  for (G4int k = 0; k < size; ++k)
+  for (std::size_t k = 0; k < size; ++k)
   {
     G4VFacet &facet = *fFacets[k];
     G4int max = facet.GetNumberOfVertices();
@@ -482,7 +477,7 @@ void G4TessellatedSolid::CreateVertexList()
     for (G4int i = 0; i < max; ++i)
     {
       p = facet.GetVertex(i);
-      value.id = fVertexList.size();
+      value.id = (G4int)fVertexList.size();
       value.mag2 = p.x() + p.y() + p.z();
 
       G4bool found = false;
@@ -500,7 +495,7 @@ void G4TessellatedSolid::CreateVertexList()
           if (found) break;
           dif = q.x() + q.y() + q.z() - value.mag2;
           if (dif > kCarTolerance3) break;
-          it++;
+          ++it;
         }
 
         if (!found && (fVertexList.size() > 1))
@@ -676,12 +671,12 @@ G4bool G4TessellatedSolid::GetSolidClosed () const
 G4int G4TessellatedSolid::CheckStructure() const
 {
   G4int nedge = 0;
-  G4int nface = fFacets.size();
+  std::size_t nface = fFacets.size();
 
   // Calculate volume
   //
   G4double volume = 0.;
-  for (G4int i = 0; i < nface; ++i)
+  for (std::size_t i = 0; i < nface; ++i)
   {
     G4VFacet& facet = *fFacets[i];
     nedge += facet.GetNumberOfVertices();
@@ -693,7 +688,7 @@ G4int G4TessellatedSolid::CheckStructure() const
   //
   std::vector<int64_t> iedge(nedge);
   G4int kk = 0;
-  for (G4int i = 0; i < nface; ++i)
+  for (std::size_t i = 0; i < nface; ++i)
   {
     G4VFacet& facet = *fFacets[i];
     G4int nnode = facet.GetNumberOfVertices();
@@ -759,7 +754,7 @@ G4TessellatedSolid::operator+=(const G4TessellatedSolid& right)
 //
 G4int G4TessellatedSolid::GetNumberOfFacets() const
 {
-  return fFacets.size();
+  return (G4int)fFacets.size();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -780,7 +775,7 @@ EInside G4TessellatedSolid::InsideVoxels(const G4ThreeVector& p) const
 
   const vector<G4int> &startingCandidates =
     fVoxels.GetCandidates(startingVoxel);
-  G4int limit = startingCandidates.size();
+  std::size_t limit = startingCandidates.size();
   if (limit == 0 && fInsides.GetNbits())
   {
     G4int index = fVoxels.GetPointIndex(p);
@@ -790,7 +785,7 @@ EInside G4TessellatedSolid::InsideVoxels(const G4ThreeVector& p) const
 
   G4double minDist = kInfinity;
 
-  for(G4int i = 0; i < limit; ++i)
+  for(std::size_t i = 0; i < limit; ++i)
   {
     G4int candidate = startingCandidates[i];
     G4VFacet &facet = *fFacets[candidate];
@@ -854,7 +849,7 @@ EInside G4TessellatedSolid::InsideVoxels(const G4ThreeVector& p) const
       const vector<G4int> &candidates =
         started ? startingCandidates : fVoxels.GetCandidates(curVoxel);
       started = false;
-      if (G4int candidatesCount = candidates.size())
+      if (G4int candidatesCount = (G4int)candidates.size())
       {
         for (G4int i = 0 ; i < candidatesCount; ++i)
         {
@@ -918,7 +913,7 @@ EInside G4TessellatedSolid::InsideVoxels(const G4ThreeVector& p) const
     // something wrong with geometry.
     //
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Cannot determine whether point is inside or outside volume!"
       << G4endl
       << "Solid name       = " << GetName()  << G4endl
@@ -970,8 +965,8 @@ EInside G4TessellatedSolid::InsideNoVoxels (const G4ThreeVector &p) const
   //
   // Check if we are close to a surface
   //
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)
   {
     G4VFacet& facet = *fFacets[i];
     G4double dist = facet.Distance(p,minDist);
@@ -1025,7 +1020,7 @@ EInside G4TessellatedSolid::InsideNoVoxels (const G4ThreeVector &p) const
       distOut = distIn = kInfinity;
       G4ThreeVector v = fRandir[sm];
       sm++;
-      vector<G4VFacet*>::const_iterator f = fFacets.begin();
+      vector<G4VFacet*>::const_iterator f = fFacets.cbegin();
 
       do    // Loop checking, 13.08.2015, G.Cosmo
       {
@@ -1046,7 +1041,7 @@ EInside G4TessellatedSolid::InsideNoVoxels (const G4ThreeVector &p) const
             if (crossingI && distI > 0.0 && distI < distIn)  distIn  = distI;
           }
         }
-      } while (!nearParallel && ++f != fFacets.end());
+      } while (!nearParallel && ++f != fFacets.cend());
     } while (nearParallel && sm != fMaxTries);
 
 #ifdef G4VERBOSE
@@ -1058,7 +1053,7 @@ EInside G4TessellatedSolid::InsideNoVoxels (const G4ThreeVector &p) const
       // that there is something wrong with geometry.
       //
       std::ostringstream message;
-      G4int oldprc = message.precision(16);
+      G4long oldprc = message.precision(16);
       message << "Cannot determine whether point is inside or outside volume!"
         << G4endl
         << "Solid name       = " << GetName()  << G4endl
@@ -1110,7 +1105,7 @@ G4int G4TessellatedSolid::GetFacetIndex (const G4ThreeVector& p) const
     vector<G4int> curVoxel(3);
     fVoxels.GetVoxel(curVoxel, p);
     const vector<G4int> &candidates = fVoxels.GetCandidates(curVoxel);
-    if (G4int limit = candidates.size())
+    if (G4int limit = (G4int)candidates.size())
     {
       G4double minDist = kInfinity;
       for(G4int i = 0 ; i < limit ; ++i)
@@ -1130,15 +1125,15 @@ G4int G4TessellatedSolid::GetFacetIndex (const G4ThreeVector& p) const
   else
   {
     G4double minDist = kInfinity;
-    G4int size = fFacets.size();
-    for (G4int i = 0; i < size; ++i)
+    std::size_t size = fFacets.size();
+    for (std::size_t i = 0; i < size; ++i)
     {
       G4VFacet& facet = *fFacets[i];
       G4double dist = facet.Distance(p, minDist);
       if (dist < minDist)
       {
         minDist  = dist;
-        index = i;
+        index = (G4int)i;
       }
     }
   }
@@ -1163,7 +1158,7 @@ G4bool G4TessellatedSolid::Normal (const G4ThreeVector& p,
     const vector<G4int> &candidates = fVoxels.GetCandidates(curVoxel);
     // fVoxels.GetCandidatesVoxelArray(p, candidates, 0);
 
-    if (G4int limit = candidates.size())
+    if (G4int limit = (G4int)candidates.size())
     {
       minDist = kInfinity;
       for(G4int i = 0 ; i < limit ; ++i)
@@ -1184,8 +1179,8 @@ G4bool G4TessellatedSolid::Normal (const G4ThreeVector& p,
   else
   {
     minDist = kInfinity;
-    G4int size = fFacets.size();
-    for (G4int i = 0; i < size; ++i)
+    std::size_t size = fFacets.size();
+    for (std::size_t i = 0; i < size; ++i)
     {
       G4VFacet& f = *fFacets[i];
       G4double dist = f.Distance(p, minDist);
@@ -1255,8 +1250,8 @@ G4TessellatedSolid::DistanceToInNoVoxels (const G4ThreeVector& p,
   }
 #endif
 
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)
   {
     G4VFacet& facet = *fFacets[i];
     if (facet.Intersect(p,v,false,dist,distFromSurface,normal))
@@ -1324,8 +1319,8 @@ G4TessellatedSolid::DistanceToOutNoVoxels (const G4ThreeVector& p,
 #endif
 
   G4bool isExtreme = false;
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)
   {
     G4VFacet& facet = *fFacets[i];
     if (facet.Intersect(p,v,true,dist,distFromSurface,normal))
@@ -1372,7 +1367,7 @@ DistanceToOutCandidates(const std::vector<G4int>& candidates,
                               G4double& minDist, G4ThreeVector& minNormal,
                               G4int& minCandidate ) const
 {
-  G4int candidatesCount = candidates.size();
+  G4int candidatesCount = (G4int)candidates.size();
   G4double dist            = 0.0;
   G4double distFromSurface = 0.0;
   G4ThreeVector normal;
@@ -1483,7 +1478,7 @@ DistanceToInCandidates(const std::vector<G4int>& candidates,
                        const G4ThreeVector& aPoint,
                        const G4ThreeVector& direction) const
 {
-  G4int candidatesCount = candidates.size();
+  G4int candidatesCount = (G4int)candidates.size();
   G4double dist            = 0.0;
   G4double distFromSurface = 0.0;
   G4ThreeVector normal;
@@ -1622,7 +1617,7 @@ G4TessellatedSolid::MinDistanceFacet(const G4ThreeVector& p,
     if (dist > minDist) break;
 
     const vector<G4int>& candidates = fVoxels.GetVoxelBoxCandidates(inf.first);
-    G4int csize = candidates.size();
+    G4int csize = (G4int)candidates.size();
     for (G4int j = 0; j < csize; ++j)
     {
       G4int candidate = candidates[j];
@@ -1686,8 +1681,8 @@ G4double G4TessellatedSolid::SafetyFromOutside (const G4ThreeVector& p,
   else
   {
     minDist = kInfinity;
-    G4int size = fFacets.size();
-    for (G4int i = 0; i < size; ++i)
+    std::size_t size = fFacets.size();
+    for (std::size_t i = 0; i < size; ++i)
     {
       G4VFacet& facet = *fFacets[i];
       G4double dist = facet.Distance(p,minDist);
@@ -1732,8 +1727,8 @@ G4TessellatedSolid::SafetyFromInside (const G4ThreeVector& p, G4bool) const
   {
     minDist = kInfinity;
     G4double dist = 0.0;
-    G4int size = fFacets.size();
-    for (G4int i = 0; i < size; ++i)
+    std::size_t size = fFacets.size();
+    for (std::size_t i = 0; i < size; ++i)
     {
       G4VFacet& facet = *fFacets[i];
       dist = facet.Distance(p,minDist);
@@ -1763,8 +1758,8 @@ std::ostream &G4TessellatedSolid::StreamInfo(std::ostream &os) const
   os << "Geometry Type    = " << fGeometryType  << G4endl;
   os << "Number of facets = " << fFacets.size() << G4endl;
 
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)
   {
     os << "FACET #          = " << i + 1 << G4endl;
     G4VFacet &facet = *fFacets[i];
@@ -1926,21 +1921,21 @@ void G4TessellatedSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 //
 G4Polyhedron* G4TessellatedSolid::CreatePolyhedron () const
 {
-  G4int nVertices = fVertexList.size();
-  G4int nFacets = fFacets.size();
+  G4int nVertices = (G4int)fVertexList.size();
+  G4int nFacets = (G4int)fFacets.size();
   G4Polyhedron* polyhedron = new G4Polyhedron(nVertices, nFacets);
-  for (G4int i = 0; i < nVertices; ++i)
+  for (auto i = 0; i < nVertices; ++i)
   {
     polyhedron->SetVertex(i+1, fVertexList[i]);
   }
 
-  for (G4int i = 0; i < nFacets; ++i)
+  for (auto i = 0; i < nFacets; ++i)
   {
     G4VFacet* facet = fFacets[i];
     G4int v[4] = {0};
     G4int n = facet->GetNumberOfVertices();
     if (n > 4) n = 4;
-    for (G4int j = 0; j < n; ++j)
+    for (auto j = 0; j < n; ++j)
     {
       v[j] = facet->GetVertexIndex(j) + 1;
     }
@@ -2123,8 +2118,8 @@ G4double G4TessellatedSolid::GetCubicVolume ()
   // https://en.wikipedia.org/wiki/Polyhedron#Volume
   // http://wwwf.imperial.ac.uk/~rn/centroid.pdf
 
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)
   {
     G4VFacet &facet = *fFacets[i];
     G4double area = facet.GetArea();
@@ -2141,8 +2136,8 @@ G4double G4TessellatedSolid::GetSurfaceArea ()
 {
   if (fSurfaceArea != 0.) return fSurfaceArea;
 
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)
   {
     G4VFacet &facet = *fFacets[i];
     fSurfaceArea += facet.GetArea();
@@ -2224,8 +2219,8 @@ G4int G4TessellatedSolid::AllocatedMemoryWithoutVoxels()
   base += fVertexList.capacity() * sizeof(G4ThreeVector);
   base += fRandir.capacity() * sizeof(G4ThreeVector);
 
-  G4int limit = fFacets.size();
-  for (G4int i = 0; i < limit; ++i)
+  std::size_t limit = fFacets.size();
+  for (std::size_t i = 0; i < limit; ++i)
   {
     G4VFacet& facet = *fFacets[i];
     base += facet.AllocatedMemory();

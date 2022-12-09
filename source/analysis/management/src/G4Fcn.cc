@@ -35,8 +35,9 @@ namespace G4Analysis
 //_____________________________________________________________________________
 G4Fcn GetFunction(const G4String& fcnName)
 {
+  // clang-format off
   G4Fcn fcn = G4FcnIdentity;
-   if ( fcnName != "none" ) {
+  if ( fcnName != "none" ) {
     if      ( fcnName == "log" )  fcn = std::log;
     else if ( fcnName == "log10") fcn = std::log10;
     else if ( fcnName == "exp" )  fcn = std::exp;
@@ -48,6 +49,7 @@ G4Fcn GetFunction(const G4String& fcnName)
     }
   }
   return fcn;
+  // clang-format on
 }
 
 }

@@ -65,5 +65,4 @@ geant4_module_link_libraries(G4emhighenergy
   PRIVATE
     G4bosons
     G4cuts
-    G4mesons
-    G4partman)
+    G4mesons)

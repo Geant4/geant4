@@ -31,18 +31,15 @@
 #pragma once
 
 #include "PTL/Globals.hh"
-#include "PTL/TBBTaskGroup.hh"
 #include "PTL/Task.hh"
 #include "PTL/TaskGroup.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/Threading.hh"
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <cstdint>
-#include <iomanip>
+#include <iostream>
+#include <memory>
 #include <stdexcept>
+#include <thread>
+#include <utility>
 
 namespace PTL
 {
@@ -51,13 +48,13 @@ namespace PTL
 class TaskManager
 {
 public:
-    typedef TaskManager           this_type;
-    typedef ThreadPool::size_type size_type;
+    using this_type = TaskManager;
+    using size_type = ThreadPool::size_type;
 
 public:
     // Constructor and Destructors
     explicit TaskManager(ThreadPool*, bool _manage_pool = true);
-    virtual ~TaskManager();
+    virtual ~TaskManager() noexcept(false);
 
     TaskManager(const TaskManager&) = delete;
     TaskManager(TaskManager&&)      = default;
@@ -109,7 +106,7 @@ public:
     template <typename RetT, typename FuncT, typename... Args>
     std::shared_ptr<PackagedTask<RetT, Args...>> async(FuncT&& func, Args&&... args)
     {
-        typedef PackagedTask<RetT, Args...> task_type;
+        using task_type = PackagedTask<RetT, Args...>;
 
         if(!m_pool)
             throw std::runtime_error("Nullptr to thread-pool");
@@ -123,7 +120,7 @@ public:
     template <typename RetT, typename FuncT>
     std::shared_ptr<PackagedTask<RetT>> async(FuncT&& func)
     {
-        typedef PackagedTask<RetT> task_type;
+        using task_type = PackagedTask<RetT>;
 
         if(!m_pool)
             throw std::runtime_error("Nullptr to thread-pool");
@@ -137,8 +134,8 @@ public:
     auto async(FuncT&& func, Args... args)
         -> std::shared_ptr<PackagedTask<decay_t<decltype(func(args...))>, Args...>>
     {
-        using RetT = decay_t<decltype(func(args...))>;
-        typedef PackagedTask<RetT, Args...> task_type;
+        using RetT      = decay_t<decltype(func(args...))>;
+        using task_type = PackagedTask<RetT, Args...>;
 
         if(!m_pool)
             throw std::runtime_error("Nullptr to thread-pool");
@@ -268,7 +265,7 @@ inline PTL::TaskManager::TaskManager(ThreadPool* _pool, bool _manage_pool)
 
 //--------------------------------------------------------------------------------------//
 
-inline PTL::TaskManager::~TaskManager()
+inline PTL::TaskManager::~TaskManager() noexcept(false)
 {
     finalize();
     if(fgInstance() == this)

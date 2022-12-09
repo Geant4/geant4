@@ -58,14 +58,14 @@ public:
 
   /// The method returns the number of shells in wich a 
   /// vacancy can be filled by a radiative transition
-  size_t NumberOfVacancies() const;
+  std::size_t NumberOfVacancies() const;
 
   /// Given the index of the vacancy returns its identity
   G4int VacancyId(G4int vacancyIndex) const;
   
   /// Given the index of a vacancy returns the number of
   /// shells starting from wich an electrons can fill the vacancy
-  size_t NumberOfTransitions(G4int vacancyIndex) const;
+  std::size_t NumberOfTransitions(G4int vacancyIndex) const;
 
   /// Given the indexes of the starting and final shells for the 
   /// transition, returns the identity of the starting one

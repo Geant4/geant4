@@ -304,7 +304,7 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
     //
 #ifdef G4CSGDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:\n";
@@ -738,7 +738,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
         default:            // Should never reach this case ...
           DumpInfo();
           std::ostringstream message;
-          G4int oldprc = message.precision(16);
+          G4long oldprc = message.precision(16);
           message << "Undefined side for valid surface normal to solid."
                   << G4endl
                   << "Position:"  << G4endl
@@ -774,7 +774,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
   if( Inside(p) == kOutside )
   {
      std::ostringstream message;
-     G4int oldprc = message.precision(16);
+     G4long oldprc = message.precision(16);
      message << "Point p is outside (!?) of solid: " << GetName() << "\n"
              << "Position:\n"
              << "   p.x() = "  << p.x()/mm << " mm\n"
@@ -817,7 +817,7 @@ G4VSolid* G4EllipticalCone::Clone() const
 
 std::ostream& G4EllipticalCone::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

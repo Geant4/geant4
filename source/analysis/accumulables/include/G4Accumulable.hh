@@ -45,13 +45,13 @@ class G4Accumulable : public G4VAccumulable
     G4Accumulable(T initValue,
                 G4MergeMode mergeMode = G4MergeMode::kAddition);
     G4Accumulable(const G4Accumulable& rhs);
-    G4Accumulable(G4Accumulable&& rhs);
+    G4Accumulable(G4Accumulable&& rhs) noexcept;
     G4Accumulable() = delete;
-    virtual ~G4Accumulable() = default;
+    ~G4Accumulable() override = default;
 
     // Operators
     G4Accumulable<T>& operator= (const G4Accumulable<T>& rhs);
-    G4Accumulable<T>& operator= (G4Accumulable<T>&& rhs);
+    G4Accumulable<T>& operator=(G4Accumulable<T>&& rhs) noexcept;
     G4Accumulable<T>& operator+=(const G4Accumulable<T>& rhs);
     G4Accumulable<T>& operator*=(const G4Accumulable<T>& rhs);
     G4Accumulable<T>  operator++(int); // postfix increment
@@ -62,8 +62,8 @@ class G4Accumulable : public G4VAccumulable
     G4Accumulable<T>& operator*=(const T& rhs);
 
     // Methods
-    virtual void Merge(const G4VAccumulable& other) final;
-    virtual void Reset() final;
+    void Merge(const G4VAccumulable& other) final;
+    void Reset() final;
 
     // Get methods
     T  GetValue() const;

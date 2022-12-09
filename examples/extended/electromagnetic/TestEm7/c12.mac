@@ -1,0 +1,57 @@
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+#
+/testem/det/setMat G4_WATER
+/testem/det/setSizeX  20 cm
+/testem/det/setSizeYZ 20 cm
+#
+/testem/det/tallyNumber 4
+/testem/det/tallyDefinition 0 2. 2. 2. mm
+/testem/det/tallyDefinition 1 2. 2. 2. mm
+/testem/det/tallyDefinition 2 2. 2. 2. mm
+/testem/det/tallyDefinition 3 2. 2. 2. mm
+/testem/det/tallyPosition 0 -9.9 0. 0. cm
+/testem/det/tallyPosition 1 -5.  0. 0. cm
+/testem/det/tallyPosition 2  0.  0. 0. cm
+/testem/det/tallyPosition 3  5.  0. 0. cm
+#
+/testem/phys/addPhysics  emstandard_opt0
+#/testem/phys/addPhysics  emstandard_opt3
+#/testem/phys/addPhysics  emstandard_opt4
+#/testem/phys/addPhysics  ionGasModels
+#/testem/phys/addPhysics  local
+#
+#/process/eLoss/UseICRU90 true
+#
+#
+/run/initialize
+#
+#/gun/particle ion
+#/gun/ion 6 12 6
+#/gun/energy 2.4 GeV
+#/gun/energy 240 MeV
+#
+/gun/particle ion
+/gun/ion 18 40 18
+/gun/energy 4 GeV
+#/gun/energy 400 MeV
+#
+# step limit
+/run/setCut 0.5 mm
+#
+#/run/printProgress 100
+#
+#/analysis/setFileName c12
+#/analysis/h1/set 2 100 80 90 mm
+#/analysis/h1/set 3 100 80 90 mm
+#
+/run/beamOn 1000
+#
+#/control/shell mkdir zphys3
+#/run/particle/storePhysicsTable zphys3
+#

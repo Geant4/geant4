@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-10-31 Gabriele Cosmo (CaTS-V11-00-02)
+- Fixed compilation warnings on latest gcc compilers.
+
 ## 2022-03-26 Gabriele Cosmo (CaTS-V11-00-01)
 - Fixed compilation warnings for unused arguments.
 

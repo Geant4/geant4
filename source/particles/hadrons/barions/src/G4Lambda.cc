@@ -95,7 +95,7 @@ G4Lambda* G4Lambda::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4Lambda*>(anInstance);
+  theInstance = static_cast<G4Lambda*>(anInstance);
   return theInstance;
 }
 

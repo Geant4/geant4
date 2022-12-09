@@ -71,7 +71,7 @@ G4JPsi* G4JPsi::Definition()
                 false,          0.0*ns,          NULL,
                 false,         "J/psi",           443);
   }
-  theInstance = reinterpret_cast<G4JPsi*>(anInstance);
+  theInstance = static_cast<G4JPsi*>(anInstance);
   return theInstance;
 }
 

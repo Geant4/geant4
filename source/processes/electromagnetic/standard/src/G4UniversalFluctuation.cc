@@ -221,7 +221,7 @@ G4UniversalFluctuation::SampleGlandz(CLHEP::HepRandomEngine* rndmEngineF,
     const G4double w3 = alfa*e0;
     if(tcut > w3) {
       const G4double w = (tcut-w3)/tcut;
-      const G4int nnb = G4Poisson(p3);
+      const G4int nnb = (G4int)G4Poisson(p3);
       if(nnb > 0) {
         if(nnb > sizearray) {
           sizearray = nnb;

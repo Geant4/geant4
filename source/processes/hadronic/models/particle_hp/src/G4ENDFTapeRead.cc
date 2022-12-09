@@ -140,7 +140,7 @@ G4GetNumberOfFissionProducts( void )
 {
 G4FFG_FUNCTIONENTER__
 
-    G4int NumberOfElements = YieldContainerTable_->G4GetNumberOfElements();
+    G4int NumberOfElements = (G4int)YieldContainerTable_->G4GetNumberOfElements();
 
 G4FFG_FUNCTIONLEAVE__
     return NumberOfElements;
@@ -199,7 +199,7 @@ G4FFG_FUNCTIONENTER__
 //    std::vector< std::vector< G4double > > Yield;
 //    std::vector< std::vector< G4double > > Error;
 //    G4String DataBlock;
-//    size_t InsertExponent;
+//    std::size_t InsertExponent;
 //    G4double Parts[6];
 //    G4double dummy;
 //    G4int MAT;
@@ -439,7 +439,7 @@ G4FFG_FUNCTIONENTER__
             {
                 // Load in the energy of the projectile
                 projectileEnergies.push_back(incidentEnergy);
-                currentEnergy = projectileEnergies.size() - 1;
+                currentEnergy = G4int(projectileEnergies.size() - 1);
             } else
             {
                 // !!! Do not break since we need to parse through the !!!
@@ -478,7 +478,7 @@ G4FFG_FUNCTIONENTER__
     }
 
     G4ENDFYieldDataContainer* NewDataContainer;
-    EnergyGroups_ = projectileEnergies.size();
+    EnergyGroups_ = (G4int)projectileEnergies.size();
     EnergyGroupValues_ = new G4double[EnergyGroups_];
     G4int NewProduct;
     G4FFGEnumerations::MetaState NewMetaState;

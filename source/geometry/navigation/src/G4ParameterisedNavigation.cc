@@ -96,7 +96,7 @@ G4double G4ParameterisedNavigation::
 
   G4bool initialNode, noStep;
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes, contentNo;
+  G4long curNoVolumes, contentNo;
   G4double voxelSafety;
 
   // Replication data
@@ -227,7 +227,7 @@ G4double G4ParameterisedNavigation::
 
     for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
     {
-      sampleNo = curVoxelNode->GetVolume(contentNo);
+      sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
       if ( !fBList.IsBlocked(sampleNo) )
       {
         fBList.BlockVolume(sampleNo);
@@ -270,7 +270,7 @@ G4double G4ParameterisedNavigation::
                 EInside insideIntPt = sampleSolid->Inside(intersectionPoint); 
                 if( insideIntPt != kSurface )
                 {
-                  G4int oldcoutPrec = G4cout.precision(16); 
+                  G4long oldcoutPrec = G4cout.precision(16); 
                   std::ostringstream message;
                   message << "Navigator gets conflicting response from Solid."
                           << G4endl
@@ -405,7 +405,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   G4int sampleNo, curVoxelNodeNo;
 
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes, contentNo;
+  G4long curNoVolumes, contentNo;
   G4double voxelSafety;
 
   // Replication data
@@ -456,7 +456,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
   {
-    sampleNo = curVoxelNode->GetVolume(contentNo);
+    sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
     
     // Call virtual methods, and copy information if needed
     //
@@ -503,7 +503,7 @@ ComputeVoxelSafety(const G4ThreeVector& localPoint,
 
   G4double voxelSafety, plusVoxelSafety, minusVoxelSafety;
   G4double curNodeOffset, minCurCommonDelta, maxCurCommonDelta;
-  G4int minCurNodeNoDelta, maxCurNodeNoDelta;
+  G4long minCurNodeNoDelta, maxCurNodeNoDelta;
   
   // Compute linear intersection distance to boundaries of max/min
   // to collected nodes at current level
@@ -624,7 +624,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
   //
   motherVoxelNode = ParamVoxelLocate(motherVoxelHeader,localPoint);
   
-  voxelNoDaughters = motherVoxelNode->GetNoContained();
+  voxelNoDaughters = (G4int)motherVoxelNode->GetNoContained();
   if ( voxelNoDaughters==0 )  { return false; }
   
   pPhysical = motherLogical->GetDaughter(0);

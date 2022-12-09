@@ -34,6 +34,9 @@
 #include "G4Scene.hh"
 #include "G4VVisCommand.hh"
 
+#include <tools/fpng>
+#include <tools/toojpeg>
+
 #include <tools/sg/device_interactor>
 #include <tools/sg/separator>
 #include <tools/sg/ortho>
@@ -265,7 +268,7 @@ public:
     CreateSG(_camera,fVP.GetActualLightpointDirection());
     
    {G4Color background = fVP.GetBackgroundColour ();
-    fSGViewer->set_clear_color(float(background.GetRed()),float(background.GetBlue()),float(background.GetBlue()),1);}
+    fSGViewer->set_clear_color(float(background.GetRed()),float(background.GetGreen()),float(background.GetBlue()),1);}
   }
 
   virtual void ClearView() {}
@@ -328,58 +331,81 @@ protected:
     }
   }
   
-  G4bool CompareForKernelVisit(G4ViewParameters& lastVP) {
-    // Typical comparison.  Taken from OpenGL.
+  G4bool CompareForKernelVisit(G4ViewParameters& vp) {
+    // Typical comparison.  Taken from OpenInventor.
     if (
-      (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (lastVP.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
-      (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (lastVP.GetCBDAlgorithmNumber() !=
-       fVP.GetCBDAlgorithmNumber())                               ||
-      (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
-      (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
-      (lastVP.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
-      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
-      (lastVP.GetDefaultVisAttributes()->GetColour() !=
-       fVP.GetDefaultVisAttributes()->GetColour())                ||
-      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
-       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
-      (lastVP.GetVisAttributesModifiers() !=
-       fVP.GetVisAttributesModifiers())                           ||
-      (lastVP.IsSpecialMeshRendering() !=
-       fVP.IsSpecialMeshRendering())
-      ) {
+       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+       (vp.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
+       (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
+       (vp.IsCulling ()          != fVP.IsCulling ())          ||
+       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+       (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+       (vp.GetCBDAlgorithmNumber() !=
+        fVP.GetCBDAlgorithmNumber())                           ||
+       (vp.IsSection ()          != fVP.IsSection ())          ||
+       (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
+       // This assumes use of generic clipping (sectioning, slicing,
+       // DCUT, cutaway).  If a decision is made to implement locally,
+       // this will need changing.  See G4OpenGLViewer::SetView,
+       // G4OpenGLStoredViewer.cc::CompareForKernelVisit and
+       // G4OpenGLStoredSceneHander::CreateSection/CutawayPolyhedron.
+       (vp.IsExplode ()          != fVP.IsExplode ())          ||
+       (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+       (vp.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+       (vp.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
+       (vp.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+       (vp.GetDefaultVisAttributes()->GetColour() !=
+        fVP.GetDefaultVisAttributes()->GetColour())            ||
+       (vp.GetDefaultTextVisAttributes()->GetColour() !=
+        fVP.GetDefaultTextVisAttributes()->GetColour())        ||
+       (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+       (vp.IsPicking ()          != fVP.IsPicking ())          ||
+       // Scaling for Open Inventor is done by the scene handler so it
+       // needs a kernel visit.  (In this respect, it differs from the
+       // OpenGL drivers, where it's done in SetView.)
+       (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
+       (vp.GetVisAttributesModifiers() !=
+        fVP.GetVisAttributesModifiers())                       ||
+       (vp.IsSpecialMeshRendering() !=
+        fVP.IsSpecialMeshRendering())                          ||
+       (vp.GetSpecialMeshRenderingOption() !=
+        fVP.GetSpecialMeshRenderingOption())
+       )
+    return true;
+
+    if (vp.IsDensityCulling () &&
+        (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
       return true;
+
+    if (vp.GetCBDAlgorithmNumber() > 0) {
+      if (vp.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+      else if (vp.GetCBDParameters() != fVP.GetCBDParameters()) return true;
     }
 
-    if (lastVP.IsDensityCulling () &&
-       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ())) return true;
-
-    if (lastVP.GetCBDAlgorithmNumber() > 0) {
-      if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
-      else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
-    }
-
-    if (lastVP.IsExplode () &&
-       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    if (vp.IsSection () &&
+        (vp.GetSectionPlane () != fVP.GetSectionPlane ()))
       return true;
 
-    if (lastVP.IsSpecialMeshRendering() &&
-	(lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
+    if (vp.IsCutaway ()) {
+      if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
+      if (vp.GetCutawayPlanes ().size () !=
+          fVP.GetCutawayPlanes ().size ()) return true;
+      for (size_t i = 0; i < vp.GetCutawayPlanes().size(); ++i)
+      if (vp.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+        return true;
+    }
+
+    if (vp.IsExplode () &&
+        (vp.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+      return true;
+
+    if (vp.IsSpecialMeshRendering() &&
+        (vp.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
       return true;
 
     return false;
   }
-
 //  void keyPressEvent        (KeyEvent*);
 //  void keyReleaseEvent      (KeyEvent*);
 //  void mouseDoubleClickEvent(MouseEvent*);
@@ -412,6 +438,8 @@ protected:
    {tools::sg::torche* light = new tools::sg::torche;
     light->on = true;
     light->direction = tools::vec3f(-a_light_dir.x(),-a_light_dir.y(),-a_light_dir.z());
+    light->ambient = tools::colorf(0.2f,0.2f,0.2f,1.0f);  //same as in G4OpenGLViewer.cc glLight(GL_LIGHT0,GL_AMBIENT and GL_DIFFUSE).
+    light->color = tools::colorf(0.8f,0.8f,0.8f,1.0f);    //idem.
     scene_3D->add(light);}
   
    {tools::sg::blend* blend = new tools::sg::blend;
@@ -422,13 +450,15 @@ protected:
     scene_3D->add(new tools::sg::noderef(fSGSceneHandler.GetPersistent3DObjects()));
   }
   
-  void Export(const G4String& a_format,const G4String& a_file) {
+  void Export(const G4String& a_format,const G4String& a_file,G4bool a_do_transparency) {
     if(!fSGViewer) return;
     const G4Colour& back_color = fVP.GetBackgroundColour();
-    if(!write_paper(G4cout,f_gl2ps_mgr,f_zb_mgr,0,0,
+    bool top_to_bottom = false;  //if using tools::fpng, tools::toojpeg.
+    if(!tools::sg::write_paper(G4cout,f_gl2ps_mgr,f_zb_mgr,
+                    tools::fpng::write,tools::toojpeg::write,
                     float(back_color.GetRed()),float(back_color.GetGreen()),float(back_color.GetBlue()),float(back_color.GetAlpha()),
-		    fSGViewer->sg(),
-		    fSGViewer->width(),fSGViewer->height(),a_file,a_format)) {
+                    fSGViewer->sg(),fSGViewer->width(),fSGViewer->height(),
+                    a_file,a_format,a_do_transparency,top_to_bottom,std::string(),std::string())) {
       G4cout << "G4ToolsSGViewer::Export: write_paper() failed." << G4endl;
       return;
     }
@@ -454,6 +484,8 @@ protected:
       write_scene->SetGuidance("- gl2ps_tex: gl2ps producing tex");
       write_scene->SetGuidance("- gl2ps_pgf: gl2ps producing pgf");
       write_scene->SetGuidance("- zb_ps: tools::sg offscreen zbuffer put in a PostScript file.");
+      write_scene->SetGuidance("- zb_png: tools::sg offscreen zbuffer put in a png file.");
+      write_scene->SetGuidance("- zb_jpeg: tools::sg offscreen zbuffer put in a jpeg file.");
 
       parameter = new G4UIparameter("format",'s',true);
       parameter->SetDefaultValue("gl2ps_eps");
@@ -462,6 +494,11 @@ protected:
       parameter = new G4UIparameter("file",'s',true);
       parameter->SetDefaultValue("out.eps");
       write_scene->SetParameter (parameter);
+
+      parameter =  new G4UIparameter ("do_transparency", 'b', true);
+      parameter->SetDefaultValue  ("true");
+      write_scene->SetParameter (parameter);
+
     }
     virtual ~Messenger() {
       delete write_scene;
@@ -484,7 +521,8 @@ protected:
       tools::double_quotes_tokenize(a_value,args);
       if(args.size()!=a_cmd->GetParameterEntries()) return;
       if(a_cmd==write_scene) {
-        tsg_viewer->Export(args[0],args[1]);
+        G4bool do_transparency = G4UIcommand::ConvertToBool(args[2].c_str());
+        tsg_viewer->Export(args[0],args[1],do_transparency);
       }
     }
   private:

@@ -62,7 +62,7 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  runManager->SetUserInitialization(new DetectorConstruction);
+  runManager->SetUserInitialization(new Common::DetectorConstruction);
 
   //
   G4VModularPhysicsList* physicsList = new QGSP_BERT;
@@ -72,7 +72,7 @@ int main(int argc,char** argv)
   // Set user action classes
   //
   runManager->SetUserAction(
-    new GunPrimaryGeneratorAction("B-", 50.*MeV));
+    new Common::GunPrimaryGeneratorAction("B-", 50.*MeV));
     // B- meson has not defined decay in Geant4
 
   // Initialize visualization

@@ -203,7 +203,7 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
                                G4double kineticEnergy) 
 {
   G4double eloss = 0.0;
-  const G4int numberOfElements = material->GetNumberOfElements();
+  const std::size_t numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
   
@@ -212,7 +212,7 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
                            material->GetElementVector() ;
   
   //  loop for the elements in the material
-  for (G4int i=0; i<numberOfElements; ++i)
+  for (std::size_t i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
       eloss += DEDXPerElement(element->GetZasInt(), kineticEnergy)

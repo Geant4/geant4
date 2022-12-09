@@ -123,8 +123,8 @@ void G4SmartTrackStack::PushToStack( const G4StackedTrack& aStackedTrack )
   energies[iDest] += aStackedTrack.GetTrack()->GetDynamicParticle()->GetTotalEnergy();
   ++nTracks;
   
-  G4int dy1 = stacks[iDest]->GetNTrack() - stacks[iDest]->GetSafetyValue1();
-  G4int dy2 = stacks[fTurn]->GetNTrack() - stacks[fTurn]->GetSafetyValue2();
+  G4long dy1 = stacks[iDest]->GetNTrack() - stacks[iDest]->GetSafetyValue1();
+  G4long dy2 = stacks[fTurn]->GetNTrack() - stacks[fTurn]->GetSafetyValue2();
   
   if (dy1 > 0 || dy1 > dy2 ||
       (iDest == 2 &&

@@ -1,9 +1,17 @@
 # Category geom-specific History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-10 Gabriele Cosmo (geom-specific-V11-00-10)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-05 Gabriele Cosmo (geom-specific-V11-00-09)
+- Fixed compilation warnings in Intel/icx compiler for variables set
+  but never used.
 
 ## 2022-04-03 Evgueni Tcherniaev (geom-specific-V11-00-08)
 - G4GenericTrap.cc, G4UGenericTrap.cc, G4UExtrudedSolid.cc,

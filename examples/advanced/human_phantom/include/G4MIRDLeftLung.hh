@@ -40,11 +40,10 @@ class G4MIRDLeftLung: public G4VOrgan
 {
 public:
 
-  G4MIRDLeftLung();
-  ~G4MIRDLeftLung();
+  G4MIRDLeftLung() = default;
+  ~G4MIRDLeftLung() override = default;
   G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*, 
-				    const G4String&,G4bool, G4bool);
+				    const G4String&,G4bool, G4bool) override;
 
-private:
 };
 #endif

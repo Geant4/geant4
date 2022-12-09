@@ -34,9 +34,6 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "G4RunManager.hh"
 #include "GammaRayTelPrimaryGeneratorAction.hh"
 
@@ -54,206 +51,180 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
-//  :rndmFlag("off"),nSourceType(0),nSpectrumType(0),sourceGun(false)
-{
-  GammaRayTelDetector = static_cast<const GammaRayTelDetectorConstruction*>
-    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction() {
+    detector = static_cast<const GammaRayTelDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
-  //create a messenger for this class
-  
-  gunMessenger = new GammaRayTelPrimaryGeneratorMessenger(this);
+    // create a messenger for this class
 
-  rndmFlag = "off";
-  nSourceType = 0;
-  nSpectrumType = 0;
-  sourceGun = false;
-  dVertexRadius = 15.*cm; 
-  
-  G4int n_particle = 1;
+    gunMessenger = new GammaRayTelPrimaryGeneratorMessenger(this);
 
-  particleGun  = new G4ParticleGun(n_particle);     
-  // default particle kinematic
-  
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
-  particleGun->SetParticleEnergy(30.*MeV);
-  G4double position = 0.5*(GammaRayTelDetector->GetWorldSizeZ());
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
-  particleSource = new G4GeneralParticleSource();
-   
+    constexpr auto NUMBER_OF_PARTICLES{1};
+    particleGun = new G4ParticleGun(NUMBER_OF_PARTICLES);
+
+    // default particle kinematic
+
+    auto *particleTable = G4ParticleTable::GetParticleTable();
+    auto *particle = particleTable->FindParticle("e-");
+    particleGun->SetParticleDefinition(particle);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., -1.));
+
+    constexpr auto PARTICLE_ENERGY{30. * MeV};
+    particleGun->SetParticleEnergy(PARTICLE_ENERGY);
+
+    auto position = 0.5 * (detector->GetWorldSizeZ());
+    particleGun->SetParticlePosition(G4ThreeVector(0. * cm, 0. * cm, position));
+    particleSource = new G4GeneralParticleSource();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelPrimaryGeneratorAction::~GammaRayTelPrimaryGeneratorAction()
-{
- 
-  delete particleGun;
-  delete particleSource;
-  delete gunMessenger;
+GammaRayTelPrimaryGeneratorAction::~GammaRayTelPrimaryGeneratorAction() {
+    delete particleGun;
+    delete particleSource;
+    delete gunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-   if (sourceGun)
-    {
+void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
+    if (sourceGun) {
+        G4cout << "Using G4ParticleGun... " << G4endl;
 
-      G4cout << "Using G4ParticleGun ... " << G4endl; 
+        // this function is called at the begining of event
+        //
+        G4double x0 = 0. * cm;
+        G4double y0 = 0. * cm;
+        G4double z0 = 0.5 * (detector->GetWorldSizeZ());
 
-      //this function is called at the begining of event
-      // 
-      G4double z0 = 0.5*(GammaRayTelDetector->GetWorldSizeZ());
-      G4double x0 = 0.*cm, y0 = 0.*cm;
-  
-      G4ThreeVector pos0;
-      G4ThreeVector vertex0 = G4ThreeVector(x0,y0,z0);
-      G4ThreeVector dir0 = G4ThreeVector(0.,0.,-1.);
-      
-      G4double theta, phi;
-      G4double y = 0.;
-      G4double f = 0.;
-      G4double theta0=0.;
-      G4double phi0=0.;
-      
-      switch(nSourceType) {
-      case 0:
-	particleGun->SetParticlePosition(vertex0);
-	particleGun->SetParticleMomentumDirection(dir0);
-	break;
-      case 1:
-	// GS: Generate random position on the 4PIsphere to create a unif. distrib.
-	// GS: on the sphere
-	phi = G4UniformRand() * twopi;
-	do {
-	  y = G4UniformRand()*1.0;
-	  theta = G4UniformRand() * pi;
-	  f = std::sin(theta);
-	} while (y > f);
-	vertex0 = G4ThreeVector(1.,0.,0.);
-	vertex0.setMag(dVertexRadius);
-	vertex0.setTheta(theta);
-	vertex0.setPhi(phi);
-	particleGun->SetParticlePosition(vertex0);
-	
-	dir0 = G4ThreeVector(1.,0.,0.);
-	do {
-	  phi = G4UniformRand() * twopi;
-	  do {
-	    y = G4UniformRand()*1.0;
-	    theta = G4UniformRand() * pi;
-	    f = std::sin(theta);
-	  } while (y > f);
-	  dir0.setPhi(phi);
-	  dir0.setTheta(theta);
-	} while (vertex0.dot(dir0) >= -0.7 * vertex0.mag());
-	particleGun->SetParticleMomentumDirection((G4ParticleMomentum)dir0);
-	
-	break;
-      case 2:
-	// GS: Generate random position on the upper semi-sphere z>0 to create a unif. distrib.
-	// GS: on a plane
-	phi = G4UniformRand() * twopi;
-	do {
-	  y = G4UniformRand()*1.0;
-	  theta = G4UniformRand() * halfpi;
-	  f = std::sin(theta) * std::cos(theta);
-	} while (y > f);
-	vertex0 = G4ThreeVector(1.,0.,0.);
-	
-	G4double xy = GammaRayTelDetector->GetWorldSizeXY();
-	G4double z = GammaRayTelDetector->GetWorldSizeZ();
-	
-	if (dVertexRadius > xy*0.5)
-	  { 
-	    G4cout << "vertexRadius too big " << G4endl;
-	    G4cout << "vertexRadius setted to " << xy*0.45 << G4endl;
-	    dVertexRadius = xy*0.45;
-	  }
-	
-	if (dVertexRadius > z*0.5)
-	  { 
-	    G4cout << "vertexRadius too high " << G4endl;
-	    G4cout << "vertexRadius setted to " << z*0.45 << G4endl;
-	    dVertexRadius = z*0.45;
-	  }
-	
-	
-	vertex0.setMag(dVertexRadius);
-	vertex0.setTheta(theta);
-	vertex0.setPhi(phi);
-	
-	// GS: Get the user defined direction for the primaries and
-	// GS: Rotate the random position according to the user defined direction for the particle
-	
-	dir0 = particleGun->GetParticleMomentumDirection();
-	if (dir0.mag() > 0.001) 
-	  {
-	    theta0 = dir0.theta();
-	    phi0   = dir0.phi();   
-	  }
-	
-	if (theta0!=0.) 
-	  {
-	    G4ThreeVector rotationAxis(1.,0.,0.);
-	    rotationAxis.setPhi(phi0+halfpi);
-	    vertex0.rotate(theta0+pi,rotationAxis);
-	  }
-	particleGun->SetParticlePosition(vertex0);
-	break;
-      }
-      
-      
-      G4double pEnergy = 100*MeV;
-      
-      switch(nSpectrumType) {
-      case 0: // Uniform energy (1-10 GeV)
-	y = G4UniformRand();
-	pEnergy = y*9.0*GeV + 1.0*GeV;
-	G4cout << pEnergy/GeV << " LIN" << G4endl;
-	break;
-      case 1: // Logaritmic energy
-	y = G4UniformRand();
-	pEnergy = std::pow(10,y)*GeV;
-	G4cout << pEnergy/GeV << " LOG" << G4endl;
-	break;
-      case 2: // Power Law (-4)
-	do {
-	  y = G4UniformRand()*100000.0;
-	  pEnergy = G4UniformRand() * 10. * GeV;
-	  f = std::pow(pEnergy * (1/GeV), -4.);
-	} while (y > f);
-	//	particleGun->SetParticleEnergy(pEnergy);
-	break;
-      case 3: // Monochromatic 
-	pEnergy = particleGun->GetParticleEnergy(); 
-	//100 * MeV; 
-	G4cout << pEnergy << " MONO" << G4endl;
-	break;
-      }
-      particleGun->SetParticleEnergy(pEnergy);
-      G4cout << particleGun->GetParticleDefinition()->GetParticleName() << G4endl;
-      particleGun->GeneratePrimaryVertex(anEvent);
+        G4ThreeVector pos0;
+        auto vertex0 = G4ThreeVector(x0, y0, z0);
+        auto momentumDirection0 = G4ThreeVector(0., 0., -1.);
+
+        G4double theta;
+        G4double phi;
+        G4double y = 0.;
+        G4double f = 0.;
+        G4double theta0 = 0.;
+        G4double phi0 = 0.;
+
+        switch (sourceType) {
+        case 0:
+            particleGun->SetParticlePosition(vertex0);
+            particleGun->SetParticleMomentumDirection(momentumDirection0);
+            break;
+        case 1:
+            // GS: Generate random position on the 4PIsphere to create a uniform distribution
+            // GS: on the sphere
+            phi = G4UniformRand() * twopi;
+            do {
+                y = G4UniformRand() * 1.0;
+                theta = G4UniformRand() * pi;
+                f = std::sin(theta);
+            } while (y > f);
+            vertex0 = G4ThreeVector(1., 0., 0.);
+            vertex0.setMag(vertexRadius);
+            vertex0.setTheta(theta);
+            vertex0.setPhi(phi);
+            particleGun->SetParticlePosition(vertex0);
+
+            momentumDirection0 = G4ThreeVector(1., 0., 0.);
+
+            do {
+                phi = G4UniformRand() * twopi;
+                do {
+                    y = G4UniformRand() * 1.0;
+                    theta = G4UniformRand() * pi;
+                    f = std::sin(theta);
+                } while (y > f);
+                momentumDirection0.setPhi(phi);
+                momentumDirection0.setTheta(theta);
+            } while (vertex0.dot(momentumDirection0) >= -0.7 * vertex0.mag());
+
+            particleGun->SetParticleMomentumDirection((G4ParticleMomentum) momentumDirection0);
+
+            break;
+        case 2:
+            // GS: Generate random position on the upper semi-sphere z > 0 to create a uniform distribution
+            // GS: on a plane
+            phi = G4UniformRand() * twopi;
+
+            do {
+                y = G4UniformRand() * 1.0;
+                theta = G4UniformRand() * halfpi;
+                f = std::sin(theta) * std::cos(theta);
+            } while (y > f);
+
+            vertex0 = G4ThreeVector(1., 0., 0.);
+
+            auto xy = detector->GetWorldSizeXY();
+            auto z = detector->GetWorldSizeZ();
+
+            if (vertexRadius > xy * 0.5) {
+                G4cout << "vertexRadius too big " << G4endl;
+                G4cout << "vertexRadius set to " << xy * 0.45 << G4endl;
+                vertexRadius = xy * 0.45;
+            }
+
+            if (vertexRadius > z * 0.5) {
+                G4cout << "vertexRadius too high " << G4endl;
+                G4cout << "vertexRadius set to " << z * 0.45 << G4endl;
+                vertexRadius = z * 0.45;
+            }
+
+            vertex0.setMag(vertexRadius);
+            vertex0.setTheta(theta);
+            vertex0.setPhi(phi);
+
+            // GS: Get the user defined direction for the primaries and
+            // GS: Rotate the random position according to the user defined direction for the particle
+
+            momentumDirection0 = particleGun->GetParticleMomentumDirection();
+            if (momentumDirection0.mag() > 0.001) {
+                theta0 = momentumDirection0.theta();
+                phi0 = momentumDirection0.phi();
+            }
+
+            if (theta0 != 0.) {
+                G4ThreeVector rotationAxis(1., 0., 0.);
+                rotationAxis.setPhi(phi0 + halfpi);
+                vertex0.rotate(theta0 + pi, rotationAxis);
+            }
+            particleGun->SetParticlePosition(vertex0);
+            break;
+        }
+
+        constexpr auto INITIAL_PARTICLE_ENERGY{100 * MeV};
+        G4double particleEnergy = INITIAL_PARTICLE_ENERGY;
+
+        switch (spectrumType) {
+        case 0: // Uniform energy (1 GeV - 10 GeV)
+            y = G4UniformRand();
+            particleEnergy = y * 9.0 * GeV + 1.0 * GeV;
+            G4cout << "Particle energy: " << particleEnergy / GeV << " LIN" << G4endl;
+            break;
+        case 1: // Logarithmic energy
+            y = G4UniformRand();
+            particleEnergy = std::pow(10, y) * GeV;
+            G4cout << "Particle energy: " << particleEnergy / GeV << " LOG" << G4endl;
+            break;
+        case 2: // Power law (-4)
+            do {
+                y = G4UniformRand() * 100000.0;
+                particleEnergy = G4UniformRand() * 10. * GeV;
+                f = std::pow(particleEnergy * (1 / GeV), -4.);
+            } while (y > f);
+            // particleGun->SetParticleEnergy(particleEnergy);
+            break;
+        case 3: // Monochromatic
+            particleEnergy = particleGun->GetParticleEnergy();
+            // 100 MeV;
+            G4cout << "Particle energy: " << particleEnergy << " MONOCHROMATIC" << G4endl;
+            break;
+        }
+        particleGun->SetParticleEnergy(particleEnergy);
+        G4cout << "Particle: " << particleGun->GetParticleDefinition()->GetParticleName() << G4endl;
+        particleGun->GeneratePrimaryVertex(event);
+    } else {
+        particleSource->GeneratePrimaryVertex(event);
     }
-   else
-     {
-       particleSource->GeneratePrimaryVertex(anEvent);
-     }
-   
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-

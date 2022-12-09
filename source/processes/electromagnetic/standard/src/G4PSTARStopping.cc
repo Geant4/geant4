@@ -82,7 +82,7 @@ void G4PSTARStopping::PrintWarning(G4int i) const
 void G4PSTARStopping::Initialise()
 {
   // this method may be called several times during initialisation
-  G4int nmat = G4Material::GetNumberOfMaterials();
+  G4int nmat = (G4int)G4Material::GetNumberOfMaterials();
   if(nmat == nvectors) { return; }
 
   // loop via material list to add extra data

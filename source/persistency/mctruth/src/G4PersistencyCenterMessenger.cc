@@ -269,8 +269,8 @@ G4String G4PersistencyCenterMessenger::PopWord(const G4String& text, G4int n,
 {
   if(text.length() <= 0)
     return "";
-  G4int p = 0, p0 = 0;
-  G4int p1 = 0;
+  std::size_t p = 0, p0 = 0;
+  std::size_t p1 = 0;
   for(G4int i = 0; i < n; ++i)
   {
     p1 = text.find_first_of(delim, p0 + 1);
@@ -280,7 +280,7 @@ G4String G4PersistencyCenterMessenger::PopWord(const G4String& text, G4int n,
       p1 = text.find_first_of(delim, p0 + 1);
     }
     p = p0;
-    if(p1 < 0)
+    if(p1 == G4String::npos)
     {
       if(i + 1 < n)
         return "";

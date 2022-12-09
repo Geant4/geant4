@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -135,6 +135,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -162,7 +163,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -213,8 +214,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -697,6 +698,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: hFritiofCaptureAtRest
 
 ---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for anti_lambda
 
   Process: hadElastic
@@ -1040,512 +1046,416 @@ Index : 9     used in the geometry : Yes
 ==================================================================
 
 ### Run 0 starts.
-Event 1964
+Event 798
  --- Reconstructed data: 
        -- entry points:
-              left: -1.57322 5.5805 -15 cm 
-             right: 10.8189 -2.60702 -15 cm 
+              left: -10.1679 1.25646 -15 cm 
+             right: -8.613 -4.64206 -15 cm 
             target: 0 0 0 fm 
-       -- the angle: 118.374 deg
-       -- mass of the output particle: 226.099 MeV
-       -- mass of the nucleus output particle: 1.26732 GeV
+       -- the angle: 128.523 deg
+       -- mass of the output particle: 529.12 MeV
+       -- mass of the nucleus output particle: 972.086 MeV
        -- production model data: 
        Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
                                (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
        Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
                                (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 89.5172 13.2228 136.2951 MeV -- 279.0793 MeV
-                               (SCM) : eta 89.5172 13.2228 16.8022 MeV -- 244.1131 MeV
-       Nucleus output particle (LAB) : neutron -89.5172 -13.2228 593.7049 MeV -- 1.4024 GeV
-                               (SCM) : neutron -89.5172 -13.2228 -16.8022 MeV -- 1.2707 GeV
-       -- triggered angular ranges: 
-                  5 [ 0.2000,  0.0000)
- --- Energy Deposit
-       monitor : 835.116 keV
-        vc (l) : 0 eV 
-        vc (r) : 0 eV 
-       cal (l) : 185.852 MeV
-         0    0.2953     24.76     30.63     2.687    0.2585
-         0     1.545     5.505     118.3     1.531         0
-         0         0         0    0.2895         0         0
-         0         0         0         0         0         0
-       cal (r) : 93.2276 MeV
-    0.7108         0         0         0         0         0
-     1.058    0.6241         0         0         0         0
-     3.827     83.99         0         0         0         0
-      1.19     1.825         0         0         0         0
-Event 2871
- --- Track Points
-       monitor : pi- [1,bp] 733 MeV :  -1.788 -1.823 -0.125 cm  [0.00708, 0.00496, 1]
-        target : pi- [1,bp] 732.5 MeV :  1.865 4.639 -1.615 cm  [-0.6362, -0.7715, 0.006543]
-               : eta [5,op] 325.1 MeV :  -0.6393 1.603 -1.589 cm  [-0.8271, -0.4906, -0.2741]
-               : neutron [6,np] 459.6 MeV :  -0.6393 1.603 -1.589 cm  [-0.4286, -0.8801, 0.2042]
-               : pi0 [9,opdp] 119.1 MeV :  -0.6393 1.603 -1.589 cm  [-0.1827, -0.174, 0.9676]
-               : pi0 [7,opdp] 165.9 MeV :  -0.6393 1.603 -1.589 cm  [-0.6311, -0.6754, -0.3814]
-        vc (l) : tp is not valid
-        vc (r) : tp is not valid
-       cal (l) : tp is not valid
-       cal (r) : tp is not valid
-      ---
-      angle between the eta decay products : 97.8314 deg
- --- Triggered angular ranges: 
-                  5 [ 0.2000,  0.0000)
- --- Production model data: 
-       Incident particle       (LAB) : pi- 5.6203 4.7380 731.4809 MeV -- 744.7134 MeV
-                               (SCM) : pi- 3.4792 2.9330 452.8150 MeV -- 473.8586 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton -3.4792 -2.9330 -452.8150 MeV -- 1.0418 GeV
-       Output particle         (LAB) : eta -103.4579 -89.0922 295.0327 MeV -- 637.0542 MeV
-                               (SCM) : eta -105.5711 -90.8737 19.9964 MeV -- 565.6465 MeV
-       Nucleus output particle (LAB) : neutron 109.0782 93.8302 436.4481 MeV -- 1.0459 GeV
-                               (SCM) : neutron 105.5711 90.8737 -19.9964 MeV -- 950.0454 MeV
- --- Reconstructed data: 
-       -- entry points:
-              left: -4.61383 -5.45322 -15 cm 
-             right: 0.739048 -2.8521 -15 cm 
-            target: 0 0 0 fm 
-       -- the angle: 124.391 deg
-       -- mass of the output particle: 125.363 MeV
-       -- mass of the nucleus output particle: 1.38788 GeV
-       -- production model data: 
-       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
-                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta -15.7700 -9.4902 65.2971 MeV -- 142.5428 MeV
-                               (SCM) : eta -15.7700 -9.4902 3.7897 MeV -- 126.7640 MeV
-       Nucleus output particle (LAB) : neutron 15.7700 9.4902 664.7029 MeV -- 1.5390 GeV
-                               (SCM) : neutron 15.7700 9.4902 -3.7897 MeV -- 1.3880 GeV
+       Output particle         (LAB) : eta 94.2321 -9.5743 280.8637 MeV -- 606.4845 MeV
+                               (SCM) : eta 94.2321 -9.5743 19.4994 MeV -- 537.8841 MeV
+       Nucleus output particle (LAB) : neutron -94.2321 9.5743 449.1363 MeV -- 1.0750 GeV
+                               (SCM) : neutron -94.2321 9.5743 -19.4994 MeV -- 976.8846 MeV
        -- triggered angular ranges: 
                   4 [ 0.4000,  0.2000)
  --- Energy Deposit
-       monitor : 365.646 keV
+       monitor : 361.13 keV
         vc (l) : 0 eV 
         vc (r) : 0 eV 
-       cal (l) : 63.654 MeV
-         0         0         0         0         0         0
-         0         0         0    0.5362         0         0
-         0         0    0.2253     39.46    0.0827         0
-         0         0    0.2199     2.628      20.5         0
-       cal (r) : 78.8889 MeV
-         0         0         0         0         0         0
-         0         0    0.6833     3.802         0         0
-    0.4163         0     12.97     59.05         0         0
-    0.2542    0.8194     0.896         0         0         0
-Event 4099
- --- Track Points
-       monitor : pi- [1,bp] 726.4 MeV :  -0.2907 -1.332 -0.125 cm  [-0.006092, -0.003585, 1]
-        target : pi- [1,bp] 725.8 MeV :  2.803 4.14 -1.429 cm  [-0.6486, -0.7612, -0.004111]
-               : eta [3,op] 234.1 MeV :  -0.7014 0.02674 -1.451 cm  [-0.2089, -0.9666, 0.1486]
-               : neutron [4,np] 533.2 MeV :  -0.7014 0.02674 -1.451 cm  [-0.7891, -0.6102, -0.07029]
-               : gamma [6,opdp] 253 MeV :  -0.7014 0.02674 -1.451 cm  [-0.98, 0.1991, -0.004589]
-               : gamma [5,opdp] 342.7 MeV :  -0.7014 0.02674 -1.451 cm  [0.5808, -0.8072, 0.1049]
-        vc (l) : gamma [5,opdp] 342.7 MeV :  10.58 4.892 -0.25 cm  [0.1853, 0.1049, 0.9771]
-        vc (r) : gamma [6,opdp] 253 MeV :  3.723 -1.718 -0.25 cm  [0.06131, -0.004589, 0.9981]
-       cal (l) : gamma [5,opdp] 342.7 MeV :  10.81 5.026 -15 cm  [0.1853, 0.1049, 0.9771]
-       cal (r) : gamma [6,opdp] 253 MeV :  3.799 -1.724 -15 cm  [0.06131, -0.004589, 0.9981]
-      ---
-      angle between the eta decay products : 136.921 deg
- --- Triggered angular ranges: 
-                  8 [-0.4000, -0.6000)
- --- Production model data: 
-       Incident particle       (LAB) : pi- -5.2157 -2.6831 724.4986 MeV -- 737.8431 MeV
-                               (SCM) : pi- -3.2378 -1.6656 449.7565 MeV -- 470.9289 MeV
-       Nucleus particle        (LAB) : proton 0.0000 -0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton 3.2378 1.6656 -449.7565 MeV -- 1.0405 GeV
-       Output particle         (LAB) : eta 107.9905 34.7983 204.7772 MeV -- 595.7847 MeV
-                               (SCM) : eta 109.8866 35.7737 -58.5977 MeV -- 562.9754 MeV
-       Nucleus output particle (LAB) : neutron -113.2063 -37.4814 519.7214 MeV -- 1.0803 GeV
-                               (SCM) : neutron -109.8866 -35.7737 58.5977 MeV -- 948.4575 MeV
+       cal (l) : 378.72 MeV
+         0         0         0    0.2582     1.315    0.1687
+         0         0    0.1643     2.079     269.7      66.6
+         0         0    0.7908    0.3713     8.649      26.3
+         0         0         0    0.5435     1.808         0
+       cal (r) : 227.765 MeV
+         0         0         0         0    0.7467         0
+         0         0         0    0.4516     2.803    0.3002
+         0         0         0     2.316     96.68      2.01
+         0         0         0     2.723     119.7         0
+Event 2429
  --- Reconstructed data: 
        -- entry points:
-              left: 9.59559 5.46319 -15 cm 
-             right: 3.9186 -2.12833 -15 cm 
+              left: 2.53077 -2.92951 -15 cm 
+             right: 9.17663 5.14441 -15 cm 
             target: 0 0 0 fm 
-       -- the angle: 135.339 deg
-       -- mass of the output particle: 437.54 MeV
-       -- mass of the nucleus output particle: 1.0438 GeV
+       -- the angle: 123.821 deg
+       -- mass of the output particle: 487.995 MeV
+       -- mass of the nucleus output particle: 1.00378 GeV
        -- production model data: 
        Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
                                (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
        Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
                                (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 135.9726 21.1650 171.3709 MeV -- 489.6387 MeV
-                               (SCM) : eta 135.9726 21.1650 -45.7344 MeV -- 460.9444 MeV
-       Nucleus output particle (LAB) : neutron -135.9726 -21.1650 558.6291 MeV -- 1.1919 GeV
-                               (SCM) : neutron -135.9726 -21.1650 45.7344 MeV -- 1.0538 GeV
+       Output particle         (LAB) : eta 123.0979 2.7146 254.7507 MeV -- 564.0903 MeV
+                               (SCM) : eta 123.0979 2.7146 10.9430 MeV -- 503.4081 MeV
+       Nucleus output particle (LAB) : neutron -123.0979 -2.7146 475.2493 MeV -- 1.1174 GeV
+                               (SCM) : neutron -123.0979 -2.7146 -10.9430 MeV -- 1.0114 GeV
        -- triggered angular ranges: 
-                  7 [-0.2000, -0.4000)
+                  5 [ 0.2000,  0.0000)
  --- Energy Deposit
-       monitor : 471.691 keV
+       monitor : 412.538 keV
         vc (l) : 0 eV 
-        vc (r) : 0 eV 
-       cal (l) : 308.073 MeV
-     84.74     39.69         0      2.75         0         0
-     12.56     157.3     3.127     6.389         0         0
-     1.539         0         0         0         0         0
+        vc (r) : 200.984 keV
+       cal (l) : 337.328 MeV
+         0         0     1.664         0         0         0
+         0         0     1.335     5.006         0         0
+    0.3258     17.37     293.3     7.904    0.6692         0
+         0     1.216     6.709     1.437    0.4377         0
+       cal (r) : 226.762 MeV
+     1.773     110.5     0.409         0         0         0
+     1.751     107.5     2.816         0         0         0
+      1.18    0.5061    0.3509         0         0         0
          0         0         0         0         0         0
-       cal (r) : 181.565 MeV
-         0     0.299         0         0         0         0
-         0     3.149     10.09         0         0         0
-         0     1.345     160.6     3.428         0         0
-    0.5994    0.2131     1.836         0         0         0
-Event 4985
- --- Track Points
-       monitor : pi- [1,bp] 737.5 MeV :  -0.516 1.314 -0.125 cm  [0.005385, -0.004072, 1]
-        target : pi- [1,bp] 736.9 MeV :  2.949 4.037 1.186 cm  [-0.638, -0.77, -0.004918]
-               : eta [4,op] 386 MeV :  1.469 2.255 1.178 cm  [-0.4049, -0.9068, -0.1171]
-               : neutron [5,np] 380.2 MeV :  1.469 2.255 1.178 cm  [-0.8205, -0.5603, 0.1128]
-               : pi0 [8,opdp] 313 MeV :  1.469 2.255 1.178 cm  [-0.4377, -0.8638, -0.2495]
-               : pi0 [6,opdp] 105.2 MeV :  1.469 2.255 1.178 cm  [-0.2294, -0.2808, 0.932]
-        vc (l) : tp is not valid
-        vc (r) : tp is not valid
-       cal (l) : tp is not valid
-       cal (r) : tp is not valid
-      ---
-      angle between the eta decay products : 83.6596 deg
- --- Triggered angular ranges: 
-                  2 [ 0.8000,  0.6000)
- --- Production model data: 
-       Incident particle       (LAB) : pi- 3.2494 -2.3177 732.2618 MeV -- 745.4550 MeV
-                               (SCM) : pi- 2.0109 -1.4343 453.1612 MeV -- 474.1740 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton -2.0109 1.4343 -453.1612 MeV -- 1.0420 GeV
-       Output particle         (LAB) : eta 105.2797 -45.2116 368.5646 MeV -- 670.1646 MeV
-                               (SCM) : eta 104.0245 -44.3163 85.6951 MeV -- 565.9341 MeV
-       Nucleus output particle (LAB) : neutron -102.0303 42.8939 363.6972 MeV -- 1.0136 GeV
-                               (SCM) : neutron -104.0245 44.3163 -85.6951 MeV -- 950.2167 MeV
+Event 2989
  --- Reconstructed data: 
        -- entry points:
-              left: -8.78078 0.00727173 -15 cm 
-             right: 6.47002 3.83656 -15 cm 
+              left: 4.73237 -5.79626 -15 cm 
+             right: 3.95309 -1.39881 -15 cm 
             target: 0 0 0 fm 
-       -- the angle: 115.464 deg
-       -- mass of the output particle: 101.425 MeV
-       -- mass of the nucleus output particle: 1.4118 GeV
+       -- the angle: 130.332 deg
+       -- mass of the output particle: 549.034 MeV
+       -- mass of the nucleus output particle: 933.965 MeV
        -- production model data: 
        Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
                                (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
        Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
                                (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta -10.3874 4.1759 64.0013 MeV -- 120.4513 MeV
-                               (SCM) : eta -10.3874 4.1759 12.9976 MeV -- 102.8653 MeV
-       Nucleus output particle (LAB) : neutron 10.3874 -4.1759 665.9987 MeV -- 1.5610 GeV
-                               (SCM) : neutron 10.3874 -4.1759 -12.9976 MeV -- 1.4119 GeV
+       Output particle         (LAB) : eta -145.9732 -31.0394 273.9420 MeV -- 631.4701 MeV
+                               (SCM) : eta -145.9732 -31.0394 -0.2252 MeV -- 568.9554 MeV
+       Nucleus output particle (LAB) : neutron 145.9732 31.0394 456.0580 MeV -- 1.0500 GeV
+                               (SCM) : neutron 145.9732 31.0394 0.2252 MeV -- 945.8133 MeV
        -- triggered angular ranges: 
-                  2 [ 0.8000,  0.6000)
- --- Energy Deposit
-       monitor : 430.401 keV
-        vc (l) : 0 eV 
-        vc (r) : 8.70591 keV
-       cal (l) : 54.7369 MeV
-         0         0         0    0.3699         0         0
-         0         0         0         0      23.1         0
-         0         0         0    0.1989     30.69    0.3785
-         0         0         0         0         0         0
-       cal (r) : 65.7143 MeV
-         0    0.5921         0     1.235         0         0
-    0.4446     53.18     10.03     0.233         0         0
-         0         0         0         0         0         0
-         0         0         0         0         0         0
-Event 5401
- --- Reconstructed data: 
-       -- entry points:
-              left: -4.50053 -3.09697 -15 cm 
-             right: 4.87479 2.25238 -15 cm 
-            target: 0 0 0 fm 
-       -- the angle: 121.124 deg
-       -- mass of the output particle: 458.335 MeV
-       -- mass of the nucleus output particle: 1.02694 GeV
-       -- production model data: 
-       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
-                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 133.0925 -10.5974 268.7994 MeV -- 547.8594 MeV
-                               (SCM) : eta 133.0925 -10.5974 34.3600 MeV -- 478.6203 MeV
-       Nucleus output particle (LAB) : neutron -133.0925 10.5974 461.2006 MeV -- 1.1336 GeV
-                               (SCM) : neutron -133.0925 10.5974 -34.3600 MeV -- 1.0361 GeV
-       -- triggered angular ranges: 
-                  4 [ 0.4000,  0.2000)
- --- Energy Deposit
-       monitor : 397.906 keV
-        vc (l) : 0 eV 
-        vc (r) : 0 eV 
-       cal (l) : 350.047 MeV
-         0         0  0.003596         0    0.7426         0
-     1.025    0.5138   0.02048      2.51     3.115         0
-         0         0     8.521     234.4     75.15     0.627
-         0         0         0     15.73     5.907     1.796
-       cal (r) : 197.812 MeV
-     1.262     2.335     6.757         0         0         0
-     1.247     40.95     124.1    0.7473         0         0
-         0     8.069     5.078      6.46    0.4416         0
-         0         0    0.3265         0         0         0
-Event 8211
- --- Track Points
-       monitor : pi- [1,bp] 733.9 MeV :  1.007 -0.359 -0.125 cm  [-0.003232, 0.002126, 1]
-        target : pi- [1,bp] 733.4 MeV :  3.854 3.186 -0.2667 cm  [-0.6452, -0.764, 0.00428]
-               : eta [7,op] 284.9 MeV :  1.443 0.3314 -0.2507 cm  [-0.19, -0.9803, 0.05339]
-               : neutron [8,np] 504.5 MeV :  1.443 0.3314 -0.2507 cm  [-0.833, -0.5527, -0.02455]
-               : gamma [10,opdp] 366.6 MeV :  1.443 0.3314 -0.2507 cm  [0.5312, -0.8471, 0.01753]
-               : gamma [9,opdp] 251 MeV :  1.443 0.3314 -0.2507 cm  [-0.9916, 0.1243, 0.03502]
-        vc (l) : gamma [10,opdp] 366.6 MeV :  8.718 0.7815 -0.25 cm  [0.1234, 0.01753, 0.9922]
-        vc (r) : gamma [9,opdp] 251 MeV :  7.593 1.874 -0.25 cm  [0.1366, 0.03502, 0.99]
-       cal (l) : gamma [10,opdp] 366.6 MeV :  8.874 0.8036 -15 cm  [0.1234, 0.01753, 0.9922]
-       cal (r) : gamma [9,opdp] 251 MeV :  7.765 1.918 -15 cm  [0.1366, 0.03502, 0.99]
-      ---
-      angle between the eta decay products : 129.155 deg
- --- Triggered angular ranges: 
                   6 [ 0.0000, -0.2000)
+ --- Energy Deposit
+       monitor : 435.726 keV
+        vc (l) : 0 eV 
+        vc (r) : 0 eV 
+       cal (l) : 225.239 MeV
+         0         0         0         0         0         0
+   0.04669     3.147         0         0         0         0
+     2.868     5.926     28.13     11.22         0         0
+    0.2522     11.43     162.2         0         0         0
+       cal (r) : 406.231 MeV
+         0    0.7268     2.331    0.9906         0         0
+         0     5.883     28.76     2.167    0.5668         0
+         0     13.39       338    0.4482         0         0
+    0.5153       8.4     4.043         0         0         0
+Event 3993
+ --- Track Points
+       monitor : pi- [1,bp] 750.8 MeV :  -3.399 -2.658 -1.25 mm  [-0.006491, 0.002246, 1]
+        target : pi- [1,bp] 750.3 MeV :  2.816 4.132 -0.2097 cm  [-0.6465, -0.7629, 0.001647]
+               : eta [5,op] 361.7 MeV :  -8.795 -2.324 -2.001 mm  [-0.9151, -0.4004, -0.04796]
+               : neutron [6,np] 453.4 MeV :  -8.795 -2.324 -2.001 mm  [-0.3365, -0.9409, 0.03861]
+               : pi0 [9,opdp] 140.6 MeV :  -8.795 -2.324 -2.001 mm  [-0.5583, -0.5776, -0.5956]
+               : pi0 [7,opdp] 271.4 MeV :  -8.795 -2.324 -2.001 mm  [-0.792, -0.4427, 0.4204]
+        vc (l) : tp is not valid
+        vc (r) : tp is not valid
+       cal (l) : tp is not valid
+       cal (r) : tp is not valid
+      ---
+      angle between the eta decay products : 63.4167 deg
+ --- Triggered angular ranges: 
+                  4 [ 0.4000,  0.2000)
  --- Production model data: 
-       Incident particle       (LAB) : pi- -4.6299 2.8270 732.4850 MeV -- 745.6832 MeV
-                               (SCM) : pi- -2.8650 1.7493 453.2571 MeV -- 474.2711 MeV
+       Incident particle       (LAB) : pi- -3.1081 0.1627 748.5312 MeV -- 761.4385 MeV
+                               (SCM) : pi- -1.9110 0.1000 460.2367 MeV -- 480.9380 MeV
        Nucleus particle        (LAB) : proton -0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton 2.8650 -1.7493 -453.2571 MeV -- 1.0420 GeV
-       Output particle         (LAB) : eta 138.0683 15.2119 248.7675 MeV -- 617.5211 MeV
-                               (SCM) : eta 139.7806 14.1664 -22.1266 MeV -- 566.0227 MeV
-       Nucleus output particle (LAB) : neutron -142.6982 -12.3849 483.7175 MeV -- 1.0664 GeV
-                               (SCM) : neutron -139.7806 -14.1664 22.1266 MeV -- 950.2694 MeV
+                               (SCM) : proton 1.9110 -0.1000 -460.2367 MeV -- 1.0451 GeV
+       Output particle         (LAB) : eta -160.4322 -17.3442 323.6746 MeV -- 656.4734 MeV
+                               (SCM) : eta -159.2484 -17.4062 38.5819 MeV -- 572.1052 MeV
+       Nucleus output particle (LAB) : neutron 157.3241 17.5070 424.8566 MeV -- 1.0432 GeV
+                               (SCM) : neutron 159.2484 17.4062 -38.5819 MeV -- 953.9049 MeV
  --- Reconstructed data: 
        -- entry points:
-              left: 8.83701 0.736842 -15 cm 
-             right: 8.13441 3.63147 -15 cm 
+              left: 9 -3 -15 cm 
+             right: 1.83444 2.71963 -15 cm 
             target: 0 0 0 fm 
-       -- the angle: 130.511 deg
-       -- mass of the output particle: 526.961 MeV
-       -- mass of the nucleus output particle: 965.999 MeV
+       -- the angle: 136.83 deg
+       -- mass of the output particle: 114.438 MeV
+       -- mass of the nucleus output particle: 1.39368 GeV
        -- production model data: 
        Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
                                (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
        Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
                                (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 118.0497 18.9477 230.8113 MeV -- 587.5855 MeV
-                               (SCM) : eta 118.0497 18.9477 -26.9542 MeV -- 541.0262 MeV
-       Nucleus output particle (LAB) : neutron -118.0497 -18.9477 499.1887 MeV -- 1.0939 GeV
-                               (SCM) : neutron -118.0497 -18.9477 26.9542 MeV -- 973.7425 MeV
-       -- triggered angular ranges: 
-                  7 [-0.2000, -0.4000)
- --- Energy Deposit
-       monitor : 417.235 keV
-        vc (l) : 0 eV 
-        vc (r) : 0 eV 
-       cal (l) : 340.114 MeV
-    0.6373    0.3785    0.2727         0         0         0
-     18.64     288.9     3.189    0.4507         0         0
-     11.96     7.629     1.994     2.622         0         0
-     0.759     1.644    0.5401     0.531         0         0
-       cal (r) : 247.472 MeV
-     6.263     1.077     1.393     0.879         0         0
-     6.255     214.2     12.94    0.8579         0         0
-         0     2.943    0.6439         0         0         0
-         0         0         0         0         0         0
-Event 10143
- --- Track Points
-       monitor : pi- [1,bp] 732.5 MeV :  2.955 -8.17 -1.25 mm  [0.002571, 0.001897, 1]
-        target : pi- [1,bp] 732 MeV :  3.479 3.591 -0.7962 cm  [-0.6421, -0.7667, 0.0006772]
-               : eta [7,op] 286.5 MeV :  2.307 2.191 -0.795 cm  [-0.2022, -0.9703, -0.1331]
-               : neutron [8,np] 501.1 MeV :  2.307 2.191 -0.795 cm  [-0.8218, -0.5646, 0.07677]
-               : gamma [10,opdp] 388.4 MeV :  2.307 2.191 -0.795 cm  [0.409, -0.9102, -0.06536]
-               : gamma [9,opdp] 229.9 MeV :  2.307 2.191 -0.795 cm  [-0.9429, 0.3283, -0.05545]
-        vc (l) : gamma [10,opdp] 388.4 MeV :  2.182 -4.71 -0.25 cm  [-0.01394, -0.06536, 0.9978]
-        vc (r) : gamma [9,opdp] 229.9 MeV :  -7.146 -4.159 -0.25 cm  [-0.07307, -0.05545, 0.9958]
-       cal (l) : gamma [10,opdp] 388.4 MeV :  2.164 -4.791 -15 cm  [-0.01394, -0.06536, 0.9978]
-       cal (r) : gamma [9,opdp] 229.9 MeV :  -7.238 -4.229 -15 cm  [-0.07307, -0.05545, 0.9958]
-      ---
-      angle between the eta decay products : 132.914 deg
- --- Triggered angular ranges: 
-                  6 [ 0.0000, -0.2000)
- --- Production model data: 
-       Incident particle       (LAB) : pi- 0.7016 0.3417 731.6423 MeV -- 744.8361 MeV
-                               (SCM) : pi- 0.4343 0.2115 452.8922 MeV -- 473.9108 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton -0.4343 -0.2115 -452.8922 MeV -- 1.0419 GeV
-       Output particle         (LAB) : eta 134.3078 -38.1310 250.1884 MeV -- 618.2553 MeV
-                               (SCM) : eta 134.0481 -38.2575 -20.6027 MeV -- 565.6941 MeV
-       Nucleus output particle (LAB) : neutron -133.6061 38.4727 481.4538 MeV -- 1.0649 GeV
-                               (SCM) : neutron -134.0481 38.2575 20.6027 MeV -- 950.0737 MeV
- --- Reconstructed data: 
-       -- entry points:
-              left: 2.65987 -4.6878 -15 cm 
-             right: -6.51834 -4.54077 -15 cm 
-            target: 0 0 0 fm 
-       -- the angle: 137.858 deg
-       -- mass of the output particle: 504.871 MeV
-       -- mass of the nucleus output particle: 969.595 MeV
-       -- production model data: 
-       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
-                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 152.3448 -43.5833 204.2290 MeV -- 567.1973 MeV
-                               (SCM) : eta 152.3448 -43.5833 -46.6369 MeV -- 531.2045 MeV
-       Nucleus output particle (LAB) : neutron -152.3448 43.5833 525.7710 MeV -- 1.1143 GeV
-                               (SCM) : neutron -152.3448 43.5833 46.6369 MeV -- 983.5641 MeV
-       -- triggered angular ranges: 
-                  7 [-0.2000, -0.4000)
- --- Energy Deposit
-       monitor : 384.251 keV
-        vc (l) : 0 eV 
-        vc (r) : 0 eV 
-       cal (l) : 368.715 MeV
-         0         0         0         0         0         0
-         0         0     0.659    0.4322         0         0
-         0     1.838       311     4.817    0.3078         0
-     1.853    0.4907     39.73     7.636         0         0
-       cal (r) : 198.483 MeV
-         0         0         0         0         0         0
-    0.3653         0         0         0    0.2415         0
-         0    0.3544  0.006736     32.17     137.6    0.7949
-         0         0    0.1463     8.018     17.87     0.935
-Event 11161
- --- Reconstructed data: 
-       -- entry points:
-              left: 4.41054 5.31558 -15 cm 
-             right: -5.96566 4.1712 -15 cm 
-            target: 0 0 0 fm 
-       -- the angle: 138.926 deg
-       -- mass of the output particle: 188.699 MeV
-       -- mass of the nucleus output particle: 1.29029 GeV
-       -- production model data: 
-       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
-                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 108.3611 19.4056 81.0386 MeV -- 233.0088 MeV
-                               (SCM) : eta 108.3611 19.4056 -22.3337 MeV -- 219.6011 MeV
-       Nucleus output particle (LAB) : neutron -108.3611 -19.4056 648.9614 MeV -- 1.4485 GeV
-                               (SCM) : neutron -108.3611 -19.4056 22.3337 MeV -- 1.2952 GeV
+       Output particle         (LAB) : eta -37.4803 1.8676 51.7973 MeV -- 131.1003 MeV
+                               (SCM) : eta -37.4803 1.8676 -5.6816 MeV -- 120.5679 MeV
+       Nucleus output particle (LAB) : neutron 37.4803 -1.8676 678.2027 MeV -- 1.5504 GeV
+                               (SCM) : neutron 37.4803 -1.8676 5.6816 MeV -- 1.3942 GeV
        -- triggered angular ranges: 
                   6 [ 0.0000, -0.2000)
  --- Energy Deposit
-       monitor : 413.242 keV
+       monitor : 435.025 keV
         vc (l) : 0 eV 
         vc (r) : 0 eV 
-       cal (l) : 175.004 MeV
-    0.3272     3.792     94.16      2.27         0         0
-     2.485     8.466     60.16     1.452         0         0
-    0.3809         0    0.9685    0.5439         0         0
-         0         0         0         0         0         0
-       cal (r) : 58.0046 MeV
-         0         0   0.09569     2.023     1.062         0
-         0    0.4829         0     13.59     40.32    0.4313
+       cal (l) : 42.9592 MeV
          0         0         0         0         0         0
          0         0         0         0         0         0
-Event 11930
+         0     42.96         0         0         0         0
+         0         0         0         0         0         0
+       cal (r) : 88.1411 MeV
+     1.664         0         0         0         0         0
+    0.2828    0.5689     14.71     67.87      0.12         0
+         0     2.727         0    0.1908         0         0
+         0         0         0         0         0         0
+Event 5924
  --- Reconstructed data: 
        -- entry points:
-              left: -0.575875 -3.12133 -15 cm 
-             right: -5.92683 -0.642717 -15 cm 
+              left: 9.56489 -1.39421 -15 cm 
+             right: 9.19168 5.19126 -15 cm 
             target: 0 0 0 fm 
-       -- the angle: 134.966 deg
-       -- mass of the output particle: 517.577 MeV
-       -- mass of the nucleus output particle: 969.607 MeV
+       -- the angle: 130.305 deg
+       -- mass of the output particle: 135.243 MeV
+       -- mass of the nucleus output particle: 1.36168 GeV
        -- production model data: 
        Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
                                (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
        Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
                                (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 133.1996 -21.4805 229.6613 MeV -- 582.0945 MeV
-                               (SCM) : eta 133.1996 -21.4805 -25.5846 MeV -- 535.4850 MeV
-       Nucleus output particle (LAB) : neutron -133.1996 21.4805 500.3387 MeV -- 1.0994 GeV
-                               (SCM) : neutron -133.1996 21.4805 25.5846 MeV -- 979.2836 MeV
+       Output particle         (LAB) : eta 66.6886 1.6501 58.1750 MeV -- 161.6325 MeV
+                               (SCM) : eta 66.6886 1.6501 -13.3160 MeV -- 151.3871 MeV
+       Nucleus output particle (LAB) : neutron -66.6886 -1.6501 671.8250 MeV -- 1.5199 GeV
+                               (SCM) : neutron -66.6886 -1.6501 13.3160 MeV -- 1.3634 GeV
        -- triggered angular ranges: 
                   6 [ 0.0000, -0.2000)
  --- Energy Deposit
-       monitor : 509.962 keV
+       monitor : 408.157 keV
         vc (l) : 0 eV 
         vc (r) : 0 eV 
-       cal (l) : 369.959 MeV
-         0         0    0.4955         0         0         0
-         0         0     1.848     7.552         0         0
-         0     1.234     56.78     280.8     0.483         0
-         0         0     15.17     5.628         0         0
-       cal (r) : 212.135 MeV
-         0         0         0    0.2151         0         0
-         0         0         0     20.13     72.03         0
-         0         0         0     95.75     21.36         0
-         0         0         0    0.3787     2.283         0
-Event 12093
- --- Track Points
-       monitor : pi- [1,bp] 728.9 MeV :  0.7398 -1.295 -0.125 cm  [0.01106, -0.01176, 0.9999]
-        target : pi- [1,bp] 728 MeV :  3.973 3.036 -1.624 cm  [-0.6335, -0.7737, -0.01143]
-               : eta [4,op] 382 MeV :  0.4636 -1.25 -1.687 cm  [-0.5724, -0.7827, 0.2445]
-               : neutron [5,np] 371.3 MeV :  0.4636 -1.25 -1.687 cm  [-0.6523, -0.7075, -0.2718]
-               : pi0 [30,opdp] 209.7 MeV :  0.4636 -1.25 -1.687 cm  [0.2412, -0.9704, 0.008518]
-               : pi0 [28,opdp] 156.2 MeV :  0.4636 -1.25 -1.687 cm  [-0.6849, -0.4908, 0.5385]
-        vc (l) : tp is not valid
-        vc (r) : tp is not valid
-       cal (l) : tp is not valid
-       cal (r) : tp is not valid
-      ---
-      angle between the eta decay products : 71.5974 deg
- --- Triggered angular ranges: 
-                  2 [ 0.8000,  0.6000)
- --- Production model data: 
-       Incident particle       (LAB) : pi- 7.9868 -7.5267 726.5379 MeV -- 739.9038 MeV
-                               (SCM) : pi- 4.9539 -4.6685 450.6412 MeV -- 471.8089 MeV
-       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
-                               (SCM) : proton -4.9539 4.6685 -450.6412 MeV -- 1.0409 GeV
-       Output particle         (LAB) : eta 24.6675 93.3992 369.6187 MeV -- 667.9092 MeV
-                               (SCM) : eta 21.5846 96.3045 89.1741 MeV -- 563.7776 MeV
-       Nucleus output particle (LAB) : neutron -16.6808 -100.9258 356.9192 MeV -- 1.0103 GeV
-                               (SCM) : neutron -21.5846 -96.3045 -89.1741 MeV -- 948.9339 MeV
+       cal (l) : 112.09 MeV
+         0         0         0         0         0         0
+     9.786     11.22     2.156         0         0         0
+      4.78     80.36     1.809         0         0         0
+     0.608         0     1.375         0         0         0
+       cal (r) : 49.5421 MeV
+     1.146     4.007    0.5435         0         0         0
+         0     43.85         0         0         0         0
+         0         0         0         0         0         0
+         0         0         0         0         0         0
+Event 5956
  --- Reconstructed data: 
        -- entry points:
-              left: 3.12996 -3.39986 -15 cm 
-             right: -9.29647 1.14106 -15 cm 
+              left: 9.70422 -3.5218 -15 cm 
+             right: -11.4703 1.74504 -15 cm 
             target: 0 0 0 fm 
-       -- the angle: 141.763 deg
-       -- mass of the output particle: 378.736 MeV
-       -- mass of the nucleus output particle: 1.13197 GeV
+       -- the angle: 149.993 deg
+       -- mass of the output particle: 529.794 MeV
+       -- mass of the nucleus output particle: 962.425 MeV
        -- production model data: 
        Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
                                (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
        Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
                                (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
-       Output particle         (LAB) : eta 2.9327 -7.9535 131.4291 MeV -- 400.9817 MeV
-                               (SCM) : eta 2.9327 -7.9535 -47.3467 MeV -- 381.7780 MeV
-       Nucleus output particle (LAB) : neutron -2.9327 7.9535 598.5709 MeV -- 1.2805 GeV
-                               (SCM) : neutron -2.9327 7.9535 47.3467 MeV -- 1.1330 GeV
+       Output particle         (LAB) : eta 63.6017 -11.0495 143.7746 MeV -- 552.7388 MeV
+                               (SCM) : eta 63.6017 -11.0495 -106.7774 MeV -- 544.2889 MeV
+       Nucleus output particle (LAB) : neutron -63.6017 11.0495 586.2254 MeV -- 1.1288 GeV
+                               (SCM) : neutron -63.6017 11.0495 106.7774 MeV -- 970.4797 MeV
        -- triggered angular ranges: 
                  10 [-0.8000, -1.0000)
  --- Energy Deposit
-       monitor : 353.171 keV
-        vc (l) : 113.489 keV
+       monitor : 394.652 keV
+        vc (l) : 0 eV 
         vc (r) : 0 eV 
-       cal (l) : 205.719 MeV
+       cal (l) : 310.561 MeV
+         0     6.519         0         0         0         0
+     9.283     1.784    0.7205         0         0         0
+     2.568     212.9     1.043         0         0         0
+     16.48     53.98     5.275         0         0         0
+       cal (r) : 242.178 MeV
+         0         0         0         0     1.178      1.03
+         0         0         0         0     144.3     79.75
+         0         0         0    0.1925     6.587     8.343
+         0         0         0     0.374         0    0.4226
+Event 7017
+ --- Track Points
+       monitor : pi- [1,bp] 733.2 MeV :  1.523 0.2231 -0.125 cm  [-0.006194, 0.01865, 0.9998]
+        target : pi- [1,bp] 732.6 MeV :  4.127 2.823 0.7481 cm  [-0.6475, -0.7618, 0.01883]
+               : eta [4,op] 273.8 MeV :  0.3046 -1.675 0.8593 cm  [-0.9414, -0.3357, 0.0318]
+               : neutron [5,np] 512.3 MeV :  0.3046 -1.675 0.8593 cm  [-0.4228, -0.9061, 0.01331]
+               : gamma [7,opdp] 227.9 MeV :  0.3046 -1.675 0.8593 cm  [0.4907, -0.8675, 0.08189]
+               : gamma [6,opdp] 384.6 MeV :  0.3046 -1.675 0.8593 cm  [-0.9611, 0.275, -0.02589]
+        vc (l) : gamma [7,opdp] 227.9 MeV :  4.059 5.566 -0.25 cm  [0.07814, 0.08189, 0.9936]
+        vc (r) : gamma [6,opdp] 384.6 MeV :  5.329 -6.812 -2.5 mm  [-0.01691, -0.02589, 0.9995]
+       cal (l) : gamma [7,opdp] 227.9 MeV :  4.158 5.669 -15 cm  [0.07814, 0.08189, 0.9936]
+       cal (r) : gamma [6,opdp] 384.6 MeV :  0.5117 -0.7136 -15 cm  [-0.01691, -0.02589, 0.9995]
+      ---
+      angle between the eta decay products : 135.424 deg
+ --- Triggered angular ranges: 
+                  7 [-0.2000, -0.4000)
+ --- Production model data: 
+       Incident particle       (LAB) : pi- -5.9206 15.5259 730.9847 MeV -- 744.3753 MeV
+                               (SCM) : pi- -3.6656 9.6124 452.5704 MeV -- 473.7147 MeV
+       Nucleus particle        (LAB) : proton -0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
+                               (SCM) : proton 3.6656 -9.6124 -452.5704 MeV -- 1.0418 GeV
+       Output particle         (LAB) : eta -138.3710 8.7070 236.1125 MeV -- 612.4738 MeV
+                               (SCM) : eta -136.1902 2.9882 -33.1361 MeV -- 565.5152 MeV
+       Nucleus output particle (LAB) : neutron 132.4504 6.8189 494.8722 MeV -- 1.0702 GeV
+                               (SCM) : neutron 136.1902 -2.9882 33.1361 MeV -- 949.9672 MeV
+ --- Reconstructed data: 
+       -- entry points:
+              left: 4.71103 6.54986 -15 cm 
+             right: -0.329119 -0.306664 -15 cm 
+            target: 0 0 0 fm 
+       -- the angle: 134.514 deg
+       -- mass of the output particle: 507.72 MeV
+       -- mass of the nucleus output particle: 962.224 MeV
+       -- production model data: 
+       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
+                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
+       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
+                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
+       Output particle         (LAB) : eta -171.4950 19.1106 230.2017 MeV -- 583.5650 MeV
+                               (SCM) : eta -171.4950 19.1106 -25.6934 MeV -- 536.8570 MeV
+       Nucleus output particle (LAB) : neutron 171.4950 -19.1106 499.7983 MeV -- 1.0979 GeV
+                               (SCM) : neutron 171.4950 -19.1106 25.6934 MeV -- 977.9117 MeV
+       -- triggered angular ranges: 
+                  6 [ 0.0000, -0.2000)
+ --- Energy Deposit
+       monitor : 439.85 keV
+        vc (l) : 0 eV 
+        vc (r) : 0 eV 
+       cal (l) : 194.994 MeV
+    0.3838     21.27     117.5         0         0         0
+         0     4.991     50.42         0         0         0
+         0         0         0    0.4269         0         0
          0         0         0         0         0         0
-         0     1.717      1.85         0         0    0.4758
-    0.1962     12.69     169.8     8.324    0.3718         0
-         0     6.354     1.724     2.168         0         0
-       cal (r) : 195.263 MeV
-         0         0         0    0.3299     6.177     1.111
-         0         0         0         0     145.4      4.81
-         0         0         0     3.856     22.04     9.515
-         0         0    0.2432     1.766         0         0
+       cal (r) : 388.571 MeV
+     1.124    0.6301         0     1.817     2.379         0
+         0         0     9.691     34.91     2.508    0.2849
+         0    0.4146     243.6     90.07    0.2577    0.3332
+         0         0    0.2893    0.2172         0         0
+Event 11869
+ --- Reconstructed data: 
+       -- entry points:
+              left: -11.3368 0.949074 -15 cm 
+             right: 9.65803 -3.2602 -15 cm 
+            target: 0 0 0 fm 
+       -- the angle: 110.174 deg
+       -- mass of the output particle: 205.313 MeV
+       -- mass of the nucleus output particle: 1.27494 GeV
+       -- production model data: 
+       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
+                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
+       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
+                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
+       Output particle         (LAB) : eta 104.6313 -0.8665 162.9122 MeV -- 282.2094 MeV
+                               (SCM) : eta 104.6313 -0.8665 44.8406 MeV -- 234.7603 MeV
+       Nucleus output particle (LAB) : neutron -104.6313 0.8665 567.0878 MeV -- 1.3993 GeV
+                               (SCM) : neutron -104.6313 0.8665 -44.8406 MeV -- 1.2800 GeV
+       -- triggered angular ranges: 
+                  4 [ 0.4000,  0.2000)
+ --- Energy Deposit
+       monitor : 382.425 keV
+        vc (l) : 0 eV 
+        vc (r) : 0 eV 
+       cal (l) : 206.21 MeV
+         0         0         0         0         0    0.2006
+         0         0    0.1975         0     123.7     60.78
+         0         0         0    0.7977     9.268     8.649
+         0         0         0         0         0     2.636
+       cal (r) : 75.9994 MeV
+         0         0         0         0         0         0
+    0.6584    0.3541         0    0.9066         0         0
+     2.061     65.84    0.6499         0         0         0
+     4.803    0.7233         0         0         0         0
+Event 12029
+ --- Reconstructed data: 
+       -- entry points:
+              left: 5.88138 3.28708 -15 cm 
+             right: -9.39562 -1.46741 -15 cm 
+            target: 0 0 0 fm 
+       -- the angle: 144.486 deg
+       -- mass of the output particle: 560.64 MeV
+       -- mass of the nucleus output particle: 919.188 MeV
+       -- production model data: 
+       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
+                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
+       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
+                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
+       Output particle         (LAB) : eta 132.6654 14.8982 188.5831 MeV -- 606.3848 MeV
+                               (SCM) : eta 132.6654 14.8982 -82.8902 MeV -- 582.2454 MeV
+       Nucleus output particle (LAB) : neutron -132.6654 -14.8982 541.4169 MeV -- 1.0751 GeV
+                               (SCM) : neutron -132.6654 -14.8982 82.8902 MeV -- 932.5233 MeV
+       -- triggered angular ranges: 
+                  8 [-0.4000, -0.6000)
+ --- Energy Deposit
+       monitor : 394.343 keV
+        vc (l) : 0 eV 
+        vc (r) : 0 eV 
+       cal (l) : 375.909 MeV
+     1.195     46.67     5.232         0    0.4769         0
+     1.174     146.9     162.1    0.3446         0         0
+         0     6.088     2.901     1.315         0         0
+    0.6038         0         0         0         0    0.9061
+       cal (r) : 230.476 MeV
+         0         0         0         0     1.701     3.459
+         0         0         0     1.772     3.452     1.629
+         0         0         0     4.701     206.1     3.071
+         0         0         0    0.2394     3.274     1.056
+Event 14081
+ --- Reconstructed data: 
+       -- entry points:
+              left: 1.76674 -4.72587 -15 cm 
+             right: 1.7346 -3.91783 -15 cm 
+            target: 0 0 0 fm 
+       -- the angle: 129.401 deg
+       -- mass of the output particle: 155.598 MeV
+       -- mass of the nucleus output particle: 1.35839 GeV
+       -- production model data: 
+       Incident particle       (LAB) : pi- 0.0000 0.0000 730.0000 MeV -- 743.2226 MeV
+                               (SCM) : pi- 0.0000 0.0000 452.1737 MeV -- 473.2239 MeV
+       Nucleus particle        (LAB) : proton 0.0000 0.0000 0.0000 eV  -- 938.2720 MeV
+                               (SCM) : proton 0.0000 0.0000 -452.1737 MeV -- 1.0415 GeV
+       Output particle         (LAB) : eta 7.6278 -12.4081 72.3577 MeV -- 172.2165 MeV
+                               (SCM) : eta 7.6278 -12.4081 -2.6730 MeV -- 156.3011 MeV
+       Nucleus output particle (LAB) : neutron -7.6278 12.4081 657.6423 MeV -- 1.5093 GeV
+                               (SCM) : neutron -7.6278 12.4081 2.6730 MeV -- 1.3585 GeV
+       -- triggered angular ranges: 
+                  6 [ 0.0000, -0.2000)
+ --- Energy Deposit
+       monitor : 708.214 keV
+        vc (l) : 0 eV 
+        vc (r) : 0 eV 
+       cal (l) : 89.1994 MeV
+         0         0         0         0         0         0
+         0    0.2924         0         0         0         0
+         0         0     73.42     2.438         0         0
+         0         0     8.142     4.904         0         0
+       cal (r) : 83.0171 MeV
+         0         0         0         0         0         0
+         0         0         0         0         0         0
+         0    0.2615     79.28     1.154    0.3255         0
+         0         0    0.8978     1.102         0         0
 Run terminated.
 Run Summary
-  Number of events processed : 12094, effectively: 10
-  User=8.820000s Real=8.897691s Sys=0.000000s
+  Number of events processed : 14082, effectively: 10
+  User=11.770000s Real=11.900029s Sys=0.010000s
 
  --- Setup acceptances (range | real (trg / mon) | rec (trg / mon / all)):
-        1 [ 1.0000,  0.8000)  | 0.00000000 ( 0 / 322 )  | 0.00000000 ( 0 / 322 / 410 )
-        2 [ 0.8000,  0.6000)  | 0.00552486 ( 2 / 362 )  | 0.00276243 ( 1 / 362 / 427 )
-        3 [ 0.6000,  0.4000)  | 0.00000000 ( 0 / 331 )  | 0.00000000 ( 0 / 331 / 413 )
-        4 [ 0.4000,  0.2000)  | 0.00000000 ( 0 / 336 )  | 0.00297619 ( 1 / 336 / 410 )
-        5 [ 0.2000,  0.0000)  | 0.00309598 ( 1 / 323 )  | 0.00000000 ( 0 / 323 / 399 )
-        6 [ 0.0000, -0.2000)  | 0.00576369 ( 2 / 347 )  | 0.00000000 ( 0 / 347 / 426 )
-        7 [-0.2000, -0.4000)  | 0.00000000 ( 0 / 350 )  | 0.00857143 ( 3 / 350 / 438 )
-        8 [-0.4000, -0.6000)  | 0.00289017 ( 1 / 346 )  | 0.00000000 ( 0 / 346 / 414 )
-        9 [-0.6000, -0.8000)  | 0.00000000 ( 0 / 334 )  | 0.00000000 ( 0 / 334 / 425 )
-       10 [-0.8000, -1.0000)  | 0.00000000 ( 0 / 343 )  | 0.00291545 ( 1 / 343 / 417 )
+        1 [ 1.0000,  0.8000)  | 0.00000000 ( 0 / 402 )  | 0.00000000 ( 0 / 402 / 509 )
+        2 [ 0.8000,  0.6000)  | 0.00000000 ( 0 / 361 )  | 0.00000000 ( 0 / 361 / 440 )
+        3 [ 0.6000,  0.4000)  | 0.00000000 ( 0 / 392 )  | 0.00000000 ( 0 / 392 / 487 )
+        4 [ 0.4000,  0.2000)  | 0.00261097 ( 1 / 383 )  | 0.00000000 ( 0 / 383 / 481 )
+        5 [ 0.2000,  0.0000)  | 0.00000000 ( 0 / 423 )  | 0.00000000 ( 0 / 423 / 520 )
+        6 [ 0.0000, -0.2000)  | 0.00000000 ( 0 / 401 )  | 0.00498753 ( 2 / 401 / 497 )
+        7 [-0.2000, -0.4000)  | 0.00257732 ( 1 / 388 )  | 0.00000000 ( 0 / 388 / 481 )
+        8 [-0.4000, -0.6000)  | 0.00000000 ( 0 / 369 )  | 0.00000000 ( 0 / 369 / 475 )
+        9 [-0.6000, -0.8000)  | 0.00000000 ( 0 / 424 )  | 0.00000000 ( 0 / 424 / 524 )
+       10 [-0.8000, -1.0000)  | 0.00000000 ( 0 / 387 )  | 0.00000000 ( 0 / 387 / 483 )
        ---
-       False hits (edt | rec):  4 | 4
+       False hits (edt | rec):  8 | 8
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 17; of which, static: 3
-Dynamic pools deleted: 14 / Total memory freed: 0.62 MB
+Dynamic pools deleted: 14 / Total memory freed: 0.86 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

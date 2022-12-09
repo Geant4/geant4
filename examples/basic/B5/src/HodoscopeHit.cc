@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HodoscopeHit.cc
+/// \file B5/src/HodoscopeHit.cc
 /// \brief Implementation of the B5::HodoscopeHit class
 
 #include "HodoscopeHit.hh"
@@ -53,34 +53,6 @@ G4ThreadLocal G4Allocator<HodoscopeHit>* HodoscopeHitAllocator;
 HodoscopeHit::HodoscopeHit(G4int id,G4double time)
 : fId(id), fTime(time)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HodoscopeHit::~HodoscopeHit()
-{}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// HodoscopeHit::HodoscopeHit(const HodoscopeHit &right)
-// : G4VHit(),
-//   fId(right.fId),
-//   fTime(right.fTime),
-//   fPos(right.fPos),
-//   fRot(right.fRot),
-//   fPLogV(right.fPLogV)
-// {}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// const HodoscopeHit& HodoscopeHit::operator=(const HodoscopeHit &right)
-// {
-//   fId = right.fId;
-//   fTime = right.fTime;
-//   fPos = right.fPos;
-//   fRot = right.fRot;
-//   fPLogV = right.fPLogV;
-//   return *this;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

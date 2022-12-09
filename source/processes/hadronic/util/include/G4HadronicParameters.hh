@@ -136,6 +136,10 @@ class G4HadronicParameters {
     /// be turned back on. Applies to Baryon Number > 10 or # target nucleons > 10.
     void SetEnableDiffDissociationForBGreater10(G4bool val);
 
+    inline G4bool EnableNeutronGeneralProcess() const;
+    void SetEnableNeutronGeneralProcess( G4bool val );
+    // Neutron general process may be enabled/disabled
+
   private:
     G4HadronicParameters();
 
@@ -160,14 +164,15 @@ class G4HadronicParameters {
     G4double fXSFactorEM = 1.0;
     G4double fXSFactorLimit = 0.2;
     
-    G4int    fVerboseLevel = 1;
-    G4bool   fEnableBC = false;
-    G4bool   fEnableHyperNuclei = false;
-    G4bool   fApplyFactorXS = false;
-    G4bool   fEnableCRCoalescence = false;
-    G4bool   fEnableIntegralInelasticXS = true;
-    G4bool   fEnableIntegralElasticXS = true;
+    G4int fVerboseLevel = 1;
+    G4bool fEnableBC = false;
+    G4bool fEnableHyperNuclei = false;
+    G4bool fApplyFactorXS = false;
+    G4bool fEnableCRCoalescence = false;
+    G4bool fEnableIntegralInelasticXS = true;
+    G4bool fEnableIntegralElasticXS = true;
     G4bool fEnableDiffDissociationForBGreater10 = false;
+    G4bool fNeutronGeneral = false;
 };
 
 inline G4double G4HadronicParameters::GetMaxEnergy() const { 
@@ -251,6 +256,10 @@ inline G4bool G4HadronicParameters::EnableIntegralElasticXS() const {
 
 inline G4bool G4HadronicParameters::EnableDiffDissociationForBGreater10() const {
   return fEnableDiffDissociationForBGreater10;
+}
+
+inline G4bool G4HadronicParameters::EnableNeutronGeneralProcess() const {
+  return fNeutronGeneral;
 }
 
 #endif

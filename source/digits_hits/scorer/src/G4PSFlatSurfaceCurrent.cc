@@ -60,16 +60,8 @@
 
 G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, G4int direction,
                                                G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , fDirection(direction)
-  , EvtMap(0)
-  , weighted(true)
-  , divideByArea(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-}
+  : G4PSFlatSurfaceCurrent(name, direction, "percm2", depth) 
+{}
 
 G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, G4int direction,
                                                const G4String& unit,
@@ -77,7 +69,7 @@ G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, G4int direction,
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
   , fDirection(direction)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
   , divideByArea(true)
 {
@@ -85,15 +77,13 @@ G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, G4int direction,
   SetUnit(unit);
 }
 
-G4PSFlatSurfaceCurrent::~G4PSFlatSurfaceCurrent() { ; }
-
 G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4StepPoint* preStep             = aStep->GetPreStepPoint();
   G4VPhysicalVolume* physVol       = preStep->GetPhysicalVolume();
   G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid                  = 0;
-  if(physParam)
+  G4VSolid* solid                  = nullptr;
+  if(physParam != nullptr)
   {  // for parameterized volume
     G4int idx =
       ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
@@ -106,7 +96,7 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-  G4Box* boxSolid = (G4Box*) (solid);
+  auto  boxSolid = (G4Box*) (solid);
 
   G4int dirFlag = IsSelectedSurface(aStep, boxSolid);
   if(dirFlag > 0)
@@ -126,10 +116,10 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       }
       EvtMap->add(index, current);
 
-      if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+      if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
       {
         auto filler = G4VScoreHistFiller::Instance();
-        if(!filler)
+        if(filler == nullptr)
         {
           G4Exception("G4PSFlatSurfaceCurrent::ProcessHits", "SCORER0123",
                       JustWarning,
@@ -144,7 +134,7 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4int G4PSFlatSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Box* boxSolid)
@@ -189,28 +179,23 @@ void G4PSFlatSurfaceCurrent::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSFlatSurfaceCurrent::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSFlatSurfaceCurrent::clear() { EvtMap->clear(); }
-
-void G4PSFlatSurfaceCurrent::DrawAll() { ; }
 
 void G4PSFlatSurfaceCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, current] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first << " current : ";
+    G4cout << "  copy no.: " << copy << " current : ";
     if(divideByArea)
     {
-      G4cout << *(itr->second) / GetUnitValue() << " [" << GetUnit() << "]";
+      G4cout << *(current) / GetUnitValue() << " [" << GetUnit() << "]";
     }
     else
     {
-      G4cout << *(itr->second) / GetUnitValue() << " [tracks]";
+      G4cout << *(current) / GetUnitValue() << " [tracks]";
     }
     G4cout << G4endl;
   }
@@ -224,7 +209,7 @@ void G4PSFlatSurfaceCurrent::SetUnit(const G4String& unit)
   }
   else
   {
-    if(unit == "")
+    if(unit.empty())
     {
       unitName  = unit;
       unitValue = 1.0;

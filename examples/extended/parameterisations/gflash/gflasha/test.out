@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -41,6 +41,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -145,6 +147,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -172,7 +175,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -223,8 +226,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -707,6 +710,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: hFritiofCaptureAtRest
 
 ---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for anti_lambda
 
   Process: hadElastic
@@ -978,9 +986,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 ... open analysis file : gflash01.root - done
 
 ******************************************
-Run Real Elapsed Time is: 0.81585
-Run System Elapsed Time: 0.02
-Run GetUserElapsed Time: 0.8
+Run Real Elapsed Time is: 0.991647
+Run System Elapsed Time: 0.01
+Run GetUserElapsed Time: 0.98
 ******************************************
 number of event = 100
 ... write file : gflash01.root - done
@@ -991,16 +999,15 @@ There are 3 h1 histograms
   2 with      0 entries: The energy of Hit (in MeV)
 List them with "/analysis/list".
 View them with "/vis/plot" or "/vis/reviewPlots".
-Set file name: gflash00
 ### Run 1 start.
 ... create file : gflash00.root - done
 ... open analysis file : gflash00.root - done
 ... open analysis file : gflash00.root - done
 
 ******************************************
-Run Real Elapsed Time is: 59.7876
-Run System Elapsed Time: 0.35
-Run GetUserElapsed Time: 58.74
+Run Real Elapsed Time is: 70.8076
+Run System Elapsed Time: 0.41
+Run GetUserElapsed Time: 69.74
 ******************************************
 number of event = 100
 ... write file : gflash00.root - done
@@ -1015,7 +1022,7 @@ Graphics systems deleted.
 Visualization Manager deleting...
 
 ******************************************
-Total Real Elapsed Time is: 64.7542
-Total System Elapsed Time: 0.56
-Total GetUserElapsed Time: 61.97
+Total Real Elapsed Time is: 75.0231
+Total System Elapsed Time: 0.64
+Total GetUserElapsed Time: 73.31
 ******************************************

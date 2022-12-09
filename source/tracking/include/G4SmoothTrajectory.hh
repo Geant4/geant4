@@ -103,7 +103,7 @@ class G4SmoothTrajectory : public G4VTrajectory
     virtual void DrawTrajectory() const;
     virtual void AppendStep(const G4Step* aStep);
     virtual G4int GetPointEntries() const
-      { return positionRecord->size(); }
+      { return (G4int)positionRecord->size(); }
     virtual G4VTrajectoryPoint* GetPoint(G4int i) const
       { return (*positionRecord)[i]; }
     virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);

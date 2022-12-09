@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EmCalorimeterHit.cc
+/// \file B5/src/EmCalorimeterHit.cc
 /// \brief Implementation of the B5::EmCalorimeterHit class
 
 #include "EmCalorimeterHit.hh"
@@ -49,43 +49,9 @@ G4ThreadLocal G4Allocator<EmCalorimeterHit>* EmCalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EmCalorimeterHit::EmCalorimeterHit()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 EmCalorimeterHit::EmCalorimeterHit(G4int cellID)
 : fCellID(cellID)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmCalorimeterHit::~EmCalorimeterHit()
-{}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// EmCalorimeterHit::EmCalorimeterHit(const EmCalorimeterHit &right)
-// : G4VHit(),
-//   fCellID(right.fCellID),
-//   fEdep(right.fEdep),
-//   fPos(right.fPos),
-//   fRot(right.fRot),
-//   fPLogV(right.fPLogV)
-// {}
-
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// const EmCalorimeterHit& EmCalorimeterHit::operator=(const EmCalorimeterHit
-//                                                           &right)
-// {
-//   fCellID = right.fCellID;
-//   fEdep = right.fEdep;
-//   fPos = right.fPos;
-//   fRot = right.fRot;
-//   fPLogV = right.fPLogV;
-//   return *this;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

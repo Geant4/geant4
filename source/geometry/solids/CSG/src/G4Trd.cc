@@ -404,7 +404,7 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
     //
 #ifdef G4CSGDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:\n";
@@ -648,7 +648,7 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
   if( Inside(p) == kOutside )
   {
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is outside (!?) of solid: " << GetName() << G4endl;
     message << "Position:\n";
     message << "   p.x() = " << p.x()/mm << " mm\n";
@@ -694,7 +694,7 @@ G4VSolid* G4Trd::Clone() const
 
 std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

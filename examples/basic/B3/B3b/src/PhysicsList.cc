@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file PhysicsList.cc
+/// \file B3/B3b/src/PhysicsList.cc
 /// \brief Implementation of the B3::PhysicsList class
 
 #include "PhysicsList.hh"
@@ -50,12 +50,6 @@ PhysicsList::PhysicsList()
 
   // Radioactive decay
   RegisterPhysics(new G4RadioactiveDecayPhysics());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

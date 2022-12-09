@@ -171,7 +171,7 @@ void G4MoleculeShootMessenger::SetNewValue(G4UIcommand* command, G4String newVal
     if(newValue == "CM")
     {
 //      G4cout << "**** Change type" << G4endl;
-//      TG4MoleculeShoot<G4ContinuousMedium>* casted = reinterpret_cast<TG4MoleculeShoot<G4ContinuousMedium>*>(fpShoot.get());
+//      TG4MoleculeShoot<G4ContinuousMedium>* casted = static_cast<TG4MoleculeShoot<G4ContinuousMedium>*>(fpShoot.get());
 //      fpShoot.reset(casted);
       fpShoot = fpShoot.get()->ChangeType<G4ContinuousMedium>();
     }

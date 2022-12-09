@@ -36,13 +36,9 @@
 //
 //      Creation date: 22 October 2015 
 //
-//Modifications:
-//
-// 
 // -------------------------------------------------------------------
 //
-// This is a new class which has different design and uses different data 
-// structure than the old one
+// This is gamma deexcitation model based on the nuclear levels data
 //
 
 #ifndef G4PHOTONEVAPORATION_HH
@@ -53,10 +49,9 @@
 #include "G4NuclearLevelData.hh"
 #include "G4LevelManager.hh"
 #include "G4Fragment.hh"
-#include "G4Threading.hh"
 
 const G4int MAXDEPOINT = 10;
-const G4int MAXGRDATA  = 300;
+const G4int MAXGRDATA = 300;
 
 class G4GammaTransition;
 
@@ -152,10 +147,6 @@ private:
   G4bool   fSampleTime;
   G4bool   fCorrelatedGamma;
   G4bool   isInitialised;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex PhotonEvaporationMutex;
-#endif
 };
 
 inline void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)

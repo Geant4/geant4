@@ -1,4 +1,4 @@
-
+/run/verbose 1
 #detector geometry
 /xtal/setMaterial G4_Si
 /xtal/setAngle 0. -25.25E-6 0. rad

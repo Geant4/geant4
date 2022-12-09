@@ -102,7 +102,7 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4KaonZeroLong*>(anInstance);
+  theInstance = static_cast<G4KaonZeroLong*>(anInstance);
   return theInstance;
 }
 

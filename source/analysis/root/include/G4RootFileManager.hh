@@ -55,16 +55,17 @@ class G4RootFileManager : public G4VTFileManager<G4RootFile>
   public:
     explicit G4RootFileManager(const G4AnalysisManagerState& state);
     G4RootFileManager() = delete;
-    virtual ~G4RootFileManager() = default;
+    ~G4RootFileManager() override = default;
 
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<G4RootFile>::WriteFile;
     using G4VTFileManager<G4RootFile>::CloseFile;
 
     // Methods to manipulate file from base classes
-    virtual G4bool OpenFile(const G4String& fileName) final;
+    G4bool OpenFile(const G4String& fileName) final;
 
-    virtual G4String GetFileType() const final { return "root"; }
+    G4String GetFileType() const final { return "root"; }
+    G4bool HasCycles() const final { return true; }
 
     // Specific methods for files per objects
     std::shared_ptr<G4RootFile> CreateNtupleFile(RootNtupleDescription* ntupleDescription,
@@ -72,8 +73,8 @@ class G4RootFileManager : public G4VTFileManager<G4RootFile>
     std::shared_ptr<G4RootFile> GetNtupleFile(RootNtupleDescription* ntupleDescription,
                                   G4bool perThread = true,
                                   G4int mainNumber = -1) const;
-    G4bool WriteNtupleFile(RootNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(RootNtupleDescription* ntupleDescription);
+    G4bool CloseNtupleFile(RootNtupleDescription* ntupleDescription,
+                                  G4int mainNumber = -1);
 
     // Set methods
     void  SetBasketSize(unsigned int basketSize);
@@ -85,9 +86,9 @@ class G4RootFileManager : public G4VTFileManager<G4RootFile>
 
   protected:
     // Methods derived from templated base class
-    virtual std::shared_ptr<G4RootFile> CreateFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteFileImpl(std::shared_ptr<G4RootFile> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<G4RootFile> file) final;
+    std::shared_ptr<G4RootFile> CreateFileImpl(const G4String& fileName) final;
+    G4bool WriteFileImpl(std::shared_ptr<G4RootFile> file) final;
+    G4bool CloseFileImpl(std::shared_ptr<G4RootFile> file) final;
 
   private:
     // Methods

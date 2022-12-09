@@ -72,7 +72,7 @@ G4AntiNeutrinoMu* G4AntiNeutrinoMu::Definition()
                 false,           "mu"
               );
   }
-  theInstance = reinterpret_cast<G4AntiNeutrinoMu*>(anInstance);
+  theInstance = static_cast<G4AntiNeutrinoMu*>(anInstance);
   return theInstance;
 }
 

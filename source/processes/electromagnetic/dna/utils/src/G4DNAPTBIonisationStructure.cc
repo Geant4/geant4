@@ -31,6 +31,13 @@
 
 G4DNAPTBIonisationStructure::G4DNAPTBIonisationStructure()
 {
+    // MPietrzak
+    energyConstant["N2"].push_back(15.58*eV);
+    energyConstant["N2"].push_back(17.07*eV);
+    energyConstant["N2"].push_back(21.00*eV);
+    energyConstant["N2"].push_back(41.72*eV);
+    // MPietrzak
+    
     energyConstant["G4_WATER"].push_back(10.79*eV);
     energyConstant["G4_WATER"].push_back(13.39*eV);
     energyConstant["G4_WATER"].push_back(16.05*eV);
@@ -150,10 +157,9 @@ G4DNAPTBIonisationStructure::G4DNAPTBIonisationStructure()
     energyConstant["TMP"].push_back(559.41*eV);
     energyConstant["TMP"].push_back(2178.05*eV);
 
-    std::map<G4String, std::vector<G4double> >::iterator it;
-    for(it=energyConstant.begin();it!=energyConstant.end();it++)
+    for(auto it=energyConstant.cbegin();it!=energyConstant.cend();++it)
     {
-        nLevels[it->first] = (it->second).size();
+        nLevels[it->first] = (G4int)(it->second).size();
     }
 }
 

@@ -43,7 +43,7 @@ class B1EventAction : public G4UserEventAction
   public:
     B1EventAction();
     virtual ~B1EventAction();
-    
+
     virtual void BeginOfEventAction(const G4Event* event);
     virtual void EndOfEventAction(const G4Event* event);
 
@@ -59,4 +59,4 @@ class B1EventAction : public G4UserEventAction
 
 #endif
 
-    
+

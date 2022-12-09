@@ -45,12 +45,12 @@ class G4CsvRFileManager : public G4VRFileManager
   public:
     explicit G4CsvRFileManager(const G4AnalysisManagerState& state);
     G4CsvRFileManager() = delete;
-    ~G4CsvRFileManager();
+    ~G4CsvRFileManager() override;
 
-    virtual G4String GetFileType() const final { return "csv"; }
+    G4String GetFileType() const final { return "csv"; }
 
     // Methods from base class
-    virtual void CloseFiles() final {}
+    void CloseFiles() final {}
 
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName);

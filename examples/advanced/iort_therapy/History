@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-09-09 Susanna Guatelli (iort_therapy-V11-00-02)
+- Ranecu engine removed.
+
 ## 2022-06-20 Sergio Losilla (iort_therapy-V11-00-01)
 - Simplified calls to SetProductionCut.
 

@@ -31,6 +31,7 @@
 
 #include "G4VUserActionInitialization.hh"
 #include "AnalysisManager.hh"
+#include "DetectorMessenger.hh"
 
 class AnalysisManager;
 class G4GeneralParticleSource;
@@ -38,7 +39,7 @@ class G4GeneralParticleSource;
 class ActionInitialization: public G4VUserActionInitialization
 {
   public:
-    ActionInitialization(AnalysisManager* );
+    ActionInitialization(AnalysisManager* analysisMan, DetectorMessenger* detectorMess);
     virtual ~ActionInitialization();
 
     virtual void BuildForMaster() const;
@@ -46,6 +47,7 @@ class ActionInitialization: public G4VUserActionInitialization
 
 private:
     AnalysisManager* analysis;
+	DetectorMessenger* detector;
 };
 
 #endif

@@ -147,8 +147,8 @@ G4FFG_FUNCTIONENTER__
   SetNubar();
 
     // Set miscellaneous variables
-    AlphaDefinition_ = reinterpret_cast<G4Ions*>(G4Alpha::Definition());
-    NeutronDefinition_ = reinterpret_cast<G4Ions*>(G4Neutron::Definition());
+    AlphaDefinition_ = static_cast<G4Ions*>(G4Alpha::Definition());
+    NeutronDefinition_ = static_cast<G4Ions*>(G4Neutron::Definition());
     GammaDefinition_ = G4Gamma::Definition();
     SmallestZ_ = SmallestA_ = LargestZ_ = LargestA_ = NULL;
 
@@ -972,7 +972,7 @@ G4FFG_DATA_FUNCTIONENTER__
 
     // Check to see if the particle is registered using the PDG code
     // TODO Add metastable state when supported by G4IonTable::GetIon()
-    Temp = reinterpret_cast<G4Ions*>(IonTable_->GetIon(Z, A));
+    Temp = static_cast<G4Ions*>(IonTable_->GetIon(Z, A));
     
     // Removed in favor of the G4IonTable::GetIon() method
 //    // Register the particle if it does not exist

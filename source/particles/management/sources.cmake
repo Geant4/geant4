@@ -9,7 +9,6 @@ geant4_add_module(G4partman
     G4DecayTableMessenger.hh
     G4DynamicParticle.hh
     G4DynamicParticle.icc
-    G4DynamicParticleFastVector.hh
     G4ElectronOccupancy.hh
     G4HyperNucleiProperties.hh
     G4IonTable.hh

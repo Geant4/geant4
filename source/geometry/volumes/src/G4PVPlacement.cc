@@ -348,9 +348,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
   G4VSolid* previous = nullptr;
   G4ThreeVector pmin_local(0.,0.,0.), pmax_local(0.,0.,0.);
 
-  for (size_t k = 0; k < motherLog->GetNoDaughters(); ++k)
+  for (std::size_t k = 0; k < motherLog->GetNoDaughters(); ++k)
   {
-    G4VPhysicalVolume* daughter = motherLog->GetDaughter(k);
+    G4VPhysicalVolume* daughter = motherLog->GetDaughter((G4int)k);
     if (daughter == this) continue;
     G4bool check_encapsulation = true;
 

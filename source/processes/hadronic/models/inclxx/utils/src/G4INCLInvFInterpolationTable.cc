@@ -59,14 +59,14 @@ namespace G4INCL {
     G4double last = f(x0);
     InterpolationNode firstNode(last, x0, 0.);
     nodes.push_back(firstNode);
-    G4int skippedNodes = 0;
+//  G4int skippedNodes = 0;
     for(unsigned i = 1; i < nNodes; i++) {
       const G4double xi = x0 + i*(x1-x0)/((G4double)(nNodes-1));
       // Make sure that the x vector is sorted (corresponding to a monotonous
       // function)
       const G4double value = f(xi);
       if(value <= last) {
-        ++skippedNodes;
+//      ++skippedNodes;
         continue;
       }
       InterpolationNode node(value, xi, 0.);

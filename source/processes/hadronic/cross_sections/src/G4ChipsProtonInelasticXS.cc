@@ -72,11 +72,11 @@ G4ChipsProtonInelasticXS::G4ChipsProtonInelasticXS():G4VCrossSectionDataSet(Defa
 
 G4ChipsProtonInelasticXS::~G4ChipsProtonInelasticXS()
 {
-  G4int lens=LEN->size();
-  for(G4int i=0; i<lens; ++i) delete[] (*LEN)[i];
+  std::size_t lens=LEN->size();
+  for(std::size_t i=0; i<lens; ++i) delete[] (*LEN)[i];
   delete LEN;
-  G4int hens=HEN->size();
-  for(G4int i=0; i<hens; ++i) delete[] (*HEN)[i];
+  std::size_t hens=HEN->size();
+  for(std::size_t i=0; i<hens; ++i) delete[] (*HEN)[i];
   delete HEN;
 }
 
@@ -100,9 +100,9 @@ G4bool G4ChipsProtonInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4ChipsProtonInelasticXS::GetIsoCrossSection(const G4DynamicParticle* Pt, G4int tgZ, G4int A,  
-							const G4Isotope*,
-							const G4Element*,
-							const G4Material*)
+                                                      const G4Isotope*,
+                                                      const G4Element*,
+                                                      const G4Material*)
 {
   G4double pMom=Pt->GetTotalMomentum();
   G4int tgN = A - tgZ;
@@ -120,9 +120,9 @@ G4double G4ChipsProtonInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ
     lastP   = 0.;                      // New momentum history (nothing to compare with)
     lastN   = tgN;                     // The last N of the calculated nucleus
     lastZ   = tgZ;                     // The last Z of the calculated nucleus
-    lastI   = colN.size();             // Size of the Associative Memory DB in the heap
+    lastI   = (G4int)colN.size();      // Size of the Associative Memory DB in the heap
     j  = 0;                            // A#0f records found in DB for this projectile
-    if(lastI) for(G4int i=0; i<lastI; i++) // AMDB exists, try to find the (Z,N) isotope
+    if(lastI) for(G4int i=0; i<lastI; ++i) // AMDB exists, try to find the (Z,N) isotope
     {
       if(colN[i]==tgN && colZ[i]==tgZ) // Try the record "i" in the AMDB
       {
@@ -203,7 +203,7 @@ G4double G4ChipsProtonInelasticXS::CalculateCrossSection(G4int F, G4int I,
   {
     if(F<0)                            // This isotope was found in DAMDB =-----=> RETRIEVE
     {
-      G4int sync=LEN->size();
+      G4int sync=(G4int)LEN->size();
       if(sync<=I) G4cout<<"*!*G4QProtonNuclCS::CalcCrossSect:Sync="<<sync<<"<="<<I<<G4endl;
       lastLEN=(*LEN)[I];               // Pointer to prepared LowEnergy cross sections
       lastHEN=(*HEN)[I];               // Pointer to prepared High Energy cross sections
@@ -214,20 +214,20 @@ G4double G4ChipsProtonInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int k=0; k<nL; k++)
+      for(G4int k=0; k<nL; ++k)
       {
         lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
-      for(G4int n=0; n<nH; n++)
+      for(G4int n=0; n<nH; ++n)
       {
         lastHEN[n] = CrossSectionLog(targZ, targN, lP);
         lP+=dlP;
       }
       // --- End of possible separate function
       // *** The synchronization check ***
-      G4int sync=LEN->size();
+      G4int sync=(G4int)LEN->size();
       if(sync!=I)
       {
         G4cout<<"***G4ChipsProtonNuclCS::CalcCrossSect: Sinc="<<sync<<"#"<<I<<", Z=" <<targZ

@@ -16,7 +16,7 @@
 #endif
 
 // the below must be in sync with tools/typedefs
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 //typedef __int64 int64;
 //typedef unsigned __int64 uint64;
 #define TOOLX_MPI_UINT64 MPI_UNSIGNED_LONG_LONG

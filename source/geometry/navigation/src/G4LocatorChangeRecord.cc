@@ -57,7 +57,7 @@ std::ostream& G4LocatorChangeRecord::ReportVector ( std::ostream& os,
      return os;
   }
   
-  G4int oldprc = os.precision(prec);
+  G4long oldprc = os.precision(prec);
 
   // std::vector<G4LocatorChangeRecord>::const_iterator
   auto itRec
@@ -104,17 +104,18 @@ G4LocatorChangeRecord::ReportEndChanges (
   using std::setw;   
   G4int prec= 16;
   const G4bool confirm = true;
-  G4int oldprc = os.precision(prec);
+  G4long oldprc = os.precision(prec);
 
   std::vector<G4LocatorChangeRecord>::const_iterator itrecA, itrecB;
   itrecA= startA.begin();
   itrecB= endB.begin();
-  
-  os << "====================================================================="
-     << G4endl;
-  os << "  Size of individual change record:  startA : " << startA.size() 
-     << "  endB : " <<   endB.size() << G4endl;
-  os << "====================================================================="
+  os << G4endl;
+  os << "=========================================================================================";
+  os << G4endl << " ** Change records: " << G4endl;
+  os << " *     endPoints  A (start) and B (end): combined changes of AB intervals" << G4endl;
+  os << " *     Sizes of change records:  start(A) : " << startA.size() 
+     << "  end(B) : " <<   endB.size() << G4endl;
+  os << "========================================================================================="    
      << G4endl;
 
   os << setw( 7 ) << "Change#"  << "  "
@@ -131,8 +132,6 @@ G4LocatorChangeRecord::ReportEndChanges (
 
   G4bool isLastA= false;
   G4bool isLastB= false;
-
-  G4int  jA=0, jB=0;
 
   G4int maxEvent = std::max( startA[ startA.size() - 1 ].GetCount() ,
                              endB[   endB.size() - 1 ].GetCount() );
@@ -211,14 +210,14 @@ G4LocatorChangeRecord::ReportEndChanges (
      if( advanceA )
      {
         ++itrecA;
-        if( !isLastA ) { ++jA; eventA = (*itrecA).GetCount(); }
+        if( !isLastA ) { eventA = (*itrecA).GetCount(); }
         else { eventA = maxEvent; }
      }
      
      if( advanceB )
      {
         ++itrecB;
-        if( !isLastB ) { ++jB; eventB = (*itrecB).GetCount(); } 
+        if( !isLastB ) { eventB = (*itrecB).GetCount(); } 
         else { eventB = maxEvent; }
      }
 
@@ -258,7 +257,7 @@ std::ostream& operator<< ( std::ostream& os, const G4LocatorChangeRecord& e )
 //
 std::ostream& G4LocatorChangeRecord::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "  count = " << fEventCount
      << "  iter= "   << fIteration
      << "  Location code = " << fCodeLocation

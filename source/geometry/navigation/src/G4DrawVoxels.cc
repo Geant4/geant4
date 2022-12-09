@@ -153,7 +153,7 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    voxel_plane.SetVisAttributes(voxelsVisAttributes);
    
    G4SmartVoxelProxy* slice = header->GetSlice(0);
-   G4int slice_no = 0, no_slices = header->GetNoSlices();
+   std::size_t slice_no = 0, no_slices = header->GetNoSlices();
    G4double beginning = header->GetMinExtent(),
             step = (header->GetMaxExtent()-beginning)/no_slices;
 

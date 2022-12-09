@@ -29,10 +29,8 @@
 #include "PTL/Config.hh"
 #endif
 
-#include <cstddef>
 #include <cstdint>
 #include <deque>
-#include <thread>
 
 #if defined(PTL_USE_TBB)
 #    if !defined(TBB_PREVIEW_GLOBAL_CONTROL)
@@ -41,6 +39,8 @@
 #    include <tbb/global_control.h>
 #    include <tbb/task_arena.h>
 #    include <tbb/task_group.h>
+#else
+#    include <cstddef>
 #endif
 
 namespace PTL

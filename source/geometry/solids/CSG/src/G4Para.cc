@@ -105,7 +105,7 @@ G4Para::G4Para( const G4String& pName,
     if (discrepancy > 0.1*kCarTolerance)
     {
       std::ostringstream message;
-      G4int oldprc = message.precision(16);
+      G4long oldprc = message.precision(16);
       message << "Invalid vertice coordinates for Solid: " << GetName()
               << "\nVertix #" << i << ", discrepancy = " << discrepancy
               << "\n  original   : " << pt[i]
@@ -816,7 +816,7 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
                                        fTthetaSphi*fTthetaSphi));
   G4double phi   = std::atan2(fTthetaSphi,fTthetaCphi);
 
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

@@ -38,7 +38,9 @@ SetVoxelDimensions( G4double halfx, G4double halfy, G4double halfz )
 
 //--------------------------------------------------------------------
 inline
-void G4PhantomParameterisation::SetNoVoxels( size_t nx, size_t ny, size_t nz )
+void G4PhantomParameterisation::SetNoVoxels( std::size_t nx,
+                                             std::size_t ny,
+                                             std::size_t nz )
 {
   fNoVoxelsX = nx; 
   fNoVoxelsY = ny; 
@@ -56,7 +58,7 @@ void G4PhantomParameterisation::SetMaterials( std::vector<G4Material*>& mates )
   
 //--------------------------------------------------------------------
 inline
-void G4PhantomParameterisation::SetMaterialIndices( size_t* matInd )
+void G4PhantomParameterisation::SetMaterialIndices( std::size_t* matInd )
 {
   fMaterialIndices = matInd;
 }
@@ -84,28 +86,28 @@ G4double G4PhantomParameterisation::GetVoxelHalfZ() const
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxelsX() const
+std::size_t G4PhantomParameterisation::GetNoVoxelsX() const
 {
   return fNoVoxelsX;
 }
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxelsY() const
+std::size_t G4PhantomParameterisation::GetNoVoxelsY() const
 {
   return fNoVoxelsY;
 }
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxelsZ() const
+std::size_t G4PhantomParameterisation::GetNoVoxelsZ() const
 {
   return fNoVoxelsZ;
 }
 
 //--------------------------------------------------------------------
 inline
-size_t G4PhantomParameterisation::GetNoVoxels() const
+std::size_t G4PhantomParameterisation::GetNoVoxels() const
 {
   return fNoVoxels;
 }
@@ -119,7 +121,7 @@ std::vector<G4Material*> G4PhantomParameterisation::GetMaterials() const
 
 //--------------------------------------------------------------------
 inline
-size_t* G4PhantomParameterisation::GetMaterialIndices() const
+std::size_t* G4PhantomParameterisation::GetMaterialIndices() const
 {
   return fMaterialIndices;
 }

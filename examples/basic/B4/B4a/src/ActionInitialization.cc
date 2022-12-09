@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.cc
-/// \brief Implementation of the ActionInitialization class
+/// \file B4/B4a/src/ActionInitialization.cc
+/// \brief Implementation of the B4a::ActionInitialization class
 
 #include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -41,14 +41,8 @@ namespace B4a
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization
-                            (DetectorConstruction* detConstruction)
+ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
  : fDetConstruction(detConstruction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -73,7 +73,7 @@ G4Geantino*  G4Geantino::Definition()
 		  false,        "geantino",            0
 		);
   }
-  theInstance = reinterpret_cast<G4Geantino*>(anInstance);
+  theInstance = static_cast<G4Geantino*>(anInstance);
   return theInstance;
 
 }

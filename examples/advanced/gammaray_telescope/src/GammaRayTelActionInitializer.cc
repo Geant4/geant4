@@ -24,37 +24,39 @@
 // ********************************************************************
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//      CERN Geneva Switzerland
+//
+//
+//      ------------ GammaRayTelActionInitializer ------
+//           by R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+//
+// ************************************************************
 
 #include "GammaRayTelActionInitializer.hh"
 #include "GammaRayTelPrimaryGeneratorAction.hh"
 #include "GammaRayTelEventAction.hh"
 #include "GammaRayTelRunAction.hh"
 
-
 #include "G4RunManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelActionInitializer::GammaRayTelActionInitializer() : 
-  G4VUserActionInitialization()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void GammaRayTelActionInitializer::Build() const 
-{
-  GammaRayTelRunAction* theRunAction = new GammaRayTelRunAction();
-  SetUserAction(new GammaRayTelPrimaryGeneratorAction());
-  SetUserAction(theRunAction);
-  SetUserAction(new GammaRayTelEventAction(theRunAction)); 
+GammaRayTelActionInitializer::GammaRayTelActionInitializer() : G4VUserActionInitialization() {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelActionInitializer::BuildForMaster() const
-{
-  SetUserAction(new GammaRayTelRunAction());
+void GammaRayTelActionInitializer::Build() const {
+	SetUserAction(new GammaRayTelPrimaryGeneratorAction());
+	auto *theRunAction = new GammaRayTelRunAction();
+	SetUserAction(theRunAction);
+	SetUserAction(new GammaRayTelEventAction(theRunAction));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelActionInitializer::BuildForMaster() const {
+	SetUserAction(new GammaRayTelRunAction());
+}

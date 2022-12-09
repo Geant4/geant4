@@ -447,7 +447,7 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   {
 #ifdef G4SPECSDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << "\n";
     message << "Position:\n";
@@ -602,7 +602,7 @@ G4VSolid* G4Tet::Clone() const
 //
 std::ostream& G4Tet::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

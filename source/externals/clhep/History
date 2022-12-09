@@ -6,6 +6,31 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-10-10 Gabriele Cosmo (clhep-V11-00-08)
+- Synchronised with CLHEP-2.4.6.2.
+  * Random (L.Garren)
+    o Add <cstdint> header where uint32_t and uint64_t are used.
+
+## 2022-10-10 Gabriele Cosmo (clhep-V11-00-07)
+- Synchronised with CLHEP-2.4.6.1.
+  * Evaluator (G.Cosmo)
+    o Fixed inconsistencies in evaluator set of units [setSystemOfUnits.cc]
+      with SystemOfUnits header.
+
+## 2022-10-10 Gabriele Cosmo (clhep-V11-00-06)
+- Synchronised with CLHEP-2.4.6.0.
+  * Evaluator (C.Green)
+    o Resolved gcc-12 warnings.
+
+## 2022-10-06 Gabriele Cosmo (clhep-V11-00-05)
+- Synchronised with CLHEP-2.4.5.4.
+  * Random (J.Junggeburth)
+    o Fix in RandGamma::genGamma() to fix reproducibility in multi-threading
+      environment.
+
+## 2022-09-22 Ben Morgan (clhep-V11-00-04)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+
 ## 2022-03-10 Evgueni Tcherniaev (clhep-V11-00-03)
 - Fixed compilation warnings in LorentzVector.h when c++20 is enabled
 

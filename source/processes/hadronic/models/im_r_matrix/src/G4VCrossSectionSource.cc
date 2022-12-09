@@ -85,15 +85,14 @@ G4bool G4VCrossSectionSource::operator!=(const G4VCrossSectionSource &right) con
 
 void G4VCrossSectionSource::Print() const
 {
-  G4int nComponents = 0;
+  std::size_t nComponents = 0;
   const G4CrossSectionVector* components = GetComponents();
   if (components)
     {
       nComponents = components->size();
     }
   G4cout << "---- " << this->Name() << " ---- has " << nComponents << " components" <<G4endl;
-  G4int i;
-  for (i=0; i<nComponents; i++)
+  for (std::size_t i=0; i<nComponents; ++i)
     {
       G4cout << "-" <<  this->Name() << " - Component " << i << ": " <<G4endl;
 
@@ -113,14 +112,13 @@ void G4VCrossSectionSource::PrintAll(const G4KineticTrack& trk1, const G4Kinetic
 	 << " Cross section = " << sigma << " mb "
 	 << G4endl;
 
-  G4int nComponents = 0;
+  std::size_t nComponents = 0;
   const G4CrossSectionVector* components = GetComponents();
   if (components != 0)
     {
       nComponents = components->size();
     }
-  G4int i;
-  for (i=0; i<nComponents; i++)
+  for (std::size_t i=0; i<nComponents; ++i)
     {
       G4cout << "* Component " << i << ": ";
       G4CrossSectionSourcePtr componentPtr = (*components)[i];

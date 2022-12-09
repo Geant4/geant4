@@ -29,17 +29,16 @@
 
 #include "PhysicsListEmSpecialized.hh"
 
-#include "SpecializedTrackingManager.hh"
-
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Positron.hh"
 
+#include "SpecializedTrackingManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListEmSpecialized::PhysicsListEmSpecialized(G4int ver,
-                                                   const G4String& name)
+PhysicsListEmSpecialized::PhysicsListEmSpecialized(G4int ver, const G4String& name)
   : G4EmStandardPhysics(ver, name)
 {}
 

@@ -11,6 +11,10 @@ The particle fluence is estimated by summing the track length in a
 (very low density gas) material, immediately outside the target sphere -
 and then dividing for the cubic volume of such scoring volume.
 
+Complementary information on average multiplicity, average kinetic energy,
+and average total energy flow (i.e. sum of kinetic energies) for the
+particles produced in the target are also computed.
+
 The particle fluence is evaluated for the following 11 particle types:
 -  all
 -  electron + positron 

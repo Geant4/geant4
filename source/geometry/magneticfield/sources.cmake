@@ -6,6 +6,10 @@ geant4_add_module(G4magneticfield
     G4BFieldIntegrationDriver.hh
     G4BogackiShampine23.hh
     G4BogackiShampine45.hh
+    G4BorisScheme.hh
+    G4BorisScheme.icc
+    G4BorisDriver.hh
+    G4BorisDriver.icc
     G4BulirschStoer.hh
     G4BulirschStoer.icc
     G4BulirschStoerDriver.hh
@@ -115,6 +119,8 @@ geant4_add_module(G4magneticfield
     G4BFieldIntegrationDriver.cc
     G4BogackiShampine23.cc
     G4BogackiShampine45.cc
+    G4BorisDriver.cc
+    G4BorisScheme.cc
     G4BulirschStoer.cc
     G4CachedMagneticField.cc
     G4CashKarpRKF45.cc

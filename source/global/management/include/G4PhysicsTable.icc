@@ -31,14 +31,11 @@
 inline void G4PhysicsTable::clearAndDestroy()
 {
   G4PhysicsVector* a = nullptr;
-  while(size() > 0)
+  while(!empty())
   {
     a = G4PhysCollection::back();
     G4PhysCollection::pop_back();
-    if(a != nullptr)
-    {
-      delete a;
-    }
+    delete a;
   }
   G4PhysCollection::clear();
   vecFlag.clear();

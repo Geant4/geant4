@@ -41,7 +41,6 @@
 #include <string_view>
 
 class G4CsvAnalysisManager;
-class G4CsvFileManager;
 class G4CsvNtupleFileManager;
 template <class T>
 class G4ThreadLocalSingleton;
@@ -51,7 +50,7 @@ class G4CsvAnalysisManager : public G4ToolsAnalysisManager
   friend class G4ThreadLocalSingleton<G4CsvAnalysisManager>;
 
   public:
-    ~G4CsvAnalysisManager();
+    ~G4CsvAnalysisManager() override;
 
     // Static methods
     static G4CsvAnalysisManager* Instance();
@@ -71,29 +70,17 @@ class G4CsvAnalysisManager : public G4ToolsAnalysisManager
     void SetIsCommentedHeader(G4bool isCommentedHeader);
     void SetIsHippoHeader(G4bool isHippoHeader);
 
-  protected:
-    // Virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl(G4bool reset) final;
-    virtual G4bool ResetImpl() final;
-    virtual G4bool IsOpenFileImpl() const final;
-
   private:
     G4CsvAnalysisManager();
 
     // Static data members
-    //
-    inline static G4CsvAnalysisManager* fgMasterInstance { nullptr };
     inline static G4ThreadLocal G4bool fgIsInstance { false };
     static constexpr std::string_view fkClass { "G4CsvAnalysisManager" };
 
     // Data members
-    std::shared_ptr<G4CsvFileManager>  fFileManager { nullptr };
     std::shared_ptr<G4CsvNtupleFileManager> fNtupleFileManager { nullptr };
 };
 
 #include "G4CsvAnalysisManager.icc"
 
 #endif
-

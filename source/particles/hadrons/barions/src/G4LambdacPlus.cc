@@ -75,7 +75,7 @@ G4LambdacPlus* G4LambdacPlus::Definition()
                 false,     0.200e-3*ns,          NULL,
                 false,       "lambda_c");
   }
-  theInstance = reinterpret_cast<G4LambdacPlus*>(anInstance);
+  theInstance = static_cast<G4LambdacPlus*>(anInstance);
   return theInstance;
 }
 

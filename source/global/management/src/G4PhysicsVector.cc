@@ -178,11 +178,11 @@ std::size_t G4PhysicsVector::FindBin(const G4double energy,
   {
     return idx;
   } 
-  else if(energy <= binVector[1])
+  if(energy <= binVector[1])
   {
     return 0;
   }
-  else if(energy >= binVector[idxmax])
+  if(energy >= binVector[idxmax])
   {
     return idxmax;
   }
@@ -224,7 +224,7 @@ void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
   // check energies of free vector
   if(type == T_G4PhysicsFreeVector)
   {
-    for(G4int i=0; i<=idxmax; ++i) 
+    for(std::size_t i=0; i<=idxmax; ++i) 
     {
       if(binVector[i + 1] <= binVector[i])
       {
@@ -292,7 +292,7 @@ void G4PhysicsVector::ComputeSecDerivative1()
 // B.I. Kvasov "Methods of shape-preserving spline approximation"
 // World Scientific, 2000
 {
-  G4int n = numberOfNodes - 1;
+  std::size_t n = numberOfNodes - 1;
   G4double* u = new G4double[n];
   G4double p, sig;
 
@@ -307,7 +307,7 @@ void G4PhysicsVector::ComputeSecDerivative1()
   secDerivative[1] = (2.0 * binVector[1] - binVector[0] - binVector[2]) /
                      (2.0 * binVector[2] - binVector[0] - binVector[1]);
 
-  for(G4int i = 2; i < n - 1; ++i)
+  for(std::size_t i = 2; i < n - 1; ++i)
   {
     sig =
       (binVector[i] - binVector[i - 1]) / (binVector[i + 1] - binVector[i - 1]);
@@ -336,7 +336,7 @@ void G4PhysicsVector::ComputeSecDerivative1()
   // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
 
-  for(G4int k = n - 2; k > 1; --k)
+  for(std::size_t k = n - 2; k > 1; --k)
   {
     secDerivative[k] *=
       (secDerivative[k + 1] - u[k] * (binVector[k + 1] - binVector[k - 1]) /
@@ -359,7 +359,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
 // See for example W.H. Press et al. "Numerical recipes in C"
 // Cambridge University Press, 1997.
 {
-  G4int n = numberOfNodes - 1;
+  std::size_t n = numberOfNodes - 1;
   G4double* u = new G4double[n];
   G4double p, sig, un;
 
@@ -372,7 +372,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
   // Decomposition loop for tridiagonal algorithm. secDerivative[i]
   // and u[i] are used for temporary storage of the decomposed factors.
 
-  for(G4int i = 1; i < n; ++i)
+  for(std::size_t i = 1; i < n; ++i)
   {
     sig =
       (binVector[i] - binVector[i - 1]) / (binVector[i + 1] - binVector[i - 1]);
@@ -397,7 +397,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
   // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
 
-  for(G4int k = n - 1; k > 0; --k)
+  for(std::size_t k = n - 1; k > 0; --k)
   {
     secDerivative[k] *=
       (secDerivative[k + 1] - u[k] * (binVector[k + 1] - binVector[k - 1]) /
@@ -412,7 +412,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
 std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning
-  G4int prec = out.precision();
+  G4long prec = out.precision();
   out << std::setprecision(12) << pv.edgeMin << " " << pv.edgeMax << " "
       << pv.numberOfNodes << G4endl;
 
@@ -422,7 +422,7 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   {
     out << pv.binVector[i] << "  " << pv.dataVector[i] << G4endl;
   }
-  out << std::setprecision(prec);
+  out.precision(prec);
 
   return out;
 }
@@ -442,10 +442,9 @@ G4double G4PhysicsVector::GetEnergy(const G4double val) const
   {
     return edgeMax;
   }
-  std::size_t bin = 
-    std::lower_bound(dataVector.begin(), dataVector.end(), val) -
-    dataVector.begin() - 1;
-  if(static_cast<G4int>(bin) > idxmax) { bin = idxmax; } 
+  std::size_t bin = std::lower_bound(dataVector.cbegin(), dataVector.cend(), val)
+                  - dataVector.cbegin() - 1;
+  if(bin > idxmax) { bin = idxmax; } 
   G4double res = binVector[bin];
   G4double del = dataVector[bin + 1] - dataVector[bin];
   if(del > 0.0)

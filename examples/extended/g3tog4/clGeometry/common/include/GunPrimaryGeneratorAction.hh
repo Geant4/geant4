@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file GunPrimaryGeneratorAction.hh
-/// \brief Definition of the GunPrimaryGeneratorAction class
+/// \file common/include/GunPrimaryGeneratorAction.hh
+/// \brief Definition of the Common::GunPrimaryGeneratorAction class
 
 #ifndef GunPrimaryGeneratorAction_h
 #define GunPrimaryGeneratorAction_h 1
@@ -44,6 +44,9 @@ class G4Event;
 ///
 /// \author I. Hrivnacova; IPN Orsay
 
+namespace Common
+{
+
 class GunPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
@@ -51,15 +54,17 @@ class GunPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
       const G4String& particleName = "geantino",
       G4double energy = 1.*CLHEP::MeV,
       G4ThreeVector position= G4ThreeVector(0,0,0),
-      G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));    
-    ~GunPrimaryGeneratorAction();
+      G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));
+    ~GunPrimaryGeneratorAction() override;
 
     // methods
-    virtual void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
 
   private:
     // data members
-    G4ParticleGun*  fParticleGun;
+    G4ParticleGun*  fParticleGun = nullptr;
 };
+
+}
 
 #endif

@@ -158,9 +158,6 @@ public:
   // Along step actions
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override;
 
-  // Post step actions
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
-
   // This method does not used for tracking, it is intended only for tests
   G4double ContinuousStepLimit(const G4Track& track,
                                G4double previousStepSize,

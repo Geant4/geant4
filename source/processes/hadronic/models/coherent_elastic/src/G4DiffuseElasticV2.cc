@@ -130,7 +130,7 @@ void G4DiffuseElasticV2::Initialise()
 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
-  size_t jEl, numOfEl = G4Element::GetNumberOfElements();
+  std::size_t jEl, numOfEl = G4Element::GetNumberOfElements();
 
   for( jEl = 0; jEl < numOfEl; ++jEl) // application element loop
   {
@@ -339,7 +339,7 @@ G4double
 G4DiffuseElasticV2::SampleTableThetaCMS(const G4ParticleDefinition* particle, 
                                        G4double momentum, G4double Z, G4double A)
 {
-  size_t iElement;
+  std::size_t iElement;
   G4int iMomentum;
   unsigned long iAngle = 0;  
   G4double randAngle, position, theta1, theta2, E1, E2, W1, W2, W;  
@@ -361,11 +361,11 @@ G4DiffuseElasticV2::SampleTableThetaCMS(const G4ParticleDefinition* particle,
   
   G4double kinE = std::sqrt(momentum*momentum + m1*m1) - m1;
     
-  iMomentum = fEnergyVector->FindBin(kinE,1000) + 1;
+  iMomentum = G4int(fEnergyVector->FindBin(kinE,1000) + 1);
   
   position = (*(*fEnergySumVector)[iMomentum])[0]*G4UniformRand();
 
-  for(iAngle = 0; iAngle < fAngleBin; iAngle++)
+  for(iAngle = 0; iAngle < fAngleBin; ++iAngle)
     {
       if (position > (*(*fEnergySumVector)[iMomentum])[iAngle]) break;
     }
@@ -434,16 +434,15 @@ void G4DiffuseElasticV2::InitialiseOnFly(G4double Z, G4double A)
 
 void G4DiffuseElasticV2::BuildAngleTable() 
 {
-  G4int i, j;
   G4double partMom, kinE, a = 0., z = fParticle->GetPDGCharge(), m1 = fParticle->GetPDGMass();
   G4double alpha1, alpha2, alphaMax, alphaCoulomb, delta = 0., sum = 0.;
 
   G4Integrator<G4DiffuseElasticV2,G4double(G4DiffuseElasticV2::*)(G4double)> integral;
   
-  fEnergyAngleVector = new std::vector<std::vector<double>*>;
-  fEnergySumVector = new std::vector<std::vector<double>*>;
+  fEnergyAngleVector = new std::vector<std::vector<G4double>*>;
+  fEnergySumVector = new std::vector<std::vector<G4double>*>;
   
-  for( i = 0; i < fEnergyBin; i++)
+  for( G4int i = 0; i < fEnergyBin; ++i)
   {
     kinE        = fEnergyVector->Energy(i);
     partMom     = std::sqrt( kinE*(kinE + 2*m1) );
@@ -469,15 +468,15 @@ void G4DiffuseElasticV2::BuildAngleTable()
       fAddCoulomb = true;
     }
 
-    std::vector<double>* angleVector = new std::vector<double>(fAngleBin);
-    std::vector<double>* sumVector = new std::vector<double>(fAngleBin);
+    std::vector<G4double>* angleVector = new std::vector<G4double>(fAngleBin);
+    std::vector<G4double>* sumVector = new std::vector<G4double>(fAngleBin);
 
     
     G4double delth = alphaMax/fAngleBin;
         
     sum = 0.;
  
-    for(j = fAngleBin-1; j >= 0; j--)
+    for(G4int j = (G4int)fAngleBin-1; j >= 0; --j)
     {
       alpha1 = delth*j;
       alpha2 = alpha1 + delth;

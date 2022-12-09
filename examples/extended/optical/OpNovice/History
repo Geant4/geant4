@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-11-09 I. Hrivnacova (OpNovice-V11-00-02)
+- Fixed Doxygen documentation
+
 ## 2022-01-17 Daren Sawkey (OpNovice-V11-00-01)
 - Fix incorrect call to G4MaterialPropertiesTable::AddProperty. Add comments explaining
   use. Addresses issue 115.

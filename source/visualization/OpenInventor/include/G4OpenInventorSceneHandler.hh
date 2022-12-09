@@ -63,6 +63,9 @@ public:
   void AddPrimitive (const G4Polyhedron& p);
   void AddPrimitive (const G4Polymarker&);
 
+  using G4VSceneHandler::AddCompound;
+  void AddCompound (const G4Mesh&);
+
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.
   void 		ClearStore ();

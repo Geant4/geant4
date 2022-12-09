@@ -69,7 +69,7 @@ std::ostream&
 operator << (std::ostream& os, const G4NavigationHistory& nav)
 {
   os << "History depth=" << nav.GetDepth() << G4endl;
-  for ( size_t i=0; i<=nav.GetDepth(); ++i )
+  for ( G4int i=0; i<=(G4int)nav.GetDepth(); ++i )
   {
     os << "Level=["<<i<<"]: ";
     if( nav.GetVolume(i) != nullptr )

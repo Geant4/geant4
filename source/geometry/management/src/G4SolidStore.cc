@@ -87,25 +87,13 @@ void G4SolidStore::Clean()
   //
   locked = true;  
 
-  std::size_t i = 0;
   G4SolidStore* store = GetInstance();
-
-#ifdef G4GEOMETRY_VOXELDEBUG
-  G4cout << "Deleting Solids ... ";
-#endif
 
   for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    delete *pos; ++i;
+    delete *pos;
   }
-
-#ifdef G4GEOMETRY_VOXELDEBUG
-  if (store->size() < i-1)
-    { G4cout << "No solids deleted. Already deleted by user ?" << G4endl; }
-  else
-    { G4cout << i-1 << " solids deleted !" << G4endl; }
-#endif
 
   store->bmap.clear(); store->mvalid = false;
   locked = false;

@@ -29,82 +29,67 @@
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelDigi  ------
+//      ------------ GammaRayTelDigi ------
 //           by F.Longo, R.Giannitrapani & G.Santin (21 oct 2001)
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 #include "GammaRayTelDigi.hh"
 
-G4ThreadLocal G4Allocator<GammaRayTelDigi> *GammaRayTelDigiAllocator = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ThreadLocal G4Allocator<GammaRayTelDigi> *digitAllocator{nullptr};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelDigi::GammaRayTelDigi()
+GammaRayTelDigi::GammaRayTelDigi() {
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+GammaRayTelDigi::~GammaRayTelDigi() {
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+GammaRayTelDigi::GammaRayTelDigi(const GammaRayTelDigi &right) :
+    planeType(right.planeType),
+    planeNumber(right.planeNumber),
+    stripNumber(right.stripNumber),
+    digitType(right.digitType),
+    energy(right.energy)
 {
-  PlaneType = 0; 
-  PlaneNumber = 0;
-  StripNumber=0;
-  DigiType = 0;
-  Energy =0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelDigi::~GammaRayTelDigi()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-GammaRayTelDigi::GammaRayTelDigi(const GammaRayTelDigi& right)
-  :G4VDigi()
-{
-  PlaneType = right.PlaneType; 
-  PlaneNumber = right.PlaneNumber;
-  StripNumber = right.StripNumber;
-  DigiType = right.DigiType;
-  Energy= right.Energy;
+auto GammaRayTelDigi::operator=(const GammaRayTelDigi &right) -> const GammaRayTelDigi& {
+    planeType = right.planeType;
+    planeNumber = right.planeNumber;
+    stripNumber = right.stripNumber;
+    digitType = right.digitType;
+    energy = right.energy;
+    return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const GammaRayTelDigi& GammaRayTelDigi::operator=(const GammaRayTelDigi& right)
-{
-  PlaneType = right.PlaneType; 
-  PlaneNumber = right.PlaneNumber;
-  StripNumber = right.StripNumber;
-  DigiType = right.DigiType;
-  Energy= right.Energy;
-  return *this;
+auto GammaRayTelDigi::operator==(const GammaRayTelDigi &right) const -> G4bool {
+    return (
+        (planeType == right.planeType) &&
+        (planeNumber == right.planeNumber) &&
+        (stripNumber == right.stripNumber) &&
+        (digitType == right.digitType) &&
+        (energy == right.energy)
+    );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelDigi::operator==(const GammaRayTelDigi& right) const
-{ 
- return ((PlaneType==right.PlaneType)&&(PlaneNumber==right.PlaneNumber)&&(StripNumber==right.StripNumber)&&(DigiType==right.DigiType)&&(Energy==right.Energy)); 
+void GammaRayTelDigi::Draw() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelDigi::Draw()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void GammaRayTelDigi::Print()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelDigi::Print() {
+}

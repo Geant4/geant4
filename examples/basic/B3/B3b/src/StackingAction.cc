@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file StackingAction.cc
+/// \file B3/B3b/src/StackingAction.cc
 /// \brief Implementation of the B3::StackingAction class
 
 #include "StackingAction.hh"
@@ -34,16 +34,6 @@
 
 namespace B3
 {
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StackingAction::StackingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StackingAction::~StackingAction()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

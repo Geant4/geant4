@@ -32,15 +32,19 @@ class G4DNARotExcitation : public G4VEmProcess
 { 
 public:
   G4DNARotExcitation(const G4String& processName ="G4DNARotExcitation");
-  ~G4DNARotExcitation();
+  ~G4DNARotExcitation() override = default;
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
-  virtual void PrintInfo();
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
+  
+  void ProcessDescription(std::ostream& outFile) const override;
+
+protected:
+
+  void InitialiseProcess(const G4ParticleDefinition*) override;
   
 private:
-  G4bool       isInitialised;
 
+  G4bool isInitialised;
 };
 
 

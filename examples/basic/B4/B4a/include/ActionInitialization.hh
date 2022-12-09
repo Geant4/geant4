@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.hh
-/// \brief Definition of the ActionInitialization class
+/// \file B4/B4a/include/ActionInitialization.hh
+/// \brief Definition of the B4a::ActionInitialization class
 
 #ifndef B4aActionInitialization_h
 #define B4aActionInitialization_h 1
@@ -47,7 +47,7 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization(B4::DetectorConstruction*);
-    ~ActionInitialization() override;
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;

@@ -242,8 +242,8 @@ G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String&
         if (table != 0)
         {
             G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const size_t n(table->NumberOfComponents());
-            size_t i(n);
+            const G4int n = (G4int)table->NumberOfComponents();
+            G4int i(n);
             G4double value = 0.;
 
             //Check reading of initial xs file
@@ -256,7 +256,7 @@ G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String&
             //G4cout << table->GetComponent(6)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
             //abort();
 
-	        while (i>0)
+	    while (i>0)
             {
                 i--;
                 valuesBuffer[i] = table->GetComponent(i)->FindValue(k);

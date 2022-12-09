@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -35,42 +34,32 @@
 //  20.11.01 G.Santin: new analysis management, modified according to GammaRayTelAnalysis
 //
 // ************************************************************
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #ifndef GammaRayTelAnalysisMessenger_h
 #define GammaRayTelAnalysisMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
+#include <memory>
+
 class GammaRayTelAnalysis;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelAnalysisMessenger: public G4UImessenger
-{
+class GammaRayTelAnalysisMessenger: public G4UImessenger {
 public:
-  GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* );
-  ~GammaRayTelAnalysisMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
+    explicit GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* analysis);
+
+    ~GammaRayTelAnalysisMessenger() override;
+
+    void SetNewValue(G4UIcommand *command, G4String newValue) override;
+
 private:
-  GammaRayTelAnalysis*       gammaRayTelAnalysis;
-  G4UIdirectory*             gammaRayTelAnalysisDir;
-  
-  G4UIcmdWithAString*        Histo2DModeCmd;
+    GammaRayTelAnalysis *gammaRayTelAnalysis;
+
+    G4UIdirectory *gammaRayTelAnalysisDir;
+
+    G4UIcmdWithAString *histo2DModeCmd;
 };
 #endif
-
-
-
-
-
-
-
-
-
-

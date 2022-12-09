@@ -42,9 +42,9 @@
 #endif
 
 #if HIGH_PRECISION
-typedef double Float;
+using Float = double;
 #else
-typedef float Float;
+using Float = float;
 #endif
 
 // Following values have been taken from limits.h
@@ -133,7 +133,7 @@ inline T sqr(const T& x)
 
 inline int G4lrint(double ad)
 {
-  return std::lrint(ad);
+  return (int)std::lrint(ad);
 }
 
 //-----------------------------

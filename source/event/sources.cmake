@@ -96,5 +96,4 @@ geant4_module_link_libraries(G4event
     G4graphics_reps
     G4materials
     G4heprandom
-    G4magneticfield
     G4parameterisation)

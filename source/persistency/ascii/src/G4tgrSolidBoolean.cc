@@ -71,9 +71,9 @@ G4tgrSolidBoolean::G4tgrSolidBoolean(const std::vector<G4String>& wl)
                   G4tgrUtils::GetDouble(wl[8]));
   //---------- Set solid type
   G4String wl2 = wl[2];
-  for(std::size_t ii = 0; ii < wl2.length(); ++ii)
+  for(G4int ii = 0; ii < (G4int)wl2.length(); ++ii)
   {
-    wl2[ii] = toupper(wl2[ii]);
+    wl2[ii] = (char)std::toupper(wl2[ii]);
   }
   theType = "Boolean_" + wl2;
 

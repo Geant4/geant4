@@ -121,7 +121,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   G4bool restoredFullEndpoint = false;
 
-  G4int oldprc;  // cout, cerr precision
+  G4long oldprc;  // cout, cerr precision
   G4int substep_no = 0;
    
   // Limits for substep number
@@ -753,7 +753,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   }
   else if( substep_no >= warn_substeps )
   {  
-    oldprc= G4cout.precision( 10 ); 
+    oldprc = G4cout.precision( 10 ); 
     std::ostringstream message;
     message << "Many substeps while trying to locate intersection."
             << G4endl

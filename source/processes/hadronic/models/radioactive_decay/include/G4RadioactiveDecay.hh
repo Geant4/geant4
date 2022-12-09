@@ -99,9 +99,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     // Remove all logical volumes from RDM applications
     void DeselectAllVolumes();
 
-    // Enable/disable ICM
-    void SetICM(G4bool icm) {applyICM = icm;} 
-
     // Enable/disable ARM
     void SetARM(G4bool arm) {applyARM = arm;}
 
@@ -205,7 +202,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     G4bool isInitialised;
 
-    G4bool applyICM;
     G4bool applyARM;
 
     // Parameters for pre-collimated (biased) decay products

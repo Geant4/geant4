@@ -790,7 +790,7 @@ namespace G4INCL {
       theStore->addToOutgoing(*i);
       (*i)->setParticleBias(Particle::getTotalBias());
     }
-    return toEject.size();
+    return (G4int)toEject.size();
   }
       
   G4bool Nucleus::emitInsideKaon() {
@@ -1049,9 +1049,9 @@ namespace G4INCL {
       
       eventInfo->ParticleBias[eventInfo->nParticles] = (*i)->getParticleBias();
       
-      eventInfo->A[eventInfo->nParticles] = (*i)->getA();
-      eventInfo->Z[eventInfo->nParticles] = (*i)->getZ();
-      eventInfo->S[eventInfo->nParticles] = (*i)->getS();
+      eventInfo->A[eventInfo->nParticles] = (G4INCL::Short_t)(*i)->getA();
+      eventInfo->Z[eventInfo->nParticles] = (G4INCL::Short_t)(*i)->getZ();
+      eventInfo->S[eventInfo->nParticles] = (G4INCL::Short_t)(*i)->getS();
       eventInfo->emissionTime[eventInfo->nParticles] = (*i)->getEmissionTime();
       eventInfo->EKin[eventInfo->nParticles] = (*i)->getKineticEnergy();
       ThreeVector mom = (*i)->getMomentum();
@@ -1080,9 +1080,9 @@ namespace G4INCL {
 
     // Projectile-like remnant characteristics
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
-      eventInfo->ARem[eventInfo->nRemnants] = theProjectileRemnant->getA();
-      eventInfo->ZRem[eventInfo->nRemnants] = theProjectileRemnant->getZ();
-      eventInfo->SRem[eventInfo->nRemnants] = theProjectileRemnant->getS();
+      eventInfo->ARem[eventInfo->nRemnants] = (G4INCL::Short_t)theProjectileRemnant->getA();
+      eventInfo->ZRem[eventInfo->nRemnants] = (G4INCL::Short_t)theProjectileRemnant->getZ();
+      eventInfo->SRem[eventInfo->nRemnants] = (G4INCL::Short_t)theProjectileRemnant->getS();
       G4double eStar = theProjectileRemnant->getExcitationEnergy();
       if(std::abs(eStar)<1E-10)
         eStar = 0.0; // blame rounding and set the excitation energy to zero
@@ -1111,9 +1111,9 @@ namespace G4INCL {
 
     // Target-like remnant characteristics
     if(hasRemnant()) {
-      eventInfo->ARem[eventInfo->nRemnants] = getA();
-      eventInfo->ZRem[eventInfo->nRemnants] = getZ();
-      eventInfo->SRem[eventInfo->nRemnants] = getS();
+      eventInfo->ARem[eventInfo->nRemnants] = (G4INCL::Short_t)getA();
+      eventInfo->ZRem[eventInfo->nRemnants] = (G4INCL::Short_t)getZ();
+      eventInfo->SRem[eventInfo->nRemnants] = (G4INCL::Short_t)getS();
       eventInfo->EStarRem[eventInfo->nRemnants] = getExcitationEnergy();
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
     INCL_WARN("Negative excitation energy in target-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << " eventNumber=" << eventInfo->eventNumber << '\n');

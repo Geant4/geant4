@@ -343,7 +343,7 @@ void G4Polyhedra::Create( G4double phiStart,
   //
   // We might have dropped a face or two: recalculate numFace
   //
-  numFace = face-faces;
+  numFace = (G4int)(face-faces);
 
   //
   // Make enclosingCylinder
@@ -688,7 +688,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   // main loop along triangles
   pMin =  kInfinity;
   pMax = -kInfinity;
-  G4int ntria = triangles.size()/3;
+  G4int ntria = (G4int)triangles.size()/3;
   for (G4int i=0; i<ntria; ++i)
   {
     G4double sinCur = sinStart;
@@ -755,7 +755,7 @@ G4VSolid* G4Polyhedra::Clone() const
 //
 std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -920,7 +920,7 @@ void G4Polyhedra::SetSurfaceElements() const
       contourRZ.push_back(G4TwoVector(corner.r, corner.z));
     }
     G4GeomTools::TriangulatePolygon(contourRZ, triangles);
-    G4int ntria = triangles.size();
+    G4int ntria = (G4int)triangles.size();
     for (G4int i=0; i<ntria; i+=3)
     {
       G4Polyhedra::surface_element selem;

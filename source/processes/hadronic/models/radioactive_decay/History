@@ -1,8 +1,43 @@
 # Category radioactive_decay History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-26 Gabriele Cosmo (radioactive_decay-V11-00-10)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-14 Vladimir Ivanchenko (radioactive_decay-V11-00-09)
+- G4RadioactiveDecay - added printout of the flag of atomic relaxation
+
+## 2022-11-03 Vladimir Ivanchenko (radioactive_decay-V11-00-08)
+- G4ECDecay, G4ITDecay - extended upper limit of atomic de-excitation 
+  from Z=100 to Z=104 by R. Chakma
+
+## 2022-10-20 Dennis Wright (radioactive_decay-V11-00-07)
+- G4RadioactiveDecay - remove SetICM() method.  Has been deprecated 
+  for some time and is no longer used.  ICM now set exclusively in 
+  G4PhotonEvaporation.
+- G4RadioactiveDecayMessenger - remove icmCmd corresponding to SetICM
+  above 
+
+## 2022-10-13 Dennis Wright (radioactive_decay-V11-00-06)
+- G4ECDecay - remove negative neutrino energy warning but keep 
+  protection against negative values. Negative values are due to 
+  negative Q values from ENSDF for only four nuclides.
+
+## 2022-10-05 Vladimir Ivanchenko (radioactive_decay-V11-00-05)
+- G4ECDecay - print warning introduced in the previous MR only
+    once in each thread and only in verbose mode
+
+## 2022-09-24 Vladimir Ivanchenko (radioactive_decay-V11-00-04)
+- G4ECDecay - added protection against negative neutrino energy
+    to fix problem #2509
+
+## 2022-09-05 Ben Morgan (radioactive_decay-V11-00-03)
+- Update dependencies to address warnings from consistency check
 
 ## 2022-04-08 Alberto Ribon (radioactive_decay-V11-00-02)
 - G4RadioactiveDecay : fixed memory leak (due to decay products

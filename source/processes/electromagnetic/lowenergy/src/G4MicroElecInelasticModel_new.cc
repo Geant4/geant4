@@ -268,7 +268,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
   
   // Cross section
   G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   
   for (G4int i = 0; i < numOfCouples; ++i) {
     const G4Material* material = theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
@@ -678,8 +678,8 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
       
       // sample deexcitation
       
-      G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries
-      G4int secNumberFinal = 0; // So I'll make the difference and then sum the energies
+      std::size_t secNumberInit = 0;  // need to know at a certain point the energy of secondaries
+      std::size_t secNumberFinal = 0; // So I'll make the difference and then sum the energies
       
       //SI: additional protection if tcs interpolation method is modified
       //if (k<bindingEnergy) return;
@@ -742,8 +742,8 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
       
       // note that secondaryKinetic is the energy of the delta ray, not of all secondaries.
       G4double deexSecEnergy = 0;
-      for (G4int j=secNumberInit; j < secNumberFinal; ++j) {
-	deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
+      for (std::size_t j=secNumberInit; j < secNumberFinal; ++j) {
+        deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
       }      
       if (SEFromFermiLevel) limitEnergy = currentMaterialStructure->GetEnergyGap();
       fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic - limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
@@ -1334,13 +1334,13 @@ G4int G4MicroElecInelasticModel_new::RandomSelect(G4double k, const G4String& pa
       if (table != 0)
 	{
 	  G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-	  const size_t n(table->NumberOfComponents());
-	  size_t i(n);
+	  const G4int n = (G4int)table->NumberOfComponents();
+	  G4int i = (G4int)n;
 	  G4double value = 0.;
 	  
 	  while (i>0)
 	    {
-	      i--;
+	      --i;
 	      valuesBuffer[i] = table->GetComponent(i)->FindValue(k)*Zeff[i]*Zeff[i];
 	      value += valuesBuffer[i];
 	    }	  
@@ -1350,7 +1350,7 @@ G4int G4MicroElecInelasticModel_new::RandomSelect(G4double k, const G4String& pa
 	  
 	  while (i > 0)
 	    {
-	      i--;
+	      --i;
 	      
 	      if (valuesBuffer[i] > value)
 		{

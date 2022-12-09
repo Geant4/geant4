@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-09-05 Ben Morgan (hadr-gammanuc-V11-00-01)
+- Update dependencies to address warnings from consistency check
+
 ## 2021-12-10 Ben Morgan (hadr-gammanuc-V11-00-00)
 - Change to new Markdown History format
 

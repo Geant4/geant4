@@ -257,7 +257,8 @@ void PhysicsList::AddRadioactiveDecay()
   
   // mandatory for G4NuclideTable
   //
-  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  const G4double meanLife = 1*picosecond, halfLife = meanLife*std::log(2);
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(halfLife);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

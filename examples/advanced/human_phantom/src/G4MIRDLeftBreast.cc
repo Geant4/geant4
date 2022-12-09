@@ -46,43 +46,34 @@
 #include "G4SubtractionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftBreast::G4MIRDLeftBreast()
-{
-}
-
-G4MIRDLeftBreast::~G4MIRDLeftBreast()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftBreast::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					       const G4String& colourName, G4bool wireFrame, G4bool)
 {
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double ax= 4.95* cm;
   G4double by= 4.35* cm;
   G4double cz= 4.15*cm;
 
-  G4Ellipsoid* oneLeftBreast = new G4Ellipsoid("OneLeftBreast",
+  auto* oneLeftBreast = new G4Ellipsoid("OneLeftBreast",
 					       ax, by, cz);
 
   G4double dx= 20.* cm;
   G4double dy= 10.* cm;
   G4double dz= 35.*cm;
 
-  G4EllipticalTube* Trunk = new G4EllipticalTube("Trunk",dx, dy, dz );
+  auto* Trunk = new G4EllipticalTube("Trunk",dx, dy, dz );
 
  
 					       
-  G4RotationMatrix* rm_relative = new G4RotationMatrix();
+  auto* rm_relative = new G4RotationMatrix();
   rm_relative -> rotateX(90. * degree);
 
-  G4SubtractionSolid* breast = new G4SubtractionSolid("LeftBreast",
+ auto* breast = new G4SubtractionSolid("LeftBreast",
 						      oneLeftBreast,
 						      Trunk,
 						      rm_relative,
@@ -91,12 +82,12 @@ G4VPhysicalVolume* G4MIRDLeftBreast::Construct(const G4String& volumeName,G4VPhy
 								    -8.66*cm));
 
 
-  G4LogicalVolume* logicLeftBreast = new G4LogicalVolume(breast, soft,
-							 "logical" + volumeName, 0, 0,0);
+  auto* logicLeftBreast = new G4LogicalVolume(breast, soft,
+							 "logical" + volumeName, nullptr, nullptr, nullptr);
 
     
   // Define rotation and position here!
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(90.*degree);
   rm->rotateY(0.*degree);
   rm->rotateZ(16.*degree);
@@ -109,9 +100,9 @@ G4VPhysicalVolume* G4MIRDLeftBreast::Construct(const G4String& volumeName,G4VPhy
 
   // Visualization Attributes
   //G4VisAttributes* LeftBreastVisAtt = new G4VisAttributes(G4Colour(1.0,0.41,0.71));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LeftBreastVisAtt = new G4VisAttributes(colour);
+  auto* LeftBreastVisAtt = new G4VisAttributes(colour);
   LeftBreastVisAtt->SetForceSolid(wireFrame);
  
   logicLeftBreast->SetVisAttributes(LeftBreastVisAtt);
@@ -133,7 +124,6 @@ G4VPhysicalVolume* G4MIRDLeftBreast::Construct(const G4String& volumeName,G4VPhy
   // Testing Mass
   G4double LeftBreastMass = (LeftBreastVol)*LeftBreastDensity;
   G4cout << "Mass of LeftBreast = " << LeftBreastMass/gram << " g" << G4endl;
-
 
   return physLeftBreast;
 }

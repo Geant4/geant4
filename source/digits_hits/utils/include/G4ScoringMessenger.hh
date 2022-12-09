@@ -50,7 +50,7 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcommand;
 
-typedef std::vector<G4String> G4TokenVec;
+using G4TokenVec = std::vector<G4String>;
 
 // class description:
 //
@@ -63,11 +63,11 @@ class G4ScoringMessenger : public G4UImessenger
  public:
   G4ScoringMessenger(G4ScoringManager* SManager);
 
-  ~G4ScoringMessenger();
+  ~G4ScoringMessenger() override;
 
-  void SetNewValue(G4UIcommand* command, G4String newValues);
+  void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
-  G4String GetCurrentValue(G4UIcommand* command);
+  G4String GetCurrentValue(G4UIcommand* command) override;
 
  protected:
   void FillTokenVec(G4String newValues, G4TokenVec& token);
@@ -84,7 +84,6 @@ class G4ScoringMessenger : public G4UImessenger
   G4UIdirectory* meshCreateDir;
   G4UIcmdWithAString* meshBoxCreateCmd;
   G4UIcmdWithAString* meshCylinderCreateCmd;
-  //    G4UIcmdWithAString*        meshSphereCreateCmd;
   G4UIcommand* meshRWLogVolCreateCmd;
   G4UIcommand* probeCreateCmd;
   //
@@ -93,14 +92,12 @@ class G4ScoringMessenger : public G4UImessenger
   G4UIcmdWithAString* meshOpnCmd;
   //
   G4UIcmdWithoutParameter* meshClsCmd;
-  //    G4UIcmdWithABool*        meshActCmd;
   //
   //   Size commands
   G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;
   G4UIcommand* mCylinderSizeCmd;
   G4UIcmdWithADoubleAndUnit* mCylinderRMinCmd;
   G4UIcommand* mCylinderAngleCmd;
-  //    G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
   //
   //   Division command
   G4UIcommand* mBinCmd;
@@ -110,7 +107,6 @@ class G4ScoringMessenger : public G4UImessenger
   G4UIcmdWithoutParameter* mTResetCmd;
   G4UIcmdWith3VectorAndUnit* mTXyzCmd;
   G4UIdirectory* mRotDir;
-  //    G4UIcmdWithoutParameter*   mRResetCmd;
   G4UIcmdWithADoubleAndUnit* mRotXCmd;
   G4UIcmdWithADoubleAndUnit* mRotYCmd;
   G4UIcmdWithADoubleAndUnit* mRotZCmd;
@@ -127,7 +123,6 @@ class G4ScoringMessenger : public G4UImessenger
   G4UIcmdWithoutParameter* listColorMapCmd;
   G4UIcmdWithAString* floatMinMaxCmd;
   G4UIcommand* colorMapMinMaxCmd;
-  // G4UIcommand *             chartCmd;
   //
   // Dump scoring result to file
   G4UIcommand* dumpQtyToFileCmd;

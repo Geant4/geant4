@@ -41,6 +41,7 @@
 
 #include "G4DNAAttachment.hh"
 #include "G4DNAVibExcitation.hh"
+#include "G4DNASancheExcitationModel.hh"
 
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"

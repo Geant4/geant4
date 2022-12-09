@@ -115,8 +115,8 @@ void G4eDPWAElasticDCS::InitialiseForZ(std::size_t iz) {
   if (!gIsGridLoaded) {
     LoadGrid();
   }
-  LoadDCSForZ(iz);
-  BuildSmplingTableForZ(iz);
+  LoadDCSForZ((G4int)iz);
+  BuildSmplingTableForZ((G4int)iz);
 }
 
 
@@ -527,7 +527,7 @@ G4eDPWAElasticDCS::ReadCompressedFile(G4String fname, std::istringstream &iss) {
   std::ifstream in(compfilename, std::ios::binary | std::ios::ate);
   if (in.good()) {
      // get current position in the stream (was set to the end)
-     G4int fileSize = in.tellg();
+     std::size_t fileSize = in.tellg();
      // set current position being the beginning of the stream
      in.seekg(0,std::ios::beg);
      // create (zlib) byte buffer for the data
@@ -580,9 +580,9 @@ G4eDPWAElasticDCS::ComputeScatteringPowerCorrection(const G4MaterialCutsCouple *
   // get the scattering power correction factor
   const G4double lekin = G4Log(ekin);
   G4double remaining   = (lekin-fSCPCPerMatCuts[imc]->fLEmin)*fSCPCPerMatCuts[imc]->fILDel;
-  G4int    lindx       = (G4int)remaining;
+  std::size_t lindx    = (G4int)remaining;
   remaining           -= lindx;
-  G4int    imax        = fSCPCPerMatCuts[imc]->fVSCPC.size()-1;
+  std::size_t imax     = fSCPCPerMatCuts[imc]->fVSCPC.size()-1;
   if (lindx>=imax) {
     corFactor = fSCPCPerMatCuts[imc]->fVSCPC[imax];
   } else {
@@ -609,7 +609,7 @@ void G4eDPWAElasticDCS::InitSCPCorrection(G4double lowEnergyLimit,
   // set size of the container and create the corresponding data structures
   fSCPCPerMatCuts.resize(numMatCuts,nullptr);
   // loop over the material-cuts and create scattering power correction data structure for each
-  for (std::size_t imc=0; imc<numMatCuts; ++imc) {
+  for (G4int imc=0; imc<(G4int)numMatCuts; ++imc) {
     const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
     const G4Material* mat  = matCut->GetMaterial();
     // get e- production cut in the current material-cuts in energy
@@ -676,7 +676,7 @@ void G4eDPWAElasticDCS::ComputeMParams(const G4Material* mat, G4double& theBc,
    const G4double finstrc2 = 5.325135453E-5; // fine-structure const. square
    //   G4double xi   = 1.0;
    const G4ElementVector* theElemVect     = mat->GetElementVector();
-   const G4int            numelems        = mat->GetNumberOfElements();
+   const std::size_t      numelems        = mat->GetNumberOfElements();
    //
    const G4double*  theNbAtomsPerVolVect  = mat->GetVecNbOfAtomsPerVolume();
    G4double         theTotNbAtomsPerVol   = mat->GetTotNbOfAtomsPerVolume();
@@ -686,7 +686,7 @@ void G4eDPWAElasticDCS::ComputeMParams(const G4Material* mat, G4double& theBc,
    G4double ze = 0.0;
    G4double sa = 0.0;
    //
-   for(G4int ielem = 0; ielem < numelems; ielem++) {
+   for(std::size_t ielem = 0; ielem < numelems; ++ielem) {
      const G4double zet  = (*theElemVect)[ielem]->GetZ();
      const G4double iwa  = (*theElemVect)[ielem]->GetN();
      const G4double ipz  = theNbAtomsPerVolVect[ielem]/theTotNbAtomsPerVol;

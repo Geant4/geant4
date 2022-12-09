@@ -127,9 +127,9 @@ inline G4String G4Demangle(const char* _str)
 {
 #if defined(G4DEMANGLE_AVAILABLE)
   // demangling a string when delimiting
-  int _status = 0;
+  G4int _status = 0;
   char* _ret  = ::abi::__cxa_demangle(_str, nullptr, nullptr, &_status);
-  if(_ret && _status == 0)
+  if((_ret != nullptr) && _status == 0)
     return G4String(const_cast<const char*>(_ret));
   return _str;
 #else
@@ -220,19 +220,19 @@ class G4Backtrace
 {
  public:
   using sigaction_t   = struct sigaction;
-  using exit_action_t = std::function<void(int)>;
+  using exit_action_t = std::function<void(G4int)>;
   using frame_func_t  = std::function<G4String(const char*)>;
-  using signal_set_t  = std::set<int>;
+  using signal_set_t  = std::set<G4int>;
 
  public:
   struct actions
   {
-    using id_entry_t = std::tuple<std::string, int, std::string>;
+    using id_entry_t = std::tuple<std::string, G4int, std::string>;
     using id_list_t  = std::vector<id_entry_t>;
 
-    std::map<int, bool> is_active           = {};
-    std::map<int, sigaction_t> current      = {};
-    std::map<int, sigaction_t> previous     = {};
+    std::map<G4int, G4bool> is_active           = {};
+    std::map<G4int, sigaction_t> current      = {};
+    std::map<G4int, sigaction_t> previous     = {};
     std::vector<exit_action_t> exit_actions = {};
     const id_list_t identifiers             = {
       id_entry_t("SIGHUP", SIGHUP, "terminal line hangup"),
@@ -277,22 +277,22 @@ class G4Backtrace
   // default set of signals
   static signal_set_t& DefaultSignals();
   // the signal handler
-  static void Handler(int sig, siginfo_t* sinfo, void* context);
+  static void Handler(G4int sig, siginfo_t* sinfo, void* context);
   // information message about the signal, performs exit-actions
   // and prints back-trace
-  static void Message(int sig, siginfo_t* sinfo, std::ostream&);
+  static void Message(G4int sig, siginfo_t* sinfo, std::ostream&);
   // calls user-provided functions after signal is caught but before abort
-  static void ExitAction(int sig);
+  static void ExitAction(G4int sig);
   // enable signals via a string (which is tokenized)
-  static int Enable(const std::string&);
+  static G4int Enable(const std::string&);
   // enable signals via set of integers, anything less than zero is ignored
-  static int Enable(const signal_set_t& _signals = DefaultSignals());
+  static G4int Enable(const signal_set_t& _signals = DefaultSignals());
   // disable signals
-  static int Disable(signal_set_t _signals = {});
+  static G4int Disable(signal_set_t _signals = {});
   // gets the numeric value for a signal name
-  static int GetSignal(const std::string&);
+  static G4int GetSignal(const std::string&);
   // provides a description of the signal
-  static std::string Description(int sig);
+  static std::string Description(G4int sig);
 
   // adds an exit action
   template <typename FuncT>
@@ -301,14 +301,14 @@ class G4Backtrace
   // gets a backtrace of "Depth" frames. The offset parameter is used
   // to ignore initial frames (such as this function). A callback
   // can be provided to inspect and/or tweak the frame string
-  template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
+  template <std::size_t Depth, std::size_t Offset = 0, typename FuncT = frame_func_t>
   static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetMangled(
     FuncT&& func = FrameFunctor());
 
   // gets a demangled backtrace of "Depth" frames. The offset parameter is
   // used to ignore initial frames (such as this function). A callback
   // can be provided to inspect and/or tweak the frame string
-  template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
+  template <std::size_t Depth, std::size_t Offset = 0, typename FuncT = frame_func_t>
   static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetDemangled(
     FuncT&& func = FrameFunctor());
 
@@ -349,7 +349,7 @@ inline void G4Backtrace::AddExitAction(FuncT&& func)
 
 //----------------------------------------------------------------------------//
 
-inline void G4Backtrace::ExitAction(int sig)
+inline void G4Backtrace::ExitAction(G4int sig)
 {
   for(auto& itr : GetData().exit_actions)
     itr(sig);
@@ -357,7 +357,7 @@ inline void G4Backtrace::ExitAction(int sig)
 
 //----------------------------------------------------------------------------//
 
-template <size_t Depth, size_t Offset, typename FuncT>
+template <std::size_t Depth, std::size_t Offset, typename FuncT>
 inline std::array<G4ResultOf_t<FuncT, const char*>, Depth>
 G4Backtrace::GetMangled(FuncT&& func)
 {
@@ -376,7 +376,7 @@ G4Backtrace::GetMangled(FuncT&& func)
   auto n = sz - Offset;
 
   // skip ahead (Offset + 1) stack frames
-  char** bsym = backtrace_symbols(buffer.data() + Offset, n);
+  char** bsym = backtrace_symbols(buffer.data() + Offset, (G4int)n);
 
   // report errors
   if(bsym == nullptr)
@@ -392,13 +392,13 @@ G4Backtrace::GetMangled(FuncT&& func)
 
 //----------------------------------------------------------------------------//
 
-template <size_t Depth, size_t Offset, typename FuncT>
+template <std::size_t Depth, std::size_t Offset, typename FuncT>
 inline std::array<G4ResultOf_t<FuncT, const char*>, Depth>
 G4Backtrace::GetDemangled(FuncT&& func)
 {
   auto demangle_bt = [&](const char* cstr) {
-    auto _trim = [](std::string& _sub, size_t& _len) {
-      size_t _pos = 0;
+    auto _trim = [](std::string& _sub, std::size_t& _len) {
+      std::size_t _pos = 0;
       while((_pos = _sub.find_first_of(' ')) == 0)
       {
         _sub = _sub.erase(_pos, 1);
@@ -413,14 +413,14 @@ G4Backtrace::GetDemangled(FuncT&& func)
     };
 
     auto str = G4Demangle(std::string(cstr));
-    auto beg = str.find("(");
+    auto beg = str.find('(');
     if(beg == std::string::npos)
     {
       beg = str.find("_Z");
       if(beg != std::string::npos)
         beg -= 1;
     }
-    auto end = str.find("+", beg);
+    auto end = str.find('+', beg);
     if(beg != std::string::npos && end != std::string::npos)
     {
       auto len = end - (beg + 1);
@@ -449,7 +449,7 @@ G4Backtrace::GetDemangled(FuncT&& func)
 
 //----------------------------------------------------------------------------//
 
-inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
+inline void G4Backtrace::Message(G4int sig, siginfo_t* sinfo, std::ostream& os)
 {
   // try to avoid as many dynamic allocations as possible here to avoid
   // overflowing the signal stack
@@ -458,13 +458,13 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
   signal(sig, SIG_IGN);
 
   os << "\n### CAUGHT SIGNAL: " << sig << " ### ";
-  if(sinfo)
+  if(sinfo != nullptr)
     os << "address: " << sinfo->si_addr << ", ";
   os << Description(sig) << ". ";
 
   if(sig == SIGSEGV)
   {
-    if(sinfo)
+    if(sinfo != nullptr)
     {
       switch(sinfo->si_code)
       {
@@ -486,7 +486,7 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
   }
   else if(sig == SIGFPE)
   {
-    if(sinfo)
+    if(sinfo != nullptr)
     {
       switch(sinfo->si_code)
       {
@@ -514,7 +514,7 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
     else
     {
       os << "Unknown floating point exception";
-      if(sinfo)
+      if(sinfo != nullptr)
         os << ": " << sinfo->si_code;
       os << ". ";
     }
@@ -524,12 +524,12 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
 
   auto bt = GetMangled<256, 3>([](const char* _s) { return _s; });
   char prefix[64];
-  snprintf(prefix, 64, "[PID=%i, TID=%i]", (int) getpid(),
-           (int) G4Threading::G4GetThreadId());
-  size_t sz = 0;
+  snprintf(prefix, 64, "[PID=%i, TID=%i]", (G4int) getpid(),
+           (G4int) G4Threading::G4GetThreadId());
+  std::size_t sz = 0;
   for(auto& itr : bt)
   {
-    if(!itr)
+    if(itr == nullptr)
       break;
     if(strlen(itr) == 0)
       break;
@@ -537,7 +537,7 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
   }
   os << "\nBacktrace:\n";
   auto _w = std::log10(sz) + 1;
-  for(size_t i = 0; i < sz; ++i)
+  for(std::size_t i = 0; i < sz; ++i)
   {
     os << prefix << "[" << std::setw(_w) << std::right << i << '/'
        << std::setw(_w) << std::right << sz << "]> " << std::left << bt.at(i)
@@ -559,14 +559,14 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
 
 //----------------------------------------------------------------------------//
 
-inline void G4Backtrace::Handler(int sig, siginfo_t* sinfo, void*)
+inline void G4Backtrace::Handler(G4int sig, siginfo_t* sinfo, void*)
 {
   Message(sig, sinfo, std::cerr);
 
   char msg[1024];
   snprintf(msg, 1024, "%s", "\n");
 
-  if(sinfo && G4PSIGINFO_AVAILABLE > 0)
+  if((sinfo != nullptr) && G4PSIGINFO_AVAILABLE > 0)
   {
 #  if G4PSIGINFO_AVAILABLE > 0
     psiginfo(sinfo, msg);
@@ -588,16 +588,16 @@ inline void G4Backtrace::Handler(int sig, siginfo_t* sinfo, void*)
 
 //----------------------------------------------------------------------------//
 
-inline int G4Backtrace::Enable(const signal_set_t& _signals)
+inline G4int G4Backtrace::Enable(const signal_set_t& _signals)
 {
-  static bool _first = true;
+  static G4bool _first = true;
   if(_first)
   {
     std::string _msg = "!!! G4Backtrace is activated !!!";
     std::stringstream _filler;
     std::stringstream _spacer;
     _filler.fill('#');
-    _filler << std::setw(_msg.length()) << "";
+    _filler << std::setw((G4int)_msg.length()) << "";
     _spacer << std::setw(10) << "";
     std::cout << "\n\n"
               << _spacer.str() << _filler.str() << "\n"
@@ -606,7 +606,7 @@ inline int G4Backtrace::Enable(const signal_set_t& _signals)
               << std::flush;
   }
   _first  = false;
-  int cnt = 0;
+  G4int cnt = 0;
   for(auto& itr : _signals)
   {
     if(itr < 0)
@@ -625,7 +625,7 @@ inline int G4Backtrace::Enable(const signal_set_t& _signals)
 
 //----------------------------------------------------------------------------//
 
-inline int G4Backtrace::Enable(const std::string& _signals)
+inline G4int G4Backtrace::Enable(const std::string& _signals)
 {
   if(_signals.empty())
     return 0;
@@ -634,7 +634,7 @@ inline int G4Backtrace::Enable(const std::string& _signals)
     if(!sig.empty())
     {
       for(auto& itr : sig)
-        itr = toupper(itr);
+        itr = (char)std::toupper(itr);
       _targ.insert(G4Backtrace::GetSignal(sig));
     }
   };
@@ -653,7 +653,7 @@ inline int G4Backtrace::Enable(const std::string& _signals)
 
 //----------------------------------------------------------------------------//
 
-inline int G4Backtrace::Disable(signal_set_t _signals)
+inline G4int G4Backtrace::Disable(signal_set_t _signals)
 {
   if(_signals.empty())
   {
@@ -661,7 +661,7 @@ inline int G4Backtrace::Disable(signal_set_t _signals)
       _signals.insert(itr.first);
   }
 
-  int cnt = 0;
+  G4int cnt = 0;
   for(auto& itr : _signals)
   {
     if(itr < 0)
@@ -678,7 +678,7 @@ inline int G4Backtrace::Disable(signal_set_t _signals)
 
 //----------------------------------------------------------------------------//
 
-inline int G4Backtrace::GetSignal(const std::string& sid)
+inline G4int G4Backtrace::GetSignal(const std::string& sid)
 {
   for(auto&& itr : GetData().identifiers)
   {
@@ -690,7 +690,7 @@ inline int G4Backtrace::GetSignal(const std::string& sid)
 
 //----------------------------------------------------------------------------//
 
-inline std::string G4Backtrace::Description(int sig)
+inline std::string G4Backtrace::Description(G4int sig)
 {
   for(auto&& itr : GetData().identifiers)
   {
@@ -732,38 +732,38 @@ class G4Backtrace
 
   using siginfo_t = fake_siginfo;
   using sigaction_t = fake_sigaction;
-  using exit_action_t = std::function<void(int)>;
+  using exit_action_t = std::function<void(G4int)>;
   using frame_func_t = std::function<G4String(const char*)>;
-  using signal_set_t = std::set<int>;
+  using signal_set_t = std::set<G4int>;
 
  public:
   struct actions
   {
-    using id_entry_t = std::tuple<std::string, int, std::string>;
+    using id_entry_t = std::tuple<std::string, G4int, std::string>;
     using id_list_t = std::vector<id_entry_t>;
 
-    std::map<int, bool> is_active = {};
-    std::map<int, sigaction_t> current = {};
-    std::map<int, sigaction_t> previous = {};
+    std::map<G4int, G4bool> is_active = {};
+    std::map<G4int, sigaction_t> current = {};
+    std::map<G4int, sigaction_t> previous = {};
     std::vector<exit_action_t> exit_actions = {};
     const id_list_t identifiers = {};
   };
 
  public:
-  static void Handler(int, siginfo_t*, void*) {}
-  static void Message(int, siginfo_t*, std::ostream&) {}
-  static void ExitAction(int) {}
-  static int Enable(const std::string&) { return 0; }
-  static int Enable(const signal_set_t& = DefaultSignals()) { return 0; }
-  static int Disable(signal_set_t = {}) { return 0; }
-  static int GetSignal(const std::string&) { return -1; }
-  static std::string Description(int) { return std::string{}; }
+  static void Handler(G4int, siginfo_t*, void*) {}
+  static void Message(G4int, siginfo_t*, std::ostream&) {}
+  static void ExitAction(G4int) {}
+  static G4int Enable(const std::string&) { return 0; }
+  static G4int Enable(const signal_set_t& = DefaultSignals()) { return 0; }
+  static G4int Disable(signal_set_t = {}) { return 0; }
+  static G4int GetSignal(const std::string&) { return -1; }
+  static std::string Description(G4int) { return std::string{}; }
 
   template <typename FuncT>
   static void AddExitAction(FuncT&&)
   {}
 
-  template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
+  template <std::size_t Depth, std::size_t Offset = 0, typename FuncT = frame_func_t>
   static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetMangled(
     FuncT&& func = FrameFunctor())
   {
@@ -773,7 +773,7 @@ class G4Backtrace
     return ret;
   }
 
-  template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
+  template <std::size_t Depth, std::size_t Offset = 0, typename FuncT = frame_func_t>
   static std::array<G4ResultOf_t<FuncT, const char*>, Depth> GetDemangled(
     FuncT&& func = FrameFunctor())
   {

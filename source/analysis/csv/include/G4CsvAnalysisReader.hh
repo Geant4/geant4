@@ -51,7 +51,7 @@ class G4CsvAnalysisReader : public G4ToolsAnalysisReader
   friend class G4ThreadLocalSingleton<G4CsvAnalysisReader>;
 
   public:
-    virtual ~G4CsvAnalysisReader();
+    ~G4CsvAnalysisReader() override;
 
     // Static methods
     static G4CsvAnalysisReader* Instance();
@@ -63,7 +63,7 @@ class G4CsvAnalysisReader : public G4ToolsAnalysisReader
 
   protected:
     // Virtual methods from base class
-    virtual G4bool CloseFilesImpl(G4bool reset) final;
+    G4bool CloseFilesImpl(G4bool reset) final;
 
   private:
     G4CsvAnalysisReader();

@@ -384,7 +384,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     if ( ProjExchangeQ != TargQ1 ) NpossibleStates++;
     if ( ProjExchangeQ != TargQ2 ) NpossibleStates++;
     if ( ProjExchangeQ != TargQ3 ) NpossibleStates++;  
-    G4int Nsampled = G4RandFlat::shootInt( G4long( NpossibleStates ) ) + 1;
+    G4int Nsampled = (G4int)G4RandFlat::shootInt( G4long( NpossibleStates ) )+1;
     NpossibleStates = 0;
     if ( ProjExchangeQ != TargQ1 ) {
       if ( ++NpossibleStates == Nsampled ) {
@@ -415,26 +415,42 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     while ( attempts++ < maxNumberOfAttempts ) {  /* Loop checking, 10.08.2015, A.Ribon */
 
       // Determination of a new projectile ID which satisfies energy-momentum conservation
+      G4double ProbSpin0 = 0.5;
       G4double Ksi = G4UniformRand();
       if ( aProjQ1 == aProjQ2 ) {
-        if ( aProjQ1 < 3 ) {
-          NewProjCode = 111;      // Pi0-meson
-          if ( Ksi < 0.5 ) {
-            NewProjCode = 221;    // Eta-meson
-            if ( Ksi < 0.25 ) {
-              NewProjCode = 331;  // Eta'-meson
-            }
-          } 
-        } else if ( aProjQ1 == 3 ) {
-          NewProjCode = 221;      // Eta-meson
-          if ( Ksi < 0.5 ) {
-            NewProjCode = 331;    // Eta'-meson
-          }
-        } else if ( aProjQ1 == 4 ) {
-	  NewProjCode = 441;      // Eta_c
-	} else if ( aProjQ1 == 5 ) {
-	  NewProjCode = 553;      // Upsilon
-	}
+        if ( G4UniformRand() < ProbSpin0 ) {  // Meson spin = 0 (pseudo-scalar)
+          if ( aProjQ1 < 3 ) {
+            NewProjCode = 111;                // pi0
+            if ( Ksi < 0.5 ) {
+              NewProjCode = 221;              // eta
+              if ( Ksi < 0.25 ) {
+                NewProjCode = 331;            // eta'
+              }
+            } 
+          } else if ( aProjQ1 == 3 ) {
+              NewProjCode = 221;              // eta
+              if ( Ksi < 0.5 ) {
+                NewProjCode = 331;            // eta'
+              }
+          } else if ( aProjQ1 == 4 ) {
+	    NewProjCode = 441;                // eta_c(1S)
+	  } else if ( aProjQ1 == 5 ) {
+	    NewProjCode = 551;                // eta_b(1S)
+	  }
+        } else {                              // Meson spin = 1 (vector meson)
+          if ( aProjQ1 < 3 ) {
+            NewProjCode = 113;                // rho0
+            if ( Ksi < 0.5 ) {
+              NewProjCode = 223;              // omega
+            } 
+          } else if ( aProjQ1 == 3 ) {
+            NewProjCode = 333;                // phi
+          } else if ( aProjQ1 == 4 ) {
+	    NewProjCode = 443;                // J/psi(1S)
+	  } else if ( aProjQ1 == 5 ) {
+	    NewProjCode = 553;                // Upsilon(1S)
+	  }
+        }
       } else {
         if ( aProjQ1 > aProjQ2 ) {
           NewProjCode = aProjQ1*100 + aProjQ2*10 + 1;

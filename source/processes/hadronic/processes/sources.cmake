@@ -12,7 +12,9 @@ geant4_add_module(G4hadronic_proc
     G4NeutrinoElectronProcess.hh
     G4NeutronCaptureProcess.hh
     G4NeutronFissionProcess.hh
+    G4NeutronGeneralProcess.hh
     G4PositronNuclearProcess.hh
+    G4TauNeutrinoNucleusProcess.hh
     G4UCNProcessSubType.hh
     G4UCNBoundaryProcess.hh
     G4UCNBoundaryProcessMessenger.hh
@@ -29,7 +31,9 @@ geant4_add_module(G4hadronic_proc
     G4NeutrinoElectronProcess.cc
     G4NeutronCaptureProcess.cc
     G4NeutronFissionProcess.cc
+    G4NeutronGeneralProcess.cc
     G4PositronNuclearProcess.cc
+    G4TauNeutrinoNucleusProcess.cc
     G4UCNBoundaryProcess.cc
     G4UCNBoundaryProcessMessenger.cc
     G4UCNLoss.cc
@@ -41,6 +45,7 @@ geant4_module_link_libraries(G4hadronic_proc
     G4baryons
     G4globman
     G4hadronic_mgt
+    G4hadronic_util
     G4intercoms
     G4materials
     G4procman
@@ -48,7 +53,6 @@ geant4_module_link_libraries(G4hadronic_proc
     G4cuts
     G4detector
     G4geometrymng
-    G4hadronic_util
     G4hadronic_xsect
     G4ions
     G4leptons

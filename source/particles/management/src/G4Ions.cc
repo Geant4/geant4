@@ -75,6 +75,13 @@ G4Ions::G4Ions(
         || (aName == "carbon") || (aName == "helium") || (aName == "alpha+")
         || (aName == "hydrogen") || (aName == "Ps-1s") || (aName == "Ps-2s")) {
      isGeneralIon = false ;
+   } else if ( aName == "hypertriton" || aName == "anti_hypertriton" ||
+               aName == "hyperalpha" || aName == "anti_hyperalpha" ||
+               aName == "hyperH4" || aName == "anti_hyperH4" ||
+               aName == "doublehyperH4" || aName == "anti_doublehyperH4" ||
+               aName == "doublehyperdoubleneutron" || aName == "anti_doublehyperdoubleneutron" ||
+               aName == "hyperHe5" || aName == "anti_hyperHe5" ) {
+     isGeneralIon = false;
    } else {
      isGeneralIon = true;
    }

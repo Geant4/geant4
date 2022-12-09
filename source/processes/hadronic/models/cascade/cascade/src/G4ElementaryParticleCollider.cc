@@ -423,12 +423,12 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 // Use generated list of final states to fill mass buffers
 
 void G4ElementaryParticleCollider::fillOutgoingMasses() {
-  G4int mult = particle_kinds.size();
+  std::size_t mult = particle_kinds.size();
 
   masses.resize(mult,0.);
   masses2.resize(mult,0.);		// Allows direct [i] setting
 
-  for (G4int i = 0; i < mult; i++) {
+  for (std::size_t i = 0; i < mult; ++i) {
     masses[i] = G4InuclElementaryParticle::getParticleMass(particle_kinds[i]);
     masses2[i] = masses[i] * masses[i];
   }
@@ -544,7 +544,7 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
     return;
   }
 
-  for (size_t i=0; i<3; i++) {
+  for (std::size_t i=0; i<3; ++i) {
     scm_momentums[i].setVectM(theMomenta[i], masses[i]);
     particles[i].fill(scm_momentums[i], particle_kinds[i], G4InuclParticle::EPCollider);
   }

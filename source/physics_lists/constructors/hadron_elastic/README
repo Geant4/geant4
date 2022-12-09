@@ -24,6 +24,12 @@
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,
                     Gheisha below.
+ - charm and bottom hadrons, light hypernuclei
+   - cross section: Glauber-Gribov
+   - final-state:   Gheisha
+ - light anti-hypernuclei
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   Gheisha
 
  G4HadronElasticPhysicsHP
  ------------------------

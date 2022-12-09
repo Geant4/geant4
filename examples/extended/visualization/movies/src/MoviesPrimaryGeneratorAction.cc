@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
 /// \file MoviesPrimaryGeneratorAction.cc
 /// \brief Implementation of the MoviesPrimaryGeneratorAction class
+//
 
 #include "MoviesPrimaryGeneratorAction.hh"
 

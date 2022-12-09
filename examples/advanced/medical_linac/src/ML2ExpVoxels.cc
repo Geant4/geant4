@@ -49,9 +49,7 @@ CML2ExpVoxels::CML2ExpVoxels(G4bool bData, G4int saveEvents, G4int seed,
           G4String FileExperimentalData, G4String FileExperimentalDataOut):startCurve(0),
           stopCurve(0),chi2Factor(0)
 {
-	char a[10];
-	sprintf(a,"%d", seed);
-	seedName = (G4String)a;
+	seedName = std::to_string(seed);
 	saving_in_Selected_Voxels_every_events = saveEvents;
 	nRecycling = 1;
 

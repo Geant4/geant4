@@ -17,27 +17,21 @@ geant4_add_module(G4analysismng
     G4BaseRNtupleManager.hh
     G4BinScheme.hh
     G4Fcn.hh
-    G4AnalysisMessengerHelper.hh
-    G4FileMessenger.hh
-    G4H1Messenger.hh
-    G4H2Messenger.hh
-    G4H3Messenger.hh
-    G4P1Messenger.hh
-    G4P2Messenger.hh
     G4NtupleBookingManager.hh
     G4NtupleBookingManager.icc
     G4NtupleMessenger.hh
     G4HnInformation.hh
     G4HnManager.hh
     G4HnMessenger.hh
-    G4PlotManager.hh
-    G4PlotMessenger.hh
-    G4PlotParameters.hh
     G4TFileInformation.hh
     G4TFileManager.hh
     G4TFileManager.icc
     G4THnManager.hh
     G4THnManager.icc
+    G4THnMessenger.hh
+    G4THnMessenger.icc
+    G4THnToolsManager.hh
+    G4THnToolsManager.icc
     G4TNtupleDescription.hh
     G4TNtupleManager.hh
     G4TNtupleManager.icc
@@ -49,15 +43,11 @@ geant4_add_module(G4analysismng
     G4VAnalysisReader.hh
     G4VAnalysisReader.icc
     G4VFileManager.hh
-    G4VH1Manager.hh
-    G4VH2Manager.hh
-    G4VH3Manager.hh
     G4VNtupleFileManager.hh
     G4VNtupleManager.hh
-    G4VP1Manager.hh
-    G4VP2Manager.hh
     G4VRFileManager.hh
     G4VRNtupleManager.hh
+    G4VTBaseHnManager.hh
     G4VTFileManager.hh
     G4VTHnFileManager.hh
     G4VTHnRFileManager.hh
@@ -65,27 +55,18 @@ geant4_add_module(G4analysismng
     G4AnalysisVerbose.cc
     G4AnalysisManagerState.cc
     G4AnalysisMessenger.cc
+    G4AnalysisUtilities.cc
     G4BaseAnalysisManager.cc
     G4BaseFileManager.cc
     G4BaseNtupleManager.cc
     G4BaseRNtupleManager.cc
-    G4AnalysisUtilities.cc
     G4BinScheme.cc
     G4Fcn.cc
-    G4AnalysisMessengerHelper.cc
-    G4FileMessenger.cc
-    G4H1Messenger.cc
-    G4H2Messenger.cc
-    G4H3Messenger.cc
-    G4P1Messenger.cc
-    G4P2Messenger.cc
     G4NtupleBookingManager.cc
     G4NtupleMessenger.cc
+    G4HnInformation.cc
     G4HnManager.cc
     G4HnMessenger.cc
-    G4PlotManager.cc
-    G4PlotMessenger.cc
-    G4PlotParameters.cc
     G4VAnalysisManager.cc
     G4VAnalysisReader.cc
     G4VFileManager.cc

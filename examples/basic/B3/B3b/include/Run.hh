@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file Run.hh
+/// \file B3/B3b/include/Run.hh
 /// \brief Definition of the B3b::Run class
 
 #ifndef B3bRun_h
@@ -45,8 +45,8 @@ namespace B3b
 class Run : public G4Run
 {
   public:
-    Run();
-    ~Run() override;
+    Run() = default;
+    ~Run() override = default;
 
     void RecordEvent(const G4Event*) override;
     void Merge(const G4Run*) override;

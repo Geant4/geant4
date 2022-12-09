@@ -4,6 +4,21 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-11-09 I. Hrivnacova (OpNovice2-V11-00-06)
+- Fixed Doxygen documentation
+
+## 2022-10-26 Daren Sawkey (OpNovice2-V11-00-05)
+- New macro coated.mac, and book-keeping code, to show reflection/refraction
+  from thin film coating. Contribution of Laurie Cappellugola et al, Aix Marseille U.
+
+## 2022-10-20 Daren Sawkey (OpNovice2-V11-00-04)
+- SteppingAction: check that group velocity is correct. Trying to reproduce
+  bug 2442, 2438.
+
+## 2022-10-18 Daren Sawkey (OpNovice2-V11-00-03)
+- SteppingAction: Don't include Absorbed or Detected photons in plots for
+  forward-going particles
+
 ## 2022-04-28 Daren Sawkey (OpNovice2-V11-00-02)
 - Add local SteppingVerbose to print velocity with /tracking/verbose 1
 

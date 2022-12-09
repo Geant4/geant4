@@ -70,21 +70,8 @@ void Warn(const G4String& message,
           const std::string_view inClass,
           const std::string_view inFunction);
 
-// Utility functions for checking input parameters
-//
-G4bool CheckNbins(G4int nbins);
-G4bool CheckMinMax(G4double xmin, G4double xmax,
-                   const G4String& fcnName = "none",
-                   const G4String& binSchemeName = "linear");
-G4bool CheckEdges(const std::vector<G4double>& edges);
-G4bool CheckName(const G4String& name, const G4String& objectType);
-
 // Get unit value with added handling of "none"
 G4double GetUnitValue(const G4String& unit);
-
-// Add unit & fcn to the title
-void UpdateTitle(G4String& title,
-                 const G4String& unitName, const G4String& fcnName);
 
 // Tokenizer with taking into account composed strings within ""
 void Tokenize(const G4String& line, std::vector<G4String>& tokens);
@@ -105,15 +92,15 @@ G4String GetHnType()
   return hnTypeLong.substr(14, 2);
 }
 
-// template <typename HT>
-// G4bool IsProfile()
-// {
-//   // tools::histo::h1d etc.
-//   G4String hnTypeLong = HT::s_class();
+template <typename HT>
+G4bool IsProfile()
+{
+  // tools::histo::h1d etc.
+  G4String hnTypeLong = HT::s_class();
 
-//   // tools::histo::h1d -> h1 etc.
-//   return (hnTypeLong.substr(14, 1) == "p");
-// }
+  // tools::histo::h1d -> h1 etc.
+  return hnTypeLong[14] == 'p';
+}
 
 // String conversion
 template <typename T>
@@ -144,30 +131,42 @@ G4String GetHnFileName(
             const G4String& hnType,
             const G4String& hnName);
 
-// Compose and return the ntuple specific file name:
-// - add _nt_ntupleName suffix to the file base name
-// - add _tN suffix if called on thread worker
-// - add file extension if not present
-G4String GetNtupleFileName(
+// Update Hn file name:
+// - add _vN  suffix to the base namer if cycle > 0
+G4String GetHnFileName(
             const G4String& fileName,
             const G4String& fileType,
-            const G4String& ntupleName);
+            G4int cycle = 0);
 
 // Compose and return the ntuple specific file name:
 // - add _nt_ntupleName suffix to the file base name
+// - add _vN  suffix if cycle > 0
 // - add _tN suffix if called on thread worker
 // - add file extension if not present
 G4String GetNtupleFileName(
             const G4String& fileName,
             const G4String& fileType,
-            G4int ntupleFileNumber);
+            const G4String& ntupleName,
+            G4int cycle = 0);
+
+// Compose and return the ntuple specific file name:
+// - add _mFN suffix to the file base name where FN = ntupleFileNumber
+// - add _vN  suffix if cycle > 0
+// - add file extension if not present
+G4String GetNtupleFileName(
+            const G4String& fileName,
+            const G4String& fileType,
+            G4int ntupleFileNumber,
+            G4int cycle = 0);
 
 // Update file base name with the thread suffix:
+// - add _vN  suffix if cycle > 0
 // - add _tN suffix if called on thread worker
 // - add file extension if not present
 G4String GetTnFileName(
             const G4String& fileName,
-            const G4String& fileType);
+            const G4String& fileType,
+            G4int cycle = 0);
 
 // Generate plot file name for an output file name
 G4String GetPlotFileName(const G4String& fileName);

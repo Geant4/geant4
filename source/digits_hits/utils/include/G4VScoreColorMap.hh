@@ -37,7 +37,7 @@ class G4VScoreColorMap
 {
  public:
   G4VScoreColorMap(G4String mName);
-  virtual ~G4VScoreColorMap();
+  virtual ~G4VScoreColorMap() = default;
 
  public:
   virtual void GetMapColor(G4double val, G4double color[4]) = 0;
@@ -77,12 +77,12 @@ class G4VScoreColorMap
 
  protected:
   G4String fName;
-  G4bool ifFloat;
-  G4double fMinVal;
-  G4double fMaxVal;
-  G4VVisManager* fVisManager;
-  G4String fPSUnit;
-  G4String fPSName;
+  G4bool ifFloat = true;
+  G4double fMinVal = 0.0;
+  G4double fMaxVal = DBL_MAX;
+  G4VVisManager* fVisManager = nullptr;
+  G4String fPSUnit = "";
+  G4String fPSName = "";
 };
 
 #endif

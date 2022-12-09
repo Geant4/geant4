@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file PrimaryGeneratorAction.cc
+/// \file B4/B4c/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the B4::PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"

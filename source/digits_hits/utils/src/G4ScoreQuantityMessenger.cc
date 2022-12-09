@@ -121,6 +121,313 @@ G4ScoreQuantityMessenger::G4ScoreQuantityMessenger(G4ScoringManager* SManager)
   FilterCommands();
 }
 
+void G4ScoreQuantityMessenger::QuantityCommands()
+{
+  G4UIparameter* param;
+
+  //
+  // Quantity commands
+  quantityDir = new G4UIdirectory("/score/quantity/");
+  quantityDir->SetGuidance("Scoring quantity of the mesh.");
+  //
+  qTouchCmd = new G4UIcmdWithAString("/score/quantity/touch", this);
+  qTouchCmd->SetGuidance(
+    "Assign previously defined quantity to the current quantity.");
+  qTouchCmd->SetParameterName("qname", false);
+  //
+  qGetUnitCmd = new G4UIcmdWithoutParameter("/score/quantity/get/unit", this);
+  qGetUnitCmd->SetGuidance("Print output unit of the current quantity.");
+  //
+  qSetUnitCmd = new G4UIcmdWithAString("/score/quantity/set/unit", this);
+  qSetUnitCmd->SetGuidance("Set output unit of the current quantity.");
+  qSetUnitCmd->SetParameterName("unit", false);
+
+  // Primitive Scorers
+  qeDepCmd = new G4UIcommand("/score/quantity/energyDeposit", this);
+  qeDepCmd->SetGuidance("Energy deposit scorer.");
+  qeDepCmd->SetGuidance("[usage] /score/quantity/energyDeposit qname unit");
+  qeDepCmd->SetGuidance("  qname  :(String) scorer name");
+  qeDepCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qeDepCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultUnit("MeV");
+  qeDepCmd->SetParameter(param);
+  //
+  qCellChgCmd = new G4UIcommand("/score/quantity/cellCharge", this);
+  qCellChgCmd->SetGuidance("Cell charge scorer.");
+  qCellChgCmd->SetGuidance("[usage] /score/quantity/cellCharge qname unit");
+  qCellChgCmd->SetGuidance("  qname  :(String) scorer name");
+  qCellChgCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qCellChgCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultUnit("e+");
+  qCellChgCmd->SetParameter(param);
+  //
+  qCellFluxCmd = new G4UIcommand("/score/quantity/cellFlux", this);
+  qCellFluxCmd->SetGuidance("Cell flux scorer.");
+  qCellFluxCmd->SetGuidance("[usage] /score/quantity/cellFlux qname unit");
+  qCellFluxCmd->SetGuidance("  qname  :(String) scorer name");
+  qCellFluxCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qCellFluxCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultValue("percm2");
+  qCellFluxCmd->SetParameter(param);
+  //
+  qPassCellFluxCmd = new G4UIcommand("/score/quantity/passageCellFlux", this);
+  qPassCellFluxCmd->SetGuidance("Passage cell flux scorer");
+  qPassCellFluxCmd->SetGuidance(
+    "[usage] /score/quantity/passageCellFlux qname unit");
+  qPassCellFluxCmd->SetGuidance("  qname  :(String) scorer name");
+  qPassCellFluxCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qPassCellFluxCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultValue("percm2");
+  qPassCellFluxCmd->SetParameter(param);
+  //
+  qdoseDepCmd = new G4UIcommand("/score/quantity/doseDeposit", this);
+  qdoseDepCmd->SetGuidance("Dose deposit scorer.");
+  qdoseDepCmd->SetGuidance("[usage] /score/quantity/doseDeposit qname unit");
+  qdoseDepCmd->SetGuidance("  qname  :(String) scorer name");
+  qdoseDepCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qdoseDepCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultUnit("Gy");
+  qdoseDepCmd->SetParameter(param);
+  //
+  qnOfStepCmd = new G4UIcommand("/score/quantity/nOfStep", this);
+  qnOfStepCmd->SetGuidance("Number of step scorer.");
+  qnOfStepCmd->SetGuidance("[usage] /score/quantity/nOfStep qname");
+  qnOfStepCmd->SetGuidance("[usage] /score/quantity/nOfStep qname  bflag");
+  qnOfStepCmd->SetGuidance("  qname  :(String) scorer name");
+  qnOfStepCmd->SetGuidance("  bflag  :(Bool) Skip zero step ");
+  qnOfStepCmd->SetGuidance("          at geometry boundary if true");
+  param = new G4UIparameter("qname", 's', false);
+  qnOfStepCmd->SetParameter(param);
+  param = new G4UIparameter("bflag", 'b', true);
+  param->SetDefaultValue("false");
+  qnOfStepCmd->SetParameter(param);
+  //
+  qnOfSecondaryCmd = new G4UIcommand("/score/quantity/nOfSecondary", this);
+  qnOfSecondaryCmd->SetGuidance("Number of secondary scorer.");
+  qnOfSecondaryCmd->SetGuidance("[usage] /score/quantity/nOfSecondary qname");
+  qnOfSecondaryCmd->SetGuidance("  qname  :(String) scorer name");
+  param = new G4UIparameter("qname", 's', false);
+  qnOfSecondaryCmd->SetParameter(param);
+  //
+  qTrackLengthCmd = new G4UIcommand("/score/quantity/trackLength", this);
+  qTrackLengthCmd->SetGuidance("Track length scorer.");
+  qTrackLengthCmd->SetGuidance(
+    "[usage] /score/quantity/trackLength qname wflag kflag vflag unit");
+  qTrackLengthCmd->SetGuidance("  qname  :(String) scorer name");
+  qTrackLengthCmd->SetGuidance("  wflag  :(Bool) weighted");
+  qTrackLengthCmd->SetGuidance("  kflag  :(Bool) multiply kinetic energy");
+  qTrackLengthCmd->SetGuidance("  vflag  :(Bool) divide by velocity");
+  qTrackLengthCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qTrackLengthCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("false");
+  qTrackLengthCmd->SetParameter(param);
+  param = new G4UIparameter("kflag", 'b', true);
+  param->SetDefaultValue("false");
+  qTrackLengthCmd->SetParameter(param);
+  param = new G4UIparameter("vflag", 'b', true);
+  param->SetDefaultValue("false");
+  qTrackLengthCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultValue("mm");
+  qTrackLengthCmd->SetParameter(param);
+  //
+  qPassCellCurrCmd =
+    new G4UIcommand("/score/quantity/passageCellCurrent", this);
+  qPassCellCurrCmd->SetGuidance("Passage cell current scorer.");
+  qPassCellCurrCmd->SetGuidance(
+    "[usage] /score/quantity/passageCellCurrent qname wflag");
+  qPassCellCurrCmd->SetGuidance("  qname  :(String) scorer name");
+  qPassCellCurrCmd->SetGuidance("  wflag  :(Bool) weighted");
+  param = new G4UIparameter("qname", 's', false);
+  qPassCellCurrCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("true");
+  qPassCellCurrCmd->SetParameter(param);
+  //
+  qPassTrackLengthCmd =
+    new G4UIcommand("/score/quantity/passageTrackLength", this);
+  qPassTrackLengthCmd->SetGuidance("Passage track length scorer.");
+  qPassTrackLengthCmd->SetGuidance(
+    "[usage] /score/quantity/passageTrackLength qname wflag unit");
+  qPassTrackLengthCmd->SetGuidance("  qname  :(String) scorer name");
+  qPassTrackLengthCmd->SetGuidance("  wflag  :(Bool) weighted");
+  qPassTrackLengthCmd->SetGuidance("  unit   :(Bool) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qPassTrackLengthCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("true");
+  qPassTrackLengthCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultUnit("mm");
+  qPassTrackLengthCmd->SetParameter(param);
+  //
+  qFlatSurfCurrCmd =
+    new G4UIcommand("/score/quantity/flatSurfaceCurrent", this);
+  qFlatSurfCurrCmd->SetGuidance("Flat surface current Scorer.");
+  qFlatSurfCurrCmd->SetGuidance(
+    "[usage] /score/quantity/flatSurfaceCurrent qname dflag wflag aflag unit");
+  qFlatSurfCurrCmd->SetGuidance("  qname  :(String) scorer name");
+  qFlatSurfCurrCmd->SetGuidance("  dflag  :(Int) direction flag");
+  qFlatSurfCurrCmd->SetGuidance("         : 0 = Both In and Out");
+  qFlatSurfCurrCmd->SetGuidance("         : 1 = In only");
+  qFlatSurfCurrCmd->SetGuidance("         : 2 = Out only");
+  qFlatSurfCurrCmd->SetGuidance("  wflag  :(Bool) weighted");
+  qFlatSurfCurrCmd->SetGuidance("  aflag  :(Bool) divide by area");
+  qFlatSurfCurrCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qFlatSurfCurrCmd->SetParameter(param);
+  param = new G4UIparameter("dflag", 'i', true);
+  param->SetDefaultValue("0");
+  qFlatSurfCurrCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("true");
+  qFlatSurfCurrCmd->SetParameter(param);
+  param = new G4UIparameter("aflag", 'b', true);
+  param->SetDefaultValue("true");
+  qFlatSurfCurrCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultValue("percm2");
+  qFlatSurfCurrCmd->SetParameter(param);
+  //
+  qFlatSurfFluxCmd = new G4UIcommand("/score/quantity/flatSurfaceFlux", this);
+  qFlatSurfFluxCmd->SetGuidance("Flat surface flux scorer.");
+  qFlatSurfFluxCmd->SetGuidance(
+    "[usage] /score/quantity/flatSurfaceFlux qname dflag unit");
+  qFlatSurfFluxCmd->SetGuidance("  qname  :(String) scorer name");
+  qFlatSurfFluxCmd->SetGuidance("  dflag  :(Int) direction flag");
+  qFlatSurfFluxCmd->SetGuidance("         : 0 = Both In and Out");
+  qFlatSurfFluxCmd->SetGuidance("         : 1 = In only");
+  qFlatSurfFluxCmd->SetGuidance("         : 2 = Out only");
+  qFlatSurfFluxCmd->SetGuidance("  wflag  :(Bool) weighted");
+  qFlatSurfFluxCmd->SetGuidance("  aflag  :(Bool) divide by area");
+  qFlatSurfFluxCmd->SetGuidance("  unit   :(String) unit");
+  param = new G4UIparameter("qname", 's', false);
+  qFlatSurfFluxCmd->SetParameter(param);
+  param = new G4UIparameter("dflag", 'i', true);
+  param->SetDefaultValue("0");
+  qFlatSurfFluxCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("true");
+  qFlatSurfFluxCmd->SetParameter(param);
+  param = new G4UIparameter("aflag", 'b', true);
+  param->SetDefaultValue("true");
+  qFlatSurfFluxCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultValue("percm2");
+  qFlatSurfFluxCmd->SetParameter(param);
+  //
+
+  qVolFluxCmd = new G4UIcommand("/score/quantity/volumeFlux", this);
+  qVolFluxCmd->SetGuidance("Volume flux scorer.");
+  qVolFluxCmd->SetGuidance(
+    "This scorer scores the number of particles getting into the volume "
+    "without normalized by the surface area.");
+  qVolFluxCmd->SetGuidance(
+    "[usage] /score/quantity/volumeFlux qname divcos dflag");
+  qVolFluxCmd->SetGuidance("  qname  :(String) scorer name");
+  qVolFluxCmd->SetGuidance("  divcos :(Bool) divide by cos(theta), where theta "
+                           "is the incident angle (default : false)");
+  qVolFluxCmd->SetGuidance(
+    "  dflag  :(Int) direction, 1 : inward (default), 2 : outward");
+  param = new G4UIparameter("qname", 's', false);
+  qVolFluxCmd->SetParameter(param);
+  param = new G4UIparameter("divcos", 'b', true);
+  param->SetDefaultValue(0);
+  qVolFluxCmd->SetParameter(param);
+  param = new G4UIparameter("dflag", 'i', true);
+  param->SetParameterRange("dflag>=1 && dflag<=2");
+  param->SetDefaultValue(1);
+  qVolFluxCmd->SetParameter(param);
+
+  qNofCollisionCmd = new G4UIcommand("/score/quantity/nOfCollision", this);
+  qNofCollisionCmd->SetGuidance("Number of collision scorer.");
+  qNofCollisionCmd->SetGuidance(
+    "[usage] /score/quantity/nOfCollision qname wflag");
+  qNofCollisionCmd->SetGuidance("  qname  :(String) scorer name");
+  param = new G4UIparameter("qname", 's', false);
+  qNofCollisionCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("false");
+  qNofCollisionCmd->SetParameter(param);
+  //
+  qPopulationCmd = new G4UIcommand("/score/quantity/population", this);
+  qPopulationCmd->SetGuidance("Population scorer.");
+  qPopulationCmd->SetGuidance("[usage] /score/quantity/population qname wflag");
+  qPopulationCmd->SetGuidance("  qname  :(String) scorer name");
+  qPopulationCmd->SetGuidance("  wflag  :(Bool) weighted");
+  param = new G4UIparameter("qname", 's', false);
+  qPopulationCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("false");
+  qPopulationCmd->SetParameter(param);
+
+  //
+  qTrackCountCmd = new G4UIcommand("/score/quantity/nOfTrack", this);
+  qTrackCountCmd->SetGuidance("Number of track scorer.");
+  qTrackCountCmd->SetGuidance(
+    "[usage] /score/quantity/nOfTrack qname dflag wflag");
+  qTrackCountCmd->SetGuidance("  qname  :(String) scorer name");
+  qTrackCountCmd->SetGuidance("  dflag  :(Int) direction");
+  qTrackCountCmd->SetGuidance("         : 0 = Both In and Out");
+  qTrackCountCmd->SetGuidance("         : 1 = In only");
+  qTrackCountCmd->SetGuidance("         : 2 = Out only");
+  qTrackCountCmd->SetGuidance("  wflag  :(Bool) weighted");
+  param = new G4UIparameter("qname", 's', false);
+  qTrackCountCmd->SetParameter(param);
+  param = new G4UIparameter("dflag", 'i', true);
+  param->SetDefaultValue("0");
+  qTrackCountCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("false");
+  qTrackCountCmd->SetParameter(param);
+
+  //
+  qTerminationCmd = new G4UIcommand("/score/quantity/nOfTerminatedTrack", this);
+  qTerminationCmd->SetGuidance("Number of terminated tracks scorer.");
+  qTerminationCmd->SetGuidance(
+    "[usage] /score/quantity/nOfTerminatedTrack qname wflag");
+  qTerminationCmd->SetGuidance("  qname  :(String) scorer name");
+  qTerminationCmd->SetGuidance("  wflag  :(Bool) weighted");
+  param = new G4UIparameter("qname", 's', false);
+  qTerminationCmd->SetParameter(param);
+  param = new G4UIparameter("wflag", 'b', true);
+  param->SetDefaultValue("false");
+  qTerminationCmd->SetParameter(param);
+
+  //
+  qMinKinEAtGeneCmd =
+    new G4UIcommand("/score/quantity/minKinEAtGeneration", this);
+  qMinKinEAtGeneCmd->SetGuidance("Min Kinetic Energy at Generation");
+  qMinKinEAtGeneCmd->SetGuidance(
+    "[usage] /score/quantity/minKinEAtGeneration qname unit");
+  qMinKinEAtGeneCmd->SetGuidance("  qname  :(String) scorer name");
+  qMinKinEAtGeneCmd->SetGuidance("  unit   :(String) unit name");
+  param = new G4UIparameter("qname", 's', false);
+  qMinKinEAtGeneCmd->SetParameter(param);
+  param = new G4UIparameter("unit", 's', true);
+  param->SetDefaultUnit("MeV");
+  qMinKinEAtGeneCmd->SetParameter(param);
+  //
+  qStepCheckerCmd = new G4UIcommand("/score/quantity/stepChecker", this);
+  qStepCheckerCmd->SetGuidance("Display a comment when this PS is invoked");
+  qStepCheckerCmd->SetGuidance("[usage] /score/quantity/stepChecker qname");
+  qStepCheckerCmd->SetGuidance("  qname  :(String) scorer name");
+  param = new G4UIparameter("qname", 's', false);
+  qStepCheckerCmd->SetParameter(param);
+}
+
 void G4ScoreQuantityMessenger::FilterCommands()
 {
   G4UIparameter* param;
@@ -226,10 +533,7 @@ G4ScoreQuantityMessenger::~G4ScoreQuantityMessenger()
   delete qFlatSurfCurrCmd;
   delete qFlatSurfFluxCmd;
   delete qVolFluxCmd;
-  //    delete          qSphereSurfCurrCmd;
-  //    delete          qSphereSurfFluxCmd;
-  //    delete          qCylSurfCurrCmd;
-  //    delete          qCylSurfFluxCmd;
+
   delete qNofCollisionCmd;
   delete qPopulationCmd;
   delete qTrackCountCmd;
@@ -257,7 +561,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
   // Get Current Mesh
   //
   G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-  if(!mesh)
+  if(mesh == nullptr)
   {
     ed << "ERROR : No mesh is currently open. Open/create a mesh first. "
           "Command ignored.";
@@ -311,7 +615,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
       }
       else if(shape == MeshShape::cylinder)
       {
-        G4PSCellFluxForCylinder3D* pps =
+        auto  pps =
           new G4PSCellFluxForCylinder3D(token[0]);
         pps->SetCylinderSize(mesh->GetSize(),mesh->GetStartAngle(),mesh->GetAngleSpan());   
         G4int nSeg[3];
@@ -345,7 +649,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
       }
       else if(shape == MeshShape::cylinder)
       {
-        G4PSPassageCellFluxForCylinder3D* pps =
+        auto  pps =
           new G4PSPassageCellFluxForCylinder3D(token[0]);
         pps->SetCylinderSize(mesh->GetSize(),mesh->GetStartAngle(),mesh->GetAngleSpan());   
         G4int nSeg[3];
@@ -396,7 +700,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
       }
       else if(shape == MeshShape::cylinder)
       {
-        G4PSDoseDepositForCylinder3D* pps =
+        auto  pps =
           new G4PSDoseDepositForCylinder3D(token[0]);
         pps->SetUnit(token[1]);
         pps->SetCylinderSize(mesh->GetSize(),mesh->GetStartAngle(),mesh->GetAngleSpan());   
@@ -569,63 +873,9 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
       {
         ps = new G4PSVolumeFlux3D(token[0], StoI(token[2]));
       }
-      ps->SetDivCos(StoI(token[1]));
+      ps->SetDivCos(StoI(token[1]) != 0);
       mesh->SetPrimitiveScorer(ps);
     }
-
-    //    } else if(command== qSphereSurfCurrCmd){
-    //        if( CheckMeshPS(mesh, token[0],command )) {
-    //            G4PSSphereSurfaceCurrent3D* ps =
-    //              new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
-    //            ps->Weighted(StoB(token[2]));
-    //            ps->DivideByArea(StoB(token[3]));
-    //            if ( StoB(token[3]) ){
-    //              ps->SetUnit(token[4]);
-    //            }else{
-    //              ps->SetUnit("");
-    //            }
-    //            mesh->SetPrimitiveScorer(ps);
-    //        }
-    //   } else if(command== qSphereSurfFluxCmd){
-    //        if( CheckMeshPS(mesh,token[0],command)) {
-    //            G4PSSphereSurfaceFlux3D* ps = new
-    //            G4PSSphereSurfaceFlux3D(token[0], StoI(token[1]));
-    //            ps->Weighted(StoB(token[2]));
-    //            ps->DivideByArea(StoB(token[3]));
-    //            if ( StoB(token[3]) ){
-    //              ps->SetUnit(token[4]);
-    //            }else{
-    //              ps->SetUnit("");
-    //            }
-    //            mesh->SetPrimitiveScorer(ps);
-    //        }
-    //   } else if(command== qCylSurfCurrCmd){
-    //        if( CheckMeshPS(mesh, token[0],command ) ) {
-    //            G4PSCylinderSurfaceCurrent3D* ps =
-    //              new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
-    //            ps->Weighted(StoB(token[2]));
-    //            ps->DivideByArea(StoB(token[3]));
-    //            if ( StoB(token[3]) ){
-    //              ps->SetUnit(token[4]);
-    //            }else{
-    //              ps->SetUnit("");
-    //            }
-    //            ps->SetUnit(token[4]);
-    //            mesh->SetPrimitiveScorer(ps);
-    //        }
-    //   } else if(command== qCylSurfFluxCmd){
-    //        if( CheckMeshPS(mesh, token[0],command ) {
-    //            G4PSCylinerSurfaceFlux3D* ps =new
-    //            G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1]));
-    //            ps->Weighted(StoB(token[2]));
-    //            ps->DivideByArea(StoB(token[3]));
-    //            if ( StoB(token[3]) ){
-    //              ps->SetUnit(token[4]);
-    //            }else{
-    //              ps->SetUnit("");
-    //            }
-    //            mesh->SetPrimitiveScorer(ps);
-    //        }
   }
   else if(command == qNofCollisionCmd)
   {
@@ -848,7 +1098,7 @@ void G4ScoreQuantityMessenger::FParticleWithEnergyCommand(G4VScoringMesh* mesh,
   G4double elow    = StoD(token[1]);
   G4double ehigh   = StoD(token[2]);
   G4double unitVal = G4UnitDefinition::GetValueOf(token[3]);
-  G4SDParticleWithEnergyFilter* filter =
+  auto  filter =
     new G4SDParticleWithEnergyFilter(name, elow * unitVal, ehigh * unitVal);
   for(G4int i = 4; i < (G4int) token.size(); i++)
   {
@@ -865,13 +1115,11 @@ G4bool G4ScoreQuantityMessenger::CheckMeshPS(G4VScoringMesh* mesh,
   {
     return true;
   }
-  else
-  {
-    G4ExceptionDescription ed;
-    ed << "WARNING[" << qTouchCmd->GetCommandPath() << "] : Quantity name, \""
-       << psname << "\", is already existing.";
-    command->CommandFailed(ed);
-    mesh->SetNullToCurrentPrimitiveScorer();
-    return false;
-  }
+  
+  G4ExceptionDescription ed;
+  ed << "WARNING[" << qTouchCmd->GetCommandPath() << "] : Quantity name, \""
+     << psname << "\", is already existing.";
+  command->CommandFailed(ed);
+  mesh->SetNullToCurrentPrimitiveScorer();
+  return false;
 }

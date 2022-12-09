@@ -1,0 +1,39 @@
+#
+# Macro file for "TestEm1.cc"
+# 
+# compute csda range of primary particle.
+#
+/control/verbose 1
+/run/verbose 1
+#
+/testem/det/setMat Water
+#
+/testem/phys/addPhysics  local
+###/testem/phys/addPhysics  emstandard_opt4
+#
+/process/em/verbose 0
+/run/initialize
+#
+# prevent any secondary production
+/run/setCut 1 km
+#
+# (no) step limitation from eLoss.
+# to test StepFunction, play with this command
+/process/eLoss/StepFunctionIons 1 1 mm
+#
+# eliminate straggling
+/process/eLoss/fluct false
+/process/inactivate msc
+#
+/process/em/printParameters
+#
+/testem/gun/setDefault
+/gun/particle ion
+/gun/ion 6 12
+/gun/energy 500 MeV
+#
+/tracking/verbose 2
+/run/beamOn 2
+/tracking/verbose 0
+#	 
+/run/beamOn 10000

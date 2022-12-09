@@ -1,9 +1,49 @@
 # Category hadr-deex History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-26 Gabriele Cosmo (hadr-deex-V11-00-21)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-24 Alberto Ribon (hadr-deex-V11-00-20)
+- G4ExcitationHandler : added protections that prevents crashes and
+  large energy non-conservations in the case of hypernuclei and, even more,
+  for anti-hypernuclei projectiles. 
+  Note: there are still cases of off-shell masses and few GeV energy
+        non-conservations that need further investigations.
+
+## 2022-11-21 Vladimir Ivanchenko (hadr-deex-V11-00-19)
+- G4ExcitationHandler - added extra sanity check for negative value
+    of lambda inside a fragment
+
+## 2022-11-11 Vladimir Ivanchenko (hadr-deex-V11-00-18)
+- G4FermiCoulombBarrier - added Coulomb barrier accourdint to
+    prescription
+- G4FermiDecayProbability, G4FermiFragment - use this new class
+- G4VCoulombBarrier, G4CoulombBarrier, G4GEMCoulombBarrier - cleanup
+
+## 2022-11-07 Vladimir Ivanchenko (hadr-deex-V11-00-17)
+- G4ExcitationHandler - introduced de-excitation of fragments with 
+    lambda inside
+
+## 2022-11-03 Vladimir Ivanchenko (hadr-deex-V11-00-16)
+- G4AtomicTransition - extended upper limit of atomic de-excitation 
+  from Z=100 to Z=104 by R. Chakma
+
+## 2022-09-05 Ben Morgan (hadr-deex-V11-00-15)
+- Update dependencies to address warnings from consistency check
+
+## 2022-07-24 Vladimir Ivanchenko (hadr-deex-V11-00-14)
+- G4PhotonEvaporation - improved use of mutex
+- G4StatMFChannel - implement fixes reported by Roman Nepeyvoda
+- G4StatMF - clean-up
+
+## 2022-06-16 Vladimir Ivanchenko (hadr-deex-V11-00-13)
+- G4PhotonEvaporation - fixed Coverity warning
 
 ## 2022-06-16 Vladimir Ivanchenko (hadr-deex-V11-00-12)
 - G4PhotonEvaporation - simplified handling of floating levels

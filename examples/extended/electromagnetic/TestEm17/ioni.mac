@@ -8,7 +8,7 @@
 /testem/det/setMat Iron
 /testem/det/setSize 1 m
 #
-/testem/phys/addPhysics emstandard_opt0
+/testem/phys/addPhysics local
 #
 /run/setCut 1 mm
 #
@@ -16,6 +16,7 @@
 #
 /process/inactivate muPairProd
 /process/inactivate muBrems
+/process/inactivate muToMuonPairProd
 #
 /gun/particle mu+
 /gun/energy 10 TeV

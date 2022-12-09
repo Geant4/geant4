@@ -39,6 +39,7 @@
 #include "G4UIExecutive.hh"
 
 #include "DetectorMessenger.hh"
+#include "AnalysisMessenger.hh"
 
 int main(int argc, char** argv)
 {
@@ -46,14 +47,14 @@ int main(int argc, char** argv)
   auto* pRunManager = G4RunManagerFactory::CreateRunManager();
   G4int nThreads = 4;
   pRunManager->SetNumberOfThreads(nThreads);
-
-  AnalysisManager* analysis = new AnalysisManager();
- 
+  
+  AnalysisMessenger* anMess = new AnalysisMessenger();
+  AnalysisManager* analysis = new AnalysisManager(anMess);
+  
   // Construct geometry
   
-  G4String defaultDetector = "SiliconBridge";
-  
-  DetectorConstruction* detector = new DetectorConstruction(analysis, defaultDetector);  
+  DetectorMessenger* detMess = new DetectorMessenger(analysis);
+  DetectorConstruction* detector = new DetectorConstruction(analysis, detMess);  
     
   pRunManager -> SetUserInitialization(detector);
 
@@ -63,12 +64,8 @@ int main(int argc, char** argv)
 
    // User action initialization  
 
-  ActionInitialization* actions = new ActionInitialization(analysis);
+  ActionInitialization* actions = new ActionInitialization(analysis, detMess);
   pRunManager->SetUserInitialization(actions);
-
-   // Geometry messenger
-
-  DetectorMessenger* detMess = new DetectorMessenger(analysis);
 
   G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
@@ -99,6 +96,7 @@ int main(int argc, char** argv)
   delete analysis; 
   delete pRunManager;
   delete detMess;
+  delete anMess;
   
   return 0;
 }

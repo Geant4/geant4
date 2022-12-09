@@ -27,8 +27,11 @@
 // Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
 
 #include "G4VNtupleFileManager.hh"
+
 #include "G4AnalysisUtilities.hh"
 #include "globals.hh"
+
+#include <utility>
 
 using namespace G4Analysis;
 
@@ -46,10 +49,9 @@ void NtupleMergingWarning(std::string_view className,
 }
 
 //_____________________________________________________________________________
-G4VNtupleFileManager::G4VNtupleFileManager(const G4AnalysisManagerState& state,
-  const G4String& fileType)
- : fState(state),
-   fFileType(fileType)
+G4VNtupleFileManager::G4VNtupleFileManager(const G4AnalysisManagerState& state, G4String fileType)
+  : fState(state),
+    fFileType(std::move(fileType))
 {}
 
 ///_____________________________________________________________________________

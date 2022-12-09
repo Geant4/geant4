@@ -43,7 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4String DicomNestedPhantomParameterisation::defaultColorFile =
+G4String DicomNestedPhantomParameterisation::fDefaultColorFile =
         DicomHandler::GetDicomDataPath() + "/ColourMap.dat";
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,7 +90,7 @@ void DicomNestedPhantomParameterisation::ReadColourData(G4String colourFile)
         G4VisAttributes* visAtt = new G4VisAttributes( colour );
         visAtt->SetVisibility(true);
         fColours[mateName] = visAtt;
-        mColours[ii] = new G4VisAttributes(*visAtt);
+        fColours2[ii] = new G4VisAttributes(*visAtt);
     }
 }
 
@@ -160,14 +160,15 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
                 if(n++ < 100)
                     G4cout << "Unknown material name " << mateName
                            << " for index " << matIndex << G4endl;
-                if(mColours.find(matIndex) != mColours.end())
+                if(fColours2.find(matIndex) != fColours2.end())
                     physVol->GetLogicalVolume()->SetVisAttributes(
-                        mColours.find(matIndex)->second);
+                        fColours2.find(matIndex)->second);
                 else
                     physVol->GetLogicalVolume()->SetVisAttributes(
                         fColours.begin()->second);
             }
         }
+        physVol -> GetLogicalVolume()->SetMaterial(mate);
     }
 
     return mate;

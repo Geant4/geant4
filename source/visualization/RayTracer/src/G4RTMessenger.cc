@@ -44,6 +44,8 @@
 #include "G4RayTracerViewer.hh"
 #include "G4TheRayTracer.hh"
 
+#define G4warn G4cout
+
 G4RTMessenger* G4RTMessenger::fpInstance = 0;
 
 G4RTMessenger* G4RTMessenger::GetInstance
@@ -193,7 +195,7 @@ void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     if (pViewer) {
       theTracer = pViewer->GetTracer();
     } else {
-      G4cout <<
+      G4warn <<
 	"G4RTMessenger::SetNewValue: Current viewer is not of type RayTracer."
 	"\n  Use \"/vis/viewer/select\" or \"/vis/open\"."
 	     << G4endl;
@@ -201,7 +203,7 @@ void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
 
   if (theTracer == theDefaultTracer) {
-    G4cout <<
+    G4warn <<
 "G4RTMessenger::SetNewValue: No valid current viewer. Using default RayTracer."
 	   << G4endl;
   }
@@ -226,7 +228,7 @@ void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { theTracer->SetDistortion(distCmd->GetNewBoolValue(newValue)); }
   else if(command==bkgColCmd)
   {
-	G4cout << "WARNING: /vis/rayTracer/backgroundColour has been deprecated."
+	G4warn << "WARNING: /vis/rayTracer/backgroundColour has been deprecated."
 	"\n  Use \"/vis/viewer/set/background\" instead."
 		<< G4endl;
   }

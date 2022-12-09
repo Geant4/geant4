@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.cc
+/// \file B2/B2b/src/RunAction.cc
 /// \brief Implementation of the B2::RunAction class
 
 #include "RunAction.hh"
@@ -42,11 +42,6 @@ RunAction::RunAction()
   // set printing event number per each 100 events
   G4RunManager::GetRunManager()->SetPrintProgress(1000);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

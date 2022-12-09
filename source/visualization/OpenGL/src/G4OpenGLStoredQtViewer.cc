@@ -141,7 +141,8 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
-      (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()))
+      (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()) ||
+      (lastVP.GetSpecialMeshRenderingOption() != fVP.GetSpecialMeshRenderingOption()))
     return true;
 
   // Don't check VisAttributesModifiers if this comparison has been
@@ -170,6 +171,7 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   /**************************************************************
    If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
+   if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
    for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)
@@ -196,7 +198,7 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 
 G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
 {
-  return isTouchableVisible(POListIndex);
+  return isTouchableVisible((int)POListIndex);
 }
 
 G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
@@ -451,5 +453,5 @@ void G4OpenGLStoredQtViewer::ShowView (
 void G4OpenGLStoredQtViewer::DisplayTimePOColourModification (
 G4Colour& c,
 size_t poIndex) {
-  c = getColorForPoIndex(poIndex);
+  c = getColorForPoIndex((int)poIndex);
 }

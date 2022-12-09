@@ -39,14 +39,9 @@
 
 G4PSPopulation::G4PSPopulation(G4String name, G4int depth)
   : G4VPrimitiveScorer(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-  , weighted(false)
 {
   SetUnit("");
 }
-
-G4PSPopulation::~G4PSPopulation() { ; }
 
 G4bool G4PSPopulation::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -60,7 +55,7 @@ G4bool G4PSPopulation::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     EvtMap->add(index, val);
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSPopulation::Initialize(G4HCofThisEvent* HCE)
@@ -81,25 +76,22 @@ void G4PSPopulation::clear()
   fCellTrackLogger.clear();
 }
 
-void G4PSPopulation::DrawAll() { ; }
-
 void G4PSPopulation::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, population] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  population: " << *(itr->second) / GetUnitValue() << " [tracks]"
+    G4cout << "  copy no.: " << copy
+           << "  population: " << *(population) / GetUnitValue() << " [tracks]"
            << G4endl;
   }
 }
 
 void G4PSPopulation::SetUnit(const G4String& unit)
 {
-  if(unit == "")
+  if(unit.empty())
   {
     unitName  = unit;
     unitValue = 1.0;

@@ -48,26 +48,15 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
-G4MIRDMaleGenitalia::G4MIRDMaleGenitalia()
-{
-}
-
-G4MIRDMaleGenitalia::~G4MIRDMaleGenitalia()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDMaleGenitalia::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 						  const G4String& colourName, G4bool wireFrame, G4bool)
 { 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
-
   G4double pDz=2.4*cm;
   G4double pTheta=0*degree;
   G4double pPhi=0*degree;
@@ -80,12 +69,11 @@ G4VPhysicalVolume* G4MIRDMaleGenitalia::Construct(const G4String& volumeName,G4V
   G4double pDx4=10*cm;
   G4double pAlp2=0*degree;
 
-  G4Trap* genitaliaTrap= new G4Trap("GenitaliaTrap", 
+  auto* genitaliaTrap= new G4Trap("GenitaliaTrap", 
 				    pDz,pTheta,pPhi,pDy1,
 				    pDx1,pDx2,pAlp1,pDy2,
 				    pDx3,pDx4,pAlp2);
  
-
   G4double rmin1 = 0.* cm;
   G4double rmin2 = 0.* cm;
   G4double dz= 5 * cm; 
@@ -94,34 +82,33 @@ G4VPhysicalVolume* G4MIRDMaleGenitalia::Construct(const G4String& volumeName,G4V
   G4double startphi= 0.* degree;
   G4double deltaphi= 360. * degree;
 
-  G4Cons* genitaliaLegL = new G4Cons("GenitaliaLegL",  
+  auto* genitaliaLegL = new G4Cons("GenitaliaLegL",  
 				     rmin1, rmax1, 
 				     rmin2, rmax2, dz/2., 
 				     startphi, deltaphi);
 
-  G4Cons* genitaliaLegR = new G4Cons("GenitaliaLegR",  
+  auto* genitaliaLegR = new G4Cons("GenitaliaLegR",  
 				     rmin1, rmax1, 
 				     rmin2, rmax2, dz/2., 
 				     startphi, deltaphi);
  
-  G4UnionSolid* genitaliaLegs = new G4UnionSolid("GenitaliaLegs",genitaliaLegL,genitaliaLegR,
-						 0,
-						 G4ThreeVector(20.* cm, 0.*cm,0* cm) );
+  auto* genitaliaLegs = new G4UnionSolid("GenitaliaLegs",genitaliaLegL,genitaliaLegR,
+					  nullptr,
+					  G4ThreeVector(20.* cm, 0.*cm,0* cm) );
 
 
-
-  G4SubtractionSolid* MaleGenitalia = new G4SubtractionSolid("MaleGenitalia",genitaliaTrap,genitaliaLegs,
-							     0,//
+  auto* MaleGenitalia = new G4SubtractionSolid("MaleGenitalia",genitaliaTrap,genitaliaLegs,
+							     nullptr,//
 							     G4ThreeVector(-10.* cm, -5.*cm,0* cm) );
  
  
-  G4LogicalVolume* logicMaleGenitalia = new G4LogicalVolume(MaleGenitalia,
+  auto* logicMaleGenitalia = new G4LogicalVolume(MaleGenitalia,
 							    soft,
 							    "logical" + volumeName,
-							    0, 0, 0);
+							    nullptr, nullptr, nullptr);
  
   // Define rotation and position here!
-  G4VPhysicalVolume* physMaleGenitalia = new G4PVPlacement(0,
+  G4VPhysicalVolume* physMaleGenitalia = new G4PVPlacement(nullptr,
 							   G4ThreeVector(0*cm,5.*cm, -2.4*cm),
 							   "physicalMaleGenitalia",
 							   logicMaleGenitalia,
@@ -131,11 +118,11 @@ G4VPhysicalVolume* G4MIRDMaleGenitalia::Construct(const G4String& volumeName,G4V
  
   // Visualization Attributes
   //G4VisAttributes* MaleGenitaliaVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   delete colourPointer;
  
-  G4VisAttributes* MaleGenitaliaVisAtt = new G4VisAttributes(colour);
+  auto* MaleGenitaliaVisAtt = new G4VisAttributes(colour);
   MaleGenitaliaVisAtt->SetForceSolid(wireFrame);
   logicMaleGenitalia->SetVisAttributes(MaleGenitaliaVisAtt);
  

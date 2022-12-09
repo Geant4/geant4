@@ -1,8 +1,33 @@
 # Category visQt3D History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-25 Gabriele Cosmo (visQt3D-V11-00-12)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-06 John Allison (visQt3D-V11-00-11)
+- Eliminate G4cerr and introduce G4warn.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where it is clearly
+    an error report or a warning.
+
+## 2022-10-28 John Allison (visQt3D-V11-00-10)
+- Request kernel visit when cutaway mode changes:
+  - G4Qt3DViewer.cc
+
+## 2022-09-14 John Allison (visQt3D-V11-00-09)
+- G4Qt3DViewer.cc:
+  - Add check on special mesh rendering option in CompareForKernelVisit.
+
+## 2022-09-03 Ben Morgan (visQt3D-V11-00-08)
+- Remove unused header from G4heprandom to resolve consistency test
 
 ## 2022-04-06 John Allison (visQt3D-V11-00-07)
 - Fix compiler warnings:

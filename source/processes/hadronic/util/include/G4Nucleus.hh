@@ -100,7 +100,7 @@ class G4Nucleus
     { return theA; }   
     
     inline G4int GetN_asInt() const
-    { return theA-theZ; }   
+    { return theA-theZ-theL; }   
     
     inline G4int GetZ_asInt() const
     { return theZ; }   

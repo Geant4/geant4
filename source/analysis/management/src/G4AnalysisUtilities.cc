@@ -42,8 +42,8 @@ namespace {
 G4bool GetToken(const G4String& line, G4String& token,
                 std::string::size_type begIdx, std::string::size_type& endIdx)
 {
-  while ( line[begIdx] == ' ') ++begIdx; // Loop checking, 23.06.2015, I. Hrivnacova
-  if ( line[begIdx] == '"' ) {
+  while ( line[(G4int)begIdx] == ' ') ++begIdx; // Loop checking, 23.06.2015, I. Hrivnacova
+  if ( line[(G4int)begIdx] == '"' ) {
     endIdx = line.find('"', begIdx+1);
     if ( endIdx == std::string::npos ) endIdx = line.length();
     token = line.substr(begIdx+1, (endIdx-1)-begIdx);
@@ -72,72 +72,6 @@ void Warn(const G4String& message,
 }
 
 //_____________________________________________________________________________
-G4bool CheckNbins(G4int nbins)
-{
-  if ( nbins <= 0 ) {
-    Warn("Illegal value of number of bins: nbins <= 0",
-      kNamespaceName, "CheckNbins");
-    return false;
-  }
-  else
-    return true;
-}
-
-
-//_____________________________________________________________________________
-G4bool CheckMinMax(G4double xmin, G4double xmax,
-                   const G4String& fcnName, const G4String& binSchemeName)
-{
-  auto result = true;
-
-  if ( xmax <= xmin ) {
-    Warn("Illegal value of number of (xmin >= xmax)",
-      kNamespaceName, "CheckMinMax");
-    result = false;
-  }
-
-  if ( ( fcnName != "none" ) && ( binSchemeName != "linear" ) ) {
-    Warn("Combining Function and Binning scheme is not supported.",
-      kNamespaceName, "CheckMinMax");
-    result = false;
-  }
-
-  if ( ( GetBinScheme(binSchemeName) == G4BinScheme::kLog ||
-         fcnName == "log" || fcnName == "log10" ) && ( xmin == 0 ) ) {
-    Warn("Illegal value of (xmin = 0) with logarithmic function or binning",
-      kNamespaceName, "CheckMinMax");
-    result = false;
-  }
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool CheckEdges(const std::vector<G4double>& edges)
-{
-  if ( edges.size() <= 1 ) {
-    Warn("Illegal edges vector (size <= 1)",
-      kNamespaceName, "CheckEdges");
-    return false;
-  }
-  else
-    return true;
-
-}
-
-//_____________________________________________________________________________
-G4bool CheckName(const G4String& name, const G4String& objectType)
-{
-  if ( ! name.size() ) {
-    Warn("Empty " + objectType + " name is not allowed.\n" +
-         objectType + " was not created.", kNamespaceName, "CheckEdges");
-    return false;
-  }
-  else
-    return true;
-}
-
-//_____________________________________________________________________________
 G4double GetUnitValue(const G4String& unit)
 {
    G4double value = 1.;
@@ -146,16 +80,6 @@ G4double GetUnitValue(const G4String& unit)
      if ( value == 0. ) value = 1.;
    }
    return value;
-}
-
-//_____________________________________________________________________________
-void UpdateTitle(G4String& title,
-                 const G4String& unitName,
-                 const G4String& fcnName)
-{
-  if ( fcnName != "none" )  { title += " "; title += fcnName; title += "("; }
-  if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
-  if ( fcnName != "none" )  { title += ")"; }
 }
 
 //_____________________________________________________________________________
@@ -178,23 +102,23 @@ void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
 }
 
 //_____________________________________________________________________________
-G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn) {
-  if      ( outputName == "csv"  )  { return G4AnalysisOutput::kCsv;  }
-  else if ( outputName == "hdf5" )  { return G4AnalysisOutput::kHdf5; }
-  else if ( outputName == "root" )  { return G4AnalysisOutput::kRoot; }
-  else if ( outputName == "xml"  )  { return G4AnalysisOutput::kXml;  }
-  else if ( outputName == "none" )  { return G4AnalysisOutput::kNone; }
-  else {
-    if (warn) {
-      Warn("\"" + outputName + "\" output type is not supported.",
-        kNamespaceName, "GetOutput");
-    }
-    return G4AnalysisOutput::kNone;
+G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn)
+{
+  if (outputName == "csv")  return G4AnalysisOutput::kCsv;
+  if (outputName == "hdf5") return G4AnalysisOutput::kHdf5;
+  if (outputName == "root") return G4AnalysisOutput::kRoot;
+  if (outputName == "xml")  return G4AnalysisOutput::kXml;
+  if (outputName == "none") return G4AnalysisOutput::kNone;
+
+  if (warn) {
+    Warn("\"" + outputName + "\" output type is not supported.", kNamespaceName, "GetOutput");
   }
+  return G4AnalysisOutput::kNone;
 }
 
 //_____________________________________________________________________________
-G4String GetOutputName(G4AnalysisOutput output) {
+G4String GetOutputName(G4AnalysisOutput output)
+{
   switch ( output ) {
     case G4AnalysisOutput::kCsv:
       return "csv";
@@ -258,6 +182,7 @@ G4String GetHnFileName(
 {
 // Compose and return the histogram or profile specific file name:
 // - add _hn_hnName suffix to the file base name
+// - add _vN  suffix if cycle > 0
 // - add file extension if not present
 
   auto name = GetBaseName(fileName);
@@ -270,7 +195,34 @@ G4String GetHnFileName(
 
   // Add file extension
   auto extension = GetExtension(fileName, fileType);
-  if ( extension.size() ) {
+  if (extension.size() != 0u) {
+    name.append(".");
+    name.append(extension);
+  }
+
+  return name;
+}
+
+//_____________________________________________________________________________
+G4String GetHnFileName(
+            const G4String& fileName,
+            const G4String& fileType,
+            G4int cycle)
+{
+// Update Hn file name:
+// - add _vN  suffix to the base namer if cycle > 0
+
+  auto name = GetBaseName(fileName);
+
+  // Add cycle number
+  if (cycle > 0) {
+    name.append("_v");
+    name.append(std::to_string(cycle));
+  }
+
+  // Add file extension
+  auto extension = GetExtension(fileName, fileType);
+  if (extension.size() != 0u) {
     name.append(".");
     name.append(extension);
   }
@@ -282,10 +234,12 @@ G4String GetHnFileName(
 G4String GetNtupleFileName(
             const G4String& fileName,
             const G4String& fileType,
-            const G4String& ntupleName)
+            const G4String& ntupleName,
+            G4int cycle)
 {
 // Compose and return the ntuple specific file name:
 // - add _nt_ntupleName suffix to the file base name
+// - add _vN  suffix if cycle > 0
 // - add _tN suffix if called on thread worker
 // - add file extension if not present
 
@@ -294,6 +248,12 @@ G4String GetNtupleFileName(
   // Add ntupleName
   name.append("_nt_");
   name.append(ntupleName);
+
+  // Add cycle number
+  if (cycle > 0) {
+    name.append("_v");
+    name.append(std::to_string(cycle));
+  }
 
   // Add thread Id to a file name if MT processing
   if ( ! G4Threading::IsMasterThread() ) {
@@ -305,7 +265,7 @@ G4String GetNtupleFileName(
 
   // Add file extension
   auto extension = GetExtension(fileName, fileType);
-  if ( extension.size() ) {
+  if (extension.size() != 0u) {
     name.append(".");
     name.append(extension);
   }
@@ -317,10 +277,12 @@ G4String GetNtupleFileName(
 G4String GetNtupleFileName(
             const G4String& fileName,
             const G4String& fileType,
-            G4int ntupleFileNumber)
+            G4int ntupleFileNumber,
+            G4int cycle)
 {
 // Compose and return the ntuple specific file name:
 // - add _mFN suffix to the file base name where FN = ntupleFileNumber
+// - add _vN  suffix if cycle > 0
 // - add file extension if not present
 
   auto name = GetBaseName(fileName);
@@ -331,9 +293,15 @@ G4String GetNtupleFileName(
   name.append("_m");
   name.append(os.str());
 
+  // Add cycle number
+  if (cycle > 0) {
+    name.append("_v");
+    name.append(std::to_string(cycle));
+  }
+
   // Add file extension
   auto extension = GetExtension(fileName, fileType);
-  if ( extension.size() ) {
+  if (extension.size() != 0u) {
     name.append(".");
     name.append(extension);
   }
@@ -344,13 +312,20 @@ G4String GetNtupleFileName(
 //_____________________________________________________________________________
 G4String GetTnFileName(
             const G4String& fileName,
-            const G4String& fileType)
+            const G4String& fileType,
+            G4int cycle)
 {
 // Update file base name with the thread suffix:
 // - add _tN suffix if called on thread worker
 // - add file extension if not present
 
   auto name = GetBaseName(fileName);
+
+  // Add cycle number
+  if (cycle > 0) {
+    name.append("_v");
+    name.append(std::to_string(cycle));
+  }
 
   // Add thread Id to a file name if MT processing
   if ( !  G4Threading::IsMasterThread() ) {
@@ -362,7 +337,7 @@ G4String GetTnFileName(
 
   // Add file extension
   auto extension = GetExtension(fileName, fileType);
-  if ( extension.size() ) {
+  if (extension.size() != 0u) {
     name.append(".");
     name.append(extension);
   }

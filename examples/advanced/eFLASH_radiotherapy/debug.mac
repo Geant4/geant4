@@ -1,0 +1,147 @@
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+
+
+
+
+#########################
+
+
+/gps/pos/centre -1000 0 0 mm
+/gps/ene/type User
+/gps/hist/type energy
+/gps/hist/point 1.5	0.0040
+/gps/hist/point 1.6	0.0040
+/gps/hist/point 1.7	0.0040
+/gps/hist/point 1.8	0.0040
+/gps/hist/point 1.9	0.0040
+/gps/hist/point 2.0	0.0040
+/gps/hist/point 2.1	0.0040
+/gps/hist/point 2.2	0.0040
+/gps/hist/point 2.3	0.0040
+/gps/hist/point 2.4	0.0040
+/gps/hist/point 2.5	0.0040
+/gps/hist/point 2.6	0.0040
+/gps/hist/point 2.7	0.0040
+/gps/hist/point 2.8	0.0040
+/gps/hist/point 2.9	0.0040
+/gps/hist/point 3.0	0.0040
+/gps/hist/point 3.1	0.0040
+/gps/hist/point 3.2	0.0040
+/gps/hist/point 3.3	0.0040
+/gps/hist/point 3.4	0.0040
+/gps/hist/point 3.5	0.0040
+/gps/hist/point 3.6	0.0040
+/gps/hist/point 3.7	0.0040
+/gps/hist/point 3.8	0.0040
+/gps/hist/point 3.9	0.0040
+/gps/hist/point 4.0	0.0040
+/gps/hist/point 4.1	0.0040
+/gps/hist/point 4.2	0.0040
+/gps/hist/point 4.3	0.0040
+/gps/hist/point 4.4	0.0040
+/gps/hist/point 4.5	0.0040
+/gps/hist/point 4.6	0.0040
+/gps/hist/point 4.7	0.0040
+/gps/hist/point 4.8	0.0040
+/gps/hist/point 4.9	0.0040
+/gps/hist/point 5.0	0.0040
+/gps/hist/point 5.1	0.0040
+/gps/hist/point 5.2	0.0040
+/gps/hist/point 5.3	0.0040
+/gps/hist/point 5.4	0.0040
+/gps/hist/point 5.5	0.0040
+/gps/hist/point 5.6	0.0040
+/gps/hist/point 5.7	0.0040
+/gps/hist/point 5.8	0.0040
+/gps/hist/point 5.9	0.0040
+/gps/hist/point 6.0	0.0040
+/gps/hist/point 6.1	0.0040
+/gps/hist/point 6.2	0.0040
+/gps/hist/point 6.3	0.0040
+/gps/hist/point 6.4	0.0040
+/gps/hist/point 6.5	0.0040
+/gps/hist/point 6.6	0.0040
+/gps/hist/point 6.7	0.0040
+/gps/hist/point 6.8	0.0040
+/gps/hist/point 6.9	0.0040
+/gps/hist/point 7.0	0.0040
+/gps/hist/point 7.1	0.0040
+/gps/hist/point 7.2	0.0040
+/gps/hist/point 7.3	0.0040
+/gps/hist/point 7.4	0.0061
+/gps/hist/point 7.5	0.0082
+/gps/hist/point 7.6	0.0082
+/gps/hist/point 7.7	0.0083
+/gps/hist/point 7.8	0.0085
+/gps/hist/point 7.9	0.0086
+/gps/hist/point 8.0	0.0087
+/gps/hist/point 8.1	0.0089
+/gps/hist/point 8.2	0.0090
+/gps/hist/point 8.3	0.0091
+/gps/hist/point 8.4	0.0092
+/gps/hist/point 8.5	0.0094
+/gps/hist/point 8.6	0.0095
+/gps/hist/point 8.7	0.0096
+/gps/hist/point 8.8	0.0099
+/gps/hist/point 8.9	0.0098
+/gps/hist/point 9.0	0.0100
+/gps/hist/point 9.1	0.0101
+/gps/hist/point 9.2	0.0100
+/gps/hist/point 9.3	0.0139
+/gps/hist/point 9.4	0.0240
+/gps/hist/point 9.5	0.0289
+/gps/hist/point 9.6	0.0410
+/gps/hist/point 9.7	0.0610
+/gps/hist/point 9.8	0.3427
+/gps/hist/point 9.9	0.0640
+/gps/hist/point 10.0	0.0150
+/gps/hist/point 10.1	0.0001
+/gps/hist/point 10.2	0.0001
+/gps/hist/point 10.3	0.0001
+/gps/hist/point 10.4	0.0001
+/gps/hist/point 10.5	0.0001
+
+
+
+#########################
+# Display the event number
+# during the run
+# 
+
+
+#########################
+# Start of the run
+#
+#
+# Scoring mesh is used to calculate
+#  the dose in the phantom
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxSize 4. 8. 8. cm
+/score/mesh/nBin 40 40 40
+/score/mesh/translate/xyz -164.4 0 0 mm 
+/score/quantity/doseDeposit dose Gy
+
+#
+/score/close
+#
+/score/list  
+
+#/run/beamOn	1000000
+#/run/beamOn  211950
+/run/beamOn 5
+
+#/score/dumpQuantityToFile boxMesh_1 dose dose.out
+

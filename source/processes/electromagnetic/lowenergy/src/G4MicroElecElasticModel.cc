@@ -83,7 +83,7 @@ G4MicroElecElasticModel::G4MicroElecElasticModel(const G4ParticleDefinition*,
 G4MicroElecElasticModel::~G4MicroElecElasticModel()
 {
   // For total cross section
-  for (auto pos : tableData)
+  for (auto & pos : tableData)
     {
       G4MicroElecCrossSectionDataSet* table = pos.second;
       delete table;

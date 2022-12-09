@@ -209,6 +209,12 @@ void G4HadronicParameters::SetEnableIntegralElasticXS( G4bool val ) {
   if ( ! IsLocked() ) fEnableIntegralElasticXS = val;
 }
 
-void G4HadronicParameters::SetEnableDiffDissociationForBGreater10(G4bool val) {
+
+void G4HadronicParameters::SetEnableDiffDissociationForBGreater10( G4bool val ) {
   if ( ! IsLocked() ) fEnableDiffDissociationForBGreater10 = val;
 }
+
+
+void G4HadronicParameters::SetEnableNeutronGeneralProcess( G4bool val ) {
+  if ( ! IsLocked() ) fNeutronGeneral = val;
+} 

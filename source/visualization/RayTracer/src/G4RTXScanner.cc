@@ -36,6 +36,8 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
+#define G4warn G4cout
+
 extern "C" {
   Bool G4RayTracerXScannerWaitForNotify (Display*, XEvent* e, char* arg) {
     return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
@@ -110,7 +112,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
 {
   display = XOpenDisplay(0);  // Use display defined by DISPLAY environment.
   if (!display) {
-    G4cerr << "G4RTXScanner::Initialize(): cannot get display."
+    G4warn << "G4RTXScanner::Initialize(): cannot get display."
 	   << G4endl;
     return false;
   }
@@ -142,7 +144,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
 	size_hints->y = yOffset;
       }
     } else {
-      G4cout << "ERROR: Geometry string \""
+      G4warn << "ERROR: Geometry string \""
 	     << XGeometryString
 	     << "\" invalid.  Using \"600x600\"."
 	     << G4endl;
@@ -150,7 +152,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
       height = 600;
     }
   } else {
-    G4cout << "ERROR: Geometry string \""
+    G4warn << "ERROR: Geometry string \""
 	   << XGeometryString
 	   << "\" is empty.  Using \"600x600\"."
 	   << G4endl;
@@ -181,7 +183,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
       (display, RootWindow(display, screen_num),
        &scmap, &nMaps, XA_RGB_BEST_MAP);
     if (!status) {
-      G4cerr <<
+      G4warn <<
 	"G4RTXScanner::Initialize(): cannot get color map."
 	"\n  Perhaps your system does not support XA_RGB_BEST_MAP."
 	     << G4endl;
@@ -189,7 +191,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
     }
   }
   if (!scmap->colormap) {
-    G4cerr << "G4RTXScanner::Initialize(): color map empty."
+    G4warn << "G4RTXScanner::Initialize(): color map empty."
 	   << G4endl;
     return false;
   }

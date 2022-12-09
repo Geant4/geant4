@@ -29,7 +29,7 @@
 #ifndef G4UItcsh_h
 #define G4UItcsh_h 1
 
-#ifndef WIN32
+#if !(defined(WIN32) || defined(__MINGW32__))
 
 #include <termios.h>
 #include <vector>

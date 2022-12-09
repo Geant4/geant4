@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -32,6 +32,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -83,7 +85,6 @@ Checking overlaps for volume Shape2:0 (G4Trd) ... OK!
     Emin(FTFP)= 3 GeV Emax(FTFP)= 100000 GeV
     Emin(BERT)= 1 GeV Emax(BERT)= 6 GeV Emax(BERTpions)= 12 GeV
     Emin(BIC) = 0 GeV Emax(BIC)= 1.5 GeV.
-### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /run/verbose 2
 /event/verbose 0
 /tracking/verbose 1
@@ -103,6 +104,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -130,7 +132,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -181,8 +183,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -533,28 +535,6 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
-                           Hadronic Processes for neutron
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-
-
-  Process: neutronInelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 1 GeV ---> 6 GeV
-        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-
-
-  Process: nCapture
-        Model:               nRadCapture: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-
-  Process: nKiller
-
----------------------------------------------------
                            Hadronic Processes for B-
 
   Process: hadElastic
@@ -667,6 +647,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -834,6 +819,28 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 
   Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -1091,13 +1098,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -55.2     5.55     -116     0.183        0        0         0    Envelope initStep
     1    -44.3    -10.9    -84.7     0.167        0     37.3      37.3    Envelope compt
-    2    -64.8    -32.2    -48.1     0.107        0       47      84.3    Envelope compt
-    3    -27.4    -1.99    -54.6     0.107        0     48.5       133      Shape1 Transportation
-    4    -2.87     17.8    -58.9    0.0774        0     31.8       165      Shape1 compt
-    5    -3.32     16.8    -58.2    0.0673        0     1.34       166      Shape1 compt
-    6     -3.8     -1.3    -87.7    0.0575        0     34.6       201      Shape1 compt
-    7    0.697     1.55    -87.7    0.0544        0     5.32       206      Shape1 compt
-    8     5.94     6.17     -100    0.0544        0     14.1       220    Envelope Transportation
+    2    -64.8    -32.2    -48.2     0.107        0       47      84.3    Envelope compt
+    3    -27.4    -1.98    -54.6     0.107        0     48.5       133      Shape1 Transportation
+    4    -2.85     17.9    -58.9    0.0774        0     31.8       165      Shape1 compt
+    5    -3.31     16.8    -58.2    0.0673        0     1.34       166      Shape1 compt
+    6    -3.78    -1.31    -87.8    0.0575        0     34.7       201      Shape1 compt
+    7    0.714     1.54    -87.8    0.0544        0     5.32       206      Shape1 compt
+    8     5.92     6.13     -100    0.0544        0       14       220    Envelope Transportation
     9     27.3       25     -150    0.0544        0     57.5       278       World Transportation
    10     40.1     36.3     -180    0.0544        0     34.5       312  OutOfWorld Transportation
 
@@ -1106,39 +1113,39 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.697     1.55    -87.7   0.00311        0        0         0      Shape1 initStep
-    1    0.697     1.55    -87.7         0  0.00311 0.000294  0.000294      Shape1 eIoni
+    0    0.714     1.54    -87.8   0.00311        0        0         0      Shape1 initStep
+    1    0.714     1.54    -87.8         0  0.00311 0.000294  0.000294      Shape1 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -3.8     -1.3    -87.7   0.00975        0        0         0      Shape1 initStep
-    1     -3.8     -1.3    -87.7         0  0.00975   0.0021    0.0021      Shape1 eIoni
+    0    -3.78    -1.31    -87.8   0.00975        0        0         0      Shape1 initStep
+    1    -3.78    -1.32    -87.8         0  0.00975   0.0021    0.0021      Shape1 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.32     16.8    -58.2    0.0101        0        0         0      Shape1 initStep
-    1    -3.32     16.8    -58.2         0   0.0101  0.00226   0.00226      Shape1 eIoni
+    0    -3.31     16.8    -58.2    0.0101        0        0         0      Shape1 initStep
+    1    -3.31     16.8    -58.2         0   0.0101  0.00226   0.00226      Shape1 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.87     17.8    -58.9    0.0296        0        0         0      Shape1 initStep
-    1    -2.86     17.9    -58.9         0   0.0296    0.015     0.015      Shape1 eIoni
+    0    -2.85     17.9    -58.9    0.0296        0        0         0      Shape1 initStep
+    1    -2.85     17.9    -58.9         0   0.0296    0.015     0.015      Shape1 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -64.8    -32.2    -48.1    0.0604        0        0         0    Envelope initStep
+    0    -64.8    -32.2    -48.2    0.0604        0        0         0    Envelope initStep
     1    -64.8    -32.2    -48.1         0   0.0604   0.0605    0.0605    Envelope eIoni
 
 *********************************************************************************************************
@@ -1195,7 +1202,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.001601s Sys=0.000000s
+  User=0.000000s Real=0.001957s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 5 gamma of 6 MeV
@@ -1306,7 +1313,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000757s Sys=0.000000s
+  User=0.000000s Real=0.000907s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1 proton of 210 MeV

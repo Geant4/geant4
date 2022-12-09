@@ -38,7 +38,7 @@
 
 namespace utility
 {
-  std::vector<G4String>& split(const G4String& str, char delim,
+  std::vector<G4String>& Split(const G4String& str, char delim,
                                std::vector<G4String>& elems)
   {
     std::stringstream ss(str);
@@ -51,15 +51,15 @@ namespace utility
     return elems;
   }
 
-  std::vector<G4String> split(const G4String& str, char delim)
+  std::vector<G4String> Split(const G4String& str, char delim)
   {
     std::vector<G4String> elems;
-    split(str, delim, elems);
+    Split(str, delim, elems);
     return elems;
   }
 
   // return element ii
-  G4String get_seperated_element(const G4String& str, char delim, G4int ii)
+  G4String Get_seperated_element(const G4String& str, char delim, G4int ii)
   {
     G4int delims = 0;
     G4String ss;
@@ -76,7 +76,7 @@ namespace utility
   }
 
   // return first four strings
-  std::array<G4String, 4> get_four_elements(const G4String& str, char delim)
+  std::array<G4String, 4> Get_four_elements(const G4String& str, char delim)
   {
     G4int delims = 0;
     std::array<G4String, 4> arr;
@@ -92,7 +92,7 @@ namespace utility
     return arr;
   }
 
-  bool path_exists(const G4String& fname)
+  G4bool Path_exists(const G4String& fname)
   {
     if(FILE* file = std::fopen(fname, "r"))
     {
@@ -107,13 +107,13 @@ namespace utility
 
   // Memory safe multi-platform getcwd
   // http://stackoverflow.com/questions/2869594/
-  [[maybe_unused]] G4String getcwd()
+  G4String Getcwd()
   {
     const size_t chunkSize = 255;
     const int maxChunks    = 10240;  // 2550 KiBs of current path is plenty
 
     char stackBuffer[chunkSize];  // Stack buffer for the "normal" case
-    if(::getcwd(stackBuffer, sizeof(stackBuffer)) != NULL)
+    if(::getcwd(stackBuffer, sizeof(stackBuffer)) != nullptr)
       return stackBuffer;
     if(errno != ERANGE)
     {
@@ -127,8 +127,8 @@ namespace utility
       // With boost use scoped_ptr; in C++0x, use unique_ptr
       // If you want to be less C++ but more efficient
       // you may want to use realloc
-      std::unique_ptr<char> cwd(new char[chunkSize * chunks]);
-      if(::getcwd(cwd.get(), chunkSize * chunks) != NULL)
+      std::unique_ptr<char[]> cwd(new char[chunkSize * chunks]);
+      if(::getcwd(cwd.get(), chunkSize * chunks) != nullptr)
         return cwd.get();
       if(errno != ERANGE)
       {
@@ -141,7 +141,7 @@ namespace utility
                              "apparently unreasonably long");
   }
 
-  G4double min(const G4ThreeVector& v)
+  G4double Min(const G4ThreeVector& v)
   {
     return std::min(std::min(v.x(), v.y()), v.z());
   }

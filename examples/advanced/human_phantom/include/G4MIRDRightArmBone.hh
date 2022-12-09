@@ -41,15 +41,10 @@ class G4MIRDRightArmBone: public G4VOrgan
 {
 public:
 
-  G4MIRDRightArmBone();
-  ~G4MIRDRightArmBone();
+  G4MIRDRightArmBone() = default;
+  ~G4MIRDRightArmBone() override = default;
 
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
-				    const G4String&,G4bool, G4bool);
- 
-private:
-  //    SAXProcessor sxp;
-  //  ProcessingConfigurator config;
-
+				    const G4String&,G4bool, G4bool) override;
 };
 #endif

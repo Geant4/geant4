@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 
 G4Visible::G4Visible ():
-  fpVisAttributes (0),
+  fpVisAttributes (nullptr),
   fAllocatedVisAttributes (false)
 {}
 
@@ -104,16 +104,16 @@ void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
 
 G4bool G4Visible::operator != (const G4Visible& right) const {
   if (fInfo != right.fInfo) return false;
-  if (fpVisAttributes && right.fpVisAttributes)
+  if ((fpVisAttributes != nullptr) && (right.fpVisAttributes != nullptr))
     return *fpVisAttributes != *right.fpVisAttributes;
-  else if (!fpVisAttributes && !right.fpVisAttributes) return false;
-  else return true;
+  if ((fpVisAttributes == nullptr) && (right.fpVisAttributes == nullptr)) return false;
+  return true;
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {
   os << "G4Visible: ";
   if (!v.fInfo.empty()) os << "User information: " << v.fInfo;
   os << '\n';
-  if (v.fpVisAttributes) return os << *(v.fpVisAttributes);
-  else return os << "No Visualization Attributes";
+  if (v.fpVisAttributes != nullptr) return os << *(v.fpVisAttributes);
+  return os << "No Visualization Attributes";
 }

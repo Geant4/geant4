@@ -67,14 +67,14 @@ class G4RayTrajectory : public G4VTrajectory
 
    public:
  
-   inline void* operator new(size_t);
+   inline void* operator new(std::size_t);
    inline void  operator delete(void*);
   //   inline int operator == (const G4RayTrajectory& right){return (this==&right);}
 
    virtual void AppendStep(const G4Step*);
    virtual void ShowTrajectory(std::ostream&) const;
    virtual void DrawTrajectory() const {;}
-   virtual int GetPointEntries() const {return positionRecord->size();}
+   virtual G4int GetPointEntries() const {return (G4int)positionRecord->size();}
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; }
    G4RayTrajectoryPoint* GetPointC(G4int i) const 
@@ -100,7 +100,7 @@ class G4RayTrajectory : public G4VTrajectory
   extern G4DLLIMPORT G4Allocator<G4RayTrajectory>*& rayTrajectoryAllocator();
 #endif
 
-inline void* G4RayTrajectory::operator new(size_t)
+inline void* G4RayTrajectory::operator new(std::size_t)
 {
    if(!rayTrajectoryAllocator())
    { rayTrajectoryAllocator() = new G4Allocator<G4RayTrajectory>; }

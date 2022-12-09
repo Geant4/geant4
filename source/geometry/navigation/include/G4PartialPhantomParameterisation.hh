@@ -69,11 +69,11 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
 
     G4ThreeVector GetTranslation(const G4int copyNo ) const;
 
-    size_t GetMaterialIndex( size_t nx, size_t ny, size_t nz) const;
-    size_t GetMaterialIndex( size_t copyNo) const;
+    std::size_t GetMaterialIndex( std::size_t nx, std::size_t ny, std::size_t nz) const;
+    std::size_t GetMaterialIndex( std::size_t copyNo) const;
 
-    G4Material* GetMaterial( size_t nx, size_t ny, size_t nz) const;
-    G4Material* GetMaterial( size_t copyNo ) const;
+    G4Material* GetMaterial( std::size_t nx, std::size_t ny, std::size_t nz) const;
+    G4Material* GetMaterial( std::size_t copyNo ) const;
 
     void SetFilledIDs( std::multimap<G4int,G4int> fid )
     {
@@ -89,11 +89,11 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
 
   private:
 
-    void ComputeVoxelIndices(const G4int copyNo, size_t& nx,
-                                   size_t& ny, size_t& nz ) const;
+    void ComputeVoxelIndices(const G4int copyNo, std::size_t& nx,
+                                   std::size_t& ny, std::size_t& nz ) const;
       // Convert the copyNo to voxel numbers in x, y and z.
 
-    void CheckCopyNo( const G4int copyNo ) const;
+    void CheckCopyNo( const G4long copyNo ) const;
       // Check that the copy number is within limits.
 
   private:

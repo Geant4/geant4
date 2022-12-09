@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+/// \file VG01DetectorConstruction.cc
+/// \brief Implementation of the VG01DetectorConstruction class
+
 //  Authors:   J. Apostolakis & S. Wenzel (CERN)   2018-2021
 //
 //  Derived from FullCMS code by Mihaly Novak  (2017-18)

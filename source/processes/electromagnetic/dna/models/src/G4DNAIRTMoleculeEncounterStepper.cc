@@ -150,7 +150,7 @@ G4DNAIRTMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
         return DBL_MAX;
     }
 
-    G4int nbReactives = pReactantList->size();
+    G4int nbReactives = (G4int)pReactantList->size();
 
     if (nbReactives == 0)
     {
@@ -178,7 +178,7 @@ G4DNAIRTMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 
     //__________________________________________________________________
     // Start looping on possible reactants
-    for (G4int i = 0; i < nbReactives; i++)
+    for (G4int i = 0; i < nbReactives; ++i)
     {
         auto pMoleculeB = (*pReactantList)[i];
 

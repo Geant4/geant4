@@ -1961,7 +1961,7 @@ G4bool G4IonTable::Contains(const G4ParticleDefinition* particle) const
 //
 G4int G4IonTable::Entries() const
 {
-  return fIonList->size();
+  return (G4int)fIonList->size();
 }
 
 // --------------------------------------------------------------------
@@ -1969,7 +1969,7 @@ G4int G4IonTable::Entries() const
 //
 G4int G4IonTable::size() const
 {
-  return fIonList->size();
+  return (G4int)fIonList->size();
 }
 
 // --------------------------------------------------------------------

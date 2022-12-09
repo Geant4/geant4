@@ -1,8 +1,16 @@
 # Category digits_hits History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-17 Gabriele Cosmo (digits_hits-V11-00-04)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-05 Ben Morgan (digits_hits-V11-00-03)
+- Add needed public dependency to G4detscorer
 
 ## 2022-01-28 Ben Morgan (digits_hits-V11-00-02)
 - Replace `geant4_global_library_target` with direct file inclusion and

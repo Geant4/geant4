@@ -40,9 +40,9 @@ class G4MIRDHeart:public G4VOrgan
 {
 public:
 
-  G4MIRDHeart();
-  ~G4MIRDHeart();
+  G4MIRDHeart() = default;
+  ~G4MIRDHeart() override = default ;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool);
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

@@ -75,7 +75,7 @@ G4AntiOmegabMinus* G4AntiOmegabMinus::Definition()
                 false,     1.640e-3*ns,          NULL,
                 false,       "omega_b");
   }
-  theInstance = reinterpret_cast<G4AntiOmegabMinus*>(anInstance);
+  theInstance = static_cast<G4AntiOmegabMinus*>(anInstance);
   return theInstance;
 }
 

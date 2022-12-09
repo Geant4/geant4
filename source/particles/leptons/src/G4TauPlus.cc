@@ -121,7 +121,7 @@ G4TauPlus* G4TauPlus::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4TauPlus*>(anInstance);
+  theInstance = static_cast<G4TauPlus*>(anInstance);
   return theInstance;
 }
 

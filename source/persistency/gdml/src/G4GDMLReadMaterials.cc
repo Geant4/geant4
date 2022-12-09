@@ -676,7 +676,7 @@ void G4GDMLReadMaterials::MaterialRead(
   }
   else
   {
-    material = new G4Material(Strip(name), D, nComponents, state, T, P);
+    material = new G4Material(Strip(name), D, (G4int)nComponents, state, T, P);
     MixtureRead(materialElement, material);
   }
   if(MEE != -1)  // ionisation potential (mean excitation energy)

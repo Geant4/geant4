@@ -164,7 +164,7 @@ private:
   G4double mass = 0.0;
   G4double spin = 0.0;
   G4double chargeSquare = 1.0;
-  G4double effChargeSquare = 1.0;
+  G4double heChargeSquare = 4.0;
   G4double massRate = 1.0;
   G4double ratio = 1.0;
   G4double HeMass;
@@ -176,7 +176,6 @@ private:
   G4int    iMolecula = -1; // index in the molecula's table
   G4int    iASTAR = -1;    // index in ASTAR
   G4int    iICRU90 = -1;
-  G4bool   isIon = false;
   G4bool   isAlpha = false;
 };
 

@@ -73,6 +73,6 @@ G4Hydrogen* G4Hydrogen::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0, 1);
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName("H");
   }
-  theInstance = reinterpret_cast<G4Hydrogen*>(anInstance);
+  theInstance = static_cast<G4Hydrogen*>(anInstance);
   return theInstance;
 }

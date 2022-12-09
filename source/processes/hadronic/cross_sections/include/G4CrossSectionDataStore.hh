@@ -94,9 +94,13 @@ public:
   void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const;
   
   void AddDataSet(G4VCrossSectionDataSet*);
-  void AddDataSet(G4VCrossSectionDataSet*, size_t);
+  void AddDataSet(G4VCrossSectionDataSet*, std::size_t);
+  inline const std::vector<G4VCrossSectionDataSet*>& GetDataSetList() const;
 
   inline void SetVerboseLevel(G4int value);
+
+  // may be used by special processes
+  inline void SetForcedElement(const G4Element*);
 
   G4CrossSectionDataStore & operator=
   (const G4CrossSectionDataStore &right) = delete;
@@ -113,6 +117,7 @@ private:
   G4NistManager* nist;
   const G4Material* currentMaterial = nullptr;
   const G4ParticleDefinition* matParticle = nullptr;
+  const G4Element* forcedElement = nullptr;
   G4double matKinEnergy = 0.0;
   G4double matCrossSection = 0.0;
 
@@ -127,6 +132,17 @@ private:
 inline void G4CrossSectionDataStore::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
+}
+
+inline void G4CrossSectionDataStore::SetForcedElement(const G4Element* ptr)
+{
+  forcedElement = ptr;
+}
+
+inline const std::vector<G4VCrossSectionDataSet*>&
+G4CrossSectionDataStore::GetDataSetList() const
+{
+  return dataSetList;
 }
 
 inline G4double 

@@ -542,7 +542,7 @@ G4bool G4Fancy3DNucleus::ReduceSum()
 	testSums.resize(myA-1);		// Allocate block for filling below
 
 	G4ThreeVector delta;
-	for (G4int aNucleon=0; aNucleon < myA-1; aNucleon++) {
+	for (G4int aNucleon=0; aNucleon < myA-1; ++aNucleon) {
 	  delta = 2.*((momentum[aNucleon]*testDir)*testDir);
 
 	  testSums[aNucleon].Fill(delta, delta.mag(), aNucleon);
@@ -551,7 +551,7 @@ G4bool G4Fancy3DNucleus::ReduceSum()
 	std::sort(testSums.begin(), testSums.end());
 
 //    reduce Momentum Sum until the next would be allowed.
-	G4int index=testSums.size();
+	G4int index=(G4int)testSums.size();
 	while ( (sum-testSums[--index].Vector).mag()>PFermi && index>0)  /* Loop checking, 30-Oct-2015, G.Folger */
 	{
 	  // Only take one which improve, ie. don't change sign and overshoot...

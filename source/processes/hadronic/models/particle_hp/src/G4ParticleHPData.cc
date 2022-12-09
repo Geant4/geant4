@@ -32,42 +32,44 @@
 #include "G4ParticleHPData.hh"
 #include "G4PhysicsFreeVector.hh"
 
-G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
+  G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
     : theProjectile(projectile)
-{
-  //const char* theDataDirVariable;
-  if( projectile == G4Neutron::Neutron() ) {
-      theDataDirVariable = "G4NEUTRONHPDATA";
-  }else if( projectile == G4Proton::Proton() ) {
-    theDataDirVariable = "G4PROTONHPDATA";
-  }else if( projectile == G4Deuteron::Deuteron() ) {
-    theDataDirVariable = "G4DEUTERONHPDATA";
-  }else if( projectile == G4Triton::Triton() ) {
-    theDataDirVariable = "G4TRITONHPDATA";
-  }else if( projectile == G4He3::He3() ) {
-    theDataDirVariable = "G4HE3HPDATA";
-  }else if( projectile == G4Alpha::Alpha() ) {
-    theDataDirVariable = "G4ALPHAHPDATA";
-  }
+  {
+    //const char* theDataDirVariable;
+    if( projectile == G4Neutron::Neutron() ) {
+        theDataDirVariable = "G4NEUTRONHPDATA";
+    }else if( projectile == G4Proton::Proton() ) {
+      theDataDirVariable = "G4PROTONHPDATA";
+    }else if( projectile == G4Deuteron::Deuteron() ) {
+      theDataDirVariable = "G4DEUTERONHPDATA";
+    }else if( projectile == G4Triton::Triton() ) {
+      theDataDirVariable = "G4TRITONHPDATA";
+    }else if( projectile == G4He3::He3() ) {
+      theDataDirVariable = "G4HE3HPDATA";
+    }else if( projectile == G4Alpha::Alpha() ) {
+      theDataDirVariable = "G4ALPHAHPDATA";
+    }
 
-     numEle = G4Element::GetNumberOfElements();
-     for ( G4int i = 0 ; i < numEle ; i++ ) theData.push_back ( new G4ParticleHPElementData );
-//     G4cout << "G4ParticleHPData::G4ParticleHPData(): numEle="<<numEle<<G4endl;
-     for (G4int i=0; i<numEle; i++)
-     {
-       (*theData[i]).Init((*(G4Element::GetElementTable()))[i], projectile, theDataDirVariable);
-     }
+    numEle = (G4int)G4Element::GetNumberOfElements();
+    for ( G4int i=0 ; i<numEle ; ++i )
+    {
+      theData.push_back ( new G4ParticleHPElementData );
+    }
+    for (G4int i=0; i<numEle; ++i)
+    {
+      (*theData[i]).Init((*(G4Element::GetElementTable()))[i], projectile, theDataDirVariable);
+    }
   }
   
   G4ParticleHPData::~G4ParticleHPData()
   {
-     for ( std::vector<G4ParticleHPElementData*>::iterator it = theData.begin() ; it != theData.end() ; it++ ) delete *it;
+     for (auto it = theData.cbegin() ; it != theData.cend() ; ++it) delete *it;
      theData.clear();
   }
   
   G4ParticleHPData * G4ParticleHPData::Instance(G4ParticleDefinition* projectile)
   {
-    static G4ThreadLocal G4ParticleHPData *theCrossSectionData_G4MT_TLS_ = 0 ;
+    static G4ThreadLocal G4ParticleHPData *theCrossSectionData_G4MT_TLS_ = nullptr ;
     if ( !theCrossSectionData_G4MT_TLS_ ) theCrossSectionData_G4MT_TLS_ = new G4ParticleHPData(projectile);  
     G4ParticleHPData &theCrossSectionData = *theCrossSectionData_G4MT_TLS_;
     return &theCrossSectionData;
@@ -75,17 +77,13 @@ G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
 
   G4PhysicsVector * G4ParticleHPData::DoPhysicsVector(G4ParticleHPVector * theVector)
   {
-//    G4cout << "Entered G4ParticleHPData::DoPhysicsVector."<<G4endl;
     G4int len = theVector->GetVectorLength();
-//    G4cout <<"zahl der energie-punkte "<< len<<G4endl;
     if(len==0) return new G4PhysicsFreeVector(0, 0., 0.);
     G4double emin = theVector->GetX(0);
     G4double emax = theVector->GetX(len-1);
-//    G4cout <<"zahl der energie-punkte "<< len<<" "<<emin<<" "<<emax<<G4endl;
-    
-   //  G4int dummy; G4cin >> dummy;     
+
     G4PhysicsFreeVector * theResult = new G4PhysicsFreeVector(len, emin, emax);
-    for (G4int i=0; i<len; i++)
+    for (G4int i=0; i<len; ++i)
     {
       theResult->PutValues(i, theVector->GetX(i), theVector->GetY(i));
     }
@@ -94,10 +92,10 @@ G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
 
 void G4ParticleHPData::addPhysicsVector()
 {
-   for ( G4int i = numEle; i < (G4int)G4Element::GetNumberOfElements() ; i++ )
+   for ( G4int i = numEle; i < (G4int)G4Element::GetNumberOfElements() ; ++i )
    {
       theData.push_back ( new G4ParticleHPElementData );
       (*theData[i]).Init((*(G4Element::GetElementTable()))[i], theProjectile, theDataDirVariable);
    }
-   numEle = G4Element::GetNumberOfElements();
+   numEle = (G4int)G4Element::GetNumberOfElements();
 }

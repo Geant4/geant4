@@ -482,7 +482,7 @@ void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) { return; }
   }
-  G4HadronicProcess* hproc = reinterpret_cast<G4HadronicProcess*>(proc);
+  G4HadronicProcess* hproc = static_cast<G4HadronicProcess*>(proc);
   if(hproc) {
     for(G4int i=0; i<n_proc; ++i) {
       if(process[i] == hproc) { return; }
@@ -781,12 +781,14 @@ void G4HadronicProcessStore::Dump(G4int verb)
 		       pname == "D-" ||
 		       pname == "B-" ||
 		       pname == "GenericIon" ||
+		       pname == "hypertriton" ||
 		       pname == "anti_neutron" ||
 		       pname == "anti_proton" ||
                        pname == "anti_deuteron" ||
                        pname == "anti_triton" ||
                        pname == "anti_He3" ||
-                       pname == "anti_alpha")) yes = true;
+                       pname == "anti_alpha" ||
+                       pname == "anti_hypertriton")) yes = true;
     if (level > 1) yes = true;	   
     if (yes) {
       // main processes

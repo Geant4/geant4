@@ -4,6 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-10-03 Ben Morgan (detscorer-V11-00-01)
+- Apply standard clang-tidy plus range-based for and boolean simplification fixes
+- General code tidy and modernization
+  - Use consistent, grouped ordering of public-protected-private members
+  - Do not override virtual members when no difference to base class implementation
+  - Use delegating constructors to remove duplicated code
+  - Use C++ boolean true/false keywords
 
 ## 2021-12-10 Ben Morgan (detscorer-V11-00-00)
 - Change to new Markdown History format

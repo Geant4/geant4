@@ -39,20 +39,20 @@ B1ConRun::B1ConRun()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1ConRun::~B1ConRun()
-{} 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1ConRun::Merge(const G4Run* aRun)
 {
   // Merge data in base class
-  B1Run::Merge(aRun); 
+  B1Run::Merge(aRun);
 
   const B1ConRun* localRun = static_cast<const B1ConRun*>(aRun);
   for ( size_t i = 0 ; i != localRun->fEdepEventVector.size() ; i++ ) {
      fEdepEventVector.push_back( localRun->fEdepEventVector[i] );
   }
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

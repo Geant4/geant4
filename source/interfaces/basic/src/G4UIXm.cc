@@ -59,8 +59,8 @@ static void XmTextAppendString (Widget,char*);
 
 static void clearButtonCallback (Widget,XtPointer,XtPointer);
 
-static char* XmConvertCompoundStringToString (XmString,int);
-static G4bool ConvertStringToInt(const char*,int&);
+static char* XmConvertCompoundStringToString (XmString,G4int);
+static G4bool ConvertStringToInt(const char*,G4int&);
 static void ExecuteChangeSizeFunction(Widget);
 
 static G4bool exitSession = true;
@@ -68,7 +68,7 @@ static G4bool exitPause = true;
 static G4bool exitHelp = true;
 /***************************************************************************/
 G4UIXm::G4UIXm (
- int argc
+ G4int argc
 ,char** argv
 )
 :shell(NULL)
@@ -106,20 +106,20 @@ G4UIXm::G4UIXm (
   XtSetArg(args[0],XmNkeyboardFocusPolicy,XmPOINTER); // For completion.
   shell = XtAppCreateShell ("G4UIXm","G4UIXm",
 			    topLevelShellWidgetClass,XtDisplay(top),
-			    args,1); 
-  form = XmCreateForm (shell,(char*)"form",NULL,0);
+			    args,1);
+  form = XmCreateForm (shell,(char*)menu_str[0].c_str(),NULL,0);
   XtManageChild (form);
 
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
   XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
-  menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
+  menuBar = XmCreateMenuBar (form,(char*)menu_str[1].c_str(),args,3);
 
   XtSetArg(args[0],XmNtopAttachment      ,XmATTACH_NONE);
   XtSetArg(args[1],XmNleftAttachment     ,XmATTACH_FORM);
   XtSetArg(args[2],XmNrightAttachment    ,XmATTACH_FORM);
   XtSetArg(args[3],XmNbottomAttachment   ,XmATTACH_FORM);
-  command = XmCreateCommand (form,(char*)"command",args,4);
+  command = XmCreateCommand (form,(char*)menu_str[2].c_str(),args,4);
   XtManageChild (command);
 
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_NONE);
@@ -127,9 +127,9 @@ G4UIXm::G4UIXm (
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
   XtSetArg(args[3],XmNbottomAttachment,XmATTACH_WIDGET);
   XtSetArg(args[4],XmNbottomWidget    ,command);
-  XmString cps = XmStringLtoRCreate((char*)"Clear",(char*)XmSTRING_DEFAULT_CHARSET);
+  XmString cps = XmStringLtoRCreate((char*)menu_str[3].c_str(),(char*)XmSTRING_DEFAULT_CHARSET);
   XtSetArg (args[5],XmNlabelString,cps);
-  Widget clearButton = XmCreatePushButton(form,(char*)"clearButton",args,6);
+  Widget clearButton = XmCreatePushButton(form,(char*)menu_str[4].c_str(),args,6);
   XmStringFree (cps);
   XtManageChild (clearButton);
 
@@ -142,7 +142,7 @@ G4UIXm::G4UIXm (
   XtSetArg(args[6],XmNeditMode        ,XmMULTI_LINE_EDIT);
   XtSetArg(args[7],XmNrows            ,12);
   XtSetArg(args[8],XmNcolumns         ,80);
-  text = XmCreateScrolledText (form,(char*)"text",args,9);
+  text = XmCreateScrolledText (form,(char*)menu_str[5].c_str(),args,9);
   XtManageChild (text);
 
   XtAddCallback(clearButton,XmNactivateCallback,
@@ -405,7 +405,8 @@ void clearButtonCallback (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  XmTextSetString((Widget)a_tag,(char*)"");
+  static const G4String empty_str = "";
+  XmTextSetString((Widget)a_tag,(char*)empty_str.c_str());
 }
 /***************************************************************************/
 void G4UIXm::ButtonCallback (
@@ -426,7 +427,7 @@ void G4UIXm::ButtonCallback (
 /***************************************************************************/
 char* XmConvertCompoundStringToString (
  XmString a_cps 
-,int a_number 
+,G4int a_number 
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -435,7 +436,7 @@ char* XmConvertCompoundStringToString (
   char* ss = NULL;
   XmStringContext context;
   XmStringInitContext(&context,a_cps);
-  int icount = 0;
+  G4int icount = 0;
   Boolean Done = False;
   while(Done==False) {  
     char* text = NULL;
@@ -476,7 +477,7 @@ void XmTextAppendString (
 //////////////////////////////////////////////////////////////////////////////
 G4bool ConvertStringToInt(
  const char* aString
-,int& aInt
+,G4int& aInt
 )
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -484,9 +485,9 @@ G4bool ConvertStringToInt(
   aInt = 0;
   if(aString==NULL) return false;
   char* s;
-  long value = strtol(aString,&s,10);
+  G4long value = strtol(aString,&s,10);
   if(s==aString) return false;
-  aInt = value;
+  aInt = (G4int)value;
   return true;
 }
 #include <X11/IntrinsicP.h>

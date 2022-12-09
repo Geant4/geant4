@@ -38,11 +38,9 @@ class G4LogicalVolume;
 class G4MIRDRightKidney: public G4VOrgan
 {
 public:
-
-  G4MIRDRightKidney();
-  ~G4MIRDRightKidney();
+  G4MIRDRightKidney() = default;
+  ~G4MIRDRightKidney() override = default;
   G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*,  
-				    const G4String&, G4bool, G4bool);
-private:
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

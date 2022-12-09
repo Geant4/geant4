@@ -1,9 +1,21 @@
 # Category phys-ctor-helastic History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-24 Gabriele Cosmo (phys-ctor-helastic-V11-00-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-11 Alberto Ribon (phys-ctor-helastic-V11-00-02)
+- G4HadronElasticPhysics : extended nuclear elastic for light hypernuclei and
+  anti-hypernuclei projectiles.
+
+## 2022-08-21 Vladimir Ivanchenko (phys-ctor-helastic-V11-00-01)
+- G4HadronElasticPhysics - use G4HadProcesses utility to build neutron 
+    elastic, which allows to use an option of neutron general process
 
 ## 2021-12-10 Ben Morgan (phys-ctor-helastic-V11-00-00)
 - Change to new Markdown History format

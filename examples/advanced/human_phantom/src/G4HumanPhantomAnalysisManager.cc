@@ -30,15 +30,13 @@ Author: Susanna Guatelli, University of Wollongong, Australia
 // The analysis was included in this application following the extended Geant4
 // example analysis/AnaEx01
 
-#include <stdlib.h>
 #include "G4HumanPhantomAnalysisManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
 G4HumanPhantomAnalysisManager::G4HumanPhantomAnalysisManager()
 {
-
-factoryOn = false;
+fFactoryOn = false;
 
 // Initialization ntuple
   for (G4int k=0; k<MaxNtCol; k++) {
@@ -46,24 +44,19 @@ factoryOn = false;
   }  
 }
 
-G4HumanPhantomAnalysisManager::~G4HumanPhantomAnalysisManager() 
-{ 
-}
-
 void G4HumanPhantomAnalysisManager::book() 
 {  
-  G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
-  AnalysisManager->SetVerboseLevel(2);
+  analysisManager->SetVerboseLevel(2);
  
   // Create a root file
   G4String fileName = "human_phantom.root";
 
   // Create directories  
-  AnalysisManager->SetNtupleDirectoryName("human_phantom_ntuple");
+  analysisManager->SetNtupleDirectoryName("human_phantom_ntuple");
   
-
-  G4bool fileOpen = AnalysisManager->OpenFile(fileName);
+  G4bool fileOpen = analysisManager->OpenFile(fileName);
   if (!fileOpen) {
     G4cout << "\n---> HistoManager::book(): cannot open " 
            << fileName
@@ -72,38 +65,37 @@ void G4HumanPhantomAnalysisManager::book()
   }
 
   //creating a ntuple, containg 3D energy deposition in the phantom
-  AnalysisManager->SetFirstNtupleId(1);
-  AnalysisManager -> CreateNtuple("1", "3Dedep");
-  fNtColId[0] = AnalysisManager->CreateNtupleDColumn("organID");
-  fNtColId[1] = AnalysisManager->CreateNtupleDColumn("edep");
+  analysisManager->SetFirstNtupleId(1);
+  analysisManager->CreateNtuple("1", "3Dedep");
+  fNtColId[0] = analysisManager->CreateNtupleDColumn("organID");
+  fNtColId[1] = analysisManager->CreateNtupleDColumn("edep");
 
-  AnalysisManager->FinishNtuple();
+  analysisManager->FinishNtuple();
   
-  factoryOn = true;    
+  fFactoryOn = true;    
 }
 
- 
 void G4HumanPhantomAnalysisManager::FillNtupleWithEnergyDeposition(G4int organ,G4double energyDep)
 {
   if (energyDep !=0)
  {
-  G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
-  AnalysisManager->FillNtupleDColumn(1, fNtColId[0], organ);
-  AnalysisManager->FillNtupleDColumn(1, fNtColId[1], energyDep);
-  AnalysisManager->AddNtupleRow(1);  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillNtupleDColumn(1, fNtColId[0], organ);
+  analysisManager->FillNtupleDColumn(1, fNtColId[1], energyDep);
+  analysisManager->AddNtupleRow(1);  
   G4cout << "Analysis: organ " << organ << " edep: "<< energyDep << G4endl;  
 }
  }
 
 void G4HumanPhantomAnalysisManager::save() 
 {  
- if (factoryOn) 
+ if (fFactoryOn) 
    {
-    G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();    
-    AnalysisManager->Write();
-    AnalysisManager->CloseFile();  
-    AnalysisManager->Clear();  
-    factoryOn = false;
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->Write();
+    analysisManager->CloseFile();  
+    analysisManager->Clear();  
+    fFactoryOn = false;
    }
 }
 

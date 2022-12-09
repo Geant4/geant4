@@ -35,6 +35,7 @@
 
 #include "DetectorMessenger.hh"
 #include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -44,13 +45,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
-    G4UImessenger(), fpDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det, PhysicsList* PL)
+  : G4UImessenger(), fpDetector(Det), fpPhysList(PL)
 {
-  fpMaterCmd = new G4UIcmdWithAString("/dna/det/setMat", this);
+  fpDetDir = new G4UIdirectory("/dna/test/");
+  fpDetDir->SetGuidance("dna test commands");
+
+  fpMaterCmd = new G4UIcmdWithAString("/dna/test/setMat", this);
   fpMaterCmd->SetGuidance("Select material of the world.");
-  fpMaterCmd->SetParameterName("choice", false);
+  fpMaterCmd->SetParameterName("Material", false);
   fpMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fpMaterCmd->SetToBeBroadcasted(false);
+
+  fpPhysCmd = new G4UIcmdWithAString("/dna/test/addPhysics", this);
+  fpPhysCmd->SetGuidance("Added Physics List");
+  fpPhysCmd->SetParameterName("Physics", false);
+  fpPhysCmd->AvailableForStates(G4State_PreInit);
+  fpPhysCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +69,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
 DetectorMessenger::~DetectorMessenger()
 {
   delete fpMaterCmd;
+  delete fpPhysCmd;
+  delete fpDetDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +78,7 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fpMaterCmd) fpDetector->SetMaterial(newValue);
+  else if (command == fpPhysCmd) fpPhysList->AddPhysics(newValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

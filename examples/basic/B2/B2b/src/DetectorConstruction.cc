@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.cc
+/// \file B2/B2b/src/DetectorConstruction.cc
 /// \brief Implementation of the B2b::DetectorConstruction class
 
 #include "DetectorConstruction.hh"
@@ -141,44 +141,37 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
          << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
          << " mm" << G4endl;
 
-  G4Box* worldS
-    = new G4Box("world",                                    //its name
-                worldLength/2,worldLength/2,worldLength/2); //its size
-  G4LogicalVolume* worldLV
-    = new G4LogicalVolume(
-                 worldS,   //its solid
-                 air,      //its material
-                 "World"); //its name
+  auto worldS = new G4Box("world",                       // its name
+    worldLength / 2, worldLength / 2, worldLength / 2);  // its size
+  auto worldLV = new G4LogicalVolume(worldS,             // its solid
+    air,                                                 // its material
+    "World");                                            // its name
 
   //  Must place the World Physical volume unrotated at (0,0,0).
   //
-  G4VPhysicalVolume* worldPV
-    = new G4PVPlacement(
-                 0,               // no rotation
-                 G4ThreeVector(), // at (0,0,0)
-                 worldLV,         // its logical volume
-                 "World",         // its name
-                 0,               // its mother  volume
-                 false,           // no boolean operations
-                 0,               // copy number
-                 fCheckOverlaps); // checking overlaps
+  auto worldPV = new G4PVPlacement(nullptr,  // no rotation
+    G4ThreeVector(),                         // at (0,0,0)
+    worldLV,                                 // its logical volume
+    "World",                                 // its name
+    nullptr,                                 // its mother  volume
+    false,                                   // no boolean operations
+    0,                                       // copy number
+    fCheckOverlaps);                         // checking overlaps
 
   // Target
 
   G4ThreeVector positionTarget = G4ThreeVector(0,0,-(targetLength+trackerSize));
 
-  G4Tubs* targetS
-    = new G4Tubs("target",0.,targetRadius,targetLength,0.*deg,360.*deg);
-  fLogicTarget
-    = new G4LogicalVolume(targetS, fTargetMaterial,"Target",0,0,0);
-  new G4PVPlacement(0,              // no rotation
-                    positionTarget, // at (x,y,z)
-                    fLogicTarget,   // its logical volume
-                    "Target",       // its name
-                    worldLV,        // its mother volume
-                    false,          // no boolean operations
-                    0,              // copy number
-                    fCheckOverlaps); // checking overlaps
+  auto targetS = new G4Tubs("target", 0., targetRadius, targetLength, 0. * deg, 360. * deg);
+  fLogicTarget = new G4LogicalVolume(targetS, fTargetMaterial, "Target", nullptr, nullptr, nullptr);
+  new G4PVPlacement(nullptr,  // no rotation
+    positionTarget,           // at (x,y,z)
+    fLogicTarget,             // its logical volume
+    "Target",                 // its name
+    worldLV,                  // its mother volume
+    false,                    // no boolean operations
+    0,                        // copy number
+    fCheckOverlaps);          // checking overlaps
 
   G4cout << "Target is " << 2*targetLength/cm << " cm of "
          << fTargetMaterial->GetName() << G4endl;
@@ -187,28 +180,25 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
 
-  G4Tubs* trackerS
-    = new G4Tubs("tracker",0,trackerSize,trackerSize, 0.*deg, 360.*deg);
-  G4LogicalVolume* trackerLV
-    = new G4LogicalVolume(trackerS, air, "Tracker",0,0,0);
-  new G4PVPlacement(0,               // no rotation
-                    positionTracker, // at (x,y,z)
-                    trackerLV,       // its logical volume
-                    "Tracker",       // its name
-                    worldLV,         // its mother  volume
-                    false,           // no boolean operations
-                    0,               // copy number
-                    fCheckOverlaps); // checking overlaps
+  auto trackerS = new G4Tubs("tracker", 0, trackerSize, trackerSize, 0. * deg, 360. * deg);
+  auto trackerLV = new G4LogicalVolume(trackerS, air, "Tracker", nullptr, nullptr, nullptr);
+  new G4PVPlacement(nullptr,  // no rotation
+    positionTracker,          // at (x,y,z)
+    trackerLV,                // its logical volume
+    "Tracker",                // its name
+    worldLV,                  // its mother  volume
+    false,                    // no boolean operations
+    0,                        // copy number
+    fCheckOverlaps);          // checking overlaps
 
   // Tracker segments
 
   // An example of Parameterised volumes
   // Dummy values for G4Tubs -- modified by parameterised volume
 
-  G4Tubs* chamberS
-    = new G4Tubs("tracker",0, 100*cm, 100*cm, 0.*deg, 360.*deg);
-  fLogicChamber
-    = new G4LogicalVolume(chamberS,fChamberMaterial,"Chamber",0,0,0);
+  auto chamberS = new G4Tubs("tracker", 0, 100 * cm, 100 * cm, 0. * deg, 360. * deg);
+  fLogicChamber =
+    new G4LogicalVolume(chamberS, fChamberMaterial, "Chamber", nullptr, nullptr, nullptr);
 
   G4double firstPosition = -trackerSize + chamberSpacing;
   G4double firstLength   = trackerLength/10;
@@ -242,12 +232,12 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Visualization attributes
 
-  G4VisAttributes* boxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto boxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   worldLV   ->SetVisAttributes(boxVisAtt);
   fLogicTarget ->SetVisAttributes(boxVisAtt);
   trackerLV ->SetVisAttributes(boxVisAtt);
 
-  G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  auto chamberVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
   fLogicChamber->SetVisAttributes(chamberVisAtt);
 
   // Example of User Limits
@@ -281,8 +271,7 @@ void DetectorConstruction::ConstructSDandField()
   // Sensitive detectors
 
   G4String trackerChamberSDname = "B2/TrackerChamberSD";
-  TrackerSD* aTrackerSD = new TrackerSD(trackerChamberSDname,
-                                        "TrackerHitsCollection");
+  auto aTrackerSD = new TrackerSD(trackerChamberSDname, "TrackerHitsCollection");
   G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
   SetSensitiveDetector( fLogicChamber,  aTrackerSD );
 

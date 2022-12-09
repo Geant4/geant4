@@ -34,78 +34,62 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "GammaRayTelCalorimeterHit.hh"
 
-G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *GammaRayTelCalorimeterHitAllocator = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *calorimeterHitAllocator{nullptr};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelCalorimeterHit::GammaRayTelCalorimeterHit()
-{
-  EdepCAL = 0.; 
-  CALBarNumber = 0;
-  CALPlaneNumber = 0;
-  IsCALPlane = 0;
-  pos = G4ThreeVector(0.,0.,0.);
+GammaRayTelCalorimeterHit::GammaRayTelCalorimeterHit() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelCalorimeterHit::~GammaRayTelCalorimeterHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-GammaRayTelCalorimeterHit::GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit& right)
-  :G4VHit()
-{
-  EdepCAL = right.EdepCAL; 
-  CALBarNumber = right.CALBarNumber;
-  CALPlaneNumber = right.CALPlaneNumber;
-  IsCALPlane = right.IsCALPlane;
-  pos = right.pos;
+GammaRayTelCalorimeterHit::~GammaRayTelCalorimeterHit() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const GammaRayTelCalorimeterHit& GammaRayTelCalorimeterHit::operator=(const GammaRayTelCalorimeterHit& right)
-{
-  EdepCAL = right.EdepCAL; 
-  CALBarNumber = right.CALBarNumber;
-  CALPlaneNumber = right.CALPlaneNumber;
-  IsCALPlane = right.IsCALPlane;
-  pos = right.pos;
-  return *this;
+GammaRayTelCalorimeterHit::GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit &right) :
+    calBarNumber(right.calBarNumber),
+    calPlaneNumber(right.calPlaneNumber),
+    isCALPlane(right.isCALPlane),
+    calDepositedEnergy(right.calDepositedEnergy),
+    position(right.position) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelCalorimeterHit::operator==(const GammaRayTelCalorimeterHit& right) const
-{
-  return((EdepCAL==right.EdepCAL)&&(CALBarNumber==right.CALBarNumber)&&(CALPlaneNumber==right.CALPlaneNumber)&&(IsCALPlane==right.IsCALPlane)&& (pos==right.pos));
+auto GammaRayTelCalorimeterHit::operator=(const GammaRayTelCalorimeterHit &right) -> const GammaRayTelCalorimeterHit& {
+	calBarNumber = right.calBarNumber;
+	calPlaneNumber = right.calPlaneNumber;
+	isCALPlane = right.isCALPlane;
+    calDepositedEnergy = right.calDepositedEnergy;
+	position = right.position;
+
+	return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterHit::Draw()
-{;}
+auto GammaRayTelCalorimeterHit::operator==(const GammaRayTelCalorimeterHit &right) const -> G4bool {
+	return (
+		(calBarNumber == right.calBarNumber) &&
+		(calPlaneNumber == right.calPlaneNumber) &&
+		(isCALPlane == right.isCALPlane) &&
+        (calDepositedEnergy == right.calDepositedEnergy) &&
+		(position == right.position)
+	);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterHit::Print()
-{;}
+void GammaRayTelCalorimeterHit::Draw() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelCalorimeterHit::Print() {
+}

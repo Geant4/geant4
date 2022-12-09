@@ -49,22 +49,20 @@
 
 class G4SDKineticEnergyFilter : public G4VSDFilter
 {
-  //-------
- public:  // with description
+ public:
   G4SDKineticEnergyFilter(G4String name, G4double elow = 0.0,
                           G4double ehigh = DBL_MAX);
   // Constructor. Filter name and kinetic energy range( elow, ehigh).
 
-  virtual ~G4SDKineticEnergyFilter();
+  ~G4SDKineticEnergyFilter() override = default;
 
- public:  // with description
-  virtual G4bool Accept(const G4Step*) const;
+  G4bool Accept(const G4Step*) const override;
 
   void SetKineticEnergy(G4double elow, G4double ehigh);
   void SetLowEnergy(G4double elow);
   void SetHighEnergy(G4double ehigh);
   // Set methods for kinetic energy range.
-  //
+  
   void show();
 
  private:

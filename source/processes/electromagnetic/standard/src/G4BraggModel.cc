@@ -356,7 +356,7 @@ void G4BraggModel::HasMaterial(const G4Material* mat)
   if(chFormula.empty()) { return; }
 
   // ICRU Report N49, 1993. Power's model for H
-  static const size_t numberOfMolecula = 11;
+  static const G4int numberOfMolecula = 11;
   static const G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
@@ -364,7 +364,7 @@ void G4BraggModel::HasMaterial(const G4Material* mat)
     "H_2O-Gas",                "Graphite" } ;
 
   // Search for the material in the table
-  for (size_t i=0; i<numberOfMolecula; ++i) {
+  for (G4int i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {
       iMolecula = i;  
       return;
@@ -625,7 +625,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
       *material->GetDensity();
 
   } 
-  const G4int numberOfElements = material->GetNumberOfElements();
+  const std::size_t numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
   
@@ -651,7 +651,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                            material->GetElementVector();
   
     //  Loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; ++i) {
+    for (std::size_t i=0; i<numberOfElements; ++i) {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
       eloss    += ElectronicStoppingPower(z,kineticEnergy)
@@ -669,7 +669,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                            material->GetElementVector() ;
   
     //  loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; ++i)
+    for (std::size_t i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
       eloss   += ElectronicStoppingPower(element->GetZ(), kineticEnergy)
@@ -705,7 +705,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   // The coffecient from Table.4 of Ziegler & Manoyan
   static const G4float HeEff = 2.8735f;
   
-  static const size_t numberOfMolecula = 53;
+  static const std::size_t numberOfMolecula = 53;
   static const G4String nameOfMol[numberOfMolecula] = {
     "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
@@ -734,7 +734,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     306.8f,  324.4f, 420.0f
   } ;
 
-  static const G4float expCharge[53] = {
+  static const G4float expCharge[numberOfMolecula] = {
     HeEff, HeEff, HeEff,  1.0f, HeEff,
     HeEff, HeEff, HeEff,  1.0f,  1.0f,
      1.0f, HeEff, HeEff, HeEff, HeEff,
@@ -748,7 +748,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     HeEff, HeEff, HeEff
   } ;
 
-  static const G4int numberOfAtomsPerMolecula[53] = {
+  static const G4int numberOfAtomsPerMolecula[numberOfMolecula] = {
     3,  7, 10,  4,  6,
     9, 12,  7,  4, 24,
     12,14, 10, 13,  5,
@@ -762,7 +762,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     10, 9,  15};
 
   // Search for the compaund in the table
-  for (size_t i=0; i<numberOfMolecula; ++i) {
+  for (std::size_t i=0; i<numberOfMolecula; ++i) {
     if(chFormula == nameOfMol[i]) {
       expStopPower125 = ((G4double)expStopping[i])
         * (material->GetTotNbOfAtomsPerVolume()) /

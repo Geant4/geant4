@@ -47,7 +47,7 @@ G4AntiHyperTriton* G4AntiHyperTriton::Definition() {
   const G4String name = "anti_hypertriton";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast< G4Ions* >( pTable->FindParticle( name ) );
+  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -90,7 +90,7 @@ G4AntiHyperTriton* G4AntiHyperTriton::Definition() {
     delete [] mode;
     anInstance->SetDecayTable( table );    
   }
-  theInstance = reinterpret_cast< G4AntiHyperTriton* >( anInstance );
+  theInstance = static_cast< G4AntiHyperTriton* >( anInstance );
   return theInstance;
 }
 

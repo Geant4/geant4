@@ -536,7 +536,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&      StartFT,
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
 
-  G4int oldprec;   // cout/cerr precision settings
+  G4long oldprec;   // cout/cerr precision settings
       
   if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
@@ -617,7 +617,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
                           G4double stepTrial,
                     const G4FieldTrack& )
 {
-  G4int  iprec= G4cout.precision(8); 
+  G4long iprec= G4cout.precision(8); 
   G4cout << " " << std::setw(12) << " PiF: NoZeroStep " 
          << " " << std::setw(20) << " CurrentProposed len " 
          << " " << std::setw(18) << " Full_curvelen_last" 

@@ -1,9 +1,26 @@
 # Category hadr-cohe History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-26 Gabriele Cosmo (hadr-cohe-V11-00-05)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-25 Alberto Ribon (hadr-cohe-V11-00-04)
+- G4AntiNuclElastic : Vladimir Uzhinsky's extension of the SampleInvariantT method
+  for the simulation of a light anti-hypernucleus projectile elastic scattering
+  on a target nucleus.
+  Note: most of the considered light anti-hypernuclei projectiles have 
+  baryon number equal to -4 : it is assumed that their properties are similar
+  to anti-He4, therefore their elastic scattering is set-up as for anti-He4
+  elastic nuclear scattering. These properties can be improved in the future
+  if theoretical estimations will be available.
+
+## 2022-09-05 Ben Morgan (hadr-cohe-V11-00-03)
+- Update dependencies to address warnings from consistency check
 
 ## 2022-02-04 Vladimir Ivanchenko (hadr-cohe-V11-00-02)
 - G4ElasticHadrNucleusHE, G4NeutronElectronElModel, G4NeutrinoElectronNcModel

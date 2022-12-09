@@ -4,9 +4,6 @@
 # - Headers
 set(G4clhep_HEADERS
   include/CLHEP/Evaluator/Evaluator.h
-  include/CLHEP/Evaluator/hash_map.icc
-  include/CLHEP/Evaluator/stack.icc
-  include/CLHEP/Evaluator/string.icc
   include/CLHEP/Geometry/BasicVector3D.h
   include/CLHEP/Geometry/Normal3D.h
   include/CLHEP/Geometry/Plane3D.h

@@ -21,6 +21,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/materials/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/particles/management/include \
@@ -39,6 +40,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/electromagnetic/highenergy/include \
+            -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/electromagnetic/xrays/include \
             -I$(G4BASE)/processes/optical/include \
@@ -62,12 +64,10 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
-            -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
             -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
             -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
-            -I$(G4BASE)/processes/hadronic/util/include \
-            -I$(G4BASE)/materials/include
+            -I$(G4BASE)/processes/hadronic/util/include
 
 include $(G4INSTALL)/config/common.gmk

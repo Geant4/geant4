@@ -56,6 +56,5 @@ geant4_module_link_libraries(G4hadronic_deex_evaporation
     G4hadronic_deex_photon_evaporation
     G4hepgeometry
     G4heprandom
-    G4ions
     G4materials
     G4partman)

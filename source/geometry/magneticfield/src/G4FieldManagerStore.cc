@@ -71,25 +71,12 @@ void G4FieldManagerStore::Clean()
   //
   locked = true;  
 
-  size_t i=0;
   G4FieldManagerStore* store = GetInstance();
 
   for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
     if (*pos) { delete *pos; }
-    i++;
   }
-
-#ifdef G4GEOMETRY_DEBUG
-  if (store->size() < i-1)
-  {
-    G4cout << "No field managers deleted. Already deleted by user ?" << G4endl;
-  }
-  else
-  {
-    G4cout << i-1 << " field managers deleted !" << G4endl;
-  }
-#endif
 
   locked = false;
   store->clear();

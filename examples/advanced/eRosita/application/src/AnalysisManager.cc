@@ -23,64 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "AnalysisManager.hh"
 #include <sstream>
 
-AnalysisManager* AnalysisManager::instance = 0;
+AnalysisManager *AnalysisManager::instance{nullptr};
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-AnalysisManager* AnalysisManager::Instance() 
+AnalysisManager::AnalysisManager()
 {
- 
-  // A new instance of AnalysisManager is created if it does not exist:
-  if (instance == 0) 
-    {
-      instance = new AnalysisManager();
+    dataFile1.open("TrackerPhotonEnergy.out"); // open the file
+//    dataFile2.open("TotalEnergy.out"); // open the file
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+AnalysisManager::~AnalysisManager()
+{
+    dataFile1.close(); // close the file
+//    dataFile2.close(); // close the file
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+auto AnalysisManager::Instance() -> AnalysisManager*
+{
+    // A new instance of AnalysisManager is created, if it does not exist:
+    if (instance == nullptr) {
+        instance = new AnalysisManager();
     }
-  
-  // The instance of AnalysisManager is returned:
-  return instance;
+
+    // The instance of AnalysisManager is returned:
+    return instance;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void AnalysisManager::Destroy() 
+void AnalysisManager::Destroy()
 {
-
-  // The AnalysisManager instance is deleted if it exists:
-  if (instance != 0) 
-    {
-      delete instance;
-      instance = 0;
+    // The AnalysisManager instance is deleted, if it exists:
+    if (instance != nullptr) {
+        delete instance;
+        instance = nullptr;
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-AnalysisManager::AnalysisManager() 
+void AnalysisManager::Score(G4double depositedEnergy)
 {
-  outFile.open("TrackerPhotonEnergy.out");
-//   outFileT.open("eTot.out"); 
+    dataFile1 << depositedEnergy << std::endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-AnalysisManager::~AnalysisManager() 
+void AnalysisManager::ScoreTotalEnergy(G4double totalDepositedEnergy)
 {
-  outFile.close();
-  outFileT.close();
+    dataFile2 << totalDepositedEnergy << std::endl;
 }
-
-
-void AnalysisManager::Score(G4double eDep) 
-{
-//   outFile << id << " "
-// 	  << eDep << " "
-// 	  << x << " "
-// 	  << y << " "
-// 	  << z << " "
-// 	  << std::endl;
-  outFile << eDep << std::endl;
-}
-
-// void AnalysisManager::ScoreTot(G4double eTot) 
-// {
-//   outFileT << eTot << std::endl;
-// }

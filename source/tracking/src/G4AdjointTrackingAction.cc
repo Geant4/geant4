@@ -112,7 +112,7 @@ void G4AdjointTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
       if ((*pListOfPrimaryFwdParticles)[i]->GetParticleName()
          == last_fwd_part_name)
       {
-        last_fwd_part_index=i;
+        last_fwd_part_index=(G4int)i;
       }
       ++i;
     }

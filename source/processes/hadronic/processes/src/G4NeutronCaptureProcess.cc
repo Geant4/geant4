@@ -51,9 +51,6 @@ G4NeutronCaptureProcess::G4NeutronCaptureProcess(const G4String& processName) :
   AddDataSet(new G4NeutronCaptureXS());
 }
 
-G4NeutronCaptureProcess::~G4NeutronCaptureProcess()
-{}
-
 G4bool
 G4NeutronCaptureProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 {

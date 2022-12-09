@@ -62,7 +62,7 @@ G4PhononTransFast*  G4PhononTransFast::Definition()
                 false,        "phononTF",       0
              );
   }
-  theInstance = reinterpret_cast<G4PhononTransFast*>(anInstance);
+  theInstance = static_cast<G4PhononTransFast*>(anInstance);
   return theInstance;
 }
 

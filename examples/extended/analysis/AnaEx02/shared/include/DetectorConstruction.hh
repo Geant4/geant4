@@ -25,10 +25,6 @@
 //
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
-//
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +34,8 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+
+#include "CLHEP/Units/SystemOfUnits.h"
 
 class G4Box;
 class G4LogicalVolume;
@@ -50,90 +48,82 @@ class DetectorMessenger;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
-    DetectorConstruction();
-    virtual ~DetectorConstruction();
+
+   DetectorConstruction();
+   ~DetectorConstruction() override;
 
   public:
-     
-     void SetAbsorberMaterial (G4String);     
-     void SetAbsorberThickness(G4double);     
+    G4VPhysicalVolume* Construct() override;
 
-     void SetGapMaterial (G4String);     
-     void SetGapThickness(G4double);
-     
-     void SetCalorSizeYZ(G4double);          
-     void SetNbOfLayers (G4int);   
-     
-     virtual G4VPhysicalVolume* Construct();
+    void SetAbsorberMaterial (const G4String&);
+    void SetAbsorberThickness(G4double);
 
-  public:
-  
-     void PrintCalorParameters(); 
-                    
-     G4double GetWorldSizeX()           {return fWorldSizeX;}; 
-     G4double GetWorldSizeYZ()          {return fWorldSizeYZ;};
-     
-     G4double GetCalorThickness()       {return fCalorThickness;}; 
-     G4double GetCalorSizeYZ()          {return fCalorSizeYZ;};
-      
-     G4int GetNbOfLayers()              {return fNbOfLayers;}; 
-     
-     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return fAbsorberThickness;};      
-     
-     G4Material* GetGapMaterial()       {return fGapMaterial;};
-     G4double    GetGapThickness()      {return fGapThickness;};
-     
-     const G4VPhysicalVolume* GetphysiWorld() {return fPhysiWorld;};           
-     const G4VPhysicalVolume* GetAbsorber()   {return fPhysiAbsorber;};
-     const G4VPhysicalVolume* GetGap()        {return fPhysiGap;};
-                 
+    void SetGapMaterial (const G4String&);
+    void SetGapThickness(G4double);
+
+    void SetCalorSizeYZ(G4double);
+    void SetNbOfLayers (G4int);
+
+    void PrintCalorParameters();
+
+    G4double GetWorldSizeX()  { return fWorldSizeX; }
+    G4double GetWorldSizeYZ() { return fWorldSizeYZ; }
+
+    G4double GetCalorThickness() { return fCalorThickness; }
+    G4double GetCalorSizeYZ()    { return fCalorSizeYZ; }
+
+    G4int GetNbOfLayers() { return fNbOfLayers; }
+
+    G4Material* GetAbsorberMaterial()  { return fAbsorberMaterial; }
+    G4double    GetAbsorberThickness() { return fAbsorberThickness; }
+
+    G4Material* GetGapMaterial()  { return fGapMaterial; }
+    G4double    GetGapThickness() { return fGapThickness; }
+
+    const G4VPhysicalVolume* GetphysiWorld() { return fPhysiWorld; }
+    const G4VPhysicalVolume* GetAbsorber()   { return fPhysiAbsorber; }
+    const G4VPhysicalVolume* GetGap()        { return fPhysiGap; }
+
   private:
-     
-     G4Material*        fAbsorberMaterial;
-     G4double           fAbsorberThickness;
-     
-     G4Material*        fGapMaterial;
-     G4double           fGapThickness;
-     
-     G4int              fNbOfLayers;
-     G4double           fLayerThickness;
-          
-     G4double           fCalorSizeYZ;
-     G4double           fCalorThickness;
-     
-     G4Material*        fDefaultMaterial;
-     G4double           fWorldSizeYZ;
-     G4double           fWorldSizeX;
-            
-     G4Box*             fSolidWorld;    //pointer to the solid World 
-     G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
+    void DefineMaterials();
+    void ComputeCalorParameters();
+    G4VPhysicalVolume* ConstructCalorimeter();
 
-     G4Box*             fSolidCalor;    //pointer to the solid Calor 
-     G4LogicalVolume*   fLogicCalor;    //pointer to the logical Calor
-     G4VPhysicalVolume* fPhysiCalor;    //pointer to the physical Calor
-     
-     G4Box*             fSolidLayer;    //pointer to the solid Layer 
-     G4LogicalVolume*   fLogicLayer;    //pointer to the logical Layer
-     G4VPhysicalVolume* fPhysiLayer;    //pointer to the physical Layer
-         
-     G4Box*             fSolidAbsorber; //pointer to the solid Absorber
-     G4LogicalVolume*   fLogicAbsorber; //pointer to the logical Absorber
-     G4VPhysicalVolume* fPhysiAbsorber; //pointer to the physical Absorber
-     
-     G4Box*             fSolidGap;      //pointer to the solid Gap
-     G4LogicalVolume*   fLogicGap;      //pointer to the logical Gap
-     G4VPhysicalVolume* fPhysiGap;      //pointer to the physical Gap
-     
-     DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
-      
-  private:
-    
-     void DefineMaterials();
-     void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+    G4Material* fAbsorberMaterial = nullptr;
+    G4Material* fGapMaterial = nullptr;
+    G4Material* fDefaultMaterial = nullptr;
+
+    G4int      fNbOfLayers = 10;
+    G4double   fAbsorberThickness = 10.*CLHEP::mm;
+    G4double   fGapThickness = 5.*CLHEP::mm;
+    G4double   fCalorSizeYZ = 10.*CLHEP::cm;
+
+    G4double   fCalorThickness = 0.;    // will be computed
+    G4double   fLayerThickness= 0.;     // will be computed
+    G4double   fWorldSizeYZ = 0.;       // will be computed;
+    G4double   fWorldSizeX = 0.;        // will be computed;
+
+    G4Box*             fSolidWorld = nullptr;    //pointer to the solid World
+    G4LogicalVolume*   fLogicWorld = nullptr;    //pointer to the logical World
+    G4VPhysicalVolume* fPhysiWorld = nullptr;    //pointer to the physical World
+
+    G4Box*             fSolidCalor = nullptr;    //pointer to the solid Calor
+    G4LogicalVolume*   fLogicCalor = nullptr;    //pointer to the logical Calor
+    G4VPhysicalVolume* fPhysiCalor = nullptr;    //pointer to the physical Calor
+
+    G4Box*             fSolidLayer = nullptr;    //pointer to the solid Layer
+    G4LogicalVolume*   fLogicLayer = nullptr;    //pointer to the logical Layer
+    G4VPhysicalVolume* fPhysiLayer = nullptr;    //pointer to the physical Layer
+
+    G4Box*             fSolidAbsorber = nullptr; //pointer to the solid Absorber
+    G4LogicalVolume*   fLogicAbsorber = nullptr; //pointer to the logical Absorber
+    G4VPhysicalVolume* fPhysiAbsorber = nullptr; //pointer to the physical Absorber
+
+    G4Box*             fSolidGap = nullptr;      //pointer to the solid Gap
+    G4LogicalVolume*   fLogicGap = nullptr;      //pointer to the logical Gap
+    G4VPhysicalVolume* fPhysiGap = nullptr;      //pointer to the physical Gap
+
+    DetectorMessenger* fDetectorMessenger = nullptr;  //pointer to the Messenger
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,10 +131,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 inline void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
-     fLayerThickness = fAbsorberThickness + fGapThickness;
-     fCalorThickness = fNbOfLayers*fLayerThickness;
-     
-     fWorldSizeX = 1.2*fCalorThickness; fWorldSizeYZ = 1.2*fCalorSizeYZ;
+    fLayerThickness = fAbsorberThickness + fGapThickness;
+    fCalorThickness = fNbOfLayers*fLayerThickness;
+
+    fWorldSizeX = 1.2*fCalorThickness; fWorldSizeYZ = 1.2*fCalorSizeYZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

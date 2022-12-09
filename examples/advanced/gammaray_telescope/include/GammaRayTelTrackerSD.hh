@@ -43,43 +43,40 @@
 class GammaRayTelDetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
+
 #include "GammaRayTelTrackerHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelTrackerSD : public G4VSensitiveDetector
-{
+class GammaRayTelTrackerSD: public G4VSensitiveDetector {
 public:
-  
-  GammaRayTelTrackerSD(G4String);
-  ~GammaRayTelTrackerSD();
-  
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step* astep,G4TouchableHistory* ROHist);
-  void EndOfEvent(G4HCofThisEvent*);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-  
+    explicit GammaRayTelTrackerSD(G4String name);
+
+	~GammaRayTelTrackerSD() override;
+
+	void Initialize(G4HCofThisEvent *event) override;
+
+	auto ProcessHits(G4Step *step, G4TouchableHistory *history) -> G4bool override;
+
+	void EndOfEvent(G4HCofThisEvent *collection) override;
+
+	void clear() override;
+
+	void DrawAll() override;
+
+	void PrintAll() override;
+
 private:
-  
-  GammaRayTelTrackerHitsCollection*  TrackerCollection;      
-  GammaRayTelDetectorConstruction* Detector;
+	GammaRayTelTrackerHitsCollection *trackerCollection;
 
-  G4int* ThitXID;
-  G4int* ThitYID;
-  
-  G4int NbOfTKRLayers;
-  G4int NbOfTKRStrips;
-  G4int NbOfTKRChannels;
+	GammaRayTelDetectorConstruction *detector;
 
+	G4int *tkrHitXID;
 
+	G4int *tkrHitYID;
+
+	G4int numberOfTKRLayers;
+
+	G4int numberOfTKRStrips;
+
+	G4int numberOfTKRChannels;
 };
-
 #endif
-
-
-
-
-
-

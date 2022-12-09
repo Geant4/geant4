@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 //
+/// \file ExGflash3ParallelWorld.hh
+/// \brief Definition of the ExGflash3ParallelWorld class
 //
 #ifndef ExGflash3ParallelWorld_h
 #define ExGflash3ParallelWorld_h 1

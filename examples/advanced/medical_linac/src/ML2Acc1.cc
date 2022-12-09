@@ -693,36 +693,27 @@ bool CML2Acc1::MLC() //MultiLeaf Collimator
 	regVol -> AddRootLogicalVolume(leafLVB);
 
 	int i;
-	int j=0;
 	G4String PVname;
 	G4ThreeVector centre;
 	int nhalfLeaves = (int)(vec_leavesA.size()/2.);
 	centre = centreStart + G4ThreeVector(-nhalfLeaves*boxSize.getX(), 0.,0.);
 	for (i = 1; i < (int)vec_leavesA.size(); i++)
 	{
-		G4String str;
-		char appo[12];
-		sprintf(appo,"%d",i);
-		str = appo;
+		G4String str = std::to_string(i);
 		PVname = "leafA"+str;
 		centre.setX(centre.getX()+boxSize.getX()*2.);
 		centre.setY(-boxSize.getY()-vec_leavesA[i]);
 		new G4PVPlacement(0, centre, PVname, leafLVA, PVWorld, false, i);
-		j++;
 	}
 	nhalfLeaves = (int)(vec_leavesB.size()/2.);
 	centre = centreStart+G4ThreeVector(-nhalfLeaves*boxSize.getX(), 0.,0.);
 	for (i = 1; i < (int)vec_leavesB.size(); i++)
 	{
-		G4String str;
-		char appo[12];
-		sprintf(appo,"%d",i);
-		str = appo;
+		G4String str = std::to_string(i);
 		PVname = "leafB"+str;
 		centre.setX(centre.getX()+boxSize.getX()*2.);
 		centre.setY(+boxSize.getY()+vec_leavesB[i]);
 		new G4PVPlacement(0, centre, PVname, leafLVB, PVWorld, false, i);
-		j++;
 	}
 	bCreated = true;
 	return bCreated;

@@ -465,7 +465,7 @@ void SbPainterPS::putInStreamF(
   va_start(args,aFormat);
   printV(aFormat,args);
   va_end(args);
-  int length = ::strlen(fBufferString);
+  int length = (int)strlen(fBufferString);
   if(length>METAFILE_RECORD_LENGTH) {
     ::printf("SoPostScript::putInStreamF overflow\n");
     return;
@@ -523,7 +523,7 @@ void SbPainterPS::printV(
     if(fBufferString==NULL) return;
   }
   fBufferString[MAX_STR-1]  = '\0';
-  ::vsprintf(fBufferString,This,aArgs);
+  ::vsnprintf(fBufferString,MAX_STR-1, This,aArgs);
   if(fBufferString[MAX_STR-1]!='\0') {
     ::printf("SbPainterPS::printV overflow\n");
     fBufferString[0] = '\0';

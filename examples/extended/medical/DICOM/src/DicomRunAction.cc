@@ -78,7 +78,7 @@ void DicomRunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStoreDir(
               G4String("dicom-run-") + std::to_string(aRun->GetRunID()));
 
-  int progress = aRun->GetNumberOfEventToBeProcessed() / 100;
+  G4int progress = aRun->GetNumberOfEventToBeProcessed() / 100;
   progress = (progress < 1) ? 1 : progress;
   G4RunManager::GetRunManager()->SetPrintProgress(progress);
 }
@@ -88,8 +88,8 @@ void DicomRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int nofEvents = aRun->GetNumberOfEvent();
 
-  static double local_total_dose = 0;
-  double total_dose = 0;
+  static G4double local_total_dose = 0;
+  G4double total_dose = 0;
 
   const DicomRun* reRun = static_cast<const DicomRun*>(aRun);
   //--- Dump all scored quantities involved in DicomRun.

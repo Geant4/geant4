@@ -87,7 +87,7 @@ G4AdjointElectron* G4AdjointElectron::Definition()
    anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
 
   }
-  theInstance = reinterpret_cast<G4AdjointElectron*>(anInstance);
+  theInstance = static_cast<G4AdjointElectron*>(anInstance);
   return theInstance;
 }
 

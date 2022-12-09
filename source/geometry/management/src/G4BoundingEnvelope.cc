@@ -33,6 +33,7 @@
 #include "globals.hh"
 #include "G4BoundingEnvelope.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4Normal3D.hh"
 
 const G4double kCarTolerance =
   G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
@@ -129,7 +130,7 @@ void G4BoundingEnvelope::CheckBoundingBox()
 //
 void G4BoundingEnvelope::CheckBoundingPolygons()
 {
-  G4int nbases = fPolygons->size();
+  std::size_t nbases = fPolygons->size();
   if (nbases < 2)
   {
     std::ostringstream message;
@@ -140,7 +141,7 @@ void G4BoundingEnvelope::CheckBoundingPolygons()
     return;
   }
 
-  G4int nsize  = std::max((*fPolygons)[0]->size(),(*fPolygons)[1]->size());
+  std::size_t nsize  = std::max((*fPolygons)[0]->size(),(*fPolygons)[1]->size());
   if (nsize < 3)
   {
     std::ostringstream message;
@@ -154,9 +155,9 @@ void G4BoundingEnvelope::CheckBoundingPolygons()
     return;
   }
 
-  for (G4int k=0; k<nbases; ++k)
+  for (std::size_t k=0; k<nbases; ++k)
   {
-    G4int np = (*fPolygons)[k]->size();
+    std::size_t np = (*fPolygons)[k]->size();
     if (np == nsize)            continue;
     if (np == 1 && k==0)        continue;
     if (np == 1 && k==nbases-1) continue;
@@ -423,7 +424,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   std::vector<G4Point3D> vertices;
   std::vector<std::pair<G4int, G4int>> bases;
   TransformVertices(pTransform3D, vertices, bases);
-  G4int nbases = bases.size();
+  std::size_t nbases = bases.size();
 
   // Create adjusted G4VoxelLimits box. New limits are extended by
   // delta, kCarTolerance multiplied by max scale factor of
@@ -447,7 +448,7 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   G4Segment3D extent;
   extent.first  = G4Point3D( kInfinity, kInfinity, kInfinity);
   extent.second = G4Point3D(-kInfinity,-kInfinity,-kInfinity);
-  for (G4int k=0; k<nbases-1; ++k)
+  for (std::size_t k=0; k<nbases-1; ++k)
   {
     baseA.resize(bases[k].second);
     for (G4int i = 0; i < bases[k].second; ++i)
@@ -599,7 +600,7 @@ TransformVertices(const G4Transform3D& pTransform3D,
   G4int index = 0;
   for (auto i = ia; i != iaend; ++i)
   {
-    G4int nv = (*i)->size();
+    G4int nv = (G4int)(*i)->size();
     pBases.push_back(std::make_pair(index, nv));
     index += nv;
   }
@@ -680,14 +681,14 @@ G4BoundingEnvelope::CreateListOfEdges(const G4Polygon3D& baseA,
                                       const G4Polygon3D& baseB,
                                       std::vector<G4Segment3D>& pEdges) const
 {
-  G4int na = baseA.size();
-  G4int nb = baseB.size();
+  std::size_t na = baseA.size();
+  std::size_t nb = baseB.size();
   pEdges.clear();
   if (na == nb)
   {
     pEdges.resize(3*na);
-    G4int k = na - 1;
-    for (G4int i=0; i<na; ++i)
+    std::size_t k = na - 1;
+    for (std::size_t i=0; i<na; ++i)
     {
       pEdges.push_back(G4Segment3D(baseA[i],baseB[i]));
       pEdges.push_back(G4Segment3D(baseA[i],baseA[k]));
@@ -698,8 +699,8 @@ G4BoundingEnvelope::CreateListOfEdges(const G4Polygon3D& baseA,
   else if (nb == 1)
   {
     pEdges.resize(2*na);
-    G4int k = na - 1;
-    for (G4int i=0; i<na; ++i)
+    std::size_t k = na - 1;
+    for (std::size_t i=0; i<na; ++i)
     {
       pEdges.push_back(G4Segment3D(baseA[i],baseA[k]));
       pEdges.push_back(G4Segment3D(baseA[i],baseB[0]));
@@ -709,8 +710,8 @@ G4BoundingEnvelope::CreateListOfEdges(const G4Polygon3D& baseA,
   else if (na == 1)
   {
     pEdges.resize(2*nb);
-    G4int k = nb - 1;
-    for (G4int i=0; i<nb; ++i)
+    std::size_t k = nb - 1;
+    for (std::size_t i=0; i<nb; ++i)
     {
       pEdges.push_back(G4Segment3D(baseB[i],baseB[k]));
       pEdges.push_back(G4Segment3D(baseB[i],baseA[0]));
@@ -730,12 +731,12 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
 {
   // Find centers of the bases and internal point of the prism
   //
-  G4int na = baseA.size();
-  G4int nb = baseB.size();
+  std::size_t na = baseA.size();
+  std::size_t nb = baseB.size();
   G4Point3D pa(0.,0.,0.), pb(0.,0.,0.), p0;
   G4Normal3D norm;
-  for (G4int i=0; i<na; ++i) pa += baseA[i];
-  for (G4int i=0; i<nb; ++i) pb += baseB[i];
+  for (std::size_t i=0; i<na; ++i) pa += baseA[i];
+  for (std::size_t i=0; i<nb; ++i) pb += baseB[i];
   pa /= na; pb /= nb; p0 = (pa+pb)/2.;
 
   // Create list of planes
@@ -743,8 +744,8 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
   pPlanes.clear();
   if (na == nb)  // bases with equal number of vertices
   {
-    G4int k = na - 1;
-    for (G4int i=0; i<na; ++i)
+    std::size_t k = na - 1;
+    for (std::size_t i=0; i<na; ++i)
     {
       norm = (baseB[k]-baseA[i]).cross(baseA[k]-baseB[i]);
       if (norm.mag2() > kCarTolerance)
@@ -766,8 +767,8 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
   }
   else if (nb == 1) // baseB has one vertex
   {
-    G4int k = na - 1;
-    for (G4int i=0; i<na; ++i)
+    std::size_t k = na - 1;
+    for (std::size_t i=0; i<na; ++i)
     {
       norm = (baseA[i]-baseB[0]).cross(baseA[k]-baseB[0]);
       if (norm.mag2() > kCarTolerance)
@@ -784,8 +785,8 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
   }
   else if (na == 1) // baseA has one vertex
   {
-    G4int k = nb - 1;
-    for (G4int i=0; i<nb; ++i)
+    std::size_t k = nb - 1;
+    for (std::size_t i=0; i<nb; ++i)
     {
       norm = (baseB[i]-baseA[0]).cross(baseB[k]-baseA[0]);
       if (norm.mag2() > kCarTolerance)
@@ -803,8 +804,8 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
 
   // Ensure that normals of the planes point to outside
   //
-  G4int nplanes = pPlanes.size();
-  for (G4int i=0; i<nplanes; ++i)
+  std::size_t nplanes = pPlanes.size();
+  for (std::size_t i=0; i<nplanes; ++i)
   {
     pPlanes[i].normalize();
     if (pPlanes[i].distance(p0) > 0)
@@ -830,8 +831,8 @@ G4BoundingEnvelope::ClipEdgesByVoxel(const std::vector<G4Segment3D>& pEdges,
   G4Point3D emin = pExtent.first;
   G4Point3D emax = pExtent.second;
 
-  G4int nedges = pEdges.size();
-  for (G4int k=0; k<nedges; ++k)
+  std::size_t nedges = pEdges.size();
+  for (std::size_t k=0; k<nedges; ++k)
   {
     G4Point3D p1 = pEdges[k].first;
     G4Point3D p2 = pEdges[k].second;

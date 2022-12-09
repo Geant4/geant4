@@ -71,6 +71,7 @@ class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
   void SetDefaultFileType(const G4String& value);
   void SetFileName(const G4String& fileName);
   void SetVerboseLevel(G4int value);
+  void SetNtupleMerging(G4bool value);
 
   // get methods
   G4String GetFileName() const { return fFileName; }
@@ -91,6 +92,7 @@ class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
   G4String fDefaultFileType;
   G4String fFileName;
   G4int fVerboseLevel;
+  G4bool fMergeNtuples;
   G4bool fHasAnalysisFile;
   G4bool fIsBooked;
   G4bool fIsInitialized;

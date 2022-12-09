@@ -84,7 +84,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     G4VPhysicalVolume* ConstructCalorimeter();     
     // To be invoked each time the geometry needs to be updated.
   
-    G4bool areParametersOK();
+    G4bool AreParametersOK();
     // Return true if all the parameters are sensible, false otherwise.
   
     void PrintParameters();

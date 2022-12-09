@@ -282,13 +282,13 @@ namespace G4INCL {
 
     // Fill in the event information
     theEventInfo.projectileType = projectileSpecies.theType;
-    theEventInfo.Ap = projectileSpecies.theA;
-    theEventInfo.Zp = projectileSpecies.theZ;
-    theEventInfo.Sp = projectileSpecies.theS;
+    theEventInfo.Ap = (G4INCL::Short_t)projectileSpecies.theA;
+    theEventInfo.Zp = (G4INCL::Short_t)projectileSpecies.theZ;
+    theEventInfo.Sp = (G4INCL::Short_t)projectileSpecies.theS;
     theEventInfo.Ep = kineticEnergy;
-    theEventInfo.At = nucleus->getA();
-    theEventInfo.Zt = nucleus->getZ();
-    theEventInfo.St = nucleus->getS();
+    theEventInfo.At = (G4INCL::Short_t)nucleus->getA();
+    theEventInfo.Zt = (G4INCL::Short_t)nucleus->getZ();
+    theEventInfo.St = (G4INCL::Short_t)nucleus->getS();
 
     // Do nothing below the Coulomb barrier
     if(maxImpactParameter<=0.) {
@@ -794,7 +794,7 @@ namespace G4INCL {
       // Add the dynamical spectators to the bunch
       ParticleList rejected = theProjectileRemnant->addAllDynamicalSpectators(dynSpectators);
       // Put back the rejected spectators into the outgoing list
-      nUnmergedSpectators = rejected.size();
+      nUnmergedSpectators = (G4int)rejected.size();
       nucleus->getStore()->addToOutgoing(rejected);
 
       // Deal with the projectile remnant

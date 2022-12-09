@@ -77,10 +77,10 @@ G4PhysicalVolumesSearchScene::Matcher::Matcher(const G4String& requiredMatch)
 : fRegexFlag(false)
 {
   if (requiredMatch.size()) {
-    size_t last = requiredMatch.size() - 1;
+    std::size_t last = requiredMatch.size() - 1;
     // If required name begins and ends with '/', treat as a regular expression.
     // 0 causes a conversion ambiguity that upsets the Windows compiler, so use 0U.
-    if (requiredMatch[0U] == '/' && requiredMatch[last] == '/') {
+    if (requiredMatch[0U] == '/' && requiredMatch[(G4int)last] == '/') {
       if (last > 1) {  // Non-null regexp
         // regex match required
         fRegexFlag = true;

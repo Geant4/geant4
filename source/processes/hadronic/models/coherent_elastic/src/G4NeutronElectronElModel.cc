@@ -203,7 +203,7 @@ G4NeutronElectronElModel:: GetTransfer( G4int iTkin, G4int iTransfer, G4double p
   {
     if ( iTransfer >= G4int((*fAngleTable)(iTkin)->GetVectorLength()) )
     {
-      iTransfer = (*fAngleTable)(iTkin)->GetVectorLength() - 1;
+      iTransfer = G4int((*fAngleTable)(iTkin)->GetVectorLength() - 1);
     }
     y1 = (*(*fAngleTable)(iTkin))(iTransfer-1);
     y2 = (*(*fAngleTable)(iTkin))(iTransfer);

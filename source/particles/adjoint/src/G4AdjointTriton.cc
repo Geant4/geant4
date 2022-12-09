@@ -41,7 +41,7 @@ G4AdjointTriton* G4AdjointTriton::Definition()
   const G4String name = "adj_triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance =  reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  G4AdjointIons* anInstance =  static_cast<G4AdjointIons*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -72,7 +72,7 @@ G4AdjointTriton* G4AdjointTriton::Definition()
   //No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 
-  theInstance = reinterpret_cast<G4AdjointTriton*>(anInstance);
+  theInstance = static_cast<G4AdjointTriton*>(anInstance);
   return theInstance;
 }
 

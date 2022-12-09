@@ -37,7 +37,9 @@
 #include "globals.hh"
 #include "G4ErrorSurfaceTarget.hh"
 #include "G4ThreeVector.hh"
+#include "G4Normal3D.hh"
 #include "G4Plane3D.hh"
+#include "G4Point3D.hh"
 
 class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
 {

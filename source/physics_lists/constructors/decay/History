@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-11-16 Vladimir Ivanchenko (phys-ctor-decay-V11-00-03)
+- added calls to G4EmBuilder and G4PhysListUtil in order to 
+  prevent from warnings on hyper-nuclei decays in the case of 
+  simplified custom Physics List
+
+## 2022-08-16 Alberto Ribon (phys-ctor-decay-V11-00-02)
+- sources.cmake : added missed dependency on G4physlist_util
+
+## 2022-08-09 Vladimir Ivanchenko (phys-ctor-decay-V11-00-01)
+- G4DecayPhysics - added instantiation of singletones for physics
 
 ## 2021-12-10 Ben Morgan (phys-ctor-decay-V11-00-00)
 - Change to new Markdown History format

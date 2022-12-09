@@ -54,7 +54,7 @@ G4double G4LinInterpolator::Calculate(G4double x, G4int bin,
 				      const G4DataVector& points, 
 				      const G4DataVector& data) const
 {
-  G4int nBins = data.size() - 1;
+  G4int nBins = G4int(data.size() - 1);
   G4double value = 0.;
   if (x < points[0])
     {

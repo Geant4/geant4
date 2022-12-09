@@ -43,23 +43,14 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftLeg::G4MIRDLeftLeg()
-{
-}
-
-G4MIRDLeftLeg::~G4MIRDLeftLeg()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftLeg::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 					    const G4String& colourName, G4bool wireFrame,G4bool)
 {
  
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
  
   G4double rmin1 = 0.* cm;
   G4double rmin2 = 0.* cm;
@@ -69,17 +60,17 @@ G4VPhysicalVolume* G4MIRDLeftLeg::Construct(const G4String& volumeName, G4VPhysi
   G4double startphi= 0.* degree;
   G4double deltaphi= 360. * degree;
 
-  G4Cons* leg1 = new G4Cons("Leg1",  
+  auto* leg1 = new G4Cons("Leg1",  
 			    rmin1, rmax1, 
 			    rmin2, rmax2, dz/2., 
 			    startphi, deltaphi);
   
-  G4LogicalVolume* logicLeftLeg = new G4LogicalVolume(leg1,
-						      soft,
-						      "logical" + volumeName,
-						      0, 0, 0);
+  auto* logicLeftLeg = new G4LogicalVolume(leg1,
+					    soft,
+				            "logical" + volumeName,
+				            nullptr, nullptr, nullptr);
 						   
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree); 
   rm->rotateY(180.*degree);
   G4VPhysicalVolume* physLeftLeg = new G4PVPlacement(rm,
@@ -94,9 +85,9 @@ G4VPhysicalVolume* G4MIRDLeftLeg::Construct(const G4String& volumeName, G4VPhysi
  
   // Visualization Attributes
   //G4VisAttributes* LeftLegVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LeftLegVisAtt = new G4VisAttributes(colour);
+  auto* LeftLegVisAtt = new G4VisAttributes(colour);
   LeftLegVisAtt->SetForceSolid(wireFrame);
   logicLeftLeg->SetVisAttributes(LeftLegVisAtt);
 
@@ -117,7 +108,6 @@ G4VPhysicalVolume* G4MIRDLeftLeg::Construct(const G4String& volumeName, G4VPhysi
   // Testing Mass
   G4double LeftLegMass = (LeftLegVol)*LeftLegDensity;
   G4cout << "Mass of LeftLeg = " << LeftLegMass/gram << " g" << G4endl;
-
-  
+ 
   return physLeftLeg;
 }

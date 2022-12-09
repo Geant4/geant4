@@ -160,13 +160,13 @@ void Par03EMShowerModel::DoIt(const G4FastTrack& aFastTrack,
   // then get random numbers from uniform distribution for azimuthal angle, and
   // from Gaussian for radius
   G4ThreeVector position;
-  G4double gammaMax   = gamma((fAlpha - 1) / fBeta, fAlpha, fBeta);
+  G4double gammaMax   = Gamma((fAlpha - 1) / fBeta, fAlpha, fBeta);
   G4int generatedHits = 0;
   while(generatedHits < fNbOfHits)
   {
     G4double random1 = G4UniformRand() * fLongMaxDepth;
     G4double random2 = G4UniformRand() * gammaMax;
-    if(gamma(random1, fAlpha, fBeta) >= random2)
+    if(Gamma(random1, fAlpha, fBeta) >= random2)
     {
       // Generate corresponding rho (phi) from Gaussian (flat) distribution
       G4double phiPosition = G4UniformRand() * 2 * CLHEP::pi;

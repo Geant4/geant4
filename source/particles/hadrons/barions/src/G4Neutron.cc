@@ -56,7 +56,7 @@ G4Neutron* G4Neutron::Definition()
   const G4String name = "neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
+  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -91,7 +91,7 @@ G4Neutron* G4Neutron::Definition()
     anInstance->SetDecayTable(table);
     
   }
-  theInstance = reinterpret_cast<G4Neutron*>(anInstance);
+  theInstance = static_cast<G4Neutron*>(anInstance);
   return theInstance;
 }
 

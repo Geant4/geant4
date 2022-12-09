@@ -382,7 +382,6 @@ void Run::EndOfRun()
   G4double meandEdxerr  = (rmst/fTrackLen)/(keV/um); 
   //G4double stopPower = (meandEdx/density)/(MeV*cm2/g);    
   G4int ncols=0;
-  G4int nlines = 0;
   G4float tmp, En;
   G4int Ntrav = 0;
   FILE * fp = fopen("OutputPerEvent.out","r");
@@ -391,7 +390,7 @@ void Run::EndOfRun()
             &tmp, &tmp, &tmp, &tmp, &En, &tmp, &tmp, &tmp);
     if (ncols < 0) break;
     if (En>0) Ntrav++;
-    nlines++;}
+  }
   fclose(fp); 
   // The surface area is calculated as spherical medium
   GunArea = fDetector->GetTotSurfMedium();  

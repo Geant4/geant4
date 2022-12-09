@@ -103,7 +103,7 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
       emax = std::min(emax, param->MaxKinEnergy());
       if(emin < emax) {
 	xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
-						    emin, emax, true);
+						    emin, emax, useSpline);
       }
     }
   }

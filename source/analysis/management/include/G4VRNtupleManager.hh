@@ -46,7 +46,7 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
     explicit G4VRNtupleManager(const G4AnalysisManagerState& state)
       : G4BaseAnalysisManager(state) {}
     G4VRNtupleManager() = delete;
-    virtual ~G4VRNtupleManager() = default;
+    ~G4VRNtupleManager() override = default;
 
     // deleted copy constructor & assignment operator
     G4VRNtupleManager(const G4VRNtupleManager& rhs) = delete;

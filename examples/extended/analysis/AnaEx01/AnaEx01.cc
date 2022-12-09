@@ -49,7 +49,7 @@ int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
@@ -62,7 +62,7 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
+  auto  detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new FTFP_BERT);
   runManager->SetUserInitialization(new ActionInitialization(detector));
@@ -76,10 +76,12 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( ! ui ) {
+  if ( ui == nullptr ) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
+    UImanager->ApplyCommand("/control/alias defaultFileType root");
+      // define the default value for alias used in AnaEx01.in
     UImanager->ApplyCommand(command+fileName);
   }
   else {

@@ -227,7 +227,7 @@ G4double G4EnergyLossTables::GetDEDX(
     return 0.0;
   }
 
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t->theMassRatio;
   G4double dEdx;
   G4bool isOut;
@@ -276,7 +276,7 @@ G4double G4EnergyLossTables::GetLabTime(
   }
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t->theMassRatio;
   G4double time;
   G4bool isOut;
@@ -331,7 +331,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
   G4double timestart,timeend,deltatime,dTT;
   G4bool isOut;
 
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergyStart*t->theMassRatio;
 
   if (scaledKineticEnergy<t->theLowestKineticEnergy) {
@@ -410,7 +410,7 @@ G4double G4EnergyLossTables::GetProperTime(
   }
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t->theMassRatio;
   G4double time;
   G4bool isOut;
@@ -465,7 +465,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
   G4double timestart,timeend,deltatime,dTT;
   G4bool isOut;
 
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergyStart*t->theMassRatio;
 
   if (scaledKineticEnergy<t->theLowestKineticEnergy) {
@@ -547,7 +547,7 @@ G4double G4EnergyLossTables::GetRange(
     return 0.0;
   }
 
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t->theMassRatio;
   G4double Range;
   G4bool isOut;
@@ -606,7 +606,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   G4double scaledrange,scaledKineticEnergy ;
   G4bool isOut ;
 
-  G4int materialIndex = aMaterial->GetIndex() ;
+  G4int materialIndex = (G4int)aMaterial->GetIndex() ;
 
   if(materialIndex != oldIndex)
   {
@@ -670,7 +670,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     return 0.0;
   }
 
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t->theMassRatio;
   G4double dEdx;
   G4bool isOut;
@@ -721,7 +721,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     ParticleHaveNoLoss(aParticle,"Range");
     return 0.0;
   }
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
 
   G4double Thighr = t->theHighestKineticEnergy*t->theLowestKineticEnergy/
                    (*rangeTable)(materialIndex)->

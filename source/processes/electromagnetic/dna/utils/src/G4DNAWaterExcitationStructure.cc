@@ -34,7 +34,7 @@ G4DNAWaterExcitationStructure::G4DNAWaterExcitationStructure(): nLevels(5)
   energyConstant.push_back(12.61*eV);
   energyConstant.push_back(13.77*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 

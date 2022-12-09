@@ -67,7 +67,7 @@ class G4Polyhedra;
 
 class G4PhantomParameterisation : public G4VPVParameterisation
 {
-  public:  // with description
+  public:
 
     G4PhantomParameterisation();
    ~G4PhantomParameterisation();
@@ -122,21 +122,21 @@ class G4PhantomParameterisation : public G4VPVParameterisation
 
     inline void SetMaterials(std::vector<G4Material*>& mates );
 
-    inline void SetMaterialIndices( size_t* matInd );
+    inline void SetMaterialIndices( std::size_t* matInd );
 
     void SetVoxelDimensions( G4double halfx, G4double halfy, G4double halfz );
-    void SetNoVoxels( size_t nx, size_t ny, size_t nz );
+    void SetNoVoxels( std::size_t nx, std::size_t ny, std::size_t nz );
     
     inline G4double GetVoxelHalfX() const;
     inline G4double GetVoxelHalfY() const;
     inline G4double GetVoxelHalfZ() const;
-    inline size_t GetNoVoxelsX() const;
-    inline size_t GetNoVoxelsY() const;
-    inline size_t GetNoVoxelsZ() const;
-    inline size_t GetNoVoxels() const;
+    inline std::size_t GetNoVoxelsX() const;
+    inline std::size_t GetNoVoxelsY() const;
+    inline std::size_t GetNoVoxelsZ() const;
+    inline std::size_t GetNoVoxels() const;
 
     inline std::vector<G4Material*> GetMaterials() const;
-    inline size_t* GetMaterialIndices() const;
+    inline std::size_t* GetMaterialIndices() const;
     inline G4VSolid* GetContainerSolid() const;
 
     G4ThreeVector GetTranslation(const G4int copyNo ) const;
@@ -144,11 +144,11 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     G4bool SkipEqualMaterials() const;
     void SetSkipEqualMaterials( G4bool skip );
 
-    size_t GetMaterialIndex( size_t nx, size_t ny, size_t nz) const;
-    size_t GetMaterialIndex( size_t copyNo) const;
+    std::size_t GetMaterialIndex( std::size_t nx, std::size_t ny, std::size_t nz) const;
+    std::size_t GetMaterialIndex( std::size_t copyNo) const;
 
-    G4Material* GetMaterial( size_t nx, size_t ny, size_t nz) const;
-    G4Material* GetMaterial( size_t copyNo ) const;
+    G4Material* GetMaterial( std::size_t nx, std::size_t ny, std::size_t nz) const;
+    G4Material* GetMaterial( std::size_t copyNo ) const;
 
     void CheckVoxelsFillContainer( G4double contX, G4double contY,
                                    G4double contZ ) const;
@@ -156,27 +156,27 @@ class G4PhantomParameterisation : public G4VPVParameterisation
 
   private:
 
-    void ComputeVoxelIndices(const G4int copyNo, size_t& nx,
-                                   size_t& ny, size_t& nz ) const;
+    void ComputeVoxelIndices(const G4int copyNo, std::size_t& nx,
+                                   std::size_t& ny, std::size_t& nz ) const;
       // Convert the copyNo to voxel numbers in x, y and z.
 
-    void CheckCopyNo( const G4int copyNo ) const;
+    void CheckCopyNo( const G4long copyNo ) const;
       // Check that the copy number is within limits.
 
   protected:
 
     G4double fVoxelHalfX = 0.0, fVoxelHalfY = 0.0, fVoxelHalfZ = 0.0;
       // Half dimension of voxels (assume they are boxes).
-    size_t fNoVoxelsX = 0, fNoVoxelsY = 0, fNoVoxelsZ = 0;
+    std::size_t fNoVoxelsX = 0, fNoVoxelsY = 0, fNoVoxelsZ = 0;
       // Number of voxel in x, y and z dimensions.
-    size_t fNoVoxelsXY = 0;
+    std::size_t fNoVoxelsXY = 0;
       // Number of voxels in x times number of voxels in y (for speed-up).
-    size_t fNoVoxels = 0;
+    std::size_t fNoVoxels = 0;
       // Total number of voxels (for speed-up).
 
     std::vector<G4Material*> fMaterials;
       // List of materials of the voxels.
-    size_t* fMaterialIndices = nullptr;
+    std::size_t* fMaterialIndices = nullptr;
       // Index in fMaterials that correspond to each voxel.
 
     G4VSolid* fContainerSolid = nullptr;

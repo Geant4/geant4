@@ -39,7 +39,7 @@ public:
     ,SUBTRACTION = 2
   };
 private:
-  typedef std::pair<Operation,HepPolyhedron> op_t;
+  using op_t = std::pair<Operation, HepPolyhedron>;
 public:
   HepPolyhedronProcessor();
   virtual ~HepPolyhedronProcessor();

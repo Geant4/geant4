@@ -35,9 +35,6 @@
 //
 //      Creation date: 20 December 2011
 //
-//Modifications:
-//
-// 
 // -------------------------------------------------------------------
 //
 
@@ -53,13 +50,15 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 #include <CLHEP/Units/PhysicalConstants.h>
 #include "G4PhysicsModelCatalog.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex photEvaporationMutex = G4MUTEX_INITIALIZER;
+}
 
 G4float G4PhotonEvaporation::GREnergy[] = {0.0f};
 G4float G4PhotonEvaporation::GRWidth[] = {0.0f};
-
-#ifdef G4MULTITHREADED
-G4Mutex G4PhotonEvaporation::PhotonEvaporationMutex = G4MUTEX_INITIALIZER;
-#endif
 
 G4PhotonEvaporation::G4PhotonEvaporation(G4GammaTransition* p)
   : fLevelManager(nullptr), fTransition(p), fPolarization(nullptr),
@@ -109,20 +108,18 @@ void G4PhotonEvaporation::Initialise()
 
 void G4PhotonEvaporation::InitialiseGRData()
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4PhotonEvaporation::PhotonEvaporationMutex);
-#endif
-  if(0.0f == GREnergy[1]) { 
-    G4Pow* g4calc = G4Pow::GetInstance();
-    const G4float GRWfactor = 0.3f;
-    for (G4int A=1; A<MAXGRDATA; ++A) {
-      GREnergy[A] = (G4float)(40.3*CLHEP::MeV/g4calc->powZ(A,0.2));
-      GRWidth[A] = GRWfactor*GREnergy[A];
+  if(0.0f == GREnergy[1]) {
+    G4AutoLock l(&photEvaporationMutex);
+    if(0.0f == GREnergy[1]) {
+      G4Pow* g4calc = G4Pow::GetInstance();
+      const G4float GRWfactor = 0.3f;
+      for (G4int A=1; A<MAXGRDATA; ++A) {
+	GREnergy[A] = (G4float)(40.3*CLHEP::MeV/g4calc->powZ(A,0.2));
+	GRWidth[A] = GRWfactor*GREnergy[A];
+      }
     }
-  } 
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4PhotonEvaporation::PhotonEvaporationMutex);
-#endif
+    l.unlock();    
+  }
 }
 
 G4Fragment* 
@@ -136,9 +133,9 @@ G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
   G4NuclearPolarizationStore* fNucPStore = nullptr;
   if(fCorrelatedGamma && fRDM) {
     fNucPStore = G4NuclearPolarizationStore::GetInstance();
-    if(nucleus->GetNuclearPolarization()) { 
-      fNucPStore->RemoveMe(nucleus->GetNuclearPolarization());
-      delete nucleus->GetNuclearPolarization(); 
+    auto nucp = nucleus->GetNuclearPolarization();
+    if(nullptr != nucp) { 
+      fNucPStore->RemoveMe(nucp);
     } 
     fPolarization = fNucPStore->FindOrBuild(nucleus->GetZ_asInt(),
                                             nucleus->GetA_asInt(),
@@ -226,7 +223,7 @@ G4bool G4PhotonEvaporation::BreakUpChain(G4FragmentVector* products,
   } while(gamma);
 
   // clear nuclear polarization end of chain
-  if(fPolarization) {
+  if(nullptr != fPolarization) {
     delete fPolarization;
     fPolarization = nullptr;
     nucleus->SetNuclearPolarization(fPolarization);
@@ -372,7 +369,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
   G4bool isDiscrete = false;
 
   const G4NucLevel* level = nullptr;
-  size_t ntrans = 0;
+  std::size_t ntrans = 0;
 
   if(fVerbose > 2) {
     G4cout << "GenerateGamma: " << " Eex= " << eexc
@@ -413,7 +410,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     if(0 == ntrans) { isDiscrete = false; }
   }
   if(fVerbose > 2) {
-    G4int prec = G4cout.precision(4);
+    G4long prec = G4cout.precision(4);
     G4cout << "GenerateGamma: Z= " << nucleus->GetZ_asInt()
            << " A= " << nucleus->GetA_asInt() 
            << " Exc= " << eexc << " Emax= " 
@@ -502,7 +499,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
       return result;
     }
 
-    size_t idx = 0;
+    std::size_t idx = 0;
     if(1 < ntrans) {
       idx = level->SampleGammaTransition(G4UniformRand());
     }

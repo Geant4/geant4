@@ -41,14 +41,14 @@
 #include <vector>
 
 
-template <int NBINS, int NMULT> inline
+template <G4int NBINS, G4int NMULT> inline
 G4double G4CascadeSampler<NBINS,NMULT>::
-findCrossSection(double ke,
+findCrossSection(G4double ke,
 		 const G4double (&xsec)[energyBins]) const {
   return interpolator.interpolate(ke, xsec);
 }
 
-template <int NBINS, int NMULT> inline
+template <G4int NBINS, G4int NMULT> inline
 G4int G4CascadeSampler<NBINS,NMULT>::
 findMultiplicity(G4double ke,
 		 const G4double xmult[][energyBins]) const {
@@ -56,7 +56,7 @@ findMultiplicity(G4double ke,
   return sampleFlat() + 2;	// Convert array index to actual mult (2 to 7)
 }
 
-template <int NBINS, int NMULT> inline
+template <G4int NBINS, G4int NMULT> inline
 G4int G4CascadeSampler<NBINS,NMULT>::
 findFinalStateIndex(G4int mult, G4double ke, const G4int index[],
 		    const G4double xsec[][energyBins]) const {
@@ -69,7 +69,7 @@ findFinalStateIndex(G4int mult, G4double ke, const G4int index[],
 }
 
 // Optional start/stop arguments default to multiplicity arrays
-template <int NBINS, int NMULT> inline
+template <G4int NBINS, G4int NMULT> inline
 void G4CascadeSampler<NBINS,NMULT>::
 fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
 		G4int startBin, G4int stopBin) const {
@@ -78,14 +78,14 @@ fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
 
   // NOTE:  push_back() must be used to ensure that size() gets set!
   sigmaBuf.reserve(stopBin-startBin);
-  for(G4int i = startBin; i < stopBin; i++)
+  for(G4int i = startBin; i < stopBin; ++i)
     sigmaBuf.push_back(interpolator.interpolate(ke, x[i]));
 }
 
 
-template <int NBINS, int NMULT> inline
+template <G4int NBINS, G4int NMULT> inline
 G4int G4CascadeSampler<NBINS,NMULT>::sampleFlat() const {
-  G4int nbins = sigmaBuf.size();
+  G4int nbins = (G4int)sigmaBuf.size();
   if (nbins <= 1) return 0;		// Avoid unnecessary work
 
 #ifdef G4CASCADE_DEBUG_SAMPLER
@@ -96,7 +96,7 @@ G4int G4CascadeSampler<NBINS,NMULT>::sampleFlat() const {
 
   G4int i;
   G4double fsum = 0.;
-  for (i = 0; i < nbins; i++) fsum += sigmaBuf[i];
+  for (i = 0; i < nbins; ++i) fsum += sigmaBuf[i];
 #ifdef G4CASCADE_DEBUG_SAMPLER
   G4cout << " buffer total (fsum) " << fsum;
 #endif
@@ -106,7 +106,7 @@ G4int G4CascadeSampler<NBINS,NMULT>::sampleFlat() const {
 #endif
 
   G4double partialSum = 0.0;
-  for (i = 0; i < nbins; i++) {
+  for (i = 0; i < nbins; ++i) {
     partialSum += sigmaBuf[i];
     if (fsum < partialSum) return i;	// Breaks out of loop automatically
   }
@@ -115,7 +115,7 @@ G4int G4CascadeSampler<NBINS,NMULT>::sampleFlat() const {
 }
 
 
-template <int NBINS, int NMULT> inline
+template <G4int NBINS, G4int NMULT> inline
 void G4CascadeSampler<NBINS,NMULT>::print(std::ostream& os) const {
   interpolator.printBins(os);
 }

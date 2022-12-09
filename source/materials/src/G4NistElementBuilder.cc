@@ -177,7 +177,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 	iso.push_back(ist);
       }
     }
-    G4int ni = iso.size();
+    G4int ni = (G4int)iso.size();
     G4double w;
     theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
     for(G4int j=0; j<ni; ++j) {
@@ -186,7 +186,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z)
       theElement->AddIsotope(ist, w);
     }
     theElement->SetNaturalAbundanceFlag(true);
-    elmIndex[Z] = theElement->GetIndex();
+    elmIndex[Z] = (G4int)theElement->GetIndex();
   }  
   l.unlock();
   return theElement;

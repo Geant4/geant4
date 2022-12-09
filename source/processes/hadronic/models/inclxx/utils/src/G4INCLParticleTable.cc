@@ -1161,18 +1161,18 @@ namespace G4INCL {
       elementStream << Z;
       std::string elementName = elementStream.str();
       std::transform(elementName.begin(), elementName.end(), elementName.begin(), intToIUPAC);
-      elementName[0] = std::toupper(elementName.at(0));
+      elementName[0] = (char)std::toupper(elementName.at(0));
       return elementName;
     }
 
     G4int parseElement(std::string pS) {
       // Normalize the element name
       std::transform(pS.begin(), pS.end(), pS.begin(), ::tolower);
-      pS[0] = ::toupper(pS[0]);
+      pS[0] = (char)std::toupper(pS[0]);
 
       const std::string *iter = std::find(elementTable, elementTable+elementTableSize, pS);
       if(iter != elementTable+elementTableSize)
-        return iter - elementTable;
+        return G4int(iter - elementTable);
       else
         return ParticleTable::parseIUPACElement(pS);
     }

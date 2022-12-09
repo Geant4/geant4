@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file TrackerSD.hh
+/// \file B2/B2a/include/TrackerSD.hh
 /// \brief Definition of the B2::TrackerSD class
 
 #ifndef B2TrackerSD_h
@@ -53,7 +53,7 @@ class TrackerSD : public G4VSensitiveDetector
   public:
     TrackerSD(const G4String& name,
                 const G4String& hitsCollectionName);
-    ~TrackerSD() override;
+    ~TrackerSD() override = default;
 
     // methods from base class
     void   Initialize(G4HCofThisEvent* hitCollection) override;

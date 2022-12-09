@@ -36,7 +36,7 @@
 
 StepMax::StepMax(DetectorConstruction* ptr, const G4String& processName)
   : G4VEmProcess(processName, fGeneral),fMaxChargedStep(DBL_MAX),
-    fDetector(ptr),fWorld(nullptr),isInitialised(false)
+    fDetector(ptr),fWorld(nullptr),fIsInitialised(false)
 {
   SetProcessSubType(static_cast<G4int>(STEP_LIMITER));  
 }
@@ -57,8 +57,8 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& part)
 
 void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
 {
-  if(isInitialised) {
-    isInitialised = false;
+  if(fIsInitialised) {
+    fIsInitialised = false;
   }
 }
 
@@ -66,10 +66,10 @@ void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
 
 void StepMax::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if(!isInitialised) {
+  if(!fIsInitialised) {
     fMaxChargedStep = fDetector->GetMaxChargedStep();
     fWorld = fDetector->GetWorldPhysVol();
-    isInitialised = true;
+    fIsInitialised = true;
     if(fMaxChargedStep < DBL_MAX) {
       G4cout << GetProcessName() << ":  SubType= " << GetProcessSubType()
              << "  Step limit(mm)= " << fMaxChargedStep << G4endl;

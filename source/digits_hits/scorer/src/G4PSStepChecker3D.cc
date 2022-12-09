@@ -44,12 +44,8 @@ G4PSStepChecker3D::G4PSStepChecker3D(G4String name, G4int ni, G4int nj,
   , fDepthj(depj)
   , fDepthk(depk)
 {
-  fNi = ni;
-  fNj = nj;
-  fNk = nk;
+  SetNijk(ni, nj, nk);
 }
-
-G4PSStepChecker3D::~G4PSStepChecker3D() { ; }
 
 G4int G4PSStepChecker3D::GetIndex(G4Step* aStep)
 {

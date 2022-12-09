@@ -52,15 +52,15 @@ class G4RootHnRFileManager : public G4VTHnRFileManager<HT>
     explicit G4RootHnRFileManager(G4RootRFileManager* rfileManger)
       : G4VTHnRFileManager<HT>(), fRFileManager(rfileManger) {}
     G4RootHnRFileManager() = delete;
-    virtual ~G4RootHnRFileManager() = default;
+    ~G4RootHnRFileManager() override = default;
 
     // Methods for reading objects
-    virtual HT* Read(const G4String& htName, const G4String& fileName,
-                     const G4String& dirName,  G4bool isUserFileName) final;
+    HT* Read(const G4String& htName, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
 
   private:
     // Methods
-    std::tuple<tools::rroot::buffer*, tools::rroot::TDirectory*> GetBuffer(
+    tools::rroot::buffer* GetBuffer(
                              const G4String& fileName,
                              const G4String& dirName,
                              const G4String& name);

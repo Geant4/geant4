@@ -38,34 +38,36 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4VProcess;
+
 class EventAction : public G4UserEventAction
 {
-  public:
-    EventAction();
-   ~EventAction();
+public:
+  EventAction();
+  ~EventAction() = default;
 
-  public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*) override;
+  void   EndOfEventAction(const G4Event*) override;
     
-    void AddEnergy      (G4double edep)   {fEnergyDeposit  += edep;};
-    void AddTrakLenCharg(G4double length) {fTrakLenCharged += length;};
-    void AddTrakLenNeutr(G4double length) {fTrakLenNeutral += length;};
+  void AddEnergy      (G4double edep)   {fEnergyDeposit  += edep;};
+  void AddTrakLenCharg(G4double length) {fTrakLenCharged += length;};
+  void AddTrakLenNeutr(G4double length) {fTrakLenNeutral += length;};
     
-    void CountStepsCharg ()               {fNbStepsCharged++ ;};
-    void CountStepsNeutr ()               {fNbStepsNeutral++ ;};
-    
-    void SetTransmitFlag (G4int flag) 
-                           {if (flag > fTransmitFlag) fTransmitFlag = flag;};
-    void SetReflectFlag  (G4int flag) 
-                           {if (flag > fReflectFlag)   fReflectFlag = flag;};
+  void CountStepsCharg () {++fNbStepsCharged;};
+  void CountStepsNeutr (const G4VProcess*);
+  
+  void SetTransmitFlag (G4int flag) 
+  {if (flag > fTransmitFlag) fTransmitFlag = flag;};
+  void SetReflectFlag  (G4int flag) 
+  {if (flag > fReflectFlag)   fReflectFlag = flag;};
                                              
         
-  private:
-    G4double fEnergyDeposit;
-    G4double fTrakLenCharged, fTrakLenNeutral;
-    G4int    fNbStepsCharged, fNbStepsNeutral;
-    G4int    fTransmitFlag,   fReflectFlag;        
+private:
+  G4double fEnergyDeposit;
+  G4double fTrakLenCharged, fTrakLenNeutral;
+  G4int fNbStepsCharged, fNbStepsNeutral;
+  G4int fTransmitFlag, fReflectFlag;
+  G4int fTypes[4];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

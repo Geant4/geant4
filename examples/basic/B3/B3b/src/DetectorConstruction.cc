@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.cc
+/// \file B3/B3b/src/DetectorConstruction.cc
 /// \brief Implementation of the B3::DetectorConstruction class
 
 #include "DetectorConstruction.hh"
@@ -57,11 +57,6 @@ DetectorConstruction::DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::~DetectorConstruction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::DefineMaterials()
 {
   G4NistManager* man = G4NistManager::Instance();
@@ -72,7 +67,7 @@ void DetectorConstruction::DefineMaterials()
   G4Element* Si = man->FindOrBuildElement("Si", isotopes);
   G4Element* Lu = man->FindOrBuildElement("Lu", isotopes);
 
-  G4Material* LSO = new G4Material("Lu2SiO5", 7.4*g/cm3, 3);
+  auto LSO = new G4Material("Lu2SiO5", 7.4 * g / cm3, 3);
   LSO->AddElement(Lu, 2);
   LSO->AddElement(Si, 1);
   LSO->AddElement(O , 5);
@@ -107,47 +102,41 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double world_sizeXY = 2.4*ring_R2;
   G4double world_sizeZ  = 1.2*detector_dZ;
 
-  G4Box* solidWorld =
-    new G4Box("World",                       //its name
-       0.5*world_sizeXY, 0.5*world_sizeXY, 0.5*world_sizeZ); //its size
+  auto solidWorld = new G4Box("World",                           // its name
+    0.5 * world_sizeXY, 0.5 * world_sizeXY, 0.5 * world_sizeZ);  // its size
 
-  G4LogicalVolume* logicWorld =
-    new G4LogicalVolume(solidWorld,          //its solid
-                        default_mat,         //its material
-                        "World");            //its name
+  auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+    default_mat,                                     // its material
+    "World");                                        // its name
 
-  G4VPhysicalVolume* physWorld =
-    new G4PVPlacement(0,                     //no rotation
-                      G4ThreeVector(),       //at (0,0,0)
-                      logicWorld,            //its logical volume
-                      "World",               //its name
-                      0,                     //its mother  volume
-                      false,                 //no boolean operation
-                      0,                     //copy number
-                      fCheckOverlaps);       // checking overlaps
+  auto physWorld = new G4PVPlacement(nullptr,  // no rotation
+    G4ThreeVector(),                           // at (0,0,0)
+    logicWorld,                                // its logical volume
+    "World",                                   // its name
+    nullptr,                                   // its mother  volume
+    false,                                     // no boolean operation
+    0,                                         // copy number
+    fCheckOverlaps);                           // checking overlaps
 
   //
   // ring
   //
-  G4Tubs* solidRing =
-    new G4Tubs("Ring", ring_R1, ring_R2, 0.5*cryst_dX, 0., twopi);
+  auto solidRing = new G4Tubs("Ring", ring_R1, ring_R2, 0.5 * cryst_dX, 0., twopi);
 
-  G4LogicalVolume* logicRing =
-    new G4LogicalVolume(solidRing,           //its solid
-                        default_mat,         //its material
-                        "Ring");             //its name
+  auto logicRing = new G4LogicalVolume(solidRing,  // its solid
+    default_mat,                                   // its material
+    "Ring");                                       // its name
 
   //
   // define crystal
   //
   G4double gap = 0.5*mm;        //a gap for wrapping
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap;
-  G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
+  auto solidCryst = new G4Box("crystal", dX / 2, dY / 2, cryst_dZ / 2);
 
-  G4LogicalVolume* logicCryst =
-    new G4LogicalVolume(solidCryst,          //its solid
-                        cryst_mat,           //its material
-                        "CrystalLV");        //its name
+  auto logicCryst = new G4LogicalVolume(solidCryst,  // its solid
+    cryst_mat,                                       // its material
+    "CrystalLV");                                    // its name
 
   // place crystals within a ring
   //
@@ -172,13 +161,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   // full detector
   //
-  G4Tubs* solidDetector =
-    new G4Tubs("Detector", ring_R1, ring_R2, 0.5*detector_dZ, 0., twopi);
+  auto solidDetector = new G4Tubs("Detector", ring_R1, ring_R2, 0.5 * detector_dZ, 0., twopi);
 
-  G4LogicalVolume* logicDetector =
-    new G4LogicalVolume(solidDetector,       //its solid
-                        default_mat,         //its material
-                        "Detector");         //its name
+  auto logicDetector = new G4LogicalVolume(solidDetector,  // its solid
+    default_mat,                                           // its material
+    "Detector");                                           // its name
 
   //
   // place rings within detector
@@ -186,27 +173,27 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double OG = -0.5*(detector_dZ + cryst_dX);
   for (G4int iring = 0; iring < nb_rings ; iring++) {
     OG += cryst_dX;
-    new G4PVPlacement(0,                     //no rotation
-                      G4ThreeVector(0,0,OG), //position
-                      logicRing,             //its logical volume
-                      "ring",                //its name
-                      logicDetector,         //its mother  volume
-                      false,                 //no boolean operation
-                      iring,                 //copy number
-                      fCheckOverlaps);       // checking overlaps
+    new G4PVPlacement(nullptr,  // no rotation
+      G4ThreeVector(0, 0, OG),  // position
+      logicRing,                // its logical volume
+      "ring",                   // its name
+      logicDetector,            // its mother  volume
+      false,                    // no boolean operation
+      iring,                    // copy number
+      fCheckOverlaps);          // checking overlaps
   }
 
   //
   // place detector in world
   //
-  new G4PVPlacement(0,                       //no rotation
-                    G4ThreeVector(),         //at (0,0,0)
-                    logicDetector,           //its logical volume
-                    "Detector",              //its name
-                    logicWorld,              //its mother  volume
-                    false,                   //no boolean operation
-                    0,                       //copy number
-                    fCheckOverlaps);         // checking overlaps
+  new G4PVPlacement(nullptr,  // no rotation
+    G4ThreeVector(),          // at (0,0,0)
+    logicDetector,            // its logical volume
+    "Detector",               // its name
+    logicWorld,               // its mother  volume
+    false,                    // no boolean operation
+    0,                        // copy number
+    fCheckOverlaps);          // checking overlaps
 
   //
   // patient
@@ -215,25 +202,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double patient_dZ = 10*cm;
   G4Material* patient_mat = nist->FindOrBuildMaterial("G4_BRAIN_ICRP");
 
-  G4Tubs* solidPatient =
-    new G4Tubs("Patient", 0., patient_radius, 0.5*patient_dZ, 0., twopi);
+  auto solidPatient = new G4Tubs("Patient", 0., patient_radius, 0.5 * patient_dZ, 0., twopi);
 
-  G4LogicalVolume* logicPatient =
-    new G4LogicalVolume(solidPatient,        //its solid
-                        patient_mat,         //its material
-                        "PatientLV");        //its name
+  auto logicPatient = new G4LogicalVolume(solidPatient,  // its solid
+    patient_mat,                                         // its material
+    "PatientLV");                                        // its name
 
   //
   // place patient in world
   //
-  new G4PVPlacement(0,                       //no rotation
-                    G4ThreeVector(),         //at (0,0,0)
-                    logicPatient,            //its logical volume
-                    "Patient",               //its name
-                    logicWorld,              //its mother  volume
-                    false,                   //no boolean operation
-                    0,                       //copy number
-                    fCheckOverlaps);         // checking overlaps
+  new G4PVPlacement(nullptr,  // no rotation
+    G4ThreeVector(),          // at (0,0,0)
+    logicPatient,             // its logical volume
+    "Patient",                // its name
+    logicWorld,               // its mother  volume
+    false,                    // no boolean operation
+    0,                        // copy number
+    fCheckOverlaps);          // checking overlaps
 
   // Visualization attributes
   //
@@ -256,7 +241,7 @@ void DetectorConstruction::ConstructSDandField()
 
   // declare crystal as a MultiFunctionalDetector scorer
   //
-  G4MultiFunctionalDetector* cryst = new G4MultiFunctionalDetector("crystal");
+  auto cryst = new G4MultiFunctionalDetector("crystal");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
@@ -264,7 +249,7 @@ void DetectorConstruction::ConstructSDandField()
 
   // declare patient as a MultiFunctionalDetector scorer
   //
-  G4MultiFunctionalDetector* patient = new G4MultiFunctionalDetector("patient");
+  auto patient = new G4MultiFunctionalDetector("patient");
   G4SDManager::GetSDMpointer()->AddNewDetector(patient);
   G4VPrimitiveScorer* primitiv2 = new G4PSDoseDeposit("dose");
   patient->RegisterPrimitive(primitiv2);

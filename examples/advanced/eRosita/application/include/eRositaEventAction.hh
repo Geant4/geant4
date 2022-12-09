@@ -23,27 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
- 
+
 #ifndef eRositaEventAction_h
 #define eRositaEventAction_h 1
 
-#include "G4UserEventAction.hh"
 #include "G4Timer.hh"
+#include "G4UserEventAction.hh"
 
 class G4Event;
 
+class eRositaEventAction : public G4UserEventAction {
+public:
+    explicit eRositaEventAction();
 
-class eRositaEventAction : public G4UserEventAction
-{
-  public:
-    eRositaEventAction();
-   ~eRositaEventAction();
+    ~eRositaEventAction() override;
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
- 
+    void BeginOfEventAction(const G4Event* event) override;
+
+    void EndOfEventAction(const G4Event* event) override;
 };
 #endif

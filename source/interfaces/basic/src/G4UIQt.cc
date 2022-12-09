@@ -113,7 +113,7 @@ static G4bool exitPause = true;
 </pre>
 */
 G4UIQt::G4UIQt (
- int argc
+ G4int argc
 ,char** argv
 )
 :fMainWindow(NULL)
@@ -193,7 +193,7 @@ G4UIQt::G4UIQt (
   if(UI!=NULL) UI->SetG4UIWindow(this);
 
   // Check if already define in external app QMainWindow
-  bool found = false;
+  G4bool found = false;
   Q_FOREACH (QWidget *widget, QApplication::allWidgets()) {
     if ((found== false) && (widget->inherits("QMainWindow"))) {
       found = true;
@@ -286,7 +286,7 @@ G4UIQt::~G4UIQt(
 }
 
 
-void G4UIQt::DefaultIcons(bool aVal)
+void G4UIQt::DefaultIcons(G4bool aVal)
 {
   fDefaultIcons = aVal;
 
@@ -335,8 +335,8 @@ void G4UIQt::SetDefaultIconsToolbar(
 #if QT_VERSION < 0x050600
     QSignalMapper *signalMapperViewerProperties = new QSignalMapper(this);
     QAction *actionViewerProperties = fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", signalMapperViewerProperties, SLOT(map()));
-    connect(signalMapperViewerProperties, SIGNAL(mapped(int)),this, SLOT(ViewerPropertiesIconCallback(int)));
-    int intVP = 0;
+    connect(signalMapperViewerProperties, SIGNAL(mapped(G4int)),this, SLOT(ViewerPropertiesIconCallback(G4int)));
+    G4int intVP = 0;
     signalMapperViewerProperties->setMapping(actionViewerProperties, intVP);
 #else
     fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", this, [this](){ this->ViewerPropertiesIconCallback(0); });
@@ -1598,7 +1598,7 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   // add all candidates to widget
   fThreadsFilterComboBox = new QComboBox();
   fThreadsFilterComboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
-  connect(fThreadsFilterComboBox, SIGNAL(activated(int)), this, SLOT(ThreadComboBoxCallback(int)));
+  connect(fThreadsFilterComboBox, SIGNAL(activated(G4int)), this, SLOT(ThreadComboBoxCallback(G4int)));
 
   UpdateCoutThreadFilter();
 
@@ -1689,7 +1689,7 @@ G4UIDockWidget* G4UIQt::CreateUITabWidget(
   fUITabWidget->setTabToolTip (0,"Scene component tree. Only available in Stored mode");
   fUITabWidget->setTabToolTip (1,"Help widget");
   fUITabWidget->setTabToolTip (2,"All commands history");
-  connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
+  connect(fUITabWidget, SIGNAL(currentChanged(G4int)), SLOT(ToolBoxActivated(G4int)));
 
   fUIDockWidget = new G4UIDockWidget ("Scene tree, Help, History");
   fUIDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -1761,9 +1761,9 @@ void G4UIQt::CreateViewerWidget(){
 
 #if QT_VERSION < 0x040500
 #else
-    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
+    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(G4int)), this, SLOT(TabCloseCallback(int)));
 #endif
-    connect(fViewerTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int)));
+    connect(fViewerTabWidget, SIGNAL(currentChanged(G4int)), SLOT(UpdateTabWidget(G4int)));
   }
 
 // set the QGLWidget size policy
@@ -1808,7 +1808,7 @@ QWidget* G4UIQt::GetPickInfosWidget(
 
 /**   Add a new tab in the viewer
  */
-bool G4UIQt::AddViewerTab(
+G4bool G4UIQt::AddViewerTab(
                           QWidget* aWidget
                           ,std::string title
                           )
@@ -1824,7 +1824,7 @@ bool G4UIQt::AddViewerTab(
 
 /**   Add a new tab in the viewer
  */
-bool G4UIQt::AddViewerTabFromFile(
+G4bool G4UIQt::AddViewerTabFromFile(
                          std::string fileName
                          ,std::string title
                           )
@@ -1857,7 +1857,7 @@ bool G4UIQt::AddViewerTabFromFile(
 /**   Add a new tab widget.
   Create the tab if it was not done
 */
-bool G4UIQt::AddTabWidget(
+G4bool G4UIQt::AddTabWidget(
  QWidget* aWidget
 ,QString name
 )
@@ -1930,7 +1930,7 @@ const std::string& text)
 }
 
 
-void G4UIQt::UpdateTabWidget(int tabNumber) {
+void G4UIQt::UpdateTabWidget(G4int tabNumber) {
   if ( fViewerTabWidget == NULL) {
     fViewerTabWidget = new G4QTabWidget;
   }
@@ -2131,7 +2131,7 @@ G4int G4UIQt::ReceiveG4cout (
   // Tabs (\t) are more tricky since the number of equivalent spaces depends
   // on how many characters precede it. Probably needs an HTML table. For now
   // we replace \t with four spaces.
-  for (size_t i = 0; i < aString.length() - 1; ++i) {
+  for (G4int i = 0; i < (G4int)aString.length() - 1; ++i) {
     if (aString[i] == '\n') {
       aStringWithStyle += "<br>";
     } else if (aString[i] == ' ') {
@@ -2218,7 +2218,7 @@ G4int G4UIQt::ReceiveG4cerr (
   // Tabs (\t) are more tricky since the number of equivalent spaces depends
   // on how many characters precede it. Probably needs an HTML table. For now
   // we replace \t with four spaces.
-  for (size_t i = 0; i < aString.length() - 1; ++i) {
+  for (G4int i = 0; i < (G4int)aString.length() - 1; ++i) {
     if (aString[i] == '\n') {
       aStringWithStyle += "<br>";
     } else if (aString[i] == ' ') {
@@ -2379,8 +2379,8 @@ void G4UIQt::AddButton (
   G4UIcommandTree * treeTop = UI->GetTree();
 
   G4String cmd = aCommand;
-  G4int cmdEndPos = cmd.find_first_of(" \t");
-  if(cmdEndPos!=G4int(std::string::npos)) {
+  std::size_t cmdEndPos = cmd.find_first_of(" \t");
+  if(cmdEndPos!=std::string::npos) {
     cmd.erase(cmdEndPos);
   }
 
@@ -2435,7 +2435,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     }
   }
   QPixmap* pix;
-  bool userToolBar = false;
+  G4bool userToolBar = false;
 
   if (!fDefaultIcons) {
     userToolBar = true;
@@ -2512,7 +2512,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
 
   QList<QAction*> list = currentToolbar->actions();
 
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->text() == QString(aLabel)) {
       G4UImanager* UI = G4UImanager::GetUIpointer();
       if(UI==NULL) return;
@@ -2683,7 +2683,7 @@ void G4UIQt::OutputStyle (const char* destination,const char* style,const char* 
   }
 }
 
-void G4UIQt::NativeMenu(bool aVal)
+void G4UIQt::NativeMenu(G4bool aVal)
 {
   if ( fMainWindow->menuBar()->isNativeMenuBar() == aVal )
     return; // already in this state
@@ -2705,7 +2705,7 @@ void G4UIQt::ActivateCommand(
     return;
   }
   // Look for the choosen command "newCommand"
-  size_t i = newCommand.find(" ");
+  std::size_t i = newCommand.find(" ");
   G4String targetCom ="";
   if( i != std::string::npos )
     {
@@ -2787,14 +2787,14 @@ void G4UIQt::FillHelpTree()
   G4int treeSize = treeTop->GetTreeEntry();
   QTreeWidgetItem * newItem = NULL;
   QString commandText = "";
-  for (int a=0;a<treeSize;a++) {
+  for (G4int a=0;a<treeSize;++a) {
     // Creating new item
     newItem = NULL;
 
     commandText = QString((char*)(treeTop->GetTree(a+1)->GetPathName()).data()).trimmed();
 
     // if already exist, don't create it !
-    for (int b=0;b<fHelpTreeWidget->topLevelItemCount();b++) {
+    for (G4int b=0;b<fHelpTreeWidget->topLevelItemCount();++b) {
       if (!newItem)
         newItem = FindTreeItem(fHelpTreeWidget->topLevelItem(b),commandText);
     }
@@ -2832,7 +2832,7 @@ void G4UIQt::CreateHelpTree(
 
   QString commandText = "";
   // Get the Sub directories
-  for (int a=0;a<aCommandTree->GetTreeEntry();a++) {
+  for (G4int a=0;a<aCommandTree->GetTreeEntry();++a) {
 
     commandText = QString((char*)(aCommandTree->GetTree(a+1)->GetPathName()).data()).trimmed();
 
@@ -2848,7 +2848,7 @@ void G4UIQt::CreateHelpTree(
 
   // Get the Commands
 
-  for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
+  for (G4int a=0;a<aCommandTree->GetCommandEntry();++a) {
 
     QStringList stringList;
     commandText = QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed();
@@ -2877,11 +2877,11 @@ void G4UIQt::CreateHelpTree(
  If depthLevel is 1 : create ToolBox
  If depthLevel is 2 or more : create GroupBox
 */
-bool G4UIQt::CreateVisCommandGroupAndToolBox(
+G4bool G4UIQt::CreateVisCommandGroupAndToolBox(
  G4UIcommand* aCommand
 ,QWidget* aParent
-,int aDepthLevel
-,bool isDialog
+,G4int aDepthLevel
+,G4bool isDialog
 )
 {
   QString commandText = QString((char*)(aCommand->GetCommandPath().data())).section("/",-aDepthLevel);
@@ -2893,7 +2893,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
   // Look if groupBox is create
   //  QGroupBox* gBoxCommandWidget;
   QWidget* newParentWidget = NULL;
-  bool found = false;
+  G4bool found = false;
   QString commandSection = commandText.left(commandText.indexOf("/"));
 
   if (aDepthLevel == 1) {
@@ -2901,7 +2901,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
     if (currentParent != 0){
 
       // already exists ?
-      for (int a=0; a<currentParent->count(); a++) {
+      for (G4int a=0; a<currentParent->count(); ++a) {
         if (currentParent->itemText(a) == commandSection) {
           found = true;
           newParentWidget = currentParent->widget(a);
@@ -2925,7 +2925,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
 
         // Guidance
         QString guidance;
-        G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
+        G4int n_guidanceEntry = (G4int)aCommand->GetGuidanceEntries();
         for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
           guidance += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "\n";
         }
@@ -2952,7 +2952,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
           //          parentToolBox->setItemText(parentToolBox->indexOf(currentParent),"[more parameters inside]");
         }
       }
-      for (int a=0; a<aParent->layout()->count(); a++) {
+      for (G4int a=0; a<aParent->layout()->count(); ++a) {
         QGroupBox* gb = dynamic_cast<QGroupBox*>(aParent->layout()->itemAt(a)->widget());
         if (gb != 0) {
           if (gb->title() == commandSection) {
@@ -2975,7 +2975,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
       // set toolTip
       // Guidance
       QString guidance;
-      G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
+      G4int n_guidanceEntry = (G4int)aCommand->GetGuidanceEntries();
       for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
         guidance += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "\n";
       }
@@ -3002,7 +3002,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
     @parent : parent widget
     @isDialog : true if we want apply/cancel button and close at end, false if we want only apply
 */
-bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool isDialog) {
+G4bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, G4bool isDialog) {
 
   if (aCommand == NULL) {
     return false;
@@ -3010,7 +3010,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
 
 
   // parameters
-  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  G4int n_parameterEntry = (G4int)aCommand->GetParameterEntries();
   if( n_parameterEntry > 0 ) {
     G4UIparameter *param;
 
@@ -3021,8 +3021,8 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
 
     // Special case for colour, try to display a color chooser if we found red/green/blue parameter
     unsigned int nbColorParameter = 0;
-    bool isStillColorParameter = false;
-    bool isColorDialogAdded = false;
+    G4bool isStillColorParameter = false;
+    G4bool isColorDialogAdded = false;
     QLabel* redLabel = NULL;
     QLabel* greenLabel = NULL;
     QString redDefaultStr = "";
@@ -3252,7 +3252,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
 
       QWidget * parentCheck = aParent;
       QDialog* parentDialog = NULL;
-      bool found = false;
+      G4bool found = false;
       while ((parentCheck->parentWidget()) != NULL) {
         parentCheck = parentCheck->parentWidget();
         parentDialog = dynamic_cast<QDialog*>(parentCheck);
@@ -3299,7 +3299,7 @@ QTreeWidgetItem* G4UIQt::FindTreeItem(
     return aParent;
 
   QTreeWidgetItem * tmp = NULL;
-  for (int a=0;a<aParent->childCount();a++) {
+  for (G4int a=0;a<aParent->childCount();++a) {
     if (!tmp)
       tmp = FindTreeItem(aParent->child(a),myCommand);
   }
@@ -3326,8 +3326,8 @@ QString G4UIQt::GetCommandList (
 
   G4String commandPath = aCommand->GetCommandPath();
   G4String rangeString = aCommand->GetRange();
-  G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
-  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  G4int n_guidanceEntry = (G4int)aCommand->GetGuidanceEntries();
+  G4int n_parameterEntry = (G4int)aCommand->GetParameterEntries();
 
   if ((commandPath == "") &&
       (rangeString == "") &&
@@ -3403,8 +3403,8 @@ void G4UIQt::updateHelpArea (
 
   G4String commandPath = aCommand->GetCommandPath();
   G4String rangeString = aCommand->GetRange();
-  G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
-  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  G4int n_guidanceEntry = (G4int)aCommand->GetGuidanceEntries();
+  G4int n_parameterEntry = (G4int)aCommand->GetParameterEntries();
 
   if ((commandPath == "") &&
       (rangeString == "") &&
@@ -3474,7 +3474,7 @@ void G4UIQt::updateHelpArea (
 
     QTableWidgetItem* t = fParameterHelpTable->horizontalHeaderItem(1);
     QFont fnt = t->font();
-    int size = fnt.pointSize();
+    G4int size = fnt.pointSize();
     fnt.setPointSize(size-2);
 
     for( G4int a=0; a<n_parameterEntry; a++ ) {
@@ -3504,7 +3504,7 @@ void G4UIQt::updateHelpArea (
         fParameterHelpTable->setItem(a, 7, new QTableWidgetItem(QString((char*)(param->GetParameterCandidates()).data())));
       }
       // tooltips
-      for (int b=0; b<8; b++) {
+      for (G4int b=0; b<8; ++b) {
         QTableWidgetItem* tmp = fParameterHelpTable->item(a,b);
         if (tmp) {
           tmp->setToolTip(tmp->text());
@@ -3513,7 +3513,7 @@ void G4UIQt::updateHelpArea (
       }
       fParameterHelpTable->resizeRowToContents(a);
     }
-    for (int c=0; c<8; c++) {
+    for (G4int c=0; c<8; ++c) {
       if (c !=2) {
         fParameterHelpTable->resizeColumnToContents(c);
       }
@@ -3537,7 +3537,7 @@ G4bool G4UIQt::IsGUICommand(
   if (aCommand == NULL)
     return false;
 
-  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  G4int n_parameterEntry = (G4int)aCommand->GetParameterEntries();
 
   if( n_parameterEntry > 0 ) {
     G4UIparameter *param;
@@ -3581,13 +3581,13 @@ G4bool G4UIQt::GetHelpChoice(
    @param obj Emitter of the event
    @param event Kind of event
 */
-bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of Qt
+G4bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of Qt
  QObject *aObj
 ,QEvent *aEvent
 )
 {
-  bool tabKeyPress = false;
-  bool moveCommandCursor = false;
+  G4bool tabKeyPress = false;
+  G4bool moveCommandCursor = false;
   if (aObj == NULL) return false;
   if (aEvent == NULL) return false;
 
@@ -3617,7 +3617,7 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
           (e->key() == (Qt::Key_PageDown)) ||
           (e->key() == (Qt::Key_Up)) ||
           (e->key() == (Qt::Key_PageUp))) {
-        int selection = fHistoryTBTableList->currentRow();
+        G4int selection = fHistoryTBTableList->currentRow();
         if (fHistoryTBTableList->count()) {
           if (selection == -1) {
             selection = fHistoryTBTableList->count()-1;
@@ -3669,7 +3669,7 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
     // specific #ifdef
   }
 
-  bool res= false;
+  G4bool res= false;
   // change cursor position if needed
   if (moveCommandCursor == true) {
     fCommandArea->setCursorPosition ( fCommandArea->text().length() );
@@ -3731,11 +3731,11 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
   G4UIcommandTree * commandTreeTop = UI->GetTree();
   G4UIcommandTree* aTree = commandTreeTop->FindCommandTree(pName);
   if (aTree) {
-    int Ndir= aTree-> GetTreeEntry();
-    int Ncmd= aTree-> GetCommandEntry();
+    G4int Ndir= aTree-> GetTreeEntry();
+    G4int Ncmd= aTree-> GetCommandEntry();
 
     // directory ...
-    for(G4int idir=1; idir<=Ndir; idir++) {
+    for(G4int idir=1; idir<=Ndir; ++idir) {
       G4String fpdir= aTree-> GetTree(idir)-> GetPathName();
       // matching test
       if( fpdir.find(remainingPath, 0) == 0) {
@@ -3755,7 +3755,7 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
 
         // Go recursively
         QStandardItemModel* subModel = CreateCompleterModel(fpdir.data());
-        for (int a=0; a< subModel->rowCount(); a++) {
+        for (G4int a=0; a< subModel->rowCount(); ++a) {
 
           // copy item (an item could only be part of one model
           QStandardItem* tempItem = new QStandardItem(subModel->item(a)->text());
@@ -3785,15 +3785,15 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
     std::string tooltip;
     G4String params;
 
-    for(G4int icmd=1; icmd<=Ncmd; icmd++){
+    for(G4int icmd=1; icmd<=Ncmd; ++icmd){
       tooltip = "";
       params = " ";
       command = aTree-> GetCommand(icmd);
       G4String longCommandName= aTree-> GetPathName() +
       command -> GetCommandName();
       rangeString = command->GetRange();
-      n_guidanceEntry = command->GetGuidanceEntries();
-      n_parameterEntry = command->GetParameterEntries();
+      n_guidanceEntry = (G4int)command->GetGuidanceEntries();
+      n_parameterEntry = (G4int)command->GetParameterEntries();
 
 
       // matching test
@@ -3840,16 +3840,16 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
   model->setColumnCount(1);
 
   // concat models
-  for (int a= 0; a< dirModelList.size(); a++) {
+  for (G4int a= 0; a< dirModelList.size(); ++a) {
     model->appendRow(dirModelList.at(a));
   }
-  for (int a= 0; a< subDirModelList.size(); a++) {
+  for (G4int a= 0; a< subDirModelList.size(); ++a) {
     model->appendRow(subDirModelList.at(a));
   }
-  for (int a= 0; a< commandModelList.size(); a++) {
+  for (G4int a= 0; a< commandModelList.size(); ++a) {
     model->appendRow(commandModelList.at(a));
   }
-  for (int a= 0; a< subCommandModelList.size(); a++) {
+  for (G4int a= 0; a< subCommandModelList.size(); ++a) {
     model->appendRow(subCommandModelList.at(a));
   }
 
@@ -3911,7 +3911,7 @@ void G4UIQt::CommandEnteredCallback (
 #endif
 
   // Apply for all commands
-  for (int a=0; a< list.size(); a++) {
+  for (G4int a=0; a< list.size(); ++a) {
     QString txt (list[a].trimmed());
     if (txt != "") {
       fHistoryTBTableList->addItem(txt);
@@ -3960,7 +3960,7 @@ void G4UIQt::CommandEditedCallback(const QString &)
 #endif
 
   if (list.size() > 1) { // trigger ActivateCommand
-    for (int a=0; a<list.size()-1; a++) {
+    for (G4int a=0; a<list.size()-1; ++a) {
       // set only the first part
       fCommandArea->setText(list[a]);
       // trigger callback
@@ -3995,7 +3995,7 @@ void G4UIQt::VisParameterCallback(QWidget* widget){
   }
   command += (dynamic_cast<QLabel*>(name))->text()+" ";
 
-  for (int a=0;a<grid->rowCount()-1; a++) {
+  for (G4int a=0;a<grid->rowCount()-1; ++a) {
 #if QT_VERSION < 0x040400
     QWidget* widgetTmp = grid->itemAt(a*grid->columnCount()+1)->widget();
 #else
@@ -4169,7 +4169,7 @@ void G4UIQt::CommandHistoryCallback(
 }
 
 
-void G4UIQt::ThreadComboBoxCallback(int) {
+void G4UIQt::ThreadComboBoxCallback(G4int) {
   CoutFilterCallback("");
 }
 
@@ -4306,9 +4306,9 @@ void G4UIQt::OpenHelpTreeOnCommand(
 
 #if QT_VERSION < 0x050F00
   // Before Qt5.15
-  QMap<int,QString> commandResultMap;
-  QMap<int,QString> commandChildResultMap;
-  for (int a=0;a<treeSize;a++) {
+  QMap<G4int,QString> commandResultMap;
+  QMap<G4int,QString> commandChildResultMap;
+  for (G4int a=0;a<treeSize;++a) {
     G4UIcommand* command = treeTop->FindPath(treeTop->GetTree(a+1)->GetPathName().data());
     tmp = GetCommandList (command).count(searchText,Qt::CaseInsensitive);
     if (tmp >0) {
@@ -4328,9 +4328,9 @@ void G4UIQt::OpenHelpTreeOnCommand(
   }
 #else
   // Qt5.15 and beyond
-  QMultiMap<int,QString> commandResultMap;
-  QMultiMap<int,QString> commandChildResultMap;
-  for (int a=0;a<treeSize;a++) {
+  QMultiMap<G4int,QString> commandResultMap;
+  QMultiMap<G4int,QString> commandChildResultMap;
+  for (G4int a=0;a<treeSize;++a) {
     G4UIcommand* command = treeTop->FindPath(treeTop->GetTree(a+1)->GetPathName().data());
     tmp = GetCommandList (command).count(searchText,Qt::CaseInsensitive);
     if (tmp >0) {
@@ -4340,10 +4340,10 @@ void G4UIQt::OpenHelpTreeOnCommand(
     commandChildResultMap = LookForHelpStringInChildTree(treeTop->GetTree(a+1),searchText);
     // insert new childs
     if (!commandChildResultMap.empty()) {
-      QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
+      QMap<G4int,QString>::const_iterator i = commandChildResultMap.constBegin();
       while (i != commandChildResultMap.constEnd()) {
         commandResultMap.insert(i.key(),i.value());
-        i++;
+        ++i;
       }
       commandChildResultMap.clear();
     }
@@ -4363,20 +4363,20 @@ void G4UIQt::OpenHelpTreeOnCommand(
     return;
   }
 
-  QMap<int,QString>::const_iterator i = commandResultMap.constEnd();
+  QMap<G4int,QString>::const_iterator i = commandResultMap.constEnd();
   i--;
   // 10 maximum progress values
-  float multValue = 10.0/(float)(i.key());
+  G4float multValue = 10.0/(G4float)(i.key());
   QString progressChar = "|";
   QString progressStr = "|";
 
   QTreeWidgetItem * newItem;
-  bool end = false;
+  G4bool end = false;
   while (!end) {
     if (i == commandResultMap.constBegin()) {
       end = true;
     }
-    for(int a=0;a<int(i.key()*multValue);a++) {
+    for(G4int a=0;a<G4int(i.key()*multValue);++a) {
       progressStr += progressChar;
     }
     newItem = new QTreeWidgetItem();
@@ -4403,17 +4403,17 @@ void G4UIQt::OpenHelpTreeOnCommand(
 
 #if QT_VERSION < 0x050F00
 // Before Qt5.15
-QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
+QMap<G4int,QString> G4UIQt::LookForHelpStringInChildTree(
  G4UIcommandTree *aCommandTree
 ,const QString & text
  )
 {
-  QMap<int,QString> commandResultMap;
+  QMap<G4int,QString> commandResultMap;
   if (aCommandTree == NULL) return commandResultMap;
   // Get the Sub directories
-  int tmp = 0;
-  QMap<int,QString> commandChildResultMap;
-  for (int a=0;a<aCommandTree->GetTreeEntry();a++) {
+  G4int tmp = 0;
+  QMap<G4int,QString> commandChildResultMap;
+  for (G4int a=0;a<aCommandTree->GetTreeEntry();++a) {
     const G4UIcommand* command = aCommandTree->GetGuidance();
     tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
     if (tmp >0) {
@@ -4423,16 +4423,16 @@ QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
     commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(a+1),text);
     if (!commandChildResultMap.empty()) {
       // insert new childs
-      QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
+      QMap<G4int,QString>::const_iterator i = commandChildResultMap.constBegin();
       while (i != commandChildResultMap.constEnd()) {
         commandResultMap.insertMulti(i.key(),i.value());
-        i++;
+        ++i;
       }
       commandChildResultMap.clear();
     }
   }
   // Get the Commands
-  for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
+  for (G4int a=0;a<aCommandTree->GetCommandEntry();++a) {
     const G4UIcommand* command = aCommandTree->GetCommand(a+1);
     tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
     if (tmp >0) {
@@ -4443,17 +4443,17 @@ QMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
 }
 #else
 // Qt5.15 and beyond
-QMultiMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
+QMultiMap<G4int,QString> G4UIQt::LookForHelpStringInChildTree(
  G4UIcommandTree *aCommandTree
 ,const QString & text
  )
 {
-  QMultiMap<int,QString> commandResultMap;
+  QMultiMap<G4int,QString> commandResultMap;
   if (aCommandTree == NULL) return commandResultMap;
   // Get the Sub directories
-  int tmp = 0;
-  QMultiMap<int,QString> commandChildResultMap;
-  for (int a=0;a<aCommandTree->GetTreeEntry();a++) {
+  G4int tmp = 0;
+  QMultiMap<G4int,QString> commandChildResultMap;
+  for (G4int a=0;a<aCommandTree->GetTreeEntry();++a) {
     const G4UIcommand* command = aCommandTree->GetGuidance();
     tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
     if (tmp >0) {
@@ -4463,16 +4463,16 @@ QMultiMap<int,QString> G4UIQt::LookForHelpStringInChildTree(
     commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(a+1),text);
     if (!commandChildResultMap.empty()) {
       // insert new childs
-      QMap<int,QString>::const_iterator i = commandChildResultMap.constBegin();
+      QMap<G4int,QString>::const_iterator i = commandChildResultMap.constBegin();
       while (i != commandChildResultMap.constEnd()) {
         commandResultMap.insert(i.key(),i.value());
-        i++;
+        ++i;
       }
       commandChildResultMap.clear();
     }
   }
   // Get the Commands
-  for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
+  for (G4int a=0;a<aCommandTree->GetCommandEntry();++a) {
     const G4UIcommand* command = aCommandTree->GetCommand(a+1);
     tmp = GetCommandList (command).count(text,Qt::CaseInsensitive);
     if (tmp >0) {
@@ -4538,7 +4538,7 @@ void G4UIQt::ChangeColorCallback(QWidget* widget) {
               value.section(" ",1,2).toDouble(),
               value.section(" ",2,3).toDouble());
 #if QT_VERSION < 0x040500
-  bool a;
+  G4bool a;
   QColor color = QColor(QColorDialog::getRgba (old.rgba(),&a,fUITabWidget));
 #else
   QColor color = QColorDialog::getColor(old,
@@ -4627,7 +4627,7 @@ void G4UIQt::ChangeSurfaceStyle(const QString& action) {
 
   if (fToolbarApp == NULL) return;
   QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == action) {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "hidden_line_removal") {
@@ -4776,7 +4776,7 @@ void G4UIQt::CreateEmptyPickInfosWidget() {
 }
 
 
-void G4UIQt::ViewerPropertiesIconCallback(int) {
+void G4UIQt::ViewerPropertiesIconCallback(G4int) {
 
   CreateViewerPropertiesDialog();
 
@@ -4793,7 +4793,7 @@ void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
   if (fToolbarApp == NULL) return;
   QList<QAction *> list = fToolbarApp->actions ();
   QString checked = "";
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == action) {
       list.at(i)->setChecked(TRUE);
       checked = list.at(i)->data().toString ();
@@ -4823,7 +4823,7 @@ void G4UIQt::SetIconMoveSelected() {
 
   if (fToolbarApp == NULL) return;
   QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "move") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "rotate") {
@@ -4849,7 +4849,7 @@ void G4UIQt::SetIconRotateSelected() {
 
   if (fToolbarApp == NULL) return;
   QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "rotate") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "move") {
@@ -4880,7 +4880,7 @@ void G4UIQt::SetIconPickSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "pick") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "move") {
@@ -4911,7 +4911,7 @@ void G4UIQt::SetIconZoomInSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "zoom_in") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "move") {
@@ -4942,7 +4942,7 @@ void G4UIQt::SetIconZoomOutSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "zoom_out") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "move") {
@@ -4968,7 +4968,7 @@ void G4UIQt::SetIconSolidSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "solid") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "hidden_line_removal") {
@@ -4992,7 +4992,7 @@ void G4UIQt::SetIconWireframeSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "wireframe") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "hidden_line_removal") {
@@ -5017,7 +5017,7 @@ void G4UIQt::SetIconHLRSelected() {
 
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "hidden_line_removal") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "solid") {
@@ -5042,7 +5042,7 @@ void G4UIQt::SetIconHLHSRSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "solid") {
@@ -5067,7 +5067,7 @@ void G4UIQt::SetIconPerspectiveSelected() {
 
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "perspective") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "ortho") {
@@ -5089,7 +5089,7 @@ void G4UIQt::SetIconOrthoSelected() {
   if (!bar) return;
 
   QList<QAction *> list = bar->actions ();
-  for (int i = 0; i < list.size(); ++i) {
+  for (G4int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "ortho") {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "perspective") {
@@ -5102,8 +5102,8 @@ void G4UIQt::SetIconOrthoSelected() {
 
 G4QTabWidget::G4QTabWidget(
 QWidget* aParent,
-int sizeX,
-int sizeY
+G4int sizeX,
+G4int sizeY
 ):QTabWidget(aParent)
  ,fTabSelected(false)
  ,fLastCreated(-1)
@@ -5142,9 +5142,9 @@ G4String outputStream
 
 
 #if QT_VERSION < 0x040500
-void G4UIQt::TabCloseCallback(int){
+void G4UIQt::TabCloseCallback(G4int){
 #else
-void G4UIQt::TabCloseCallback(int a){
+void G4UIQt::TabCloseCallback(G4int a){
 #endif
 #if QT_VERSION < 0x040500
 #else
@@ -5156,8 +5156,8 @@ void G4UIQt::TabCloseCallback(int a){
   fViewerTabWidget->removeTab (a);
 
   // if last QWidget : Add empty string
-  bool lastTab = true;
-  for (int c=0; c<fViewerTabWidget->count(); c++) {
+  G4bool lastTab = true;
+  for (G4int c=0; c<fViewerTabWidget->count(); ++c) {
     if (fViewerTabWidget->tabText(c).contains("viewer")) {
       lastTab = false;
     }
@@ -5172,7 +5172,7 @@ void G4UIQt::TabCloseCallback(int a){
 }
 
 
-void G4UIQt::ToolBoxActivated(int a){
+void G4UIQt::ToolBoxActivated(G4int a){
 
   if (fUITabWidget->widget(a) == fHelpTBWidget) {
     // Rebuild the help tree

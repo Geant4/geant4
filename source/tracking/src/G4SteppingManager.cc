@@ -500,7 +500,7 @@ void G4SteppingManager::DefinePhysicalStepLength()
 
   for(std::size_t np=0; np<MAXofPostStepLoops; ++np)
   {
-    fCurrentProcess = (*fPostStepGetPhysIntVector)(np);
+    fCurrentProcess = (*fPostStepGetPhysIntVector)((G4int)np);
     if (fCurrentProcess == nullptr)
     {
       (*fSelectedPostStepDoItVector)[np] = InActivated;
@@ -573,7 +573,7 @@ void G4SteppingManager::DefinePhysicalStepLength()
 
   for(std::size_t kp=0; kp<MAXofAlongStepLoops; ++kp)
   {
-    fCurrentProcess = (*fAlongStepGetPhysIntVector)[kp];
+    fCurrentProcess = (*fAlongStepGetPhysIntVector)[(G4int)kp];
     if (fCurrentProcess == nullptr) continue;
       // NULL means the process is inactivated by a user on fly
 
@@ -717,16 +717,14 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
   fAtRestDoItProcTriggered = 0;
   shortestLifeTime = DBL_MAX;
 
-  unsigned int NofInactiveProc = 0;
   for( std::size_t ri=0 ; ri < MAXofAtRestLoops ; ++ri )
   {
-    fCurrentProcess = (*fAtRestGetPhysIntVector)[ri];
+    fCurrentProcess = (*fAtRestGetPhysIntVector)[(G4int)ri];
     if (fCurrentProcess == nullptr)
     {
       (*fSelectedAtRestDoItVector)[ri] = InActivated;
-      ++NofInactiveProc;
       continue;
-    }   // NULL means the process is inactivated by a user on fly
+    }   // nullptr means the process is inactivated by a user on fly
 
     lifeTime = fCurrentProcess->AtRestGPIL( *fTrack, &fCondition );
 
@@ -748,17 +746,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 
   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
 
-  // at least one process is necessary to destroy the particle exit with warning
-  //
-  if(NofInactiveProc==MAXofAtRestLoops)
-  { 
-    G4Exception("G4SteppingManager::InvokeAtRestDoItProcs()", "Tracking0013",
-                JustWarning, "No AtRestDoIt process is active!" );
-  }
-
   fStep->SetStepLength( 0. );  // the particle has stopped
   fTrack->SetStepLength( 0. );
-
 
   // Condition to avoid that stable ions are handled by Radioactive Decay.
   // We use a very large time threshold (many orders of magnitude bigger than
@@ -776,7 +765,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
       //
       if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated)
       {
-        fCurrentProcess = (*fAtRestDoItVector)[np];
+        fCurrentProcess = (*fAtRestDoItVector)[(G4int)np];
         fParticleChange = fCurrentProcess->AtRestDoIt(*fTrack, *fStep);
 
         // Update Step
@@ -818,7 +807,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
   //
   for( std::size_t ci=0; ci<MAXofAlongStepLoops; ++ci )
   {
-    fCurrentProcess = (*fAlongStepDoItVector)[ci];
+    fCurrentProcess = (*fAlongStepDoItVector)[(G4int)ci];
     if (fCurrentProcess== 0) continue;
       // NULL means the process is inactivated by a user on fly.
 
@@ -905,7 +894,7 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 void G4SteppingManager::InvokePSDIP(size_t np)
 ////////////////////////////////////////////////////////
 {
-  fCurrentProcess = (*fPostStepDoItVector)[np];
+  fCurrentProcess = (*fPostStepDoItVector)[(G4int)np];
   fParticleChange = fCurrentProcess->PostStepDoIt( *fTrack, *fStep);
 
   // Update PostStepPoint of Step according to ParticleChange

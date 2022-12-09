@@ -239,8 +239,8 @@ void SteppingAction::DoChromosomeDNAHit(
   const G4ThreeVector& pos, const G4ThreeVector& localPos, const G4double& edep,
   const G4double& dist, const G4String& pvName, const G4String& motherName)
 {
-  G4int placementIdx = std::stoi(utility::split(motherName, '-').at(1));
-  std::vector<G4String> pvNameVec = utility::split(pvName, '-');
+  G4int placementIdx = std::stoi(utility::Split(motherName, '-').at(1));
+  std::vector<G4String> pvNameVec = utility::Split(pvName, '-');
   molecule mol                    = utility::GetMoleculeEnum(pvNameVec.at(0));
   G4int chainIdx                  = std::stoi(pvNameVec.at(1));
   G4int strandIdx                 = std::stoi(pvNameVec.at(2));

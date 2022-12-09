@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Reference:
+//    A.D. Dominguez-Munoz, M.I. Gallardo, M.C. Bordage,
+//    Z. Francis, S. Incerti, M.A. Cortes-Giraldo,
+//    Radiat. Phys. Chem. 199 (2022) 110363.
 //
-// Created on 2022/03/03
+// Class authors:
+//    A.D. Dominguez-Munoz
+//    M.A. Cortes-Giraldo (miancortes -at- us.es)
 //
-// Authors: A.D. Dominguez-Munoz, M.I. Gallardo, M.C. Bordage,
-//          Z. Francis, S. Incerti, M.A. Cortes-Giraldo
-// 
-// Contact: M.A. Cortes-Giraldo (miancortes -at- us.es)
-// 
+// Class creation: 2022-03-03
+//
 //
 
 #include "G4DNARPWBAExcitationModel.hh"
@@ -87,8 +90,13 @@ void G4DNARPWBAExcitationModel::Initialise(const G4ParticleDefinition* particle,
   fLowEnergy  = 100. * MeV;
   fHighEnergy = 300. * MeV;
 
-  //SetLowEnergyLimit(fLowEnergy);
-  //SetHighEnergyLimit(fHighEnergy);
+  if(LowEnergyLimit() < fLowEnergy || HighEnergyLimit() > fHighEnergy)
+  {
+    G4ExceptionDescription ed;
+    ed << "Model is applicable from "<<fLowEnergy<<" to "<<fHighEnergy;
+    G4Exception("G4DNARPWBAExcitationModel::Initialise", "em0004",
+      FatalException, ed);
+  }
 
   G4double scaleFactor = 1 * cm * cm;
   fTableData = make_unique<G4DNACrossSectionDataSet>(new G4LogLogInterpolation,
@@ -229,13 +237,13 @@ G4int G4DNARPWBAExcitationModel::RandomSelect(G4double k)
   G4int level = 0;
 
   G4double* valuesBuffer = new G4double[fTableData->NumberOfComponents()];
-  const size_t n(fTableData->NumberOfComponents());
-  size_t i(n);
+  const G4int n = (G4int)fTableData->NumberOfComponents();
+  G4int i(n);
   G4double value = 0.;
 
   while(i > 0)
   {
-    i--;
+    --i;
     valuesBuffer[i] = fTableData->GetComponent(i)->FindValue(k);
     value += valuesBuffer[i];
   }
@@ -245,7 +253,7 @@ G4int G4DNARPWBAExcitationModel::RandomSelect(G4double k)
 
   while(i > 0)
   {
-    i--;
+    --i;
 
     if(valuesBuffer[i] > value)
     {

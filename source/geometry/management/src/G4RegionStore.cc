@@ -91,25 +91,13 @@ void G4RegionStore::Clean()
   //
   locked = true;  
 
-  std::size_t i=0;
   G4RegionStore* store = GetInstance();
-
-#ifdef G4GEOMETRY_VOXELDEBUG
-  G4cout << "Deleting Regions ... ";
-#endif
 
   for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    delete *pos; ++i;
+    delete *pos;
   }
-
-#ifdef G4GEOMETRY_VOXELDEBUG
-  if (store->size() < i-1)
-    { G4cout << "No regions deleted. Already deleted by user ?" << G4endl; }
-  else
-    { G4cout << i-1 << " regions deleted !" << G4endl; }
-#endif
 
   store->bmap.clear(); store->mvalid = false;
   locked = false;
@@ -338,8 +326,8 @@ void G4RegionStore::SetWorldVolume()
   //
   G4PhysicalVolumeStore* fPhysicalVolumeStore
     = G4PhysicalVolumeStore::GetInstance();
-  size_t nPhys = fPhysicalVolumeStore->size();
-  for(size_t iPhys=0; iPhys<nPhys; ++iPhys)
+  std::size_t nPhys = fPhysicalVolumeStore->size();
+  for(std::size_t iPhys=0; iPhys<nPhys; ++iPhys)
   {
     G4VPhysicalVolume* fPhys = (*fPhysicalVolumeStore)[iPhys];
     if(fPhys->GetMotherLogical() != nullptr) { continue; } // not a world volume

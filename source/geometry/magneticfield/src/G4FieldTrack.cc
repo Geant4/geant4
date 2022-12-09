@@ -38,7 +38,7 @@ std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
      const G4int precLen= 12;  // For Length along track
      const G4int precSpin= 9;  // For polarisation
      const G4int precTime= 6;  // For time of flight
-     const G4int oldpr= os.precision(precPos);
+     const G4long oldpr= os.precision(precPos);
      os << " ( ";
      os << " X= " << SixV[0] << " " << SixV[1] << " "
                   << SixV[2] << " ";  // Position

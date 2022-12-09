@@ -93,10 +93,10 @@ G4PAIPhotData::G4PAIPhotData(G4double tmin, G4double tmax, G4int ver)
 G4PAIPhotData::~G4PAIPhotData()
 {
   //G4cout << "G4PAIPhotData::~G4PAIPhotData() " << this << G4endl;
-  size_t n = fPAIxscBank.size();
+  std::size_t n = fPAIxscBank.size();
   if(0 < n) 
   {
-    for(size_t i=0; i<n; ++i) 
+    for(std::size_t i=0; i<n; ++i) 
     {
       if(fPAIxscBank[i]) 
       {
@@ -128,14 +128,14 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
 {
   G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  size_t jMatCC;
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+  G4int jMatCC;
 
-  for (jMatCC = 0; jMatCC < numOfCouples; jMatCC++ )
+  for (jMatCC = 0; jMatCC < numOfCouples; ++jMatCC )
   {
     if( couple == theCoupleTable->GetMaterialCutsCouple(jMatCC) ) break;
   }
-  if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
+  if( jMatCC == numOfCouples && jMatCC > 0 ) --jMatCC;
 
   const vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
   const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
@@ -273,8 +273,8 @@ G4double G4PAIPhotData::DEDXPerVolume(G4int coupleIndex, G4double scaledTkin,
 {
   // VI: iPlace is the low edge index of the bin
   // iPlace is in interval from 0 to (N-1)
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
   G4bool one = true;
   if(scaledTkin >= fParticleEnergyVector->Energy(nPlace)) { iPlace = nPlace; }
@@ -314,8 +314,8 @@ G4PAIPhotData::CrossSectionPerVolume(G4int coupleIndex,
 
   // iPlace is in interval from 0 to (N-1)
 
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
   G4bool one = true;
 
@@ -372,8 +372,8 @@ G4PAIPhotData::GetPlasmonRatio(G4int coupleIndex, G4double scaledTkin) const
   G4double cross, xscEl, xscEl2, xscPh, xscPh2, plRatio;
   // iPlace is in interval from 0 to (N-1)
 
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
   G4bool one = true;
 
@@ -441,8 +441,8 @@ G4double G4PAIPhotData::SampleAlongStepTransfer(G4int coupleIndex,
   G4double omega; 
   G4double position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
 
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
  
   G4bool one = true;
 
@@ -487,7 +487,7 @@ G4double G4PAIPhotData::SampleAlongStepTransfer(G4int coupleIndex,
   }
   if( meanNumber <= 0.0) return 0.0; 
 
-  G4int numOfCollisions = G4Poisson(meanNumber);
+  G4int numOfCollisions = (G4int)G4Poisson(meanNumber);
 
   //G4cout << "N= " << numOfCollisions << G4endl;
 
@@ -533,8 +533,8 @@ G4double G4PAIPhotData::SampleAlongStepPhotonTransfer(G4int coupleIndex,
   G4double omega; 
   G4double position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
 
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
  
   G4bool one = true;
 
@@ -579,7 +579,7 @@ G4double G4PAIPhotData::SampleAlongStepPhotonTransfer(G4int coupleIndex,
   }
   if( meanNumber <= 0.0) return 0.0; 
 
-  G4int numOfCollisions = G4Poisson(meanNumber);
+  G4int numOfCollisions = (G4int)G4Poisson(meanNumber);
 
   //G4cout << "N= " << numOfCollisions << G4endl;
 
@@ -625,8 +625,8 @@ G4double G4PAIPhotData::SampleAlongStepPlasmonTransfer(G4int coupleIndex,
   G4double omega; 
   G4double position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
 
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
  
   G4bool one = true;
 
@@ -671,7 +671,7 @@ G4double G4PAIPhotData::SampleAlongStepPlasmonTransfer(G4int coupleIndex,
   }
   if( meanNumber <= 0.0) return 0.0; 
 
-  G4int numOfCollisions = G4Poisson(meanNumber);
+  G4int numOfCollisions = (G4int)G4Poisson(meanNumber);
 
   //G4cout << "N= " << numOfCollisions << G4endl;
 
@@ -718,9 +718,9 @@ G4double G4PAIPhotData::SamplePostStepTransfer(G4int coupleIndex,
   G4double transfer = 0.0;
   G4double rand = G4UniformRand();
 
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
-  //  size_t iTransfer, iTr1, iTr2;
+  //  std::size_t iTransfer, iTr1, iTr2;
   G4double position, dNdxCut1, dNdxCut2, E1, E2, W1, W2, W;
 
   G4PhysicsVector* cutv = fdNdxCutTable[coupleIndex];
@@ -738,7 +738,7 @@ G4double G4PAIPhotData::SamplePostStepTransfer(G4int coupleIndex,
   }
   else 
   {  
-    size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+    std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
 
     dNdxCut1 = (*cutv)[iPlace];  
     dNdxCut2 = (*cutv)[iPlace+1];  
@@ -774,9 +774,9 @@ G4double G4PAIPhotData::SamplePostStepPhotonTransfer(G4int coupleIndex,
   G4double transfer = 0.0;
   G4double rand = G4UniformRand();
 
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
-  //  size_t iTransfer, iTr1, iTr2;
+  //  std::size_t iTransfer, iTr1, iTr2;
   G4double position, dNdxCut1, dNdxCut2, E1, E2, W1, W2, W;
 
   G4PhysicsVector* cutv = fdNdxCutPhotonTable[coupleIndex];
@@ -795,7 +795,7 @@ G4double G4PAIPhotData::SamplePostStepPhotonTransfer(G4int coupleIndex,
   }
   else 
   {  
-    size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+    std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
 
     dNdxCut1 = (*cutv)[iPlace];  
     dNdxCut2 = (*cutv)[iPlace+1];  
@@ -832,9 +832,9 @@ G4double G4PAIPhotData::SamplePostStepPlasmonTransfer(G4int coupleIndex,
   G4double transfer = 0.0;
   G4double rand = G4UniformRand();
 
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
-  //  size_t iTransfer, iTr1, iTr2;
+  //  std::size_t iTransfer, iTr1, iTr2;
   G4double position, dNdxCut1, dNdxCut2, E1, E2, W1, W2, W;
 
   G4PhysicsVector* cutv = fdNdxCutPlasmonTable[coupleIndex];
@@ -852,7 +852,7 @@ G4double G4PAIPhotData::SamplePostStepPlasmonTransfer(G4int coupleIndex,
   }
   else 
   {  
-    size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+    std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
 
     dNdxCut1 = (*cutv)[iPlace];  
     dNdxCut2 = (*cutv)[iPlace+1];  
@@ -887,15 +887,15 @@ G4double G4PAIPhotData::SamplePostStepPlasmonTransfer(G4int coupleIndex,
 // indexes of particle kinetic enegry and random x-section
 
 G4double G4PAIPhotData::GetEnergyTransfer(G4int coupleIndex, 
-					   size_t iPlace, 
-					   G4double position) const
+					 std::size_t iPlace, 
+					 G4double position) const
 { 
   G4PhysicsVector* v = (*(fPAIxscBank[coupleIndex]))(iPlace); 
   if(position*v->Energy(0) >= (*v)[0]) { return v->Energy(0); }
 
-  size_t iTransferMax = v->GetVectorLength() - 1;
+  std::size_t iTransferMax = v->GetVectorLength() - 1;
 
-  size_t iTransfer;
+  std::size_t iTransfer;
   G4double x1(0.0), x2(0.0), y1(0.0), y2(0.0), energyTransfer;
 
   for(iTransfer=1; iTransfer<=iTransferMax; ++iTransfer) {
@@ -938,15 +938,15 @@ G4double G4PAIPhotData::GetEnergyTransfer(G4int coupleIndex,
 /////////////////////////////////////////////////////////////////
 
 G4double G4PAIPhotData::GetEnergyPhotonTransfer(G4int coupleIndex, 
-					   size_t iPlace, 
-					   G4double position) const
+					        std::size_t iPlace, 
+					        G4double position) const
 { 
   G4PhysicsVector* v = (*(fPAIphotonBank[coupleIndex]))(iPlace); 
   if(position*v->Energy(0) >= (*v)[0])  return v->Energy(0); 
 
-  size_t iTransferMax = v->GetVectorLength() - 1;
+  std::size_t iTransferMax = v->GetVectorLength() - 1;
 
-  size_t iTransfer;
+  std::size_t iTransfer;
   G4double x1(0.0), x2(0.0), y1(0.0), y2(0.0), energyTransfer;
 
   for(iTransfer=1; iTransfer<=iTransferMax; ++iTransfer) 
@@ -999,16 +999,16 @@ G4double G4PAIPhotData::GetEnergyPhotonTransfer(G4int coupleIndex,
 /////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIPhotData::GetEnergyPlasmonTransfer(G4int coupleIndex, 
-					   size_t iPlace, 
-					   G4double position) const
+					         std::size_t iPlace, 
+					         G4double position) const
 { 
   G4PhysicsVector* v = (*(fPAIplasmonBank[coupleIndex]))(iPlace); 
 
   if( position*v->Energy(0) >= (*v)[0] )  return v->Energy(0); 
 
-  size_t iTransferMax = v->GetVectorLength() - 1;
+  std::size_t iTransferMax = v->GetVectorLength() - 1;
 
-  size_t iTransfer;
+  std::size_t iTransfer;
   G4double x1(0.0), x2(0.0), y1(0.0), y2(0.0), energyTransfer;
 
   for(iTransfer = 1; iTransfer <= iTransferMax; ++iTransfer) 

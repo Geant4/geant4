@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+
+## 2022-11-17 V. Ivanchenko (exhadr03-V11-00-02)
+- Hadr03.cc - removed RanecuEngine
+- PhysicsList: use G4NuclideTable::SetMeanLifeThreshold(1ns);
+    use QBBC as the default configuration
+- Run - added protection for the case when G4NeutronGeneralProcess is
+    used - in that case it is not possible to access cross section
+    via G4HadronicProcessStore, this may be resolved for the next release;
+    fixed problem 2517
+
 ## 2022-04-01 mma (exhadr03-V11-00-01)
 - PhysicsList: add G4NuclideTable::SetThresholdOfHalfLife(1ns*log2)
 

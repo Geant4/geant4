@@ -66,7 +66,7 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Step* aStep)
   }
   else
   {
-    fVolumeName = " ";
+    fVolumeName = G4String(" ");
   }
 }
 

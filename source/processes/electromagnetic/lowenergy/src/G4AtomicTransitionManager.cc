@@ -67,8 +67,8 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
  
   for (auto& pos : shellTable){
     std::vector<G4AtomicShell*>vec = pos.second;
-    G4int vecSize = vec.size();   
-    for (G4int i=0; i< vecSize; ++i){
+    std::size_t vecSize = vec.size();   
+    for (std::size_t i=0; i< vecSize; ++i){
       G4AtomicShell* shell = vec[i];
       delete shell;     
     }
@@ -77,9 +77,9 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
   for (auto& ppos : transitionTable)
     {
       std::vector<G4FluoTransition*>vec = ppos.second;
-      G4int vecSize=vec.size();
+      std::size_t vecSize=vec.size();
    
-      for (G4int i=0; i< vecSize; ++i){
+      for (std::size_t i=0; i< vecSize; ++i){
 	G4FluoTransition* transition = vec[i];
 	delete transition;      
       }
@@ -167,8 +167,8 @@ G4int G4AtomicTransitionManager::NumberOfShells (G4int Z) const
 {
   auto pos = shellTable.find(Z);
 
-  G4int res = 0;
-  if (pos != shellTable.end()){
+  std::size_t res = 0;
+  if (pos != shellTable.cend()){
 
     res = ((*pos).second).size();
 
@@ -178,7 +178,7 @@ G4int G4AtomicTransitionManager::NumberOfShells (G4int Z) const
     G4Exception("G4AtomicTransitionManager::NumberOfShells()","de0001",
 		FatalException, ed, "");
   } 
-  return res;
+  return (G4int)res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -188,8 +188,8 @@ G4int G4AtomicTransitionManager::NumberOfShells (G4int Z) const
 G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z) const
 {
   auto pos = transitionTable.find(Z);
-  G4int res = 0;
-  if (pos!= transitionTable.end())
+  std::size_t res = 0;
+  if (pos!= transitionTable.cend())
     {
       res = ((*pos).second).size();
     }
@@ -201,7 +201,7 @@ G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z) const
       G4Exception("G4AtomicTransitionManager::NumberOfReachebleShells()",
 		  "de0001",FatalException,ed,"");
     } 
-  return res;
+  return (G4int)res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -210,7 +210,7 @@ G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z) const
 // vacancy can be filled with a NON-radiative transition 
 G4int G4AtomicTransitionManager::NumberOfReachableAugerShells(G4int Z)const 
 {
-  return augerData->NumberOfVacancies(Z);
+  return (G4int)augerData->NumberOfVacancies(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -277,6 +277,7 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4AtomicTransitionManager::Initialise()
 {
+  if(isInitialized) { return; }
   G4AutoLock l(&AtomicTransitionManagerMutex);
 
   if(isInitialized) { return; }
@@ -284,72 +285,71 @@ void G4AtomicTransitionManager::Initialise()
 
   // Selection of fluorescence files
   
-  G4String fluoDirectory = "/fluor";
-  
-  fluoDirectory = (G4EmParameters::Instance()->BeardenFluoDir()?
-			    "/fluor_Bearden":"/fluor");
+  G4String defaultDirectory = "/fluor";
+  G4String fluoDirectory = defaultDirectory;
+  G4String bindingDirectory = defaultDirectory;
+  G4EmFluoDirectory fdir = G4EmParameters::Instance()->FluoDirectory();
+  G4int zLim = zMax + 1;
+  if(fdir == fluoBearden) {
+    zMax = 100;
+    supTableLimit = 100;
+    bindingDirectory = fluoDirectory = "/fluor_Bearden";
+  } else if(fdir == fluoANSTO) {
+    zLim = 93;
+    fluoDirectory = "/fluor_ANSTO";
+  } else if(fdir == fluoXDB_EADL) {
+    zMax = 100;
+    supTableLimit = 100;
+    bindingDirectory = fluoDirectory = "/fluor_XDB_EADL";
+  }
  
   // infTableLimit is initialized to 6 because EADL lacks data for Z<=5
-  G4ShellData* shellManager = new G4ShellData;
-  shellManager->LoadData(fluoDirectory+"/binding");
+  G4ShellData* shellManager = new G4ShellData(1, zMax, false);
+  shellManager->LoadData(bindingDirectory + "/binding");
 
   // initialization of the data for auger effect
   augerData = new G4AugerData;
   
-  if (G4EmParameters::Instance()->ANSTOFluoDir()) 
-     {
-      fluoDirectory = "/fluor_ANSTO";                                 
-       G4cout << "The ANSTO fluorescence radiation yields substitute the EADL data libraries" << G4endl;
-      }                                     
   // Fills shellTable with the data from EADL, identities and binding 
   // energies of shells
-  for (G4int Z = zMin; Z<= zMax; ++Z) 
-    {
-    
-    if ((Z > 92) && (G4EmParameters::Instance()->ANSTOFluoDir())) fluoDirectory ="/fluor";   
-    
+  for (G4int Z = zMin; Z <= zMax; ++Z)
+    {    
       std::vector<G4AtomicShell*> vectorOfShells;  
-      size_t shellIndex = 0; 
+      G4int shellIndex = 0; 
 
-      size_t numberOfShells = shellManager->NumberOfShells(Z);
-      // G4cout << fluoDirectory <<"    For Z= " << Z << "  " << numberOfShells << " shells" << G4endl;
+      G4int numberOfShells = (G4int)shellManager->NumberOfShells(Z);
       for (shellIndex = 0; shellIndex<numberOfShells; ++shellIndex) 
 	{ 
 	  G4int shellId = shellManager->ShellId(Z,shellIndex);
 	  G4double bindingEnergy = shellManager->BindingEnergy(Z,shellIndex);
-	 
 	  G4AtomicShell * shell = new G4AtomicShell(shellId,bindingEnergy);
-	
 	  vectorOfShells.push_back(shell);
 	}
       shellTable[Z] = vectorOfShells;
     }
   
-  // Fills transitionTable with the data from EADL, identities, transition 
+  // Fills transitionTable with the data on identities, transition 
   // energies and transition probabilities
-   if (G4EmParameters::Instance()->ANSTOFluoDir()) fluoDirectory = "/fluor_ANSTO"; 
-  
-  
+  G4String dir = fluoDirectory;
   for (G4int Znum= infTableLimit; Znum<=supTableLimit; ++Znum)
     {  
-      if ((Znum > 92) && (G4EmParameters::Instance()->ANSTOFluoDir())) fluoDirectory ="/fluor";    
-      G4FluoData* fluoManager = new G4FluoData(fluoDirectory);
+      if (Znum == zLim) { dir = defaultDirectory; }
+      G4FluoData* fluoManager = new G4FluoData(dir);
       std::vector<G4FluoTransition*> vectorOfTransitions;
       fluoManager->LoadData(Znum);
     
-      size_t numberOfVacancies = fluoManager-> NumberOfVacancies();
-    
-      for(size_t vacancyIndex = 0; vacancyIndex<numberOfVacancies;  
+      G4int numberOfVacancies = (G4int)fluoManager->NumberOfVacancies();
+      for(G4int vacancyIndex = 0; vacancyIndex<numberOfVacancies;  
 	  ++vacancyIndex)
 	{
-	  std::vector<G4int>  vectorOfIds;
+	  std::vector<G4int> vectorOfIds;
 	  G4DataVector vectorOfEnergies;
 	  G4DataVector vectorOfProbabilities;
 	
 	  G4int finalShell = fluoManager->VacancyId(vacancyIndex);
-	  size_t numberOfTransitions = 
-	    fluoManager->NumberOfTransitions(vacancyIndex);
-	  for (size_t origShellIndex = 0; origShellIndex < numberOfTransitions;
+	  G4int numberOfTransitions = (G4int)
+                fluoManager->NumberOfTransitions(vacancyIndex);
+	  for (G4int origShellIndex = 0; origShellIndex < numberOfTransitions;
 	       ++origShellIndex)
 	    {
 	      G4int originatingShellId = 
@@ -372,9 +372,5 @@ void G4AtomicTransitionManager::Initialise()
       delete fluoManager;
     }
   delete shellManager;
+  l.unlock();
 }
-
-
-
-
-

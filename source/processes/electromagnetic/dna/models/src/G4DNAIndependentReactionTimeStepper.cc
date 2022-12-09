@@ -117,7 +117,7 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateStep(
     return DBL_MAX;
   }
 
-  G4int nbReactives = pReactantList->size();
+  G4int nbReactives = (G4int)pReactantList->size();
 
   if(nbReactives == 0)
   {
@@ -142,7 +142,7 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateStep(
   }
   fReactants = std::make_shared<vector<G4Track*>>();
   fReactionModel->Initialise(pMolConfA, trackA);
-  for(G4int i = 0; i < nbReactives; i++)
+  for(G4int i = 0; i < nbReactives; ++i)
   {
     auto pMoleculeB = (*pReactantList)[i];
     G4int key       = pMoleculeB->GetMoleculeID();
@@ -177,47 +177,51 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateStep(
                     "::CalculateStep()",
                     "G4DNAIndependentReactionTimeStepper007", FatalException,
                     exceptionDescription);
-      }
-
-      if(fCheckedTracks.find(pTrackB->GetTrackID()) != fCheckedTracks.end())
+      }else
       {
-        continue;
-      }
-
-      Utils utils(trackA, *pTrackB);
-
-      auto pMolB        = GetMolecule(pTrackB);
-      auto pMolConfB    = pMolB->GetMolecularConfiguration();
-      G4double distance = (trackA.GetPosition() - pTrackB->GetPosition()).mag();
-      if(distance * distance < Reff * Reff)
-      {
-        auto reactionData =
-          fMolecularReactionTable->GetReactionData(pMolConfA, pMolConfB);
-        if(reactionData->GetProbability() > G4UniformRand())
+        if(fCheckedTracks.find(pTrackB->GetTrackID()) != fCheckedTracks.end())
         {
-          if(!fHasAlreadyReachedNullTime)
+          continue;
+        }
+
+        Utils utils(trackA, *pTrackB);
+
+        auto pMolB        = GetMolecule(pTrackB);
+        auto pMolConfB    = pMolB->GetMolecularConfiguration();
+        G4double distance = (trackA.GetPosition() - pTrackB->GetPosition()).mag();
+        if(distance * distance < Reff * Reff)
+        {
+          auto reactionData =
+            fMolecularReactionTable->GetReactionData(pMolConfA, pMolConfB);
+          if(G4Scheduler::Instance()->GetGlobalTime() == G4Scheduler::Instance()->GetStartTime())
           {
-            fReactants->clear();
-            fHasAlreadyReachedNullTime = true;
+            if(reactionData->GetProbability() > G4UniformRand())
+            {
+              if(!fHasAlreadyReachedNullTime)
+              {
+                fReactants->clear();
+                fHasAlreadyReachedNullTime = true;
+              }
+              fSampledMinTimeStep = 0.;
+              CheckAndRecordResults(utils);
+            }
           }
-          fSampledMinTimeStep = 0.;
+        }
+        else
+        {
+          G4double tempMinET = GetTimeToEncounter(trackA, *pTrackB);
+          if(tempMinET < 0 || tempMinET > G4Scheduler::Instance()->GetEndTime())
+          {
+            continue;
+          }
+          if(tempMinET >= fSampledMinTimeStep)
+          {
+            continue;
+          }
+          fSampledMinTimeStep = tempMinET;
+          fReactants->clear();
           CheckAndRecordResults(utils);
         }
-      }
-      else
-      {
-        G4double tempMinET = GetTimeToEncounter(trackA, *pTrackB);
-        if(tempMinET < 0 || tempMinET > G4Scheduler::Instance()->GetEndTime())
-        {
-          continue;
-        }
-        if(tempMinET >= fSampledMinTimeStep)
-        {
-          continue;
-        }
-        fSampledMinTimeStep = tempMinET;
-        fReactants->clear();
-        CheckAndRecordResults(utils);
       }
     }
   }

@@ -76,8 +76,8 @@ public:
   const std::vector<Region_h2>& GetRegionH2s() const {return fRegion_h2s;}
 
 private:
-  unsigned int fColumns;
-  unsigned int fRows;
+  unsigned int fColumns{1};
+  unsigned int fRows{1};
   std::vector<G4String> fStyles;
   std::vector<RegionStyle> fRegionStyles;
   std::vector<RegionParameter> fRegionParameters;

@@ -301,8 +301,8 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
     G4double      dB = 0., dB1=0., dB2=0.;
     G4bool        doA = true, doB = true;
 
-    static const size_t max_trials=10000;
-    for (size_t trial=0; trial<max_trials; ++trial) 
+    static const std::size_t max_trials=10000;
+    for (std::size_t trial=0; trial<max_trials; ++trial) 
     {
       if(doA) 
       {

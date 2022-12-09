@@ -46,7 +46,7 @@ public: // With description
   G4Circle ();
   G4Circle (const G4VMarker&);
   G4Circle (const G4Point3D& position);
-  virtual ~G4Circle ();
+  ~G4Circle () override;
 
  };
 

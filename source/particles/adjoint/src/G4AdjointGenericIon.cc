@@ -39,7 +39,7 @@ G4AdjointGenericIon* G4AdjointGenericIon::Definition()
   const G4String name = "adj_GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance = reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  G4AdjointIons* anInstance = static_cast<G4AdjointIons*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -67,7 +67,7 @@ G4AdjointGenericIon* G4AdjointGenericIon::Definition()
               );
   }
 
-  theInstance = reinterpret_cast<G4AdjointGenericIon*>(anInstance);
+  theInstance = static_cast<G4AdjointGenericIon*>(anInstance);
   return theInstance;
 }
 

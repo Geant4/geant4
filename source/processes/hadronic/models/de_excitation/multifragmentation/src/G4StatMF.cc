@@ -34,26 +34,18 @@
 #include "G4Pow.hh"
 #include "G4PhysicsModelCatalog.hh"
 
-// Default constructor
-G4StatMF::G4StatMF() : _theEnsemble(0), _secID(-1) {
+G4StatMF::G4StatMF()
+{
   _secID = G4PhysicsModelCatalog::GetModelID("model_G4StatMF");
 }
 
+G4StatMF::~G4StatMF() {}
 
-// Destructor
-G4StatMF::~G4StatMF() {} //{if (_theEnsemble != 0) delete _theEnsemble;}
-
-
-G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
+G4FragmentVector* G4StatMF::BreakItUp(const G4Fragment &theFragment)
 {
-  // 	G4FragmentVector * theResult = new G4FragmentVector;
-
   if (theFragment.GetExcitationEnergy() <= 0.0) {
-    //G4FragmentVector * theResult = new G4FragmentVector;
-    //theResult->push_back(new G4Fragment(theFragment));
-    return 0;
+    return nullptr;
   }
-
 
   // Maximun average multiplicity: M_0 = 2.6 for A ~ 200 
   // and M_0 = 3.3 for A <= 110
@@ -140,19 +132,14 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   } while (Iterations++ < IterationsLimit );
-  
- 
 
   // If Iterations >= IterationsLimit means that we couldn't solve for temperature
   if (Iterations >= IterationsLimit) 
     throw G4HadronicException(__FILE__, __LINE__, "G4StatMF::BreakItUp: Was not possible to solve for temperature of breaking channel");
-  
-  
+
   G4FragmentVector * theResult = theChannel->
     GetFragments(theFragment.GetA_asInt(),theFragment.GetZ_asInt(),Temperature);
-  
-  
-	
+  	
   // ~~~~~~ Energy conservation Patch !!!!!!!!!!!!!!!!!!!!!!
   // Original nucleus 4-momentum in CM system
   G4LorentzVector InitialMomentum(theFragment.GetMomentum());
@@ -250,17 +237,14 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
       return true;
     }
     
-    T = Tc;
-    
+    T = Tc;    
     TotalEnergy = CalcEnergy(A,Z,aChannel,T);
-    
     G4double Dc = (U - TotalEnergy)/U; 
     
     if (Dc == 0.0) {
       Temperature  = Tc;
       return true;
     }
-    
     if (Da*Dc < 0.0) {
       T  = Tc;
       Db = Dc;

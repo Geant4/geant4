@@ -96,10 +96,10 @@ class G4NavigationHistory
   inline G4VPhysicalVolume* GetTopVolume() const;
     // Returns topmost physical volume pointer.
 
-  inline size_t GetDepth() const;
+  inline std::size_t GetDepth() const;
     // Returns current history depth.
 
-  inline size_t GetMaxDepth() const;
+  inline std::size_t GetMaxDepth() const;
     // Returns current maximum size of history.
     // Note: MaxDepth of 16 mean history entries [0..15] inclusive.
 
@@ -127,7 +127,7 @@ class G4NavigationHistory
   inline void BackLevel(G4int n);
     // Back up specified number of levels in history.
 
-  inline void *operator new(size_t);
+  inline void *operator new(std::size_t);
     // Override "new" for "G4Allocator".
   inline void operator delete(void *aHistory);
     // Override "delete" for "G4Allocator".
@@ -144,7 +144,7 @@ class G4NavigationHistory
   std::vector<G4NavigationLevel>* fNavHistory;
     // Pointer to the vector of navigation levels.
 
-  size_t fStackDepth;
+  std::size_t fStackDepth;
     // Depth of stack: effectively depth in geometrical tree.
 };
 

@@ -71,7 +71,7 @@ G4BetheHeitlerModel::~G4BetheHeitlerModel()
 {
   if (IsMaster()) {
     // clear ElementData container
-    for (size_t iz = 0; iz < gElementData.size(); ++iz) {
+    for (std::size_t iz = 0; iz < gElementData.size(); ++iz) {
       if (gElementData[iz]) delete gElementData[iz];
     }
     gElementData.clear(); 
@@ -295,14 +295,14 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 // should be called only by the master and at initialisation
 void G4BetheHeitlerModel::InitialiseElementData() 
 {
-  G4int size = gElementData.size();
+  G4int size = (G4int)gElementData.size();
   if (size < gMaxZet+1) {
     gElementData.resize(gMaxZet+1, nullptr);
   }
   // create for all elements that are in the detector
   const G4ElementTable* elemTable = G4Element::GetElementTable();
-  size_t numElems = (*elemTable).size();
-  for (size_t ie = 0; ie < numElems; ++ie) {
+  std::size_t numElems = (*elemTable).size();
+  for (std::size_t ie = 0; ie < numElems; ++ie) {
     const G4Element* elem = (*elemTable)[ie];
     const G4int        iz = std::min(gMaxZet, elem->GetZasInt());
     if (!gElementData[iz]) { // create it if doesn't exist yet

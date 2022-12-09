@@ -1,0 +1,123 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_offscreen_sg_viewer
+#define tools_offscreen_sg_viewer
+
+#include "session"
+
+#include "../sg/viewer"
+#include "../sg/zb_manager"
+#include "../sg/gl2ps_manager"
+#include "../sg/write_paper"
+
+namespace tools {namespace sg {class device_interactor;}}
+
+namespace tools {
+namespace offscreen {
+
+class sg_viewer : public sg::viewer, public offscreen::viewer {
+  typedef sg::viewer parent;
+protected:
+  virtual void render() {write_paper();}
+public:
+  sg_viewer(session& a_session,
+            int /*a_x*/ = 0,int /*a_y*/ = 0,
+            unsigned int a_width = 500,unsigned int a_height = 500,
+            const std::string& /*a_win_title*/ = "")
+  :parent(a_session.out(),a_width,a_height)
+  ,m_session(a_session)
+  ,m_file_format("zb_ps")
+  ,m_file_name("out_zb.ps")
+  ,m_png_writer(0)
+  ,m_jpeg_writer(0)
+  ,m_do_transparency(true)
+  ,m_top_to_bottom(true)
+  {}
+  virtual ~sg_viewer() {}
+protected:
+  sg_viewer(const sg_viewer& a_from)
+  :parent(a_from)
+  ,offscreen::viewer(a_from)
+  ,m_session(a_from.m_session)
+  ,m_zb_mgr(a_from.m_zb_mgr)
+  ,m_gl2ps_mgr(a_from.m_gl2ps_mgr)
+  ,m_file_format(a_from.m_file_format)
+  ,m_file_name(a_from.m_file_name)
+  ,m_png_writer(a_from.m_png_writer)
+  ,m_jpeg_writer(a_from.m_jpeg_writer)
+  ,m_do_transparency(a_from.m_do_transparency)
+  ,m_top_to_bottom(a_from.m_top_to_bottom)
+  ,m_opts_1(a_from.m_opts_1)
+  ,m_opts_2(a_from.m_opts_2)
+  {}
+  sg_viewer& operator=(const sg_viewer& a_from){
+    parent::operator=(a_from);
+    m_file_format = a_from.m_file_format;
+    m_file_name = a_from.m_file_name;
+    m_png_writer = a_from.m_png_writer;
+    m_jpeg_writer = a_from.m_jpeg_writer;
+    m_do_transparency = a_from.m_do_transparency;
+    m_top_to_bottom = a_from.m_top_to_bottom;
+    m_opts_1 = a_from.m_opts_1;
+    m_opts_2 = a_from.m_opts_2;
+    return *this;
+  }
+public:
+  bool has_window() const {return true;}
+
+  bool show() {
+    m_session.to_render(this);
+    return true;
+  }
+  
+  void win_render() {
+    m_session.to_render(this);
+  }
+
+  void set_device_interactor(sg::device_interactor*) {}
+
+public:
+  void set_file_format(const std::string& a_file_format) {m_file_format = a_file_format;}
+  void set_file_name(const std::string& a_file_name) {m_file_name = a_file_name;}
+  const std::string& file_format() const {return m_file_format;}
+  const std::string& file_name() const {return m_file_name;}
+  void set_png_writer(sg::png_writer a_png_writer) {m_png_writer = a_png_writer;}
+  void set_jpeg_writer(sg::jpeg_writer a_jpeg_writer) {m_jpeg_writer = a_jpeg_writer;}
+  void set_do_transparency(bool a_do_transparency) {m_do_transparency = a_do_transparency;}
+  void set_top_to_bottom(bool a_top_to_bottom) {m_top_to_bottom = a_top_to_bottom;}
+  void set_opts_1(const std::string& a_opts) {m_opts_1 = a_opts;}
+  void set_opts_2(const std::string& a_opts) {m_opts_2 = a_opts;}
+
+  bool write_paper() {
+    if(!m_ww) return false;
+    if(!m_wh) return false;
+    return sg::write_paper(m_out,m_gl2ps_mgr,m_zb_mgr,
+                           m_png_writer,m_jpeg_writer,
+                           m_clear_color.r(),
+                           m_clear_color.g(),
+                           m_clear_color.b(),
+                           m_clear_color.a(),
+                           m_sg,m_ww,m_wh,
+                           m_file_name,m_file_format,
+                           m_do_transparency,m_top_to_bottom,
+                           m_opts_1,m_opts_2);
+  }
+protected:
+  session& m_session;
+  sg::zb_manager m_zb_mgr;
+  sg::gl2ps_manager m_gl2ps_mgr;
+  std::string m_file_format;
+  std::string m_file_name;
+  sg::png_writer m_png_writer;
+  sg::jpeg_writer m_jpeg_writer;
+  bool m_do_transparency;
+  bool m_top_to_bottom;
+  std::string m_opts_1;
+  std::string m_opts_2;
+};
+
+}}
+
+#endif
+

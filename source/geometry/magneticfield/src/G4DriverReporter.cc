@@ -62,9 +62,9 @@ void G4DriverReporter::PrintStatus( const G4double* StartArr,
 
 // ---------------------------------------------------------------------------
 const G4int noPrecision = 8;
-const int prec7= noPrecision+2;
-const int prec8= noPrecision+3;    
-const int prec9= noPrecision+4;
+const G4int prec7= noPrecision+2;
+const G4int prec8= noPrecision+3;    
+const G4int prec9= noPrecision+4;
 
 void G4DriverReporter::PrintStatus(const G4FieldTrack& StartFT,
                                    const G4FieldTrack& CurrentFT, 
@@ -72,7 +72,7 @@ void G4DriverReporter::PrintStatus(const G4FieldTrack& StartFT,
                                    unsigned int        subStepNo)
 {
     G4int verboseLevel= 2; // fVerboseLevel;
-    G4int oldPrec= G4cout.precision(noPrecision);
+    G4long oldPrec= G4cout.precision(noPrecision);
     // G4cout.setf(ios_base::fixed,ios_base::floatfield);
         
     const G4ThreeVector StartPosition=       StartFT.GetPosition();
@@ -143,7 +143,7 @@ void G4DriverReporter::PrintStat_Aux(const G4FieldTrack& aFieldTrack,
     const G4ThreeVector Position = aFieldTrack.GetPosition();
     const G4ThreeVector UnitVelocity = aFieldTrack.GetMomentumDir();
 
-    G4int oldprec= G4cout.precision(noPrecision);
+    G4long oldprec= G4cout.precision(noPrecision);
     
     if( subStepNo >= 0)
     {

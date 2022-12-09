@@ -58,7 +58,7 @@ static int unitsDB_release( void );
 */
 const char *PoPs_version( void ) {
 
-    if( versionStr[0] == 0 ) sprintf( versionStr, "PoPs version %d.%d.%d", POPS_VERSION_MAJOR, POPS_VERSION_MINOR, POPS_VERSION_PATCHLEVEL );
+    if( versionStr[0] == 0 ) snprintf( versionStr, sizeof versionStr, "PoPs version %d.%d.%d", POPS_VERSION_MAJOR, POPS_VERSION_MINOR, POPS_VERSION_PATCHLEVEL );
     return( versionStr );
 }
 /*

@@ -74,10 +74,16 @@ void P6DExtDecayerPhysics::ConstructProcess()
   extDecayer->SetVerboseLevel(1); 
      // The extDecayer will be deleted in G4Decay destructor
 
+  G4bool isSet = false;
+     // One G4Decay object is shared by all unstable particles (per thread).
+     // Thus, we need to set the external decayer only once.
+
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while ((*particleIterator)())
-  {    
+  {
+    if (isSet) break;
+
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     
@@ -88,10 +94,13 @@ void P6DExtDecayerPhysics::ConstructProcess()
     } 
     
     G4ProcessVector* processVector = pmanager->GetProcessList();
-    for (G4int i=0; i<processVector->length(); i++) {
+    for (std::size_t i=0; i<processVector->length(); i++) {
     
       G4Decay* decay = dynamic_cast<G4Decay*>((*processVector)[i]);
-      if ( decay ) decay->SetExtDecayer(extDecayer);
+      if ( decay ) {
+        decay->SetExtDecayer(extDecayer);
+        isSet = true;
+      }
     }              
   }
 

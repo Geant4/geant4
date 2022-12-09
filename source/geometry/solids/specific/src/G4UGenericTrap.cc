@@ -256,7 +256,7 @@ G4Polyhedron* G4UGenericTrap::CreatePolyhedron() const
   // Construct extra Points, if Twisted Side
   //
   G4Polyhedron* polyhedron;
-  size_t nVertices, nFacets;
+  G4int nVertices, nFacets;
   G4double fDz = GetZHalfLength();
 
   G4int subdivisions = 0;

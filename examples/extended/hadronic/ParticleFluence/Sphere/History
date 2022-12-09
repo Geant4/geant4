@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-09-07 Alberto Ribon (exhadrParticleFluenceSphere-V11-00-02)
+- Added complementary information on particle production (multiplicity,
+  kinetic energy, and total energy flow) in the target.
+
+## 2022-08-26 Alberto Ribon (exhadrParticleFluenceSphere-V11-00-01)
+- SteppingAction : introduced protection on the value of the array index.
+
 ## 2021-06-10 Alberto Ribon (exhadrParticleFluenceSphere-V11-00-00)
 - Created the Sphere variant of the ParticleFluence example.
-

@@ -135,8 +135,8 @@ void G4VViewer::SetTouchable
   const auto& pvStore = G4PhysicalVolumeStore::GetInstance();
   for (const auto& pvNodeId: fullPath) {
     const auto& pv = pvNodeId.GetPhysicalVolume();
-    auto iterator = find(pvStore->begin(),pvStore->end(),pv);
-    if (iterator == pvStore->end()) {
+    auto iterator = find(pvStore->cbegin(),pvStore->cend(),pv);
+    if (iterator == pvStore->cend()) {
       G4ExceptionDescription ed;
       ed << "Volume no longer in physical volume store.";
       G4Exception("G4VViewer::SetTouchable", "visman0501", JustWarning, ed);
@@ -155,12 +155,8 @@ void G4VViewer::TouchableSetVisibility
 {
   // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
 
-  std::ostringstream oss;
-  oss << "/vis/touchable/set/visibility ";
-  if (visibiity) oss << "true"; else oss << "false";
-
   // The following is equivalent to
-  //  G4UImanager::GetUIpointer()->ApplyCommand(oss.str());
+  //  G4UImanager::GetUIpointer()->ApplyCommand("/vis/touchable/set/visibility ...");
   // (assuming the touchable has already been set), but avoids view rebuild.
 
   // Instantiate a working copy of a G4VisAttributes object...
@@ -176,11 +172,6 @@ void G4VViewer::TouchableSetVisibility
   // G4ModelingParameters::VASVisibility (VAS = Vis Attribute Signifier)
   // signifies that it is the visibility that should be picked out
   // and merged with the touchable's normal vis attributes.
-
-  // Record on G4cout (with #) for information.
-  if (G4UImanager::GetUIpointer()->GetVerboseLevel() >= 2) {
-    G4cout << "# " << oss.str() << G4endl;
-  }
 }
 
 void G4VViewer::TouchableSetColour
@@ -189,13 +180,8 @@ void G4VViewer::TouchableSetColour
 {
   // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
 
-  std::ostringstream oss;
-  oss << "/vis/touchable/set/colour "
-  << colour.GetRed() << ' ' << colour.GetGreen()
-  << ' ' << colour.GetBlue() << ' ' << colour.GetAlpha();
-
   // The following is equivalent to
-  //  G4UImanager::GetUIpointer()->ApplyCommand(oss.str());
+  //  G4UImanager::GetUIpointer()->ApplyCommand("/vis/touchable/set/colour ...");
   // (assuming the touchable has already been set), but avoids view rebuild.
 
   // Instantiate a working copy of a G4VisAttributes object...
@@ -211,11 +197,6 @@ void G4VViewer::TouchableSetColour
   // G4ModelingParameters::VASColour (VAS = Vis Attribute Signifier)
   // signifies that it is the colour that should be picked out
   // and merged with the touchable's normal vis attributes.
-
-  // Record on G4cout (with #) for information.
-  if (G4UImanager::GetUIpointer()->GetVerboseLevel() >= 2) {
-    G4cout << "# " << oss.str() << G4endl;
-  }
 }
 
 std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
@@ -228,7 +209,7 @@ std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
 //    int myCurveType = Bezier;
 
     // number if step points
-    int stepPoints = 500;
+    G4int stepPoints = 500;
 
     
     G4Spline spline;
@@ -248,8 +229,8 @@ std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
         
         // Draw the spline
         
-        for (int i = 0; i < stepPoints; i++) {
-            float t = (float)i / (float)stepPoints;
+        for (G4int i = 0; i < stepPoints; ++i) {
+            G4float t = (G4float)i / (G4float)stepPoints;
             G4Vector3D cameraPosition = spline.GetInterpolatedSplinePoint(t);
             //        G4Vector3D targetPoint = spline.GetInterpolatedSplinePoint(t);
             
@@ -415,15 +396,15 @@ G4VViewer::G4Spline::~G4Spline()
 {}
 
 // Solve the Catmull-Rom parametric equation for a given time(t) and vector quadruple (p1,p2,p3,p4)
-G4Vector3D G4VViewer::G4Spline::CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2, const G4Vector3D& p3, const G4Vector3D& p4)
+G4Vector3D G4VViewer::G4Spline::CatmullRom_Eq(G4float t, const G4Vector3D& p1, const G4Vector3D& p2, const G4Vector3D& p3, const G4Vector3D& p4)
 {
-    float t2 = t * t;
-    float t3 = t2 * t;
+    G4float t2 = t * t;
+    G4float t3 = t2 * t;
     
-    float b1 = .5 * (  -t3 + 2*t2 - t);
-    float b2 = .5 * ( 3*t3 - 5*t2 + 2);
-    float b3 = .5 * (-3*t3 + 4*t2 + t);
-    float b4 = .5 * (   t3 -   t2    );
+    G4float b1 = .5 * (  -t3 + 2*t2 - t);
+    G4float b2 = .5 * ( 3*t3 - 5*t2 + 2);
+    G4float b3 = .5 * (-3*t3 + 4*t2 + t);
+    G4float b4 = .5 * (   t3 -   t2    );
     
     return (p1*b1 + p2*b2 + p3*b3 + p4*b4);
 }
@@ -431,32 +412,32 @@ G4Vector3D G4VViewer::G4Spline::CatmullRom_Eq(float t, const G4Vector3D& p1, con
 void G4VViewer::G4Spline::AddSplinePoint(const G4Vector3D& v)
 {
     vp.push_back(v);
-    delta_t = (float)1 / (float)vp.size();
+    delta_t = (G4float)1 / (G4float)vp.size();
 }
 
 
-G4Vector3D G4VViewer::G4Spline::GetPoint(int a)
+G4Vector3D G4VViewer::G4Spline::GetPoint(G4int a)
 {
     return vp[a];
 }
 
-int G4VViewer::G4Spline::GetNumPoints()
+G4int G4VViewer::G4Spline::GetNumPoints()
 {
-    return vp.size();
+    return (G4int)vp.size();
 }
 
-G4Vector3D G4VViewer::G4Spline::GetInterpolatedSplinePoint(float t)
+G4Vector3D G4VViewer::G4Spline::GetInterpolatedSplinePoint(G4float t)
 {
     // Find out in which interval we are on the spline
-    int p = (int)(t / delta_t);
+    G4int p = (G4int)(t / delta_t);
     // Compute local control point indices
-#define BOUNDS(pp) { if (pp < 0) pp = 0; else if (pp >= (int)vp.size()-1) pp = vp.size() - 1; }
-    int p0 = p - 1;     BOUNDS(p0);
-    int p1 = p;         BOUNDS(p1);
-    int p2 = p + 1;     BOUNDS(p2);
-    int p3 = p + 2;     BOUNDS(p3);
+#define BOUNDS(pp) { if (pp < 0) pp = 0; else if (pp >= (G4int)vp.size()-1) pp = (G4int)vp.size() - 1; }
+    G4int p0 = p - 1;     BOUNDS(p0);
+    G4int p1 = p;         BOUNDS(p1);
+    G4int p2 = p + 1;     BOUNDS(p2);
+    G4int p3 = p + 2;     BOUNDS(p3);
     // Relative (local) time
-    float lt = (t - delta_t*(float)p) / delta_t;
+    G4float lt = (t - delta_t*p) / delta_t;
     // Interpolate
     return CatmullRom_Eq(lt, vp[p0], vp[p1], vp[p2], vp[p3]);
 }

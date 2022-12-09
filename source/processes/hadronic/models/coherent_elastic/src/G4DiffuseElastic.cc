@@ -143,7 +143,7 @@ void G4DiffuseElastic::Initialise()
 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
-  size_t jEl, numOfEl = G4Element::GetNumberOfElements();
+  std::size_t jEl, numOfEl = G4Element::GetNumberOfElements();
 
   for( jEl = 0; jEl < numOfEl; ++jEl) // application element loop
   {
@@ -854,7 +854,7 @@ G4double
 G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle, 
                                        G4double momentum, G4double Z, G4double A)
 {
-  size_t iElement;
+  std::size_t iElement;
   G4int iMomentum, iAngle;  
   G4double randAngle, position, theta1, theta2, E1, E2, W1, W2, W;  
   G4double m1 = particle->GetPDGMass();
@@ -1103,7 +1103,7 @@ G4DiffuseElastic:: GetScatteringAngle( G4int iMomentum, G4int iAngle, G4double p
   {
     if ( iAngle >= G4int((*fAngleTable)(iMomentum)->GetVectorLength()) )
     {
-      iAngle = (*fAngleTable)(iMomentum)->GetVectorLength() - 1;
+      iAngle = G4int((*fAngleTable)(iMomentum)->GetVectorLength() - 1);
     }
     y1 = (*(*fAngleTable)(iMomentum))(iAngle-1);
     y2 = (*(*fAngleTable)(iMomentum))(iAngle);

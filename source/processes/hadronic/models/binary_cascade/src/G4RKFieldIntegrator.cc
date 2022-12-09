@@ -60,13 +60,13 @@ G4double G4RKFieldIntegrator::CalculateTotalEnergy(const G4KineticTrackVector& B
    const G4double GammaY =  1.4*fermi;
 
    G4double Etot = 0;
-   G4int nBarion = Barions.size();
-   for(G4int c1 = 0; c1 < nBarion; c1++)
+   G4int nBarion = (G4int)Barions.size();
+   for(G4int c1 = 0; c1 < nBarion; ++c1)
       {
       G4KineticTrack* p1 = Barions.operator[](c1);
    // Ekin
       Etot += p1->Get4Momentum().e();
-      for(G4int c2 = c1 + 1; c2 < nBarion; c2++)
+      for(G4int c2 = c1 + 1; c2 < nBarion; ++c2)
          {
          G4KineticTrack* p2 = Barions.operator[](c2);
          G4double r12 = (p1->GetPosition() - p2->GetPosition()).mag()*fermi;
@@ -186,7 +186,7 @@ G4double G4RKFieldIntegrator::GetExcitationEnergy(G4int nHitNucleons, const G4Ki
 {
    const G4double MeanE = 50;
    G4double Sum = 0;
-   for(G4int c1 = 0; c1 < nHitNucleons; c1++)
+   for(G4int c1 = 0; c1 < nHitNucleons; ++c1)
        {
        Sum += -MeanE*G4Log(G4UniformRand());
        }
@@ -198,7 +198,7 @@ G4double G4RKFieldIntegrator::GetExcitationEnergy(G4int nHitNucleons, const G4Ki
 //This is free propagation of particles for CASCADE mode. Target nucleons should be frozen
 void G4RKFieldIntegrator::Integrate(G4KineticTrackVector& theParticles)
    {
-   for(G4int cParticle = 0; cParticle < theParticles.length(); cParticle++)
+   for(G4int cParticle = 0; cParticle < theParticles.length(); ++cParticle)
       {
       G4KineticTrack* pKineticTrack = theParticles.at(cParticle);
       pKineticTrack->SetPosition(pKineticTrack->GetPosition() + theTimeStep*pKineticTrack->Get4Momentum().boostVector());
@@ -209,7 +209,7 @@ void G4RKFieldIntegrator::Integrate(G4KineticTrackVector& theParticles)
 
 void G4RKFieldIntegrator::Integrate(const G4KineticTrackVector& theBarions, G4double theTimeStep)
 {
-   for(size_t cParticle = 0; cParticle < theBarions.size(); cParticle++)
+   for(std::size_t cParticle = 0; cParticle < theBarions.size(); ++cParticle)
       {
       G4KineticTrack* pKineticTrack = theBarions[cParticle];
       pKineticTrack->SetPosition(pKineticTrack->GetPosition() + theTimeStep*pKineticTrack->Get4Momentum().boostVector());

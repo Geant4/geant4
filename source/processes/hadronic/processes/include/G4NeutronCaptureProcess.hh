@@ -49,16 +49,16 @@
 #include "globals.hh"
 #include "G4HadronicProcess.hh"
 
-class G4NeutronCaptureProcess : public G4HadronicProcess
+class G4NeutronCaptureProcess final : public G4HadronicProcess
 {
-  public:
+public:
 
-    explicit G4NeutronCaptureProcess(const G4String& processName ="nCapture");
+  explicit G4NeutronCaptureProcess(const G4String& processName ="nCapture");
   
-    virtual ~G4NeutronCaptureProcess();
+  ~G4NeutronCaptureProcess() final = default;
  
-    G4bool IsApplicable(const G4ParticleDefinition& aParticleType) final;
+  G4bool IsApplicable(const G4ParticleDefinition&) final;
 
-    void ProcessDescription(std::ostream& outFile) const final;
+  void ProcessDescription(std::ostream& outFile) const final;
 };
 #endif

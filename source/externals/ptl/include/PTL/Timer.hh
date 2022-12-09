@@ -71,12 +71,11 @@
 
 #include <chrono>
 #include <iomanip>
-#include <ostream>
 #include <sstream>
 
 #if !(defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64))
 #    include <sys/times.h>
-#    include <unistd.h>
+#    include <time.h>
 #else
 #    include <ctime>
 #    define _SC_CLK_TCK 1
@@ -106,55 +105,90 @@ namespace PTL
 {
 class Timer
 {
-    typedef std::chrono::high_resolution_clock clock_type;
+public:
+    PTL_DEFAULT_OBJECT(Timer)
 
 public:
-    Timer();
+    void   Start();
+    void   Stop();
+    bool   IsValid() const;
+    double GetRealElapsed() const;
+    double GetSystemElapsed() const;
+    double GetUserElapsed() const;
 
-public:
-    inline void        Start();
-    inline void        Stop();
-    inline bool        IsValid() const;
-    inline const char* GetClockTime() const;
-    double             GetRealElapsed() const;
-    double             GetSystemElapsed() const;
-    double             GetUserElapsed() const;
-
-public:
-    friend std::ostream& operator<<(std::ostream& os, const Timer& t)
-    {
-        // so fixed doesn't propagate
-        std::stringstream ss;
-        ss << std::fixed;
-        if(t.IsValid())
-        {
-            ss << "Real=" << t.GetRealElapsed() << "s User=" << t.GetUserElapsed()
-               << "s Sys=" << t.GetSystemElapsed() << "s";
-
-            // avoid possible FPE error
-            if(t.GetRealElapsed() > 1.0e-6)
-            {
-                double cpu_util = (t.GetUserElapsed() + t.GetSystemElapsed()) /
-                                  t.GetRealElapsed() * 100.0;
-                ss << std::setprecision(1);
-                ss << " [Cpu=" << std::setprecision(1) << cpu_util << "%]";
-            }
-        }
-        else
-        {
-            ss << "Real=****s User=****s Sys=****s";
-        }
-        os << ss.str();
-
-        return os;
-    }
+    static const char* GetClockTime();
 
 private:
-    bool                                fValidTimes;
+    bool fValidTimes{ false };
+    using clock_type = std::chrono::high_resolution_clock;
     std::chrono::time_point<clock_type> fStartRealTime, fEndRealTime;
     tms                                 fStartTimes, fEndTimes;
 };
 
-}  // namespace PTL
+// ------------------------------------------------------------
+//      class inline implementation
+// ------------------------------------------------------------
 
-#include "PTL/Timer.icc"
+inline void
+Timer::Start()
+{
+    fValidTimes = false;
+    times(&fStartTimes);
+    fStartRealTime = clock_type::now();
+}
+
+inline void
+Timer::Stop()
+{
+    times(&fEndTimes);
+    fEndRealTime = clock_type::now();
+    fValidTimes  = true;
+}
+
+inline bool
+Timer::IsValid() const
+{
+    return fValidTimes;
+}
+
+inline const char*
+Timer::GetClockTime()
+{
+    time_t     rawtime;
+    struct tm* timeinfo;
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    return asctime(timeinfo);
+}
+
+inline std::ostream&
+operator<<(std::ostream& os, const Timer& t)
+{
+    // so fixed doesn't propagate
+    std::stringstream ss;
+    ss << std::fixed;
+    if(t.IsValid())
+    {
+        ss << "Real=" << t.GetRealElapsed() << "s User=" << t.GetUserElapsed()
+           << "s Sys=" << t.GetSystemElapsed() << "s";
+
+        // avoid possible FPE error
+        if(t.GetRealElapsed() > 1.0e-6)
+        {
+            double cpu_util =
+                (t.GetUserElapsed() + t.GetSystemElapsed()) / t.GetRealElapsed() * 100.0;
+            ss << std::setprecision(1);
+            ss << " [Cpu=" << std::setprecision(1) << cpu_util << "%]";
+        }
+    }
+    else
+    {
+        ss << "Real=****s User=****s Sys=****s";
+    }
+    os << ss.str();
+
+    return os;
+}
+
+}  // namespace PTL

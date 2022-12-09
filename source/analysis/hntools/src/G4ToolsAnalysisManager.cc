@@ -27,11 +27,7 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4ToolsAnalysisManager.hh"
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
+#include "G4VNtupleFileManager.hh"
 #include "G4PlotManager.hh"
 #include "G4MPIToolsManager.hh"
 #include "G4AnalysisUtilities.hh"
@@ -66,11 +62,11 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type)
   fgToolsInstance = this;
 
   // Create managers
-  fH1Manager = new G4H1ToolsManager(fState);
-  fH2Manager = new G4H2ToolsManager(fState);
-  fH3Manager = new G4H3ToolsManager(fState);
-  fP1Manager = new G4P1ToolsManager(fState);
-  fP2Manager = new G4P2ToolsManager(fState);
+  fH1Manager = new G4THnToolsManager<kDim1, tools::histo::h1d>(fState);
+  fH2Manager = new G4THnToolsManager<kDim2, tools::histo::h2d>(fState);
+  fH3Manager = new G4THnToolsManager<kDim3, tools::histo::h3d>(fState);
+  fP1Manager = new G4THnToolsManager<kDim2, tools::histo::p1d>(fState);
+  fP2Manager = new G4THnToolsManager<kDim3, tools::histo::p2d>(fState);
       // The managers will be deleted by the base class
 
   // Set managers to base class which takes then their ownership
@@ -81,10 +77,7 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type)
   SetP2Manager(fP2Manager);
 
   // Plot manager
-  SetPlotManager(std::make_shared<G4PlotManager>(fState));
-
-  // Messenger
-  fMessenger = std::make_unique<G4ToolsAnalysisMessenger>(this);
+  fPlotManager = std::make_unique<G4PlotManager>(fState);
 }
 
 //_____________________________________________________________________________
@@ -95,91 +88,11 @@ G4ToolsAnalysisManager::~G4ToolsAnalysisManager()
 }
 
 //
-// protected methods
+// private methods
 //
 
 //_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::PlotImpl()
-{
-
-  // Only master thread performs plotting
-  if ( G4Threading::IsWorkerThread() )  return true;
-
-  auto result = true;
-
-  // Open output file
-  fPlotManager->OpenFile(fVFileManager->GetPlotFileName());
-
-  // H1
-  result
-    &= fPlotManager->PlotAndWrite<tools::histo::h1d>(fH1Manager->GetH1Vector(),
-                                                    fH1Manager->GetHnVector());
-
-  // H2
-  result
-    &= fPlotManager->PlotAndWrite<tools::histo::h2d>(fH2Manager->GetH2Vector(),
-                                                    fH2Manager->GetHnVector());
-
-  // H3
-  // not yet available in tools
-
-  // P1
-  result
-    &= fPlotManager->PlotAndWrite<tools::histo::p1d>(fP1Manager->GetP1Vector(),
-                                                    fP1Manager->GetHnVector());
-
-  // P2
-  // not yet available in tools
-
-  // Close output file
-  result &= fPlotManager->CloseFile();
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::MergeImpl(tools::histo::hmpi* hmpi)
-{
-
-  // if ( G4Threading::IsWorkerThread() )  return true;
-
-  if ( ! hmpi )  return false;
-
-  auto result = true;
-
-  // Create MPI manager
-  G4MPIToolsManager mpiToolsManager(fState, hmpi);
-
-  // H1
-  result
-    &= mpiToolsManager.Merge<tools::histo::h1d>(fH1Manager->GetH1Vector(),
-                                               fH1Manager->GetHnVector());
-
-  // H2
-  result
-    &= mpiToolsManager.Merge<tools::histo::h2d>(fH2Manager->GetH2Vector(),
-                                               fH2Manager->GetHnVector());
-
-  // H3
-  result
-    &= mpiToolsManager.Merge<tools::histo::h3d>(fH3Manager->GetH3Vector(),
-                                               fH3Manager->GetHnVector());
-
-  // P1
-  result
-    &= mpiToolsManager.Merge<tools::histo::p1d>(fP1Manager->GetP1Vector(),
-                                               fP1Manager->GetHnVector());
-
-  // P2
-  result
-    &= mpiToolsManager.Merge<tools::histo::p2d>(fP2Manager->GetP2Vector(),
-                                               fP2Manager->GetHnVector());
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::WriteImpl()
+G4bool G4ToolsAnalysisManager::WriteHns()
 {
   // Nothing to be done on worker
   if ( G4Threading::IsWorkerThread() ) return false;
@@ -187,17 +100,17 @@ G4bool G4ToolsAnalysisManager::WriteImpl()
   auto result = true;
 
   // Write all histograms/profile on master
-  result &=WriteT(fH1Manager->GetH1Vector(), fH1Manager->GetHnVector());
-  result &=WriteT(fH2Manager->GetH2Vector(), fH2Manager->GetHnVector());
-  result &=WriteT(fH3Manager->GetH3Vector(), fH3Manager->GetHnVector());
-  result &=WriteT(fP1Manager->GetP1Vector(), fP1Manager->GetHnVector());
-  result &=WriteT(fP2Manager->GetP2Vector(), fP2Manager->GetHnVector());
+  result &= WriteT(fH1Manager->GetTHnVectorRef());
+  result &= WriteT(fH2Manager->GetTHnVectorRef());
+  result &= WriteT(fH3Manager->GetTHnVectorRef());
+  result &= WriteT(fP1Manager->GetTHnVectorRef());
+  result &= WriteT(fP2Manager->GetTHnVectorRef());
 
   return result;
 }
 
 //_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::ResetImpl()
+G4bool G4ToolsAnalysisManager::ResetHns()
 {
 // Reset histograms and profiles
 
@@ -213,24 +126,12 @@ G4bool G4ToolsAnalysisManager::ResetImpl()
 }
 
 //_____________________________________________________________________________
-void G4ToolsAnalysisManager::ClearImpl()
-{
-// Reset histograms and profiles
-
-  fH1Manager->ClearData();
-  fH2Manager->ClearData();
-  fH3Manager->ClearData();
-  fP1Manager->ClearData();
-  fP2Manager->ClearData();
-}
-
-//_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::Merge()
+G4bool G4ToolsAnalysisManager::MergeHns()
 {
   // Nothing to be done on master
   if ( ! G4Threading::IsWorkerThread() ) return false;
 
-  if ( ! fgMasterToolsInstance ) {
+  if (fgMasterToolsInstance == nullptr) {
     if (! IsEmpty() ) {
       Warn("No master G4AnalysisManager instance exists.\n"
            "Histogram/profile data will not be merged.",
@@ -253,6 +154,204 @@ G4bool G4ToolsAnalysisManager::Merge()
 
   return true;
 }
+
+//
+// protected methods
+//
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::OpenFileImpl(const G4String& fileName)
+{
+  // Create ntuple manager(s)
+  // and set it to base class which takes then their ownership
+  SetNtupleManager(fVNtupleFileManager->CreateNtupleManager());
+
+  auto result = true;
+
+  // Open file
+  if ( fVNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave )  {
+    result &= fVFileManager->OpenFile(fileName);
+  }
+
+  // Open ntuple files and create ntuples from bookings
+  result &= fVNtupleFileManager->ActionAtOpenFile(fVFileManager->GetFullFileName());
+
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::WriteImpl()
+{
+  Message(kVL4, "write", "files");
+
+  auto result = true;
+  if ( G4Threading::IsWorkerThread() )  {
+    result &= MergeHns();
+  }
+  else {
+    // Open all files registered with objects
+    fVFileManager->OpenFiles();
+
+    // Write all histograms/profile on master
+    result &= WriteHns();
+  }
+
+  // Ntuples
+  if (fVNtupleFileManager) {
+    result &= fVNtupleFileManager->ActionAtWrite();
+  }
+
+  // Files
+  if ( (fVNtupleFileManager == nullptr) ||
+       (fVNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave) )  {
+    result &= fVFileManager->WriteFiles();
+  }
+
+  // Write ASCII if activated
+  if ( IsAscii() ) {
+    result &= WriteAscii(fVFileManager->GetFileName());
+  }
+
+  Message(kVL3, "write", "files", "", result);
+
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::CloseFileImpl(G4bool reset)
+{
+  Message(kVL4, "close", "files");
+
+  auto result = true;
+  if (fVNtupleFileManager) {
+    result &= fVNtupleFileManager->ActionAtCloseFile();
+  }
+
+  // close file
+  if ( (fVNtupleFileManager == nullptr) ||
+       (fVNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave) )  {
+    if ( ! fVFileManager->CloseFiles() ) {
+      Warn("Closing files failed", fkClass, "CloseFileImpl");
+      result = false;
+    }
+  }
+
+  // delete empty files
+  if ( ! fVFileManager->DeleteEmptyFiles() ) {
+    Warn("Deleting empty files failed", fkClass, "CloseFileImpl");
+    result = false;
+  }
+
+  // reset histograms
+  if ( reset ) {
+    if ( ! Reset() ) {
+      Warn("Resetting data failed", fkClass, "CloseFileImpl");
+      result = false;
+    }
+  }
+
+  Message(kVL3, "close", "files", "", result);
+
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::ResetImpl()
+{
+// Reset histograms and ntuple
+
+  Message(kVL4, "reset", "");
+
+  auto result = true;
+  result &= ResetHns();
+  if ( fVNtupleFileManager != nullptr ) {
+    result &= fVNtupleFileManager->Reset();
+  }
+
+  Message(kVL3, "reset", "", "", result);
+
+  return result;
+}
+
+//_____________________________________________________________________________
+void G4ToolsAnalysisManager::ClearImpl()
+{
+// Reset histograms and profiles
+
+  fH1Manager->ClearData();
+  fH2Manager->ClearData();
+  fH3Manager->ClearData();
+  fP1Manager->ClearData();
+  fP2Manager->ClearData();
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::PlotImpl()
+{
+
+  // Only master thread performs plotting
+  if ( G4Threading::IsWorkerThread() )  return true;
+
+  auto result = true;
+
+  // Open output file
+  fPlotManager->OpenFile(fVFileManager->GetPlotFileName());
+
+  // H1
+  result
+    &= fPlotManager->PlotAndWrite<tools::histo::h1d>(fH1Manager->GetTHnVectorRef());
+
+  // H2
+  result
+    &= fPlotManager->PlotAndWrite<tools::histo::h2d>(fH2Manager->GetTHnVectorRef());
+
+  // H3
+  // not yet available in tools
+
+  // P1
+  result
+    &= fPlotManager->PlotAndWrite<tools::histo::p1d>(fP1Manager->GetTHnVectorRef());
+
+  // P2
+  // not yet available in tools
+
+  // Close output file
+  result &= fPlotManager->CloseFile();
+
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::MergeImpl(tools::histo::hmpi* hmpi)
+{
+
+  // if ( G4Threading::IsWorkerThread() )  return true;
+
+  if (hmpi == nullptr) return false;
+
+  auto result = true;
+
+  // Create MPI manager
+  G4MPIToolsManager mpiToolsManager(fState, hmpi);
+
+  // H1
+  result &= mpiToolsManager.Merge<tools::histo::h1d>(fH1Manager->GetTHnVectorRef());
+
+  // H2
+  result &= mpiToolsManager.Merge<tools::histo::h2d>(fH2Manager->GetTHnVectorRef());
+
+  // H3
+  result &= mpiToolsManager.Merge<tools::histo::h3d>(fH3Manager->GetTHnVectorRef());
+
+  // P1
+  result &= mpiToolsManager.Merge<tools::histo::p1d>(fP1Manager->GetTHnVectorRef());
+
+  // P2
+  result &= mpiToolsManager.Merge<tools::histo::p2d>(fP2Manager->GetTHnVectorRef());
+
+  return result;
+}
+
 
 //_____________________________________________________________________________
 G4bool G4ToolsAnalysisManager::IsEmpty()

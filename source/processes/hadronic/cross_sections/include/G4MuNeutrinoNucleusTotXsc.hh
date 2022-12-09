@@ -28,7 +28,7 @@
 //
 // 14.08.17 V. Grichine
 //
-//
+// 27.10.22 V. Grichine - extension to tau-neutrinos based on mu_nu XS energy scaled
 
 #ifndef G4MuNeutrinoNucleusTotXsc_h
 #define G4MuNeutrinoNucleusTotXsc_h
@@ -88,7 +88,7 @@ protected:
   G4double fCutEnergy; // minimal recoil electron energy detected
   G4double fBiasingFactor; // biasing xsc up
   G4double fTotXsc, fCcTotRatio, fCcFactor, fNcFactor, fQEratio;
-
+  G4double fEmc;
   G4int fIndex;
 
   static const G4double fNuMuEnergy[50];
@@ -97,8 +97,8 @@ protected:
   static const G4double fANuMuInXsc[50];
   static const G4double fANuMuQeXsc[50];
 
-  G4ParticleDefinition* theMuonMinus;
-  G4ParticleDefinition* theMuonPlus;
+  // G4ParticleDefinition* theMuonMinus;
+  // G4ParticleDefinition* theMuonPlus;
 };
 
 #endif

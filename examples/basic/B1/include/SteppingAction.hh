@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file SteppingAction.hh
+/// \file B1/include/SteppingAction.hh
 /// \brief Definition of the B1::SteppingAction class
 
 #ifndef B1SteppingAction_h
@@ -47,7 +47,7 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(EventAction* eventAction);
-    ~SteppingAction() override;
+    ~SteppingAction() override = default;
 
     // method from the base class
     void UserSteppingAction(const G4Step*) override;

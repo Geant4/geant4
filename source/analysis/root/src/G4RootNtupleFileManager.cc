@@ -87,8 +87,7 @@ void G4RootNtupleFileManager::SetNtupleMergingMode(G4bool mergeNtuples,
   }
 
   // Illegal situations
-  if ( mergeNtuples && G4Threading::IsMultithreadedApplication() &&
-       ( ! fgMasterInstance ) ) {
+  if (mergeNtuples && G4Threading::IsMultithreadedApplication() && (fgMasterInstance == nullptr)) {
     Warn("Merging ntuples requires G4AnalysisManager instance on master.\n"
          "Setting was ignored.",
          fkClass, "SetNtupleMergingMode");
@@ -115,6 +114,7 @@ void G4RootNtupleFileManager::SetNtupleMergingMode(G4bool mergeNtuples,
 
     // Forced merging mode
     G4bool isMaster = ! G4Threading::IsWorkerThread();
+    // G4bool isMaster = fState.GetIsMaster();
     if ( isMaster ) {
       fNtupleMergeMode = G4NtupleMergeMode::kMain;
       mergingMode = "G4NtupleMergeMode::kMain";
@@ -130,10 +130,10 @@ void G4RootNtupleFileManager::SetNtupleMergingMode(G4bool mergeNtuples,
 //_____________________________________________________________________________
 G4int G4RootNtupleFileManager::GetNtupleFileNumber()
 {
-  if ( ! fNofNtupleFiles ) return 0;
+  if (fNofNtupleFiles == 0) return 0;
 
   G4int nofMainManagers = fNofNtupleFiles;
-  if ( ! nofMainManagers ) nofMainManagers = 1;
+  if (nofMainManagers == 0) nofMainManagers = 1;
 
   auto fileNumber = G4Threading::G4GetThreadId() % nofMainManagers;
   return fileNumber;
@@ -142,14 +142,16 @@ G4int G4RootNtupleFileManager::GetNtupleFileNumber()
 //_____________________________________________________________________________
 G4bool G4RootNtupleFileManager::CloseNtupleFiles()
 {
- // Close ntuple files
+  // Take into account main ntuple files if present
+  auto mainNumber = ( fNofNtupleFiles > 0 ) ? 0 : -1;
 
   auto result = true;
   auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
   for ( auto ntupleDescription : ntupleVector) {
-    result &= fFileManager->CloseNtupleFile(ntupleDescription);
+    for (G4int i = mainNumber; i < fNofNtupleFiles; ++i ) {
+      result &= fFileManager->CloseNtupleFile(ntupleDescription, i);
+    }
   }
-
   return result;
 }
 
@@ -243,8 +245,10 @@ std::shared_ptr<G4VNtupleManager> G4RootNtupleFileManager::CreateNtupleManager()
 
     case G4NtupleMergeMode::kMain: {
       G4int nofMainManagers = fNofNtupleFiles;
-      if ( ! nofMainManagers ) nofMainManagers = 1;
-             // create one manager if merging required into the histos & profiles files
+      if (nofMainManagers == 0) {
+        // create one manager if merging required into the histos & profiles files
+        nofMainManagers = 1;
+      }
       fNtupleManager
         = make_shared<G4RootNtupleManager>(
             fState, fBookingManager, nofMainManagers, fNofNtupleFiles, fNtupleRowWise, fNtupleRowMode);
@@ -343,24 +347,14 @@ G4bool G4RootNtupleFileManager::ActionAtWrite()
 }
 
 //_____________________________________________________________________________
-G4bool G4RootNtupleFileManager::ActionAtCloseFile(G4bool reset)
+G4bool G4RootNtupleFileManager::ActionAtCloseFile()
 {
-  auto result = true;
-
-  // close files
-  if ( fNtupleMergeMode != G4NtupleMergeMode::kSlave )  {
-    result &= CloseNtupleFiles();
+  if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave)  {
+    fSlaveNtupleManager->SetNewCycle(false);
+    return true;
   }
 
-  if ( ! reset ) {
-    // The ntuples must be always reset when closing file)
-    if ( ! Reset() ) {
-      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
-      result = false;
-    }
-  }
-
-  return result;
+  return CloseNtupleFiles();
 }
 
 //_____________________________________________________________________________
@@ -373,6 +367,10 @@ G4bool G4RootNtupleFileManager::Reset()
   if ( fNtupleMergeMode == G4NtupleMergeMode::kNone ||
        fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
     result &= fNtupleManager->Reset();
+  }
+
+  if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave ) {
+    fSlaveNtupleManager->Reset();
   }
 
   return result;

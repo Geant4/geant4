@@ -423,7 +423,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
   G4ThreeVector boost   = pP.findBoostToCM();
   G4Fragment *fragmentP = GetAbradedNucleons (Dabr, AP, ZP, rP); 
-  G4int nSecP           = theParticleChange.GetNumberOfSecondaries();
+  G4int nSecP           = (G4int)theParticleChange.GetNumberOfSecondaries();
   G4int i               = 0;
   for (i=0; i<nSecP; ++i)
   {
@@ -472,7 +472,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // from these is determined.
 //
   G4Fragment *fragmentT = GetAbradedNucleons (Dabr, AT, ZT, rT); 
-  G4int nSec = theParticleChange.GetNumberOfSecondaries();
+  G4int nSec = (G4int)theParticleChange.GetNumberOfSecondaries();
   for (i=nSecP; i<nSec; ++i)
   {
     TotalEPost += theParticleChange.GetSecondary(i)->

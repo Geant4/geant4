@@ -344,7 +344,7 @@ G4DisplacedSolid* G4OpenGLSceneHandler::CreateCutawaySolid ()
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
-  G4int nPoints = line.size ();
+  std::size_t nPoints = line.size ();
   if (nPoints <= 0) return;
 
   // Note: colour and depth test treated in sub-class.
@@ -368,7 +368,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   // Boundary and nonboundary edge flags on vertices are significant only if GL_POLYGON_MODE is set to GL_POINT or GL_LINE.  See glPolygonMode.
   
   //  glEdgeFlag (GL_TRUE);
-  for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
+  for (std::size_t iPoint = 0; iPoint < nPoints; ++iPoint) {
   G4double x, y, z;
     x = line[iPoint].x(); 
     y = line[iPoint].y();
@@ -379,7 +379,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 #else
   glBeginVBO(GL_LINE_STRIP);
 
-  for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
+  for (std::size_t iPoint = 0; iPoint < nPoints; ++iPoint) {
     fOglVertex.push_back(line[iPoint].x());
     fOglVertex.push_back(line[iPoint].y());
     fOglVertex.push_back(line[iPoint].z());

@@ -47,12 +47,8 @@ G4PSPassageCellCurrent3D::G4PSPassageCellCurrent3D(G4String name, G4int ni,
   , fDepthj(dj)
   , fDepthk(dk)
 {
-  fNi = ni;
-  fNj = nj;
-  fNk = nk;
+  SetNijk(ni, nj, nk);
 }
-
-G4PSPassageCellCurrent3D::~G4PSPassageCellCurrent3D() { ; }
 
 G4int G4PSPassageCellCurrent3D::GetIndex(G4Step* aStep)
 {

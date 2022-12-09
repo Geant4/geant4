@@ -77,7 +77,7 @@ G4AntiLambdacPlus* G4AntiLambdacPlus::Definition()
   
   // decay mode is not defined here, with expectation of pre-assigned.
   } 
-  theInstance = reinterpret_cast<G4AntiLambdacPlus*>(anInstance);
+  theInstance = static_cast<G4AntiLambdacPlus*>(anInstance);
   return theInstance;
 }
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 
-// Manager class for Root ntuples.
-// It implements functions specific to Root ntuples in sequential mode.
+// The tuple for root file including its directories
 //
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,6 +31,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -102,6 +104,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -129,7 +132,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -165,8 +168,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     1
 PIXE atomic de-excitation enabled                  1
 De-excitation module ignores cuts                  0
@@ -184,8 +186,8 @@ Type of PIXE cross section for e+-                 Livermore
 ### ===  PIXE model for e+-:     Livermore
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 GeV in 120 bins 
+      Lambda table from 100 eV  to 150 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 GeV in 116 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 GeV  CullenGenerator
 
@@ -286,10 +288,11 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-min MeanLife (from G4NuclideTable)                1.4427 us 
-Max life time (from G4DeexPrecoParameters)        1.4427 us 
+min MeanLife (from G4NuclideTable)                1 ns 
+Max life time (from G4DeexPrecoParameters)        1000 ps 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
@@ -471,7 +474,7 @@ hIoni:  for pi-  XStype:3  SubType=2
 Index : 0     used in the geometry : Yes
  Material : Concrete
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  1.00446 keV proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  1.00436 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -492,14 +495,14 @@ Index : 2     used in the geometry : Yes
 Index : 3     used in the geometry : Yes
  Material : MetalAluminium
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  1.06388 keV proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  1.06385 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Steel
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  5.52446 keV proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  5.52571 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -520,42 +523,42 @@ Index : 6     used in the geometry : Yes
 Index : 7     used in the geometry : Yes
  Material : MetalCopper
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  6.64437 keV proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  6.64446 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 8     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  860.092 eV  proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  859.963 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 9     used in the geometry : Yes
  Material : MetalLead
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  1.21757 keV    e-  250 eV     e+  6.4681 keV proton 100 eV 
+ Energy thresholds :  gamma  1.21764 keV    e-  250 eV     e+  6.46937 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 10     used in the geometry : Yes
  Material : UraniumSource
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  1.5021 keV    e-  250 eV     e+  8.08967 keV proton 100 eV 
+ Energy thresholds :  gamma  1.50218 keV    e-  250 eV     e+  8.09086 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 11     used in the geometry : Yes
  Material : quartz
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  792.786 eV  proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  792.749 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 12     used in the geometry : Yes
  Material : CathodeMetalAluminium
  Range cuts        :  gamma  1 um     e-  1 nm     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  1.06388 keV proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  1.06385 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -576,7 +579,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 10
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 12
+     Total energy in LXe: 10.551 keV
+     Average light collection time: 49.169 ns 
+     Number of PMT hits (photoelectron equivalent): 12
+     Event summary in file gamma_1000.out
 
 ---> End of event: 10
 
@@ -593,8 +601,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 5
-     Total energy in LXe: 2.85089 keV
+     Number of hits in LXe: 50
+     Total energy in LXe: 60 keV
+     Average light collection time: 39.6199 ns 
+     Number of PMT hits (photoelectron equivalent): 64
      Event summary in file gamma_1000.out
 
 ---> End of event: 30
@@ -627,7 +637,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 70
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 63
+     Total energy in LXe: 60 keV
+     Average light collection time: 50.2129 ns 
+     Number of PMT hits (photoelectron equivalent): 77
+     Event summary in file gamma_1000.out
 
 ---> End of event: 70
 
@@ -636,10 +651,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 65
+     Number of hits in LXe: 61
      Total energy in LXe: 60 keV
-     Average light collection time: 30.5692 ns 
-     Number of PMT hits (photoelectron equivalent): 54
+     Average light collection time: 51.0338 ns 
+     Number of PMT hits (photoelectron equivalent): 59
      Event summary in file gamma_1000.out
 
 ---> End of event: 80
@@ -656,12 +671,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 100
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 34
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 56.7961 ns 
-     Number of PMT hits (photoelectron equivalent): 19
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 100
 
@@ -670,9 +680,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 65
+     Number of hits in LXe: 72
      Total energy in LXe: 60 keV
-     Average light collection time: 51.4766 ns 
+     Average light collection time: 47.569 ns 
      Number of PMT hits (photoelectron equivalent): 64
      Event summary in file gamma_1000.out
 
@@ -683,10 +693,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 59
+     Number of hits in LXe: 52
      Total energy in LXe: 60 keV
-     Average light collection time: 39.7939 ns 
-     Number of PMT hits (photoelectron equivalent): 59
+     Average light collection time: 38.8568 ns 
+     Number of PMT hits (photoelectron equivalent): 63
      Event summary in file gamma_1000.out
 
 ---> End of event: 120
@@ -703,7 +713,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 140
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 61
+     Total energy in LXe: 60 keV
+     Average light collection time: 45.7226 ns 
+     Number of PMT hits (photoelectron equivalent): 85
+     Event summary in file gamma_1000.out
 
 ---> End of event: 140
 
@@ -743,12 +758,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 190
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 61
-     Total energy in LXe: 60 keV
-     Average light collection time: 44.7708 ns 
-     Number of PMT hits (photoelectron equivalent): 72
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 190
 
@@ -756,12 +766,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 200
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 67
-     Total energy in LXe: 60 keV
-     Average light collection time: 43.9753 ns 
-     Number of PMT hits (photoelectron equivalent): 54
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 200
 
@@ -786,10 +791,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 26
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 51.0834 ns 
-     Number of PMT hits (photoelectron equivalent): 34
+     Number of hits in LXe: 28
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 46.2931 ns 
+     Number of PMT hits (photoelectron equivalent): 37
      Event summary in file gamma_1000.out
 
 ---> End of event: 230
@@ -799,10 +804,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 49
+     Number of hits in LXe: 69
      Total energy in LXe: 60 keV
-     Average light collection time: 47.731 ns 
-     Number of PMT hits (photoelectron equivalent): 157
+     Average light collection time: 41.1249 ns 
+     Number of PMT hits (photoelectron equivalent): 47
      Event summary in file gamma_1000.out
 
 ---> End of event: 240
@@ -811,7 +816,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 250
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 27
+     Total energy in LXe: 30.5479 keV
+     Average light collection time: 41.4264 ns 
+     Number of PMT hits (photoelectron equivalent): 30
+     Event summary in file gamma_1000.out
 
 ---> End of event: 250
 
@@ -820,10 +830,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 74
-     Total energy in LXe: 60 keV
-     Average light collection time: 58.2045 ns 
-     Number of PMT hits (photoelectron equivalent): 67
+     Number of hits in LXe: 34
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 48.6233 ns 
+     Number of PMT hits (photoelectron equivalent): 24
      Event summary in file gamma_1000.out
 
 ---> End of event: 260
@@ -832,12 +842,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 270
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 44
-     Total energy in LXe: 60 keV
-     Average light collection time: 41.2048 ns 
-     Number of PMT hits (photoelectron equivalent): 85
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 270
 
@@ -846,10 +851,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 48
+     Number of hits in LXe: 68
      Total energy in LXe: 60 keV
-     Average light collection time: 53.5998 ns 
-     Number of PMT hits (photoelectron equivalent): 55
+     Average light collection time: 48.2766 ns 
+     Number of PMT hits (photoelectron equivalent): 71
      Event summary in file gamma_1000.out
 
 ---> End of event: 280
@@ -859,10 +864,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 46
-     Total energy in LXe: 60 keV
-     Average light collection time: 39.4363 ns 
-     Number of PMT hits (photoelectron equivalent): 176
+     Number of hits in LXe: 90
+     Total energy in LXe: 50.3228 keV
+     Average light collection time: 44.2764 ns 
+     Number of PMT hits (photoelectron equivalent): 50
      Event summary in file gamma_1000.out
 
 ---> End of event: 290
@@ -871,12 +876,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 300
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 63
-     Total energy in LXe: 60 keV
-     Average light collection time: 46.379 ns 
-     Number of PMT hits (photoelectron equivalent): 158
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 300
 
@@ -884,7 +884,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 310
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 60
+     Total energy in LXe: 60 keV
+     Average light collection time: 47.4875 ns 
+     Number of PMT hits (photoelectron equivalent): 63
+     Event summary in file gamma_1000.out
 
 ---> End of event: 310
 
@@ -892,12 +897,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 320
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 44
-     Total energy in LXe: 60 keV
-     Average light collection time: 39.4208 ns 
-     Number of PMT hits (photoelectron equivalent): 59
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 320
 
@@ -906,10 +906,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 34
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 37.2632 ns 
-     Number of PMT hits (photoelectron equivalent): 32
+     Number of hits in LXe: 62
+     Total energy in LXe: 60 keV
+     Average light collection time: 41.3024 ns 
+     Number of PMT hits (photoelectron equivalent): 61
      Event summary in file gamma_1000.out
 
 ---> End of event: 330
@@ -918,7 +918,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 340
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 29
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 36.147 ns 
+     Number of PMT hits (photoelectron equivalent): 28
+     Event summary in file gamma_1000.out
 
 ---> End of event: 340
 
@@ -934,12 +939,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 360
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 58
-     Total energy in LXe: 60 keV
-     Average light collection time: 40.8387 ns 
-     Number of PMT hits (photoelectron equivalent): 51
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 360
 
@@ -948,10 +948,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 32
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 41.1677 ns 
-     Number of PMT hits (photoelectron equivalent): 34
+     Number of hits in LXe: 17
+     Total energy in LXe: 26.3706 keV
+     Average light collection time: 34.2707 ns 
+     Number of PMT hits (photoelectron equivalent): 15
      Event summary in file gamma_1000.out
 
 ---> End of event: 370
@@ -968,7 +968,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 390
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 26
+     Total energy in LXe: 26.4335 keV
+     Average light collection time: 45.373 ns 
+     Number of PMT hits (photoelectron equivalent): 18
+     Event summary in file gamma_1000.out
 
 ---> End of event: 390
 
@@ -1008,7 +1013,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 440
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 25
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 62.1009 ns 
+     Number of PMT hits (photoelectron equivalent): 40
+     Event summary in file gamma_1000.out
 
 ---> End of event: 440
 
@@ -1016,12 +1026,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 450
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 28
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 47.5527 ns 
-     Number of PMT hits (photoelectron equivalent): 27
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 450
 
@@ -1029,7 +1034,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 460
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 60
+     Total energy in LXe: 60 keV
+     Average light collection time: 50.0673 ns 
+     Number of PMT hits (photoelectron equivalent): 69
+     Event summary in file gamma_1000.out
 
 ---> End of event: 460
 
@@ -1053,12 +1063,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 490
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 55
-     Total energy in LXe: 60 keV
-     Average light collection time: 55.5201 ns 
-     Number of PMT hits (photoelectron equivalent): 70
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 490
 
@@ -1066,7 +1071,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 500
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 27
+     Total energy in LXe: 30.5479 keV
+     Average light collection time: 40.9373 ns 
+     Number of PMT hits (photoelectron equivalent): 35
+     Event summary in file gamma_1000.out
 
 ---> End of event: 500
 
@@ -1074,12 +1084,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 510
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 59
-     Total energy in LXe: 60 keV
-     Average light collection time: 37.652 ns 
-     Number of PMT hits (photoelectron equivalent): 42
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 510
 
@@ -1096,10 +1101,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 57
+     Number of hits in LXe: 69
      Total energy in LXe: 60 keV
-     Average light collection time: 43.7398 ns 
-     Number of PMT hits (photoelectron equivalent): 75
+     Average light collection time: 40.9197 ns 
+     Number of PMT hits (photoelectron equivalent): 57
      Event summary in file gamma_1000.out
 
 ---> End of event: 530
@@ -1108,12 +1113,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 540
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 46.1322 ns 
-     Number of PMT hits (photoelectron equivalent): 23
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 540
 
@@ -1121,12 +1121,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 550
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 27
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 31.2909 ns 
-     Number of PMT hits (photoelectron equivalent): 30
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
+     Average light collection time: 43.0712 ns 
+     Number of PMT hits (photoelectron equivalent): 128
 
 ---> End of event: 550
 
@@ -1134,12 +1131,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 560
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 70
-     Total energy in LXe: 60 keV
-     Average light collection time: 50.9932 ns 
-     Number of PMT hits (photoelectron equivalent): 52
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 560
 
@@ -1147,7 +1139,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 570
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 58
+     Total energy in LXe: 60 keV
+     Average light collection time: 37.1946 ns 
+     Number of PMT hits (photoelectron equivalent): 83
+     Event summary in file gamma_1000.out
 
 ---> End of event: 570
 
@@ -1155,7 +1152,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 580
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 34
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 53.5632 ns 
+     Number of PMT hits (photoelectron equivalent): 39
+     Event summary in file gamma_1000.out
 
 ---> End of event: 580
 
@@ -1172,10 +1174,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 57
-     Total energy in LXe: 27.7875 keV
-     Average light collection time: 37.7672 ns 
-     Number of PMT hits (photoelectron equivalent): 32
+     Number of hits in LXe: 53
+     Total energy in LXe: 60 keV
+     Average light collection time: 45.9217 ns 
+     Number of PMT hits (photoelectron equivalent): 59
      Event summary in file gamma_1000.out
 
 ---> End of event: 600
@@ -1192,12 +1194,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 620
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 39
-     Total energy in LXe: 26.3706 keV
-     Average light collection time: 47.3932 ns 
-     Number of PMT hits (photoelectron equivalent): 28
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 620
 
@@ -1205,11 +1202,11 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 630
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 32
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 50.4997 ns 
-     Number of PMT hits (photoelectron equivalent): 33
+     First hit in LXe: e-
+     Number of hits in LXe: 42
+     Total energy in LXe: 22.0677 keV
+     Average light collection time: 29.6429 ns 
+     Number of PMT hits (photoelectron equivalent): 24
      Event summary in file gamma_1000.out
 
 ---> End of event: 630
@@ -1218,12 +1215,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 640
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 44
-     Total energy in LXe: 28.8337 keV
-     Average light collection time: 56.3244 ns 
-     Number of PMT hits (photoelectron equivalent): 21
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 640
 
@@ -1248,10 +1240,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 54
-     Total energy in LXe: 60 keV
-     Average light collection time: 40.459 ns 
-     Number of PMT hits (photoelectron equivalent): 50
+     Number of hits in LXe: 20
+     Total energy in LXe: 26.3706 keV
+     Average light collection time: 55.2454 ns 
+     Number of PMT hits (photoelectron equivalent): 37
      Event summary in file gamma_1000.out
 
 ---> End of event: 670
@@ -1260,12 +1252,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 680
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 12
-     Total energy in LXe: 26.4335 keV
-     Average light collection time: 46.1871 ns 
-     Number of PMT hits (photoelectron equivalent): 21
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 680
 
@@ -1273,7 +1260,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 690
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 61
+     Total energy in LXe: 60 keV
+     Average light collection time: 41.0589 ns 
+     Number of PMT hits (photoelectron equivalent): 51
+     Event summary in file gamma_1000.out
 
 ---> End of event: 690
 
@@ -1281,12 +1273,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 700
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 60
-     Total energy in LXe: 60 keV
-     Average light collection time: 43.4805 ns 
-     Number of PMT hits (photoelectron equivalent): 63
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 700
 
@@ -1311,10 +1298,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 60
+     Number of hits in LXe: 43
      Total energy in LXe: 60 keV
-     Average light collection time: 47.3725 ns 
-     Number of PMT hits (photoelectron equivalent): 60
+     Average light collection time: 39.108 ns 
+     Number of PMT hits (photoelectron equivalent): 68
      Event summary in file gamma_1000.out
 
 ---> End of event: 730
@@ -1340,10 +1327,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 61
-     Total energy in LXe: 60 keV
-     Average light collection time: 47.1211 ns 
-     Number of PMT hits (photoelectron equivalent): 47
+     Number of hits in LXe: 42
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 25.0838 ns 
+     Number of PMT hits (photoelectron equivalent): 36
      Event summary in file gamma_1000.out
 
 ---> End of event: 760
@@ -1360,12 +1347,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 780
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 29
-     Total energy in LXe: 36.9845 keV
-     Average light collection time: 67.0181 ns 
-     Number of PMT hits (photoelectron equivalent): 28
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 780
 
@@ -1381,7 +1363,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 800
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 45
+     Total energy in LXe: 60 keV
+     Average light collection time: 55.9986 ns 
+     Number of PMT hits (photoelectron equivalent): 71
+     Event summary in file gamma_1000.out
 
 ---> End of event: 800
 
@@ -1413,12 +1400,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 840
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 28
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 42.3064 ns 
-     Number of PMT hits (photoelectron equivalent): 21
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 840
 
@@ -1426,12 +1408,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 850
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 56
-     Total energy in LXe: 60 keV
-     Average light collection time: 45.6925 ns 
-     Number of PMT hits (photoelectron equivalent): 60
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 850
 
@@ -1439,7 +1416,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 860
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 65
+     Total energy in LXe: 60 keV
+     Average light collection time: 44.1653 ns 
+     Number of PMT hits (photoelectron equivalent): 53
+     Event summary in file gamma_1000.out
 
 ---> End of event: 860
 
@@ -1447,12 +1429,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 870
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 40
-     Total energy in LXe: 60 keV
-     Average light collection time: 42.9937 ns 
-     Number of PMT hits (photoelectron equivalent): 64
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 870
 
@@ -1460,7 +1437,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 880
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 46
+     Total energy in LXe: 60 keV
+     Average light collection time: 42.9689 ns 
+     Number of PMT hits (photoelectron equivalent): 49
+     Event summary in file gamma_1000.out
 
 ---> End of event: 880
 
@@ -1469,10 +1451,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 26.4335 keV
-     Average light collection time: 46.3639 ns 
-     Number of PMT hits (photoelectron equivalent): 27
+     Number of hits in LXe: 62
+     Total energy in LXe: 60 keV
+     Average light collection time: 41.726 ns 
+     Number of PMT hits (photoelectron equivalent): 50
      Event summary in file gamma_1000.out
 
 ---> End of event: 890
@@ -1497,7 +1479,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 920
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 53
+     Total energy in LXe: 60 keV
+     Average light collection time: 51.6368 ns 
+     Number of PMT hits (photoelectron equivalent): 47
+     Event summary in file gamma_1000.out
 
 ---> End of event: 920
 
@@ -1513,12 +1500,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 940
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 25
-     Total energy in LXe: 26.3706 keV
-     Average light collection time: 36.3246 ns 
-     Number of PMT hits (photoelectron equivalent): 32
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 940
 
@@ -1526,12 +1508,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 950
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 29
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 40.0013 ns 
-     Number of PMT hits (photoelectron equivalent): 34
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 950
 
@@ -1539,12 +1516,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 960
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 19
-     Total energy in LXe: 25.6047 keV
-     Average light collection time: 48.4933 ns 
-     Number of PMT hits (photoelectron equivalent): 19
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 960
 
@@ -1552,7 +1524,12 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 970
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 55
+     Total energy in LXe: 60 keV
+     Average light collection time: 47.9392 ns 
+     Number of PMT hits (photoelectron equivalent): 59
+     Event summary in file gamma_1000.out
 
 ---> End of event: 970
 
@@ -1568,12 +1545,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 990
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 47.4844 ns 
-     Number of PMT hits (photoelectron equivalent): 24
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 990
 

@@ -189,6 +189,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mudatCmd->AvailableForStates(G4State_PreInit);
   mudatCmd->SetToBeBroadcasted(false);
 
+  peKCmd = new G4UIcmdWithABool("/process/em/PhotoeffectBelowKShell",this);
+  peKCmd->SetGuidance("Enable sampling of photoeffect below K-shell");
+  peKCmd->SetParameterName("peK",true);
+  peKCmd->SetDefaultValue(true);
+  peKCmd->AvailableForStates(G4State_PreInit);
+  peKCmd->SetToBeBroadcasted(false);
+
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
   minEnCmd->SetParameterName("emin",true);
@@ -342,7 +349,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   llimCmd->AvailableForStates(G4State_PreInit);
   llimCmd->SetToBeBroadcasted(false);
 
-  amCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsPerDecade",this);
+  amCmd = new G4UIcmdWithAnInteger("/process/em/binsPerDecade",this);
   amCmd->SetGuidance("Set number of bins per decade for EM tables");
   amCmd->SetParameterName("bins",true);
   amCmd->SetDefaultValue(7);
@@ -466,6 +473,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete poCmd;
   delete icru90Cmd;
   delete mudatCmd;
+  delete peKCmd;
 
   delete minEnCmd;
   delete maxEnCmd;
@@ -553,6 +561,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetEnableSamplingTable(sampleTCmd->GetNewBoolValue(newValue));
   } else if (command == mudatCmd) {
     theParameters->SetRetrieveMuDataFromFile(mudatCmd->GetNewBoolValue(newValue));
+  } else if (command == peKCmd) {
+    theParameters->SetPhotoeffectBelowKShell(peKCmd->GetNewBoolValue(newValue));
 
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
@@ -610,6 +620,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetMscLambdaLimit(llimCmd->GetNewDoubleValue(newValue));
   } else if (command == screCmd) { 
     theParameters->SetScreeningFactor(screCmd->GetNewDoubleValue(newValue));
+  } else if (command == amCmd) {
+    theParameters->SetNumberOfBinsPerDecade(amCmd->GetNewIntValue(newValue));
   } else if (command == verCmd) {
     theParameters->SetVerbose(verCmd->GetNewIntValue(newValue));
   } else if (command == ver1Cmd) {

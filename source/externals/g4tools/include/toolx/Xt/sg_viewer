@@ -168,7 +168,7 @@ protected:
   tools::key_code convert(KeySym a_key) {
     if(a_key==XK_Shift_L) return tools::sg::key_shift();
     if(a_key==XK_Shift_R) return tools::sg::key_shift();
-    return a_key;
+    return (tools::key_code)a_key;
   }
 protected:
   session& m_session;

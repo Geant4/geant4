@@ -1,14 +1,28 @@
 # Category had-binary History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-26 Gabriele Cosmo (had-binary-V11-00-04)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-25 Alberto Ribon (had-binary-V11-00-03)
+- G4GeneratorPrecompoundInterface: in the PropagateNuclNucl method, in the
+  case of anti-nucleus projectile, convert also lambdas into anti-lambdas
+  after the de-excitation (which assumes a projectile nucleus).
+
+## 2022-10-07 Gabriele Cosmo (had-binary-V11-00-02)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used in G4BinaryCascade.
 
 ## 2022-05-25 Alberto Ribon (had-binary-V11-00-01)
-- `G4GeneratorPrecompoundInterface`, `G4BinaryCascade`: propagate the information
-  on parent resonance (in the `G4BinaryCascade::ApplyYourself` method,
-  from `G4ReactionProduct` to `G4HadSecondary`, in other methods
-  from `G4KineticTrack` to `G4ReactionProduct`)
+- G4GeneratorPrecompoundInterface, G4BinaryCascade: propagate the information
+  on parent resonance (in the G4BinaryCascade::ApplyYourself method,
+  from G4ReactionProduct to G4HadSecondary, in other methods
+  from G4KineticTrack to G4ReactionProduct)
 
 ## 2021-12-10 Ben Morgan (had-binary-V11-00-00)
 - Change to new Markdown History format

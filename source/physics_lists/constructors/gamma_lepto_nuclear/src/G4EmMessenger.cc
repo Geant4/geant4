@@ -103,6 +103,11 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGMM->AvailableForStates(G4State_PreInit);
   theGMM->SetToBeBroadcasted(false);
 
+  theMMM = new G4UIcmdWithABool("/physics_lists/em/MuonToMuons",this);
+  theMMM->SetGuidance("Switching on muon pair production by muons.");
+  theMMM->AvailableForStates(G4State_PreInit);
+  theMMM->SetToBeBroadcasted(false);
+
   thePMM = new G4UIcmdWithABool("/physics_lists/em/PositronToMuons",this);
   thePMM->SetGuidance("Switching on positron conversion to muon pair.");
   thePMM->AvailableForStates(G4State_PreInit);
@@ -175,6 +180,7 @@ G4EmMessenger::~G4EmMessenger()
   delete theEN;
   delete theMUN;
   delete theGMM;
+  delete theMMM;
   delete thePMM;
   delete thePH;
   delete theNu;
@@ -203,6 +209,7 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==theEN)       theB->ElectroNuclear(theEN->GetNewBoolValue(aS));
   if(aComm==theMUN)      theB->MuonNuclear(theMUN->GetNewBoolValue(aS));
   if(aComm==theGMM)      theB->GammaToMuMu(theGMM->GetNewBoolValue(aS));
+  if(aComm==theMMM)      theB->MuonToMuMu(theMMM->GetNewBoolValue(aS));
   if(aComm==thePMM)      theB->PositronToMuMu(thePMM->GetNewBoolValue(aS));
   if(aComm==thePH)       theB->PositronToHadrons(thePH->GetNewBoolValue(aS));
   if(aComm==theNu)       theB->NeutrinoActivated(theNu->GetNewBoolValue(aS));

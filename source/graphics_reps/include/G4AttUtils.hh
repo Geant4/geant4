@@ -61,7 +61,8 @@ namespace G4AttUtils {
   G4bool ExtractAttDef(const T& object, const G4String& name, G4AttDef& def) 
   {
     const std::map<G4String, G4AttDef>* attDefs = object.GetAttDefs();
-
+    
+    // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator despite attDefs being const
     std::map<G4String, G4AttDef>::const_iterator iter = attDefs->find(name);
     if (iter == attDefs->end()) return false;    
     
@@ -76,9 +77,9 @@ namespace G4AttUtils {
   {
     std::vector<G4AttValue>* attValues = object.CreateAttValues();
     
-    std::vector<G4AttValue>::iterator iter = std::find_if(attValues->begin(), attValues->end(), 
+    auto iter = std::find_if(attValues->cbegin(), attValues->cend(), 
                                                           HasName<G4AttValue>(name));
-    if (iter == attValues->end()) return false;
+    if (iter == attValues->cend()) return false;
     
     attVal = *iter;
     

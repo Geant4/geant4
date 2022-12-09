@@ -118,7 +118,7 @@ G4TaskRunManager::G4TaskRunManager(G4VUserTaskQueue* task_queue, G4bool useTBB,
   //------------------------------------------------------------------------//
   G4String _nthread_env = G4GetEnv<G4String>("G4FORCENUMBEROFTHREADS", "");
   for(auto& itr : _nthread_env)
-    itr = tolower(itr);
+    itr = (char)std::tolower(itr);
 
   if(_nthread_env == "max")
     forcedNwokers = G4Threading::G4GetNumberOfCores();
@@ -310,7 +310,8 @@ void G4TaskRunManager::TerminateOneEvent()
 
 void G4TaskRunManager::ComputeNumberOfTasks()
 {
-  G4int grainSize = (eventGrainsize == 0) ? threadPool->size() : eventGrainsize;
+  G4int grainSize = (eventGrainsize == 0)
+                  ? (G4int)threadPool->size() : eventGrainsize;
   grainSize =
     G4GetEnv<G4int>("G4FORCE_GRAINSIZE", grainSize, "Forcing grainsize...");
   if(grainSize == 0)
@@ -366,7 +367,7 @@ void G4TaskRunManager::ComputeNumberOfTasks()
 
     std::stringstream ss;
     ss.fill('=');
-    ss << std::setw(msg.str().length()) << "";
+    ss << std::setw((G4int)msg.str().length()) << "";
     G4cout << "\n"
            << ss.str() << "\n"
            << msg.str() << "\n"
@@ -410,7 +411,7 @@ void G4TaskRunManager::CreateAndStartWorkers()
 
       std::stringstream ss;
       ss.fill('=');
-      ss << std::setw(msg.str().length()) << "";
+      ss << std::setw((G4int)msg.str().length()) << "";
       G4cout << "\n"
              << ss.str() << "\n"
              << msg.str() << "\n"
@@ -447,7 +448,7 @@ void G4TaskRunManager::CreateAndStartWorkers()
 
       std::stringstream ss;
       ss.fill('=');
-      ss << std::setw(msg.str().length()) << "";
+      ss << std::setw((G4int)msg.str().length()) << "";
       G4cout << "\n"
              << ss.str() << "\n"
              << msg.str() << "\n"
@@ -617,11 +618,11 @@ void G4TaskRunManager::ConstructScoringWorlds()
   G4RunManager::ConstructScoringWorlds();
 
   masterWorlds.clear();
-  size_t nWorlds =
+  G4int nWorlds = (G4int)
     G4TransportationManager::GetTransportationManager()->GetNoWorlds();
   std::vector<G4VPhysicalVolume*>::iterator itrW =
     G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
-  for(size_t iWorld = 0; iWorld < nWorlds; ++iWorld)
+  for(G4int iWorld = 0; iWorld < nWorlds; ++iWorld)
   {
     addWorld(iWorld, *itrW);
     ++itrW;

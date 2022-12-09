@@ -276,7 +276,7 @@ G4double G4HadronicProcess::PostStepGetPhysicalInteractionLength(
   if(mat != currentMat) {
     currentMat = mat;
     mfpKinEnergy = DBL_MAX;
-    matIdx = track.GetMaterial()->GetIndex();
+    matIdx = (G4int)track.GetMaterial()->GetIndex();
   }
   /*
   G4cout << GetProcessName() << " E=" << track.GetKineticEnergy()
@@ -392,7 +392,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
   G4HadFinalState* result = nullptr;
   G4int reentryCount = 0;
-  /* 
+  /*
   G4cout << "### " << aParticle->GetDefinition()->GetParticleName() 
 	 << "  Ekin(MeV)= " << aParticle->GetKineticEnergy()
 	 << "  Z= " << targetNucleus.GetZ_asInt() 
@@ -448,7 +448,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   // with equal, 50% probability, keeping their dynamical masses (and
   // the other kinematical properties). 
   // When this happens - very rarely - a "JustWarning" exception is thrown.
-  G4int nSec = result->GetNumberOfSecondaries();
+  G4int nSec = (G4int)result->GetNumberOfSecondaries();
   if ( nSec > 0 ) {
     for ( G4int i = 0; i < nSec; ++i ) {
       auto dynamicParticle = result->GetSecondary(i)->GetParticle();
@@ -538,7 +538,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
  
   // check secondaries 
   nICelectrons = 0;
-  G4int nSec = aR->GetNumberOfSecondaries();
+  G4int nSec = (G4int)aR->GetNumberOfSecondaries();
   theTotalResult->SetNumberOfSecondaries(nSec);
   G4double time0 = aT.GetGlobalTime();
 
@@ -547,29 +547,8 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
 
     // apply rotation
     G4ThreeVector newDir = dynParticle->GetMomentumDirection();
-    G4double secondaryEkinBeforeRotation = dynParticle->GetKineticEnergy();
     newDir.rotateUz(dir);
     dynParticle->SetMomentumDirection(newDir);
-
-    // Check energy after Lorentz rotation and boost, and do not create a track
-    // in the case of unphysical kinetic energy (either before or after the
-    // Lorentz rotation and boost).
-    // Note: this only a temporary fix, until we are able to reproduce, understand
-    //       and solve the source of the problem!
-    G4double secondaryEkinAfterRotation = dynParticle->GetKineticEnergy();
-    if ( std::abs( secondaryEkinAfterRotation - secondaryEkinBeforeRotation ) > 
-	 G4HadronicParameters::Instance()->GetMaxEnergy()                                ||
-         secondaryEkinBeforeRotation > G4HadronicParameters::Instance()->GetMaxEnergy()  || 
-         secondaryEkinAfterRotation  > G4HadronicParameters::Instance()->GetMaxEnergy() ) {
-      G4ExceptionDescription ed;
-      ed << "  " << dynParticle->GetDefinition()->GetParticleName()
-	 << " Target Z=" << targetNucleus.GetZ_asInt() << "  A=" << targetNucleus.GetA_asInt() 
-	 << " Ekin(GeV) : before=" << secondaryEkinBeforeRotation/CLHEP::GeV 
-         << "  after Lorentz rotation=" << secondaryEkinAfterRotation/CLHEP::GeV 
-         << "  -> Unphysical candidate secondary, skip it! " << G4endl;
-      G4Exception( "G4HadronicProcess::FillResults", "had012", JustWarning, ed );
-      continue;  // Give up: do not create a track for this candidate secondary
-    }
 
     // check if secondary is on the mass shell
     const G4ParticleDefinition* part = dynParticle->GetDefinition();
@@ -654,7 +633,7 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
 
     // Compute final-state total energy
     G4double finalE(0.);
-    G4int nSec = result->GetNumberOfSecondaries();
+    G4int nSec = (G4int)result->GetNumberOfSecondaries();
 
     nuclearMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),
 						     aNucleus.GetZ_asInt());
@@ -670,7 +649,7 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
         nuclearMass=0.0;
       }
     }
-    for (G4int i = 0; i < nSec; i++) {
+    for (G4int i = 0; i < nSec; ++i) {
       G4DynamicParticle *pdyn=result->GetSecondary(i)->GetParticle();
       finalE += pdyn->GetTotalEnergy();
       G4double mass_pdg=pdyn->GetDefinition()->GetPDGMass();

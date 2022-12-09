@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B4/B4d/src/EventAction.cc
 /// \brief Implementation of the B4d::EventAction class
 
 #include "EventAction.hh"
@@ -41,16 +41,6 @@
 
 namespace B4d
 {
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::EventAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

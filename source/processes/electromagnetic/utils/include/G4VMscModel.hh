@@ -135,6 +135,9 @@ protected:
   // convert true length to geometry length
   inline G4double ConvertTrueToGeom(G4double& tLength, G4double& gLength);
 
+  // should be set before initialisation
+  inline void SetUseSplineForMSC(G4bool val);
+
 public:
 
   // compute safety
@@ -202,12 +205,15 @@ protected:
   G4double geomMin;
   G4double geomMax;
 
-  G4bool   samplez = false;
-  G4bool   latDisplasment = true;
-
-  G4ThreeVector      fDisplacement;
+  G4ThreeVector fDisplacement;
   G4MscStepLimitType steppingAlgorithm;
 
+  G4bool samplez = false;
+  G4bool latDisplasment = true;
+
+private:
+
+  G4bool useSpline = true;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -341,6 +347,13 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
     x = pFactor*CrossSectionPerVolume(pBaseMaterial, part, ekin, 0.0, DBL_MAX);
   }
   return (x > 0.0) ? 1.0/x : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VMscModel::SetUseSplineForMSC(G4bool val)
+{
+  useSpline = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

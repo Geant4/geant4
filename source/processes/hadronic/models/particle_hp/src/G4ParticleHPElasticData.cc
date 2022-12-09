@@ -45,6 +45,11 @@
 #include "G4ParticleHPData.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4HadronicParameters.hh"
+#include "G4Nucleus.hh"
+#include "G4NucleiProperties.hh"
+#include "G4Neutron.hh"
+#include "G4Electron.hh"
+
 #include "G4Pow.hh"
 
 G4ParticleHPElasticData::G4ParticleHPElasticData()
@@ -58,8 +63,8 @@ G4ParticleHPElasticData::G4ParticleHPElasticData()
    if ( G4Threading::IsWorkerThread() ) {
       instanceOfWorker = true;
    }
-   element_cache = NULL;
-   material_cache = NULL;
+   element_cache = nullptr;
+   material_cache = nullptr;
    ke_cache = 0.0; 
    xs_cache = 0.0; 
 // BuildPhysicsTable( *G4Neutron::Neutron() );
@@ -67,10 +72,10 @@ G4ParticleHPElasticData::G4ParticleHPElasticData()
    
 G4ParticleHPElasticData::~G4ParticleHPElasticData()
 {
-   if ( theCrossSections != NULL && instanceOfWorker != true ) {
+   if ( theCrossSections != nullptr && instanceOfWorker != true ) {
      theCrossSections->clearAndDestroy();
      delete theCrossSections;
-     theCrossSections = NULL;
+     theCrossSections = nullptr;
    }
 }
    
@@ -125,10 +130,10 @@ void G4ParticleHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       return;
    }
 
-  size_t numberOfElements = G4Element::GetNumberOfElements();
+  std::size_t numberOfElements = G4Element::GetNumberOfElements();
 // TKDB
    //if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
-   if ( theCrossSections == NULL ) 
+   if ( theCrossSections == nullptr ) 
       theCrossSections = new G4PhysicsTable( numberOfElements );
    else
       theCrossSections->clearAndDestroy();
@@ -136,7 +141,7 @@ void G4ParticleHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   // make a PhysicsVector for each element
 
   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
-  for( size_t i=0; i<numberOfElements; ++i )
+  for( std::size_t i=0; i<numberOfElements; ++i )
   {
     G4PhysicsVector* physVec = G4ParticleHPData::
       Instance(G4Neutron::Neutron())->MakePhysicsVector((*theElementTable)[i], this);
@@ -151,7 +156,7 @@ void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
-  #ifdef G4VERBOSE  
+#ifdef G4VERBOSE  
   if ( G4HadronicParameters::Instance()->GetVerboseLevel() == 0 ) return;
   
 //
@@ -170,17 +175,16 @@ void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    G4cout << "Energy[eV]  XS[barn]" << G4endl;
    G4cout << G4endl;
 
-   size_t numberOfElements = G4Element::GetNumberOfElements();
-   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
+   std::size_t numberOfElements = G4Element::GetNumberOfElements();
+   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ;
+   if (!theElementTable) theElementTable= G4Element::GetElementTable();
 
-   for ( size_t i = 0 ; i < numberOfElements ; ++i )
+   for ( std::size_t i = 0 ; i < numberOfElements ; ++i )
    {
-
       G4cout << (*theElementTable)[i]->GetName() << G4endl;
-
       G4int ie = 0;
 
-      for ( ie = 0 ; ie < 130 ; ie++ )
+      for ( ie = 0 ; ie < 130 ; ++ie )
       {
          G4double eKinetic = 1.0e-5 * G4Pow::GetInstance()->powA ( 10.0 , ie/10.0 ) *eV;
          G4bool outOfRange = false;
@@ -189,27 +193,18 @@ void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
          {
             G4cout << eKinetic/eV << " " << (*((*theCrossSections)(i))).GetValue(eKinetic, outOfRange)/barn << G4endl;
          }
-
       }
-
       G4cout << G4endl;
    }
-
-   //G4cout << "G4ParticleHPElasticData::DumpPhysicsTable still to be implemented"<<G4endl;
-   #endif
+#endif
 }
-
-#include "G4Nucleus.hh"
-#include "G4NucleiProperties.hh"
-#include "G4Neutron.hh"
-#include "G4Electron.hh"
 
 G4double G4ParticleHPElasticData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 {
   G4double result = 0;
   G4bool outOfRange;
-  G4int index = anE->GetIndex();
+  G4int index = (G4int)anE->GetIndex();
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
@@ -240,7 +235,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double eleMass; 
 
 
-  eleMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theA+eps) , static_cast<G4int>(theZ+eps) )
+  eleMass = ( G4NucleiProperties::GetNuclearMass( G4int(theA+eps) , G4int(theZ+eps) )
 	     ) / G4Neutron::Neutron()->GetPDGMass();
   
   G4ReactionProduct boosted;
@@ -291,6 +286,7 @@ SetVerboseLevel( G4int newValue )
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
 }
+
 void G4ParticleHPElasticData::CrossSectionDescription(std::ostream& outFile) const
 {
     outFile << "High Precision cross data based on Evaluated Nuclear Data Files (ENDF) for elastic reaction of neutrons below 20MeV\n" ;

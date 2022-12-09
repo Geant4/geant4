@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file TrackerSD.cc
+/// \file B2/B2b/src/TrackerSD.cc
 /// \brief Implementation of the B2::TrackerSD class
 
 #include "TrackerSD.hh"
@@ -45,11 +45,6 @@ TrackerSD::TrackerSD(const G4String& name,
 {
   collectionName.insert(hitsCollectionName);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TrackerSD::~TrackerSD()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -77,7 +72,7 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
 
   if (edep==0.) return false;
 
-  TrackerHit* newHit = new TrackerHit();
+  auto newHit = new TrackerHit();
 
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
   newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()

@@ -72,7 +72,6 @@ class G4RadioactiveDecayMessenger: public G4UImessenger
     G4UIcmdWithAString* deavolumeCmd;
     G4UIcmdWithoutParameter* allvolumesCmd;
     G4UIcmdWithoutParameter* deallvolumesCmd;
-    G4UIcmdWithABool* icmCmd;
     G4UIcmdWithABool* armCmd;
     G4UIcommand* userDecayDataCmd;
     G4UIcommand* userEvaporationDataCmd;

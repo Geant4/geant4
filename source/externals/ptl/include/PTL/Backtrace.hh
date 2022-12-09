@@ -67,14 +67,20 @@
 #endif
 
 #include <cfenv>
+#include <cmath>
 #include <csignal>
+#include <cstring>
 #include <type_traits>
 
 namespace PTL
 {
-template <typename FuncT>
-using ResultOf_t = typename std::result_of<FuncT>::type;
-}
+template <typename FuncT, typename... ArgTypes>
+#if __cpp_lib_is_invocable >= 201703
+using ResultOf_t = std::invoke_result_t<FuncT, ArgTypes...>;
+#else
+using ResultOf_t = typename std::result_of<FuncT(ArgTypes...)>::type;
+#endif
+}  // namespace PTL
 
 // compatible OS and compiler
 #if defined(PTL_UNIX) &&                                                                 \
@@ -287,14 +293,14 @@ public:
     // to ignore initial frames (such as this function). A callback
     // can be provided to inspect and/or tweak the frame string
     template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-    static std::array<ResultOf_t<FuncT(const char*)>, Depth> GetMangled(
+    static std::array<ResultOf_t<FuncT, const char*>, Depth> GetMangled(
         FuncT&& func = FrameFunctor());
 
     // gets a demangled backtrace of "Depth" frames. The offset parameter is
     // used to ignore initial frames (such as this function). A callback
     // can be provided to inspect and/or tweak the frame string
     template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-    static std::array<ResultOf_t<FuncT(const char*)>, Depth> GetDemangled(
+    static std::array<ResultOf_t<FuncT, const char*>, Depth> GetDemangled(
         FuncT&& func = FrameFunctor());
 
 private:
@@ -348,12 +354,12 @@ Backtrace::ExitAction(int sig)
 //----------------------------------------------------------------------------//
 
 template <size_t Depth, size_t Offset, typename FuncT>
-inline std::array<ResultOf_t<FuncT(const char*)>, Depth>
+inline std::array<ResultOf_t<FuncT, const char*>, Depth>
 Backtrace::GetMangled(FuncT&& func)
 {
     static_assert((Depth - Offset) >= 1, "Error Depth - Offset should be >= 1");
 
-    using type = ResultOf_t<FuncT(const char*)>;
+    using type = ResultOf_t<FuncT, const char*>;
     // destination
     std::array<type, Depth> btrace;
     btrace.fill((std::is_pointer<type>::value) ? nullptr : type{});
@@ -383,7 +389,7 @@ Backtrace::GetMangled(FuncT&& func)
 //----------------------------------------------------------------------------//
 
 template <size_t Depth, size_t Offset, typename FuncT>
-inline std::array<ResultOf_t<FuncT(const char*)>, Depth>
+inline std::array<ResultOf_t<FuncT, const char*>, Depth>
 Backtrace::GetDemangled(FuncT&& func)
 {
     auto demangle_bt = [&](const char* cstr) {
@@ -446,7 +452,7 @@ Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
     // overflowing the signal stack
 
     // ignore future signals of this type
-    sigignore(sig);
+    signal(sig, SIG_IGN);
 
     os << "\n### CAUGHT SIGNAL: " << sig << " ### ";
     if(sinfo)
@@ -557,9 +563,8 @@ Backtrace::Handler(int sig, siginfo_t* sinfo, void*)
     }
 
     // ignore any termination signals
-    sigignore(SIGKILL);
-    sigignore(SIGTERM);
-    sigignore(SIGABRT);
+    for(auto itr : { SIGKILL, SIGTERM, SIGABRT })
+        signal(itr, SIG_IGN);
     abort();
 }
 
@@ -585,7 +590,7 @@ Backtrace::Enable(const signal_set_t& _signals)
     }
     _first  = false;
     int cnt = 0;
-    for(auto& itr : _signals)
+    for(const auto& itr : _signals)
     {
         if(itr < 0)
             continue;
@@ -641,7 +646,7 @@ Backtrace::Disable(signal_set_t _signals)
     }
 
     int cnt = 0;
-    for(auto& itr : _signals)
+    for(const auto& itr : _signals)
     {
         if(itr < 0)
             continue;
@@ -715,33 +720,33 @@ public:
     struct fake_sigaction
     {};
 
-    using siginfo_t = fake_siginfo;
-    using sigaction_t = fake_sigaction;
+    using siginfo_t     = fake_siginfo;
+    using sigaction_t   = fake_sigaction;
     using exit_action_t = std::function<void(int)>;
-    using frame_func_t = std::function<std::string(const char*)>;
-    using signal_set_t = std::set<int>;
+    using frame_func_t  = std::function<std::string(const char*)>;
+    using signal_set_t  = std::set<int>;
 
 public:
     struct actions
     {
         using id_entry_t = std::tuple<std::string, int, std::string>;
-        using id_list_t = std::vector<id_entry_t>;
+        using id_list_t  = std::vector<id_entry_t>;
 
-        std::map<int, bool> is_active = {};
-        std::map<int, sigaction_t> current = {};
-        std::map<int, sigaction_t> previous = {};
+        std::map<int, bool>        is_active    = {};
+        std::map<int, sigaction_t> current      = {};
+        std::map<int, sigaction_t> previous     = {};
         std::vector<exit_action_t> exit_actions = {};
-        const id_list_t identifiers = {};
+        const id_list_t            identifiers  = {};
     };
 
 public:
-    static void Handler(int, siginfo_t*, void*) {}
-    static void Message(int, siginfo_t*, std::ostream&) {}
-    static void ExitAction(int) {}
-    static int Enable(const std::string&) { return 0; }
-    static int Enable(const signal_set_t& = DefaultSignals()) { return 0; }
-    static int Disable(signal_set_t = {}) { return 0; }
-    static int GetSignal(const std::string&) { return -1; }
+    static void        Handler(int, siginfo_t*, void*) {}
+    static void        Message(int, siginfo_t*, std::ostream&) {}
+    static void        ExitAction(int) {}
+    static int         Enable(const std::string&) { return 0; }
+    static int         Enable(const signal_set_t& = DefaultSignals()) { return 0; }
+    static int         Disable(signal_set_t = {}) { return 0; }
+    static int         GetSignal(const std::string&) { return -1; }
     static std::string Description(int) { return std::string{}; }
 
     template <typename FuncT>
@@ -749,21 +754,21 @@ public:
     {}
 
     template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-    static std::array<ResultOf_t<FuncT(const char*)>, Depth> GetMangled(
+    static std::array<ResultOf_t<FuncT, const char*>, Depth> GetMangled(
         FuncT&& func = FrameFunctor())
     {
-        using type = ResultOf_t<FuncT(const char*)>;
-        auto ret = std::array<type, Depth>{};
+        using type = ResultOf_t<FuncT, const char*>;
+        auto ret   = std::array<type, Depth>{};
         ret.fill(func(""));
         return ret;
     }
 
     template <size_t Depth, size_t Offset = 0, typename FuncT = frame_func_t>
-    static std::array<ResultOf_t<FuncT(const char*)>, Depth> GetDemangled(
+    static std::array<ResultOf_t<FuncT, const char*>, Depth> GetDemangled(
         FuncT&& func = FrameFunctor())
     {
-        using type = ResultOf_t<FuncT(const char*)>;
-        auto ret = std::array<type, Depth>{};
+        using type = ResultOf_t<FuncT, const char*>;
+        auto ret   = std::array<type, Depth>{};
         ret.fill(func(""));
         return ret;
     }

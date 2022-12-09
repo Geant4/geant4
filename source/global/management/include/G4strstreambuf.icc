@@ -31,7 +31,6 @@
 
 // --------------------------------------------------------------------
 inline G4strstreambuf::G4strstreambuf()
-  : std::basic_streambuf<char>()
 {
   size   = 4095;
   buffer = new char[size + 1];
@@ -53,7 +52,7 @@ inline G4strstreambuf::~G4strstreambuf()
 
 // --------------------------------------------------------------------
 inline G4strstreambuf::G4strstreambuf(const G4strstreambuf& right)
-  : std::basic_streambuf<char>()
+  : std::basic_streambuf<char>() // NOLINT(readability-redundant-member-init)
   , buffer(right.buffer)
   , count(right.count)
   , size(right.size)
@@ -81,7 +80,7 @@ inline G4int G4strstreambuf::overflow(G4int c)
   if(count >= size)
     result = sync();
 
-  buffer[count] = c;
+  buffer[count] = (char)c;
   count++;
 
   return result;

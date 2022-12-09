@@ -52,7 +52,7 @@ class G4AugerData
 public:
 
   explicit G4AugerData();
-  ~G4AugerData();
+  ~G4AugerData() = default;
 
   /// The method returns the number of shells in wich a 
   /// vacancy can be filled by a NON-radiative transition, given the atomic number

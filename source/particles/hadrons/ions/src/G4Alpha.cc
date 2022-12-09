@@ -51,7 +51,7 @@ G4Alpha* G4Alpha::Definition()
   const G4String name = "alpha";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance = reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
+  G4Ions* anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -76,7 +76,7 @@ G4Alpha* G4Alpha::Definition()
 
   }
 
-  theInstance = reinterpret_cast<G4Alpha*>(anInstance);
+  theInstance = static_cast<G4Alpha*>(anInstance);
   return theInstance;
 }
 

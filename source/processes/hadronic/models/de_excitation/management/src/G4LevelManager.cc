@@ -50,7 +50,7 @@
 G4String G4LevelManager::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 
-G4LevelManager::G4LevelManager(G4int Z, G4int A, size_t ntrans,
+G4LevelManager::G4LevelManager(G4int Z, G4int A, std::size_t ntrans,
                                const std::vector<G4double>& energies,
 			       const std::vector<G4int>& spin,
 			       const std::vector<const G4NucLevel*>& levels)
@@ -61,7 +61,7 @@ G4LevelManager::G4LevelManager(G4int Z, G4int A, size_t ntrans,
     fLevelEnergy.reserve(ntrans);
     fSpin.reserve(ntrans);
     fLevels.reserve(ntrans);
-    for(size_t i=0; i<ntrans; ++i) {
+    for(std::size_t i=0; i<ntrans; ++i) {
       fLevelEnergy.push_back(energies[i]);
       fSpin.push_back(spin[i]);
       fLevels.push_back(levels[i]);
@@ -93,13 +93,13 @@ G4LevelManager::G4LevelManager(G4int Z, G4int A, size_t ntrans,
 
 G4LevelManager::~G4LevelManager()
 {
-  for(size_t i=0; i<=nTransitions; ++i) { delete fLevels[i]; }
+  for(std::size_t i=0; i<=nTransitions; ++i) { delete fLevels[i]; }
 }
 
-size_t G4LevelManager::NearestLevelIndex(const G4double energy,
-                                         const size_t index) const
+std::size_t G4LevelManager::NearestLevelIndex(const G4double energy,
+                                              const std::size_t index) const
 {
-  size_t idx = std::min(index, nTransitions);
+  std::size_t idx = std::min(index, nTransitions);
   static const G4double tolerance = 10*CLHEP::eV;
   if(0 == nTransitions || std::abs(energy - fLevelEnergy[idx]) <= tolerance) {
     return idx;
@@ -111,15 +111,15 @@ size_t G4LevelManager::NearestLevelIndex(const G4double energy,
   return idx;
 }
 
-const G4String& G4LevelManager::FloatingType(const size_t i) const
+const G4String& G4LevelManager::FloatingType(const std::size_t i) const
 {
   return fFloatingLevels[fSpin[i]/100000]; 
 }
 
 void G4LevelManager::StreamInfo(std::ostream& out) const
 {
-  for(size_t i=0; i<=nTransitions; ++i) {
-    G4int prec = out.precision(6);
+  for(std::size_t i=0; i<=nTransitions; ++i) {
+    G4long prec = out.precision(6);
     out << std::setw(6) << i << ". " 
 	<< std::setw(8) << fLevelEnergy[i];
     if(fLevels[i]) {

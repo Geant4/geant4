@@ -33,9 +33,9 @@ namespace field_utils {
 namespace internal
 {
   template<class T>
-  size_t getFirstIndex(const T& value)
+  std::size_t getFirstIndex(const T& value)
   {
-    return static_cast<size_t>(value);
+    return static_cast<std::size_t>(value);
   }
 }
 

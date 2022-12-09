@@ -1,8 +1,32 @@
 # Category hadr-man History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-26 Gabriele Cosmo (hadr-man-V11-00-08)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-11 Alberto Ribon (hadr-man-V11-00-07)
+- G4HadronicProcessStore: extended the Dump method for hypertriton and 
+  anti_hypertriton.
+
+## 2022-08-24 Vladimir Ivanchenko (hadr-man-V11-00-06)
+- G4HadronicProcessType - added fNeutronGeneral
+
+## 2022-08-22 Vladimir Ivanchenko (hadr-man-V11-00-05)
+- G4HadronicProcess - make access to target nucleus public needed for 
+    neutron general process
+
+## 2022-07-01 Alberto Ribon (hadr-man-V11-00-04)
+- G4HadronicProcess: removed the temporary check and protection introduced
+  in the previous tag (see below). This is not needed any longer after 
+  replacing the threshold used for checking the absolute energy 
+  non-conservation from DLB_MAX (implying no checking at all) to 350 GeV
+  (this value allows for cases where the residual nucleus is not produced,
+   even when super-heavy nuclides are involved).
 
 ## 2022-06-16 Alberto Ribon (hadr-man-V11-00-03)
 - G4HadronicProcess: temporary check and protection against the crashes

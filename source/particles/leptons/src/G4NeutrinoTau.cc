@@ -72,7 +72,7 @@ G4NeutrinoTau* G4NeutrinoTau::Definition()
              false,           "tau"
               );
   }
-  theInstance = reinterpret_cast<G4NeutrinoTau*>(anInstance);
+  theInstance = static_cast<G4NeutrinoTau*>(anInstance);
   return theInstance;
 }
 

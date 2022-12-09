@@ -18,16 +18,16 @@ geant4_add_module(G4visHepRep
 geant4_module_link_libraries(G4visHepRep
   PUBLIC
     G4csg
-    G4geometrymng
-    G4materials
-    G4modeling
     G4specsolids
     G4globman
     G4intercoms
     G4vis_management
-    G4graphics_reps
   PRIVATE
-    G4hepgeometry
+    G4geometrymng
+    G4graphics_reps
+    G4hits
+    G4materials
+    G4modeling
     G4tracking)
 
 # List any source specific properties here

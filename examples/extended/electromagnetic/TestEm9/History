@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-10-26 I. Hrivnacova (testem9-V11-00-02)
+- Removed PhysListEmStandard::verbose data member,
+  use the verboseLevel defined in the base class for this purpose.
 
 ## 2022-05-05 Vladimir Ivanchenko (testem9-V11-00-01)
 - Updated all user actions: more correct count of creator process;

@@ -73,10 +73,8 @@ G4int G4coutDestination::ReceiveG4cout_(const G4String& msg)
     }
     return (result ? ReceiveG4cout(m) : 0);
   }
-  else
-  {
-    return ReceiveG4cout(msg);
-  }
+  
+  return ReceiveG4cout(msg);
 }
 
 // --------------------------------------------------------------------
@@ -91,8 +89,6 @@ G4int G4coutDestination::ReceiveG4cerr_(const G4String& msg)
     );
     return ReceiveG4cerr(m);
   }
-  else
-  {
-    return ReceiveG4cerr(msg);
-  }
+  
+  return ReceiveG4cerr(msg);
 }

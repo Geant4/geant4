@@ -29,7 +29,6 @@
 #include <list>
 #include <map>
 #include <G4memory.hh>
-#include "G4Track.hh"
 #include <set>
 #include "G4DNAMesh.hh"
 #include <variant>

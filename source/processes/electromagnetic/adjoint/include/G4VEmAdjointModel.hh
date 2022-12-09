@@ -227,7 +227,7 @@ class G4VEmAdjointModel
   G4double DiffCrossSectionFunction2(G4double kinEnergyProj);
 
   // General methods to sample secondary energy
-  G4double SampleAdjSecEnergyFromCSMatrix(size_t MatrixIndex,
+  G4double SampleAdjSecEnergyFromCSMatrix(std::size_t MatrixIndex,
                                           G4double prim_energy,
                                           G4bool isScatProjToProj);
 
@@ -295,7 +295,7 @@ class G4VEmAdjointModel
   G4int fASelectedNucleus = 0;
   G4int fZSelectedNucleus = 0;
 
-  size_t fCSMatrixUsed = 0;  // Index of crosssection matrices used
+  std::size_t fCSMatrixUsed = 0;  // Index of crosssection matrices used
 
   G4bool fSecondPartSameType = false;
   G4bool fInModelWeightCorr =

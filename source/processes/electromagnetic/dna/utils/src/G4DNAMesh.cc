@@ -42,7 +42,7 @@ G4DNAMesh::Voxel& G4DNAMesh::GetVoxel(const Index& key)
     Data mapList;
     G4DNAMesh::Voxel& voxel =
       fVoxelVector.emplace_back(std::make_tuple(key, box, std::move(mapList)));
-    fIndexMap[key] = fVoxelVector.size() - 1;
+    fIndexMap[key] = G4int(fVoxelVector.size() - 1);
     return voxel;
   }
   else

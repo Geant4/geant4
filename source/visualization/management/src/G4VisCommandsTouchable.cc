@@ -41,6 +41,8 @@
 #include "G4AttCheck.hh"
 #include "G4AxesModel.hh"
 
+#define G4warn G4cout
+
 G4VisCommandsTouchable::G4VisCommandsTouchable()
 {
   G4bool omitable;
@@ -159,7 +161,7 @@ void G4VisCommandsTouchable::SetNewValue
   G4VPhysicalVolume* world = *(transportationManager->GetWorldsIterator());
   if (!world) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsTouchable::SetNewValue:"
       "\n  No world.  Maybe the geometry has not yet been defined."
       "\n  Try \"/run/initialize\""
@@ -171,7 +173,7 @@ void G4VisCommandsTouchable::SetNewValue
   G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
       << G4endl;
     }
@@ -181,7 +183,7 @@ void G4VisCommandsTouchable::SetNewValue
   G4Scene* currentScene = fpVisManager->GetCurrentScene();
   if (!currentScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No current scene - \"/vis/scene/list\" to see possibilities."
       << G4endl;
     }
@@ -232,12 +234,12 @@ void G4VisCommandsTouchable::SetNewValue
       newVP.SetCurrentTargetPoint(newTargetPoint - standardTargetPoint);
 
       // Interpolate
-      auto keepVerbose = fpVisManager->GetVerbosity();
+      auto keepVisVerbose = fpVisManager->GetVerbosity();
       fpVisManager->SetVerboseLevel(G4VisManager::errors);
       if (newVP != saveVP) InterpolateToNewView(currentViewer, saveVP, newVP);
       // ...and twinkle
       Twinkle(currentViewer,newVP,touchables);
-      fpVisManager->SetVerboseLevel(keepVerbose);
+      fpVisManager->SetVerboseLevel(keepVisVerbose);
 
       if (verbosity >= G4VisManager::confirmations) {
         G4cout
@@ -251,7 +253,7 @@ void G4VisCommandsTouchable::SetNewValue
       }
       SetViewParameters(currentViewer, newVP);
     } else {
-      G4cout << "Touchable not found." << G4endl;
+      G4warn << "Touchable not found." << G4endl;
     }
 
     return;
@@ -271,16 +273,10 @@ void G4VisCommandsTouchable::SetNewValue
        true, // use full extent (prevents calculating own extent, which crashes)
        properties.fTouchableBaseFullPVPath);
 
-      G4int keepVerbose = UImanager->GetVerboseLevel();
-      G4int newVerbose(0);
-      if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
-        newVerbose = 2;
-      UImanager->SetVerboseLevel(newVerbose);
       UImanager->ApplyCommand("/vis/scene/create");
       currentScene = fpVisManager->GetCurrentScene();  // New current scene
       G4bool successful = currentScene->AddRunDurationModel(pvModel,warn);
       UImanager->ApplyCommand("/vis/sceneHandler/attach");
-      UImanager->SetVerboseLevel(keepVerbose);
 
       if (successful) {
         if (fpCommandDraw->GetNewBoolValue(newValue)) {
@@ -305,7 +301,7 @@ void G4VisCommandsTouchable::SetNewValue
         G4VisCommandsSceneAddUnsuccessful(verbosity);
       }
     } else {
-      G4cout << "Touchable not found." << G4endl;
+      G4warn << "Touchable not found." << G4endl;
     }
     return;
 
@@ -335,7 +331,7 @@ void G4VisCommandsTouchable::SetNewValue
       polyhedron->Transform(transform);
       G4cout << "\nGlobal polyhedron coordinates:\n" << *polyhedron;
     } else {
-      G4cout << "Touchable not found." << G4endl;
+      G4warn << "Touchable not found." << G4endl;
     }
     return;
 
@@ -358,7 +354,7 @@ void G4VisCommandsTouchable::SetNewValue
         DrawExtent(extent);
       }
     } else {
-      G4cout << "Touchable not found." << G4endl;
+      G4warn << "Touchable not found." << G4endl;
     }
     return;
 
@@ -398,9 +394,9 @@ void G4VisCommandsTouchable::SetNewValue
       << "\nor to see overlaps: \"/vis/drawLogicalVolume <mother-logical-volume-name>\""
       << G4endl;
     } else {
-      G4cout << pvName;
-      if (copyNo >= 0) G4cout << ':' << copyNo;
-      G4cout << " not found" << G4endl;
+      G4warn << pvName;
+      if (copyNo >= 0) G4warn << ':' << copyNo;
+      G4warn << " not found" << G4endl;
     }
 
   } else if (command == fpCommandLocalAxes) {
@@ -427,7 +423,7 @@ void G4VisCommandsTouchable::SetNewValue
       G4cout << extent << G4endl;
       if (fpCommandShowExtent->GetNewBoolValue(newValue)) DrawExtent(extent);
     } else {
-      G4cout << "Touchable not found." << G4endl;
+      G4warn << "Touchable not found." << G4endl;
     }
     return;
 
@@ -454,14 +450,14 @@ void G4VisCommandsTouchable::SetNewValue
         DrawExtent(extent);
       }
     } else {
-      G4cout << "Touchable not found." << G4endl;
+      G4warn << "Touchable not found." << G4endl;
     }
     return;
 
   } else {
 
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsTouchable::SetNewValue: unrecognised command."
       << G4endl;
     }

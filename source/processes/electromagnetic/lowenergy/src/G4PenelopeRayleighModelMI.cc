@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModelMI.hh 75573 2013-11-04 11:48:15Z gcosmo $
-//
-// Author: Luciano Pandola and Gianfranco Paternò
+// Author: Luciano Pandola and Gianfranco Paterno
 //
 // -------------------------------------------------------------------
 // History:
 // 03 Dec 2009   L. Pandola   1st implementation 
 // 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
 // 27 Sep 2013   L. Pandola   Migration to MT paradigm
-// 20 Aug 2017 	 G. Paternò   Molecular Interference implementation
-// 24 Mar 2019 	 G. Paternò   Improved Molecular Interference implementation
-// 20 Jun 2020   G. Paternò   Read qext separately and leave original atomic form factors
-// 27 Aug 2020   G. Paternò   Further improvement of MI implementation
+// 20 Aug 2017 	 G. Paterno   Molecular Interference implementation
+// 24 Mar 2019 	 G. Paterno   Improved Molecular Interference implementation
+// 20 Jun 2020   G. Paterno   Read qext separately and leave original atomic form factors
+// 27 Aug 2020   G. Paterno   Further improvement of MI implementation
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -233,12 +231,12 @@ void G4PenelopeRayleighModelMI::Initialise(const G4ParticleDefinition* part,
     //loop on the used materials  			  
     G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
     
-    for (size_t i=0;i<theCoupleTable->GetTableSize();i++) {
+    for (G4int i=0;i<(G4int)theCoupleTable->GetTableSize();++i) {
       const G4Material* material =
 	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       const G4ElementVector* theElementVector = material->GetElementVector();
       
-      for (size_t j=0;j<material->GetNumberOfElements();j++) {
+      for (std::size_t j=0;j<material->GetNumberOfElements();++j) {
 	G4int iZ = theElementVector->at(j)->GetZasInt();
 	//read data files only in the master
 	if (!fLogAtomicCrossSection[iZ])
@@ -432,7 +430,7 @@ G4double G4PenelopeRayleighModelMI::CrossSectionPerVolume(const G4Material* mate
       //No need to lock, as this is always called in a master
       const G4ElementVector* theElementVector = material->GetElementVector();
       //protect file reading via autolock
-      for (size_t j=0;j<material->GetNumberOfElements();j++) {
+      for (std::size_t j=0;j<material->GetNumberOfElements();++j) {
 	G4int iZ = theElementVector->at(j)->GetZasInt();
 	if (!fLogAtomicCrossSection[iZ]) {
 	  ReadDataFile(iZ);
@@ -478,29 +476,29 @@ G4double G4PenelopeRayleighModelMI::CrossSectionPerVolume(const G4Material* mate
 
   //GET MATERIAL INFORMATION  	
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();	
-  G4int nElements = material->GetNumberOfElements();
+  std::size_t nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* fractionVector = material->GetFractionVector();  
     
   //Stoichiometric factors
   std::vector<G4double> *StoichiometricFactors = new std::vector<G4double>;
-  for (G4int i=0;i<nElements;i++) {
+  for (std::size_t i=0;i<nElements;++i) {
     G4double fraction = fractionVector[i];
     G4double atomicWeigth = (*elementVector)[i]->GetA()/(g/mole);
     StoichiometricFactors->push_back(fraction/atomicWeigth);
   }
   G4double MaxStoichiometricFactor = 0.;
-  for (G4int i=0;i<nElements;i++) {
+  for (std::size_t i=0;i<nElements;++i) {
     if ((*StoichiometricFactors)[i] > MaxStoichiometricFactor)
       MaxStoichiometricFactor = (*StoichiometricFactors)[i];
   }
-  for (G4int i=0;i<nElements;i++) {
+  for (std::size_t i=0;i<nElements;++i) {
     (*StoichiometricFactors)[i] /=  MaxStoichiometricFactor;
   }
 
   //Equivalent atoms per molecule
   G4double atPerMol = 0;
-  for (G4int i=0;i<nElements;i++)
+  for (std::size_t i=0;i<nElements;++i)
     atPerMol += (*StoichiometricFactors)[i]; 	
   G4double moleculeDensity = 0.;
   if (atPerMol) moleculeDensity = atomDensity/atPerMol;
@@ -511,7 +509,7 @@ G4double G4PenelopeRayleighModelMI::CrossSectionPerVolume(const G4Material* mate
   
   //Equivalent molecular weight (dimensionless)
   G4double MolWeight = 0.;
-  for (G4int i=0;i<nElements;i++)
+  for (std::size_t i=0;i<nElements;++i)
     MolWeight += (*StoichiometricFactors)[i]*(*elementVector)[i]->GetA()/(g/mole);
   
   if (fVerboseLevel > 2)
@@ -549,19 +547,19 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
     G4cout << "Calling BuildFormFactorTable() of G4PenelopeRayleighModelMI" << G4endl;
 
   //GET MATERIAL INFORMATION
-  G4int nElements = material->GetNumberOfElements();
+  std::size_t nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* fractionVector = material->GetFractionVector();
   
   //Stoichiometric factors
   std::vector<G4double> *StoichiometricFactors = new std::vector<G4double>;
-  for (G4int i=0;i<nElements;i++) {
+  for (std::size_t i=0;i<nElements;++i) {
     G4double fraction = fractionVector[i];
     G4double atomicWeigth = (*elementVector)[i]->GetA()/(g/mole);
     StoichiometricFactors->push_back(fraction/atomicWeigth);
   }
   G4double MaxStoichiometricFactor = 0.;
-  for (G4int i=0;i<nElements;i++) {
+  for (std::size_t i=0;i<nElements;++i) {
     if ((*StoichiometricFactors)[i] > MaxStoichiometricFactor)
       MaxStoichiometricFactor = (*StoichiometricFactors)[i];
   }
@@ -571,12 +569,12 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
     G4Exception("G4PenelopeRayleighModelMI::BuildFormFactorTable()",
 		"em2042",FatalException,ed);
   }
-  for (G4int i=0;i<nElements;i++)
+  for (std::size_t i=0;i<nElements;++i)
     (*StoichiometricFactors)[i] /=  MaxStoichiometricFactor;
   
   //Equivalent molecular weight (dimensionless)
   G4double MolWeight = 0.;
-  for (G4int i=0;i<nElements;i++)
+  for (std::size_t i=0;i<nElements;++i)
     MolWeight += (*StoichiometricFactors)[i]*(*elementVector)[i]->GetA()/(g/mole);
     	
   //CREATE THE FORM FACTOR TABLE
@@ -602,7 +600,7 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
     ReadMolInterferenceData(matname,aFileNameFF); 
     G4PhysicsFreeVector* Fvector =  fMolInterferenceData->find(matname)->second;
     
-    for (size_t k=0;k<fLogQSquareGrid.size();k++) {
+    for (std::size_t k=0;k<fLogQSquareGrid.size();++k) {
       G4double q = std::pow(G4Exp(fLogQSquareGrid[k]),0.5);
       G4double f = Fvector->Value(q);          
       G4double ff2 = f*f*MolWeight;  			
@@ -621,7 +619,7 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
       G4int ki, kf=6, ktot=19;
       G4double comp[4];
       G4String compstring = matname.substr(kf+1, ktot);
-      for (size_t j=0; j<4; j++) {
+      for (std::size_t j=0; j<4; ++j) {
 	ki = kf+1;
 	kf = ki+4;
 	compstring = matname.substr(ki, 4);
@@ -654,7 +652,7 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
       G4PhysicsFreeVector* mineralFF = fMolInterferenceData->find("Mineral_MI")->second;          
 
       //get and combine the molecular form factors with interference effect
-      for (size_t k=0;k<fLogQSquareGrid.size();k++) {
+      for (std::size_t k=0;k<fLogQSquareGrid.size();++k) {
 	G4double ff2 = 0; 
 	G4double q = std::pow(G4Exp(fLogQSquareGrid[k]),0.5);
 	G4double ffat = fatFF->Value(q);
@@ -672,7 +670,7 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
       if (fVerboseLevel)
 	G4cout << "Read MIFF from database " << matname << G4endl;
       G4PhysicsFreeVector* FF = fMolInterferenceData->find(matname)->second;
-      for (size_t k=0;k<fLogQSquareGrid.size();k++) {
+      for (std::size_t k=0;k<fLogQSquareGrid.size();++k) {
 	G4double ff2 = 0; 
 	G4double q = std::pow(G4Exp(fLogQSquareGrid[k]),0.5);
 	G4double f = FF->Value(q);
@@ -684,9 +682,9 @@ void G4PenelopeRayleighModelMI::BuildFormFactorTable(const G4Material* material)
     else {
       if (fVerboseLevel)
 	G4cout << "FF of " << matname << " calculated according to the IAM" << G4endl;
-      for (size_t k=0;k<fLogQSquareGrid.size();k++) {
+      for (std::size_t k=0;k<fLogQSquareGrid.size();++k) {
 	G4double ff2 = 0;
-	for (G4int i=0;i<nElements;i++) {
+	for (std::size_t i=0;i<nElements;++i) {
 	  G4int iZ = (*elementVector)[i]->GetZasInt();
 	  G4PhysicsFreeVector* theAtomVec = fAtomicFormFactor[iZ];
 	  G4double q = std::pow(G4Exp(fLogQSquareGrid[k]),0.5);
@@ -775,7 +773,7 @@ void G4PenelopeRayleighModelMI::SampleSecondaries(std::vector<G4DynamicParticle*
     const G4ElementVector* theElementVector = theMat->GetElementVector();
     //protect file reading via autolock
     G4AutoLock lock(&PenelopeRayleighModelMutex);
-    for (size_t j=0;j<theMat->GetNumberOfElements();j++) {
+    for (std::size_t j=0;j<theMat->GetNumberOfElements();++j) {
       G4int iZ = theElementVector->at(j)->GetZasInt();
       if (!fLogAtomicCrossSection[iZ]) {
 	lock.lock();
@@ -819,7 +817,7 @@ void G4PenelopeRayleighModelMI::SampleSecondaries(std::vector<G4DynamicParticle*
     } while(loopAgain);
   }
   else { //larger momentum transfer
-    size_t nData = theDataTable->GetNumberOfStoredPoints();
+    std::size_t nData = theDataTable->GetNumberOfStoredPoints();
     G4double LastQ2inTheTable = theDataTable->GetX(nData-1);
     G4double q2max = std::min(qmax*qmax,LastQ2inTheTable);
 
@@ -895,7 +893,7 @@ void G4PenelopeRayleighModelMI::ReadDataFile(const G4int Z)
   }
   
   G4int readZ = 0;
-  size_t nPoints = 0;
+  std::size_t nPoints = 0;
   file >> readZ >> nPoints;
   
   if (readZ != Z || nPoints <= 0 || nPoints >= 5000) {
@@ -906,9 +904,9 @@ void G4PenelopeRayleighModelMI::ReadDataFile(const G4int Z)
     return;
   }
   
-  fLogAtomicCrossSection[Z] = new G4PhysicsFreeVector((size_t)nPoints);
+  fLogAtomicCrossSection[Z] = new G4PhysicsFreeVector((std::size_t)nPoints);
   G4double ene=0,f1=0,f2=0,xs=0;
-  for (size_t i=0;i<nPoints;i++) {
+  for (std::size_t i=0;i<nPoints;++i) {
     file >> ene >> f1 >> f2 >> xs;
     //dimensional quantities
     ene *= eV;
@@ -941,7 +939,7 @@ void G4PenelopeRayleighModelMI::ReadDataFile(const G4int Z)
   }
   G4double qext = 0;
   if (fillQGrid) {	//fLogQSquareGrid filled only one time
-    for (size_t i=0;i<nPoints;i++) {
+    for (std::size_t i=0;i<nPoints;++i) {
       file >> qext;		
       fLogQSquareGrid.push_back(2.0*G4Log(qext));
     }
@@ -972,9 +970,9 @@ void G4PenelopeRayleighModelMI::ReadDataFile(const G4int Z)
     return;
   }
   
-  fAtomicFormFactor[Z] = new G4PhysicsFreeVector((size_t)nPoints);
+  fAtomicFormFactor[Z] = new G4PhysicsFreeVector((std::size_t)nPoints);
   G4double q=0,ff=0,incoh=0;  
-  for (size_t i=0;i<nPoints;i++) {
+  for (std::size_t i=0;i<nPoints;++i) {
     file >> q >> ff >> incoh;	//q and ff are dimensionless (q is in units of (m_e*c))		
     fAtomicFormFactor[Z]->PutValue(i,q,ff);
     if (file.eof() && i != (nPoints-1)) { //file ended too early
@@ -1035,7 +1033,7 @@ void G4PenelopeRayleighModelMI::ReadMolInterferenceData(const G4String& matname,
     }
     
     //check the number of points in the file
-    size_t nPoints = 0;
+    std::size_t nPoints = 0;
     G4double x=0,y=0;
     while (file.good()) {
       file >> x >> y;
@@ -1048,9 +1046,9 @@ void G4PenelopeRayleighModelMI::ReadMolInterferenceData(const G4String& matname,
     
     //read the file
     file.open(ostIMFF.str().c_str());  
-    G4PhysicsFreeVector* theFFVec = new G4PhysicsFreeVector((size_t)nPoints);
+    G4PhysicsFreeVector* theFFVec = new G4PhysicsFreeVector((std::size_t)nPoints);
     G4double q=0,ff=0;
-    for (size_t i=0; i<nPoints; i++) {
+    for (std::size_t i=0; i<nPoints; ++i) {
       file >> q >> ff;
       
       //q and ff are dimensionless (q is in units of (m_e*c))
@@ -1127,8 +1125,8 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
 {
   G4double q2min = 0;
   G4double q2max = 0;
-  const size_t np = 150; //hard-coded in Penelope
-  for (size_t i=1;i<fLogQSquareGrid.size();i++)
+  const std::size_t np = 150; //hard-coded in Penelope
+  for (std::size_t i=1;i<fLogQSquareGrid.size();++i)
     {
       G4double Q2 = G4Exp(fLogQSquareGrid[i]);
       if (GetFSquared(mat,Q2) >  1e-35)
@@ -1136,7 +1134,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
 	  q2max = G4Exp(fLogQSquareGrid[i-1]);
 	}
     }
-  size_t nReducedPoints = np/4;
+  std::size_t nReducedPoints = np/4;
 
   //check for errors
   if (np < 16)
@@ -1162,12 +1160,12 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
   /*******************************************************************************
     Start with a grid of NUNIF points uniformly spaced in the interval q2min,q2max
   ********************************************************************************/
-  size_t NUNIF = std::min(std::max(((size_t)8),nReducedPoints),np/2);
+  std::size_t NUNIF = std::min(std::max(((std::size_t)8),nReducedPoints),np/2);
   const G4int nip = 51; //hard-coded in Penelope
 
   G4double dx = (q2max-q2min)/((G4double) NUNIF-1);
   x->push_back(q2min);
-  for (size_t i=1;i<NUNIF-1;i++)
+  for (std::size_t i=1;i<NUNIF-1;++i)
     {
       G4double app = q2min + i*dx;
       x->push_back(app); //increase
@@ -1184,7 +1182,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
   G4DataVector* c = new G4DataVector();
   G4DataVector* err = new G4DataVector();
 
-  for (size_t i=0;i<NUNIF-1;i++) //build all points but the last
+  for (std::size_t i=0;i<NUNIF-1;++i) //build all points but the last
     {
       //Temporary vectors for this loop
       G4DataVector* pdfi = new G4DataVector();
@@ -1222,7 +1220,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
       area->push_back(lastIntegral);
       //Normalize cumulative function
       G4double factor = 1.0/lastIntegral;
-      for (size_t k=0;k<sumi->size();k++)
+      for (std::size_t k=0;k<sumi->size();++k)
 	(*sumi)[k] *= factor;
 
       //When the PDF vanishes at one of the interval end points, its value is modified
@@ -1310,8 +1308,8 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
   do
     {
       G4double maxError = 0.0;
-      size_t iErrMax = 0;
-      for (size_t i=0;i<err->size()-2;i++)
+      std::size_t iErrMax = 0;
+      for (std::size_t i=0;i<err->size()-2;++i)
 	{
 	  //maxError is the lagest of the interval errors err[i]
 	  if ((*err)[i] > maxError)
@@ -1333,7 +1331,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
       err->insert(err->begin()+iErrMax+1,0.);
 
       //Now calculate the other parameters
-      for (size_t i=iErrMax;i<=iErrMax+1;i++)
+      for (std::size_t i=iErrMax;i<=iErrMax+1;++i)
 	{
 	  //Temporary vectors for this loop
 	  G4DataVector* pdfi = new G4DataVector();
@@ -1372,7 +1370,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
 
 	  //Normalize cumulative function
 	  G4double factor = 1.0/lastIntegral;
-	  for (size_t k=0;k<sumi->size();k++)
+	  for (std::size_t k=0;k<sumi->size();++k)
 	    (*sumi)[k] *= factor;
 
 	  //When the PDF vanishes at one of the interval end points, its value is modified
@@ -1446,11 +1444,11 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
    Renormalization
   ********************************************************************************/
   G4double ws = 0;
-  for (size_t i=0;i<np-1;i++)
+  for (std::size_t i=0;i<np-1;++i)
     ws += (*area)[i];
   ws = 1.0/ws;
   G4double errMax = 0;
-  for (size_t i=0;i<np-1;i++)
+  for (std::size_t i=0;i<np-1;++i)
     {
       (*area)[i] *= ws;
       (*err)[i] *= ws;
@@ -1460,7 +1458,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
   //Vector with the normalized cumulative distribution
   G4DataVector* PAC = new G4DataVector();
   PAC->push_back(0.);
-  for (size_t i=0;i<np-1;i++)
+  for (std::size_t i=0;i<np-1;++i)
     {
       G4double previous = (*PAC)[i];
       PAC->push_back(previous+(*area)[i]);
@@ -1470,11 +1468,11 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
   /*******************************************************************************
   Pre-calculated limits for the initial binary search for subsequent sampling
   ********************************************************************************/
-  std::vector<size_t> *ITTL = new std::vector<size_t>;
-  std::vector<size_t> *ITTU = new std::vector<size_t>;
+  std::vector<std::size_t> *ITTL = new std::vector<std::size_t>;
+  std::vector<std::size_t> *ITTU = new std::vector<std::size_t>;
 
   //Just create place-holders
-  for (size_t i=0;i<np;i++)
+  for (std::size_t i=0;i<np;++i)
     {
       ITTL->push_back(0);
       ITTU->push_back(0);
@@ -1482,11 +1480,11 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
 
   G4double bin = 1.0/(np-1);
   (*ITTL)[0]=0;
-  for (size_t i=1;i<(np-1);i++)
+  for (std::size_t i=1;i<(np-1);++i)
     {
       G4double ptst = i*bin;
       G4bool found = false;
-      for (size_t j=(*ITTL)[i-1];j<np && !found;j++)
+      for (std::size_t j=(*ITTL)[i-1];j<np && !found;++j)
 	{
 	  if ((*PAC)[j] > ptst)
 	    {
@@ -1511,7 +1509,7 @@ void G4PenelopeRayleighModelMI::InitializeSamplingAlgorithm(const G4Material* ma
     Copy tables
   ********************************************************************************/
   G4PenelopeSamplingData* theTable = new G4PenelopeSamplingData(np);
-  for (size_t i=0;i<np;i++)
+  for (std::size_t i=0;i<np;++i)
     {
       theTable->AddPoint((*x)[i],(*PAC)[i],(*a)[i],(*b)[i],(*ITTL)[i],(*ITTU)[i]);
     }
@@ -1575,13 +1573,13 @@ void G4PenelopeRayleighModelMI::GetPMaxTable(const G4Material* mat)
     }
 
   G4PenelopeSamplingData *theTable = fSamplingTable->find(mat)->second;
-  size_t tablePoints = theTable->GetNumberOfStoredPoints();
-  size_t nOfEnergyPoints = fLogEnergyGridPMax.size();
+  std::size_t tablePoints = theTable->GetNumberOfStoredPoints();
+  std::size_t nOfEnergyPoints = fLogEnergyGridPMax.size();
   G4PhysicsFreeVector* theVec = new G4PhysicsFreeVector(nOfEnergyPoints);
 
-  const size_t nip = 51; //hard-coded in Penelope
+  const std::size_t nip = 51; //hard-coded in Penelope
 
-  for (size_t ie=0;ie<fLogEnergyGridPMax.size();ie++)
+  for (std::size_t ie=0;ie<fLogEnergyGridPMax.size();++ie)
     {
       G4double energy = G4Exp(fLogEnergyGridPMax[ie]);
       G4double Qm = 2.0*energy/electron_mass_c2; //this is non-dimensional now
@@ -1595,11 +1593,11 @@ void G4PenelopeRayleighModelMI::GetPMaxTable(const G4Material* mat)
 	  if (Qm2 < lastQ2)
 	    {
 	      //bisection to look for the index of Qm
-	      size_t lowerBound = 0;
-	      size_t upperBound = tablePoints-1;
+	      std::size_t lowerBound = 0;
+	      std::size_t upperBound = tablePoints-1;
 	      while (lowerBound <= upperBound)
 		{
-		  size_t midBin = (lowerBound + upperBound)/2;
+		  std::size_t midBin = (lowerBound + upperBound)/2;
 		  if( Qm2 < theTable->GetX(midBin))
 		    { upperBound = midBin-1; }
 		  else
@@ -1613,7 +1611,7 @@ void G4PenelopeRayleighModelMI::GetPMaxTable(const G4Material* mat)
 	      G4double theB = theTable->GetB(upperBound);
 	      G4double thePAC = theTable->GetPAC(upperBound);
 	      G4DataVector* fun = new G4DataVector();
-	      for (size_t k=0;k<nip;k++)
+	      for (std::size_t k=0;k<nip;++k)
 		{
 		  G4double qi = Q1 + k*DQ;
 		  G4double tau = (qi-Q1)/
@@ -1639,7 +1637,7 @@ void G4PenelopeRayleighModelMI::GetPMaxTable(const G4Material* mat)
 	      G4double secondPoint = (*sum)[0] +
 		(5.0*(*fun)[0]+8.0*(*fun)[1]-(*fun)[2])*CONS;
 	      sum->push_back(secondPoint);
-	      for (size_t hh=2;hh<nip-1;hh++)
+	      for (std::size_t hh=2;hh<nip-1;++hh)
 		{
 		  G4double previous = (*sum)[hh-1];
 		  G4double next = previous+(13.0*((*fun)[hh-1]+(*fun)[hh])-
@@ -1684,7 +1682,7 @@ void G4PenelopeRayleighModelMI::DumpFormFactorTable(const G4Material* mat)
     BuildFormFactorTable(mat);
 
   G4PhysicsFreeVector* theVec = fLogFormFactorTable->find(mat)->second;
-  for (size_t i=0;i<theVec->GetVectorLength();i++)
+  for (std::size_t i=0;i<theVec->GetVectorLength();++i)
     {
       G4double logQ2 = theVec->GetLowEdgeEnergy(i);
       G4double Q = G4Exp(0.5*logQ2);

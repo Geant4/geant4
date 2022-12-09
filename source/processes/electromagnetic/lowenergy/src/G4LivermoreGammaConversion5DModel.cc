@@ -110,15 +110,15 @@ G4LivermoreGammaConversion5DModel::Initialise( const G4ParticleDefinition* parti
      const char* path = G4FindDataDir("G4LEDATA");
      G4ProductionCutsTable* theCoupleTable =
        G4ProductionCutsTable::GetProductionCutsTable();
-     G4int numOfCouples = theCoupleTable->GetTableSize();
+     G4int numOfCouples = G4int(theCoupleTable->GetTableSize());
      for(G4int i=0; i<numOfCouples; ++i) 
        {
 	 const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
 	 SetCurrentCouple(couple);
 	 const G4Material* mat = couple->GetMaterial();
 	 const G4ElementVector* theElementVector = mat->GetElementVector();
-	 G4int nelm = mat->GetNumberOfElements();
-	 for (G4int j=0; j<nelm; ++j) 
+	 std::size_t nelm = mat->GetNumberOfElements();
+	 for (std::size_t j=0; j<nelm; ++j) 
 	   {
 	     G4int Z = std::max(1, std::min((*theElementVector)[j]->GetZasInt(), maxZ));
 	     if(!data[Z]) { ReadData(Z, path); }
@@ -168,7 +168,7 @@ void G4LivermoreGammaConversion5DModel::ReadData(size_t Z, const char* path)
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermoreGammaConversion5DModel::ReadData()",
 		"em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   }   
   else 

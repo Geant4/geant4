@@ -38,24 +38,24 @@ class G4HumanPhantomColour
 { 
 public:
   G4HumanPhantomColour();
-  ~G4HumanPhantomColour();
+  ~G4HumanPhantomColour()=default;
 
 public:
   //void  DefineColour();
   G4Colour GetColour(const G4String&); //returns the colour
 
 private:
-  G4Colour white;
-  G4Colour pink;
-  G4Colour grey;
-  G4Colour yellow;
-  G4Colour blue;
-  G4Colour lightBlue;
-  G4Colour green;
-  G4Colour brown;
-  G4Colour purple;
-  G4Colour red;
-  G4Colour orange;
-  G4Colour black;
+  G4Colour fWhite;
+  G4Colour fPink;
+  G4Colour fGrey;
+  G4Colour fYellow;
+  G4Colour fBlue;
+  G4Colour fLightBlue;
+  G4Colour fGreen;
+  G4Colour fBrown;
+  G4Colour fPurple;
+  G4Colour fRed;
+  G4Colour fOrange;
+  G4Colour fBlack;
 };
 #endif

@@ -45,7 +45,8 @@ class SteppingAction : public G4UserSteppingAction
   virtual void UserSteppingAction(const G4Step*);
 
  private:
-  G4int fVerbose;
+  G4int fVerbose = 0;
+  size_t fIdxVelocity = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

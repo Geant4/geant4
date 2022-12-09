@@ -459,7 +459,6 @@ void G4UnitDefinition::ClearUnitsTable()
 
 G4UnitsCategory::G4UnitsCategory(const G4String& name)
   : Name(name)
-  , UnitsList()
 {}
 
 // --------------------------------------------------------------------
@@ -592,7 +591,7 @@ std::ostream& operator<<(std::ostream& flux, const G4BestUnit& a)
   G4UnitsContainer& List = theUnitsTable[a.IndexOfCategory]->GetUnitsList();
   G4int len              = theUnitsTable[a.IndexOfCategory]->GetSymbMxLen();
 
-  G4int ksup(-1), kinf(-1);
+  G4long ksup(-1), kinf(-1);
   G4double umax(0.), umin(DBL_MAX);
   G4double rsup(DBL_MAX), rinf(0.);
 
@@ -649,7 +648,7 @@ std::ostream& operator<<(std::ostream& flux, const G4BestUnit& a)
     }
   }
 
-  G4int index = ksup;
+  G4long index = ksup;
   if(index == -1)
   {
     index = kinf;

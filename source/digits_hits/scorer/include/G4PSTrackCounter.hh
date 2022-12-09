@@ -47,36 +47,27 @@
 
 class G4PSTrackCounter : public G4VPrimitivePlotter
 {
- public:  // with description
+ public: 
   G4PSTrackCounter(G4String name, G4int direction, G4int depth = 0);
-
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
- public:
-  virtual ~G4PSTrackCounter();
+  ~G4PSTrackCounter() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }
   // Multiply track weight
 
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-
- public:
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
 
- private:
-  G4int HCID;
-  G4int fDirection;
-  G4THitsMap<G4double>* EvtMap;
-  G4bool weighted;
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
- public:
+ private:
+  G4int HCID{-1};
+  G4int fDirection;
+  G4THitsMap<G4double>* EvtMap{nullptr};
+  G4bool weighted{false};
 };
 
 #endif

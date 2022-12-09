@@ -99,7 +99,9 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetVisAttributesModifiers() !=
        fVP.GetVisAttributesModifiers())                           ||
       (lastVP.IsSpecialMeshRendering() !=
-       fVP.IsSpecialMeshRendering())
+       fVP.IsSpecialMeshRendering())                              ||
+      (lastVP.GetSpecialMeshRenderingOption() !=
+       fVP.GetSpecialMeshRenderingOption())
       )
   return true;
   
@@ -117,6 +119,7 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
   /**************************************************************
    If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
+   if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
    for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)

@@ -31,10 +31,6 @@
 #include "G4VUserTrackInformation.hh"
 
 // --------------------------------------------------------------------
-G4VUserTrackInformation::G4VUserTrackInformation()
-{}
-
-// --------------------------------------------------------------------
 G4VUserTrackInformation::G4VUserTrackInformation(const G4String& infoType)
 {
   pType = new G4String(infoType);
@@ -43,8 +39,7 @@ G4VUserTrackInformation::G4VUserTrackInformation(const G4String& infoType)
 // --------------------------------------------------------------------
 G4VUserTrackInformation::~G4VUserTrackInformation()
 {
-  if(pType != nullptr)
-    delete pType;
+  delete pType;
 }
 
 // --------------------------------------------------------------------
@@ -61,9 +56,9 @@ G4VUserTrackInformation::operator=(const G4VUserTrackInformation& right)
 {
   if(this != &right)
   {
-    if(pType != nullptr)
-      delete pType;
-    if(right.pType)
+    delete pType;
+
+    if(right.pType != nullptr)
       pType = new G4String(*(right.pType));
     else
       pType = nullptr;
@@ -77,6 +72,5 @@ const G4String& G4VUserTrackInformation::GetType() const
   static const G4String NOTYPE = "NONE";
   if(pType != nullptr)
     return *pType;
-  else
-    return NOTYPE;
+  return NOTYPE;
 }

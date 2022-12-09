@@ -1119,7 +1119,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
       default:
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid." << G4endl
                 << "Position:" << G4endl
                 << "  p.x() = "   << p.x()/mm << " mm" << G4endl
@@ -1271,7 +1271,7 @@ G4VSolid* G4GenericTrap::Clone() const
 
 std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " *** \n"
      << "    =================================================== \n"
@@ -1621,7 +1621,7 @@ void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
 
   std::vector<G4ThreeVector> oldVertices(vertices);
 
-  for ( size_t i=0; i<oldVertices.size(); ++i )
+  for ( std::size_t i=0; i<oldVertices.size(); ++i )
   {
     vertices[i] = oldVertices[oldVertices.size()-1-i];
   }  
@@ -2029,7 +2029,7 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
   // Construct extra Points, if Twisted Side
   //
   G4Polyhedron* polyhedron;
-  size_t nVertices, nFacets;
+  G4int nVertices, nFacets;
 
   G4int subdivisions = 0;
   if (fIsTwisted)

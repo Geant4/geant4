@@ -5,6 +5,19 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-11-09 I. Hrivnacova (doxygen-V11-00-03)
+- Updated configuration files and generate_standalone.sh script
+- Added new extended example analysis/AnaEx03
+
+## 2022-10-25 I.Hrivnacova (doxygen-V11-00-02)
+- Added new extended examples in documentation:
+  - hadronic/ParticleFluence
+  - medical/dna/jetcounter and moleculardna
+  - parameterisations/Par04
+
+## 2022-09-13 I.Hrivnacova (doxygen-V11-00-01)
+- Updated for modifications in errorpropagation example
+
 ## 2021-12-10 Ben Morgan (doxygen-V11-00-00)
 - Change to new Markdown History format
 

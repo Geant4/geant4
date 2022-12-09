@@ -28,7 +28,8 @@
 #include "G4RayTracerSceneHandler.hh"
 
 #include "G4VisManager.hh"
-#include "G4LogicalVolume.hh"
+
+#define G4warn G4cout
 
 G4int G4RayTracerSceneHandler::fSceneIdCount = 0;
 
@@ -99,7 +100,7 @@ void G4RayTracerSceneHandler::BuildVisAttsMap (const G4VSolid&)
     if (!pVisAtts) {
       // Shouldn't happen.
       if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings) {
-        G4cout <<
+        G4warn <<
         "WARNING: G4RayTracerSceneHandler::BuildVisAttsMap: null vis atts pointer."
         "\n  Using a default vis atts."
         << G4endl;

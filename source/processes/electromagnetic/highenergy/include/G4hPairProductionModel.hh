@@ -60,7 +60,7 @@ public:
   explicit G4hPairProductionModel(const G4ParticleDefinition* p = nullptr,
 			 const G4String& nam = "hPairProd");
 
-  ~G4hPairProductionModel() override;
+  ~G4hPairProductionModel() = default;
 
   // hide assignment operator
   G4hPairProductionModel & 

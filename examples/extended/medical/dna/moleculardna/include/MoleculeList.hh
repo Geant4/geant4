@@ -51,9 +51,9 @@ namespace utility
 {
   using namespace G4::hashing;
   // Larson: works for the given set of words and is the fastest
-#define CT_HASHER(x) larson::cthash(x)
+#define CT_HASHER(x) larson::Cthash(x)
 #define DEFINE_HASHER
-#define RT_HASHER(x) larson::hash(x)
+#define RT_HASHER(x) larson::Hash(x)
 
   // Default
   //#define CT_HASHER(x) "x"_hash
@@ -76,12 +76,12 @@ namespace utility
   //#define DEFINE_HASHER G4ThreadLocalStatic std::hash<std::string> stdhasher;
   //#define RT_HASHER(x) stdhasher(x)
 
-  static constexpr size_t sugar_h = CT_HASHER("SUGAR");
-  static constexpr size_t p_h     = CT_HASHER("PHOSPHATE");
-  static constexpr size_t a_h     = CT_HASHER("ADENINE");
-  static constexpr size_t g_h     = CT_HASHER("GUANINE");
-  static constexpr size_t t_h     = CT_HASHER("THYMINE");
-  static constexpr size_t c_h     = CT_HASHER("CYTOSINE");
+  static constexpr size_t fSugar_h = CT_HASHER("SUGAR");
+  static constexpr size_t fP_h     = CT_HASHER("PHOSPHATE");
+  static constexpr size_t fA_h     = CT_HASHER("ADENINE");
+  static constexpr size_t fG_h     = CT_HASHER("GUANINE");
+  static constexpr size_t fT_h     = CT_HASHER("THYMINE");
+  static constexpr size_t fC_h     = CT_HASHER("CYTOSINE");
 
   inline ::molecule GetMoleculeEnum(const G4String& mol)
   {
@@ -93,22 +93,22 @@ namespace utility
 
     switch(mol_h)
     {
-      case sugar_h:
+      case fSugar_h:
         //          G4cout << "RETURN SUGAR FOR : " << mol << G4endl;
         return SUGAR;
-      case p_h:
+      case fP_h:
         //          G4cout << "RETURN P FOR : " << mol << G4endl;
         return PHOSPHATE;
-      case a_h:
+      case fA_h:
         //          G4cout << "RETURN A FOR : " << mol << G4endl;
         return ADENINE;
-      case g_h:
+      case fG_h:
         //          G4cout << "RETURN G FOR : " << mol << G4endl;
         return GUANINE;
-      case c_h:
+      case fC_h:
         //          G4cout << "RETURN C FOR : " << mol << G4endl;
         return CYTOSINE;
-      case t_h:
+      case fT_h:
         //          G4cout << "RETURN T FOR : " << mol << G4endl;
         return THYMINE;
       default:

@@ -106,7 +106,7 @@ G4UPara::G4UPara( const G4String& pName,
     if (discrepancy > 0.1*kCarTolerance)
     {
       std::ostringstream message;
-      G4int oldprc = message.precision(16);
+      G4long oldprc = message.precision(16);
       message << "Invalid vertice coordinates for Solid: " << GetName()
               << "\nVertix #" << i << ", discrepancy = " << discrepancy
               << "\n  original   : " << pt[i]

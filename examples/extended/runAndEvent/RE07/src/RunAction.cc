@@ -32,20 +32,18 @@
 
 #include "RunAction.hh"
 
-#include "DetectorConstruction.hh"
 #include "G4RunManager.hh"
 #include "G4Timer.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "Randomize.hh"
+
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : G4UserRunAction()
-  , fDetector(det)
-  , fPrimary(prim)
-  , fRun(nullptr)
+  : G4UserRunAction(), fDetector(det), fPrimary(prim), fRun(nullptr)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,16 +59,13 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   // keep run condition
-  if(fPrimary)
-  {
-    G4ParticleDefinition* particle =
-      fPrimary->GetParticleGun()->GetParticleDefinition();
+  if (fPrimary) {
+    G4ParticleDefinition* particle = fPrimary->GetParticleGun()->GetParticleDefinition();
     G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
     fRun->SetPrimary(particle, energy);
   }
 
-  if(isMaster)
-  {
+  if (isMaster) {
     fTimer.Start();
   }
 }
@@ -80,15 +75,11 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   // compute and print statistic
-  if(isMaster)
-  {
+  if (isMaster) {
     fTimer.Stop();
-    if(!((G4RunManager::GetRunManager()->GetRunManagerType() ==
-          G4RunManager::sequentialRM)))
-    {
+    if (! ((G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM))) {
       G4cout << "\n"
-             << "Total number of events:  " << fRun->GetNumberOfEvent()
-             << G4endl;
+             << "Total number of events:  " << fRun->GetNumberOfEvent() << G4endl;
       G4cout << "Master thread time:  " << fTimer << G4endl;
     }
     fRun->EndOfRun();

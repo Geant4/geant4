@@ -41,6 +41,8 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4UnitsTable.hh"
 
+#define G4warn G4cout
+
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
   fpDefaultVisAttributes (0),
@@ -117,12 +119,12 @@ G4ModelingParameters::~G4ModelingParameters ()
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
   if (visibleDensity < 0 && fWarning) {
-    G4cout << "G4ModelingParameters::SetVisibleDensity: attempt to set negative "
+    G4warn << "G4ModelingParameters::SetVisibleDensity: attempt to set negative "
       "density - ignored." << G4endl;
   }
   else {
     if (fVisibleDensity > reasonableMaximum && fWarning) {
-      G4cout << "G4ModelingParameters::SetVisibleDensity: density > "
+      G4warn << "G4ModelingParameters::SetVisibleDensity: density > "
 	   << reasonableMaximum
 	   << " g / cm3 - did you mean this?"
 	   << G4endl;
@@ -136,7 +138,7 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     if (fWarning)
-      G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
+      G4warn << "G4ModelingParameters::SetNoOfSides: attempt to set the"
 	"\nnumber of sides per circle < " << nSidesMin
 	     << "; forced to" << nSides << G4endl;
   }

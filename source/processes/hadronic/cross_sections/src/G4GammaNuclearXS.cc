@@ -235,7 +235,7 @@ G4double G4GammaNuclearXS::GetIsoCrossSection(
 const G4Isotope* G4GammaNuclearXS::SelectIsotope(
        const G4Element* anElement, G4double kinEnergy, G4double)
 {
-  size_t nIso = anElement->GetNumberOfIsotopes();
+  std::size_t nIso = anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
 
   if(1 == nIso) { return iso; }
@@ -243,12 +243,12 @@ const G4Isotope* G4GammaNuclearXS::SelectIsotope(
   const G4double* abundVector = anElement->GetRelativeAbundanceVector();
   G4double q = G4UniformRand();
   G4double sum = 0.0;
-  size_t j;
+  G4int j;
   G4int Z = anElement->GetZasInt();
 
   // condition to use only isotope abundance
   if(amax[Z] == amin[Z] || kinEnergy > rTransitionBound || Z >= MAXZGAMMAXS ) {
-    for (j=0; j<nIso; ++j) {
+    for (j=0; j<(G4int)nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
 	iso = anElement->GetIsotope(j);
@@ -258,10 +258,10 @@ const G4Isotope* G4GammaNuclearXS::SelectIsotope(
     return iso;
   }
   // use isotope cross sections
-  size_t nn = temp.size();
+  std::size_t nn = temp.size();
   if(nn < nIso) { temp.resize(nIso, 0.); }
   
-  for (j=0; j<nIso; ++j) {
+  for (j=0; j<(G4int)nIso; ++j) {
     //G4cout << j << "-th isotope " << (*isoVector)[j]->GetN() 
     //       <<  " abund= " << abundVector[j] << G4endl;
     sum += abundVector[j]*
@@ -269,7 +269,7 @@ const G4Isotope* G4GammaNuclearXS::SelectIsotope(
     temp[j] = sum;
   }
   sum *= q;
-  for (j = 0; j<nIso; ++j) {
+  for (j = 0; j<(G4int)nIso; ++j) {
     if(temp[j] >= sum) {
       iso = anElement->GetIsotope(j);
       break;
@@ -321,9 +321,9 @@ G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 
     // prepare isotope selection
-  size_t nIso = temp.size();
+  std::size_t nIso = temp.size();
   for ( auto & elm : *table ) {
-    size_t n = elm->GetNumberOfIsotopes();
+    std::size_t n = elm->GetNumberOfIsotopes();
     if(n > nIso) { nIso = n; }
   }
   temp.resize(nIso, 0.0);   
@@ -380,7 +380,7 @@ void G4GammaNuclearXS::Initialise(G4int Z)
   G4DynamicParticle theGamma(gamma, G4ThreeVector(1,0,0), rTransitionBound);
   xs150[Z] = ggXsection->GetElementCrossSection(&theGamma, Z, 0);
   if(amax[Z] > amin[Z]) {
-    size_t nmax = (size_t)(amax[Z]-amin[Z]+1);
+    G4int nmax = amax[Z]-amin[Z]+1;
     data->InitialiseForComponent(Z, nmax);
     for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
       std::ostringstream ost1;

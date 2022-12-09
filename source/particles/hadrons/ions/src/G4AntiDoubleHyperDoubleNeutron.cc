@@ -47,7 +47,7 @@ G4AntiDoubleHyperDoubleNeutron* G4AntiDoubleHyperDoubleNeutron::Definition() {
   const G4String name = "anti_doublehyperdoubleneutron";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast< G4Ions* >( pTable->FindParticle( name ) );
+  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -85,8 +85,10 @@ G4AntiDoubleHyperDoubleNeutron* G4AntiDoubleHyperDoubleNeutron::Definition() {
     mode[2] = new G4PhaseSpaceDecayChannel( "anti_doublehyperdoubleneutron", br_lambda_to_n_piz, 5,
                                             "anti_neutron", "anti_neutron", "anti_lambda", "anti_neutron", "pi0" );
     for ( G4int index = 0; index < 3; ++index ) table->Insert( mode[index] );
+    delete [] mode;
+    anInstance->SetDecayTable( table );
   }
-  theInstance = reinterpret_cast< G4AntiDoubleHyperDoubleNeutron* >( anInstance );
+  theInstance = static_cast< G4AntiDoubleHyperDoubleNeutron* >( anInstance );
   return theInstance;
 }
 

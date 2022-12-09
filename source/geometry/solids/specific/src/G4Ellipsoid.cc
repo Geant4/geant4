@@ -342,7 +342,7 @@ G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
   {
 #ifdef G4SPECSDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << "\n";
     message << "Position:\n";
@@ -542,7 +542,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
   {
 #ifdef G4SPECSDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is outside (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:  " << p << G4endl;;
@@ -659,7 +659,7 @@ G4VSolid* G4Ellipsoid::Clone() const
 
 std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

@@ -163,6 +163,15 @@ void G4DNAPTBExcitationModel::Initialise(const G4ParticleDefinition* particle,
                             scaleFactor*33./50);
         SetLowELimit("backbone_TMP", particleName, 9.*eV);
         SetHighELimit("backbone_TMP", particleName, 1.*keV);
+
+        // MPietrzak, adding paths for N2
+        AddCrossSectionData("N2",
+            particleName,
+            "dna/sigma_excitation_e-_PTB_N2",
+            scaleFactor);
+        SetLowELimit("N2", particleName, 13.*eV);
+        SetHighELimit("N2", particleName, 1.02*MeV);
+        // MPietrzak
     }
 
     //*******************************************************
@@ -233,7 +242,7 @@ G4double G4DNAPTBExcitationModel::CrossSectionPerVolume(const G4Material* /*mate
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAPTBExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
+void G4DNAPTBExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
                                                 const G4MaterialCutsCouple* /*couple*/,
                                                 const G4String& materialName,
                                                 const G4DynamicParticle* aDynamicParticle,
@@ -246,42 +255,90 @@ void G4DNAPTBExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
     // Get the incident particle kinetic energy
     G4double k = aDynamicParticle->GetKineticEnergy();
+    //Get the particle name
+    const G4String& particleName = aDynamicParticle->GetDefinition()->GetParticleName();
+    // Get the energy limits
+    G4double lowLim = GetLowELimit(materialName, particleName);
+    G4double highLim = GetHighELimit(materialName, particleName);
 
-    if(materialName!="G4_WATER")
+    // Check if we are in the correct energy range
+    if (k >= lowLim && k < highLim)
     {
-        // Retrieve the excitation energy for the current material
-        G4double excitationEnergy = tableMeanEnergyPTB[materialName];
-
-        // Calculate the new energy of the particle
-        G4double newEnergy = k - excitationEnergy;
-
-        // Check that the new energy is above zero before applying it the particle.
-        // Otherwise, do nothing.
-        if (newEnergy > 0)
+        if(materialName=="N2")
         {
-            particleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
-            particleChangeForGamma->SetProposedKineticEnergy(newEnergy);
-            particleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+
+            // Retrieve the excitation energy for the current material
+            G4int level = RandomSelectShell(k,particleName,materialName);
+            G4double excitationEnergy = ptbExcitationStructure.ExcitationEnergy(level, materialName);
+
+            // Calculate the new energy of the particle
+            G4double newEnergy = k - excitationEnergy;
+
+            // Check that the new energy is above zero before applying it the particle.
+            // Otherwise, do nothing.
+            if (newEnergy > 0)
+            {
+                particleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
+                particleChangeForGamma->SetProposedKineticEnergy(newEnergy);
+                particleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+                G4double ioniThres = ptbIonisationStructure.IonisationEnergy(0,materialName);
+                // if excitation energy greater than ionisation threshold, then autoionisaiton
+                if((excitationEnergy>ioniThres)&&(G4UniformRand()<0.5))
+                {
+                    particleChangeForGamma->ProposeLocalEnergyDeposit(ioniThres);
+                    // energy of ejected electron
+                    G4double secondaryKinetic = excitationEnergy - ioniThres;
+                    // random direction
+                    G4double cosTheta = 2*G4UniformRand() - 1., phi = CLHEP::twopi*G4UniformRand();
+                    G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
+                    G4double ux = sinTheta*std::cos(phi),
+                    uy = sinTheta*std::sin(phi),
+                    uz = cosTheta;
+                    G4ThreeVector deltaDirection(ux,uy,uz);
+                    // Create the new particle with its characteristics
+                    G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
+                    fvect->push_back(dp);
+                }
+            } else {
+                G4ExceptionDescription description;
+                description<<"Kinetic energy <= 0 at "<<materialName<<" material !!!";
+                G4Exception("G4DNAPTBExcitationModel::SampleSecondaries","",FatalException,description);
+            }     
+        } else if(materialName!="G4_WATER"){
+            // Retrieve the excitation energy for the current material
+            G4double excitationEnergy = tableMeanEnergyPTB[materialName];
+            // Calculate the new energy of the particle
+            G4double newEnergy = k - excitationEnergy;
+            // Check that the new energy is above zero before applying it the particle.
+            // Otherwise, do nothing.
+            if (newEnergy > 0){
+                particleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
+                particleChangeForGamma->SetProposedKineticEnergy(newEnergy);
+                particleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+            } else {
+                G4ExceptionDescription description;
+                description<<"Kinetic energy <= 0 at "<<materialName<<" material !!!";
+                G4Exception("G4DNAPTBExcitationModel::SampleSecondaries","",FatalException,description);
+            }
+        } else {
+            G4int level = RandomSelectShell(k,particleName, materialName);
+            G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
+            G4double newEnergy = k - excitationEnergy;
+
+            if (newEnergy > 0){
+                particleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
+                particleChangeForGamma->SetProposedKineticEnergy(newEnergy);
+                particleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+                const G4Track * theIncomingTrack = particleChangeForGamma->GetCurrentTrack();
+                G4DNAChemistryManager::Instance()->CreateWaterMolecule(eExcitedMolecule,
+                                                                level,
+                                                                theIncomingTrack);
+            } else {
+                G4ExceptionDescription description;
+                description<<"Kinetic energy <= 0 at "<<materialName<<" material !!!";
+                G4Exception("G4DNAPTBExcitationModel::SampleSecondaries","",FatalException,description);
+            }
         }
     }
-    else
-    {
-        const G4String& particleName = aDynamicParticle->GetDefinition()->GetParticleName();
-
-        G4int level = RandomSelectShell(k,particleName, materialName);
-        G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
-        G4double newEnergy = k - excitationEnergy;
-
-        if (newEnergy > 0)
-        {
-            particleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
-            particleChangeForGamma->SetProposedKineticEnergy(newEnergy);
-            particleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
-        }
-
-        const G4Track * theIncomingTrack = particleChangeForGamma->GetCurrentTrack();
-        G4DNAChemistryManager::Instance()->CreateWaterMolecule(eExcitedMolecule,
-                                                               level,
-                                                               theIncomingTrack);
-    }
+    
 }

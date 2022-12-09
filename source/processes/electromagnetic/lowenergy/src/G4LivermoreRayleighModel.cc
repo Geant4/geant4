@@ -102,8 +102,8 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
     // Access to elements
     const char* path = G4FindDataDir("G4LEDATA");
     const G4ElementTable* elemTable = G4Element::GetElementTable();
-    size_t numElems                 = (*elemTable).size();
-    for(size_t ie = 0; ie < numElems; ++ie)
+    std::size_t numElems                 = (*elemTable).size();
+    for(std::size_t ie = 0; ie < numElems; ++ie)
     {
       const G4Element* elem = (*elemTable)[ie];
       const G4int Z         = std::min(maxZ, elem->GetZasInt());
@@ -128,7 +128,7 @@ void G4LivermoreRayleighModel::InitialiseLocal(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreRayleighModel::ReadData(size_t Z, const char* path)
+void G4LivermoreRayleighModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1) 
   {
@@ -168,7 +168,7 @@ void G4LivermoreRayleighModel::ReadData(size_t Z, const char* path)
     ed << "G4LivermoreRayleighModel data file <" << ostCS.str().c_str()
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermoreRayleighModel::ReadData()","em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   } 
   else 
@@ -211,7 +211,7 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
     if(nullptr == pv) { return xs; }
   }
 
-  G4int n = pv->GetVectorLength() - 1;
+  G4int n = G4int(pv->GetVectorLength() - 1);
   G4double e = GammaEnergy/MeV;
   if(e >= pv->Energy(n)) {
     xs = (*pv)[n]/(e*e);  

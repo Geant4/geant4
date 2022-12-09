@@ -24,11 +24,6 @@
 // ********************************************************************
 //
 
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 #include "G4AnalysisUtilities.hh"
 
 //_____________________________________________________________________________
@@ -53,7 +48,7 @@ G4int G4ToolsAnalysisReader::ReadTImpl(
     return G4Analysis::kInvalidId;
   }
 
-  auto id = htManager->RegisterT(static_cast<HT*>(ht), htName);
+  auto id = htManager->RegisterT(htName, static_cast<HT*>(ht));
 
   Message(G4Analysis::kVL2, "read", G4Analysis::GetHnType<HT>(), htName,
           id > G4Analysis::kInvalidId);
@@ -66,33 +61,33 @@ G4int G4ToolsAnalysisReader::ReadTImpl(
 inline
 tools::histo::h1d*  G4ToolsAnalysisReader::GetH1(G4int id, G4bool warn) const
 {
-  return fH1Manager->GetH1(id, warn, false);
+  return fH1Manager->GetT(id, warn, false);
 }
 
 //_____________________________________________________________________________
 inline
 tools::histo::h2d*  G4ToolsAnalysisReader::GetH2(G4int id, G4bool warn) const
 {
-  return fH2Manager->GetH2(id, warn, false);
+  return fH2Manager->GetT(id, warn, false);
 }
 
 //_____________________________________________________________________________
 inline
 tools::histo::h3d*  G4ToolsAnalysisReader::GetH3(G4int id, G4bool warn) const
 {
-  return fH3Manager->GetH3(id, warn, false);
+  return fH3Manager->GetT(id, warn, false);
 }
 
 //_____________________________________________________________________________
 inline
 tools::histo::p1d*  G4ToolsAnalysisReader::GetP1(G4int id, G4bool warn) const
 {
-  return fP1Manager->GetP1(id, warn, false);
+  return fP1Manager->GetT(id, warn, false);
 }
 
 //_____________________________________________________________________________
 inline
 tools::histo::p2d*  G4ToolsAnalysisReader::GetP2(G4int id, G4bool warn) const
 {
-  return fP2Manager->GetP2(id, warn, false);
+  return fP2Manager->GetT(id, warn, false);
 }

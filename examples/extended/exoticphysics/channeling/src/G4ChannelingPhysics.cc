@@ -38,6 +38,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4ProcessTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,6 +73,12 @@ void G4ChannelingPhysics::ConstructParticle(){
 
 void G4ChannelingPhysics::ConstructProcess()
 {
+  auto ptable = G4ProcessTable::GetProcessTable();
+  G4int verb = ptable->GetVerboseLevel();
+  ptable->SetVerboseLevel(2);
+  ptable->SetProcessActivation("CoulombScat", false);
+  ptable->SetVerboseLevel(verb);
+
     G4Channeling* channeling = new G4Channeling();
 
     G4ParticleTable::G4PTblDicIterator* aParticleIterator =

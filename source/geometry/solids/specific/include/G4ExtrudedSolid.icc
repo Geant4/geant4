@@ -29,12 +29,12 @@
 inline 
 G4int G4ExtrudedSolid::GetNofVertices() const
 {
-  return fNv;
+  return (G4int)fNv;
 }
 
 inline G4TwoVector G4ExtrudedSolid::GetVertex(G4int index) const
 {
-  if ( index<0 || index >= fNv )
+  if ( index<0 || index >= (G4int)fNv )
   {
     G4Exception ("G4ExtrudedSolid::GetVertex()", "GeomSolids0003",
                  FatalException, "Index outside range.");
@@ -52,13 +52,13 @@ std::vector<G4TwoVector> G4ExtrudedSolid::GetPolygon() const
 inline 
 G4int  G4ExtrudedSolid::GetNofZSections() const
 {
-  return fNz;
+  return (G4int)fNz;
 }
   
 inline 
 G4ExtrudedSolid::ZSection  G4ExtrudedSolid::GetZSection(G4int index) const
 {
-  if ( index<0 || index >= fNz )
+  if ( index<0 || index >= (G4int)fNz )
   {
     G4Exception ("G4ExtrudedSolid::GetZSection()", "GeomSolids0003",
                  FatalException, "Index outside range.");
@@ -78,7 +78,7 @@ G4bool G4ExtrudedSolid::PointInPolygon(const G4ThreeVector& p) const
 {
   G4bool in = 0;
   G4int icur = (fPolygon[fNv-1].y() > p.y()), iprev = 0;
-  for (G4int i = 0; i < fNv; ++i)
+  for (std::size_t i = 0; i < fNv; ++i)
   {
     iprev = icur;
     if ((icur = (fPolygon[i].y() > p.y())) != iprev)
@@ -93,7 +93,7 @@ inline
 G4double G4ExtrudedSolid::DistanceToPolygonSqr(const G4ThreeVector& p) const
 {
   G4double dd = DBL_MAX;
-  for (G4int i=0, k=fNv-1; i<fNv; k=i++)
+  for (std::size_t i=0, k=fNv-1; i<fNv; k=i++)
   {
     G4double ix = p.x() - fPolygon[i].x();
     G4double iy = p.y() - fPolygon[i].y();

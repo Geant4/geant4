@@ -72,7 +72,7 @@ G4DsMesonMinus* G4DsMesonMinus::Definition()
              false,           "Ds"
               );
   }
-  theInstance = reinterpret_cast<G4DsMesonMinus*>(anInstance);
+  theInstance = static_cast<G4DsMesonMinus*>(anInstance);
   return theInstance;
 }
 

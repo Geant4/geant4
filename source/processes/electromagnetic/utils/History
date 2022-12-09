@@ -1,9 +1,56 @@
 # Category emutils History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-23 Gabriele Cosmo (emutils-V11-00-38)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (emutils-V11-00-37)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-19 V.Ivanchenko (emutils-V11-00-36)
+- G4EmFluoDirectory - added new enumerator
+- G4EmParameters, G4EmLowEParameters, G4EmLowEParametersMessenger
+    introduced directory for the fluorescence data as a parameter,
+    added new UI command, improved information printout
+
+## 2022-10-07 V.Ivanchenko (emutils-V11-00-35)
+- G4VEnergyLossProcess - for ions compute effective charge
+    prestep and set this value to the model of energy loss
+    fluctuations
+- G4EmCalculator - update computation of ion dEdx (problem #2495);
+    added extra flag applySmoothing to enable/disable smoothing
+    algorithms to connect low-energy and high energy models;
+    code clean-up
+- G4LossTableManager - fix selection of energy loss process used
+    by G4EmCalculator
+
+## 2022-09-02 V.Ivanchenko (emutils-V11-00-34)
+- G4VMultipleScattering - removed two virtual calls
+- G4VMscModel - added Boolean flag "useSpline" and Set method
+    allowing to choose spline for transport x-section
+- G4EmParameterMessenger - restore forgotten UI command to set
+    number of bins per decade
+
+## 2022-08-25 V.Ivanchenko (emutils-V11-00-33)
+- G4EmExtraParameters - safe definition of StepFuction for the 
+    G4GenericIon, related to problem #2495
+
+## 2022-07-08 J.Apostolakis (emutils-V11-00-32)
+- Fix in `G4TransportationWithMsc`: StartTracking now calls 
+    corresponding method of G4Transportation (to initialise values
+    used for propagation in field.)
+
+## 2022-07-08 V.Ivanchenko (emutils-V11-00-31)
+- G4EmParameters, G4EmParametersMessenger - added extra boolean flag
+    for sampling of photoeffect below K-shell, which was introduced
+    in ATLAS
+- G4EmProcessSubType - added extra types for muon pair production
+    by muons and dark particles bremsstrahlung
 
 ## 2022-06-19 V.Ivanchenko (emutils-V11-00-30)
 - G4EmExtraParametersMessenger - fixed typo (problem #2492)

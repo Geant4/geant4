@@ -51,16 +51,15 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) return;
 
-   G4int nSecondaries = theResult.Get()->GetNumberOfSecondaries();
+   G4int nSecondaries = (G4int)theResult.Get()->GetNumberOfSecondaries();
 
    G4int sum_Z = 0;
    G4int sum_A = 0;
    G4int max_SecZ = 0;
    G4int max_SecA = 0;
    G4int imaxA = -1;
-   for ( int i = 0 ; i < nSecondaries ; i++ )
+   for ( G4int i = 0 ; i < nSecondaries ; ++i )
    {
-      //G4cout << "G4ParticleHPFinalState::adjust_final_state theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() = " << theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
       sum_Z += theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber();
       max_SecZ = std::max ( max_SecZ , theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() );
       sum_A += theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass();
@@ -101,14 +100,14 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
    G4bool needOneMoreSec = false;
    G4ParticleDefinition* oneMoreSec_pd = 0;
-   if ( (int)(baseZNew - sum_Z) == 0 && (int)(baseANew - sum_A) == 0 )
+   if ( (G4int)(baseZNew - sum_Z) == 0 && (G4int)(baseANew - sum_A) == 0 )
    {
       //All secondaries are already created;
       resi_pd = theResult.Get()->GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
    }
    else
    {
-      if ( max_SecA >= int(baseANew - sum_A) ) 
+      if ( max_SecA >= G4int(baseANew - sum_A) ) 
       {
          //Most heavy secondary is interpreted as residual
          resi_pd = theResult.Get()->GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
@@ -116,16 +115,19 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       }
       else 
       {
-         //creation of residual is requierd 
-	resi_pd = G4IonTable::GetIonTable()->GetIon ( int(baseZNew - sum_Z) , (int)(baseANew - sum_A) , 0.0 );
+         //creation of residual is required 
+	resi_pd = G4IonTable::GetIonTable()->GetIon ( G4int(baseZNew - sum_Z),
+                                                      G4int(baseANew - sum_A) , 0.0 );
       }
 
       if ( needOneMoreSec )
       {
-         if ( int(baseZNew - sum_Z) == 0 && (int)(baseANew - sum_A) > 0 )
+         if ( G4int(baseZNew - sum_Z) == 0 && G4int(baseANew - sum_A) > 0 )
          {
             //In this case, one neutron is added to secondaries 
-            if ( int(baseANew - sum_A) > 1 ) G4cout << "More than one neutron is required for the balance of baryon number!" << G4endl;
+            if ( G4int(baseANew - sum_A) > 1 )
+              G4cout << "More than one neutron is required for the balance of baryon number!"
+                     << G4endl;
             oneMoreSec_pd = G4Neutron::Neutron();
          }
          else 
@@ -133,7 +135,8 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 #ifdef G4PHPDEBUG
 	   if( std::getenv("G4ParticleHPDebug")) G4cout << this << "G4ParticleHPFinalState oneMoreSec_pd Z " << baseZNew << " - " << sum_Z << " A " << baseANew << " - " << sum_A << " projectile " << theProjectile->GetParticleName() << G4endl;
 #endif
-	   oneMoreSec_pd = G4IonTable::GetIonTable()->GetIon ( int(baseZNew - sum_Z) , (int)(baseANew - sum_A) , 0.0 );
+	   oneMoreSec_pd = G4IonTable::GetIonTable()->GetIon ( G4int(baseZNew - sum_Z),
+                                                               G4int(baseANew - sum_A) , 0.0 );
 	   if( !oneMoreSec_pd ) {
 	     G4cerr << this << "G4ParticleHPFinalState oneMoreSec_pd Z " << baseZNew << " - " << sum_Z << " A " << baseANew << " - " << sum_A << " projectile " << theProjectile->GetParticleName() << G4endl;
 	     G4Exception("G4ParticleHPFinalState:adjust_final_state",
@@ -169,10 +172,10 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 	  ndlANew += 4;
 	}
         // theNDLDataZ,A has the Z and A of used NDL file
-        if ( (int)(ndlZNew - sum_Z) == 0 && (int)(ndlANew - sum_A) == 0 )
+        if ( G4int(ndlZNew - sum_Z) == 0 && G4int(ndlANew - sum_A) == 0 )
         {
-           G4int dif_Z = ( int ) ( theNDLDataZ - theBaseZ );
-           G4int dif_A = ( int ) ( theNDLDataA - theBaseA );
+           G4int dif_Z = G4int( theNDLDataZ - theBaseZ );
+           G4int dif_A = G4int( theNDLDataA - theBaseA );
            resi_pd = G4IonTable::GetIonTable()->GetIon ( max_SecZ - dif_Z , max_SecA - dif_A , 0.0 );
 	   if( !resi_pd ) {
 	     G4cerr << "G4ParticleHPFinalState resi_pd Z " << max_SecZ << " - " << dif_Z << " A " << max_SecA << " - " << dif_A << " projectile " << theProjectile->GetParticleName() << G4endl;
@@ -183,7 +186,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 	     return;
 	   }
 
-           for ( int i = 0 ; i < nSecondaries ; i++ )
+           for ( G4int i = 0 ; i < nSecondaries ; ++i )
            {
               if ( theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() == max_SecZ  
                 && theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA )
@@ -198,25 +201,17 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       }
    }
 
-
    G4LorentzVector secs_4p_lab( 0.0 );
 
-   G4int n_sec = theResult.Get()->GetNumberOfSecondaries();
+   G4int n_sec = (G4int)theResult.Get()->GetNumberOfSecondaries();
    G4double fast = 0;
    G4double slow = 1;
    G4int ifast = 0;
    G4int islow = 0;
    G4int ires = -1;
 
-   for ( G4int i = 0 ; i < n_sec ; i++ )
+   for ( G4int i = 0 ; i < n_sec ; ++i )
    {
-
-      //G4cout << "HP_DB " << i 
-      //       << " " << theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() 
-      //       << " 4p " << theResult.GetSecondary( i )->GetParticle()->Get4Momentum() 
-      //       << " ke " << theResult.GetSecondary( i )->GetParticle()->Get4Momentum().e() - theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetPDGMass() 
-      //       << G4endl;
-
       secs_4p_lab += theResult.Get()->GetSecondary( i )->GetParticle()->Get4Momentum();
 
       G4double beta = 0;
@@ -246,28 +241,23 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          } 
          else
          {
-//          fast is already photon then check E
+            // fast is already photon then check E
             G4double e = theResult.Get()->GetSecondary( i )->GetParticle()->Get4Momentum().e();
             if ( e > theResult.Get()->GetSecondary( ifast )->GetParticle()->Get4Momentum().e() )   
             {
-//             among photons, the highest E becomes the fastest 
+               // among photons, the highest E becomes the fastest 
                ifast = i; 
             }
          } 
       }
    }
 
-
    G4LorentzVector dif_4p = init_4p_lab - secs_4p_lab;
-
-   //G4cout << "HP_DB dif_4p " << init_4p_lab - secs_4p_lab << G4endl;
-   //G4cout << "HP_DB dif_3p mag " << ( dif_4p.v() ).mag() << G4endl;
-   //G4cout << "HP_DB dif_e " << dif_4p.e() - ( dif_4p.v() ).mag()<< G4endl;
 
    G4LorentzVector p4(0);
    if ( ires == -1 ) 
    {
-//    Create and Add Residual Nucleus 
+      // Create and Add Residual Nucleus 
       ires = nSecondaries;
       nSecondaries += 1;
 
@@ -303,25 +293,17 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       dif_4p = init_4p_lab - ( secs_4p_lab + p4 );  
    }
 
-   //Which is bigger dif_p or dif_e
+   // Which is bigger dif_p or dif_e
 
    if ( dif_4p.v().mag() < std::abs( dif_4p.e() ) )
    {
-
       // Adjust p
-      //if ( dif_4p.v().mag() < 1*MeV )
       if ( minimum_energy < dif_4p.v().mag() && dif_4p.v().mag() < 1*MeV )
       {
 
          nSecondaries += 1;
-         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , dif_4p.v() ), secID );    
-
+         theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , dif_4p.v() ), secID );
       }
-      else
-      {
-         //G4cout << "HP_DB Difference in dif_p is too large (>1MeV) or too small(<1keV) to adjust, so that give up tuning" << G4endl;
-      }
-
    }
    else
    {
@@ -333,18 +315,14 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       p4 = theResult.Get()->GetSecondary( ires )->GetParticle()->Get4Momentum();
       theResult.Get()->GetSecondary( ires )->GetParticle()->SetMomentum( p4.v() + dif_4p.v() ); 
       dif_4p = init_4p_lab - ( secs_4p_lab - p4 + theResult.Get()->GetSecondary( ires )->GetParticle()->Get4Momentum()  );  
-
-      //G4cout << "HP_DB new residual kinetic energy " << theResult.GetSecondary( ires )->GetParticle()->GetKineticEnergy() << G4endl;
-
    }
 
    G4double dif_e = dif_4p.e() - ( dif_4p.v() ).mag();
-   //G4cout << "HP_DB dif_e " << dif_e << G4endl;
 
    if ( dif_e > 0 )
    {
 
-//    create 2 gamma 
+      // create 2 gamma 
 
       nSecondaries += 2;
       G4double e1 = ( dif_4p.e() -dif_4p.v().mag() ) / 2;
@@ -359,21 +337,13 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ),  secID );    
          theResult.Get()->AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ), secID );    
       }
-      else
-      {
-         //G4cout << "HP_DB Difference is too small(<1keV) to adjust, so that neglect it" << G4endl;
-      }
-
    }
-   else    //dif_e < 0
+   else    // dif_e < 0
    {
-
-//    At first reduce KE of the fastest secondary;
+      // At first reduce KE of the fastest secondary;
       G4double ke0 = theResult.Get()->GetSecondary( ifast )->GetParticle()->GetKineticEnergy();
       G4ThreeVector p0 = theResult.Get()->GetSecondary( ifast )->GetParticle()->GetMomentum();
       G4ThreeVector dir = ( theResult.Get()->GetSecondary( ifast )->GetParticle()->GetMomentum() ).unit();
-
-      //G4cout << "HP_DB ifast " << ifast << " ke0 " << ke0 << G4endl;
 
       if ( ke0 + dif_e > 0 )
       {
@@ -384,12 +354,5 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          //theResult.GetSecondary( islow )->GetParticle()->SetMomentum( p - dif_e*dir ); 
          theResult.Get()->GetSecondary( islow )->GetParticle()->SetMomentum( p + dp ); 
       }
-      else
-      {
-         //G4cout << "HP_DB Difference in dif_e too large ( <0MeV ) to adjust, so that give up tuning" << G4endl;
-      }
-
    }
-
 }
-

@@ -452,9 +452,9 @@ void G4ReflectionFactory::ReflectDaughters(G4LogicalVolume* LV,
            << LV->GetNoDaughters() << " of " << LV->GetName() << G4endl;
   }     
 
-  for (size_t i=0; i<LV->GetNoDaughters(); ++i)
+  for (std::size_t i=0; i<LV->GetNoDaughters(); ++i)
   {
-    G4VPhysicalVolume* dPV = LV->GetDaughter(i);
+    G4VPhysicalVolume* dPV = LV->GetDaughter((G4int)i);
     
     if (!dPV->IsReplicated())
     {

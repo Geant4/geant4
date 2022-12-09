@@ -208,7 +208,7 @@ protected:
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*, 
                                        G4double cut);
 
-  inline size_t CurrentMaterialCutsCoupleIndex() const;
+  inline std::size_t CurrentMaterialCutsCoupleIndex() const;
 
   //------------------------------------------------------------------------
   // Specific methods to set, access, modify models
@@ -221,7 +221,7 @@ public:
   // Select model by energy and couple index
   // Not for run time processing
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
-                                            size_t& idxCouple) const;
+                                            std::size_t& idxCouple) const;
 
   // Add EM model coupled with fluctuation model for region, smaller value 
   // of order defines which pair of models will be selected for a given 
@@ -235,13 +235,13 @@ public:
   void SetEmModel(G4VEmModel*, G4int index=0);
 
   // Access to models
-  inline size_t NumberOfModels() const;
+  inline std::size_t NumberOfModels() const;
   
   // Return a model from the local list
-  inline G4VEmModel* EmModel(size_t index=0) const;
+  inline G4VEmModel* EmModel(std::size_t index=0) const;
   
   // Access to models from G4EmModelManager list
-  inline G4VEmModel* GetModelByIndex(size_t idx = 0, G4bool ver = false) const;
+  inline G4VEmModel* GetModelByIndex(std::size_t idx = 0, G4bool ver = false) const;
 
   // Assign a fluctuation model to a process
   inline void SetFluctModel(G4VEmFluctuationModel*);
@@ -477,7 +477,7 @@ protected:
   G4double preStepLogScaledEnergy = LOG_EKIN_MIN;
   G4double mfpKinEnergy = 0.0;
 
-  size_t currentCoupleIndex = 0;
+  std::size_t currentCoupleIndex = 0;
 
 private:
 
@@ -490,16 +490,16 @@ private:
   G4int biasID = _DeltaEBelowCut;
   G4int mainSecondaries = 1;
 
-  size_t basedCoupleIndex = 0;
-  size_t coupleIdxRange = 0;
-  size_t idxDEDX = 0;
-  size_t idxDEDXunRestricted = 0;
-  size_t idxIonisation = 0;
-  size_t idxRange = 0;
-  size_t idxCSDA = 0;
-  size_t idxSecRange = 0;
-  size_t idxInverseRange = 0;
-  size_t idxLambda = 0;
+  std::size_t basedCoupleIndex = 0;
+  std::size_t coupleIdxRange = 0;
+  std::size_t idxDEDX = 0;
+  std::size_t idxDEDXunRestricted = 0;
+  std::size_t idxIonisation = 0;
+  std::size_t idxRange = 0;
+  std::size_t idxCSDA = 0;
+  std::size_t idxSecRange = 0;
+  std::size_t idxInverseRange = 0;
+  std::size_t idxLambda = 0;
 
   G4GPILSelection aGPILSelection;
   G4CrossSectionType fXSType = fEmOnePeak;
@@ -527,7 +527,7 @@ private:
 
 // ======== Run time inline methods ================
 
-inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
+inline std::size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentCoupleIndex;
 }
@@ -543,7 +543,7 @@ inline void G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* G4VEnergyLossProcess::SelectModelForMaterial(
-                   G4double kinEnergy, size_t& idx) const
+                   G4double kinEnergy, std::size_t& idx) const
 {
   return modelManager->SelectModel(kinEnergy, idx);
 }
@@ -986,14 +986,14 @@ inline std::vector<G4TwoPeaksXS*>* G4VEnergyLossProcess::TwoPeaksXS() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline size_t G4VEnergyLossProcess::NumberOfModels() const
+inline std::size_t G4VEnergyLossProcess::NumberOfModels() const
 {
   return numberOfModels;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEnergyLossProcess::EmModel(size_t index) const
+inline G4VEmModel* G4VEnergyLossProcess::EmModel(std::size_t index) const
 {
   return (index < emModels->size()) ? (*emModels)[index] : nullptr;
 }
@@ -1001,9 +1001,9 @@ inline G4VEmModel* G4VEnergyLossProcess::EmModel(size_t index) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmModel* 
-G4VEnergyLossProcess::GetModelByIndex(size_t idx, G4bool ver) const
+G4VEnergyLossProcess::GetModelByIndex(std::size_t idx, G4bool ver) const
 {
-  return modelManager->GetModel(idx, ver);
+  return modelManager->GetModel((G4int)idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

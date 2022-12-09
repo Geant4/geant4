@@ -139,7 +139,7 @@ void G4LivermorePolarizedRayleighModel::InitialiseLocal(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
+void G4LivermorePolarizedRayleighModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1) {
     G4cout << "Calling ReadData() of G4LivermoreRayleighModel" 
@@ -174,7 +174,7 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermorePolarizedRayleighModel::ReadData()","em0003",
 		FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   } else {
     if(verboseLevel > 3) { 
@@ -194,7 +194,7 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermorePolarizedRayleighModel::ReadData()","em0003",
 		FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   } else {
     if(verboseLevel > 3) { 
@@ -235,7 +235,7 @@ G4double G4LivermorePolarizedRayleighModel::ComputeCrossSectionPerAtom(
     if(nullptr == pv) { return xs; }
   }
  
-  G4int n = pv->GetVectorLength() - 1;
+  G4int n = G4int(pv->GetVectorLength() - 1);
   G4double e = GammaEnergy/MeV;
   if(e >= pv->Energy(n)) {
     xs = (*pv)[n]/(e*e);  

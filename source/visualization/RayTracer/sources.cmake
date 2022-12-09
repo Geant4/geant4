@@ -64,13 +64,12 @@ geant4_module_link_libraries(G4RayTracer
   PRIVATE
     G4event
     G4bosons
+    G4geometrymng
     G4scoring
     G4partman
     G4procman
     G4cuts
     G4detector
-    G4csg
-    G4specsolids
     G4navigation)
 
 # X11 RayTracer only if selected

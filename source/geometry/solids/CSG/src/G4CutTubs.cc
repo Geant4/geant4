@@ -1823,7 +1823,7 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl ;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -1917,7 +1917,7 @@ G4VSolid* G4CutTubs::Clone() const
 
 std::ostream& G4CutTubs::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

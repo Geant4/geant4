@@ -24,6 +24,8 @@
 
 #include "CLHEP/Random/RandomEngine.h"
 
+#include <cstdint>
+
 namespace CLHEP {
 
 /**

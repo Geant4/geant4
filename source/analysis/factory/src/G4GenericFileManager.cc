@@ -135,7 +135,7 @@ G4GenericFileManager::GetFileManager(const G4String& fileName)
 {
   // Get file extension
   G4String extension = GetExtension(fileName);
-  if ( ! extension.size() ) {
+  if (extension.size() == 0u) {
     // use the default
     extension = fDefaultFileType;
   }
@@ -212,7 +212,13 @@ G4bool G4GenericFileManager::OpenFiles()
       continue;
     }
 
-    result &= fileManager->CreateFile(fileName);
+    // filenames for csv need to be updated
+    auto newFileName = fileName;
+    if (fileManager == fCsvFileManager) {
+      newFileName = fileManager->GetHnFileName(fileName, GetCycle());
+    }
+
+    result &= fileManager->CreateFile(newFileName);
   }
 
   Message(kVL3, "open", "analysis files", "", result);
@@ -360,7 +366,7 @@ G4bool G4GenericFileManager::SetHistoDirectoryName(const G4String& dirName)
 {
   auto result = G4VFileManager::SetHistoDirectoryName(dirName);
 
-  for (auto fileManager : fFileManagers ) {
+  for (auto& fileManager : fFileManagers ) {
     if ( fileManager != nullptr ) {
       result &= fileManager->SetHistoDirectoryName(dirName);
     }
@@ -373,7 +379,7 @@ G4bool G4GenericFileManager::SetNtupleDirectoryName(const G4String& dirName)
 {
   auto result = G4VFileManager::SetNtupleDirectoryName(dirName);
 
-  for (auto fileManager : fFileManagers ) {
+  for (auto& fileManager : fFileManagers ) {
     if ( fileManager != nullptr ) {
       result &= fileManager->SetNtupleDirectoryName(dirName);
     }

@@ -38,18 +38,20 @@
 
 class G4Run;
 class SteppingAction;
+class TrackingAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction: public G4UserRunAction {
   public:
-    RunAction( SteppingAction* steppingAction = nullptr );
-    virtual ~RunAction();
-    virtual void BeginOfRunAction( const G4Run* aRun ) override;
-    virtual void   EndOfRunAction( const G4Run* aRun ) override;
-    virtual G4Run* GenerateRun() override;
+    RunAction( SteppingAction* steppingAction = nullptr,
+               TrackingAction* trackingAction = nullptr );
+    void BeginOfRunAction( const G4Run* aRun ) override;
+    void   EndOfRunAction( const G4Run* aRun ) override;
+    G4Run* GenerateRun() override;
   private:
     SteppingAction* fSteppingAction;
+    TrackingAction* fTrackingAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

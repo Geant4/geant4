@@ -19,12 +19,12 @@
 {
 //*******************************************************************************//
 // If you need to add multiple root outputs, by multithreading, use this command:
-system ("hadd -O -f moleXcular-dna.root molecular-dna_t*.root");
+system ("hadd -O -f molecular-dna.root molecular-dna_t*.root");
 
 // Define these parameters of the simulation
 char ifile[256] = "molecular-dna.root";  // input filepath
-Double_t r3 = 950e-9 * 400e-9 * 400e-9;  // a * b * c   // Chromosome size, as defined in the mac file, but in meters. If sphere, a=b=c
-Double_t Nbp = 2.448108; // Mbp // Length of the DNA chain in Mbp
+Double_t r3 = 900e-9 * 400e-9 * 400e-9;  // a * b * c   // Chromosome size, as defined in the mac file, but in meters. If sphere, a=b=c
+Double_t Nbp = 4.629360; // Mbp // Length of the DNA chain in Mbp
 Double_t mass = 997 * 4 * 3.141592 * r3 / 3 ;  // waterDensity * 4/3 * pi * r3 in kg
 ///////////////////////////////////////////////////////////////////////////////////
 //*******************************************************************************//

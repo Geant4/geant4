@@ -74,7 +74,7 @@ G4ForwardXrayTR::G4ForwardXrayTR(const G4String& matName1,
   G4int iMat;
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   G4bool build = true;
 
@@ -170,7 +170,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
   G4int iMat, jMat, iTkin, iTR, iPlace;
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   fGammaCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
 
@@ -493,7 +493,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 
   if(iTkin == fTotBin)  // TR plato, try from left
   {
-    numOfTR = G4Poisson(
+    numOfTR = (G4int)G4Poisson(
       ((*(*fEnergyDistrTable)(iPlace))(0) + (*(*fAngleDistrTable)(iPlace))(0)) *
       chargeSq * 0.5);
     if(numOfTR == 0)
@@ -557,13 +557,13 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
       W1 = (E2 - TkinScaled) * W;
       W2 = (TkinScaled - E1) * W;
 
-      numOfTR = G4Poisson((((*(*fEnergyDistrTable)(iPlace))(0) +
-                            (*(*fAngleDistrTable)(iPlace))(0)) *
-                             W1 +
-                           ((*(*fEnergyDistrTable)(iPlace + 1))(0) +
-                            (*(*fAngleDistrTable)(iPlace + 1))(0)) *
-                             W2) *
-                          chargeSq * 0.5);
+      numOfTR = (G4int)G4Poisson((((*(*fEnergyDistrTable)(iPlace))(0) +
+                                   (*(*fAngleDistrTable)(iPlace))(0)) *
+                                    W1 +
+                                  ((*(*fEnergyDistrTable)(iPlace + 1))(0) +
+                                   (*(*fAngleDistrTable)(iPlace + 1))(0)) *
+                                    W2) *
+                                 chargeSq * 0.5);
       if(numOfTR == 0)
       {
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -640,7 +640,7 @@ G4double G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   // The case of equal or approximate (in terms of plasma energy) materials
   // No TR photons ?!
@@ -679,7 +679,7 @@ G4double G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 
   if(iTkin == fTotBin)  // TR plato, try from left
   {
-    numOfTR = G4Poisson((*energyVector1)(0));
+    numOfTR = (G4int)G4Poisson((*energyVector1)(0));
     if(numOfTR == 0)
     {
       return energyTR;
@@ -708,7 +708,7 @@ G4double G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
     {     // use trivial mean half/half
       W1      = 0.5;
       W2      = 0.5;
-      numOfTR = G4Poisson((*energyVector1)(0) * W1 + (*energyVector2)(0) * W2);
+      numOfTR = (G4int)G4Poisson((*energyVector1)(0) * W1 + (*energyVector2)(0) * W2);
       if(numOfTR == 0)
       {
         return energyTR;

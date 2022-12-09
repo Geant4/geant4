@@ -357,7 +357,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     for (G4int ift=0; ift<nFragTypes; ift++)
     {
       G4ParticleDefinition *type = fragType[ift];
-      G4int n                    = std::count(evapType.begin(),evapType.end(),type);
+      G4long n = std::count(evapType.cbegin(),evapType.cend(),type);
       if (n > 0) 
         G4cout <<"Particle type: " <<std::setw(10) <<type->GetParticleName()
                <<", number of particles emitted = " <<n <<G4endl;
@@ -374,7 +374,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 //  G4Fragment *resultNucleus(theNucleus);
   G4Fragment *resultNucleus = new G4Fragment(A, Z, theNucleus.GetMomentum());
   G4ThreeVector boost(0.0,0.0,0.0);
-  G4int nEvap = 0;
+  std::size_t nEvap = 0;
   if (produceSecondaries && evapType.size()>0)
   {
     if (excess > 0.0)
@@ -415,9 +415,9 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
       G4cout <<"Evaporated particles :" <<G4endl;
       G4cout <<"----------------------" <<G4endl;
     }
-    G4int ie = 0;
-    G4FragmentVector::iterator iter;
-    for (iter = fragmentVector->begin(); iter != fragmentVector->end(); iter++)
+    std::size_t ie = 0;
+    for (auto iter = fragmentVector->cbegin();
+              iter != fragmentVector->cend(); ++iter)
     {
       if (ie == nEvap)
       {
@@ -517,13 +517,13 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 //      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
-    G4int nChannels = theChannels1.size();
+    std::size_t nChannels = theChannels1.size();
 
     G4double totalProb = 0.0;
     G4int ich = 0;
     G4double probEvapType[6] = {0.0};
-    std::vector<G4VEvaporationChannel*>::iterator iterEv;
-    for (iterEv=theChannels1.begin(); iterEv!=theChannels1.end(); iterEv++) {
+    for (auto iterEv=theChannels1.cbegin();
+              iterEv!=theChannels1.cend(); ++iterEv) {
       totalProb += (*iterEv)->GetEmissionProbability(intermediateNucleus);
       probEvapType[ich] = totalProb;
       ++ich;
@@ -536,14 +536,18 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 // the nucleus.
 //
       G4double xi = totalProb*G4UniformRand();
-      G4int ii     = 0;
-      for (ii=0; ii<nChannels; ii++) {
+      std::size_t ii = 0;
+      for (ii=0; ii<nChannels; ++ii)
+      {
         if (xi < probEvapType[ii]) { break; }
       }
       if (ii >= nChannels) { ii = nChannels - 1; }
       G4FragmentVector *evaporationResult = theChannels1[ii]->
         BreakUpFragment(intermediateNucleus);
-      if ((*evaporationResult)[0] != nullptr) { (*evaporationResult)[0]->SetCreatorModelID(secID); }
+      if ((*evaporationResult)[0] != nullptr)
+      {
+        (*evaporationResult)[0]->SetCreatorModelID(secID);
+      }
       fragmentVector->push_back((*evaporationResult)[0]);
       intermediateNucleus = (*evaporationResult)[1];
       delete evaporationResult;
@@ -565,7 +569,7 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 //
 void G4WilsonAblationModel::SelectSecondariesByDefault (G4ThreeVector boost)
 {
-  for (unsigned i=0; i<evapType.size(); i++)
+  for (std::size_t i=0; i<evapType.size(); ++i)
   {
     G4ParticleDefinition *type = evapType[i];
     G4double mass              = type->GetPDGMass();

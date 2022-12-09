@@ -74,9 +74,9 @@ G4FindShiftedMean( G4double RequestedMean,
 {
 G4FFG_SAMPLING_FUNCTIONENTER__
 
-    G4int VectorSize = ShiftedMean_.size();
+    std::size_t VectorSize = ShiftedMean_.size();
 
-    for(G4int i = 0; i < VectorSize; i++)
+    for(std::size_t i = 0; i < VectorSize; ++i)
     {
         if(ShiftedMean_[i].first.first == RequestedMean)
         {
@@ -89,7 +89,7 @@ G4FFG_SAMPLING_FUNCTIONLEAVE__
     }
 
 G4FFG_SAMPLING_FUNCTIONLEAVE__
-    return 0;
+    return 0.;
 }
 
 void G4ShiftedGaussian::

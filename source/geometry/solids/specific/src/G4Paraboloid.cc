@@ -819,7 +819,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
      G4cout << G4endl ;
      DumpInfo();
      std::ostringstream message;
-     G4int oldprc = message.precision(16);
+     G4long oldprc = message.precision(16);
      message << "Point p is outside !?" << G4endl
              << "Position:" << G4endl
              << "   p.x() = "   << p.x()/mm << " mm" << G4endl
@@ -869,7 +869,7 @@ G4VSolid* G4Paraboloid::Clone() const
 //
 std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

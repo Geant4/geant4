@@ -276,9 +276,9 @@ class G4TemplateAutoLock : public std::unique_lock<_Mutex_t>
   //------------------------------------------------------------------------//
   // Some useful typedefs
   //------------------------------------------------------------------------//
-  typedef std::unique_lock<_Mutex_t> unique_lock_t;
-  typedef G4TemplateAutoLock<_Mutex_t> this_type;
-  typedef typename unique_lock_t::mutex_type mutex_type;
+  using unique_lock_t = std::unique_lock<_Mutex_t>;
+  using this_type = G4TemplateAutoLock<_Mutex_t>;
+  using mutex_type = typename unique_lock_t::mutex_type;
 
  public:
   //------------------------------------------------------------------------//

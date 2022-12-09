@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -43,44 +42,31 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* analysis)
-  :gammaRayTelAnalysis(analysis)
+GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis *analysis) : gammaRayTelAnalysis(analysis) {
+    gammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
+    gammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
 
-{ 
-  gammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
-  gammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
-  
-  Histo2DModeCmd = new G4UIcmdWithAString("/analysis/histo2dMode",this);
-  Histo2DModeCmd->SetGuidance("Select the mode for the 2d histograms.");
-  Histo2DModeCmd->SetGuidance("Choice: position, strip(default)");
-  Histo2DModeCmd->SetGuidance("position -> the histo is filled with true positions in mm");
-  Histo2DModeCmd->SetGuidance("strip -> the histo is filled with the number of the strip and the plane");
-  Histo2DModeCmd->SetParameterName("choice",true);
-  Histo2DModeCmd->SetDefaultValue("strip");
-  Histo2DModeCmd->SetCandidates("position strip");
-  Histo2DModeCmd->AvailableForStates(G4State_Idle);
+    histo2DModeCmd = new G4UIcmdWithAString("/analysis/histo2dMode", this);
+    histo2DModeCmd->SetGuidance("Select the mode for the 2d histograms.");
+    histo2DModeCmd->SetGuidance("Choice: position, strip(default)");
+    histo2DModeCmd->SetGuidance("position -> the histogram is filled with true positions in mm");
+    histo2DModeCmd->SetGuidance("strip -> the histogram is filled with the number of the strip and the plane");
+    histo2DModeCmd->SetParameterName("choice", true);
+    histo2DModeCmd->SetDefaultValue("strip");
+    histo2DModeCmd->SetCandidates("position strip");
+    histo2DModeCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnalysisMessenger::~GammaRayTelAnalysisMessenger()
-{
-  delete Histo2DModeCmd; 
+GammaRayTelAnalysisMessenger::~GammaRayTelAnalysisMessenger() {
+    delete histo2DModeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-
-  if( command == Histo2DModeCmd )
-    { gammaRayTelAnalysis->SetHisto2DMode(newValue);}
-   
+void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+    if (command == histo2DModeCmd) {
+        gammaRayTelAnalysis->SetHisto2DMode(newValue);
+    }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-

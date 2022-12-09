@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HadCalorimeterHit.hh
+/// \file B5/include/HadCalorimeterHit.hh
 /// \brief Definition of the B5::HadCalorimeterHit class
 
 #ifndef B5HadCalorimeterHit_h
@@ -54,10 +54,10 @@ namespace B5
 class HadCalorimeterHit : public G4VHit
 {
   public:
-    HadCalorimeterHit();
+    HadCalorimeterHit() = default;
     HadCalorimeterHit(G4int iCol,G4int iRow);
     HadCalorimeterHit(const HadCalorimeterHit &right) = default;
-    ~HadCalorimeterHit() override;
+    ~HadCalorimeterHit() override = default;
 
     HadCalorimeterHit& operator=(const HadCalorimeterHit &right) = default;
     G4bool operator==(const HadCalorimeterHit &right) const;

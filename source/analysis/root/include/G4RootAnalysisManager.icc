@@ -30,13 +30,6 @@
 
 //_____________________________________________________________________________
 inline
-G4bool G4RootAnalysisManager::IsOpenFileImpl() const
-{
-  return fFileManager->IsOpenFile();
-}
-
-//_____________________________________________________________________________
-inline
 tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple();

@@ -49,14 +49,14 @@
 #ifndef G4String_hh
 #define G4String_hh 1
 
+#include "G4Types.hh"
+
 #include <algorithm>
+#include <cstdio>
 #include <cstring>
 #include <iostream>
-#include <stdio.h>
 #include <string>
 #include <string_view>
-
-#include "G4Types.hh"
 
 class G4String : public std::string
 {

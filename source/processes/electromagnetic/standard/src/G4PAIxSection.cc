@@ -127,7 +127,7 @@ G4PAIxSection::G4PAIxSection()
 G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
 {
   fDensity       = matCC->GetMaterial()->GetDensity();
-  G4int matIndex = matCC->GetMaterial()->GetIndex();
+  G4int matIndex = (G4int)matCC->GetMaterial()->GetIndex();
   fMaterialIndex = matIndex;   
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
@@ -138,15 +138,15 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
   G4int i, j; 
   fMatSandiaMatrix = new G4OrderedTable();
  
-  for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
+  for (i = 0; i < fSandia->GetMaxInterval()-1; ++i)
   {
      fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
   }                         
-  for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
+  for (i = 0; i < fSandia->GetMaxInterval()-1; ++i)
   {
     (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
 
-    for(j = 1; j < 5; j++)
+    for(j = 1; j < 5; ++j)
     {
       (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
     }     
@@ -444,11 +444,11 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
   fMaterialIndex   = materialIndex;   
   fDensity         = (*theMaterialTable)[materialIndex]->GetDensity();
   fElectronDensity = (*theMaterialTable)[materialIndex]->GetElectronDensity();
-  numberOfElements = (*theMaterialTable)[materialIndex]->GetNumberOfElements();
+  numberOfElements = (G4int)(*theMaterialTable)[materialIndex]->GetNumberOfElements();
 
   G4int* thisMaterialZ = new G4int[numberOfElements];
    
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
    {
          thisMaterialZ[i] = (G4int)(*theMaterialTable)[materialIndex]->
                                       GetElement(i)->GetZ();
@@ -745,7 +745,7 @@ void G4PAIxSection::Initialize( const G4Material* material,
 
 void G4PAIxSection::ComputeLowEnergyCof(const G4Material* material)
 {    
-  G4int i, numberOfElements = material->GetNumberOfElements();
+  G4int i, numberOfElements = (G4int)material->GetNumberOfElements();
   G4double sumZ = 0., sumCof = 0.; 
 
   static const G4double p0 =  1.20923e+00; 
@@ -755,13 +755,13 @@ void G4PAIxSection::ComputeLowEnergyCof(const G4Material* material)
   G4double* thisMaterialZ   = new G4double[numberOfElements];
   G4double* thisMaterialCof = new G4double[numberOfElements];
    
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
   {
     thisMaterialZ[i] = material->GetElement(i)->GetZ();
     sumZ += thisMaterialZ[i];
     thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
   }
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
   {
     sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
   }
@@ -779,7 +779,7 @@ void G4PAIxSection::ComputeLowEnergyCof(const G4Material* material)
 void G4PAIxSection::ComputeLowEnergyCof()
 {    
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int i, numberOfElements = (*theMaterialTable)[fMaterialIndex]->GetNumberOfElements();
+  G4int i, numberOfElements = (G4int)(*theMaterialTable)[fMaterialIndex]->GetNumberOfElements();
   G4double sumZ = 0., sumCof = 0.; 
 
   const G4double p0 =  1.20923e+00; 
@@ -789,13 +789,13 @@ void G4PAIxSection::ComputeLowEnergyCof()
   G4double* thisMaterialZ   = new G4double[numberOfElements];
   G4double* thisMaterialCof = new G4double[numberOfElements];
    
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
   {
     thisMaterialZ[i] = (*theMaterialTable)[fMaterialIndex]->GetElement(i)->GetZ();
     sumZ += thisMaterialZ[i];
     thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
   }
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
   {
     sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
   }

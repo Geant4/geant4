@@ -214,16 +214,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
   # - USolids
   if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
     set(G4_BUILTWITH_USOLIDS "yes")
-    set(G4_USOLIDS_INCLUDE_DIRS "${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES}")
+    get_target_property(G4_USOLIDS_INCLUDE_DIRS VecGeom::vecgeom INTERFACE_INCLUDE_DIRECTORIES)
     list(REMOVE_DUPLICATES G4_USOLIDS_INCLUDE_DIRS)
-    if(_cxx_compiler_dirs)
-      list(REMOVE_ITEM G4_USOLIDS_INCLUDE_DIRS ${_cxx_compiler_dirs})
-    endif()
-
-    string(REPLACE ";" " " G4_USOLIDS_CFLAGS "${VECGEOM_DEFINITIONS}")
     foreach(_dir ${G4_USOLIDS_INCLUDE_DIRS})
       set(G4_USOLIDS_CFLAGS "${G4_USOLIDS_CFLAGS} -I${_dir}")
     endforeach()
+    # NB: should ALSO account for VecGeom having compile_options, but
+    # this is better handled through proper pkg-config support
   else()
     set(G4_BUILTWITH_USOLIDS "no")
   endif()
@@ -245,7 +242,15 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
-    set(G4_QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS} ${Qt53DCore_INCLUDE_DIRS} ${Qt53DExtras_INCLUDE_DIRS} ${Qt53DRender_INCLUDE_DIRS})
+    set(_qtcomps Core Gui Widgets OpenGL PrintSupport)
+    if(QT_VERSION_MAJOR VERSION_GREATER_EQUAL 5.15)
+      list(APPEND _qtcomp 3DCore 3DExtras 3DRender)
+    endif()
+
+    set(G4_QT_INCLUDE_DIRS )
+    foreach(_qtc ${_qtcomps})
+      list(APPEND G4_QT_INCLUDE_DIRS ${Qt${QT_VERSION_MAJOR}${_qtc}_INCLUDE_DIRS})
+    endforeach()
 
     list(REMOVE_DUPLICATES G4_QT_INCLUDE_DIRS)
     if(_cxx_compiler_dirs)

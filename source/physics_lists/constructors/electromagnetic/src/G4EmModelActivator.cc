@@ -147,7 +147,7 @@ G4EmModelActivator::G4EmModelActivator(const G4String& emphys)
 void G4EmModelActivator::ActivateEmOptions()
 {
   const std::vector<G4String>& regnamesPhys = theParameters->RegionsPhysics();
-  G4int nreg = regnamesPhys.size();
+  std::size_t nreg = regnamesPhys.size();
   if(0 == nreg) { return; }
   G4int verbose = theParameters->Verbose() - 1; 
   if(verbose > 0) {
@@ -176,7 +176,7 @@ void G4EmModelActivator::ActivateEmOptions()
   // general high energy limit
   G4double highEnergy = theParameters->MaxKinEnergy();
 
-  for(G4int i=0; i<nreg; ++i) {
+  for(std::size_t i=0; i<nreg; ++i) {
     G4String reg = regnamesPhys[i];
     if(verbose > 0) {
       G4cout << i << ". region <" << reg << ">; type <" << typesPhys[i] << "> " 
@@ -397,7 +397,7 @@ void G4EmModelActivator::ActivateEmOptions()
 void G4EmModelActivator::ActivatePAI()
 {
   const std::vector<G4String> regnamesPAI = theParameters->RegionsPAI();
-  G4int nreg = regnamesPAI.size();
+  std::size_t nreg = regnamesPAI.size();
   if(0 == nreg) { return; }
   G4int verbose = theParameters->Verbose() - 1;
   if(verbose > 0) {
@@ -418,7 +418,7 @@ void G4EmModelActivator::ActivatePAI()
   const G4ParticleDefinition* mumi = G4MuonMinus::MuonMinus();
   const G4ParticleDefinition* gion = G4GenericIon::GenericIon();
 
-  for(G4int i = 0; i < nreg; ++i) {
+  for(std::size_t i = 0; i < nreg; ++i) {
     const G4ParticleDefinition* p = nullptr;
     if(particlesPAI[i] != "all") {
       p = G4ParticleTable::GetParticleTable()->FindParticle(particlesPAI[i]);
@@ -511,7 +511,7 @@ void G4EmModelActivator::ActivatePAI()
 void G4EmModelActivator::ActivateMicroElec()
 {
   const std::vector<G4String> regnamesME = theParameters->RegionsMicroElec();
-  G4int nreg = regnamesME.size();
+  std::size_t nreg = regnamesME.size();
   if(0 == nreg)
   {
     return;
@@ -564,7 +564,7 @@ void G4EmModelActivator::ActivateMicroElec()
   G4LowECapture* ecap = new G4LowECapture(elowest);
   eman->AddDiscreteProcess(ecap);
 
-  for(G4int i = 0; i < nreg; ++i)
+  for(std::size_t i = 0; i < nreg; ++i)
   {
 
     G4String reg = regnamesME[i];

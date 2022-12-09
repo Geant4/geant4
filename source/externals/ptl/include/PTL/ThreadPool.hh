@@ -31,6 +31,9 @@
 #pragma once
 
 #include "PTL/AutoLock.hh"
+#ifndef G4GMAKE
+#include "PTL/Config.hh"
+#endif
 #include "PTL/ThreadData.hh"
 #include "PTL/Threading.hh"
 #include "PTL/Types.hh"
@@ -45,28 +48,42 @@
 #        define TBB_PREVIEW_GLOBAL_CONTROL 1
 #    endif
 #    include <tbb/global_control.h>
-#    include <tbb/tbb.h>
+#    include <tbb/task_arena.h>
+#    include <tbb/task_group.h>
 #endif
 
-// C
+#include <algorithm>
+#include <atomic>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
-#include <cstring>
-// C++
-#include <atomic>
 #include <deque>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
-#include <queue>
+#include <mutex>  // IWYU pragma: keep
 #include <set>
-#include <stack>
 #include <thread>
+#include <type_traits>  // IWYU pragma: keep
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace PTL
 {
+namespace thread_pool
+{
+namespace state
+{
+static const short STARTED = 0;
+static const short PARTIAL = 1;
+static const short STOPPED = 2;
+static const short NONINIT = 3;
+
+}  // namespace state
+}  // namespace thread_pool
+
 class ThreadPool
 {
 public:
@@ -242,10 +259,7 @@ public:
     void notify_all();
     void notify(size_type);
     bool is_initialized() const;
-    int  get_active_threads_count() const
-    {
-        return (m_thread_awake) ? m_thread_awake->load() : 0;
-    }
+    int  get_active_threads_count() const { return (int)m_thread_awake->load(); }
 
     void set_affinity(affinity_func_t f) { m_affinity_func = std::move(f); }
     void set_affinity(intmax_t i, Thread&) const;
@@ -288,8 +302,8 @@ private:
     ThreadId         m_main_tid          = ThisThread::get_id();
     atomic_bool_type m_alive_flag        = std::make_shared<std::atomic_bool>(false);
     pool_state_type  m_pool_state        = std::make_shared<std::atomic_short>(0);
-    atomic_int_type  m_thread_awake      = std::make_shared<std::atomic_uintmax_t>();
-    atomic_int_type  m_thread_active     = std::make_shared<std::atomic_uintmax_t>();
+    atomic_int_type  m_thread_awake      = std::make_shared<std::atomic_uintmax_t>(0);
+    atomic_int_type  m_thread_active     = std::make_shared<std::atomic_uintmax_t>(0);
 
     // locks
     lock_t m_task_lock = std::make_shared<Mutex>();
@@ -328,7 +342,7 @@ inline void
 ThreadPool::notify()
 {
     // wake up one thread that is waiting for a task to be available
-    if(m_thread_awake && m_thread_awake->load() < m_pool_size)
+    if(m_thread_awake->load() < m_pool_size)
     {
         AutoLock l(*m_task_lock);
         m_task_cond->notify_one();
@@ -350,7 +364,7 @@ ThreadPool::notify(size_type ntasks)
         return;
 
     // wake up as many threads that tasks just added
-    if(m_thread_awake && m_thread_awake->load() < m_pool_size)
+    if(m_thread_awake->load() < m_pool_size)
     {
         AutoLock l(*m_task_lock);
         if(ntasks < this->size())
@@ -429,7 +443,7 @@ ThreadPool::insert(task_pointer&& task, int bin)
     // pass the task to the queue
     auto ibin = get_valid_queue(m_task_queue)->InsertTask(std::move(task), _data, bin);
     notify();
-    return ibin;
+    return (int)ibin;
 }
 //--------------------------------------------------------------------------------------//
 inline ThreadPool::size_type

@@ -100,7 +100,7 @@ G4KaonMinus* G4KaonMinus::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4KaonMinus*>(anInstance);
+  theInstance = static_cast<G4KaonMinus*>(anInstance);
   return theInstance;
 }
 

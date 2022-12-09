@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -60,6 +60,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -87,7 +88,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -123,8 +124,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              1
+Directory in G4LEDATA for fluorescence data files  fluor_ANSTO
 Auger electron cascade enabled                     1
 PIXE atomic de-excitation enabled                  1
 De-excitation module ignores cuts                  1
@@ -165,7 +165,6 @@ Type of PIXE cross section for e+-                 Livermore
 ###/run/beamOn 1
 #
 /analysis/setFileName pixe
-Set file name: pixe
 /analysis/h1/set 3 1000 0 100 keV
 /analysis/h1/set 51 1000 0 100 keV
 /analysis/h1/set 55 1000 0 100 keV
@@ -181,7 +180,6 @@ Set file name: pixe
 /tracking/verbose 0
 /run/printProgress 10000
 /run/beamOn 100000
-The ANSTO fluorescence radiation yields substitute the EADL data libraries
 
 ### === G4UAtomicDeexcitation::InitialiseForNewRun()
 Using ANSTO K Cross Sections! 
@@ -238,48 +236,53 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=68.150000s Real=78.655958s Sys=0.020000s
+  User=81.290000s Real=84.773830s Sys=0.020000s
 
  ======================== run summary ======================
 
  The run was 100000 proton of 3 MeV through 50 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 3 MeV +- 33.77 eV 
+ Total energy deposit in absorber per event = 3 MeV +- 36.45 eV 
 
- -----> Mean dE/dx = 600 MeV/cm	(31.06 MeV*cm2/g)
+ -----> Mean dE/dx = 600 MeV/cm	(31.05 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 676.4 MeV/cm	(35.01 MeV*cm2/g)
    full dEdx       = 676.5 MeV/cm	(35.01 MeV*cm2/g)
 
- Leakage :  primary = 52.45 eV  +- 33.51 eV    secondaries = 14.26 eV  +- 1.184 eV 
+ Leakage :  primary = 65.74 eV  +- 35.92 eV    secondaries = 14.07 eV  +- 1.179 eV 
  Energy balance :  edep + eleak = 3 MeV
 
- Total track length (charged) in absorber per event = 31.06 um  +- 1.079 nm 
- Total track length (neutral) in absorber per event = 362.3 nm  +- 3.164 nm 
+ Total track length (charged) in absorber per event = 31.06 um  +- 1.083 nm 
+ Total track length (neutral) in absorber per event = 362.7 nm  +- 3.184 nm 
 
- Number of steps (charged) in absorber per event = 141.8 +- 0.1264
- Number of steps (neutral) in absorber per event = 0.587 +- 0.002453
+ Number of steps (charged) in absorber per event = 141.8 +- 0.1263
+ Number of steps (neutral) in absorber per event = 0.5861 +- 0.002446
 
- Number of secondaries per event : Gammas = 0.5845   electrons = 109.7   positrons = 0
+ Number of secondaries per event : Gammas = 0.5839   electrons = 109.6   positrons = 0
 
  Number of events with the primary particle transmitted = 0 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 0 %
 
- Number of events with the primary particle reflected = 0.003 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.003 %
+ Number of events with the primary particle reflected = 0.005 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.005 %
 
  MultipleScattering:
   rms proj angle of transmit primary particle = 0 mrad (central part only)
   computed theta0 (Highland formula)          = 233.3 mrad
   central part defined as +- 699.8 mrad   Tail ratio = 0 %
+## Gamma process counts:
+   Photoeffect 58109
+   Compton     3
+   Conversion  0
+   Rayleigh    218
 ... write file : pixe.root - done
 ... close file : pixe.root - done
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1575258209681380324, 502268587721984320, 1265333753759368, 474264208644985106, 1151878254013493547, 1483930652511092178, 2145339813694232495, 149443267521788243, 598331707926294923, 205239878707861393, 1658426149017994571, 261898008556819608, 1328410559873084242, 346152083954518470, 442818399680857434, 1302852778065642940, 971632776144456411} counter= 2sumtot= 764352614188081867
+N=17 V[N]={944671353633884230, 300194246912256983, 1338926093308238266, 1441599044978111444, 559828476273747537, 976665045002376518, 1655586542061687849, 1507013437582523992, 2052944524787068341, 2173254900581545545, 733849232472135636, 379249519059016924, 877093410379007237, 1488918075031648810, 1263787258307413205, 589725557209658928, 749180548014423557} counter= 14sumtot= 585743191885193394
 ---------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

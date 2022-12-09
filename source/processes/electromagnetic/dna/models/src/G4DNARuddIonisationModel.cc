@@ -50,8 +50,6 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
                                                    const G4String& nam) :
 G4VEmModel(nam), isInitialised(false)
 {
-  fpWaterDensity = 0;
-
   slaterEffectiveCharge[0] = 0.;
   slaterEffectiveCharge[1] = 0.;
   slaterEffectiveCharge[2] = 0.;
@@ -84,8 +82,6 @@ G4VEmModel(nam), isInitialised(false)
 
   // Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
-  fAtomDeexcitation = 0;
-  fParticleChangeForGamma = 0;
 
  // Selection of stationary mode
 
@@ -1027,13 +1023,13 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k,
     {
       G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
 
-      const size_t n(table->NumberOfComponents());
-      size_t i(n);
+      const G4int n = (G4int)table->NumberOfComponents();
+      G4int i(n);
       G4double value = 0.;
 
       while (i > 0)
       {
-        i--;
+        --i;
         valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
         value += valuesBuffer[i];
       }
@@ -1044,7 +1040,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k,
 
       while (i > 0)
       {
-        i--;
+        --i;
 
         if (valuesBuffer[i] > value)
         {

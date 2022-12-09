@@ -72,7 +72,7 @@ G4DMesonMinus* G4DMesonMinus::Definition()
                 false,     1.040e-3*ns,          NULL,
                 false,       "D");
   }
-  theInstance = reinterpret_cast<G4DMesonMinus*>(anInstance);
+  theInstance = static_cast<G4DMesonMinus*>(anInstance);
   return theInstance;
 }
 

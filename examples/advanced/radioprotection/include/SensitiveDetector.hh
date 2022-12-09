@@ -44,7 +44,9 @@ class SensitiveDetector : public G4VSensitiveDetector
 {
   public:
     SensitiveDetector(const G4String& name, 
-                const G4String& hitsCollectionName, AnalysisManager*);
+                const G4String& hitsCollectionName,
+                G4bool isThisAMicrodosimeter, 
+                AnalysisManager*);
     virtual ~SensitiveDetector();
   
     // methods from base class
@@ -55,6 +57,7 @@ class SensitiveDetector : public G4VSensitiveDetector
   private:
     SensitiveDetectorHitsCollection* fHitsCollection;
     AnalysisManager* analysis;
+	G4bool isMicrod;
 };
 
 #endif

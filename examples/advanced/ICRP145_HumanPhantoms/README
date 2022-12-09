@@ -1,0 +1,116 @@
+
+     =========================================================
+ 		      Geant4 - ICRP145_HumanPhantoms example
+     =========================================================
+
+                             README
+                      ---------------------
+
+
+********************************************************************
+* The ICRP145 Phantoms are used in Geant4 with permission from the *
+* International Commission on  Radiological Protection             *                                               *
+********************************************************************
+
+Authors' list:
+•	Haeginh Han / Hanyang University, Republic of Korea
+•	Min Cheol Han /  Yonsei University Health System, Republic of Korea
+•	Banho Shin / Hanyang University, Republic of Korea
+•	Chansoo Choi /  University of Florida, USA
+•	Yeon Soo Yeom /  Yonsei University, Republic of Korea
+•	Jonghwi Jeong / National Cancer Center, Republic of Korea
+•	Chan Hyeong Kim / Hanyang University, Republic of Korea
+
+Bibliographic references - please refer to this reference when using the Advanced Example
+•	ICRP, 2020. Adult mesh-type reference computational phantoms. ICRP Publication 145. Ann. ICRP 49(3).
+
+Geant4 Contributors: J. Allison and S. Guatelli
+
+e-mail inquiries to: haeginh@hanyang.ac.kr, susanna@uow.edu.au, MRCP.ICRP@gmail.com               
+
+1- HOW TO BUILD AND RUN THE EXAMPLES
+  
+  Please note that the guides below are based on Linux/MacOSX, which are the
+  recommended platforms for Geant4.
+  
+1) Compile and link to generate an executable (with CMake)
+  
+        % cd path_to_example    
+        % mkdir example_build 
+        % cd example_build
+        % cmake ..
+        % make
+  
+2) How to run
+  
+    a) For the irradiation with external beams:
+
+        % ./ICRP145phantoms [options]
+        
+        Options:
+        -m [input file name]    optional provided->batch mode
+                                         not provided->interactive mode
+        -o [output file name]   optional (default: [macro file name].out)
+        -f                      optional  switch to change the phantom to MRCP-AF
+                                          (default: MRCP-AM)
+          
+          ex) MRCP-AM: % ./External -m example.in -o example.out
+          ex) MRCP-AF: % ./External -m example.in -o example.out -f 
+        
+       *** The radiation source can be specified in source.mac file by using
+       macro commands for G4GeneralParticleSource (/gps/)
+          
+    b) For the case of internal radiation sources: 
+    
+        % ./ICRP145phantoms [options]
+
+        Options:
+        -i [ID of source organ] mandatory (ID of each organ can be found in Appendix A)
+        -m [input file name]    optional  provided->batch mode
+                                          not provided->interactive mode
+        -o [output file name]   optional  (default: [macro file name].out)
+        -f                      optional  switch to change the phantom to MRCP-AF
+                                          (default: MRCP-AM)
+
+          ex) MRCP-AM: % ./Internal -i 9500 -m example.in -o example.out
+          ex) MRCP-AF: % ./Internal -i 9500 -m example.in -o example.out -f 
+          
+          *** source organ can be defined by using -i option.
+          *** source particle and the particle energy can be specified
+              in source.mac file by using macro commands for G4ParticlGun (/gun/)
+    c) Notes
+    
+      - Regarding the interactive mode with visualisation:
+         
+         * you can run the codes in interactive mode with visualisation by 
+           omitting -m option.
+         * the memory required for the visualisation is ~35 GB when the code is
+           run on a single thread. (it is less than 10 GB in batch mode)
+         * in interactive mode, user should start a run by using 
+           /run/beamOn command. (Idle> /run/beamOn [number of events])
+          
+          
+      - Regarding the multi-threaded mode:
+         
+         * these examples can be run in multi-threaded mode when Geant4 was 
+           compiled in multi-threaded mode.
+         * the number of threads can be set in input file (see example.in)
+         
+      - Regarding the path to phantom data:
+       
+         * the default path to phantom data is "(build_directory)/../../phantoms".
+         * to specify the path please change a PHANTOM_PATH environment variable.
+           (export PHANTOM_PATH="path_to_phantom_data")
+          
+2- RESULT FILE
+
+  example_male.out and example_female.out files in each folder is the result file
+  for example.in. The result file provides absorbed doses for all organ IDs for TM 
+  model listed in Appendix A.
+       
+3- LICENSE
+
+  This code is based on Geant4 toolkit, and therefore follows the 'The Geant4
+  Software License' (http://geant4.web.cern.ch/license/LICENSE.html).
+  
+

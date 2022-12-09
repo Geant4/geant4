@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EmCalorimeterSD.cc
+/// \file B5/src/EmCalorimeterSD.cc
 /// \brief Implementation of the B5::EmCalorimeterSD class
 
 #include "EmCalorimeterSD.hh"
@@ -48,11 +48,6 @@ EmCalorimeterSD::EmCalorimeterSD(G4String name)
 {
   collectionName.insert("EMcalorimeterColl");
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmCalorimeterSD::~EmCalorimeterSD()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -55,7 +55,7 @@ class G4tgrVolumeAssembly : public G4tgrVolume
     }
     const G4String& GetComponentRM(G4int ii) const {return theComponentRMs[ii];}
     G4ThreeVector GetComponentPos(G4int ii) const {return theComponentPos[ii];}
-    G4int GetNoComponents() const { return theComponentNames.size(); }
+    G4int GetNoComponents() const { return (G4int)theComponentNames.size(); }
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrVolumeAssembly& obj);

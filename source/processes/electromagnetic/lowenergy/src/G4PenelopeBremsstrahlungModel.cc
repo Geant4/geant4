@@ -131,8 +131,8 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* part,
 	fPenelopeAngular->Initialize();
 
       //Set the number of bins for the tables. 20 points per decade
-      nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
-      nBins = std::max(nBins,(size_t)100);
+      nBins = (std::size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
+      nBins = std::max(nBins,(std::size_t)100);
       fEnergyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
                                       HighEnergyLimit(),
                                       nBins-1); //one hidden bin is added
@@ -146,7 +146,7 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* part,
 	G4ProductionCutsTable::GetProductionCutsTable();
 
       //Build tables for all materials
-      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+      for (G4int i=0;i<(G4int)theCoupleTable->GetTableSize();++i)
 	{
 	  const G4Material* theMat =
 	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
@@ -204,7 +204,7 @@ void G4PenelopeBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* 
       G4ProductionCutsTable* theCoupleTable =
 	G4ProductionCutsTable::GetProductionCutsTable();
       //Build tables for all materials
-      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+      for (G4int i=0;i<(G4int)theCoupleTable->GetTableSize();++i)
 	{
 	  const G4Material* theMat =
 	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
@@ -507,7 +507,7 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
   const G4PhysicsTable* table = fPenelopeFSHelper->GetScaledXSTable(mat,cut);
 
   //loop on the energy grid
-  for (size_t bin=0;bin<nBins;bin++)
+  for (std::size_t bin=0;bin<nBins;++bin)
     {
        G4double energy = fEnergyGrid->GetLowEdgeEnergy(bin);
        G4double XH0=0, XH1=0, XH2=0;
@@ -522,10 +522,10 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
 
        //Now I need the dSigma/dX profile - interpolated on energy - for
        //the 32-point x grid. Interpolation is log-log
-       size_t nBinsX = fPenelopeFSHelper->GetNBinsX();
+       std::size_t nBinsX = fPenelopeFSHelper->GetNBinsX();
        G4double* tempData = new G4double[nBinsX];
        G4double logene = G4Log(energy);
-       for (size_t ix=0;ix<nBinsX;ix++)
+       for (std::size_t ix=0;ix<nBinsX;++ix)
 	 {
 	   //find dSigma/dx for the given E. X belongs to the 32-point grid.
 	   G4double val = (*table)[ix]->Value(logene);

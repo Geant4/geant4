@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 
-// The messenger class for histogram information management.
-// It implements commands in /analysis/h1 directory.
+// The messenger class for ntuple management.
+// It implements commands in /analysis/ntuple directory.
+// It is asscoiciated with G4VAnalysisManager and this delegates
+// call to both ntuple booking and ntuple managers.
 //
 // Author: Ivana Hrivnacova, 05/05/2015  (ivana@ipno.in2p3.fr)
 
@@ -48,17 +50,22 @@ class G4NtupleMessenger : public G4UImessenger
   public:
     explicit G4NtupleMessenger(G4VAnalysisManager* manager);
     G4NtupleMessenger() = delete;
-    virtual ~G4NtupleMessenger();
+    ~G4NtupleMessenger() override;
 
     // Methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value) final;
+    void SetNewValue(G4UIcommand* command, G4String value) final;
 
   private:
     // Methods
+    template <typename CMD>
+    std::unique_ptr<CMD> CreateCommand(G4String name, G4String guidance);
+    void AddIdParameter(G4UIcommand& command);
+
     void SetActivationCmd();
     void SetActivationToAllCmd();
     void SetFileNameCmd();
     void SetFileNameToAllCmd();
+    void ListCmd();
 
     // Static data members
     static constexpr std::string_view fkClass { "G4NtupleMessenger" };
@@ -71,6 +78,21 @@ class G4NtupleMessenger : public G4UImessenger
     std::unique_ptr<G4UIcmdWithABool>   fSetActivationAllCmd;
     std::unique_ptr<G4UIcommand>        fSetFileNameCmd;
     std::unique_ptr<G4UIcmdWithAString> fSetFileNameAllCmd;
+    std::unique_ptr<G4UIcommand>        fListCmd;
 };
+
+//_____________________________________________________________________________
+template <typename CMD>
+std::unique_ptr<CMD> G4NtupleMessenger::CreateCommand(
+  G4String name, G4String guidance)
+{
+  G4String fullName = "/analysis/ntuple/" + name;
+
+  auto command = std::make_unique<CMD>(fullName, this);
+  command->SetGuidance(guidance.c_str());
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  return command;
+}
 
 #endif

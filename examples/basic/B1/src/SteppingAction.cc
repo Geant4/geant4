@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file SteppingAction.cc
+/// \file B1/src/SteppingAction.cc
 /// \brief Implementation of the B1::SteppingAction class
 
 #include "SteppingAction.hh"
@@ -47,17 +47,11 @@ SteppingAction::SteppingAction(EventAction* eventAction)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
   if (!fScoringVolume) {
-    const DetectorConstruction* detConstruction
-      = static_cast<const DetectorConstruction*>
-        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    const auto detConstruction = static_cast<const DetectorConstruction*>(
+      G4RunManager::GetRunManager()->GetUserDetectorConstruction());
     fScoringVolume = detConstruction->GetScoringVolume();
   }
 

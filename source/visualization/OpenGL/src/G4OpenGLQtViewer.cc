@@ -600,8 +600,8 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   }
 #else
   // no more radioAction, not realy useful and could be confusing to use context menu and icon at the same time
-  fProjectionOrtho = mProjection->addAction("Orthographic", this, [this](){ this->toggleProjection(1); });
-  fProjectionPerspective = mProjection->addAction("Perspective", this, [this](){ this->toggleProjection(2); });
+  fProjectionOrtho = mProjection->addAction("Orthographic", this, [this](){ this->toggleProjection(true); });
+  fProjectionPerspective = mProjection->addAction("Perspective", this, [this](){ this->toggleProjection(false); });
 #endif
   // === Drawing Menu ===
   QMenu *mDrawing = mStyle->addMenu("&Drawing");
@@ -935,7 +935,7 @@ void G4OpenGLQtViewer::toggleSurfaceAction(int aAction) {
 */
 void G4OpenGLQtViewer::toggleProjection(bool check) {
 
-  if (check == 1) {
+  if (check) {
     fVP.SetOrthogonalProjection ();
   } else {
     fVP.SetPerspectiveProjection();
@@ -1343,7 +1343,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
   // factorX == factorY
   double factorX =  ((double)viewport[2]/fGLWidget->width());
   double factorY =  ((double)viewport[3]/fGLWidget->height());
-  fSpinningDelay = fLastEventTime->elapsed();
+  fSpinningDelay = (int)fLastEventTime->elapsed();
   QPoint delta = (fLastPos3-fLastPos1)*factorX;
 
   // reset cursor state
@@ -2934,7 +2934,7 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
 
   // Set depth
   if (fullPath.size() > fSceneTreeDepth) {
-    fSceneTreeDepth = fullPath.size();
+    fSceneTreeDepth = (unsigned int)fullPath.size();
     // Change slider value
     if (fSceneTreeDepthSlider) {
       fSceneTreeDepthSlider->setTickInterval(1000/(fSceneTreeDepth+1));
@@ -3195,24 +3195,24 @@ void G4OpenGLQtViewer::changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement
 
     // POindex > 0
     std::map <int, QTreeWidgetItem*>::const_iterator i;
-    i = fOldPositivePoIndexSceneTreeWidgetQuickMap.begin();
-    while (i != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    i = fOldPositivePoIndexSceneTreeWidgetQuickMap.cbegin();
+    while (i != fOldPositivePoIndexSceneTreeWidgetQuickMap.cend()) {
       if (isSameSceneTreeElement(i->second,subItem)) {
         oldItem = i->second;
-        i = fOldPositivePoIndexSceneTreeWidgetQuickMap.end();
+        i = fOldPositivePoIndexSceneTreeWidgetQuickMap.cend();
       } else {
-        i++;
+        ++i;
       }
     }
     // POindex == 0 ?
     if (oldItem == NULL) {
-      unsigned int a = 0;
+      std::size_t a = 0;
       while (a < fOldNullPoIndexSceneTreeWidgetQuickVector.size()) {
         if (isSameSceneTreeElement(fOldNullPoIndexSceneTreeWidgetQuickVector[a],subItem)) {
           oldItem = fOldNullPoIndexSceneTreeWidgetQuickVector[a];
           a = fOldNullPoIndexSceneTreeWidgetQuickVector.size();
         } else {
-          a++;
+          ++a;
         }
       }
     }
@@ -4470,7 +4470,7 @@ void G4OpenGLQtViewer::updateViewerPropertiesTableWidget() {
 
         // Set Guidance
         QString guidance;
-        G4int n_guidanceEntry = commandTmp->GetGuidanceEntries();
+        G4int n_guidanceEntry = (G4int)commandTmp->GetGuidanceEntries();
         for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
           guidance += QString((char*)(commandTmp->GetGuidanceLine(i_thGuidance)).data()) + "\n";
         }
@@ -4756,7 +4756,7 @@ QString G4OpenGLQtViewer::GetCommandParameterList (
                                   const G4UIcommand *aCommand
                                   )
 {
-  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  G4int n_parameterEntry = (G4int)aCommand->GetParameterEntries();
   QString txt;
 
   if( n_parameterEntry > 0 ) {

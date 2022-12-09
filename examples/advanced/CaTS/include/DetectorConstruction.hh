@@ -49,7 +49,7 @@ class G4VPhysicalVolume;
 class ColorReader;
 class G4GDMLParser;
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class DetectorConstruction final : public G4VUserDetectorConstruction
 {
  public:
   DetectorConstruction(G4String fname);

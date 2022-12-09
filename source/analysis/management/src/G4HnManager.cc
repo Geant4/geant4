@@ -27,18 +27,22 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4HnManager.hh"
-#include "G4VFileManager.hh"
+#include "G4HnMessenger.hh"
+
 #include "G4AnalysisUtilities.hh"
+#include "G4VFileManager.hh"
+
+#include <utility>
 
 using namespace G4Analysis;
 using std::to_string;
 
 //_____________________________________________________________________________
-G4HnManager::G4HnManager(const G4String& hnType,
-                         const G4AnalysisManagerState& state)
-  : G4BaseAnalysisManager(state),
-    fHnType(hnType)
-{}
+G4HnManager::G4HnManager(G4String hnType, const G4AnalysisManagerState& state)
+  : G4BaseAnalysisManager(state), fHnType(std::move(hnType))
+{
+  fMessenger = std::make_unique<G4HnMessenger>(*this);
+}
 
 //_____________________________________________________________________________
 G4HnManager::~G4HnManager()
@@ -62,10 +66,12 @@ void  G4HnManager::SetActivation(G4HnInformation* info, G4bool activation)
 
   // Change activation and account it in fNofActiveObjects
   info->SetActivation(activation);
-  if ( activation )
+  if (activation) {
     fNofActiveObjects++;
-  else
+  }
+  else {
     fNofActiveObjects--;
+  }
 }
 
 //_____________________________________________________________________________
@@ -76,10 +82,12 @@ void  G4HnManager::SetPlotting(G4HnInformation* info, G4bool plotting)
 
   // Change Plotting and account it in fNofPlottingObjects
   info->SetPlotting(plotting);
-  if ( plotting )
+  if (plotting) {
     fNofPlottingObjects++;
-  else
+  }
+  else {
     fNofPlottingObjects--;
+  }
 }
 
 //_____________________________________________________________________________
@@ -151,7 +159,7 @@ G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id,
                                 std::string_view functionName, G4bool warn) const
 {
   auto info = GetHnInformation(id, functionName, warn);
-  if ( ! info ) return nullptr;
+  if (info == nullptr) return nullptr;
 
   return info->GetHnDimensionInformation(dimension);
 }
@@ -187,7 +195,7 @@ void  G4HnManager::SetActivation(G4int id, G4bool activation)
 
   auto info = GetHnInformation(id, "SetActivation");
 
-  if ( ! info ) return;
+  if (info == nullptr) return;
 
   SetActivation(info, activation);
 }
@@ -211,17 +219,19 @@ void  G4HnManager::SetAscii(G4int id, G4bool ascii)
 {
   auto info = GetHnInformation(id, "SetAscii");
 
-  if ( ! info ) return;
+  if (info == nullptr) return;
 
   // Do nothing if ascii does not change
   if ( info->GetAscii() == ascii ) return;
 
   // Change ascii and account it in fNofAsciiObjects
   info->SetAscii(ascii);
-  if ( ascii )
+  if (ascii) {
     fNofAsciiObjects++;
-  else
+  }
+  else {
     fNofAsciiObjects--;
+  }
 }
 
 //_____________________________________________________________________________
@@ -229,7 +239,7 @@ void  G4HnManager::SetPlotting(G4int id, G4bool plotting)
 {
   auto info = GetHnInformation(id, "SetPlotting");
 
-  if ( ! info ) return;
+  if (info == nullptr) return;
 
   SetPlotting(info, plotting);
 }
@@ -249,7 +259,7 @@ void  G4HnManager::SetFileName(G4int id, const G4String& fileName)
 {
   auto info = GetHnInformation(id, "SetFileName");
 
-  if ( ! info ) return;
+  if (info == nullptr) return;
 
   SetFileName(info, fileName);
 }
@@ -265,35 +275,13 @@ void  G4HnManager::SetFileName(const G4String& fileName)
 }
 
 //_____________________________________________________________________________
-G4bool G4HnManager::SetXAxisIsLog(G4int id, G4bool isLog)
+G4bool G4HnManager::SetAxisIsLog(unsigned int idim, G4int id, G4bool isLog)
 {
-  auto info = GetHnInformation(id, "SetXAxisIsLog");
+  auto info = GetHnInformation(id, "SetAxisIsLog");
 
-  if ( ! info ) return false;
+  if (info == nullptr) return false;
 
-  info->SetIsLogAxis(kX, isLog);
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool  G4HnManager::SetYAxisIsLog(G4int id, G4bool isLog)
-{
-  auto info = GetHnInformation(id, "SetYAxisIsLog");
-
-  if ( ! info ) return false;
-
-  info->SetIsLogAxis(kY, isLog);
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool  G4HnManager::SetZAxisIsLog(G4int id, G4bool isLog)
-{
-  auto info = GetHnInformation(id, "SetZAxisIsLog");
-
-  if ( ! info ) return false;
-
-  info->SetIsLogAxis(kZ, isLog);
+  info->SetIsLogAxis(idim, isLog);
   return true;
 }
 
@@ -302,69 +290,29 @@ G4String G4HnManager::GetName(G4int id) const
 {
   auto info = GetHnInformation(id, "GetName");
 
-  if ( ! info ) return "";
+  if (info == nullptr) return "";
 
   return info->GetName();
 }
 
 //_____________________________________________________________________________
-G4double G4HnManager::GetXUnit(G4int id) const
+G4double G4HnManager::GetUnit(unsigned int idim, G4int id) const
 {
-  auto info = GetHnDimensionInformation(id, kX, "GetXUnit");
+  auto info = GetHnDimensionInformation(id, idim, "GetXUnit");
 
-  if ( ! info ) return 1.0;
+  if (info == nullptr) return 1.0;
 
   return info->fUnit;
 }
 
 //_____________________________________________________________________________
-G4double G4HnManager::GetYUnit(G4int id) const
-{
-  auto info = GetHnDimensionInformation(id, kY, "GetYUnit");
-
-  if ( ! info ) return 1.0;
-
-  return info->fUnit;
-}
-
-//_____________________________________________________________________________
-G4double G4HnManager::GetZUnit(G4int id) const
-{
-  auto info = GetHnDimensionInformation(id, kZ, "GetZUnit");
-
-  if ( ! info ) return 1.0;
-
-  return info->fUnit;
-}
-
-//_____________________________________________________________________________
-G4bool G4HnManager::GetXAxisIsLog(G4int id) const
+G4bool G4HnManager::GetAxisIsLog(unsigned int idim, G4int id) const
 {
   auto info = GetHnInformation(id, "GetXAxisIsLog");
 
-  if ( ! info ) return false;
+  if (info == nullptr) return false;
 
-  return info->GetIsLogAxis(kX);
-}
-
-//_____________________________________________________________________________
-G4bool G4HnManager::GetYAxisIsLog(G4int id) const
-{
-  auto info = GetHnInformation(id, "GetYAxisIsLog");
-
-  if ( ! info ) return 1.0;
-
-  return info->GetIsLogAxis(kY);
-}
-
-//_____________________________________________________________________________
-G4bool G4HnManager::GetZAxisIsLog(G4int id) const
-{
-  auto info = GetHnInformation(id, "GetZAxisIsLog");
-
-  if ( ! info ) return 1.0;
-
-  return info->GetIsLogAxis(kZ);
+  return info->GetIsLogAxis(idim);
 }
 
 //_____________________________________________________________________________
@@ -372,7 +320,7 @@ G4bool G4HnManager::GetActivation(G4int id) const
 {
   auto info = GetHnInformation(id, "GetActivation");
 
-  if ( ! info ) return true;
+  if (info == nullptr) return true;
 
   return info->GetActivation();
 }
@@ -382,7 +330,7 @@ G4bool G4HnManager::GetAscii(G4int id) const
 {
   auto info = GetHnInformation(id, "GetAscii");
 
-  if ( ! info ) return false;
+  if (info == nullptr) return false;
 
   return info->GetAscii();
 }
@@ -392,7 +340,7 @@ G4bool G4HnManager::GetPlotting(G4int id) const
 {
   auto info = GetHnInformation(id, "GetPlotting");
 
-  if ( ! info ) return false;
+  if (info == nullptr) return false;
 
   return info->GetPlotting();
 }
@@ -402,7 +350,7 @@ G4String G4HnManager::GetFileName(G4int id) const
 {
   auto info = GetHnInformation(id, "GetFileName");
 
-  if ( ! info ) return "";
+  if (info == nullptr) return "";
 
   return info->GetFileName();
 }

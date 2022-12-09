@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -90,6 +90,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -117,7 +118,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -168,8 +169,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -547,28 +548,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.370000s Real=1.409343s Sys=0.000000s
+  User=1.660000s Real=1.678080s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 775.14 MeV :  15.89 MeV      2.05 +- 0.205 %      54.8 cm  +- 1.26 cm 
-        G4_lAr: 213.75 MeV :  14.62 MeV     6.839 +- 0.6839 %      1.05 m   +- 7.63 cm 
+         G4_Pb: 775.36 MeV :  17.79 MeV     2.295 +- 0.2295 %      54.7 cm  +- 1.37 cm 
+        G4_lAr: 213.68 MeV :  16.63 MeV     7.783 +- 0.7783 %      1.05 m   +- 8.45 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       510
- Mean number of e-          871
- Mean number of e+          53.4
- Mean number of charged steps  3665.7
- Mean number of neutral steps  3720.75
+ Mean number of gamma       507
+ Mean number of e-          870
+ Mean number of e+          53.7
+ Mean number of charged steps  3659.12
+ Mean number of neutral steps  3651.52
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 775.131 MeV
-    G4_lAr:	 213.76 MeV
+     G4_Pb:	 775.372 MeV
+    G4_lAr:	 213.651 MeV
 
 ------------------------------------------------------------
 
@@ -619,28 +620,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.160000s Real=1.192525s Sys=0.000000s
+  User=1.370000s Real=1.391094s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 772.98 MeV :  22.39 MeV     2.896 +- 0.2896 %        52 cm  +- 1.27 cm 
-        G4_lAr: 215.77 MeV :  17.22 MeV     7.981 +- 0.7981 %      1.02 m   +- 8.43 cm 
+         G4_Pb: 773.86 MeV :  20.77 MeV     2.683 +- 0.2683 %        52 cm  +- 1.36 cm 
+        G4_lAr: 215.88 MeV :  17.59 MeV      8.15 +- 0.815 %      1.02 m   +- 8.23 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       292
- Mean number of e-          554
- Mean number of e+          54.1
- Mean number of charged steps  3142.23
- Mean number of neutral steps  2940.92
+ Mean number of gamma       290
+ Mean number of e-          556
+ Mean number of e+          53.2
+ Mean number of charged steps  3103.77
+ Mean number of neutral steps  2939.75
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 772.779 MeV
-    G4_lAr:	 217.969 MeV
+     G4_Pb:	 773.503 MeV
+    G4_lAr:	 217.71 MeV
 
 ------------------------------------------------------------
 
@@ -648,6 +649,6 @@ Run Summary
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.094 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.11 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

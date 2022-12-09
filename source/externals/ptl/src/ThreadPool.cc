@@ -29,14 +29,16 @@
 // ---------------------------------------------------------------
 
 #include "PTL/ThreadPool.hh"
-#include "PTL/Globals.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/Threading.hh"
 #include "PTL/UserTaskQueue.hh"
 #include "PTL/Utility.hh"
 #include "PTL/VUserTaskQueue.hh"
 
-#include <cstdlib>
+#include <cassert>
+#include <mutex>
+#include <new>
+#include <stdexcept>
 #include <thread>
 
 using namespace PTL;
@@ -127,7 +129,7 @@ ThreadPool::start_thread(ThreadPool* tp, thread_data_t* _data, intmax_t _idx)
         if(_idx < 0)
             _idx = f_thread_ids().size();
         f_thread_ids()[std::this_thread::get_id()] = _idx;
-        Threading::SetThreadId(_idx);
+        Threading::SetThreadId((int)_idx);
         _data->emplace_back(_thr_data);
     }
     thread_data() = _thr_data.get();
@@ -159,7 +161,7 @@ ThreadPool::set_use_tbb(bool enable)
 #if defined(PTL_USE_TBB)
     f_use_tbb() = enable;
 #else
-    ConsumeParameters<bool>(enable);
+    ConsumeParameters(enable);
 #endif
 }
 
@@ -171,7 +173,7 @@ ThreadPool::set_default_use_cpu_affinity(bool enable)
 #if defined(PTL_USE_TBB)
     f_use_cpu_affinity() = enable;
 #else
-    ConsumeParameters<bool>(enable);
+    ConsumeParameters(enable);
 #endif
 }
 
@@ -227,7 +229,7 @@ ThreadPool::add_thread_id(ThreadId _tid)
     {
         auto _idx            = f_thread_ids().size();
         f_thread_ids()[_tid] = _idx;
-        Threading::SetThreadId(_idx);
+        Threading::SetThreadId((int)_idx);
     }
     return f_thread_ids().at(_tid);
 }
@@ -314,6 +316,13 @@ ThreadPool::~ThreadPool()
             itr.join();
         m_threads.clear();
     }
+
+    // delete owned resources
+    if(m_delete_task_queue)
+        delete m_task_queue;
+
+    delete m_tbb_task_arena;
+    delete m_tbb_task_group;
 }
 
 //======================================================================================//
@@ -329,8 +338,7 @@ ThreadPool::is_initialized() const
 void
 ThreadPool::record_entry()
 {
-    if(m_thread_active)
-        ++(*m_thread_active);
+    ++(*m_thread_active);
 }
 
 //======================================================================================//
@@ -338,8 +346,7 @@ ThreadPool::record_entry()
 void
 ThreadPool::record_exit()
 {
-    if(m_thread_active)
-        --(*m_thread_active);
+    --(*m_thread_active);
 }
 
 //======================================================================================//
@@ -357,7 +364,7 @@ ThreadPool::set_affinity(intmax_t i, Thread& _thread) const
             std::cerr << "[PTL::ThreadPool] Setting pin affinity for thread "
                       << get_thread_id(_thread.get_id()) << " to " << _pin << std::endl;
         }
-        Threading::SetPinAffinity(_pin, native_thread);
+        Threading::SetPinAffinity((int)_pin, native_thread);
     } catch(std::runtime_error& e)
     {
         std::cerr << "[PTL::ThreadPool] Error setting pin affinity: " << e.what()
@@ -867,7 +874,7 @@ ThreadPool::execute_thread(VUserTaskQueue* _task_queue)
 
             if(_task_queue->true_size() == 0)
             {
-                if(m_thread_awake && m_thread_awake->load() > 0)
+                if(m_thread_awake->load() > 0)
                     --(*m_thread_awake);
 
                 // lock before sleeping on condition
@@ -887,7 +894,7 @@ ThreadPool::execute_thread(VUserTaskQueue* _task_queue)
                     _task_lock.unlock();
 
                 // notify that is awake
-                if(m_thread_awake && m_thread_awake->load() < m_pool_size)
+                if(m_thread_awake->load() < m_pool_size)
                     ++(*m_thread_awake);
             }
             else

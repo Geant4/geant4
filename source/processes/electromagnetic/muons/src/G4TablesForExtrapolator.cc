@@ -199,10 +199,9 @@ void G4TablesForExtrapolator::Initialisation()
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator::Initialisation" << G4endl;
   }
-  G4int num = G4Material::GetNumberOfMaterials();
+  G4int num = (G4int)G4Material::GetNumberOfMaterials();
   if(nmat == num) { return; }
   nmat = num;
-  nmat = G4Material::GetNumberOfMaterials();
   cuts.resize(nmat, DBL_MAX);
   couples.resize(nmat, nullptr);
 
@@ -278,7 +277,7 @@ G4PhysicsTable* G4TablesForExtrapolator::PrepareTable(G4PhysicsTable* ptr)
 {
   G4PhysicsTable* table = ptr;
   if(nullptr == ptr) { table = new G4PhysicsTable(); }
-  G4int n = table->length();
+  G4int n = (G4int)table->length();
   for(G4int i=n; i<nmat; ++i) {  
     G4PhysicsVector* v = new G4PhysicsLogVector(emin, emax, nbins, splineFlag);
     table->push_back(v);

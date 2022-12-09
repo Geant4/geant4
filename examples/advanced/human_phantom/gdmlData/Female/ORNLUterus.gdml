@@ -9,108 +9,108 @@
  </define> 
 
  <materials>
-  <material name="sH" formula=" " Z="1."> 
+  <material name="sH_uterus" formula=" " Z="1."> 
    <D value="0.00009" />
    <atom value="1.008"/>
   </material>
-  <material name="sC" formula=" " Z="6."> 
+  <material name="sC_uterus" formula=" " Z="6."> 
    <D value="0.00226" />
    <atom value="12.011"/>
   </material>
-  <material name="sN" formula=" " Z="7."> 
+  <material name="sN_uterus" formula=" " Z="7."> 
    <D value="0.00125" />
    <atom value="14.006"/>
   </material>
-  <material name="sO" formula=" " Z="8."> 
+  <material name="sO_uterus" formula=" " Z="8."> 
    <D value="0.00143" />
    <atom value="15.999"/>
   </material>
-  <material name="sF" formula=" " Z="9."> 
+  <material name="sF_uterus" formula=" " Z="9."> 
    <D value="0.00169" />
    <atom value="18.998"/>
   </material>
-  <material name="sNa" formula=" " Z="11."> 
+  <material name="sNa_uterus" formula=" " Z="11."> 
    <D value="0.00097" />
    <atom value="22.989"/>
   </material>
-  <material name="sMg" formula=" " Z="12."> 
+  <material name="sMg_uterus" formula=" " Z="12."> 
    <D value="0.00174" />
    <atom value="24.3"/>
   </material>
-  <material name="sSi" formula=" " Z="14."> 
+  <material name="sSi_uterus" formula=" " Z="14."> 
    <D value="0.00233" />
    <atom value="28.086"/>
   </material>
-  <material name="sP" formula=" " Z="15."> 
+  <material name="sP_uterus" formula=" " Z="15."> 
    <D value="0.00182" />
    <atom value="30.973"/>
   </material>
-  <material name="sS" formula=" " Z="16."> 
+  <material name="sS_uterus" formula=" " Z="16."> 
    <D value="0.00207" />
    <atom value="32.064"/>
   </material>
-  <material name="sCl" formula=" " Z="17."> 
+  <material name="sCl_uterus" formula=" " Z="17."> 
    <D value="0.00321" />
    <atom value="35.453"/>
   </material>
-  <material name="sK" formula=" " Z="19."> 
+  <material name="sK_uterus" formula=" " Z="19."> 
    <D value="0.00086" />
    <atom value="39.10"/>
   </material>
-  <material name="sCa" formula=" " Z="20."> 
+  <material name="sCa_uterus" formula=" " Z="20."> 
    <D value="0.00155" />
    <atom value="40.08"/>
   </material>
-  <material name="sFe" formula=" " Z="26."> 
+  <material name="sFe_uterus" formula=" " Z="26."> 
    <D value="0.00786" />
    <atom value="55.847"/>
   </material>
-  <material name="sZn" formula=" " Z="30."> 
+  <material name="sZn_uterus" formula=" " Z="30."> 
    <D value="0.00714" />
    <atom value="65.37"/>
   </material>
-  <material name="sRb" formula=" " Z="37."> 
+  <material name="sRb_uterus" formula=" " Z="37."> 
    <D value="0.00153" />
    <atom value="85.47"/>
   </material> 
-  <material name="sSr" formula=" " Z="38."> 
+  <material name="sSr_uterus" formula=" " Z="38."> 
    <D value="0.00260" />
    <atom value="87.62"/>
   </material>
-  <material name="sZr" formula=" " Z="40."> 
+  <material name="sZr_uterus" formula=" " Z="40."> 
    <D value="0.00649" />
    <atom value="91.22"/>
   </material>
-  <material name="sPb" formula=" " Z="82."> 
+  <material name="sPb_uterus" formula=" " Z="82."> 
    <D value="0.01140" />
    <atom value="207.19"/>
   </material>
-  <material formula=" " name="SoftTissue">
+  <material formula=" " name="SoftTissue_uterus">
    <D value="1.04" />
-   <fraction n="0.10454" ref="sH" />
-   <fraction n="0.22663" ref="sC" />
-   <fraction n="0.02490" ref="sN" />
-   <fraction n="0.63525" ref="sO" />
-   <fraction n="0.00112" ref="sNa" />
-   <fraction n="0.00013" ref="sMg" />
-   <fraction n="0.00030" ref="sSi" />
-   <fraction n="0.00134" ref="sP" />
-   <fraction n="0.00204" ref="sS" />
-   <fraction n="0.00133" ref="sCl" />
-   <fraction n="0.00208" ref="sK" />
-   <fraction n="0.00024" ref="sCa" />
-   <fraction n="0.00005" ref="sFe" />
-   <fraction n="0.00003" ref="sZn" />
-   <fraction n="0.00001" ref="sRb" />
-   <fraction n="0.00001" ref="sZr" />
+   <fraction n="0.10454" ref="sH_uterus" />
+   <fraction n="0.22663" ref="sC_uterus" />
+   <fraction n="0.02490" ref="sN_uterus" />
+   <fraction n="0.63525" ref="sO_uterus" />
+   <fraction n="0.00112" ref="sNa_uterus" />
+   <fraction n="0.00013" ref="sMg_uterus" />
+   <fraction n="0.00030" ref="sSi_uterus" />
+   <fraction n="0.00134" ref="sP_uterus" />
+   <fraction n="0.00204" ref="sS_uterus" />
+   <fraction n="0.00133" ref="sCl_uterus" />
+   <fraction n="0.00208" ref="sK_uterus" />
+   <fraction n="0.00024" ref="sCa_uterus" />
+   <fraction n="0.00005" ref="sFe_uterus" />
+   <fraction n="0.00003" ref="sZn_uterus" />
+   <fraction n="0.00001" ref="sRb_uterus" />
+   <fraction n="0.00001" ref="sZr_uterus" />
   </material>
  </materials>
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Uterus" ax="2.47" by="1.55" cz="5.61" zcut1="-5.61" zcut2="2.81" />
+  <ellipsoid lunit="cm" name="Uterus" ax="2.47" by="1.55" cz="5.61" zcut1="-5.61" zcut2="2.81" />
  </solids>
  <structure>
   <volume name="UterusVolume" >
-   <materialref ref="SoftTissue" />
+   <materialref ref="SoftTissue_uterus" />
    <solidref ref="Uterus" />
   </volume>
  </structure>

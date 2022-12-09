@@ -46,6 +46,7 @@ G4TScoreNtupleWriter<T>::G4TScoreNtupleWriter()
   , fDefaultFileType("root")
   , fFileName("scoring")
   , fVerboseLevel(1)
+  , fMergeNtuples(false)
   , fHasAnalysisFile(false)
   , fIsBooked(false)
   , fIsInitialized(false)
@@ -72,14 +73,16 @@ G4TScoreNtupleWriter<T>::~G4TScoreNtupleWriter()
 template <typename T>
 void G4TScoreNtupleWriter<T>::CreateAnalysisManager()
 {
-  if(fAnalysisManager)
+  if(fAnalysisManager) {
     return;
+  }
 
   // create/get analysis manager
   fAnalysisManager = T::Instance();
 
   fAnalysisManager->SetDefaultFileType(fDefaultFileType);
   fAnalysisManager->SetVerboseLevel(fVerboseLevel);
+  fAnalysisManager->SetNtupleMerging(fMergeNtuples);
 }
 
 //
@@ -93,6 +96,8 @@ G4VScoreNtupleWriter* G4TScoreNtupleWriter<T>::CreateInstance() const
   auto instance = new G4TScoreNtupleWriter();
   instance->SetFileName(fFileName);
   instance->SetVerboseLevel(fVerboseLevel);
+  instance->SetNtupleMerging(fMergeNtuples);
+  instance->fHasAnalysisFile = fHasAnalysisFile;
 
   return instance;
 }
@@ -231,7 +236,9 @@ void G4TScoreNtupleWriter<T>::OpenFile()
   }
 #endif
 
-  fHasAnalysisFile = fAnalysisManager->IsOpenFile();
+  fHasAnalysisFile = fHasAnalysisFile || fAnalysisManager->IsOpenFile();
+    // Do not overwrite file ownership
+    // if merging is activated and file is not open on workers
 }
 
 //_____________________________________________________________________________
@@ -340,5 +347,16 @@ void G4TScoreNtupleWriter<T>::SetVerboseLevel(G4int value)
   if(fAnalysisManager)
   {
     fAnalysisManager->SetVerboseLevel(value);
+  }
+}
+
+//_____________________________________________________________________________
+template <typename T>
+void G4TScoreNtupleWriter<T>::SetNtupleMerging(G4bool value)
+{
+  fMergeNtuples = value;
+  if(fAnalysisManager)
+  {
+    fAnalysisManager->SetNtupleMerging(value);
   }
 }

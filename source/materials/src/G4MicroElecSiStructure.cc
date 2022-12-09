@@ -52,7 +52,7 @@ G4MicroElecSiStructure::G4MicroElecSiStructure(): nLevels(6)
   energyConstant.push_back(151.55*eV); 
   energyConstant.push_back(1828.5*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 G4double G4MicroElecSiStructure::Energy(G4int level)

@@ -35,14 +35,6 @@
 // Original author: Jonas Hahnfeld, 2021
 
 #include "G4EventManager.hh"
-#include "G4Step.hh"
-#include "G4StepPoint.hh"
-#include "G4Track.hh"
-#include "G4TrackVector.hh"
-#include "G4UserSteppingAction.hh"
-#include "G4UserTrackingAction.hh"
-#include "G4VSensitiveDetector.hh"
-
 #include "G4Field.hh"
 #include "G4FieldManager.hh"
 #include "G4FieldManagerStore.hh"
@@ -52,23 +44,30 @@
 #include "G4PropagatorInField.hh"
 #include "G4Region.hh"
 #include "G4SafetyHelper.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
 #include "G4TouchableHandle.hh"
 #include "G4TouchableHistory.hh"
+#include "G4Track.hh"
+#include "G4TrackVector.hh"
 #include "G4TransportationManager.hh"
+#include "G4UserSteppingAction.hh"
+#include "G4UserTrackingAction.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VSensitiveDetector.hh"
 
 template <typename PhysicsImpl, typename NavigationImpl>
-void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
-                                          NavigationImpl& navigation)
+void TrackingManagerHelper::TrackParticle(
+  G4Track* aTrack, PhysicsImpl& physics, NavigationImpl& navigation)
 {
   // Prepare for calling the user action.
-  auto* evtMgr             = G4EventManager::GetEventManager();
+  auto* evtMgr = G4EventManager::GetEventManager();
   auto* userTrackingAction = evtMgr->GetUserTrackingAction();
   auto* userSteppingAction = evtMgr->GetUserSteppingAction();
 
   // Locate the track in geometry.
   {
-    auto* transMgr        = G4TransportationManager::GetTransportationManager();
+    auto* transMgr = G4TransportationManager::GetTransportationManager();
     auto* linearNavigator = transMgr->GetNavigatorForTracking();
 
     const G4ThreeVector& pos = aTrack->GetPosition();
@@ -76,24 +75,20 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
 
     // Do not assign directly, doesn't work if the handle is empty.
     G4TouchableHandle touchableHandle;
-    if(aTrack->GetTouchableHandle())
-    {
+    if (aTrack->GetTouchableHandle()) {
       touchableHandle = aTrack->GetTouchableHandle();
       // FIXME: This assumes we only ever have G4TouchableHistorys!
-      auto* touchableHistory          = (G4TouchableHistory*) touchableHandle();
+      auto* touchableHistory = (G4TouchableHistory*)touchableHandle();
       G4VPhysicalVolume* oldTopVolume = touchableHandle->GetVolume();
       G4VPhysicalVolume* newTopVolume =
         linearNavigator->ResetHierarchyAndLocate(pos, dir, *touchableHistory);
       // TODO: WHY?!
-      if(newTopVolume != oldTopVolume ||
-         oldTopVolume->GetRegularStructureId() == 1)
-      {
+      if (newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId() == 1) {
         touchableHandle = linearNavigator->CreateTouchableHistory();
         aTrack->SetTouchableHandle(touchableHandle);
       }
     }
-    else
-    {
+    else {
       linearNavigator->LocateGlobalPointAndSetup(pos, &dir, false, false);
       touchableHandle = linearNavigator->CreateTouchableHistory();
       aTrack->SetTouchableHandle(touchableHandle);
@@ -110,15 +105,13 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
   G4TrackVector secondaries;
 
   // Start of tracking: Inform user and processes.
-  if(userTrackingAction)
-  {
+  if (userTrackingAction) {
     userTrackingAction->PreUserTrackingAction(aTrack);
   }
 
   physics.StartTracking(aTrack);
 
-  while(aTrack->GetTrackStatus() == fAlive)
-  {
+  while (aTrack->GetTrackStatus() == fAlive) {
     // Beginning of this step: Prepare data structures.
     aTrack->IncrementCurrentStepNumber();
 
@@ -144,15 +137,11 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
     physics.AlongStepDoIt(*aTrack, step, secondaries);
     step.UpdateTrack();
 
-    if(aTrack->GetTrackStatus() == fAlive &&
-       aTrack->GetKineticEnergy() < DBL_MIN)
-    {
-      if(physics.HasAtRestProcesses())
-      {
+    if (aTrack->GetTrackStatus() == fAlive && aTrack->GetKineticEnergy() < DBL_MIN) {
+      if (physics.HasAtRestProcesses()) {
         aTrack->SetTrackStatus(fStopButAlive);
       }
-      else
-      {
+      else {
         aTrack->SetTrackStatus(fStopAndKill);
       }
     }
@@ -160,16 +149,14 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
     navigation.FinishStep(*aTrack, step);
 
     // Check if the track left the world.
-    if(aTrack->GetNextVolume() == nullptr)
-    {
+    if (aTrack->GetNextVolume() == nullptr) {
       aTrack->SetTrackStatus(fStopAndKill);
     }
 
     // The check should rather check for == fAlive and avoid calling
     // PostStepDoIt for fStopButAlive, but the generic stepping loop
     // does it like this...
-    if(aTrack->GetTrackStatus() != fStopAndKill)
-    {
+    if (aTrack->GetTrackStatus() != fStopAndKill) {
       physics.PostStepDoIt(*aTrack, step, secondaries);
     }
 
@@ -177,30 +164,24 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
     aTrack->AddTrackLength(step.GetStepLength());
 
     // End of this step: Call sensitive detector and stepping actions.
-    if(step.GetControlFlag() != AvoidHitInvocation)
-    {
+    if (step.GetControlFlag() != AvoidHitInvocation) {
       auto* sensitive = lvol->GetSensitiveDetector();
-      if(sensitive)
-      {
+      if (sensitive) {
         sensitive->Hit(&step);
       }
     }
 
-    if(userSteppingAction)
-    {
+    if (userSteppingAction) {
       userSteppingAction->UserSteppingAction(&step);
     }
 
     auto* regionalAction = lvol->GetRegion()->GetRegionalSteppingAction();
-    if(regionalAction)
-    {
+    if (regionalAction) {
       regionalAction->UserSteppingAction(&step);
     }
   }
 
-  if(aTrack->GetTrackStatus() == fStopButAlive &&
-     aTrack->GetNextVolume() != nullptr)
-  {
+  if (aTrack->GetTrackStatus() == fStopButAlive && aTrack->GetNextVolume() != nullptr) {
     // Do one final step.
     aTrack->IncrementCurrentStepNumber();
 
@@ -211,23 +192,19 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
 
     // End of this step: Call sensitive detector and stepping actions.
     auto* lvol = aTrack->GetTouchable()->GetVolume()->GetLogicalVolume();
-    if(step.GetControlFlag() != AvoidHitInvocation)
-    {
+    if (step.GetControlFlag() != AvoidHitInvocation) {
       auto sensitive = lvol->GetSensitiveDetector();
-      if(sensitive)
-      {
+      if (sensitive) {
         sensitive->Hit(&step);
       }
     }
 
-    if(userSteppingAction)
-    {
+    if (userSteppingAction) {
       userSteppingAction->UserSteppingAction(&step);
     }
 
     auto* regionalAction = lvol->GetRegion()->GetRegionalSteppingAction();
-    if(regionalAction)
-    {
+    if (regionalAction) {
       regionalAction->UserSteppingAction(&step);
     }
   }
@@ -235,8 +212,7 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
   // End of tracking: Inform processes and user.
   physics.EndTracking();
 
-  if(userTrackingAction)
-  {
+  if (userTrackingAction) {
     userTrackingAction->PostUserTrackingAction(aTrack);
   }
 
@@ -246,20 +222,18 @@ void TrackingManagerHelper::TrackParticle(G4Track* aTrack, PhysicsImpl& physics,
 }
 
 template <typename PhysicsImpl>
-void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
-                                                 PhysicsImpl& physics)
+void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack, PhysicsImpl& physics)
 {
   class ChargedNavigation final : public Navigation
   {
    public:
     ChargedNavigation()
     {
-      auto* transMgr   = G4TransportationManager::GetTransportationManager();
+      auto* transMgr = G4TransportationManager::GetTransportationManager();
       fLinearNavigator = transMgr->GetNavigatorForTracking();
       fFieldPropagator = transMgr->GetPropagatorInField();
-      fSafetyHelper    = transMgr->GetSafetyHelper();
-      kCarTolerance =
-        0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+      fSafetyHelper = transMgr->GetSafetyHelper();
+      kCarTolerance = 0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
       // Reset sstate of field propagator and all chord finders.
       fFieldPropagator->ClearPropagatorState();
@@ -268,20 +242,16 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
       fieldMgrStore->ClearAllChordFindersState();
     }
 
-    G4double MakeStep(G4Track& track, G4Step& step,
-                      G4double physicalStep) override
+    G4double MakeStep(G4Track& track, G4Step& step, G4double physicalStep) override
     {
-      G4ThreeVector pos          = track.GetPosition();
-      G4ThreeVector dir          = track.GetMomentumDirection();
+      G4ThreeVector pos = track.GetPosition();
+      G4ThreeVector dir = track.GetMomentumDirection();
       G4StepPoint& postStepPoint = *step.GetPostStepPoint();
 
       bool fieldExertsForce = false;
-      if(auto* fieldMgr =
-           fFieldPropagator->FindAndSetFieldManager(track.GetVolume()))
-      {
+      if (auto* fieldMgr = fFieldPropagator->FindAndSetFieldManager(track.GetVolume())) {
         fieldMgr->ConfigureForTrack(&track);
-        if(const G4Field* ptrField = fieldMgr->GetDetectorField())
-        {
+        if (const G4Field* ptrField = fieldMgr->GetDetectorField()) {
           fieldExertsForce = true;
         }
       }
@@ -292,21 +262,19 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
       // short steps where the field propagator returns immediately without
       // calling geometry.
       const G4double shiftSquare = (pos - fSafetyOrigin).mag2();
-      if(shiftSquare < sqr(fSafety))
-      {
+      if (shiftSquare < sqr(fSafety)) {
         safety = fSafety - std::sqrt(shiftSquare);
       }
 
-      if(fieldExertsForce)
-      {
+      if (fieldExertsForce) {
         const G4DynamicParticle* pParticle = track.GetDynamicParticle();
-        const G4double particleCharge      = pParticle->GetCharge();
-        const G4double particleMass        = pParticle->GetMass();
-        const G4double magneticMoment      = pParticle->GetMagneticMoment();
-        const G4ThreeVector particleSpin   = pParticle->GetPolarization();
-        const G4double kineticEnergy       = pParticle->GetKineticEnergy();
-        const auto pParticleDef            = pParticle->GetDefinition();
-        const auto particlePDGSpin         = pParticleDef->GetPDGSpin();
+        const G4double particleCharge = pParticle->GetCharge();
+        const G4double particleMass = pParticle->GetMass();
+        const G4double magneticMoment = pParticle->GetMagneticMoment();
+        const G4ThreeVector particleSpin = pParticle->GetPolarization();
+        const G4double kineticEnergy = pParticle->GetKineticEnergy();
+        const auto pParticleDef = pParticle->GetDefinition();
+        const auto particlePDGSpin = pParticleDef->GetPDGSpin();
         const auto particlePDGMagM = pParticleDef->GetPDGMagneticMoment();
 
         auto equationOfMotion = fFieldPropagator->GetCurrentEquationOfMotion();
@@ -314,32 +282,28 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
           G4ChargeState(particleCharge, magneticMoment, particlePDGSpin),
           pParticle->GetTotalMomentum(), particleMass);
 
-        const G4ThreeVector startPosition  = pos;
+        const G4ThreeVector startPosition = pos;
         const G4ThreeVector startDirection = dir;
         G4FieldTrack aFieldTrack(startPosition,
-                                 track.GetGlobalTime(),  // Lab.
-                                 dir, kineticEnergy, particleMass,
-                                 particleCharge, particleSpin, particlePDGMagM,
-                                 0.0,  // Length along track
-                                 particlePDGSpin);
+          track.GetGlobalTime(),  // Lab.
+          dir, kineticEnergy, particleMass, particleCharge, particleSpin, particlePDGMagM,
+          0.0,  // Length along track
+          particlePDGSpin);
 
         // Do the Transport in the field (non recti-linear)
         //
-        fGeometryLimitedStep            = false;
+        fGeometryLimitedStep = false;
         const G4double lengthAlongCurve = fFieldPropagator->ComputeStep(
-          aFieldTrack, physicalStep, safety, track.GetVolume(),
-          kineticEnergy < 250.0);
-        if(lengthAlongCurve < physicalStep)
-        {
-          physicalStep         = lengthAlongCurve;
+          aFieldTrack, physicalStep, safety, track.GetVolume(), kineticEnergy < 250.0);
+        if (lengthAlongCurve < physicalStep) {
+          physicalStep = lengthAlongCurve;
           fGeometryLimitedStep = true;
         }
         fSafetyHelper->SetCurrentSafety(safety, pos);
         fSafetyOrigin = pos;
-        fSafety       = safety;
+        fSafety = safety;
 
-        if(fFieldPropagator->IsParticleLooping())
-        {
+        if (fFieldPropagator->IsParticleLooping()) {
           track.SetTrackStatus(fStopAndKill);
         }
 
@@ -351,19 +315,16 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
 
         endpointDistance = (startPosition - pos).mag();
       }
-      else
-      {
+      else {
         fGeometryLimitedStep = false;
-        G4double linearStepLength =
-          fLinearNavigator->ComputeStep(pos, dir, physicalStep, safety);
-        if(linearStepLength < physicalStep)
-        {
-          physicalStep         = linearStepLength;
+        G4double linearStepLength = fLinearNavigator->ComputeStep(pos, dir, physicalStep, safety);
+        if (linearStepLength < physicalStep) {
+          physicalStep = linearStepLength;
           fGeometryLimitedStep = true;
         }
         fSafetyHelper->SetCurrentSafety(safety, pos);
         fSafetyOrigin = pos;
-        fSafety       = safety;
+        fSafety = safety;
 
         // Update the position.
         pos += physicalStep * dir;
@@ -373,43 +334,37 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
       }
 
       // Update global, local, and proper time.
-      double velocity  = track.GetVelocity();
+      double velocity = track.GetVelocity();
       double deltaTime = 0;
-      if(velocity > 0)
-      {
+      if (velocity > 0) {
         deltaTime = physicalStep / velocity;
       }
 
       postStepPoint.AddGlobalTime(deltaTime);
       postStepPoint.AddLocalTime(deltaTime);
 
-      double restMass        = track.GetDynamicParticle()->GetMass();
+      double restMass = track.GetDynamicParticle()->GetMass();
       double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
       postStepPoint.AddProperTime(deltaProperTime);
 
       // Compute safety, including the call to safetyHelper, but don't set the
       // safety in the post-step point to mimick the generic stepping loop.
-      if(safety > physicalStep)
-      {
+      if (safety > physicalStep) {
         safety -= physicalStep;
       }
-      else if(safety < endpointDistance)
-      {
+      else if (safety < endpointDistance) {
         safety = fLinearNavigator->ComputeSafety(pos);
         fSafetyHelper->SetCurrentSafety(safety, pos);
         fSafetyOrigin = pos;
-        fSafety       = safety;
+        fSafety = safety;
       }
-      else
-      {
+      else {
         safety = 0;
       }
-      if(safety < kCarTolerance)
-      {
+      if (safety < kCarTolerance) {
         fPostStepSafety = kCarTolerance;
       }
-      else
-      {
+      else {
         fPostStepSafety = safety;
       }
 
@@ -423,25 +378,21 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
       postStepPoint.SetSafety(fPostStepSafety);
 
       G4TouchableHandle touchableHandle = track.GetTouchableHandle();
-      const G4ThreeVector& pos          = track.GetPosition();
-      if(fGeometryLimitedStep)
-      {
+      const G4ThreeVector& pos = track.GetPosition();
+      if (fGeometryLimitedStep) {
         // Relocate the particle.
         fLinearNavigator->SetGeometricallyLimitedStep();
         fLinearNavigator->LocateGlobalPointAndUpdateTouchableHandle(
           pos, track.GetMomentumDirection(), touchableHandle, true);
         const G4VPhysicalVolume* newVolume = touchableHandle->GetVolume();
-        if(newVolume == nullptr)
-        {
+        if (newVolume == nullptr) {
           postStepPoint.SetStepStatus(fWorldBoundary);
         }
-        else
-        {
+        else {
           postStepPoint.SetStepStatus(fGeomBoundary);
         }
       }
-      else
-      {
+      else {
         // Move the Navigator's location.
         fLinearNavigator->LocateGlobalPointWithinVolume(pos);
       }
@@ -455,7 +406,7 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
     G4PropagatorInField* fFieldPropagator;
     G4SafetyHelper* fSafetyHelper;
     G4ThreeVector fSafetyOrigin;
-    G4double fSafety         = 0;
+    G4double fSafety = 0;
     G4double fPostStepSafety = 0;
     G4double kCarTolerance;
     G4bool fGeometryLimitedStep;
@@ -466,81 +417,70 @@ void TrackingManagerHelper::TrackChargedParticle(G4Track* aTrack,
 }
 
 template <typename PhysicsImpl>
-void TrackingManagerHelper::TrackNeutralParticle(G4Track* aTrack,
-                                                 PhysicsImpl& physics)
+void TrackingManagerHelper::TrackNeutralParticle(G4Track* aTrack, PhysicsImpl& physics)
 {
   class NeutralNavigation final : public Navigation
   {
    public:
     NeutralNavigation()
     {
-      auto* transMgr   = G4TransportationManager::GetTransportationManager();
+      auto* transMgr = G4TransportationManager::GetTransportationManager();
       fLinearNavigator = transMgr->GetNavigatorForTracking();
-      fSafetyHelper    = transMgr->GetSafetyHelper();
-      kCarTolerance =
-        0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+      fSafetyHelper = transMgr->GetSafetyHelper();
+      kCarTolerance = 0.5 * G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
     }
 
-    G4double MakeStep(G4Track& track, G4Step& step,
-                      G4double physicalStep) override
+    G4double MakeStep(G4Track& track, G4Step& step, G4double physicalStep) override
     {
-      G4ThreeVector pos          = track.GetPosition();
-      G4ThreeVector dir          = track.GetMomentumDirection();
+      G4ThreeVector pos = track.GetPosition();
+      G4ThreeVector dir = track.GetMomentumDirection();
       G4StepPoint& postStepPoint = *step.GetPostStepPoint();
 
-      G4double safety            = 0.0;
+      G4double safety = 0.0;
       const G4double shiftSquare = (pos - fSafetyOrigin).mag2();
-      if(shiftSquare < sqr(fSafety))
-      {
+      if (shiftSquare < sqr(fSafety)) {
         safety = fSafety - std::sqrt(shiftSquare);
       }
 
       fGeometryLimitedStep = false;
-      G4double linearStepLength =
-        fLinearNavigator->ComputeStep(pos, dir, physicalStep, safety);
-      if(linearStepLength < physicalStep)
-      {
-        physicalStep         = linearStepLength;
+      G4double linearStepLength = fLinearNavigator->ComputeStep(pos, dir, physicalStep, safety);
+      if (linearStepLength < physicalStep) {
+        physicalStep = linearStepLength;
         fGeometryLimitedStep = true;
       }
       fSafetyHelper->SetCurrentSafety(safety, pos);
       fSafetyOrigin = pos;
-      fSafety       = safety;
+      fSafety = safety;
 
       // Update the position.
       pos += physicalStep * dir;
       postStepPoint.SetPosition(pos);
 
       // Update global, local, and proper time.
-      double velocity  = track.GetVelocity();
+      double velocity = track.GetVelocity();
       double deltaTime = 0;
-      if(velocity > 0)
-      {
+      if (velocity > 0) {
         deltaTime = physicalStep / velocity;
       }
       postStepPoint.AddGlobalTime(deltaTime);
       postStepPoint.AddLocalTime(deltaTime);
 
-      double restMass        = track.GetDynamicParticle()->GetMass();
+      double restMass = track.GetDynamicParticle()->GetMass();
       double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
       postStepPoint.AddProperTime(deltaProperTime);
 
       // Compute safety, but don't set the safety in the post-step point to
       // mimick the generic stepping loop.
-      if(safety > physicalStep)
-      {
+      if (safety > physicalStep) {
         safety -= physicalStep;
       }
-      else
-      {
+      else {
         safety = 0;
       }
-      if(safety < kCarTolerance)
-      {
+      if (safety < kCarTolerance) {
         fPostStepSafety = kCarTolerance;
       }
-      else
-      {
+      else {
         fPostStepSafety = safety;
       }
 
@@ -554,25 +494,21 @@ void TrackingManagerHelper::TrackNeutralParticle(G4Track* aTrack,
       postStepPoint.SetSafety(fPostStepSafety);
 
       G4TouchableHandle touchableHandle = track.GetTouchableHandle();
-      const G4ThreeVector& pos          = track.GetPosition();
-      if(fGeometryLimitedStep)
-      {
+      const G4ThreeVector& pos = track.GetPosition();
+      if (fGeometryLimitedStep) {
         // Relocate the particle.
         fLinearNavigator->SetGeometricallyLimitedStep();
         fLinearNavigator->LocateGlobalPointAndUpdateTouchableHandle(
           pos, track.GetMomentumDirection(), touchableHandle, true);
         const G4VPhysicalVolume* newVolume = touchableHandle->GetVolume();
-        if(newVolume == nullptr)
-        {
+        if (newVolume == nullptr) {
           postStepPoint.SetStepStatus(fWorldBoundary);
         }
-        else
-        {
+        else {
           postStepPoint.SetStepStatus(fGeomBoundary);
         }
       }
-      else
-      {
+      else {
         // Move the Navigator's location.
         fLinearNavigator->LocateGlobalPointWithinVolume(pos);
       }
@@ -585,7 +521,7 @@ void TrackingManagerHelper::TrackNeutralParticle(G4Track* aTrack,
     G4Navigator* fLinearNavigator;
     G4SafetyHelper* fSafetyHelper;
     G4ThreeVector fSafetyOrigin;
-    G4double fSafety         = 0;
+    G4double fSafety = 0;
     G4double fPostStepSafety = 0;
     G4double kCarTolerance;
     G4bool fGeometryLimitedStep;

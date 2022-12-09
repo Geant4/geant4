@@ -95,7 +95,7 @@ void G4VUserDetectorConstruction::ConstructParallelSD()
 // --------------------------------------------------------------------
 G4int G4VUserDetectorConstruction::GetNumberOfParallelWorld() const
 {
-  return parallelWorld.size();
+  return (G4int)parallelWorld.size();
 }
 
 // --------------------------------------------------------------------

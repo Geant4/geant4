@@ -457,8 +457,10 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
 
     G4bool haveProducts = false;
+#ifdef debug_BIC_Propagate_Collisions
     G4int collisionCount=0;
-	 G4int collisionLoopMaxCount=1000000;
+#endif
+    G4int collisionLoopMaxCount=1000000;
     while(theCollisionMgr->Entries() > 0 && currentZ && --collisionLoopMaxCount>0)  /* Loop checking, 31.08.2015, G.Folger */  
     {
       if(Absorb()) {  // absorb secondaries, pions only
@@ -495,9 +497,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
                 {
                     //G4cerr << "ApplyCollision success " << G4endl;
                     haveProducts = true;
+#ifdef debug_BIC_Propagate_Collisions
                     collisionCount++;
-                    //_CheckChargeAndBaryonNumber_("ApplyCollision");
-                    //_DebugEpConservation("ApplyCollision");
+#endif
 
                 } else {
                     //G4cerr << "ApplyCollision failure " << G4endl;
@@ -1691,7 +1693,6 @@ void G4BinaryCascade::StepParticlesOut()
     while( theSecondaryList.size() > 0 )               /* Loop checking, 31.08.2015, G.Folger */
 	                                                    // if countreset reaches limit, there is a break from while, see below.
     {
-        G4int nsec=0;
         G4double minTimeStep = 1.e-12*ns;   // about 30*fermi/(0.1*c_light);1.e-12*ns
                                             // i.e. a big step
         std::vector<G4KineticTrack *>::iterator i;
@@ -1700,7 +1701,6 @@ void G4BinaryCascade::StepParticlesOut()
             G4KineticTrack * kt = *i;
             if( kt->GetState() == G4KineticTrack::inside )
             {
-                nsec++;
                 G4double tStep(0), tdummy(0);
                 G4bool intersect =
                         ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep);
@@ -1724,7 +1724,6 @@ void G4BinaryCascade::StepParticlesOut()
             }
         }
         minTimeStep *= 1.2;
-        //    G4cerr << "CaptureCount = "<<counter<<" "<<nsec<<" "<<minTimeStep<<" "<<1*ns<<G4endl;
         G4double timeToCollision=DBL_MAX;
         G4CollisionInitialState * nextCollision=0;
         if(theCollisionMgr->Entries() > 0)
@@ -1920,11 +1919,9 @@ void G4BinaryCascade::CorrectFinalPandE()
     G4cerr << " -CorrectFinalPandE 3" << G4endl;
 #endif
     G4LorentzVector pFinals(0);
-    G4int nFinals(0);
     for(i = theFinalState.begin(); i != theFinalState.end(); ++i)
     {
         pFinals += (*i)->Get4Momentum();
-        ++nFinals;
 #ifdef debug_BIC_CorrectFinalPandE
         G4cout <<"CorrectFinalPandE a final " << (*i)->GetDefinition()->GetParticleName()
         		           << " 4mom " << (*i)->Get4Momentum()<< G4endl;
@@ -1978,7 +1975,6 @@ void G4BinaryCascade::CorrectFinalPandE()
     {
         G4ThreeVector p3finals=pInCM*pFinals.vect().unit();
 
-        //    G4ThreeVector deltap=(p3finals - pFinals.vect() ) / nFinals;
         G4double factor=std::max(0.98,pInCM/pFinals.vect().mag());   // small correction
         G4LorentzVector qFinals(0);
         for(i = theFinalState.begin(); i != theFinalState.end(); ++i)
@@ -2496,7 +2492,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
             << G4endl;
 #endif
 
-    G4int a = theTargetList.size()+theCapturedList.size();
+    G4int a = G4int(theTargetList.size()+theCapturedList.size());
     G4int zTarget = 0;
     G4KineticTrackVector::iterator i;
     for(i = theTargetList.begin(); i != theTargetList.end(); ++i)
@@ -2543,8 +2539,8 @@ G4Fragment * G4BinaryCascade::FindFragments()
     //  if(getenv("BCDEBUG") ) G4cerr << "Fragment A, Z "<< a <<" "<< z<<G4endl;
     if ( z < 1 ) return 0;
 
-    G4int holes = the3DNucleus->GetMassNumber() - theTargetList.size();
-    G4int excitons = theCapturedList.size();
+    G4int holes = G4int(the3DNucleus->GetMassNumber() - theTargetList.size());
+    G4int excitons = (G4int)theCapturedList.size();
 #ifdef debug_BIC_FindFragments
     G4cout << "Fragment: a= " << a << " z= " << z << " particles= " <<  excitons
             << " Charged= " << zCaptured << " holes= " << holes
@@ -2891,11 +2887,11 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     // return product when nucleus is destroyed, i.e. charge=0, or theTargetList.size()=0
     G4double Esecondaries(0.);
     G4LorentzVector psecondaries;
-    std::vector<G4KineticTrack *>::iterator iter;
-    std::vector<G4ReactionProduct *>::iterator rpiter;
+    std::vector<G4KineticTrack *>::const_iterator iter;
+    std::vector<G4ReactionProduct *>::const_iterator rpiter;
     decayKTV.Decay(&theFinalState);
 
-    for(iter = theFinalState.begin(); iter != theFinalState.end(); ++iter)
+    for(iter = theFinalState.cbegin(); iter != theFinalState.cend(); ++iter)
     {
         G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
@@ -2951,7 +2947,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     	transferCorrection= theMomentumTransfer /(theSecondaryList.size() + theCapturedList.size());
     }
 
-    for(iter = theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
+    for(iter = theSecondaryList.cbegin(); iter != theSecondaryList.cend(); ++iter)
     {
         G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         (*iter)->Update4Momentum((*iter)->Get4Momentum().vect()+transferCorrection);
@@ -2966,7 +2962,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         products->push_back(aNew);
     }
 
-    for(iter = theCapturedList.begin(); iter != theCapturedList.end(); ++iter)
+    for(iter = theCapturedList.cbegin(); iter != theCapturedList.cend(); ++iter)
     {
         G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         (*iter)->Update4Momentum((*iter)->Get4Momentum().vect()+transferCorrection);
@@ -2983,7 +2979,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 
     G4double SumMassNucleons(0.);
     G4LorentzVector pNucleons(0.);
-    for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
+    for(iter = theTargetList.cbegin(); iter != theTargetList.cend(); ++iter)
     {
         SumMassNucleons += (*iter)->GetDefinition()->GetPDGMass();
         pNucleons += (*iter)->Get4Momentum();
@@ -3002,7 +2998,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         G4double Ekineticrdm(0);
         if (theTargetList.size()) Ekineticrdm = ( 0.1 + G4UniformRand()*5.) * MeV;	// leave some  Energy for Nucleons
       	G4double TotalEkin(Ekineticrdm);
-        for (rpiter=products->begin(); rpiter!=products->end(); ++rpiter){
+        for (rpiter=products->cbegin(); rpiter!=products->cend(); ++rpiter){
         	TotalEkin+=(*rpiter)->GetKineticEnergy();
         }
         G4double correction(1.);
@@ -3015,7 +3011,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 			}
         #endif
 
-        for (rpiter=products->begin(); rpiter!=products->end(); ++rpiter){
+        for (rpiter=products->cbegin(); rpiter!=products->cend(); ++rpiter){
 	    	(*rpiter)->SetKineticEnergy((*rpiter)->GetKineticEnergy()*correction);  // this sets kinetic & total energy
         	(*rpiter)->SetMomentum((*rpiter)->GetTotalMomentum() * (*rpiter)->GetMomentum().unit());
 
@@ -3026,7 +3022,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 
 	}
 
-    for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter) {
+    for(iter = theTargetList.cbegin(); iter != theTargetList.cend(); ++iter) {
     	// set Nucleon it to be hit - as it is in fact
     	(*iter)->Hit();
         G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
@@ -3041,7 +3037,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         psecondaries += G4LorentzVector(aNew->GetMomentum(),aNew->GetTotalEnergy() );
     }
     psecondaries=G4LorentzVector(0);
-    for (rpiter=products->begin(); rpiter!=products->end(); ++rpiter){
+    for (rpiter=products->cbegin(); rpiter!=products->cend(); ++rpiter){
     	psecondaries += G4LorentzVector((*rpiter)->GetMomentum(),(*rpiter)->GetTotalEnergy() );
     }
 
@@ -3055,24 +3051,22 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     SumMom=initial4Mom.vect()-SumMom;
     G4int loopcount(0);
 
-    std::vector<G4ReactionProduct *>::reverse_iterator reverse;  // start to correct last added first
+    // reverse_iterator reverse - start to correct last added first
     while ( SumMom.mag() > 0.1*MeV && loopcount++ < 10)           /* Loop checking, 31.08.2015, G.Folger */
     {
-	 	G4int index=products->size();
-		for (reverse=products->rbegin(); reverse!=products->rend(); ++reverse, --index){
-			SumMom=initial4Mom.vect();
-			for (rpiter=products->begin(); rpiter!=products->end(); ++rpiter){
-				SumMom-=(*rpiter)->GetMomentum();
-			}
-
-			G4double p=((*reverse)->GetMomentum()).mag();
-			(*reverse)->SetMomentum(  p*(((*reverse)->GetMomentum()+SumMom).unit()));
-
-		}
+      G4int index=(G4int)products->size();
+      for (auto reverse=products->crbegin(); reverse!=products->crend(); ++reverse, --index){
+        SumMom=initial4Mom.vect();
+        for (rpiter=products->cbegin(); rpiter!=products->cend(); ++rpiter){
+          SumMom-=(*rpiter)->GetMomentum();
+        }
+        G4double p=((*reverse)->GetMomentum()).mag();
+        (*reverse)->SetMomentum(  p*(((*reverse)->GetMomentum()+SumMom).unit()));
+      }
     }
-
     return products;
 }
+
 G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionProductVector * products,
         G4KineticTrackVector * secondaries)
 {

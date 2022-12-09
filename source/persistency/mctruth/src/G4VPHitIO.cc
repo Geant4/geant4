@@ -44,7 +44,7 @@ void G4VPHitIO::SetVerboseLevel(G4int v)
   m_verbose = v;
 
   // Loop through the registered Hit I/O managers
-  for(std::size_t i = 0; i < f_catalog->NumberOfHCIOmanager(); ++i)
+  for(G4int i = 0; i < (G4int)f_catalog->NumberOfHCIOmanager(); ++i)
   {
     G4VPHitsCollectionIO* hitIOman = f_catalog->GetHCIOmanager(i);
     hitIOman->SetVerboseLevel(v);

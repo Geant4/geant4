@@ -398,11 +398,11 @@ void G4QGSParticipants::GetList( const G4ReactionProduct& thePrimary ) {
     #ifdef debugQGSParticipants
       G4cout<<"InteractionMode "<<InteractionMode<<G4endl;
       G4cout<<"Impact parameter (fm ) "<<std::sqrt(sqr(impactX)+sqr(impactY))/fermi<<" "<<G4endl;
+      G4int nucleonCount = -1;
     #endif
 
     // loop over nucleons to find collisions
     theNucleus->StartLoop();
-    G4int nucleonCount = -1;
     G4QGSParticipants_NPart = 0;
 
     G4double Power=MaxPower;
@@ -410,7 +410,6 @@ void G4QGSParticipants::GetList( const G4ReactionProduct& thePrimary ) {
     while( (tNucleon = theNucleus->GetNextNucleon()) )
     {
       if(Power <= 0.) break;
-      nucleonCount++;
 
       G4LorentzVector nucleonMomentum=tNucleon->Get4Momentum();
 
@@ -425,6 +424,7 @@ void G4QGSParticipants::GetList( const G4ReactionProduct& thePrimary ) {
       Regge->GetProbabilities(std::sqrt(Distance2), InteractionMode,
 			      Pint, Pprd, Ptrd, Pdd, Pnd, Pnvr);
       #ifdef debugQGSParticipants
+        nucleonCount++;
         G4cout<<"Nucleon & its impact parameter: "<<nucleonCount<<" "<<std::sqrt(Distance2)/fermi<<" (fm)"<<G4endl;
         G4cout<<"Probability of interaction:     "<<Pint<<G4endl;
 	G4cout<<"Probability of PrD, TrD, DD:    "<<Pprd<<" "<<Ptrd<<" "<<Pdd<<G4endl;
@@ -636,10 +636,14 @@ void G4QGSParticipants::ReggeonCascade()
     G4V3DNucleus* theTargetNucleus = theNucleus;
     theTargetNucleus->StartLoop();
 
-    G4int TrgNuc=0;
+    #ifdef debugQGSParticipants
+      G4int TrgNuc=0;
+    #endif
     G4Nucleon* Neighbour(0);
     while ( ( Neighbour = theTargetNucleus->GetNextNucleon() ) ) {
-      TrgNuc++;
+      #ifdef debugQGSParticipants
+        TrgNuc++;
+      #endif
       if ( ! Neighbour->AreYouHit() ) {
         G4double impact2 = sqr( XofWoundedNucleon - Neighbour->GetPosition().x() ) +
                            sqr( YofWoundedNucleon - Neighbour->GetPosition().y() );
@@ -1552,18 +1556,18 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
   #ifdef debugQGSParticipants
     G4cout<<"Projectile 4 momentum "<<Psum<<G4endl
           <<"Target nucleon momenta at start"<<G4endl;
+    G4int NuclNo=0;
   #endif
 
   std::vector<G4VSplitableHadron*>::iterator i;
-  G4int NuclNo=0;
 
   for (i = theTargets.begin(); i != theTargets.end(); i++ )
   {
     Psum += (*i)->Get4Momentum();
     #ifdef debugQGSParticipants
       G4cout<<"Nusleus nucleon # and its 4Mom. "<<NuclNo<<" "<<(*i)->Get4Momentum()<<G4endl;
+      NuclNo++;
     #endif
-    NuclNo++;
   }
 
   G4LorentzRotation toCms( -1*Psum.boostVector() );
@@ -1579,9 +1583,9 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
   #ifdef debugQGSParticipants
     G4cout<<G4endl<<"In CMS---------------"<<G4endl;
     G4cout<<"Projectile 4 Mom "<<Projectile4Momentum<<G4endl;
+    NuclNo=0;
   #endif
 
-  NuclNo=0;
   G4LorentzVector Target4Momentum(0.,0.,0.,0.);
   for(i = theTargets.begin(); i != theTargets.end(); i++ )
   {
@@ -1589,9 +1593,9 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
     (*i)->Set4Momentum( tmp );
     #ifdef debugQGSParticipants
       G4cout<<"Target nucleon # and 4Mom "<<" "<<NuclNo<<" "<<(*i)->Get4Momentum()<<G4endl;
+      NuclNo++;
     #endif
     Target4Momentum += tmp;
-    NuclNo++;
   }
 
   G4double S     = Psum.mag2();
@@ -1600,11 +1604,11 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
   #ifdef debugQGSParticipants
     G4cout<<"Sum of target nucleons 4 momentum "<<Target4Momentum<<G4endl<<G4endl;
     G4cout<<"Target nucleons mom: px, py, z_1, m_i"<<G4endl;
+    NuclNo=0;
   #endif
 
   //G4double PplusProjectile = Projectile4Momentum.plus();
   G4double PminusTarget    = Target4Momentum.minus();
-  NuclNo=0;
   
   for(i = theTargets.begin(); i != theTargets.end(); i++ )
   {
@@ -1634,8 +1638,8 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
     (*i)->Set4Momentum(tmp); 
     #ifdef debugQGSParticipants
       G4cout<<"Target nucleons # and mom: "<<NuclNo<<" "<<(*i)->Get4Momentum()<<G4endl;
+      NuclNo++;
     #endif
-    NuclNo++;
   }
 
   //+++++++++++++++++++++++++++++++++++++++++++
@@ -1765,13 +1769,13 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
     aParton->Set4Momentum(tmp);
     #ifdef debugQGSParticipants
       G4cout<<"              "<<tmp<<" "<<SumZ+(1.-SumZ)<<" (z-fraction)"<<G4endl;
+      NuclNo=0;
     #endif
 
     // End of work with the projectile
 
     // Work with target nucleons 
 
-    NuclNo=0;
     for(i = theTargets.begin(); i != theTargets.end(); i++ )
     {
       nSeaPair = (*i)->GetSoftCollisionCount()-1;
@@ -1958,19 +1962,19 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
 
   #ifdef debugQGSParticipants
     G4cout<<"              "<<Tmp<<" "<<Tmp.mag()<<" (mass)"<<G4endl;
+    NuclNo=0;
   #endif
 
   // End of work with the projectile
 
   // Work with target nucleons 
-  NuclNo=0;
   for(i = theTargets.begin(); i != theTargets.end(); i++ )
   {
     nSeaPair = (*i)->GetSoftCollisionCount()-1;
     #ifdef debugQGSParticipants
       G4cout<<"nSeaPair of target and N# "<<nSeaPair<<" "<<NuclNo<<G4endl;
+      NuclNo++;
     #endif
-    NuclNo++;
     for (G4int aSeaPair = 0; aSeaPair < nSeaPair; aSeaPair++)
     {
       aParton = (*i)->GetNextParton();   // for quarks
@@ -2027,8 +2031,8 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
     aParton->Set4Momentum(Tmp);
     #ifdef debugQGSParticipants
       G4cout<<"              "<<Tmp<<" "<<Tmp.mag()<<" (mass)"<<G4endl;
+      NuclNo++;
     #endif
-    NuclNo++;
   }   // End of for(i = theTargets.begin(); i != theTargets.end(); i++ )
 
   return true;
@@ -2137,10 +2141,10 @@ void G4QGSParticipants::CreateStrings()
 
   //-----------------------------------------
   #ifdef debugQGSParticipants
+    G4int IntNo=0;    
     G4cout<<"Strings created in soft interactions"<<G4endl;
   #endif 
   std::vector<G4InteractionContent*>::iterator i;
-  G4int IntNo=0;    
   i = theInteractions.begin();
   while ( i != theInteractions.end() )  /* Loop checking, 07.08.2015, A.Ribon */
   {
@@ -2150,8 +2154,8 @@ void G4QGSParticipants::CreateStrings()
     #ifdef debugQGSParticipants
       G4cout<<"An interaction # and soft coll. # "<<IntNo<<" "
             <<anIniteraction->GetNumberOfSoftCollisions()<<G4endl;
+      IntNo++;
     #endif 
-    IntNo++;
     if (anIniteraction->GetNumberOfSoftCollisions())
     {
       G4VSplitableHadron* pProjectile = anIniteraction->GetProjectile();

@@ -64,6 +64,7 @@ enum G4MaterialPropertyIndex   {
   kSCINTILLATIONCOMPONENT1,    // scintillation light yield vectors for 
   kSCINTILLATIONCOMPONENT2,    //   3 channels
   kSCINTILLATIONCOMPONENT3,    // "
+  kCOATEDRINDEX,               // real part of the refractive index of the thin layer in case of coated surface
   kNumberOfPropertyIndex       // the number of G4MaterialPropertyIndex
 } ;
 
@@ -127,6 +128,10 @@ enum G4MaterialConstPropertyIndex
   kELECTRONSCINTILLATIONYIELD1, // scintillation light yield by electrons
   kELECTRONSCINTILLATIONYIELD2, //   for 3 channels
   kELECTRONSCINTILLATIONYIELD3, // "
+  kCOATEDTHICKNESS,             // thickness of the thin layer in case of coated
+  kCOATEDFRUSTRATEDTRANSMISSION,// for incident angle superior to limit angle, use frustrated transmission (if true)
+                                // or total reflection (if false)
+
   kNumberOfConstPropertyIndex   // the number of G4MaterialConstPropertyIndex
 };
 

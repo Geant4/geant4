@@ -70,12 +70,7 @@ Run::Run()
 
   fTotalSurface = 0;
 
-  fBoundaryProcs.clear();
-  fBoundaryProcs.resize(40);
-  for(G4int i = 0; i < 40; ++i)
-  {
-    fBoundaryProcs[i] = 0;
-  }
+  fBoundaryProcs.assign(43, 0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -529,6 +524,21 @@ void Run::EndOfRun()
   {
     G4cout << "  Ground VM2000 Glue reflection: " << std::setw(8)
            << fBoundaryProcs[GroundVM2000GlueReflection] << G4endl;
+  }
+  if(fBoundaryProcs[CoatedDielectricRefraction] > 0)
+  {
+    G4cout << "  CoatedDielectricRefraction: " << std::setw(8)
+           << fBoundaryProcs[CoatedDielectricRefraction] << G4endl;
+  }
+  if(fBoundaryProcs[CoatedDielectricReflection] > 0)
+  {
+    G4cout << "  CoatedDielectricReflection: " << std::setw(8)
+           << fBoundaryProcs[CoatedDielectricReflection] << G4endl;
+  }
+  if(fBoundaryProcs[CoatedDielectricFrustratedTransmission] > 0)
+  {
+    G4cout << "  CoatedDielectricFrustratedTransmission: " << std::setw(8)
+           << fBoundaryProcs[CoatedDielectricFrustratedTransmission] << G4endl;
   }
 
   G4int sum = std::accumulate(fBoundaryProcs.begin(), fBoundaryProcs.end(), 0);

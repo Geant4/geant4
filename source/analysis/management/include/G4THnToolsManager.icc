@@ -1,0 +1,332 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, 10/08/2022  (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisUtilities.hh"
+
+using G4Analysis::kX;
+using G4Analysis::kY;
+using G4Analysis::kZ;
+using G4Analysis::CheckDimensions;
+using G4Analysis::GetHnType;
+using G4Analysis::IsProfile;
+using G4Analysis::Warn;
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+const std::array<std::string, 3> G4THnToolsManager<DIM, HT>::fkKeyAxisTitle =
+{ "axis_x.title", "axis_y.title", "axis_z.title" };
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4THnToolsManager<DIM, HT>::G4THnToolsManager(const G4AnalysisManagerState& state) 
+  : G4THnManager<HT>(state)
+{
+  fMessenger = std::make_unique<G4THnMessenger<DIM, HT>>(this);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnToolsManager<DIM, HT>::UpdateInformation(G4HnInformation* hnInformation,
+  const std::array<G4HnDimensionInformation, DIM>& hnInfo)
+{
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    hnInformation->SetDimension(idim, hnInfo[idim]);
+  }
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4HnInformation* G4THnToolsManager<DIM, HT>::AddInformation(const G4String& name,
+  const std::array<G4HnDimensionInformation, DIM>& hnInfo)
+{
+  auto hnInformation = GetHnManager()->AddHnInformation(name, DIM);
+  for (unsigned int idim = 0; idim < DIM; ++idim) {  
+    hnInformation->AddDimension(hnInfo[idim]);
+  }
+
+  return hnInformation;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnToolsManager<DIM, HT>::AddAnnotation(HT* ht,
+  const std::array<G4HnDimensionInformation, DIM>& hnInfo)
+{
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    G4String axisTitle;
+    G4Analysis::UpdateTitle(axisTitle, hnInfo[idim]);
+
+    ht->add_annotation(fkKeyAxisTitle[idim], axisTitle);
+  }
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::CheckName(const G4String& name) const
+{
+  if (name.size() == 0u) {
+    G4Analysis::Warn("Empty " + GetHnType<HT>() + " name is not allowed.\n" +
+         GetHnType<HT>() + " was not created.", fkClass, "CheckName");
+    return false;
+  }
+  return true;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4int G4THnToolsManager<DIM, HT>::Create(
+  const G4String& name, const G4String& title,
+  const std::array<G4HnDimension, DIM>& bins,
+  const std::array<G4HnDimensionInformation, DIM>& hnInfo)
+{
+  // Check parameters
+  if ((! CheckName(name)) ||
+      (! CheckDimensions<DIM>(bins, hnInfo, IsProfile<HT>()))) {
+    return G4Analysis::kInvalidId;
+  }
+
+  Message(G4Analysis::kVL4, "create", GetHnType<HT>(), name);
+
+  auto ht = CreateToolsHT(title, bins, hnInfo);
+
+  // Add annotation
+  AddAnnotation(ht, hnInfo);
+
+  // Save hn information
+  auto info = AddInformation(name, hnInfo);
+
+  // Register histogram
+  auto id = RegisterT(name, ht, info);
+
+  Message(G4Analysis::kVL2, "create", GetHnType<HT>(), name);
+
+  return id;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::Set(G4int id,
+  const std::array<G4HnDimension, DIM>& bins,
+  const std::array<G4HnDimensionInformation, DIM>& hnInfo)
+{
+  // Check parameters
+  if (! CheckDimensions<DIM>(bins, hnInfo, IsProfile<HT>())) {
+    return false;
+  }
+
+  auto [ht, info] = GetTHnInFunction(id, "Set" + GetHnType<HT>(), false, false);
+  if (ht == nullptr) return false;
+
+  Message(G4Analysis::kVL4, "configure", GetHnType<HT>(), info->GetName());
+
+  // Configure tools h2
+  ConfigureToolsHT(ht, bins, hnInfo);
+
+  // Add annotation
+  AddAnnotation(ht, hnInfo);
+
+  // Update information
+  UpdateInformation(info, hnInfo);
+
+  // Set activation
+  GetHnManager()->SetActivation(id, true);
+
+  return true;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::Scale(G4int id, G4double factor)
+{
+  auto ht = GetTInFunction(id, "Scale"  + GetHnType<HT>(), false, false);
+  if (ht == nullptr) return false;
+
+  return ht->scale(factor);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::Fill(G4int id, 
+  std::array<G4double, DIM> value, G4double weight)
+{
+  auto [ht, info] = GetTHnInFunction(id, "Fill"+ GetHnType<HT>(), true, false);
+  if (ht == nullptr) return false;
+
+  if ( G4THnManager<HT>::fState.GetIsActivation() && ( ! info->GetActivation() ) ) {
+    return false;
+  }
+
+  std::array<G4double, DIM> newValue(value);
+  auto result = FillHT(ht, *info, newValue, weight);
+
+  if ( IsVerbose(G4Analysis::kVL4) ) {
+    // compose message
+    G4String dims("xyz");
+    G4String message =  " id " + to_string(id);
+    for (unsigned int idim = 0; idim < DIM; ++idim) {
+      auto xyz = dims[idim];
+      message +=
+        xyz + to_string(value[idim]) + " " +
+        xyz + "fcn(" + xyz + "value/" + xyz + "xunit) " +  to_string(newValue[idim]);
+    }
+    message += " weight " + to_string(weight);  
+
+    Message(G4Analysis::kVL4, "fill", GetHnType<HT>(), message);
+  }
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4int  G4THnToolsManager<DIM, HT>::GetId(const G4String& name, G4bool warn) const
+{
+  return GetTId(name, warn);
+}
+
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4int G4THnToolsManager<DIM, HT>::GetNbins(unsigned int idim, G4int id) const
+{
+  auto ht = GetTInFunction(id, "GetNbins");
+  if (ht == nullptr) return 0;
+
+  return ht->get_axis(idim).bins();
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4double G4THnToolsManager<DIM, HT>::GetMinValue(unsigned int idim, G4int id) const
+{
+  auto ht = GetTInFunction(id, "GetMinValue");
+  if (ht == nullptr) return 0.;
+
+  return ht->get_axis(idim).lower_edge();
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4double G4THnToolsManager<DIM, HT>::GetMaxValue(unsigned int idim, G4int id) const
+{
+  auto ht = GetTInFunction(id, "GetMaxValue");
+  if (ht == nullptr) return 0.;
+
+  return ht->get_axis(idim).upper_edge();
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4double G4THnToolsManager<DIM, HT>::GetWidth(unsigned int idim, G4int id) const
+{
+  auto ht = GetTInFunction(id, "GetWidth", true, false);
+  if (ht == nullptr) return 0.;
+
+  auto nbins = ht->get_axis(idim).bins();
+  if (nbins == 0u) {
+    Warn("nbins = 0 ! for " + GetHnType<HT>(), fkClass, "GetWidth");
+    return 0.;
+  }
+
+  return ( ht->get_axis(idim).upper_edge() -
+           ht->get_axis(idim).lower_edge() )/nbins;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::SetTitle(G4int id, const G4String& title)
+{
+  auto ht = GetTInFunction(id, "SetTitle");
+  if (ht == nullptr) return false;
+
+  return ht->set_title(title);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::SetAxisTitle(unsigned int idim, G4int id, const G4String& title)
+{
+  auto ht = GetTInFunction(id, "SetAxisTitle");
+  if (ht == nullptr) return false;
+
+  ht->add_annotation(fkKeyAxisTitle[idim], title);
+
+  return true;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4String G4THnToolsManager<DIM, HT>::GetTitle(G4int id) const
+{
+  auto ht = GetTInFunction(id, "GetTitle");
+  if (ht == nullptr) return 0;
+
+  return ht->title();
+}
+
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4String G4THnToolsManager<DIM, HT>::GetAxisTitle(unsigned int idim, G4int id) const
+{
+  auto ht = GetTInFunction(id, "GetAxisTitle");
+  if (ht == nullptr) return 0;
+
+  G4String title;
+  G4bool result = ht->annotation(fkKeyAxisTitle[idim], title);
+
+  if ( ! result ) {
+    Warn("Got wrong dimension " + to_string(idim) + " for " + GetHnType<HT>(),
+      fkClass, "GetAxisTitle");
+
+    return {};
+  }
+
+  return title;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::List(std::ostream& output, G4bool onlyIfActive)
+{
+  return G4THnManager<HT>::List(output, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+std::shared_ptr<G4HnManager> G4THnToolsManager<DIM, HT>::GetHnManager() {
+  return G4THnManager<HT>::fHnManager;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+const std::shared_ptr<G4HnManager> G4THnToolsManager<DIM, HT>::GetHnManager() const
+{
+  return G4THnManager<HT>::fHnManager;
+}
+

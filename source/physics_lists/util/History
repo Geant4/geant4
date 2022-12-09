@@ -1,9 +1,39 @@
 # Category phys-util History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-24 Gabriele Cosmo (phys-util-V11-00-09)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-05 Ben Morgan (phys-util-V11-00-08)
+- Update public/private dependencies for consistency
+
+## 2022-08-24 Vladimir Ivanchenko (phys-util-V11-00-07)
+- G4PhysListUtil - use enumerator for neutron general process
+    instead of hard-coded number
+
+## 2022-08-24 Gabriele Cosmo (phys-util-V11-00-06)
+- Added missing dependencies on G4hadronic_deex_photon_evaporation
+  and G4run in GNUmakefile and CMake script.
+  Added missing dependency on G4procman to GNUmakefile.
+
+## 2022-08-21 Vladimir Ivanchenko (phys-util-V11-00-05)
+- G4PhysListUtil, G4HadProcesses - added extra methods needed for
+    neutron general process initialisation
+- GNUmakefile, source.cmake - added dependences on needed hadronic
+    sub-libraries in order to fix granular build
+
+## 2022-08-16 Alberto Ribon (phys-util-V11-00-04)
+- G4PhysListUtil : in the method InitialiseParameters(), called
+  the singleton G4FTFTunings::Instance() to allow the setting of
+  a FTF tune via UI commands at PreInit state.
+
+## 2022-08-09 Vladimir Ivanchenko (phys-util-V11-00-03)
+- G4PhysListUtil - extended InitialiseParameters() method
 
 ## 2022-03-26 Vladimir Ivanchenko (phys-util-V11-00-02)
 - G4PhysListUtil - use dynamic_cast instead of static_cast

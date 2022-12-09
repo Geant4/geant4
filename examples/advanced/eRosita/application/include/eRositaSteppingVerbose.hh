@@ -23,36 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose.
-//   It shows how to extract informations during the tracking of a particle.
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class eRositaSteppingVerbose;
+// This class manages the verbose outputs in G4SteppingManager.
+// It shows how to extract informations during the tracking of a particle.
 
 #ifndef eRositaSteppingVerbose_h
 #define eRositaSteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class eRositaSteppingVerbose;
 
-class eRositaSteppingVerbose : public G4SteppingVerbose 
-{
- public:
-   
-  eRositaSteppingVerbose();
- ~eRositaSteppingVerbose();
+class eRositaSteppingVerbose : public G4SteppingVerbose {
+public:
+    eRositaSteppingVerbose();
 
-  void StepInfo();
-  void TrackingStarted();
+    ~eRositaSteppingVerbose() override;
 
+    void StepInfo() override;
+
+    void TrackingStarted() override;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

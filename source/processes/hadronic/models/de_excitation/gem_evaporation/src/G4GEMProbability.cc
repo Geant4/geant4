@@ -83,10 +83,10 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
 
     // Next there is a loop over excited states for this channel 
     // summing probabilities
-    size_t nn = ExcitEnergies.size();
+    std::size_t nn = ExcitEnergies.size();
     if (0 < nn) {
       G4double SavedSpin = Spin;
-      for (size_t i = 0; i <nn; ++i) {
+      for (std::size_t i = 0; i <nn; ++i) {
 	Spin = ExcitSpins[i];
 	// substract excitation energies
 	G4double Tmax = MaximalKineticEnergy - ExcitEnergies[i];
@@ -266,12 +266,12 @@ void G4GEMProbability::Dump() const
     efermi = G4NucleiProperties::GetNuclearMass(theA-1, theZ)
       + neutron_mass_c2 - mass;
   }
-  G4int nlev = ExcitEnergies.size();
+  std::size_t nlev = ExcitEnergies.size();
   G4cout << "GEM: List of Excited States for Isotope Z= " 
 	 << theZ << " A= " << theA << " Nlevels= " << nlev 
 	 << " Efermi(MeV)= " << efermi
 	 << G4endl;
-  for(G4int i=0; i< nlev; ++i) {
+  for(std::size_t i=0; i< nlev; ++i) {
     G4cout << "Z= " << theZ << " A= " << theA 
 	   << " Mass(GeV)= " << mass/GeV
 	   << " Eexc(MeV)= " << ExcitEnergies[i]

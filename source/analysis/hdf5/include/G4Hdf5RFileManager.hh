@@ -47,12 +47,12 @@ class G4Hdf5RFileManager : public G4VRFileManager
   public:
     explicit G4Hdf5RFileManager(const G4AnalysisManagerState& state);
     G4Hdf5RFileManager() = delete;
-    virtual ~G4Hdf5RFileManager() = default;
+    ~G4Hdf5RFileManager() override = default;
 
-    virtual G4String GetFileType() const final { return "hdf5"; }
+    G4String GetFileType() const final { return "hdf5"; }
 
     // Methods from base class
-    virtual void CloseFiles() final;
+    void CloseFiles() final;
 
     // Get methods
     G4Hdf5File* GetRFile(const G4String& fileName, G4bool isPerThread);

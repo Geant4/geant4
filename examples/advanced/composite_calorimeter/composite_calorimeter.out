@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,6 +78,8 @@ HcalTB96 is registered to the default region.
 *  Magnetic Field is off  *
 *                         *
 ***************************
+G4FieldManager/SetEpsMin :  eps_min =      1e-05
+G4FieldManager/SetEpsMax :  eps_max =       0.01 ( Note: unchanged eps_min=     1e-05 )
 *******************************************************
 *                                                     *
 * Constructing a CCaloSD  with name HadronCalorimeter
@@ -108,6 +110,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -135,7 +138,7 @@ Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -186,8 +189,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -670,6 +673,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: hFritiofCaptureAtRest
 
 ---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for anti_lambda
 
   Process: hadElastic
@@ -997,20 +1005,20 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   15 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.00            8k CrystalMatrix
        0.00         0.00         0.00            0k HcalTB96
        0.00         0.00         0.00            0k HadronCalorimeter
-       0.00         0.00         0.00            3k HadronCalorimeterBox0       0.00         0.00         0.00            2k HadronCalorimeterBox1       0.00         0.00         0.00            1k HadronCalorimeterScntLayer2       0.00         0.00         0.00            0k HadronCalorimeterScntLayer1       0.00         0.00         0.00            0k HadronCalorimeterScntLayer0       0.00         0.00         0.00            8k CrystalMatrix
-       0.00         0.00         0.00            1k CrystalMatrixLayer
+       0.00         0.00         0.00            3k HadronCalorimeterBox0       0.00         0.00         0.00            2k HadronCalorimeterBox1       0.00         0.00         0.00            1k HadronCalorimeterScntLayer2       0.00         0.00         0.00            0k HadronCalorimeterScntLayer1       0.00         0.00         0.00            0k HadronCalorimeterScntLayer0       0.00         0.00         0.00            1k CrystalMatrixLayer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.44          7k        12      112        196         0.00    CrystalMatrix
+      49.44          7k        12      112        196         0.01    CrystalMatrix
       20.31          3k         6       44         83         0.00    HadronCalorimeterBox0      14.44          2k         5       30         60         0.00    HadronCalorimeterBox1       4.81          0k         1       12         14         0.00    CrystalMatrixLayer
        3.70          0k         2        7         13         0.00    HadronCalorimeterScntLayer2       2.08          0k         1        4          8         0.00    HadronCalorimeter
        1.98          0k         1        4          6         0.00    HadronCalorimeterScntLayer0       1.67          0k         1        3          6         0.00    HadronCalorimeterScntLayer1       1.57          0k         1        3          4         0.00    HcalTB96
@@ -1078,7 +1086,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=15.890000s Real=16.088186s Sys=0.010000s
+  User=17.640000s Real=17.826814s Sys=0.000000s
 ### Run 0 end.
 ... write file : ccal.root - done
 ... close file : ccal.root - done
@@ -1096,12 +1104,12 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 52
+Total navigation history collections cleaned: 49
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0779 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0731 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0461 MB
+Pool ID '17G4DynamicParticle', size : 0.0385 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00769 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00385 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -1109,13 +1117,13 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.0913 MB
-Pool ID '18G4TouchableHistory', size : 0.00673 MB
+Pool ID '7G4Track', size : 0.0759 MB
+Pool ID '18G4TouchableHistory', size : 0.00577 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.0144 MB
 Pool ID '10G4Fragment', size : 0.00673 MB
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 0.26 MB
+Dynamic pools deleted: 15 / Total memory freed: 0.23 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -112,8 +112,8 @@ G4PixeCrossSectionHandler::~G4PixeCrossSectionHandler()
 
   if (crossSections != 0)
     {
-      size_t n = crossSections->size();
-      for (size_t i=0; i<n; i++)
+      std::size_t n = crossSections->size();
+      for (std::size_t i=0; i<n; ++i)
 	{
 	  delete (*crossSections)[i];
 	}
@@ -178,8 +178,8 @@ void G4PixeCrossSectionHandler::PrintData() const
 
 void G4PixeCrossSectionHandler::LoadShellData(const G4String& fileName)
 {
-  size_t nZ = activeZ.size();
-  for (size_t i=0; i<nZ; i++)
+  std::size_t nZ = activeZ.size();
+  for (std::size_t i=0; i<nZ; ++i)
     {
       G4int Z = (G4int) activeZ[i];     
       G4IInterpolator* algo = interpolation->Clone();
@@ -271,7 +271,7 @@ G4double G4PixeCrossSectionHandler::FindValue(G4int Z, G4double energy,
       G4IDataSet* dataSet = (*pos).second;
       if (shellIndex >= 0) 
 	{
-	  G4int nComponents = dataSet->NumberOfComponents();
+	  G4int nComponents = (G4int)dataSet->NumberOfComponents();
 	  if(shellIndex < nComponents)    
 	    // The value is the cross section for shell component at given energy
 	    value = dataSet->GetComponent(shellIndex)->FindValue(energy);
@@ -302,9 +302,9 @@ G4double G4PixeCrossSectionHandler::ValueForMaterial(const G4Material* material,
 
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
-  G4int nElements = material->GetNumberOfElements();
+  std::size_t nElements = material->GetNumberOfElements();
 
-  for (G4int i=0 ; i<nElements ; i++)
+  for (std::size_t i=0 ; i<nElements ; ++i)
     {
       G4int Z = (G4int) (*elementVector)[i]->GetZ();
       G4double elementValue = FindValue(Z,energy);
@@ -365,10 +365,10 @@ G4double G4PixeCrossSectionHandler::ValueForMaterial(const G4Material* material,
   
   const G4ProductionCutsTable* theCoupleTable=
   G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
 
-  for (size_t m=0; m<numOfCouples; m++)
+  for (std::size_t m=0; m<numOfCouples; m++)
   {
   energies = new G4DataVector;
   data = new G4DataVector;
@@ -450,7 +450,7 @@ G4int G4PixeCrossSectionHandler::SelectRandomAtom(const G4Material* material,
   // Select randomly an element within the material, according to the weight
   // determined by the cross sections in the data set
 
-  G4int nElements = material->GetNumberOfElements();
+  G4int nElements = (G4int)material->GetNumberOfElements();
 
   // Special case: the material consists of one element
   if (nElements == 1)
@@ -462,13 +462,13 @@ G4int G4PixeCrossSectionHandler::SelectRandomAtom(const G4Material* material,
   // Composite material
 
   const G4ElementVector* elementVector = material->GetElementVector();
-  size_t materialIndex = material->GetIndex();
+  std::size_t materialIndex = material->GetIndex();
 
   G4IDataSet* materialSet = (*crossSections)[materialIndex];
   G4double materialCrossSection0 = 0.0;
   G4DataVector cross;
   cross.clear();
-  for ( G4int i=0; i < nElements; i++ )
+  for ( G4int i=0; i < nElements; ++i )
     {
       G4double cr = materialSet->GetComponent(i)->FindValue(e);
       materialCrossSection0 += cr;
@@ -477,7 +477,7 @@ G4int G4PixeCrossSectionHandler::SelectRandomAtom(const G4Material* material,
 
   G4double random = G4UniformRand() * materialCrossSection0;
 
-  for (G4int k=0 ; k < nElements ; k++ )
+  for (G4int k=0 ; k < nElements ; ++k )
     {
       if (random <= cross[k]) return (G4int) (*elementVector)[k]->GetZ();
     }
@@ -507,7 +507,7 @@ G4int G4PixeCrossSectionHandler::SelectRandomAtom(const G4Material* material,
   {
   // Composite material
 
-  size_t materialIndex = couple->GetIndex();
+  std::size_t materialIndex = couple->GetIndex();
 
   G4IDataSet* materialSet = (*crossSections)[materialIndex];
   G4double materialCrossSection0 = 0.0;
@@ -557,8 +557,8 @@ G4int G4PixeCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   // if (pos != dataMap.end()) dataSet = pos->second;
   if (pos != dataMap.end()) dataSet = (*pos).second;
 
-  size_t nShells = dataSet->NumberOfComponents();
-  for (size_t i=0; i<nShells; i++)
+  G4int nShells = (G4int)dataSet->NumberOfComponents();
+  for (G4int i=0; i<nShells; ++i)
     {
       const G4IDataSet* shellDataSet = dataSet->GetComponent(i);
       if (shellDataSet != 0)
@@ -581,15 +581,15 @@ void G4PixeCrossSectionHandler::ActiveElements()
 				  FatalException,
 				  "no MaterialTable found");
 
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  std::size_t nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int mat=0; mat<nMaterials; mat++)
+  for (std::size_t mat=0; mat<nMaterials; ++mat)
     {
       const G4Material* material= (*materialTable)[mat];
       const G4ElementVector* elementVector = material->GetElementVector();
-      const G4int nElements = material->GetNumberOfElements();
+      const std::size_t nElements = material->GetNumberOfElements();
 
-      for (G4int iEl=0; iEl<nElements; iEl++)
+      for (std::size_t iEl=0; iEl<nElements; ++iEl)
 	{
 	  G4double Z = (*elementVector)[iEl]->GetZ();
 	  if (!(activeZ.contains(Z)) && Z >= zMin && Z <= zMax)
@@ -615,7 +615,7 @@ G4int G4PixeCrossSectionHandler::NumberOfComponents(G4int Z) const
   if (pos!= dataMap.end())
     {
       G4IDataSet* dataSet = (*pos).second;
-      n = dataSet->NumberOfComponents();
+      n = (G4int)dataSet->NumberOfComponents();
     }
   else
     {
@@ -636,9 +636,9 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
   std::vector<G4IDataSet*>* matCrossSections = new std::vector<G4IDataSet*>;
 
   //const G4ProductionCutsTable* theCoupleTable=G4ProductionCutsTable::GetProductionCutsTable();
-  //size_t numOfCouples = theCoupleTable->GetTableSize();
+  //std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  size_t nOfBins = energyVector.size();
+  std::size_t nOfBins = energyVector.size();
   const G4IInterpolator* interpolationAlgo = CreateInterpolation();
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
@@ -648,12 +648,12 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
 		FatalException,
 		"no MaterialTable found");
 
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  std::size_t nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int mat=0; mat<nMaterials; mat++)
+  for (std::size_t mat=0; mat<nMaterials; ++mat)
     {
       const G4Material* material = (*materialTable)[mat];
-      G4int nElements = material->GetNumberOfElements();
+      G4int nElements = (G4int)material->GetNumberOfElements();
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();
 
@@ -661,7 +661,7 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
 
       G4IDataSet* setForMat = new G4CompositeDataSet(algo,1.,1.);
 
-      for (G4int i=0; i<nElements; i++) {
+      for (G4int i=0; i<nElements; ++i) {
  
         G4int Z = (G4int) (*elementVector)[i]->GetZ();
         G4double density = nAtomsPerVolume[i];
@@ -670,7 +670,7 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
         data = new G4DataVector;
 
 
-        for (size_t bin=0; bin<nOfBins; bin++)
+        for (std::size_t bin=0; bin<nOfBins; ++bin)
 	  {
 	    G4double e = energyVector[bin];
 	    energies->push_back(e);

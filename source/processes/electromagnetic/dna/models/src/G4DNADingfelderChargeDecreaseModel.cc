@@ -47,7 +47,6 @@ G4DNADingfelderChargeDecreaseModel::G4DNADingfelderChargeDecreaseModel(const G4P
                                                                        const G4String& nam) :
 G4VEmModel(nam), isInitialised(false)
 {
-  fpMolWaterDensity = 0;
   numberOfPartialCrossSections[0] = 0;
   numberOfPartialCrossSections[1] = 0;
   numberOfPartialCrossSections[2] = 0;
@@ -64,17 +63,9 @@ G4VEmModel(nam), isInitialised(false)
   {
     G4cout << "Dingfelder charge decrease model is constructed " << G4endl;
   }
-  fParticleChangeForGamma = 0;
-
   // Selection of stationary mode
 
   statCode = false;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4DNADingfelderChargeDecreaseModel::~G4DNADingfelderChargeDecreaseModel()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -79,7 +79,7 @@ void G4ICRU90StoppingData::Initialise()
 {
   if(isInitialized) { return; }
   // this method may be called several times during initialisation
-  G4int nmat = G4Material::GetNumberOfMaterials();
+  G4int nmat = (G4int)G4Material::GetNumberOfMaterials();
   if(nmat == (G4int)nvectors) { return; }
 
   static const G4String nameNIST_ICRU90[3] = 

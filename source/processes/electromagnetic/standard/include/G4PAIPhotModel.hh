@@ -170,8 +170,8 @@ inline void G4PAIPhotModel::SetVerboseLevel(G4int verbose)
 inline G4int G4PAIPhotModel::FindCoupleIndex(const G4MaterialCutsCouple* couple)
 {
   G4int idx = -1;
-  size_t jMatMax = fMaterialCutsCoupleVector.size();
-  for(size_t jMat = 0;jMat < jMatMax; ++jMat) { 
+  G4int jMatMax = (G4int)fMaterialCutsCoupleVector.size();
+  for(G4int jMat = 0;jMat < jMatMax; ++jMat) { 
     if(couple == fMaterialCutsCoupleVector[jMat]) {
       idx = jMat; 
       break; 
@@ -192,10 +192,3 @@ inline void G4PAIPhotModel::SetParticle(const G4ParticleDefinition* p)
 }
 
 #endif
-
-
-
-
-
-
-

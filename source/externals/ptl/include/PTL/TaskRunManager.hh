@@ -25,18 +25,15 @@
 
 #pragma once
 
-#include "PTL/TBBTaskGroup.hh"
-#include "PTL/TaskGroup.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/Threading.hh"
 #include "PTL/VUserTaskQueue.hh"
 
-#include <list>
-#include <map>
+#include <cstddef>
+#include <cstdint>
+#include <thread>
 
 namespace PTL
 {
-class ThreadPool;
 class TaskManager;
 
 //======================================================================================//
@@ -44,7 +41,7 @@ class TaskManager;
 class TaskRunManager
 {
 public:
-    typedef TaskRunManager* pointer;
+    using pointer = TaskRunManager*;
 
 public:
     // Parameters:
@@ -57,7 +54,7 @@ public:
 public:
     virtual int GetNumberOfThreads() const
     {
-        return (m_thread_pool) ? m_thread_pool->size() : 0;
+        return (m_thread_pool) ? (int)m_thread_pool->size() : 0;
     }
     virtual size_t GetNumberActiveThreads() const
     {

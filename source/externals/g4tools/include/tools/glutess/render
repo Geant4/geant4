@@ -272,6 +272,7 @@ inline/*static*/ void static_RenderFan( GLUtesselator *tess, GLUhalfEdge *e, lon
 
   assert( size == 0 );
   CALL_END_OR_END_DATA();
+  (void)size;
 }
 
 
@@ -300,6 +301,7 @@ inline/*static*/ void static_RenderStrip( GLUtesselator *tess, GLUhalfEdge *e, l
 
   assert( size == 0 );
   CALL_END_OR_END_DATA();
+  (void)size;
 }
 
 

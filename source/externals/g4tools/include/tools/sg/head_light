@@ -30,8 +30,8 @@ public:
    {mat4f mtx;
     state.m_camera_orientation.value(mtx);
     mtx.mul_dir_3f(dx,dy,dz);}
-    state.m_GL_LIGHTING = true; //for separator
-    a_action.enable_light(state.m_light,vec3f(dx,dy,dz),color.value());
+    state.m_GL_LIGHTING = true;
+    a_action.enable_light(state.m_light,vec3f(dx,dy,dz),color.value(),ambient.value());
     state.m_light++;
   }
 public:

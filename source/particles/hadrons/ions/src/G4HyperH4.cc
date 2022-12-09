@@ -47,7 +47,7 @@ G4HyperH4* G4HyperH4::Definition() {
   const G4String name = "hyperH4";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  reinterpret_cast< G4Ions* >( pTable->FindParticle( name ) );
+  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -109,7 +109,7 @@ G4HyperH4* G4HyperH4::Definition() {
     delete [] mode;
     anInstance->SetDecayTable( table );
   }
-  theInstance = reinterpret_cast< G4HyperH4* >( anInstance );
+  theInstance = static_cast< G4HyperH4* >( anInstance );
   return theInstance;
 }
 

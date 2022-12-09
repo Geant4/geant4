@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -54,6 +54,7 @@ min MeanLife (from G4NuclideTable)                1 ns
 Max life time (from G4DeexPrecoParameters)        1 ns 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    0
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      0
@@ -160,6 +161,11 @@ NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -465,47 +471,50 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.420000s Real=3.474103s Sys=0.010000s
+  User=3.890000s Real=3.924373s Sys=0.000000s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-                Decay=   8049             NoProcess= 179947       Radioactivation=     30
-                 Rayl=   2319        Transportation=  23806                 compt=  40811
-                eIoni=  44865                 hIoni=  35894            hadElastic= 171491
-           ionElastic=      1               ionIoni= 191727              nCapture=     15
-     neutronInelastic=  16507                  phot=    823            tInelastic=      3
+                Decay=   8157             NoProcess= 178922       Radioactivation=     48
+                 Rayl=   2094        Transportation=  23700               annihil=      1
+                compt=  38845                  conv=      1                 eIoni=  42961
+                hIoni=  36546            hadElastic= 170852               ionIoni= 249450
+             nCapture=     24      neutronInelastic=  16237                  phot=    789
+           tInelastic=     11 
 
+ Mean energy deposit per event = 11.046 MeV  rms = 2.6327 MeV
+ Mean energy leakage per event = 1.0568 MeV  rms = 2.8918 MeV
 
- Mean energy deposit per event = 11.049 MeV  rms = 2.6034 MeV
- Mean energy leakage per event = 1.0609 MeV  rms = 2.9094 MeV
-
- total energy: Edep + Eleak = 12.11 MeV
+ total energy: Edep + Eleak = 12.103 MeV
 
  List of particles at creation :
-  Be8[3030.000]:      15  Emean =  7.6597 keV	( 1.7427 keV --> 11.702 keV)	mean life = 0 ps 
-            Li6:      47  Emean =  1.7213 MeV	( 244.36 keV --> 4.0596 MeV)	stable
-            Li7:  179900  Emean =  308.25 keV	( 2.0831 meV --> 6.2241 MeV)	stable
-            Li8:      15  Emean =  292.72 eV 	( 10.399 eV  --> 863.97 eV )	mean life = 1.2117 s  
-          alpha:    8088  Emean =  2.7437 MeV	( 3.9355 keV --> 8.8316 MeV)	stable
-      anti_nu_e:      15  Emean =  7.9832 MeV	( 5.1073 MeV --> 11.127 MeV)	stable
-             e-:   40388  Emean =   27.44 keV	( 100 eV  --> 7.8585 MeV)	stable
-          gamma:    2673  Emean =  485.74 keV	( 458.14 keV --> 2.0431 MeV)	stable
-        neutron:   16560  Emean =  3.5788 MeV	( 4.0149 keV --> 14.097 MeV)	mean life = 14.67 min
-         triton:    8052  Emean =  3.9336 MeV	( 7.3962 keV --> 10.253 MeV)	mean life = 12.32 y  
+  Be8[3030.000]:      24  Emean =  6.8652 keV	( 1.3565 keV --> 12.031 keV)	mean life = 0 ps 
+            Be9:       1  Emean =  2.9094 MeV	( 2.9094 MeV --> 2.9094 MeV)	stable
+            Li6:      50  Emean =   1.539 MeV	( 138.04 keV --> 3.3473 MeV)	stable
+            Li7:  178871  Emean =  304.11 keV	( 0.35712 meV --> 6.2225 MeV)	stable
+            Li8:      24  Emean =  2.6424 keV	( 6.9729 eV  --> 21.75 keV)	mean life = 1.2117 s  
+          alpha:    8236  Emean =  2.7417 MeV	( 2.6404 keV --> 9.6881 MeV)	stable
+      anti_nu_e:      24  Emean =   6.167 MeV	( 1.4391 MeV --> 11.932 MeV)	stable
+             e+:       1  Emean =  211.75 keV	( 211.75 keV --> 211.75 keV)	stable
+             e-:   38492  Emean =  29.982 keV	( 100.02 eV  --> 11.527 MeV)	stable
+          gamma:    2568  Emean =  489.31 keV	( 458.45 keV --> 2.0324 MeV)	stable
+        neutron:   16308  Emean =  3.5394 MeV	( 4.2641 keV --> 14.093 MeV)	mean life = 14.67 min
+         triton:    8168  Emean =  3.9543 MeV	( 18.185 keV --> 10.243 MeV)	mean life = 17.774 y  
 
  List of particles emerging from the absorber :
-      anti_nu_e:      15  Emean =  7.9832 MeV	( 5.1073 MeV --> 11.127 MeV) 	Eleak/event = 11.975 keV
-          gamma:    1850  Emean =  143.13 keV	( 11.746 keV --> 2.0324 MeV) 	Eleak/event = 26.48 keV
-        neutron:   10038  Emean =  1.0186 MeV	( 18.784 meV --> 14.1 MeV) 	Eleak/event = 1.0225 MeV
+      anti_nu_e:      24  Emean =   6.167 MeV	( 1.4391 MeV --> 11.932 MeV) 	Eleak/event = 14.801 keV
+             e-:       1  Emean =  4.8459 MeV	( 4.8459 MeV --> 4.8459 MeV) 	Eleak/event = 484.59 eV 
+          gamma:    1778  Emean =  148.68 keV	( 12.633 keV --> 2.0324 MeV) 	Eleak/event = 26.436 keV
+        neutron:   10047  Emean =  1.0103 MeV	( 20.236 meV --> 14.1 MeV) 	Eleak/event = 1.0151 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1592173356, 237181160
+ Current couple of seeds = 694179371, 1671448937
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.058 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -106,14 +106,14 @@ G4ReactionProductVector *G4AblaInterface::DeExcite(G4Fragment& aFragment) {
   const G4double pyRem        = pRem.y() / MeV;
   const G4double pzRem        = pRem.z() / MeV;
 
-  eventNumber++;
+  ++eventNumber;
 
   theABLAModel->DeexcitationAblaxx(ARem, ZRem, eStarRem, jRem, pxRem, pyRem,
-                                   pzRem, eventNumber, SRem);
+                                   pzRem, (G4int)eventNumber, SRem);
 
   G4ReactionProductVector* result = new G4ReactionProductVector;
 
-  for(int j = 0; j < ablaResult->ntrack; ++j)
+  for(G4int j = 0; j < ablaResult->ntrack; ++j)
   { // Copy ABLA result to the EventInfo
     G4ReactionProduct* product =
       toG4Particle(ablaResult->avv[j], ablaResult->zvv[j], ablaResult->svv[j],

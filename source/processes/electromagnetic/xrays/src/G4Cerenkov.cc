@@ -147,12 +147,12 @@ void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
     return;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numOfMaterials                    = G4Material::GetNumberOfMaterials();
+  std::size_t numOfMaterials              = G4Material::GetNumberOfMaterials();
 
   thePhysicsTable = new G4PhysicsTable(numOfMaterials);
 
   // loop over materials
-  for(G4int i = 0; i < numOfMaterials; ++i)
+  for(std::size_t i = 0; i < numOfMaterials; ++i)
   {
     G4PhysicsFreeVector* cerenkovIntegral = nullptr;
 
@@ -186,7 +186,7 @@ void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
 
           // loop over all (photon energy, refraction index)
           // pairs stored for this material
-          for(size_t ii = 1; ii < refractiveIndex->GetVectorLength(); ++ii)
+          for(std::size_t ii = 1; ii < refractiveIndex->GetVectorLength(); ++ii)
           {
             currentRI  = (*refractiveIndex)[ii];
             currentPM  = refractiveIndex->Energy(ii);
@@ -407,7 +407,7 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
   fNumPhotons        = 0;
 
   const G4Material* aMaterial = aTrack.GetMaterial();
-  G4int materialIndex         = aMaterial->GetIndex();
+  std::size_t materialIndex   = aMaterial->GetIndex();
 
   // If Physics Vector is not defined no Cerenkov photons
   if(!(*thePhysicsTable)[materialIndex])
@@ -514,12 +514,12 @@ G4double G4Cerenkov::GetAverageNumberOfPhotons(
   // Vectors used in computation of Cerenkov Angle Integral:
   // 	- Refraction Indices for the current material
   //	- new G4PhysicsFreeVector allocated to hold CAI's
-  G4int materialIndex = aMaterial->GetIndex();
+  std::size_t materialIndex = aMaterial->GetIndex();
 
   // Retrieve the Cerenkov Angle Integrals for this material
   G4PhysicsVector* CerenkovAngleIntegrals = ((*thePhysicsTable)(materialIndex));
 
-  G4int length = CerenkovAngleIntegrals->GetVectorLength();
+  std::size_t length = CerenkovAngleIntegrals->GetVectorLength();
   if(0 == length)
     return 0.0;
 
@@ -604,7 +604,7 @@ void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
 void G4Cerenkov::DumpPhysicsTable() const
 {
   G4cout << "Dump Physics Table!" << G4endl;
-  for(size_t i = 0; i < thePhysicsTable->entries(); ++i)
+  for(std::size_t i = 0; i < thePhysicsTable->entries(); ++i)
   {
     (*thePhysicsTable)[i]->DumpValues();
   }

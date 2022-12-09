@@ -390,10 +390,10 @@ void RE02DetectorConstruction::ConstructSDandField() {
   //  100 keV  to   1 MeV,        gammaSurfCurr002
   //    1 MeV  to  10 MeV.        gammaSurfCurr003
   //
-  char name[17];
   for ( G4int i = 0; i < 4; i++){
-    std::sprintf(name,"gammaSurfCurr%03d",i);
-    G4String psgName(name);
+    std::ostringstream name;
+    name << "gammaSurfCurr" << std::setfill('0') << std::setw(3) << i;
+    G4String psgName = name.str();
     G4double kmin = std::pow(10.,(G4double)i)*keV;
     G4double kmax = std::pow(10.,(G4double)(i+1))*keV;
     //-- Particle with kinetic energy filter.

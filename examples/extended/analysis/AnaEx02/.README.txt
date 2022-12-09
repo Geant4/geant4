@@ -6,16 +6,16 @@
 
  Examples AnaEx01 and AnaEx02 show the usage of histogram and tuple
  manipulations using G4Analysis and ROOT compliant systems on the same
- scenario. All analysis manipulations (histo booking, filling, saving histos 
- in a file, etc...) are located in one class : HistoManager, implementation of 
- which is different in each example. All the other classes are same in all 
+ scenario. All analysis manipulations (histo booking, filling, saving histos
+ in a file, etc...) are located in one class : HistoManager, implementation of
+ which is different in each example. All the other classes are same in all
  three examples.
- 
- This example shows the usage of histogram and tuple manipulations using 
- ROOT system. Please install ROOT before building this example: 
+
+ This example shows the usage of histogram and tuple manipulations using
+ ROOT system. Please install ROOT before building this example:
  http://root.cern.ch
 
- The example is an adaptation of examples/novice/N03. It describes a simple 
+ The example is an adaptation of examples/novice/N03. It describes a simple
  sampling calorimeter setup.
 
 \section AnaEx02_s1 Detector description
@@ -30,7 +30,7 @@
     - the material of the detection gap,
     - the thickness of a  gap,
     - the number of layers,
-    - the transverse size of the calorimeter (the input face is a square). 
+    - the transverse size of the calorimeter (the input face is a square).
 
  The default geometry is constructed in DetectorConstruction class,
  but all of the above parameters can be modified interactively via
@@ -56,20 +56,20 @@
 
 \section AnaEx02_s3 Action Initialization
 
-   A newly introduced class, ActionInitialization, 
-   instantiates and registers to Geant4 kernel all user action classes 
+   A newly introduced class, ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes
    which are defined thread-local and a run action class
    which is defined both thread-local and global.
-   
-   The thread-local action classes are defined in 
-     ActionInitialization::Build() 
-   and  the global run action class is defined in 
+
+   The thread-local action classes are defined in
+     ActionInitialization::Build()
+   and  the global run action class is defined in
      ActionInitialization::BuildForMaster().
-   Note that ActionInitialization::Build() is also used to 
+   Note that ActionInitialization::Build() is also used to
    instatiate user action clasess in sequential mode.
 
 \section AnaEx02_s4 An event : PrimaryGeneratorAction
- 
+
  The primary kinematic consists of a single particle which hits the
  calorimeter perpendicular to the input face. The type of the particle
  and its energy are set in the PrimaryGeneratorAction class, and can
@@ -79,34 +79,34 @@
 \section AnaEx02_s5 Histograms
 
  To produce histograms, ROOT system must be installed
-  
+
  AnaEx02 can produce 4 histograms :
-  
+
   - EAbs : total energy deposit in absorber per event
-  - EGap : total energy deposit in gap per event	  
-  - LAbs : total track length of charged particles in absorber per event 	
-  - LGap : total track length of charged particles in gap per event 
- 
+  - EGap : total energy deposit in gap per event
+  - LAbs : total track length of charged particles in absorber per event
+  - LGap : total track length of charged particles in gap per event
+
  And 2 Ntuples :
  - Ntuple1:
    - one row per event : EnergyAbs EnergyGap
  - Ntuple2:
    - one row per event : TrackLAbs TrackLGap
-  
- These histos and ntuples are booked in HistoManager and filled from 
+
+ These histos and ntuples are booked in HistoManager and filled from
  EventAction.
- 
+
  One can control the name of the histograms file :
  - default name     : AnaEx02
  Format : root
- 
+
  See HistoManager constructor
 
 \section AnaEx02_s6 How to build
 
  An additional step is needed when building the example with GNUmake
- due to using the extra shared directory: 
-\verbatim      
+ due to using the extra shared directory:
+\verbatim
 % cd path_to_AnaEx02/AnaEx02
 % gmake setup
 % gmake
@@ -114,7 +114,7 @@
 
  This will copy the files from shared in the example include and src;
  to remove these files:
-\verbatim      
+\verbatim
 % gmake clean_setup
 \endverbatim
 
@@ -126,23 +126,23 @@
 and type in the commands from run.mac line by line:
 Idle> /control/verbose 2
 Idle> /tracking/verbose 1
-Idle> /run/beamOn 10 
+Idle> /run/beamOn 10
 Idle> ...
 Idle> exit
-\endverbatim                
+\endverbatim
       or
 \verbatim
 Idle> /control/execute run.mac
 ....
 Idle> exit
-\endverbatim                
+\endverbatim
 
-- Execute AnaEx02 in the 'batch' mode from macro files 
+- Execute AnaEx02 in the 'batch' mode from macro files
   (without visualization)
 \verbatim
 % ./AnaEx02 run.mac
 % ./AnaEx02 run.mac > run.out
-\endverbatim                
+\endverbatim
 
 The AnaEx02.in macro is used in Geant4 testing.
 

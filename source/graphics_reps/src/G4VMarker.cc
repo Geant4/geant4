@@ -32,7 +32,6 @@
 #include "G4VisAttributes.hh"
 
 G4VMarker::G4VMarker ():
-  fPosition   (G4Point3D ()),
   fWorldSize  (0.),
   fScreenSize (0.),
   fFillStyle  (noFill)
@@ -45,7 +44,7 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
   fFillStyle  (noFill)
 {}
 
-G4VMarker::~G4VMarker () {}
+G4VMarker::~G4VMarker () = default;
 
 G4bool G4VMarker::operator != (const G4VMarker& mk) const {
   return ( (G4Visible::operator != (mk))   ||
@@ -79,8 +78,8 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
 
 G4VMarker::SizeType G4VMarker::GetSizeType () const {
   SizeType type = none;
-  if (fWorldSize) type = world;
-  else if (fScreenSize) type = screen;
+  if (fWorldSize != 0.0) type = world;
+  else if (fScreenSize != 0.0) type = screen;
   return type;
 }
 

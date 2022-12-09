@@ -46,37 +46,28 @@
 #include "G4HumanPhantomColour.hh"
 #include <cmath>
 
-G4MIRDLiver::G4MIRDLiver()
-{
-}
-
-G4MIRDLiver::~G4MIRDLiver()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDLiver::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					  const G4String& colourName, G4bool wireFrame, G4bool)
 {
 
   G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double dx= 14.19 *cm; //a
   G4double dy= 7.84 *cm;  //b
   G4double dz= 7.21* cm; //(z2-z1)/2
 
-  G4EllipticalTube* firstLiver = new G4EllipticalTube("FirstLiver",dx, dy, dz);
+  auto* firstLiver = new G4EllipticalTube("FirstLiver",dx, dy, dz);
 
   G4double xx = 20.00 * cm;
   G4double yy = 50.00 * cm;
   G4double zz = 50.00 *cm;
 
-  G4Box* subtrLiver = new G4Box("SubtrLiver", xx/2., yy/2., zz/2.);
+  auto* subtrLiver = new G4Box("SubtrLiver", xx/2., yy/2., zz/2.);
 
-  G4RotationMatrix* rm_relative = new G4RotationMatrix();
+  auto* rm_relative = new G4RotationMatrix();
   rm_relative -> rotateY(32.* degree);
   rm_relative -> rotateZ(40.9* degree);
 
@@ -90,18 +81,18 @@ G4VPhysicalVolume* G4MIRDLiver::Construct(const G4String& volumeName,G4VPhysical
   //  G4cout << aa/dd << "" << bb/dd << " "<< cc/dd <<G4endl;
   //  G4cout << (std::atan(1.42))/deg << G4endl;
 
-  G4SubtractionSolid* liver = new G4SubtractionSolid("Liver",
+  auto* liver = new G4SubtractionSolid("Liver",
  						     firstLiver,subtrLiver,
  						     rm_relative,
  						     G4ThreeVector(10.0*cm,0.0*cm,0.0 *cm));
 
-  G4LogicalVolume* logicLiver = new G4LogicalVolume(liver,
+  auto* logicLiver = new G4LogicalVolume(liver,
  						    soft,
  						    "LiverVolume",
- 						    0, 0, 0);
+ 						    nullptr, nullptr, nullptr);
 
   // Define rotation and position here!
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree);
   G4VPhysicalVolume* physLiver = new G4PVPlacement(rm,G4ThreeVector(0. *cm,0. *cm,0.*cm),
 						   "physicalLiver",
@@ -111,9 +102,9 @@ G4VPhysicalVolume* G4MIRDLiver::Construct(const G4String& volumeName,G4VPhysical
 						   0,true);
 
   // Visualization Attributes
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LiverVisAtt = new G4VisAttributes(colour);
+  auto* LiverVisAtt = new G4VisAttributes(colour);
   LiverVisAtt->SetForceSolid(wireFrame);
   logicLiver->SetVisAttributes(LiverVisAtt);
 

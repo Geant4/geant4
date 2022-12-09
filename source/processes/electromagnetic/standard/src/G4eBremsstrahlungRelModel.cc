@@ -139,7 +139,7 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 {
   if (IsMaster()) {
     // clear ElementData container
-    for (size_t iz = 0; iz < gElementData.size(); ++iz) {
+    for (std::size_t iz = 0; iz < gElementData.size(); ++iz) {
       if (nullptr != gElementData[iz]) {
         delete gElementData[iz];
       }
@@ -249,10 +249,10 @@ G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(const G4Material* material,
   // get element compositions of the material
   const G4ElementVector* theElemVector = material->GetElementVector();
   const G4double* theAtomNumDensVector = material->GetAtomicNumDensityVector();
-  const size_t        numberOfElements = theElemVector->size();
+  const std::size_t numberOfElements = theElemVector->size();
   // loop over the elements of the material and compute their contributions to
   // the restricted dE/dx by numerical integration of the dependent part of DCS
-  for (size_t ie = 0; ie < numberOfElements; ++ie) {
+  for (std::size_t ie = 0; ie < numberOfElements; ++ie) {
     G4VEmModel::SetCurrentElement((*theElemVector)[ie]);
     G4int zet = (*theElemVector)[ie]->GetZasInt();
     fCurrentIZ = std::min(zet, gMaxZet);
@@ -618,14 +618,14 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
 
 void G4eBremsstrahlungRelModel::InitialiseElementData()
 {
-  const G4int size = gElementData.size();
+  const G4int size = (G4int)gElementData.size();
   if (size < gMaxZet+1) {
     gElementData.resize(gMaxZet+1, nullptr);
   }
   // create for all elements that are in the detector
   const G4ElementTable* elemTable = G4Element::GetElementTable();
-  size_t numElems = (*elemTable).size();
-  for (size_t ielem=0; ielem<numElems; ++ielem) {
+  std::size_t numElems = (*elemTable).size();
+  for (std::size_t ielem=0; ielem<numElems; ++ielem) {
     const G4Element* elem = (*elemTable)[ielem];
     const G4double    zet = elem->GetZ();
     const G4int      izet = std::min(G4lrint(zet),gMaxZet);

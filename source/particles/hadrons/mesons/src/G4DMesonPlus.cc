@@ -72,7 +72,7 @@ G4DMesonPlus* G4DMesonPlus::Definition()
                 false,     1.040e-3*ns,          NULL,
                 false,       "D");
   }
-  theInstance = reinterpret_cast<G4DMesonPlus*>(anInstance);
+  theInstance = static_cast<G4DMesonPlus*>(anInstance);
   return theInstance;
 }
 

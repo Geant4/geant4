@@ -33,6 +33,8 @@
 
 #include "globals.hh"
 
+class G4Pow;
+
 class G4VCoulombBarrier
 {
 public:
@@ -43,26 +45,23 @@ public:
   virtual G4double GetCoulombBarrier(G4int ARes, G4int ZRes, 
 				     G4double U = 0.0) const = 0;
 
-  virtual G4double BarrierPenetrationFactor(G4int aZ) const = 0;
+  virtual G4double BarrierPenetrationFactor(G4int aZ) const;
 
   void SetParameters(G4double rho, G4double r0); 
-					
-  inline G4int GetA(void) const { return theA; }
-  inline G4int GetZ(void) const { return theZ; }
-  inline G4double GetRho(void) const { return theRho; }
-  inline G4double GetR0(void)  const { return theR0; }
 
   G4VCoulombBarrier(const G4VCoulombBarrier & right) = delete;
   const G4VCoulombBarrier & operator=(const G4VCoulombBarrier & right) = delete;
-  G4bool operator==(const G4VCoulombBarrier & right) const = delete;
-  G4bool operator!=(const G4VCoulombBarrier & right) const = delete;
 
-private:
+protected:
 	
+  G4Pow* g4calc;
+
   G4int theA;
   G4int theZ;
-  G4double theRho;
+
   G4double theR0;
+  G4double theRho = 0.0;
+  G4double factor = 0.0;
 };
 
 #endif

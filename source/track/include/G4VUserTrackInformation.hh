@@ -55,7 +55,7 @@ class G4VUserTrackInformation
 {
   public:
 
-    G4VUserTrackInformation();
+    G4VUserTrackInformation() = default;
     G4VUserTrackInformation(const G4String& infoType);
       // String is provided to indicate the Type of UserTrackInfo class
       // User is recommended to set the type of his/her class

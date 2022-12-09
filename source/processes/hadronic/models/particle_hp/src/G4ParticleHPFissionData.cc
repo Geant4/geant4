@@ -43,6 +43,7 @@
 #include "G4ParticleHPData.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4HadronicParameters.hh"
+#include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 
 G4ParticleHPFissionData::G4ParticleHPFissionData()
@@ -56,8 +57,8 @@ G4ParticleHPFissionData::G4ParticleHPFissionData()
    if ( G4Threading::IsWorkerThread() ) {
       instanceOfWorker = true;
    }
-   element_cache = NULL;
-   material_cache = NULL;
+   element_cache = nullptr;
+   material_cache = nullptr;
    ke_cache = 0.0; 
    xs_cache = 0.0; 
    //BuildPhysicsTable(*G4Neutron::Neutron());
@@ -65,10 +66,10 @@ G4ParticleHPFissionData::G4ParticleHPFissionData()
    
 G4ParticleHPFissionData::~G4ParticleHPFissionData()
 {
-   if ( theCrossSections != NULL && instanceOfWorker != true ) {
+   if ( theCrossSections != nullptr && instanceOfWorker != true ) {
      theCrossSections->clearAndDestroy();
      delete theCrossSections;
-     theCrossSections = NULL;
+     theCrossSections = nullptr;
    }
 }
 
@@ -101,16 +102,6 @@ G4double G4ParticleHPFissionData::GetIsoCrossSection( const G4DynamicParticle* d
    return xs;
 }
 
-/*
-G4bool G4ParticleHPFissionData::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
-{
-  G4bool result = true;
-  G4double eKin = aP->GetKineticEnergy();
-  if(eKin>20*MeV||aP->GetDefinition()!=G4Neutron::Neutron()) result = false;
-  return result;
-}
-*/
-
 void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
@@ -121,19 +112,17 @@ void G4ParticleHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       return;
    }
 
-  size_t numberOfElements = G4Element::GetNumberOfElements();
-  //theCrossSections = new G4PhysicsTable( numberOfElements );
-   // TKDB
-   //if ( theCrossSections == NULL ) theCrossSections = new G4PhysicsTable( numberOfElements );
-   if ( theCrossSections == NULL ) 
-      theCrossSections = new G4PhysicsTable( numberOfElements );
-   else
-      theCrossSections->clearAndDestroy();
+  std::size_t numberOfElements = G4Element::GetNumberOfElements();
+  if ( theCrossSections == nullptr ) 
+     theCrossSections = new G4PhysicsTable( numberOfElements );
+  else
+     theCrossSections->clearAndDestroy();
 
   // make a PhysicsVector for each element
 
-  static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
-  for( size_t i=0; i<numberOfElements; ++i )
+  static G4ThreadLocal G4ElementTable *theElementTable  = nullptr ;
+  if (!theElementTable) theElementTable= G4Element::GetElementTable();
+  for( std::size_t i=0; i<numberOfElements; ++i )
   {
     G4PhysicsVector* physVec = G4ParticleHPData::
       Instance(G4Neutron::Neutron())->MakePhysicsVector((*theElementTable)[i], this);
@@ -148,16 +137,15 @@ void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");
   
-  #ifdef G4VERBOSE
+#ifdef G4VERBOSE
   if ( G4HadronicParameters::Instance()->GetVerboseLevel() == 0 ) return;
   
-//
-// Dump element based cross section
-// range 10e-5 eV to 20 MeV
-// 10 point per decade
-// in barn
-//
-
+  //
+  // Dump element based cross section
+  // range 10e-5 eV to 20 MeV
+  // 10 point per decade
+  // in barn
+  //
    G4cout << G4endl;
    G4cout << G4endl;
    G4cout << "Fission Cross Section of Neutron HP"<< G4endl;
@@ -167,12 +155,12 @@ void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    G4cout << "Energy[eV]  XS[barn]" << G4endl;
    G4cout << G4endl;
 
-   size_t numberOfElements = G4Element::GetNumberOfElements();
-   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ; if (!theElementTable) theElementTable= G4Element::GetElementTable();
+   std::size_t numberOfElements = G4Element::GetNumberOfElements();
+   static G4ThreadLocal G4ElementTable *theElementTable  = nullptr ;
+   if (!theElementTable) theElementTable= G4Element::GetElementTable();
 
-   for ( size_t i = 0 ; i < numberOfElements ; ++i )
+   for ( std::size_t i = 0 ; i < numberOfElements ; ++i )
    {
-
       G4cout << (*theElementTable)[i]->GetName() << G4endl;
 
       if ( (*((*theCrossSections)(i))).GetVectorLength() == 0 ) 
@@ -182,9 +170,7 @@ void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
          continue;
       }
 
-      G4int ie = 0;
-
-      for ( ie = 0 ; ie < 130 ; ie++ )
+      for ( G4int ie = 0 ; ie < 130 ; ++ie )
       {
          G4double eKinetic = 1.0e-5 * G4Pow::GetInstance()->powA ( 10.0 , ie/10.0 ) *eV;
          G4bool outOfRange = false;
@@ -193,17 +179,12 @@ void G4ParticleHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
          {
             G4cout << eKinetic/eV << " " << (*((*theCrossSections)(i))).GetValue(eKinetic, outOfRange)/barn << G4endl;
          }
-
       }
 
       G4cout << G4endl;
    }
-
-  //G4cout << "G4ParticleHPFissionData::DumpPhysicsTable still to be implemented"<<G4endl;
-  #endif
+#endif
 }
-
-#include "G4NucleiProperties.hh"
 
 G4double G4ParticleHPFissionData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
@@ -211,10 +192,10 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double result = 0;
   if(anE->GetZ()<88) return result;
   G4bool outOfRange;
-  G4int index = anE->GetIndex();
+  G4int index = (G4int)anE->GetIndex();
 
-// 100729 TK add safety
-if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
+  if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 )
+    return result;
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
@@ -279,11 +260,14 @@ G4int G4ParticleHPFissionData::GetVerboseLevel() const
 {
    return G4ParticleHPManager::GetInstance()->GetVerboseLevel();
 }
+
 void G4ParticleHPFissionData::SetVerboseLevel( G4int newValue ) 
 {
    G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
 }
+
 void G4ParticleHPFissionData::CrossSectionDescription(std::ostream& outFile) const
 {
-   outFile << "High Precision cross data based on Evaluated Nuclear Data Files (ENDF) for induced fission reaction of neutrons below 20MeV\n" ;
+   outFile << "High Precision cross data based on Evaluated Nuclear Data Files (ENDF)\n"
+           << "for induced fission reaction of neutrons below 20MeV\n" ;
 }

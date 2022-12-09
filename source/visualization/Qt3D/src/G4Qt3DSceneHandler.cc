@@ -44,7 +44,6 @@
 #include "G4Mesh.hh"
 #include "G4PseudoScene.hh"
 #include "G4VisManager.hh"
-#include "Randomize.hh"
 
 #include "G4Qt3DViewer.hh"
 #include "G4Qt3DUtils.hh"
@@ -55,6 +54,8 @@
 #include <Qt3DRender>
 
 #include <utility>
+
+#define G4warn G4cout
 
 // Qt3D seems to offer a choice of type - float or double. It would be nice
 // to use double since it offers the prospect of higher precision, hopefully
@@ -105,11 +106,11 @@ void G4Qt3DSceneHandler::EstablishG4Qt3DQEntities()
   // Physical volume objects for each world hang from POs
   G4TransportationManager* transportationManager
   = G4TransportationManager::GetTransportationManager ();
-  size_t nWorlds = transportationManager->GetNoWorlds();
+  std::size_t nWorlds = transportationManager->GetNoWorlds();
   std::vector<G4VPhysicalVolume*>::iterator iterWorld
   = transportationManager->GetWorldsIterator();
   fpPhysicalVolumeObjects.resize(nWorlds);
-  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+  for (std::size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
     G4VPhysicalVolume* wrld = (*iterWorld);
     auto entity = new G4Qt3DQEntity(fpPersistentObjects);
     entity->setObjectName("G4Qt3DPORoot_"+QString(wrld->GetName()));
@@ -157,8 +158,8 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
 #endif
 
   // Find appropriate root
-  const size_t nWorlds = fpPhysicalVolumeObjects.size();
-  size_t iWorld = 0;
+  const std::size_t nWorlds = fpPhysicalVolumeObjects.size();
+  std::size_t iWorld = 0;
   for (; iWorld < nWorlds; ++iWorld) {
     if (fullPVPath[0].GetPhysicalVolume() ==
         fpPhysicalVolumeObjects[iWorld]->GetPVNodeID().GetPhysicalVolume()) break;
@@ -175,8 +176,8 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
   // Create nodes as required
   G4Qt3DQEntity* node = wrld;
   newNode = node;
-  const size_t depth = fullPVPath.size();
-  size_t iDepth = 1;
+  const std::size_t depth = fullPVPath.size();
+  std::size_t iDepth = 1;
   while (iDepth < depth) {
     const auto& children = node->children();
     const G4int nChildren = children.size();  // int size() (Qt covention?)
@@ -287,13 +288,13 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
 
   const auto vertexByteSize  = 3*sizeof(PRECISION);
 
-  const size_t nLines = polyline.size() - 1;
+  const std::size_t nLines = polyline.size() - 1;
   QByteArray polylineByteArray;
   const auto polylineBufferByteSize = 2*nLines*vertexByteSize;
-  polylineByteArray.resize(polylineBufferByteSize);
+  polylineByteArray.resize((G4int)polylineBufferByteSize);
   auto polylineBufferArray = reinterpret_cast<PRECISION*>(polylineByteArray.data());
   G4int iLine = 0;
-  for (size_t i = 0; i < nLines; ++i) {
+  for (std::size_t i = 0; i < nLines; ++i) {
     polylineBufferArray[iLine++] = polyline[i].x();
     polylineBufferArray[iLine++] = polyline[i].y();
     polylineBufferArray[iLine++] = polyline[i].z();
@@ -314,7 +315,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   polylineAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
   polylineAtt->setVertexBaseType(BASETYPE);
   polylineAtt->setVertexSize(3);
-  polylineAtt->setCount(nLines);
+  polylineAtt->setCount((G4int)nLines);
   polylineAtt->setByteOffset(0);
   polylineAtt->setByteStride(vertexByteSize);
 
@@ -332,7 +333,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   auto renderer = new Qt3DRender::QGeometryRenderer;
   renderer->setObjectName("polylineWireframeRenderer");
   renderer->setGeometry(polylineGeometry);
-  renderer->setVertexCount(2*nLines);
+  renderer->setVertexCount(2*(G4int)nLines);
   renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
   polylineEntity->addComponent(renderer);
 }
@@ -362,7 +363,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     default:
     case G4Polymarker::dots:
     {
-      const size_t nDots = polymarker.size();
+      const std::size_t nDots = polymarker.size();
 
       auto transform = G4Qt3DUtils::CreateQTransformFrom(fObjectTransformation);
       transform->setObjectName("transform");
@@ -374,10 +375,10 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
       QByteArray polymarkerByteArray;
       const auto polymarkerBufferByteSize = nDots*vertexByteSize;
-      polymarkerByteArray.resize(polymarkerBufferByteSize);
+      polymarkerByteArray.resize((G4int)polymarkerBufferByteSize);
       auto polymarkerBufferArray = reinterpret_cast<PRECISION*>(polymarkerByteArray.data());
       G4int iMarker = 0;
-      for (size_t i = 0; i < polymarker.size(); ++i) {
+      for (std::size_t i = 0; i < polymarker.size(); ++i) {
         polymarkerBufferArray[iMarker++] = polymarker[i].x();
         polymarkerBufferArray[iMarker++] = polymarker[i].y();
         polymarkerBufferArray[iMarker++] = polymarker[i].z();
@@ -395,7 +396,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       polymarkerAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
       polymarkerAtt->setVertexBaseType(BASETYPE);
       polymarkerAtt->setVertexSize(3);
-      polymarkerAtt->setCount(nDots);
+      polymarkerAtt->setCount((G4int)nDots);
       polymarkerAtt->setByteOffset(0);
       polymarkerAtt->setByteStride(vertexByteSize);
 
@@ -413,7 +414,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       auto renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polymarkerWireframeRenderer");
       renderer->setGeometry(polymarkerGeometry);
-      renderer->setVertexCount(nDots);
+      renderer->setVertexCount((G4int)nDots);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Points);
       polymarkerEntity->addComponent(renderer);
     }
@@ -440,7 +441,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 //      sphereMesh->setInstanceCount(polymarker.size());  // Not undertood instancing yet
 
 //      auto currentEntity = new Qt3DCore::QEntity(currentNode);  // Not undertood instancing yet
-      for (size_t iPoint = 0; iPoint < polymarker.size(); iPoint++) {
+      for (std::size_t iPoint = 0; iPoint < polymarker.size(); ++iPoint) {
         auto position = fObjectTransformation*G4Translate3D(polymarker[iPoint]);
         auto transform = G4Qt3DUtils::CreateQTransformFrom(position);
 	auto currentEntity = new Qt3DCore::QEntity(currentNode);  // Not undertood instancing yet
@@ -472,7 +473,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       boxMesh->setYExtent(side);
       boxMesh->setZExtent(side);
 
-      for (size_t iPoint = 0; iPoint < polymarker.size(); iPoint++) {
+      for (std::size_t iPoint = 0; iPoint < polymarker.size(); ++iPoint) {
         auto position = fObjectTransformation*G4Translate3D(polymarker[iPoint]);
         auto transform = G4Qt3DUtils::CreateQTransformFrom(position);
         auto currentEntity = new Qt3DCore::QEntity(currentNode);
@@ -768,7 +769,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       if(isAuxilaryEdgeVisible||edgeFlag[2]>0)insertIfNew(Line(vertex[2],vertex[3]));
       if(isAuxilaryEdgeVisible||edgeFlag[3]>0)insertIfNew(Line(vertex[3],vertex[0]));
     } else {
-      G4cerr
+      G4warn
       << "ERROR: polyhedron face with unexpected number of edges (" << nEdges << ')'
       << "\n  Tag: " << fpModel->GetCurrentTag()
       << G4endl;
@@ -812,7 +813,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       // Shouldn't happen in this function (it's a polyhedron!)
       if (errorCount == 0) {
         ++errorCount;
-        G4cerr << "WARNING: Qt3D: cloud drawing not implemented" << G4endl;
+        G4warn << "WARNING: Qt3D: cloud drawing not implemented" << G4endl;
       }
       return;
       break;
@@ -836,10 +837,10 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     // Accomodates both vertices and normals - hence 2*
     QByteArray vertexByteArray;
     const auto vertexBufferByteSize = 2*nVerts*vertexByteSize;
-    vertexByteArray.resize(vertexBufferByteSize);
+    vertexByteArray.resize((G4int)vertexBufferByteSize);
     auto vertexBufferArray = reinterpret_cast<PRECISION*>(vertexByteArray.data());
     G4int i1 = 0;
-    for (size_t i = 0; i < nVerts; i++) {
+    for (std::size_t i = 0; i < nVerts; ++i) {
       vertexBufferArray[i1++] = vertices[i].x();
       vertexBufferArray[i1++] = vertices[i].y();
       vertexBufferArray[i1++] = vertices[i].z();
@@ -862,7 +863,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     positionAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
     positionAtt->setVertexBaseType(BASETYPE);
     positionAtt->setVertexSize(3);
-    positionAtt->setCount(nVerts);
+    positionAtt->setCount((G4int)nVerts);
     positionAtt->setByteOffset(0);
     positionAtt->setByteStride(2*vertexByteSize);
 
@@ -874,7 +875,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     normalAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
     normalAtt->setVertexBaseType(BASETYPE);
     normalAtt->setVertexSize(3);
-    normalAtt->setCount(nVerts);
+    normalAtt->setCount((G4int)nVerts);
     normalAtt->setByteOffset(vertexByteSize);
     normalAtt->setByteStride(2*vertexByteSize);
   }
@@ -887,7 +888,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     // Put lines into a QByteArray
     QByteArray lineByteArray;
     const auto lineBufferByteSize = 2*nLines*vertexByteSize;
-    lineByteArray.resize(lineBufferByteSize);
+    lineByteArray.resize((G4int)lineBufferByteSize);
     auto lineBufferArray = reinterpret_cast<PRECISION*>(lineByteArray.data());
     G4int i2 = 0;
     for (const auto& line: lines) {
@@ -913,7 +914,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     lineAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
     lineAtt->setVertexBaseType(BASETYPE);
     lineAtt->setVertexSize(3);
-    lineAtt->setCount(nLines);
+    lineAtt->setCount((G4int)nLines);
     lineAtt->setByteOffset(0);
     lineAtt->setByteStride(vertexByteSize);
   }
@@ -939,7 +940,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polyhedronWireframeRenderer");
       renderer->setGeometry(lineGeometry);
-      renderer->setVertexCount(2*nLines);
+      renderer->setVertexCount(2*(G4int)nLines);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
       wireframeEntity->addComponent(renderer);
 
@@ -962,7 +963,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polyhedronSurfaceRenderer");
       renderer->setGeometry(vertexGeometry);
-      renderer->setVertexCount(nVerts);
+      renderer->setVertexCount((G4int)nVerts);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Triangles);
       surfaceEntity->addComponent(renderer);
 
@@ -980,7 +981,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polyhedronWireframeRenderer");
       renderer->setGeometry(lineGeometry);
-      renderer->setVertexCount(2*nLines);
+      renderer->setVertexCount(2*(G4int)nLines);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
       wireframeEntity->addComponent(renderer);
 
@@ -1000,7 +1001,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polyhedronSurfaceRenderer");
       renderer->setGeometry(vertexGeometry);
-      renderer->setVertexCount(nVerts);
+      renderer->setVertexCount((G4int)nVerts);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Triangles);
       surfaceEntity->addComponent(renderer);
 
@@ -1022,7 +1023,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polyhedronSurfaceRenderer");
       renderer->setGeometry(vertexGeometry);
-      renderer->setVertexCount(nVerts);
+      renderer->setVertexCount((G4int)nVerts);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Triangles);
       surfaceEntity->addComponent(renderer);
 
@@ -1040,7 +1041,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       renderer = new Qt3DRender::QGeometryRenderer;
       renderer->setObjectName("polyhedronSurfaceRenderer");
       renderer->setGeometry(lineGeometry);
-      renderer->setVertexCount(2*nLines);
+      renderer->setVertexCount(2*(G4int)nLines);
       renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
       wireframeEntity->addComponent(renderer);
 

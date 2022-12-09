@@ -42,15 +42,13 @@
 
 class G4PSTrackCounter3D : public G4PSTrackCounter
 {
- public:  // with description
+ public:
   G4PSTrackCounter3D(G4String name, G4int direction, G4int ni = 1, G4int nj = 1,
                      G4int nk = 1, G4int di = 2, G4int dj = 1, G4int dk = 0);
+  ~G4PSTrackCounter3D() override = default;
 
- public:
-  virtual ~G4PSTrackCounter3D();
-
- protected:  // with description
-  virtual G4int GetIndex(G4Step*);
+ protected:
+  G4int GetIndex(G4Step*) override;
 
  private:
   G4int fDepthi, fDepthj, fDepthk;

@@ -755,7 +755,6 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
    }
 
 
-   G4int nclst = 1;
    G4int ichek = 1;
 
 
@@ -891,7 +890,6 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
 
          if ( ichek == i ) 
          {
-            nclst++;
             ichek++;
          }
          }

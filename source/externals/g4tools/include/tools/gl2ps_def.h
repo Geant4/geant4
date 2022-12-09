@@ -72,6 +72,7 @@ typedef unsigned char  tools_GLboolean;
 #define TOOLS_GL2PS_TIGHT_BOUNDING_BOX   (1<<12)
 #define TOOLS_GL2PS_NO_OPENGL_CONTEXT    (1<<13)
 #define TOOLS_GL2PS_NO_TEX_FONTSIZE      (1<<14)
+#define TOOLS_GL2PS_PORTABLE_SORT        (1<<15)
 
 /* Arguments for tools_gl2psEnable/tools_gl2psDisable */
 

@@ -2587,7 +2587,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -2611,7 +2611,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << G4endl;
     DumpInfo();
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Logic error: snxt = kInfinity  ???" << G4endl
             << "Position:"  << G4endl << G4endl
             << "p.x() = "   << p.x()/mm << " mm" << G4endl
@@ -2649,7 +2649,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4int old_prc = G4cout.precision(16);
+     G4long old_prc = G4cout.precision(16);
      G4cout << G4endl;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -2750,7 +2750,7 @@ G4VSolid* G4Sphere::Clone() const
 
 std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

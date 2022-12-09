@@ -152,7 +152,7 @@ void G4BetheBlochModel::SetupParameters(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   G4double q = particle->GetPDGCharge()*inveplus;
-  if(!isIon && q > 1.1) { isIon = true; } 
+  isIon = (!isAlpha && q > 1.1); 
   chargeSquare = q*q;
   ratio = electron_mass_c2/mass;
   static const G4double aMag = 1./(0.5*eplus*CLHEP::hbar_Planck*CLHEP::c_squared);
@@ -339,34 +339,36 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                              const G4DynamicParticle* dp,
-                                             const G4double& length,
+                                             const G4double& /*length*/,
                                              G4double& eloss)
 {
-  // no correction at the last step
-  const G4double preKinEnergy = dp->GetKineticEnergy();
-  if(eloss >= preKinEnergy) { return; }
+  // no correction for alpha
+  if(isAlpha) { return; }
 
+  // no correction at the last step or at small step
+  const G4double preKinEnergy = dp->GetKineticEnergy();
+  if(eloss >= preKinEnergy || eloss < preKinEnergy*0.05) { return; }
+
+  // corrections for all charged particles with Q > 1
   const G4ParticleDefinition* p = dp->GetDefinition();
   if(p != particle) { SetupParameters(p); }
-  if(isIon) {
-    const G4Material* mat = couple->GetMaterial();
-    G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.75);
+  if(!isIon) { return; }
 
-    const G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
-    GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-    const G4double qfactor =
-      q2*corr->EffectiveChargeCorrection(p,mat,e)/chargeSquare;
-    const G4double highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
-    const G4double elossnew = eloss*qfactor + highOrder;
-    /*    
-    G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
-    << " eloss=" << eloss << " elossnew=" << elossnew 
-    << " qfactor= " << qfactor << " highOrder= " << highOrder << " (ratio=" 
-    << highOrder/eloss << ")" 
-    " q2= " << q2 << "  chargeSquare= " << chargeSquare << G4endl;
-    */
-    eloss = elossnew;
-  }
+  // effective energy and charge at a step
+  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
+  const G4Material* mat = couple->GetMaterial();
+  const G4double q20 = corr->EffectiveChargeSquareRatio(p, mat, preKinEnergy);
+  const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
+  const G4double qfactor = q2/q20;
+
+  /*    
+    G4cout << "G4BetheBlochModel::CorrectionsAlongStep: Epre(MeV)="
+    << preKinEnergy << " Eeff(MeV)=" << e
+    << " eloss=" << eloss << " elossnew=" << eloss*qfactor 
+    << " qfactor=" << qfactor << " Qpre=" << q20 
+    << p->GetParticleName() <<G4endl;
+  */
+  eloss *= qfactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

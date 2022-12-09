@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
-/// \file DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+//
+/// \file common/include/DetectorConstruction.hh
+/// \brief Definition of the Common::DetectorConstruction class
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -40,39 +40,44 @@ class G4GenericMessenger;
 
 /// Simple detector construction with a box volume placed in a world
 
+namespace Common
+{
+
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     DetectorConstruction(
        const G4String& boxMaterialName = "G4_AIR",
-       G4double boxHx = 40*CLHEP::cm, 
-       G4double boxHy = 40*CLHEP::cm, 
+       G4double boxHx = 40*CLHEP::cm,
+       G4double boxHy = 40*CLHEP::cm,
        G4double boxHz = 40*CLHEP::cm,
        const G4String& worldMaterialName = "G4_AIR",
        G4double worldSizeFactor = 1.25);
-    ~DetectorConstruction();
+    ~DetectorConstruction() override;
 
   public:
-    // methods from base class 
-    virtual G4VPhysicalVolume* Construct();
+    // methods from base class
+    G4VPhysicalVolume* Construct() override;
 
     // set methods
     void  SetBoxMaterial(const G4String& materialName);
     void  SetWorldMaterial(const G4String& materialName);
     void  SetBoxDimensions(G4ThreeVector dimensions);
     void  SetWorldSizeFactor(G4double factor);
-                       
+
   private:
     void DefineCommands();
 
-    G4GenericMessenger*  fMessenger; 
+    G4GenericMessenger*  fMessenger = nullptr;
     G4String             fBoxMaterialName;
     G4String             fWorldMaterialName;
     G4ThreeVector        fBoxDimensions;
-    G4double             fWorldSizeFactor;
-    G4LogicalVolume*     fBoxVolume;  
-    G4LogicalVolume*     fWorldVolume;  
+    G4double             fWorldSizeFactor = 0.;
+    G4LogicalVolume*     fBoxVolume = nullptr;
+    G4LogicalVolume*     fWorldVolume = nullptr;
 };
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

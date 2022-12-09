@@ -6,6 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-25 Gabriele Cosmo (raytracer-V11-00-06)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-06 John Allison (raytracer-V11-00-05)
+- Eliminate G4cerr and introduce G4warn.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where it is clearly
+    an error report or a warning.
+
+## 2022-09-03 Ben Morgan (raytracer-V11-00-04)
+- Resolve inconsistencies in dependencies
+  - Remove inclusion of headers for unused interfaces
+  - Remove unused dependencies
+  - Add needed G4geometrymg dependency
+
 ## 2022-04-07 Gabriele Cosmo (raytracer-V11-00-03)
 - Fixed GNUmakefile and source.cmake to add required granular dependencies on
   "geometry/solids/CSG" and "geometry/solids/specific" modules, introduced

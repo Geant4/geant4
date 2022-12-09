@@ -34,30 +34,27 @@
 #include "G4SystemOfUnits.hh"
 
 G4GEMCoulombBarrier::G4GEMCoulombBarrier(G4int anA, G4int aZ) :
-  G4CoulombBarrier(anA,aZ) 
+  G4CoulombBarrier(anA, aZ) 
 {
   AejectOneThird = g4calc->Z13(anA);
 }
 
-G4GEMCoulombBarrier::~G4GEMCoulombBarrier() 
-{}
-
 G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, 
                                                 G4double U) const 
-// Calculation of Coulomb potential energy (barrier) for outgoing fragment
 {
+  // Calculation of Coulomb potential energy (barrier) for outgoing fragment
   G4double Barrier = 0.0;
-  if (GetZ() > 0 && ZRes > 0) {
+  if (theZ > 0 && ZRes > 0) {
 
     G4double CompoundRadius = CalcCompoundRadius(ARes);
-    Barrier = CLHEP::elm_coupling * (GetZ() * ZRes)/CompoundRadius;
+    Barrier = CLHEP::elm_coupling * (theZ * ZRes)/CompoundRadius;
       
     // Barrier penetration coeficient
-    if(GetA() <= 4) { Barrier *= BarrierPenetrationFactor(ZRes); }
+    if(theA <= 4) { Barrier *= BarrierPenetrationFactor(ZRes); }
   
     //JMQ 200709 effective decrease  of barrier with E* (Barashenkov)
     // (not inclued in original Furihata's formulation)
-    Barrier /= (1.0 + std::sqrt(U/(static_cast<G4double>(2*ARes))));
+    Barrier /= (1.0 + std::sqrt(U/((2*ARes)*CLHEP::MeV)));
   }
   return Barrier;
 }
@@ -65,20 +62,19 @@ G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes,
 G4double G4GEMCoulombBarrier::CalcCompoundRadius(G4int ARes) const
 {      
   G4double AresOneThird = g4calc->Z13(ARes);
-  G4int A = GetA();
 
   G4double Result = 0.0;
-  if(A == 1){
+  if(theA == 1){
     Result = 1.7* AresOneThird;
 
-  } else if (A <= 4){
+  } else if (theA <= 4){
     Result = 1.7* AresOneThird + 1.2;
 
   } else {
     Result = 1.12*(AresOneThird + AejectOneThird) - 
       0.86*(AresOneThird+AejectOneThird)/(AresOneThird*AejectOneThird)+3.75;
   }
-  return Result*fermi;
+  return Result*CLHEP::fermi;
 }
 
 

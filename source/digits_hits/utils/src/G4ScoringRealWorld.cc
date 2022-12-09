@@ -32,7 +32,6 @@
 #include "G4Region.hh"
 
 #include "G4MultiFunctionalDetector.hh"
-#include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
 
 #include "G4ScoringManager.hh"
@@ -50,8 +49,6 @@ G4ScoringRealWorld::G4ScoringRealWorld(G4String lvName)
   G4int nBin[] = { 1, 1, 1 };
   SetNumberOfSegments(nBin);
 }
-
-G4ScoringRealWorld::~G4ScoringRealWorld() {}
 
 void G4ScoringRealWorld::List() const
 {
@@ -88,7 +85,7 @@ void G4ScoringRealWorld::SetupGeometry(G4VPhysicalVolume*)
       SetNumberOfSegments(nBin);
       // check if this logical volume belongs to the real world
       auto region = (*itr)->GetRegion();
-      if(region && !(region->IsInMassGeometry()))
+      if((region != nullptr) && !(region->IsInMassGeometry()))
       {
         G4ExceptionDescription ed;
         ed << "Logical Volume with name <" << logVolName

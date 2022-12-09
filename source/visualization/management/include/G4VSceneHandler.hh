@@ -419,6 +419,15 @@ protected:
   // For a tetrahedron mesh, draw as surfaces by colour and material
   // with inner shared faces removed.
 
+  G4ThreeVector GetPointInBox(const G4ThreeVector& pos,
+                              G4double halfX,
+                              G4double halfY,
+                              G4double halfZ) const;
+  // Sample a random point inside the box
+
+  G4ThreeVector GetPointInTet(const std::vector<G4ThreeVector>& vertices) const;
+  // Sample a random point inside the tetrahedron
+
   //////////////////////////////////////////////////////////////
   // Data members
 

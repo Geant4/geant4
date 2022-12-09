@@ -118,13 +118,13 @@ G4long G4SmartVoxelStat::GetMemoryUse() const
 //
 void G4SmartVoxelStat::CountHeadsAndNodes( const G4SmartVoxelHeader* head ) 
 {
-  G4int numSlices = head->GetNoSlices();
+  std::size_t numSlices = head->GetNoSlices();
   
   pointers += numSlices;
   
   const G4SmartVoxelProxy* lastProxy = nullptr;
   
-  for(auto i=0; i<numSlices; ++i)
+  for(std::size_t i=0; i<numSlices; ++i)
   {
     const G4SmartVoxelProxy *proxy = head->GetSlice(i);
     if (proxy == lastProxy) continue;

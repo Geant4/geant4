@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.cc
+/// \file B3/B3a/src/ActionInitialization.cc
 /// \brief Implementation of the B3a::ActionInitialization class
 
 #include "ActionInitialization.hh"
@@ -40,16 +40,6 @@ namespace B3a
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ActionInitialization::BuildForMaster() const
 {
   SetUserAction(new RunAction);
@@ -59,7 +49,7 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  RunAction* runAction = new RunAction();
+  auto runAction = new RunAction();
   SetUserAction(runAction);
 
   SetUserAction(new EventAction(runAction));

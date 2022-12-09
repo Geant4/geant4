@@ -174,7 +174,7 @@ tools::sg::separator* G4ToolsSGSceneHandler::GetOrCreateNode()
   size_t iDepth = 1;
   while (iDepth < depth) {
     const auto& children = node->children();
-    const G4int nChildren = children.size();
+    const G4int nChildren = (G4int)children.size();
     G4int iChild = 0;
     G4ToolsSGNode* child = nullptr;
     for (; iChild < nChildren; ++iChild) {

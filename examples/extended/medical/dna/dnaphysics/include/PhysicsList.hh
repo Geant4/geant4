@@ -45,9 +45,23 @@ class G4VPhysicsConstructor;
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-    virtual ~PhysicsList();
+public:
+  PhysicsList();
+  ~PhysicsList() override;
+
+  void ConstructParticle() override;
+  void ConstructProcess() override;
+
+  void AddPhysics(const G4String&);
+
+private:
+    
+  G4VPhysicsConstructor* fEmPhysicsList = nullptr;
+  G4VPhysicsConstructor* fDecayPhysicsList = nullptr;
+  G4VPhysicsConstructor* fRadDecayPhysicsList = nullptr;
+  G4VPhysicsConstructor* fEmDNAActivator = nullptr;
+
+  G4String fEmPhysics = "";
 };
 
 #endif

@@ -125,6 +125,14 @@ void G4DNAIRT::Initialize(){
   SpaceBinning();		// 1. binning the space
   IRTSampling();		// 2. Sampling of the IRT
 
+  //hoang : if the first IRTSampling won't give any reactions, end the simu.
+  if(fReactionSet->Empty())
+  {
+    for (auto pTrack : *fTrackHolder->GetMainList())
+    {
+      pTrack->SetGlobalTime(G4Scheduler::Instance()->GetEndTime());
+    }
+  }
 }
 
 void G4DNAIRT::SpaceBinning(){

@@ -59,6 +59,8 @@
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
 
+#include "G4TransportationParameters.hh"
+
 class G4VSensitiveDetector;
 
 G4bool G4Transportation::fUseMagneticMoment=false;
@@ -93,9 +95,20 @@ G4Transportation::G4Transportation( G4int verbosity, const G4String& aName )
 
   fpLogger = new G4TransportationLogger("G4Transportation", verbosity);
 
-  SetHighLooperThresholds();
-  // Use the old defaults: Warning = 100 MeV, Important = 250 MeV, No Trials = 10;
-  
+  auto trParams= G4TransportationParameters::Instance();
+  if( G4TransportationParameters::Exists() )
+  {
+    SetThresholdWarningEnergy(  trParams->GetWarningEnergy() );
+    SetThresholdWarningEnergy(  trParams->GetWarningEnergy() );
+    SetThresholdImportantEnergy( trParams->GetImportantEnergy() );
+    SetThresholdTrials( trParams->GetNumberOfTrials() );
+    G4Transportation::fSilenceLooperWarnings= trParams->GetSilenceAllLooperWarnings();
+  }
+  else {
+     SetHighLooperThresholds();
+     // Use the old defaults: Warning = 100 MeV, Important = 250 MeV, No Trials = 10;
+  }
+
   PushThresholdsToLogger();
   // Should be done by Set methods in SetHighLooperThresholds -- making sure
   
@@ -255,8 +268,8 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
   if(currentMinimumStep == 0.0)
   {
     fEndPointDistance = 0.0;
-    fGeometryLimitedStep = false;
-
+    fGeometryLimitedStep = false;  //  Old code:  = (currentSafety == 0.0);
+    // Changed to avoid problems when setting the step status (now done in AlongStepDoIt)
     fMomentumChanged           = false;
     fParticleIsLooping         = false;
     fEndGlobalTimeComputed     = false;
@@ -348,6 +361,8 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
     fTransportEndPosition    = aFieldTrack.GetPosition();
     fTransportEndMomentumDir = aFieldTrack.GetMomentumDir();
 
+    // G4cout << " G4Transport: End of step pMag = " << aFieldTrack.GetMomentum().mag() << G4endl;
+
     fEndPointDistance  = (fTransportEndPosition - startPosition).mag();
 
     // Ignore change in energy for fields that conserve energy
@@ -377,13 +392,7 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
       G4double startEnergy = kineticEnergy;
       G4double endEnergy   = fTransportEndKineticEnergy;
 
-      static G4ThreadLocal G4int no_inexact_steps = 0, no_large_ediff;
-      G4double absEdiff = std::fabs(startEnergy - endEnergy);
-      if(absEdiff > perMillion * endEnergy)
-      {
-        no_inexact_steps++;
-        // Possible statistics keeping here ...
-      }
+      static G4ThreadLocal G4int no_large_ediff;
       if(verboseLevel > 1)
       {
         if(std::fabs(startEnergy - endEnergy) > perThousand * endEnergy)
@@ -916,7 +925,7 @@ void G4Transportation::ProcessDescription(std::ostream& outStr) const
                                   
 {
   G4String indent = "  "; //  : "");
-  G4int oldPrec= outStr.precision(6);
+  G4long oldPrec= outStr.precision(6);
   // outStr << std::setprecision(6);
   outStr << G4endl << indent << GetProcessName() << ": ";
 

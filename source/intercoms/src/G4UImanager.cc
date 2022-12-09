@@ -210,7 +210,7 @@ G4String G4UImanager::GetCurrentStringValue(const char* aCommand,
   {
     G4String parameterValues = GetCurrentValues(aCommand);
   }
-  for(std::size_t i = 0; i < savedCommand->GetParameterEntries(); ++i)
+  for(G4int i = 0; i < (G4int)savedCommand->GetParameterEntries(); ++i)
   {
     if(aParameterName == savedCommand->GetParameter(i)->GetParameterName())
     {
@@ -430,19 +430,19 @@ void G4UImanager::Foreach(const char* macroFile, const char* variableName,
 G4String G4UImanager::SolveAlias(const char* aCmd)
 {
   G4String aCommand = aCmd;
-  G4int ia          = aCommand.find("{");
-  G4int iz          = aCommand.find("#");
-  while((ia != G4int(std::string::npos)) &&
-        ((iz == G4int(std::string::npos)) || (ia < iz)))
+  std::size_t ia = aCommand.find("{");
+  std::size_t iz = aCommand.find("#");
+  while((ia != std::string::npos) &&
+        ((iz == std::string::npos) || (ia < iz)))
   {
     G4int ibx = -1;
     while(ibx < 0)
     {
-      G4int ib = aCommand.find("}");
-      if(ib == G4int(std::string::npos))
+      std::size_t ib = aCommand.find("}");
+      if(ib == std::string::npos)
       {
         G4cerr << aCommand << G4endl;
-        for(G4int i = 0; i < ia; ++i)
+        for(std::size_t i = 0; i < ia; ++i)
         {
           G4cerr << " ";
         }
@@ -452,15 +452,15 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
         return nullStr;
       }
       G4String ps = aCommand.substr(ia + 1, aCommand.length() - (ia + 1));
-      G4int ic    = ps.find("{");
-      G4int id    = ps.find("}");
-      if(ic != G4int(std::string::npos) && ic < id)
+      std::size_t ic    = ps.find("{");
+      std::size_t id    = ps.find("}");
+      if(ic != std::string::npos && ic < id)
       {
         ia += ic + 1;
       }
       else
       {
-        ibx = ib;
+        ibx = (G4int)ib;
       }
     }
     //--- Here ia represents the position of innermost "{"
@@ -522,8 +522,8 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   }
 
   // remove doubled slash
-  G4int len = commandString.length();
-  G4int ll  = 0;
+  std::size_t len = commandString.length();
+  std::size_t ll  = 0;
   G4String a1;
   G4String a2;
   while(ll < len - 1)
@@ -704,10 +704,10 @@ G4UIcommandTree* G4UImanager::FindDirectory(const char* dirName)
   {
     return comTree;
   }
-  G4int idx = 1;
-  while(idx < G4int(targetDir.length()) - 1)
+  std::size_t idx = 1;
+  while(idx < targetDir.length() - 1)
   {
-    G4int i                  = targetDir.find("/", idx);
+    std::size_t i            = targetDir.find("/", idx);
     G4String targetDirString = targetDir.substr(0, i + 1);
     comTree                  = comTree->GetTree(targetDirString);
     if(comTree == nullptr)
@@ -754,7 +754,7 @@ void G4UImanager::SetCoutDestination(G4UIsession* const value)
 void G4UImanager::SetAlias(const char* aliasLine)
 {
   G4String aLine      = aliasLine;
-  G4int i             = aLine.find(" ");
+  std::size_t i       = aLine.find(" ");
   G4String aliasName  = aLine.substr(0, i);
   G4String aliasValue = aLine.substr(i + 1, aLine.length() - (i + 1));
   if(aliasValue[0] == '"')

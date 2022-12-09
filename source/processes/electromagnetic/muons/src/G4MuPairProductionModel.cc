@@ -135,11 +135,6 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MuPairProductionModel::~G4MuPairProductionModel()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MuPairProductionModel::MinPrimaryEnergy(const G4Material*,
                                                    const G4ParticleDefinition*,
                                                    G4double cut)
@@ -239,10 +234,10 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   G4double aaa = G4Log(minPairEnergy);
   G4double bbb = G4Log(cut);
 
-  G4int kkk = (G4int)((bbb-aaa)/ak1+ak2);
+  G4int kkk = G4lrint((bbb-aaa)/ak1+ak2);
   if(kkk > 8) { kkk = 8; }
   else if (kkk < 1) { kkk = 1; }
-  G4double hhh = (bbb-aaa)/(G4double)kkk;
+  G4double hhh = (bbb-aaa)/kkk;
   G4double x = aaa;
 
   for (G4int l=0 ; l<kkk; ++l) {
@@ -271,11 +266,11 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
 
   G4double aaa = G4Log(cut);
   G4double bbb = G4Log(tmax);
-  G4int kkk = ((bbb-aaa)/ak1 + ak2);
+  G4int kkk = G4lrint((bbb-aaa)/ak1 + ak2);
   if(kkk > 8) { kkk = 8; }
   else if (kkk < 1) { kkk = 1; }
 
-  G4double hhh = (bbb-aaa)/(G4double)(kkk);
+  G4double hhh = (bbb-aaa)/(kkk);
   G4double x = aaa;
 
   for(G4int l=0; l<kkk; ++l) {
@@ -657,6 +652,27 @@ void G4MuPairProductionModel::SampleSecondaries(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double 
+G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
+					  G4double logTkin,
+					  G4double yymin, G4double yymax)
+{
+  G4double res = yymin;
+  G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
+  if(nullptr != pv) { 
+    G4double pmin = pv->Value(yymin, logTkin);
+    G4double pmax = pv->Value(yymax, logTkin);
+    G4double p0   = pv->Value(0.0, logTkin);
+    if(p0 <= 0.0) { DataCorrupted(Z, logTkin); }
+    else { res = pv->FindLinearX((pmin + rand*(pmax - pmin))/p0, logTkin); }
+  } else {
+    DataCorrupted(Z, logTkin); 
+  }
+  return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuPairProductionModel::DataCorrupted(G4int Z, G4double logTkin) const
 {
   G4ExceptionDescription ed;
@@ -664,8 +680,7 @@ void G4MuPairProductionModel::DataCorrupted(G4int Z, G4double logTkin) const
      << " Ekin(MeV)= " << G4Exp(logTkin)
      << " IsMasterThread= " << IsMaster() 
      << " Model " << GetName();
-  G4Exception("G4MuPairProductionModel::()","em0033",FatalException,
-              ed,"");
+  G4Exception("G4MuPairProductionModel::()", "em0033", FatalException, ed, "");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

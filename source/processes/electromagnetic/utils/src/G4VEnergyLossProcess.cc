@@ -498,7 +498,7 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
         << " regions" << G4endl;
   }
   if(2 < verboseLevel) {
-    for(size_t i=0; i<7; ++i) {
+    for(std::size_t i=0; i<7; ++i) {
       auto ta = theData->Table(i);
       out << "      " << tnames[i] << " address: " << ta << G4endl; 
       if(nullptr != ta) { out << *ta << G4endl; }
@@ -622,13 +622,17 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
       reduceFactor = 1.0/(fFactor*massRatio);
       chargeSqRatio = q2;
     }
+    if (lossFluctuationFlag) {
+      auto fluc = currentModel->GetModelOfFluctuations();
+      fluc->SetParticleAndCharge(track.GetDefinition(), q2);
+    }
   }
 
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track.GetParentID() && biasFlag && 
-       biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
-      return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
+       biasManager->ForcedInteractionRegion((G4int)currentCoupleIndex)) {
+      return biasManager->GetStepLimit((G4int)currentCoupleIndex, previousStepSize);
     }
   }
 
@@ -809,7 +813,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     eloss = preStepKinEnergy;
     if (useDeexcitation) {
       atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
-                                              eloss, currentCoupleIndex);
+                                              eloss, (G4int)currentCoupleIndex);
       if(scTracks.size() > 0) { FillSecondariesAlongStep(weight); }
       eloss = std::max(eloss, 0.0);
     }
@@ -885,7 +889,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     G4double esecfluo = preStepKinEnergy;
     G4double de = esecfluo;
     atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
-                                            de, currentCoupleIndex);
+                                            de, (G4int)currentCoupleIndex);
 
     // sum of de-excitation energies
     esecfluo -= de;
@@ -938,21 +942,21 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
 void G4VEnergyLossProcess::FillSecondariesAlongStep(G4double wt)
 {
-  const G4int n0 = scTracks.size();
+  const std::size_t n0 = scTracks.size();
   G4double weight = wt;
   // weight may be changed by biasing manager
   if(biasManager) {
-    if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+    if(biasManager->SecondaryBiasingRegion((G4int)currentCoupleIndex)) {
       weight *=
-        biasManager->ApplySecondaryBiasing(scTracks, currentCoupleIndex);
+        biasManager->ApplySecondaryBiasing(scTracks, (G4int)currentCoupleIndex);
     }
   } 
 
   // fill secondaries
-  const G4int n = scTracks.size();
-  fParticleChange.SetNumberOfSecondaries(n);
+  const std::size_t n = scTracks.size();
+  fParticleChange.SetNumberOfSecondaries((G4int)n);
 
-  for(G4int i=0; i<n; ++i) {
+  for(std::size_t i=0; i<n; ++i) {
     G4Track* t = scTracks[i];
     if(nullptr != t) {
       t->SetWeight(weight); 
@@ -988,7 +992,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   */
   // forced process - should happen only once per track
   if(biasFlag) {
-    if(biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+    if(biasManager->ForcedInteractionRegion((G4int)currentCoupleIndex)) {
       biasFlag = false;
     }
   }
@@ -1020,17 +1024,17 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   secParticles.clear();
   currentModel->SampleSecondaries(&secParticles, currentCouple, dp, tcut);
 
-  const G4int num0 = secParticles.size();
+  const G4int num0 = (G4int)secParticles.size();
 
   // bremsstrahlung splitting or Russian roulette  
   if(biasManager) {
-    if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+    if(biasManager->SecondaryBiasingRegion((G4int)currentCoupleIndex)) {
       G4double eloss = 0.0;
       weight *= biasManager->ApplySecondaryBiasing(
                                       secParticles,
                                       track, currentModel, 
                                       &fParticleChange, eloss,
-                                      currentCoupleIndex, tcut, 
+                                      (G4int)currentCoupleIndex, tcut, 
                                       step.GetPostStepPoint()->GetSafety());
       if(eloss > 0.0) {
         eloss += fParticleChange.GetLocalEnergyDeposit();
@@ -1040,7 +1044,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   }
 
   // save secondaries
-  const G4int num = secParticles.size();
+  const G4int num = (G4int)secParticles.size();
   if(num > 0) {
 
     fParticleChange.SetNumberOfSecondaries(num);
@@ -1104,7 +1108,7 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
        const G4ParticleDefinition* part, const G4String& dir, G4bool ascii)
 {
   if (!isMaster || nullptr != baseParticle || part != particle ) return true;
-  for(size_t i=0; i<7; ++i) {
+  for(std::size_t i=0; i<7; ++i) {
     if(nullptr != theData->Table(i)) {
       if(1 < verboseLevel) {
 	G4cout << "G4VEnergyLossProcess::StorePhysicsTable i=" << i
@@ -1128,7 +1132,7 @@ G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
                                            const G4String& dir, G4bool ascii)
 {
   if (!isMaster || nullptr != baseParticle || part != particle ) return true;
-  for(size_t i=0; i<7; ++i) {
+  for(std::size_t i=0; i<7; ++i) {
     if(!G4EmTableUtil::RetrieveTable(this, part, theData->Table(i), dir, tnames[i],
                                      verboseLevel, ascii, spline)) { 
       return false;

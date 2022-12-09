@@ -35,6 +35,7 @@
 #include "globals.hh"
 
 #include <string_view>
+#include <utility>
 
 class G4CsvFileManager;
 class G4CsvNtupleManager;
@@ -48,24 +49,21 @@ class G4CsvNtupleFileManager : public G4VNtupleFileManager
   public:
     explicit G4CsvNtupleFileManager(const G4AnalysisManagerState& state);
     G4CsvNtupleFileManager() = delete;
-    virtual ~G4CsvNtupleFileManager() = default;
+    ~G4CsvNtupleFileManager() override = default;
 
-    virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
+    std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
 
     // Methods to be performed at file management
-    virtual G4bool ActionAtOpenFile(const G4String& fileName) override;
-    virtual G4bool ActionAtWrite() override;
-    virtual G4bool ActionAtCloseFile(G4bool reset) override;
-    virtual G4bool Reset() override;
+    G4bool ActionAtOpenFile(const G4String& fileName) override;
+    G4bool ActionAtWrite() override;
+    G4bool ActionAtCloseFile() override;
+    G4bool Reset() override;
 
     void SetFileManager(std::shared_ptr<G4CsvFileManager> fileManager);
 
     std::shared_ptr<G4CsvNtupleManager> GetNtupleManager() const;
 
   private:
-    // Methods
-    G4bool CloseNtupleFiles();
-
     // Static data members
     static constexpr std::string_view fkClass { "G4CsvNtupleFileManager" };
 
@@ -78,7 +76,9 @@ class G4CsvNtupleFileManager : public G4VNtupleFileManager
 
 inline void G4CsvNtupleFileManager::SetFileManager(
   std::shared_ptr<G4CsvFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 inline std::shared_ptr<G4CsvNtupleManager> G4CsvNtupleFileManager::GetNtupleManager() const
 { return fNtupleManager; }

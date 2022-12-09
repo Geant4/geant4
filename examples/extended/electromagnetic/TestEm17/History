@@ -5,13 +5,21 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-10-24 I. Hrivnacova (testem17-V11-00-02)
+- Coding guidelines: start data members with 'f' (MuCrossSections);
+  use G4int, G4double
+
+## 2022-07-20 Vladimir Ivanchenko (testem17-V11-00-01)
+- Added new process of muon pair production by muons; 
+  analysis extended and new histograms are added by Siddharth Yajaman
+
 ## 2021-12-10 Ben Morgan (testem17-V11-00-00)
 - Change to new Markdown History format
 
 ---
 
 # History entries prior to 11.0
-     
+
 07-11-21 I. Hrivnacova (testem17-V10-07-03)
 - Added analysis manager Clear() call instead of
   deleting in the end of run (removed on July 19)

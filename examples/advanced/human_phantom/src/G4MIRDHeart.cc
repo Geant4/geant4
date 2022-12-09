@@ -45,25 +45,15 @@
 #include "G4HumanPhantomColour.hh"
 #include "G4SystemOfUnits.hh"
 
-G4MIRDHeart::G4MIRDHeart()
-{
-
-}
-
-G4MIRDHeart::~G4MIRDHeart()
-{
-
-}
-
 G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					  const G4String& colourName, G4bool wireFrame, G4bool)
 {
   
   G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  auto* material = new G4HumanPhantomMaterial();
 
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* soft = material -> GetMaterial("soft_tissue");
   
   G4double ax= 4.00* cm;
   G4double by= 4.00 *cm;
@@ -71,7 +61,7 @@ G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String& volumeName,G4VPhysical
   G4double zcut1= -7.00 *cm;
   G4double zcut2= 0.0 *cm;
   
-  G4Ellipsoid* heart1 =  new G4Ellipsoid("Heart1",ax, by, cz, zcut1, zcut2);
+  auto* heart1 =  new G4Ellipsoid("Heart1",ax, by, cz, zcut1, zcut2);
   
   G4double rmin =0.*cm;
   G4double rmax = 3.99*cm;
@@ -80,18 +70,18 @@ G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String& volumeName,G4VPhysical
   G4double starttheta = 0. * degree;
   G4double deltatheta = 90. * degree;
  
-  G4Sphere* heart2 = new G4Sphere("Heart2", rmin,rmax,
+  auto* heart2 = new G4Sphere("Heart2", rmin,rmax,
 				  startphi,   deltaphi,
 				  starttheta, deltatheta);
  
-  G4UnionSolid* heart = new G4UnionSolid("Heart", heart1, heart2);
+  auto* heart = new G4UnionSolid("Heart", heart1, heart2);
  
-  G4LogicalVolume* logicHeart = new G4LogicalVolume(heart, soft,
-						    "HeartVolume",
-						    0, 0, 0);
+  auto* logicHeart = new G4LogicalVolume(heart, soft,
+				          "HeartVolume",
+				           nullptr, nullptr, nullptr);
 
   // Define rotation and position here!
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateY(25.*degree);
   G4VPhysicalVolume* physHeart = new G4PVPlacement(rm,G4ThreeVector(0.0,-3.0*cm, 15.32 *cm),
 						   "physicalHeart",
@@ -101,9 +91,9 @@ G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String& volumeName,G4VPhysical
 						   0,true);
 
   // Visualization Attributes
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* HeartVisAtt = new G4VisAttributes(colour);
+  auto* HeartVisAtt = new G4VisAttributes(colour);
   HeartVisAtt->SetForceSolid(wireFrame);
   logicHeart->SetVisAttributes(HeartVisAtt);
 

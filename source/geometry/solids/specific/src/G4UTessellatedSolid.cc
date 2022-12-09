@@ -70,8 +70,8 @@ G4UTessellatedSolid::G4UTessellatedSolid(__void__& a)
 //
 G4UTessellatedSolid::~G4UTessellatedSolid()
 {
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)  { delete fFacets[i]; }
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)  { delete fFacets[i]; }
   fFacets.clear();
 }
 
@@ -174,14 +174,14 @@ void G4UTessellatedSolid::SetSolidClosed(const G4bool t)
   if (t && !Base_t::IsClosed())
   {
     Base_t::Close();
-    G4int nVertices = fTessellated.fVertices.size();
-    G4int nFacets   = fTessellated.fFacets.size();
-    for (G4int j = 0; j < nVertices; ++j)
+    std::size_t nVertices = fTessellated.fVertices.size();
+    std::size_t nFacets   = fTessellated.fFacets.size();
+    for (std::size_t j = 0; j < nVertices; ++j)
     {
       U3Vector vt = fTessellated.fVertices[j];
       fVertexList.push_back(G4ThreeVector(vt.x(), vt.y(), vt.z()));
     }
-    for (G4int i = 0; i < nFacets; ++i)
+    for (std::size_t i = 0; i < nFacets; ++i)
     {
       vecgeom::TriangleFacet<G4double>* afacet = Base_t::GetFacet(i);
       std::vector<G4ThreeVector> v;
@@ -255,8 +255,8 @@ G4int G4UTessellatedSolid::AllocatedMemoryWithoutVoxels()
   G4int base = sizeof(*this);
   base += fVertexList.capacity() * sizeof(G4ThreeVector);
 
-  G4int limit = fFacets.size();
-  for (G4int i = 0; i < limit; ++i)
+  std::size_t limit = fFacets.size();
+  for (std::size_t i = 0; i < limit; ++i)
   {
     G4VFacet &facet = *fFacets[i];
     base += facet.AllocatedMemory();
@@ -379,19 +379,19 @@ G4UTessellatedSolid::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UTessellatedSolid::CreatePolyhedron () const
 {
-  G4int nVertices = fVertexList.size();
-  G4int nFacets = fFacets.size();
+  G4int nVertices = (G4int)fVertexList.size();
+  G4int nFacets = (G4int)fFacets.size();
   G4Polyhedron* polyhedron = new G4Polyhedron(nVertices, nFacets);
-  for (G4int i = 0; i < nVertices; ++i)
+  for (auto i = 0; i < nVertices; ++i)
   {
     polyhedron->SetVertex(i+1, fVertexList[i]);
   }
 
-  for (G4int i = 0; i < nFacets; ++i)
+  for (auto i = 0; i < nFacets; ++i)
   {
     G4int v[3];  // Only facets with 3 vertices are defined in VecGeom
     G4VFacet* facet = GetFacet(i);
-    for (G4int j = 0; j < 3; ++j) // Retrieve indexing directly from VecGeom
+    for (auto j = 0; j < 3; ++j) // Retrieve indexing directly from VecGeom
     {
       v[j] = facet->GetVertexIndex(j) + 1;
     }

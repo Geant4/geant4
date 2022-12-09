@@ -139,20 +139,20 @@ void G4LivermorePolarizedComptonModel::Initialise(const G4ParticleDefinition* pa
     G4ProductionCutsTable* theCoupleTable = 
       G4ProductionCutsTable::GetProductionCutsTable();
 
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
     
     for(G4int i=0; i<numOfCouples; ++i) {
       const G4Material* material = 
-	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+        theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       const G4ElementVector* theElementVector = material->GetElementVector();
-      G4int nelm = material->GetNumberOfElements();
+      std::size_t nelm = material->GetNumberOfElements();
       
-      for (G4int j=0; j<nelm; ++j) {
-	G4int Z = G4lrint((*theElementVector)[j]->GetZ());
-	if(Z < 1)        { Z = 1; }
-	else if(Z > maxZ){ Z = maxZ; }
-	
-	if( (!data[Z]) ) { ReadData(Z, path); }
+      for (std::size_t j=0; j<nelm; ++j) {
+        G4int Z = G4lrint((*theElementVector)[j]->GetZ());
+        if(Z < 1)        { Z = 1; }
+        else if(Z > maxZ){ Z = maxZ; }
+
+        if( (!data[Z]) ) { ReadData(Z, path); }
       }
     }
     
@@ -206,7 +206,7 @@ void G4LivermorePolarizedComptonModel::InitialiseLocal(const G4ParticleDefinitio
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePolarizedComptonModel::ReadData(size_t Z, const char* path)
+void G4LivermorePolarizedComptonModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1) 
     {
@@ -240,7 +240,7 @@ void G4LivermorePolarizedComptonModel::ReadData(size_t Z, const char* path)
 	 << "> is not opened!" << G4endl;
       G4Exception("G4LivermoreComptonModel::ReadData()",
 		  "em0003",FatalException,
-		  ed,"G4LEDATA version should be G4EMLOW6.34 or later");
+		  ed,"G4LEDATA version should be G4EMLOW8.0 or later");
       return;
     } else {
     if(verboseLevel > 3) {
@@ -283,7 +283,7 @@ G4double G4LivermorePolarizedComptonModel::ComputeCrossSectionPerAtom(
       if(!pv) { return cs; }
     }
   
-  G4int n = pv->GetVectorLength() - 1;   
+  G4int n = G4int(pv->GetVectorLength() - 1);   
   G4double e1 = pv->Energy(0);
   G4double e2 = pv->Energy(n);
   
@@ -738,13 +738,13 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   if(fAtomDeexcitation && iteration < maxDopplerIterations) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
-      size_t nbefore = fvect->size();
+      std::size_t nbefore = fvect->size();
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellIdx);
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      size_t nafter = fvect->size();
+      std::size_t nafter = fvect->size();
       if(nafter > nbefore) {
-	for (size_t i=nbefore; i<nafter; ++i) {
+	for (std::size_t i=nbefore; i<nafter; ++i) {
 	  //Check if there is enough residual energy 
 	  if (bindingE >= ((*fvect)[i])->GetKineticEnergy())
             {

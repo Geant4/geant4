@@ -96,7 +96,7 @@ G4Eta* G4Eta::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4Eta*>(anInstance);
+  theInstance = static_cast<G4Eta*>(anInstance);
   return theInstance;
 }
 

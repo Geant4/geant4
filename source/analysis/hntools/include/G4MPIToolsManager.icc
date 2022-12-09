@@ -33,9 +33,8 @@ using std::to_string;
 //_____________________________________________________________________________
 template <typename HT>
 inline
-G4bool G4MPIToolsManager::Send(G4int nofActiveT,
-                               const std::vector<HT*>& htVector,
-                               const std::vector<G4HnInformation*>& hnVector)
+G4bool G4MPIToolsManager::Send(
+  G4int nofActiveT, const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector)
 {
   auto result = true;
 
@@ -44,13 +43,11 @@ G4bool G4MPIToolsManager::Send(G4int nofActiveT,
   fHmpi->beg_send(nofActiveT);
 
   // pack objects
-  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+  for (const auto& [ht, info] : hnVector) {
     // skip sending if activation is enabled and HT is inactivated
-    auto info = hnVector[i];
     if ( ( fState.GetIsActivation() && ( ! info->GetActivation() ) ) ) continue;
     // pack histogram for sending
     // G4cout << "Packed " << i << "th T" << G4endl;
-    auto ht = htVector[i];
     result &= fHmpi->pack(*ht);
   }
 
@@ -68,9 +65,8 @@ G4bool G4MPIToolsManager::Send(G4int nofActiveT,
 //_____________________________________________________________________________
 template <typename HT>
 inline
-G4bool G4MPIToolsManager::Receive(G4int nofActiveT,
-                                  const std::vector<HT*>& htVector,
-                                  const std::vector<G4HnInformation*>& hnVector)
+G4bool G4MPIToolsManager::Receive(
+  G4int nofActiveT, const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector)
 {
   G4int commSize;
   G4bool result = fHmpi->comm_size(commSize);
@@ -109,12 +105,10 @@ G4bool G4MPIToolsManager::Receive(G4int nofActiveT,
 
     // merge the objects to destination rank
     G4int counter = 0;
-    for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    for (const auto& [ht, info] : hnVector) {
       // skip sending if activation is enabled and HT is inactivated
-      auto info = hnVector[i];
       if ( ( fState.GetIsActivation() && ( ! info->GetActivation() ) ) ) continue;
       // merge histograms
-      auto ht = htVector[i];
       auto newHt = static_cast<HT*>(hs[counter++].second);
       ht->add(*newHt);
     }
@@ -126,21 +120,21 @@ G4bool G4MPIToolsManager::Receive(G4int nofActiveT,
 //_____________________________________________________________________________
 template <typename HT>
 inline
-G4bool G4MPIToolsManager::Merge(const std::vector<HT*>& htVector,
-                                const std::vector<G4HnInformation*>& hnVector)
+G4bool G4MPIToolsManager::Merge(
+  const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector)
 {
-  if ( ! htVector.size() ) return true;
+  if ( hnVector.empty() ) return true;
 
   // Get number of objects to be sent
   G4int nofActiveT = 0;
   if ( fState.GetIsActivation() ) {
     // only activated histograms will be treated
-    for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
-      auto activation = hnVector[i]->GetActivation();
+    for (const auto& htn : hnVector) {
+      auto activation = htn.second->GetActivation();
       if ( activation ) ++nofActiveT;
     }
   } else {
-      nofActiveT = G4int(htVector.size());
+      nofActiveT = G4int(hnVector.size());
   }
 
   if ( ! nofActiveT ) return true;
@@ -160,7 +154,7 @@ G4bool G4MPIToolsManager::Merge(const std::vector<HT*>& htVector,
       "on rank "  + to_string(commRank) +
       " destination rank: " + to_string(fHmpi->rank()));
 
-    result &= Send(nofActiveT, htVector, hnVector);
+    result &= Send(nofActiveT, hnVector);
 
     fState.Message(G4Analysis::kVL1, "mpi send", "Hn|Pn",
       "on rank "  + to_string(commRank) +
@@ -171,7 +165,7 @@ G4bool G4MPIToolsManager::Merge(const std::vector<HT*>& htVector,
       "on rank "  + to_string(commRank) +
       " destination rank: " + to_string(fHmpi->rank()));
 
-    result &= Receive(nofActiveT, htVector, hnVector);
+    result &= Receive(nofActiveT, hnVector);
 
     fState.Message(G4Analysis::kVL1, "mpi wait_histos", "Hn|Pn",
       "on rank "  + to_string(commRank) +

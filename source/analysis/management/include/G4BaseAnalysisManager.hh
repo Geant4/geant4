@@ -55,6 +55,7 @@ class G4BaseAnalysisManager
 
     // Access method
     G4int GetFirstId() const;
+    G4int GetCycle() const;
 
   protected:
     // Methods for verbose
@@ -93,6 +94,10 @@ inline void G4BaseAnalysisManager::SetLockFirstId(G4bool lockFirstId) {
 
 inline G4int G4BaseAnalysisManager::GetFirstId() const {
   return fFirstId;
+}
+
+inline G4int G4BaseAnalysisManager::GetCycle() const {
+  return fState.GetCycle();
 }
 
 #endif

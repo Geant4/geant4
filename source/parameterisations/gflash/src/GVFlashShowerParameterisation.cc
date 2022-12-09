@@ -62,10 +62,10 @@ G4double GVFlashShowerParameterisation::GetEffZ(const G4Material * mat  )
   // of given material
   //
   G4double z = 0.;
-  G4int nofElements = mat->GetNumberOfElements();
+  G4int nofElements = (G4int)mat->GetNumberOfElements();
   if (nofElements > 1) 
   {
-    for (G4int i=0; i<nofElements; i++) {
+    for (G4int i=0; i<nofElements; ++i) {
       G4double zOfElement = mat->GetElement(i)->GetZ();
       G4double massFraction = mat->GetFractionVector()[i];
       // cout << mat->GetElement(i)->GetName()
@@ -85,9 +85,9 @@ G4double GVFlashShowerParameterisation::GetEffA  (const G4Material * mat  )
   // of given material
   //
   G4double a = 0.;
-  G4int nofElements = mat->GetNumberOfElements();
+  G4int nofElements = (G4int)mat->GetNumberOfElements();
   if (nofElements > 1) {
-    for (G4int i=0; i<nofElements; i++) {
+    for (G4int i=0; i<nofElements; ++i) {
       G4double aOfElement = mat->GetElement(i)->GetA()/(g/mole);
       G4double massFraction = mat->GetFractionVector()[i];     
       a += aOfElement*massFraction;

@@ -1,0 +1,8 @@
+#
+# Macro file for the test of AnaEx01 example
+# with root file type (default)
+#
+
+/control/alias defaultFileType root
+
+/control/execute AnaEx01.in

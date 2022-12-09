@@ -163,7 +163,7 @@ template <typename NT>
 G4int G4TRNtupleManager<NT>::SetNtuple(
   G4TRNtupleDescription<NT>* rntupleDescription)
 {
-  G4int id = fNtupleDescriptionVector.size() + fFirstId;
+  G4int id = G4int(fNtupleDescriptionVector.size() + fFirstId);
 
   fNtupleDescriptionVector.push_back(rntupleDescription);
 

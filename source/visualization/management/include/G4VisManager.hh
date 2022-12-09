@@ -286,6 +286,10 @@ public: // With description
   void Draw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
+  void DrawGeometry
+  (G4VPhysicalVolume*, const G4Transform3D& t = G4Transform3D());
+  // Draws a geometry tree starting at the specified physical volume.
+
   //////////////////////////////////////////////////////////////////////
   // Optional methods that you may use to bracket a series of Draw
   // messages that have identical objectTransformation to improve

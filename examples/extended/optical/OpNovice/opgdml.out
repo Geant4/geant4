@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -84,6 +84,7 @@ Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
 Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -111,7 +112,7 @@ Lowest e+e- kinetic energy                         100 eV
 Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Type of fluctuation model                          2
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     1
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -147,8 +148,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -178,8 +178,8 @@ conv:  for gamma SubType=14 BuildTable=1
       BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      Lambda table from 100 eV  to 150 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 176 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -303,7 +303,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LindhardSorensen : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -487,23 +487,23 @@ CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-2.034e-06MeV	857214mm
-2.068e-06MeV	798979mm
-2.103e-06MeV	744093mm
-2.139e-06MeV	692451mm
-2.177e-06MeV	642760mm
-2.216e-06MeV	596287mm
-2.256e-06MeV	552882mm
-2.298e-06MeV	511498mm
-2.341e-06MeV	473038mm
-2.386e-06MeV	436596mm
-2.433e-06MeV	402211mm
-2.481e-06MeV	369900mm
+2.034e-06MeV	857215mm
+2.068e-06MeV	798981mm
+2.103e-06MeV	744094mm
+2.139e-06MeV	692453mm
+2.177e-06MeV	642761mm
+2.216e-06MeV	596288mm
+2.256e-06MeV	552883mm
+2.298e-06MeV	511499mm
+2.341e-06MeV	473039mm
+2.386e-06MeV	436597mm
+2.433e-06MeV	402212mm
+2.481e-06MeV	369901mm
 2.532e-06MeV	338815mm
-2.585e-06MeV	310630mm
+2.585e-06MeV	310631mm
 2.64e-06MeV	284407mm
 2.697e-06MeV	259459mm
-2.757e-06MeV	236845mm
+2.757e-06MeV	236846mm
 2.82e-06MeV	215010mm
 2.885e-06MeV	195502mm
 2.954e-06MeV	177163mm
@@ -512,13 +512,13 @@ CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
 3.181e-06MeV	130201mm
 3.265e-06MeV	116849mm
 3.353e-06MeV	104397mm
-3.446e-06MeV	93281.2mm
-3.545e-06MeV	82767.8mm
-3.649e-06MeV	73439.2mm
-3.76e-06MeV	64888.9mm
-3.877e-06MeV	57179.3mm
-4.002e-06MeV	50166.7mm
-4.136e-06MeV	43700.7mm
+3.446e-06MeV	93281.4mm
+3.545e-06MeV	82768mm
+3.649e-06MeV	73439.3mm
+3.76e-06MeV	64889mm
+3.877e-06MeV	57179.4mm
+4.002e-06MeV	50166.8mm
+4.136e-06MeV	43700.8mm
 
 msc:  for pi+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -716,6 +716,11 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
 
   Process: hFritiofCaptureAtRest
 
@@ -1676,18 +1681,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2      133     -244    -39.6     0.311 1.42e-05      230       316   Tank_phys compt
     3      117     -454    -10.4     0.167 1.42e-05      212       529   Tank_phys compt
     4      116     -406     59.9     0.149 1.42e-05     84.9       614   Tank_phys compt
-    5      110     -403     63.8     0.141 0.000537      7.8       621   Tank_phys compt
+    5      110     -403     63.7     0.141 0.000537      7.8       621   Tank_phys compt
     6      108     -402     63.8     0.119 1.42e-05     2.45       624   Tank_phys compt
-    7     91.2     -408     49.4    0.0969 2.92e-05     23.1       647   Tank_phys compt
+    7     91.2     -408     49.4    0.0969 2.92e-05     23.2       647   Tank_phys compt
     8     91.4     -402     46.4    0.0729 1.42e-05     6.99       654   Tank_phys compt
-    9     84.4     -451     36.4    0.0624 0.000537     50.4       704   Tank_phys compt
+    9     84.3     -451     36.4    0.0624 0.000537     50.4       704   Tank_phys compt
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 60,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     84.4     -451     36.4   3.6e-06        0        0         0   Tank_phys initStep
+    0     84.3     -451     36.4   3.6e-06        0        0         0   Tank_phys initStep
     1 2.01e+03     -734     -570   3.6e-06  3.6e-06 2.04e+03  2.04e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -1695,17 +1700,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     84.4     -451     36.4   0.00994        0        0         0   Tank_phys initStep
-    1     84.4     -451     36.4   0.00945 0.000494 0.000196  0.000196   Tank_phys msc
-    2     84.4     -451     36.4         0  0.00945  0.00224   0.00244   Tank_phys eIoni
-    3     84.4     -451     36.4         0        0        0   0.00244   Tank_phys NoProcess
+    0     84.3     -451     36.4   0.00994        0        0         0   Tank_phys initStep
+    1     84.3     -451     36.4   0.00945 0.000494 0.000196  0.000196   Tank_phys msc
+    2     84.3     -451     36.4         0  0.00945  0.00224   0.00244   Tank_phys eIoni
+    3     84.3     -451     36.4         0        0        0   0.00244   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 61,   Parent ID = 59
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     84.4     -451     36.4  3.85e-06        0        0         0   Tank_phys initStep
+    0     84.3     -451     36.4  3.85e-06        0        0         0   Tank_phys initStep
     1 1.83e+03    5e+03     -101  3.85e-06        0 5.73e+03  5.73e+03 expHall_phys Transportation
     2 5.27e+03    1e+04 -1.47e+03  3.85e-06        0 6.22e+03  1.19e+04 World_log_PV Transportation
     3 8.71e+03  1.5e+04 -2.84e+03  3.85e-06        0 6.22e+03  1.82e+04  OutOfWorld Transportation
@@ -1765,10 +1770,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      110     -403     63.8   0.00829        0        0         0   Tank_phys initStep
-    1      110     -403     63.8   0.00796 0.000339 0.000143  0.000143   Tank_phys msc
-    2      110     -403     63.8         0  0.00796  0.00166    0.0018   Tank_phys eIoni
-    3      110     -403     63.8         0        0        0    0.0018   Tank_phys NoProcess
+    0      110     -403     63.7   0.00829        0        0         0   Tank_phys initStep
+    1      110     -403     63.7   0.00796 0.000339 0.000143  0.000143   Tank_phys msc
+    2      110     -403     63.7         0  0.00796  0.00166    0.0018   Tank_phys eIoni
+    3      110     -403     63.7         0        0        0    0.0018   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 54,   Parent ID = 50
@@ -2167,7 +2172,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    9     84.4     -451     36.4    0.0624        0        0       704   Tank_phys initStep
+    9     84.3     -451     36.4    0.0624        0        0       704   Tank_phys initStep
    10     91.6     -435     41.9    0.0624        0     18.7       723   Tank_phys Rayl
    11      110     -424     48.2    0.0537 1.36e-05     21.8       745   Tank_phys compt
    12      114     -439     40.1    0.0464 1.42e-05     17.6       762   Tank_phys compt
@@ -2256,7 +2261,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0      164     -533     26.3  3.34e-06        0        0         0   Tank_phys initStep
     1     -528 3.87e+03    5e+03  3.34e-06        0 6.68e+03  6.68e+03 expHall_phys Transportation
     2     -528 3.87e+03    5e+03  3.34e-06        0        0  6.68e+03   Tank_phys Transportation
-    3     -577 3.92e+03 4.94e+03  3.34e-06 3.34e-06     93.9  6.77e+03   Tank_phys OpAbsorption
+    3     -577 3.92e+03 4.94e+03  3.34e-06 3.34e-06     93.8  6.77e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 90,   Parent ID = 50
@@ -2325,28 +2330,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5     -174       94      265    0.0894 2.92e-05     10.8       428   Tank_phys compt
     6     -175     93.1      265    0.0774 1.42e-05     1.92       430   Tank_phys compt
     7     -192      109      356    0.0625 1.42e-05     93.9       524   Tank_phys compt
-    8     -150     39.9      330    0.0573 1.36e-05     85.1       609   Tank_phys compt
+    8     -150     39.9      331    0.0573 1.36e-05     85.1       609   Tank_phys compt
     9     -150     46.5      278    0.0482 1.42e-05     52.5       661   Tank_phys compt
-   10     -209    -4.55      305    0.0482        0     82.6       744   Tank_phys Rayl
-   11     -213    -8.47      307         0 0.000538     6.04       750   Tank_phys phot
+   10     -209    -4.54      305    0.0482        0     82.5       744   Tank_phys Rayl
+   11     -213    -8.46      307         0 0.000538     6.04       750   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 107,   Parent ID = 49
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -213    -8.47      307    0.0476        0        0         0   Tank_phys initStep
-    1     -213    -8.47      307    0.0458  0.00186  0.00313   0.00313   Tank_phys msc
-    2     -213    -8.47      307    0.0324   0.0133   0.0211    0.0242   Tank_phys eIoni
+    0     -213    -8.46      307    0.0476        0        0         0   Tank_phys initStep
+    1     -213    -8.46      307    0.0458  0.00186  0.00313   0.00313   Tank_phys msc
+    2     -213    -8.46      307    0.0324   0.0133   0.0211    0.0242   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 108,   Parent ID = 107
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -213    -8.47      307  3.46e-06        0        0         0   Tank_phys initStep
-    1 4.53e+03   -5e+03     -569  3.46e-06        0 6.94e+03  6.94e+03 expHall_phys Transportation
-    2 4.53e+03   -5e+03     -569  3.46e-06        0        0  6.94e+03   Tank_phys Transportation
+    0     -213    -8.46      307  3.46e-06        0        0         0   Tank_phys initStep
+    1 4.53e+03   -5e+03     -568  3.46e-06        0 6.94e+03  6.94e+03 expHall_phys Transportation
+    2 4.53e+03   -5e+03     -568  3.46e-06        0        0  6.94e+03   Tank_phys Transportation
     3    5e+03 -4.66e+03     -509  3.46e-06        0      587  7.52e+03 expHall_phys Transportation
     4    1e+04      711 1.52e+03  3.46e-06        0 7.61e+03  1.51e+04 World_log_PV Transportation
     5  1.5e+04 6.08e+03 3.54e+03  3.46e-06        0 7.61e+03  2.28e+04  OutOfWorld Transportation
@@ -2356,20 +2361,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2     -213    -8.47      307    0.0324        0        0    0.0242   Tank_phys initStep
-    3     -213    -8.47      307    0.0314 0.000987  0.00159    0.0258   Tank_phys msc
-    4     -213    -8.47      307    0.0169   0.0145   0.0155    0.0413   Tank_phys eIoni
+    2     -213    -8.46      307    0.0324        0        0    0.0242   Tank_phys initStep
+    3     -213    -8.46      307    0.0314 0.000987  0.00159    0.0258   Tank_phys msc
+    4     -213    -8.46      307    0.0169   0.0145   0.0155    0.0413   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 109,   Parent ID = 107
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -213    -8.47      307  3.67e-06        0        0         0   Tank_phys initStep
+    0     -213    -8.46      307  3.67e-06        0        0         0   Tank_phys initStep
     1 -2.15e+03    5e+03 -2.69e+03  3.67e-06        0 6.15e+03  6.15e+03 expHall_phys Transportation
     2 -2.15e+03    5e+03 -2.69e+03  3.67e-06        0        0  6.15e+03   Tank_phys Transportation
-    3   -5e+03     -219 -4.97e+03  3.67e-06        0 6.37e+03  1.25e+04 expHall_phys Transportation
-    4   -5e+03     -219 -4.97e+03  3.67e-06        0        0  1.25e+04   Tank_phys Transportation
+    3   -5e+03     -219 -4.96e+03  3.67e-06        0 6.37e+03  1.25e+04 expHall_phys Transportation
+    4   -5e+03     -219 -4.96e+03  3.67e-06        0        0  1.25e+04   Tank_phys Transportation
     5 -4.94e+03     -295   -5e+03  3.67e-06        0      104  1.26e+04 expHall_phys Transportation
     6 -4.94e+03     -295   -5e+03  3.67e-06        0        0  1.26e+04   Tank_phys Transportation
     7 -3.42e+03 -3.07e+03 -3.33e+03  3.67e-06 3.67e-06 3.57e+03  1.62e+04   Tank_phys OpAbsorption
@@ -2379,10 +2384,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    4     -213    -8.47      307    0.0169        0        0    0.0413   Tank_phys initStep
-    5     -213    -8.47      307    0.0163 0.000623 0.000501    0.0418   Tank_phys msc
-    6     -213    -8.47      307         0   0.0163  0.00586    0.0477   Tank_phys eIoni
-    7     -213    -8.47      307         0        0        0    0.0477   Tank_phys NoProcess
+    4     -213    -8.46      307    0.0169        0        0    0.0413   Tank_phys initStep
+    5     -213    -8.46      307    0.0163 0.000623 0.000501    0.0418   Tank_phys msc
+    6     -213    -8.46      307         0   0.0163  0.00586    0.0477   Tank_phys eIoni
+    7     -213    -8.46      307         0        0        0    0.0477   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 106,   Parent ID = 49
@@ -2399,10 +2404,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -150     39.9      330   0.00519        0        0         0   Tank_phys initStep
-    1     -150     39.9      330   0.00507  0.00012  6.3e-05   6.3e-05   Tank_phys msc
-    2     -150     39.9      330         0  0.00507 0.000756  0.000819   Tank_phys eIoni
-    3     -150     39.9      330         0        0        0  0.000819   Tank_phys NoProcess
+    0     -150     39.9      331   0.00519        0        0         0   Tank_phys initStep
+    1     -150     39.9      331   0.00507  0.00012  6.3e-05   6.3e-05   Tank_phys msc
+    2     -150     39.9      331         0  0.00507 0.000756  0.000819   Tank_phys eIoni
+    3     -150     39.9      331         0        0        0  0.000819   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 104,   Parent ID = 49
@@ -2410,9 +2415,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     -192      109      356    0.0149        0        0         0   Tank_phys initStep
-    1     -192      109      356    0.0143 0.000584 0.000401  0.000401   Tank_phys msc
-    2     -192      109      356         0   0.0143  0.00467   0.00507   Tank_phys eIoni
-    3     -192      109      356         0        0        0   0.00507   Tank_phys NoProcess
+    1     -192      109      357    0.0143 0.000584 0.000401  0.000401   Tank_phys msc
+    2     -192      109      357         0   0.0143  0.00467   0.00507   Tank_phys eIoni
+    3     -192      109      357         0        0        0   0.00507   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 103,   Parent ID = 49
@@ -3318,13 +3323,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3    -34.5     93.7    -84.8     0.117 1.42e-05     62.6       219   Tank_phys compt
     4    -34.1     96.3    -87.4      0.11 1.42e-05     3.62       223   Tank_phys compt
     5    -90.3      120     -168    0.0994 2.92e-05      101       323   Tank_phys compt
-    6    -92.6      158     -180    0.0698 1.42e-05     40.3       364   Tank_phys compt
-    7    -89.7      133     -172    0.0697 1.36e-05       26       390   Tank_phys compt
+    6    -92.6      158     -180    0.0698 1.42e-05     40.4       364   Tank_phys compt
+    7    -89.7      133     -172    0.0697 1.36e-05     26.1       390   Tank_phys compt
     8    -91.9     85.3     -146    0.0549 1.36e-05     54.5       444   Tank_phys compt
     9    -90.1     98.6     -157     0.052 2.92e-05     17.2       462   Tank_phys compt
    10    -62.8      115     -126    0.0514 2.92e-05     44.6       506   Tank_phys compt
-   11    -27.1      137     -112    0.0477 0.000537     44.2       550   Tank_phys compt
-   12    -2.18      124     -123    0.0404 1.42e-05     30.2       581   Tank_phys compt
+   11    -27.2      137     -112    0.0477 0.000537     44.2       550   Tank_phys compt
+   12    -2.21      124     -123    0.0404 1.42e-05     30.2       581   Tank_phys compt
    13    -15.1      130     -131         0 0.000538     16.3       597   Tank_phys phot
 
 *********************************************************************************************************
@@ -3369,28 +3374,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.18      124     -123   0.00731        0        0         0   Tank_phys initStep
-    1    -2.17      124     -123   0.00703 0.000279 0.000114  0.000114   Tank_phys msc
-    2    -2.17      124     -123         0  0.00703  0.00134   0.00145   Tank_phys eIoni
-    3    -2.17      124     -123         0        0        0   0.00145   Tank_phys NoProcess
+    0    -2.21      124     -123   0.00731        0        0         0   Tank_phys initStep
+    1    -2.21      124     -123   0.00703 0.000279 0.000114  0.000114   Tank_phys msc
+    2     -2.2      124     -123         0  0.00703  0.00134   0.00145   Tank_phys eIoni
+    3     -2.2      124     -123         0        0        0   0.00145   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 32
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -27.1      137     -112   0.00309        0        0         0   Tank_phys initStep
-    1    -27.1      137     -112   0.00305 3.63e-05  2.6e-05   2.6e-05   Tank_phys msc
-    2    -27.1      137     -112         0  0.00305 0.000319  0.000345   Tank_phys eIoni
-    3    -27.1      137     -112         0        0        0  0.000345   Tank_phys NoProcess
+    0    -27.2      137     -112   0.00309        0        0         0   Tank_phys initStep
+    1    -27.2      137     -112   0.00305 3.63e-05  2.6e-05   2.6e-05   Tank_phys msc
+    2    -27.2      137     -112         0  0.00305 0.000319  0.000345   Tank_phys eIoni
+    3    -27.2      137     -112         0        0        0  0.000345   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 48,   Parent ID = 43
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -27.1      137     -112  3.97e-06        0        0         0   Tank_phys initStep
-    1 -1.66e+03 4.63e+03    -71.2  3.97e-06 3.97e-06 4.78e+03  4.78e+03   Tank_phys OpAbsorption
+    0    -27.2      137     -112  3.97e-06        0        0         0   Tank_phys initStep
+    1 -1.66e+03 4.63e+03    -71.3  3.97e-06 3.97e-06 4.78e+03  4.78e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 42,   Parent ID = 32
@@ -3439,16 +3444,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -92.6      158     -180    0.0295        0        0         0   Tank_phys initStep
     1    -92.6      158     -180    0.0282  0.00138  0.00135   0.00135   Tank_phys msc
-    2    -92.6      158     -180    0.0143   0.0139   0.0139    0.0153   Tank_phys eIoni
-    3    -92.6      158     -180         0   0.0143  0.00463    0.0199   Tank_phys eIoni
-    4    -92.6      158     -180         0        0        0    0.0199   Tank_phys NoProcess
+    2    -92.6      158     -181    0.0143   0.0139   0.0139    0.0153   Tank_phys eIoni
+    3    -92.6      158     -181         0   0.0143  0.00463    0.0199   Tank_phys eIoni
+    4    -92.6      158     -181         0        0        0    0.0199   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 49,   Parent ID = 38
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -92.6      158     -180  2.52e-06        0        0         0   Tank_phys initStep
+    0    -92.6      158     -181  2.52e-06        0        0         0   Tank_phys initStep
     1    5e+03 3.23e+03 1.05e+03  2.52e-06        0 6.07e+03  6.07e+03 expHall_phys Transportation
     2    5e+03 3.23e+03 1.05e+03  2.52e-06        0        0  6.07e+03   Tank_phys Transportation
     3 3.95e+03    5e+03      702  2.52e-06        0 2.09e+03  8.16e+03 expHall_phys Transportation
@@ -3838,9 +3843,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2     3.33     10.2     15.9     0.201 1.36e-05     22.7      31.7   Tank_phys compt
     3    0.888     23.1     59.7     0.136 1.42e-05     45.8      77.5   Tank_phys compt
     4       42     10.7     55.1     0.135 1.42e-05     43.2       121   Tank_phys compt
-    5     63.4    -1.94       54     0.123 1.42e-05     24.9       146   Tank_phys compt
+    5     63.3    -1.94       54     0.123 1.42e-05     24.9       146   Tank_phys compt
     6     67.2    -28.9     61.3    0.0843 1.36e-05     28.2       174   Tank_phys compt
-    7     75.6     11.9     37.7    0.0753 2.92e-05     47.9       222   Tank_phys compt
+    7     75.5     11.9     37.7    0.0753 2.92e-05     47.9       222   Tank_phys compt
     8      114    -12.3     23.2         0 2.85e-05       48       270   Tank_phys phot
 
 *********************************************************************************************************
@@ -3873,22 +3878,22 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     1      114    -12.3     23.2    0.0709        0        0   0.00695   Tank_phys initStep
     2      114    -12.3     23.2    0.0673   0.0036  0.00627    0.0132   Tank_phys msc
-    3      114    -12.3     23.2    0.0542   0.0131   0.0292    0.0424   Tank_phys eIoni
-    4      114    -12.3     23.2    0.0383   0.0159   0.0242    0.0666   Tank_phys eIoni
-    5      114    -12.3     23.2    0.0235   0.0148   0.0183    0.0849   Tank_phys eIoni
-    6      114    -12.3     23.2   0.00505   0.0184   0.0111    0.0961   Tank_phys eIoni
-    7      114    -12.3     23.2         0  0.00505 0.000753    0.0968   Tank_phys eIoni
-    8      114    -12.3     23.2         0        0        0    0.0968   Tank_phys NoProcess
+    3      114    -12.4     23.2    0.0542   0.0131   0.0292    0.0424   Tank_phys eIoni
+    4      114    -12.4     23.2    0.0383   0.0159   0.0242    0.0666   Tank_phys eIoni
+    5      114    -12.4     23.2    0.0235   0.0148   0.0183    0.0849   Tank_phys eIoni
+    6      114    -12.4     23.2   0.00505   0.0184   0.0111    0.0961   Tank_phys eIoni
+    7      114    -12.4     23.2         0  0.00505 0.000753    0.0968   Tank_phys eIoni
+    8      114    -12.4     23.2         0        0        0    0.0968   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 75,   Parent ID = 31
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     75.6     11.9     37.7   0.00895        0        0         0   Tank_phys initStep
-    1     75.6     11.9     37.7   0.00635  0.00261 0.000163  0.000163   Tank_phys msc
-    2     75.6       12     37.7         0  0.00635  0.00112   0.00128   Tank_phys eIoni
-    3     75.6       12     37.7         0        0        0   0.00128   Tank_phys NoProcess
+    0     75.5     11.9     37.7   0.00895        0        0         0   Tank_phys initStep
+    1     75.5     11.9     37.7   0.00635  0.00261 0.000163  0.000163   Tank_phys msc
+    2     75.5     11.9     37.7         0  0.00635  0.00112   0.00128   Tank_phys eIoni
+    3     75.5     11.9     37.7         0        0        0   0.00128   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 74,   Parent ID = 31
@@ -3959,17 +3964,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     63.4    -1.94       54    0.0125        0        0         0   Tank_phys initStep
-    1     63.4    -1.94       54    0.0121 0.000412 0.000292  0.000292   Tank_phys msc
-    2     63.4    -1.94       54         0   0.0121  0.00344   0.00373   Tank_phys eIoni
-    3     63.4    -1.94       54         0        0        0   0.00373   Tank_phys NoProcess
+    0     63.3    -1.94       54    0.0125        0        0         0   Tank_phys initStep
+    1     63.3    -1.94       54    0.0121 0.000412 0.000292  0.000292   Tank_phys msc
+    2     63.3    -1.94       54         0   0.0121  0.00344   0.00373   Tank_phys eIoni
+    3     63.3    -1.94       54         0        0        0   0.00373   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 81,   Parent ID = 73
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     63.4    -1.94       54  2.34e-06        0        0         0   Tank_phys initStep
+    0     63.3    -1.94       54  2.34e-06        0        0         0   Tank_phys initStep
     1      -54    2e+03     -451  2.34e-06 2.34e-06 2.07e+03  2.07e+03 Bubble_phys Transportation
 
 *********************************************************************************************************
@@ -4565,7 +4570,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10   -5e+03 3.92e+03 -2.85e+03  3.03e-06        0        0  2.71e+04   Tank_phys Transportation
    11 -4.44e+03    5e+03     -688  3.03e-06        0 2.48e+03  2.96e+04 expHall_phys Transportation
    12 -4.44e+03    5e+03     -688  3.03e-06        0        0  2.96e+04   Tank_phys Transportation
-   13 -4.49e+03 4.62e+03 -1.53e+03  3.03e-06        0      924  3.05e+04   Tank_phys OpRayleigh
+   13 -4.49e+03 4.61e+03 -1.53e+03  3.03e-06        0      924  3.05e+04   Tank_phys OpRayleigh
    14   -5e+03 4.34e+03 -1.29e+03  3.03e-06        0      623  3.11e+04 expHall_phys Transportation
    15   -1e+04      374  1.8e+03  3.03e-06        0 7.09e+03  3.82e+04 World_log_PV Transportation
    16 -1.5e+04 -3.59e+03 4.89e+03  3.03e-06        0 7.09e+03  4.53e+04  OutOfWorld Transportation
@@ -5089,30 +5094,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2    -4.57    0.613    -6.96     0.108 2.92e-05     16.7      29.5   Tank_phys compt
     3    -13.5     11.2     3.27    0.0822 0.000537     17.2      46.7   Tank_phys compt
     4     97.7     40.7    -23.9    0.0751 1.36e-05      118       165   Tank_phys compt
-    5      111     53.1     -110    0.0604 2.92e-05     88.4       253   Tank_phys compt
-    6     91.8     41.3    -95.7    0.0487 1.36e-05     27.1       280   Tank_phys compt
-    7      104     60.5     -111    0.0444 2.92e-05     27.3       308   Tank_phys compt
+    5      111     53.1     -110    0.0604 2.92e-05     88.5       253   Tank_phys compt
+    6     91.8     41.3    -95.7    0.0487 1.36e-05     27.1       281   Tank_phys compt
+    7      104     60.4     -111    0.0444 2.92e-05     27.3       308   Tank_phys compt
     8      113     70.3    -90.9    0.0441 1.42e-05     24.4       332   Tank_phys compt
-    9      119      110    -50.5         0 0.000538     57.2       389   Tank_phys phot
+    9      119      110    -50.6         0 0.000538     57.2       389   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 63,   Parent ID = 54
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      119      110    -50.5    0.0435        0        0         0   Tank_phys initStep
-    1      119      110    -50.5    0.0392  0.00427  0.00267   0.00267   Tank_phys msc
-    2      119      110    -50.5    0.0268   0.0124   0.0187    0.0214   Tank_phys eIoni
-    3      119      110    -50.5    0.0105   0.0163   0.0132    0.0345   Tank_phys eIoni
-    4      119      110    -50.5         0   0.0105  0.00271    0.0373   Tank_phys eIoni
-    5      119      110    -50.5         0        0        0    0.0373   Tank_phys NoProcess
+    0      119      110    -50.6    0.0435        0        0         0   Tank_phys initStep
+    1      119      110    -50.6    0.0392  0.00427  0.00267   0.00267   Tank_phys msc
+    2      119      110    -50.6    0.0268   0.0124   0.0187    0.0214   Tank_phys eIoni
+    3      119      110    -50.6    0.0105   0.0163   0.0132    0.0345   Tank_phys eIoni
+    4      119      110    -50.6         0   0.0105  0.00271    0.0373   Tank_phys eIoni
+    5      119      110    -50.6         0        0        0    0.0373   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 64,   Parent ID = 63
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      119      110    -50.5  2.41e-06        0        0         0   Tank_phys initStep
+    0      119      110    -50.6  2.41e-06        0        0         0   Tank_phys initStep
     1    5e+03 3.77e+03    -59.1  2.41e-06        0  6.1e+03   6.1e+03 expHall_phys Transportation
     2 8.27e+03    1e+04      607  2.41e-06        0 7.07e+03  1.32e+04 World_log_PV Transportation
     3 1.09e+04  1.5e+04 1.14e+03  2.41e-06        0 5.67e+03  1.88e+04  OutOfWorld Transportation
@@ -5132,8 +5137,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      104     60.5     -111   0.00426        0        0         0   Tank_phys initStep
-    1      104     60.5     -111   0.00416 9.92e-05  4.5e-05   4.5e-05   Tank_phys msc
+    0      104     60.4     -111   0.00426        0        0         0   Tank_phys initStep
+    1      104     60.4     -111   0.00416 9.92e-05  4.5e-05   4.5e-05   Tank_phys msc
     2      104     60.5     -111         0  0.00416  0.00054  0.000585   Tank_phys eIoni
     3      104     60.5     -111         0        0        0  0.000585   Tank_phys NoProcess
 
@@ -5538,33 +5543,33 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        1   -0.619   -0.394     0.511        0        0         0   Tank_phys initStep
     1     27.9    -38.6    -46.3     0.216 2.92e-05     65.4      65.4   Tank_phys compt
     2     88.5     66.5      -34     0.127 1.42e-05      122       187   Tank_phys compt
-    3     65.6     53.4    -60.2      0.12 1.42e-05     37.2       225   Tank_phys compt
-    4       59     54.5    -93.9    0.0999 1.42e-05     34.4       259   Tank_phys compt
-    5     72.4     17.8     -106    0.0955 0.000537     40.9       300   Tank_phys compt
-    6      137    -15.4     -157    0.0711 1.36e-05     88.8       389   Tank_phys compt
-    7     95.6     27.3     -146    0.0708 1.42e-05     60.5       449   Tank_phys compt
+    3     65.6     53.4    -60.2      0.12 1.42e-05     37.3       225   Tank_phys compt
+    4       59     54.5      -94    0.0999 1.42e-05     34.4       259   Tank_phys compt
+    5     72.4     17.7     -106    0.0955 0.000537     40.9       300   Tank_phys compt
+    6      137    -15.5     -157    0.0711 1.36e-05     88.9       389   Tank_phys compt
+    7     95.7     27.3     -146    0.0708 1.42e-05     60.5       449   Tank_phys compt
     8     89.7       30     -145    0.0642 1.36e-05     6.63       456   Tank_phys compt
-    9     95.6     73.9    -83.2    0.0522 0.000537     75.8       532   Tank_phys compt
-   10      106     76.1    -93.4    0.0444 0.000537     14.5       546   Tank_phys compt
-   11     53.6      146     17.2    0.0378 1.36e-05      141       687   Tank_phys compt
-   12     82.2     94.3    -27.3    0.0333 1.42e-05     74.1       761   Tank_phys compt
-   13     84.1      103    -14.5         0 0.000538     15.5       777   Tank_phys phot
+    9     95.6     73.9    -83.3    0.0522 0.000537     75.8       532   Tank_phys compt
+   10      106       76    -93.5    0.0444 0.000537     14.5       546   Tank_phys compt
+   11     53.6      146     17.1    0.0378 1.36e-05      141       687   Tank_phys compt
+   12     82.2     94.2    -27.5    0.0333 1.42e-05     74.1       761   Tank_phys compt
+   13     84.1      103    -14.7         0 0.000538     15.5       777   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 96,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     84.1      103    -14.5    0.0327        0        0         0   Tank_phys initStep
-    1     84.1      103    -14.5    0.0305  0.00227  0.00161   0.00161   Tank_phys msc
-    2     84.1      103    -14.5    0.0144   0.0161   0.0151    0.0167   Tank_phys eIoni
+    0     84.1      103    -14.7    0.0327        0        0         0   Tank_phys initStep
+    1     84.1      103    -14.7    0.0305  0.00227  0.00161   0.00161   Tank_phys msc
+    2     84.1      103    -14.7    0.0144   0.0161   0.0151    0.0167   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 97,   Parent ID = 96
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     84.1      103    -14.5  3.56e-06        0        0         0   Tank_phys initStep
+    0     84.1      103    -14.7  3.56e-06        0        0         0   Tank_phys initStep
     1 -1.74e+03 2.08e+03   -5e+03  3.56e-06        0 5.67e+03  5.67e+03 expHall_phys Transportation
     2 -6.13e+03 6.46e+03   -1e+04  3.56e-06        0 7.96e+03  1.36e+04 World_log_PV Transportation
     3 -1.05e+04 1.08e+04 -1.5e+04  3.56e-06        0 7.96e+03  2.16e+04  OutOfWorld Transportation
@@ -5574,66 +5579,66 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2     84.1      103    -14.5    0.0144        0        0    0.0167   Tank_phys initStep
-    3     84.1      103    -14.5    0.0142 0.000215 0.000377     0.017   Tank_phys msc
-    4     84.1      103    -14.5         0   0.0142  0.00459    0.0216   Tank_phys eIoni
-    5     84.1      103    -14.5         0        0        0    0.0216   Tank_phys NoProcess
+    2     84.1      103    -14.7    0.0144        0        0    0.0167   Tank_phys initStep
+    3     84.1      103    -14.7    0.0142 0.000215 0.000377     0.017   Tank_phys msc
+    4     84.1      103    -14.7         0   0.0142  0.00459    0.0216   Tank_phys eIoni
+    5     84.1      103    -14.7         0        0        0    0.0216   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 95,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     82.2     94.3    -27.3   0.00452        0        0         0   Tank_phys initStep
-    1     82.2     94.3    -27.3   0.00393 0.000587 4.97e-05  4.97e-05   Tank_phys msc
-    2     82.2     94.3    -27.3         0  0.00393  0.00049  0.000539   Tank_phys eIoni
-    3     82.2     94.3    -27.3         0        0        0  0.000539   Tank_phys NoProcess
+    0     82.2     94.2    -27.5   0.00452        0        0         0   Tank_phys initStep
+    1     82.2     94.2    -27.5   0.00393 0.000587 4.97e-05  4.97e-05   Tank_phys msc
+    2     82.2     94.2    -27.5         0  0.00393  0.00049  0.000539   Tank_phys eIoni
+    3     82.2     94.2    -27.5         0        0        0  0.000539   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 94,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     53.6      146     17.2   0.00655        0        0         0   Tank_phys initStep
-    1     53.6      146     17.2   0.00613  0.00042 9.44e-05  9.44e-05   Tank_phys msc
-    2     53.6      146     17.2         0  0.00613  0.00105   0.00115   Tank_phys eIoni
-    3     53.6      146     17.2         0        0        0   0.00115   Tank_phys NoProcess
+    0     53.6      146     17.1   0.00655        0        0         0   Tank_phys initStep
+    1     53.6      146     17.1   0.00613  0.00042 9.44e-05  9.44e-05   Tank_phys msc
+    2     53.6      146     17.1         0  0.00613  0.00105   0.00115   Tank_phys eIoni
+    3     53.6      146     17.1         0        0        0   0.00115   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 93,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      106     76.1    -93.4   0.00726        0        0         0   Tank_phys initStep
-    1      106     76.1    -93.4   0.00684 0.000424 0.000113  0.000113   Tank_phys msc
-    2      106     76.1    -93.4         0  0.00684  0.00127   0.00139   Tank_phys eIoni
-    3      106     76.1    -93.4         0        0        0   0.00139   Tank_phys NoProcess
+    0      106       76    -93.5   0.00726        0        0         0   Tank_phys initStep
+    1      106       76    -93.5   0.00684 0.000424 0.000113  0.000113   Tank_phys msc
+    2      106       76    -93.5         0  0.00684  0.00127   0.00139   Tank_phys eIoni
+    3      106       76    -93.5         0        0        0   0.00139   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 92,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     95.6     73.9    -83.2    0.0115        0        0         0   Tank_phys initStep
-    1     95.6     73.9    -83.2    0.0114 9.44e-05 0.000255  0.000255   Tank_phys msc
-    2     95.6     73.9    -83.2         0   0.0114  0.00314    0.0034   Tank_phys eIoni
-    3     95.6     73.9    -83.2         0        0        0    0.0034   Tank_phys NoProcess
+    0     95.6     73.9    -83.3    0.0115        0        0         0   Tank_phys initStep
+    1     95.6     73.9    -83.3    0.0114 9.44e-05 0.000255  0.000255   Tank_phys msc
+    2     95.6     73.9    -83.3         0   0.0114  0.00314    0.0034   Tank_phys eIoni
+    3     95.6     73.9    -83.3         0        0        0    0.0034   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 98,   Parent ID = 92
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     95.6     73.9    -83.2  2.21e-06        0        0         0   Tank_phys initStep
+    0     95.6     73.9    -83.3  2.21e-06        0        0         0   Tank_phys initStep
     1 -2.77e+03    5e+03 2.48e+03  2.21e-06        0 6.25e+03  6.25e+03 expHall_phys Transportation
     2 -2.77e+03    5e+03 2.48e+03  2.21e-06        0        0  6.25e+03   Tank_phys Transportation
     3 -4.95e+03 1.71e+03    5e+03  2.21e-06        0 4.68e+03  1.09e+04 expHall_phys Transportation
     4 -4.95e+03 1.71e+03    5e+03  2.21e-06        0        0  1.09e+04   Tank_phys Transportation
-    5   -5e+03 1.64e+03 4.95e+03  2.21e-06        0       97   1.1e+04 expHall_phys Transportation
+    5   -5e+03 1.64e+03 4.95e+03  2.21e-06        0     96.9   1.1e+04 expHall_phys Transportation
     6   -5e+03 1.64e+03 4.95e+03  2.21e-06        0        0   1.1e+04   Tank_phys Transportation
     7    5e+03 -2.94e+03 1.15e+03  2.21e-06        0 1.16e+04  2.27e+04 expHall_phys Transportation
     8    5e+03 -2.94e+03 1.15e+03  2.21e-06        0        0  2.27e+04   Tank_phys Transportation
-    9     -461 -3.09e+03   -5e+03  2.21e-06        0 8.22e+03  3.09e+04 expHall_phys Transportation
+    9     -461 -3.09e+03   -5e+03  2.21e-06        0 8.23e+03  3.09e+04 expHall_phys Transportation
    10     -461 -3.09e+03   -5e+03  2.21e-06        0        0  3.09e+04   Tank_phys Transportation
    11 -1.43e+03   -5e+03      479  2.21e-06        0 5.88e+03  3.68e+04 expHall_phys Transportation
    12 -1.43e+03   -5e+03      479  2.21e-06        0        0  3.68e+04   Tank_phys Transportation
@@ -5654,29 +5659,29 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     95.6     27.3     -146  0.000217        0        0         0   Tank_phys initStep
-    1     95.6     27.3     -146  0.000171 4.59e-05 6.15e-07  6.15e-07   Tank_phys msc
-    2     95.6     27.3     -146         0 0.000171 6.34e-06  6.96e-06   Tank_phys eIoni
-    3     95.6     27.3     -146         0        0        0  6.96e-06   Tank_phys NoProcess
+    0     95.7     27.3     -146  0.000217        0        0         0   Tank_phys initStep
+    1     95.7     27.3     -146  0.000171 4.59e-05 6.15e-07  6.15e-07   Tank_phys msc
+    2     95.7     27.3     -146         0 0.000171 6.34e-06  6.96e-06   Tank_phys eIoni
+    3     95.7     27.3     -146         0        0        0  6.96e-06   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      137    -15.4     -157    0.0245        0        0         0   Tank_phys initStep
-    1      137    -15.4     -157    0.0238 0.000661 0.000964  0.000964   Tank_phys msc
-    2      137    -15.4     -157   0.00609   0.0177   0.0113    0.0123   Tank_phys eIoni
-    3      137    -15.4     -157         0  0.00609  0.00104    0.0133   Tank_phys eIoni
-    4      137    -15.4     -157         0        0        0    0.0133   Tank_phys NoProcess
+    0      137    -15.5     -157    0.0245        0        0         0   Tank_phys initStep
+    1      137    -15.5     -157    0.0238 0.000661 0.000964  0.000964   Tank_phys msc
+    2      137    -15.5     -157   0.00609   0.0177   0.0113    0.0123   Tank_phys eIoni
+    3      137    -15.5     -157         0  0.00609  0.00104    0.0133   Tank_phys eIoni
+    4      137    -15.5     -157         0        0        0    0.0133   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 88,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     72.4     17.8     -106   0.00386        0        0         0   Tank_phys initStep
-    1     72.4     17.8     -106   0.00383 3.74e-05  3.8e-05   3.8e-05   Tank_phys msc
+    0     72.4     17.7     -106   0.00386        0        0         0   Tank_phys initStep
+    1     72.4     17.7     -106   0.00383 3.74e-05  3.8e-05   3.8e-05   Tank_phys msc
     2     72.4     17.7     -106         0  0.00383 0.000467  0.000505   Tank_phys eIoni
     3     72.4     17.7     -106         0        0        0  0.000505   Tank_phys NoProcess
 
@@ -5695,15 +5700,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       59     54.5    -93.9    0.0198        0        0         0   Tank_phys initStep
-    1       59     54.5    -93.9    0.0193 0.000471 0.000662  0.000662   Tank_phys msc
+    0       59     54.5      -94    0.0198        0        0         0   Tank_phys initStep
+    1       59     54.5      -94    0.0193 0.000471 0.000662  0.000662   Tank_phys msc
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 100,   Parent ID = 87
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       59     54.5    -93.9  3.13e-06        0        0         0   Tank_phys initStep
+    0       59     54.5      -94  3.13e-06        0        0         0   Tank_phys initStep
     1 1.41e+03   -5e+03 1.43e+03  3.13e-06        0 5.45e+03  5.45e+03 expHall_phys Transportation
     2 4.79e+03   -1e+04 4.53e+03  3.13e-06        0 6.78e+03  1.22e+04 World_log_PV Transportation
     3 8.17e+03 -1.5e+04 7.63e+03  3.13e-06        0 6.78e+03   1.9e+04  OutOfWorld Transportation
@@ -5713,10 +5718,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    1       59     54.5    -93.9    0.0193        0        0  0.000662   Tank_phys initStep
-    2       59     54.5    -93.9    0.0186 0.000725 0.000635    0.0013   Tank_phys msc
-    3       59     54.5    -93.9         0   0.0186  0.00741   0.00871   Tank_phys eIoni
-    4       59     54.5    -93.9         0        0        0   0.00871   Tank_phys NoProcess
+    1       59     54.5      -94    0.0193        0        0  0.000662   Tank_phys initStep
+    2       59     54.5      -94    0.0186 0.000725 0.000635    0.0013   Tank_phys msc
+    3       59     54.5      -94         0   0.0186  0.00741   0.00871   Tank_phys eIoni
+    4       59     54.5      -94         0        0        0   0.00871   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 86,   Parent ID = 53
@@ -6700,7 +6705,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2    0.131     9.98     6.27     0.268 1.42e-05     4.73      14.4   Tank_phys compt
     3    -7.93       25    -14.4     0.173 1.42e-05     26.7      41.2   Tank_phys compt
     4    -37.3      -29    -37.2      0.14 1.42e-05     65.5       107   Tank_phys compt
-    5    -17.2    -53.4    -27.9     0.111 1.36e-05     32.9       140   Tank_phys compt
+    5    -17.2    -53.3    -27.9     0.111 1.36e-05     32.9       140   Tank_phys compt
     6    -32.4    -52.2     17.7    0.0838 2.92e-05     48.1       188   Tank_phys compt
     7     25.5    -62.7     4.88    0.0806 1.42e-05     60.3       248   Tank_phys compt
     8     44.5      -79    -18.9    0.0604 0.000537     34.4       282   Tank_phys compt
@@ -6726,8 +6731,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0     -106    -82.2      103  3.29e-06        0        0         0   Tank_phys initStep
     1  2.1e+03     -421    5e+03  3.29e-06        0 5.38e+03  5.38e+03 expHall_phys Transportation
     2  2.1e+03     -421    5e+03  3.29e-06        0        0  5.38e+03   Tank_phys Transportation
-    3    5e+03       87 3.08e+03  3.29e-06        0 3.51e+03  8.89e+03 expHall_phys Transportation
-    4    5e+03       87 3.08e+03  3.29e-06        0        0  8.89e+03   Tank_phys Transportation
+    3    5e+03     87.1 3.08e+03  3.29e-06        0 3.51e+03  8.89e+03 expHall_phys Transportation
+    4    5e+03     87.1 3.08e+03  3.29e-06        0        0  8.89e+03   Tank_phys Transportation
     5 -2.08e+03 2.23e+03   -5e+03  3.29e-06        0  1.1e+04  1.99e+04 expHall_phys Transportation
     6 -2.08e+03 2.23e+03   -5e+03  3.29e-06        0        0  1.99e+04   Tank_phys Transportation
     7   -5e+03 2.85e+03 -3.1e+03  3.29e-06        0 3.54e+03  2.34e+04 expHall_phys Transportation
@@ -6758,8 +6763,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     -106    -82.2      103  2.48e-06        0        0         0   Tank_phys initStep
-    1      805   -5e+03     37.8  2.48e-06        0    5e+03     5e+03 expHall_phys Transportation
-    2 2.91e+03   -1e+04    -40.9  2.48e-06        0 5.42e+03  1.04e+04 World_log_PV Transportation
+    1      805   -5e+03     37.9  2.48e-06        0    5e+03     5e+03 expHall_phys Transportation
+    2 2.91e+03   -1e+04    -40.8  2.48e-06        0 5.42e+03  1.04e+04 World_log_PV Transportation
     3    5e+03 -1.5e+04     -120  2.48e-06        0 5.42e+03  1.58e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -6835,16 +6840,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -17.2    -53.4    -27.9    0.0289        0        0         0   Tank_phys initStep
-    1    -17.2    -53.4    -27.9    0.0283 0.000601   0.0013    0.0013   Tank_phys msc
-    2    -17.2    -53.4    -27.9   0.00883   0.0195    0.014    0.0153   Tank_phys eIoni
+    0    -17.2    -53.3    -27.9    0.0289        0        0         0   Tank_phys initStep
+    1    -17.2    -53.3    -27.9    0.0283 0.000601   0.0013    0.0013   Tank_phys msc
+    2    -17.2    -53.3    -27.9   0.00883   0.0195    0.014    0.0153   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 64,   Parent ID = 53
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -17.2    -53.4    -27.9  2.99e-06        0        0         0   Tank_phys initStep
+    0    -17.2    -53.3    -27.9  2.99e-06        0        0         0   Tank_phys initStep
     1   -5e+03 -2.43e+03 -2.67e+03  2.99e-06        0 6.12e+03  6.12e+03 expHall_phys Transportation
     2   -5e+03 -2.43e+03 -2.67e+03  2.99e-06        0        0  6.12e+03   Tank_phys Transportation
     3 -1.49e+03 -3.23e+03   -5e+03  2.99e-06        0 4.29e+03  1.04e+04 expHall_phys Transportation
@@ -6856,10 +6861,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2    -17.2    -53.4    -27.9   0.00883        0        0    0.0153   Tank_phys initStep
-    3    -17.2    -53.4    -27.9   0.00857 0.000259 0.000159    0.0155   Tank_phys msc
-    4    -17.2    -53.4    -27.9         0  0.00857  0.00189    0.0174   Tank_phys eIoni
-    5    -17.2    -53.4    -27.9         0        0        0    0.0174   Tank_phys NoProcess
+    2    -17.2    -53.3    -27.9   0.00883        0        0    0.0153   Tank_phys initStep
+    3    -17.2    -53.3    -27.9   0.00857 0.000259 0.000159    0.0155   Tank_phys msc
+    4    -17.2    -53.3    -27.9         0  0.00857  0.00189    0.0174   Tank_phys eIoni
+    5    -17.2    -53.3    -27.9         0        0        0    0.0174   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 52,   Parent ID = 48
@@ -7125,54 +7130,54 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2      -28    -51.4    -44.8     0.229 0.000537     39.4       111   Tank_phys compt
     3    -59.7    -50.2    -33.7     0.155 1.42e-05     33.6       144   Tank_phys compt
     4    -53.6    -33.1    -21.2     0.142 1.42e-05       22       166   Tank_phys compt
-    5     -120     39.7     88.8     0.111 1.42e-05      148       314   Tank_phys compt
-    6     -202     46.1     37.3    0.0944 1.36e-05     96.4       411   Tank_phys compt
-    7     -200    -20.5     -1.6    0.0936 2.92e-05     77.1       488   Tank_phys compt
-    8     -204    -32.7    -6.79    0.0788 1.36e-05     13.7       501   Tank_phys compt
-    9     -115    -23.3      -80    0.0584 0.000537      115       617   Tank_phys compt
-   10     -159     41.2    -52.8    0.0475 1.36e-05     82.6       699   Tank_phys compt
-   11     4.17     -133     -171         0 2.85e-05      266       965   Tank_phys phot
+    5     -120     39.6     88.8     0.111 1.42e-05      148       314   Tank_phys compt
+    6     -201     46.1     37.2    0.0944 1.36e-05     96.4       411   Tank_phys compt
+    7     -200    -20.6    -1.68    0.0936 2.92e-05     77.2       488   Tank_phys compt
+    8     -204    -32.8    -6.87    0.0788 1.36e-05     13.7       501   Tank_phys compt
+    9     -115    -23.4    -80.2    0.0584 0.000537      115       617   Tank_phys compt
+   10     -159     41.1    -52.9    0.0475 1.36e-05     82.6       699   Tank_phys compt
+   11     4.22     -133     -171         0 2.85e-05      266       965   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 47
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.17     -133     -171    0.0474        0        0         0   Tank_phys initStep
-    1     4.17     -133     -171    0.0456  0.00181  0.00311   0.00311   Tank_phys msc
+    0     4.22     -133     -171    0.0474        0        0         0   Tank_phys initStep
+    1     4.23     -133     -171    0.0456  0.00181  0.00311   0.00311   Tank_phys msc
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 90,   Parent ID = 89
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.17     -133     -171  2.64e-06        0        0         0   Tank_phys initStep
+    0     4.22     -133     -171  2.64e-06        0        0         0   Tank_phys initStep
     1 -4.67e+03 -3.53e+03   -5e+03  2.64e-06        0 7.53e+03  7.53e+03 expHall_phys Transportation
     2 -4.67e+03 -3.53e+03   -5e+03  2.64e-06        0        0  7.53e+03   Tank_phys Transportation
-    3   -5e+03 -3.79e+03 -4.53e+03  2.64e-06        0      632  8.16e+03 expHall_phys Transportation
+    3   -5e+03 -3.79e+03 -4.53e+03  2.64e-06        0      633  8.16e+03 expHall_phys Transportation
     4   -5e+03 -3.79e+03 -4.53e+03  2.64e-06        0        0  8.16e+03   Tank_phys Transportation
     5 -2.38e+03   -5e+03 -3.29e+03  2.64e-06        0 3.14e+03  1.13e+04 expHall_phys Transportation
     6 -2.38e+03   -5e+03 -3.29e+03  2.64e-06        0        0  1.13e+04   Tank_phys Transportation
     7    5e+03 -2.86e+03      678  2.64e-06        0 8.64e+03  1.99e+04 expHall_phys Transportation
     8    5e+03 -2.86e+03      678  2.64e-06        0        0  1.99e+04   Tank_phys Transportation
-    9    4e+03 -2.46e+03 1.36e+03  2.64e-06 2.64e-06 1.28e+03  2.12e+04   Tank_phys OpAbsorption
+    9    4e+03 -2.46e+03 1.37e+03  2.64e-06 2.64e-06 1.28e+03  2.12e+04   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 47
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    1     4.17     -133     -171    0.0456        0        0   0.00311   Tank_phys initStep
-    2     4.17     -133     -171    0.0442  0.00138   0.0029   0.00601   Tank_phys msc
-    3     4.19     -133     -171         0   0.0442   0.0205    0.0266   Tank_phys eIoni
-    4     4.19     -133     -171         0        0        0    0.0266   Tank_phys NoProcess
+    1     4.23     -133     -171    0.0456        0        0   0.00311   Tank_phys initStep
+    2     4.23     -133     -171    0.0442  0.00138   0.0029   0.00601   Tank_phys msc
+    3     4.24     -133     -171         0   0.0442   0.0205    0.0266   Tank_phys eIoni
+    4     4.24     -133     -171         0        0        0    0.0266   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 93,   Parent ID = 89
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.18     -133     -171  3.95e-06        0        0         0   Tank_phys initStep
+    0     4.23     -133     -171  3.95e-06        0        0         0   Tank_phys initStep
     1     -176   -5e+03 -2.71e+03  3.95e-06        0 5.49e+03  5.49e+03 expHall_phys Transportation
     2     -176   -5e+03 -2.71e+03  3.95e-06        0        0  5.49e+03   Tank_phys Transportation
     3     -687 -2.89e+03   -5e+03  3.95e-06        0 3.16e+03  8.65e+03 expHall_phys Transportation
@@ -7184,22 +7189,22 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.18     -133     -171   2.3e-06        0        0         0   Tank_phys initStep
+    0     4.24     -133     -171   2.3e-06        0        0         0   Tank_phys initStep
     1 -3.04e+03    5e+03 3.02e+03   2.3e-06        0 6.77e+03  6.77e+03 expHall_phys Transportation
     2 -3.04e+03    5e+03 3.02e+03   2.3e-06        0        0  6.77e+03   Tank_phys Transportation
     3 -4.4e+03  4.6e+03    5e+03   2.3e-06        0 2.44e+03   9.2e+03 expHall_phys Transportation
     4 -4.4e+03  4.6e+03    5e+03   2.3e-06        0        0   9.2e+03   Tank_phys Transportation
     5   -5e+03 4.71e+03 4.24e+03   2.3e-06        0      968  1.02e+04 expHall_phys Transportation
     6   -5e+03 4.71e+03 4.24e+03   2.3e-06        0        0  1.02e+04   Tank_phys Transportation
-    7 -1.42e+03    5e+03     80.5   2.3e-06        0  5.5e+03  1.57e+04 expHall_phys Transportation
-    8 -1.42e+03    5e+03     80.5   2.3e-06        0        0  1.57e+04   Tank_phys Transportation
+    7 -1.42e+03    5e+03     80.2   2.3e-06        0  5.5e+03  1.57e+04 expHall_phys Transportation
+    8 -1.42e+03    5e+03     80.2   2.3e-06        0        0  1.57e+04   Tank_phys Transportation
     9 2.87e+03 3.16e+03   -5e+03   2.3e-06        0 6.89e+03  2.26e+04 expHall_phys Transportation
    10 2.87e+03 3.16e+03   -5e+03   2.3e-06        0        0  2.26e+04   Tank_phys Transportation
    11    5e+03 -2.62e+03 3.23e+03   2.3e-06        0 1.03e+04  3.29e+04 expHall_phys Transportation
    12    5e+03 -2.62e+03 3.23e+03   2.3e-06        0        0  3.29e+04   Tank_phys Transportation
    13 2.96e+03 -3.57e+03    5e+03   2.3e-06        0 2.86e+03  3.57e+04 expHall_phys Transportation
    14 2.96e+03 -3.57e+03    5e+03   2.3e-06        0        0  3.57e+04   Tank_phys Transportation
-   15     -483   -5e+03 3.88e+03   2.3e-06        0  3.9e+03  3.96e+04 expHall_phys Transportation
+   15     -484   -5e+03 3.88e+03   2.3e-06        0  3.9e+03  3.96e+04 expHall_phys Transportation
    16   -1e+04 -5.19e+03      479   2.3e-06        0 1.01e+04  4.97e+04 World_log_PV Transportation
    17 -1.5e+04 -5.3e+03 -1.31e+03   2.3e-06        0 5.31e+03   5.5e+04  OutOfWorld Transportation
 
@@ -7208,7 +7213,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.18     -133     -171  3.59e-06        0        0         0   Tank_phys initStep
+    0     4.23     -133     -171  3.59e-06        0        0         0   Tank_phys initStep
     1 -2.92e+03 -3.55e+03   -5e+03  3.59e-06        0  6.6e+03   6.6e+03 expHall_phys Transportation
     2 -2.92e+03 -3.55e+03   -5e+03  3.59e-06        0        0   6.6e+03   Tank_phys Transportation
     3 -3.55e+03   -5e+03 -4.83e+03  3.59e-06        0 1.59e+03  8.19e+03 expHall_phys Transportation
@@ -7220,27 +7225,27 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -159     41.2    -52.8    0.0109        0        0         0   Tank_phys initStep
-    1     -159     41.2    -52.8    0.0109 4.87e-05 0.000232  0.000232   Tank_phys msc
-    2     -159     41.2    -52.8         0   0.0109  0.00287    0.0031   Tank_phys eIoni
-    3     -159     41.2    -52.8         0        0        0    0.0031   Tank_phys NoProcess
+    0     -159     41.1    -52.9    0.0109        0        0         0   Tank_phys initStep
+    1     -159     41.1    -52.9    0.0109 4.87e-05 0.000232  0.000232   Tank_phys msc
+    2     -159     41.1    -52.9         0   0.0109  0.00287    0.0031   Tank_phys eIoni
+    3     -159     41.1    -52.9         0        0        0    0.0031   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 87,   Parent ID = 47
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -115    -23.3      -80    0.0199        0        0         0   Tank_phys initStep
-    1     -115    -23.3      -80    0.0191 0.000744 0.000667  0.000667   Tank_phys msc
-    2     -115    -23.3    -80.1         0   0.0191  0.00779   0.00845   Tank_phys eIoni
-    3     -115    -23.3    -80.1         0        0        0   0.00845   Tank_phys NoProcess
+    0     -115    -23.4    -80.2    0.0199        0        0         0   Tank_phys initStep
+    1     -115    -23.4    -80.2    0.0191 0.000744 0.000667  0.000667   Tank_phys msc
+    2     -115    -23.4    -80.2         0   0.0191  0.00779   0.00845   Tank_phys eIoni
+    3     -115    -23.4    -80.2         0        0        0   0.00845   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 94,   Parent ID = 87
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -115    -23.3    -80.1  2.47e-06        0        0         0   Tank_phys initStep
+    0     -115    -23.4    -80.2  2.47e-06        0        0         0   Tank_phys initStep
     1    5e+03 1.04e+03 2.99e+03  2.47e-06        0 6.06e+03  6.06e+03 expHall_phys Transportation
     2    5e+03 1.04e+03 2.99e+03  2.47e-06        0        0  6.06e+03   Tank_phys Transportation
     3 3.61e+03 1.35e+03    5e+03  2.47e-06        0 2.46e+03  8.52e+03 expHall_phys Transportation
@@ -7252,40 +7257,40 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -204    -32.7    -6.79    0.0148        0        0         0   Tank_phys initStep
-    1     -204    -32.7    -6.79    0.0144 0.000391 0.000397  0.000397   Tank_phys msc
-    2     -204    -32.7    -6.79         0   0.0144  0.00473   0.00512   Tank_phys eIoni
-    3     -204    -32.7    -6.79         0        0        0   0.00512   Tank_phys NoProcess
+    0     -204    -32.8    -6.87    0.0148        0        0         0   Tank_phys initStep
+    1     -204    -32.8    -6.87    0.0144 0.000391 0.000397  0.000397   Tank_phys msc
+    2     -204    -32.8    -6.87         0   0.0144  0.00473   0.00512   Tank_phys eIoni
+    3     -204    -32.8    -6.87         0        0        0   0.00512   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 85,   Parent ID = 47
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -200    -20.5     -1.6   0.00073        0        0         0   Tank_phys initStep
-    1     -200    -20.5     -1.6         0  0.00073  2.6e-06   2.6e-06   Tank_phys msc
-    2     -200    -20.5     -1.6         0        0        0   2.6e-06   Tank_phys NoProcess
+    0     -200    -20.6    -1.68   0.00073        0        0         0   Tank_phys initStep
+    1     -200    -20.6    -1.68         0  0.00073  2.6e-06   2.6e-06   Tank_phys msc
+    2     -200    -20.6    -1.68         0        0        0   2.6e-06   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 84,   Parent ID = 47
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -202     46.1     37.3    0.0161        0        0         0   Tank_phys initStep
-    1     -202     46.1     37.3    0.0153 0.000827 0.000462  0.000462   Tank_phys msc
-    2     -202     46.1     37.3         0   0.0153  0.00526   0.00572   Tank_phys eIoni
-    3     -202     46.1     37.3         0        0        0   0.00572   Tank_phys NoProcess
+    0     -201     46.1     37.2    0.0161        0        0         0   Tank_phys initStep
+    1     -201     46.1     37.2    0.0153 0.000827 0.000462  0.000462   Tank_phys msc
+    2     -201     46.1     37.2         0   0.0153  0.00526   0.00572   Tank_phys eIoni
+    3     -201     46.1     37.2         0        0        0   0.00572   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 83,   Parent ID = 47
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -120     39.7     88.8    0.0313        0        0         0   Tank_phys initStep
-    1     -120     39.7     88.8    0.0296  0.00168  0.00149   0.00149   Tank_phys msc
-    2     -120     39.7     88.8    0.0126   0.0171   0.0147    0.0162   Tank_phys eIoni
-    3     -120     39.7     88.8         0   0.0126  0.00372    0.0199   Tank_phys eIoni
-    4     -120     39.7     88.8         0        0        0    0.0199   Tank_phys NoProcess
+    0     -120     39.6     88.8    0.0313        0        0         0   Tank_phys initStep
+    1     -120     39.6     88.8    0.0296  0.00168  0.00149   0.00149   Tank_phys msc
+    2     -120     39.6     88.8    0.0126   0.0171   0.0147    0.0162   Tank_phys eIoni
+    3     -120     39.6     88.8         0   0.0126  0.00372    0.0199   Tank_phys eIoni
+    4     -120     39.6     88.8         0        0        0    0.0199   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 82,   Parent ID = 47
@@ -7943,9 +7948,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3    5e+03 -4.83e+03      782  2.52e-06        0      191  7.24e+03 expHall_phys Transportation
     4    5e+03 -4.83e+03      782  2.52e-06        0        0  7.24e+03   Tank_phys Transportation
     5 1.42e+03 2.96e+03 4.15e+03  2.52e-06        0 9.21e+03  1.65e+04   Tank_phys OpRayleigh
-    6    5e+03     4.96 1.92e+03  2.52e-06        0 5.15e+03  2.16e+04 expHall_phys Transportation
-    7    5e+03     4.96 1.92e+03  2.52e-06        0        0  2.16e+04   Tank_phys Transportation
-    8 4.48e+03     -347 1.95e+03  2.52e-06 2.52e-06      627  2.22e+04   Tank_phys OpAbsorption
+    6    5e+03     4.97 1.92e+03  2.52e-06        0 5.15e+03  2.16e+04 expHall_phys Transportation
+    7    5e+03     4.97 1.92e+03  2.52e-06        0        0  2.16e+04   Tank_phys Transportation
+    8 4.48e+03     -346 1.95e+03  2.52e-06 2.52e-06      627  2.22e+04   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -7962,8 +7967,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.759   -0.382  -0.0759  2.54e-06        0        0         0   Tank_phys initStep
-    1     -446     -249 -1.03e+03  2.54e-06 2.54e-06 1.15e+03  1.15e+03   Tank_phys OpAbsorption
+    0    0.761   -0.375  -0.0596   2.5e-06        0        0         0   Tank_phys initStep
+    1     76.7     -455      904   2.5e-06  2.5e-06 1.01e+03  1.01e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 23,   Parent ID = 1
@@ -7978,11 +7983,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5     -192     38.2     -103     0.291 0.000537       28       226   Tank_phys compt
     6     -260     21.5    -68.1     0.146 2.92e-05     77.7       303   Tank_phys compt
     7     -250     36.7    -91.4     0.102 1.36e-05     29.6       333   Tank_phys compt
-    8     -241     45.2    -62.9       0.1 1.36e-05     31.1       364   Tank_phys compt
+    8     -241     45.1    -62.8       0.1 1.36e-05     31.1       364   Tank_phys compt
     9     -231     47.9    -51.1    0.0987 1.42e-05     15.7       380   Tank_phys compt
-   10     -220     57.4    -37.5    0.0745 1.42e-05     19.9       400   Tank_phys compt
+   10     -220     57.4    -37.5    0.0745 1.42e-05       20       400   Tank_phys compt
    11     -210     26.2     -131    0.0576 1.42e-05     98.9       499   Tank_phys compt
-   12     -187     44.4    -75.9    0.0478 2.92e-05     62.3       561   Tank_phys compt
+   12     -187     44.3    -75.9    0.0478 2.92e-05     62.4       561   Tank_phys compt
    13     -208     72.8     -152         0 0.000538     84.3       645   Tank_phys phot
 
 *********************************************************************************************************
@@ -8002,19 +8007,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -187     44.4    -75.9   0.00981        0        0         0   Tank_phys initStep
-    1     -187     44.4    -75.9   0.00977 4.61e-05 0.000192  0.000192   Tank_phys msc
-    2     -187     44.4    -75.9         0  0.00977  0.00237   0.00257   Tank_phys eIoni
-    3     -187     44.4    -75.9         0        0        0   0.00257   Tank_phys NoProcess
+    0     -187     44.3    -75.9   0.00981        0        0         0   Tank_phys initStep
+    1     -187     44.3    -75.9   0.00977 4.61e-05 0.000192  0.000192   Tank_phys msc
+    2     -187     44.3    -75.9         0  0.00977  0.00237   0.00257   Tank_phys eIoni
+    3     -187     44.3    -75.9         0        0        0   0.00257   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 38,   Parent ID = 36
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -187     44.4    -75.9  3.49e-06        0        0         0   Tank_phys initStep
+    0     -187     44.3    -75.9  3.49e-06        0        0         0   Tank_phys initStep
     1      245 1.15e+03 -4.42e+03  3.49e-06        0  4.5e+03   4.5e+03   Tank_phys OpRayleigh
-    2      513 1.52e+03 -4.74e+03  3.49e-06 3.49e-06      559  5.06e+03   Tank_phys OpAbsorption
+    2      514 1.52e+03 -4.74e+03  3.49e-06 3.49e-06      559  5.06e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 35,   Parent ID = 23
@@ -8075,10 +8080,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -241     45.2    -62.9   0.00165        0        0         0   Tank_phys initStep
-    1     -241     45.2    -62.9   0.00165        0  9.2e-06   9.2e-06   Tank_phys msc
-    2     -241     45.2    -62.9         0  0.00165 0.000115  0.000124   Tank_phys eIoni
-    3     -241     45.2    -62.9         0        0        0  0.000124   Tank_phys NoProcess
+    0     -241     45.1    -62.8   0.00165        0        0         0   Tank_phys initStep
+    1     -241     45.1    -62.8   0.00165        0  9.2e-06   9.2e-06   Tank_phys msc
+    2     -241     45.1    -62.8         0  0.00165 0.000115  0.000124   Tank_phys eIoni
+    3     -241     45.1    -62.8         0        0        0  0.000124   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 31,   Parent ID = 23
@@ -8407,9 +8412,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5   -5e+03 3.69e+03 3.03e+03  3.53e-06        0        0  7.63e+03   Tank_phys Transportation
     6 -3.13e+03    5e+03 4.94e+03  3.53e-06        0 2.98e+03  1.06e+04 expHall_phys Transportation
     7 -3.13e+03    5e+03 4.94e+03  3.53e-06        0        0  1.06e+04   Tank_phys Transportation
-    8 -3.09e+03 4.99e+03    5e+03  3.53e-06        0     75.3  1.07e+04 expHall_phys Transportation
+    8 -3.09e+03 4.99e+03    5e+03  3.53e-06        0     75.4  1.07e+04 expHall_phys Transportation
     9 -3.09e+03 4.99e+03    5e+03  3.53e-06        0        0  1.07e+04   Tank_phys Transportation
-   10 -3.06e+03 4.99e+03 4.95e+03  3.53e-06        0     63.2  1.07e+04   Tank_phys OpRayleigh
+   10 -3.06e+03 4.99e+03 4.95e+03  3.53e-06        0     63.3  1.07e+04   Tank_phys OpRayleigh
    11 -2.56e+03 -3.02e+03   -5e+03  3.53e-06        0 1.28e+04  2.35e+04 expHall_phys Transportation
    12 -2.56e+03 -3.02e+03   -5e+03  3.53e-06        0        0  2.35e+04   Tank_phys Transportation
    13 -3.15e+03 -4.47e+03 -3.26e+03  3.53e-06 3.53e-06 2.34e+03  2.59e+04   Tank_phys OpAbsorption
@@ -8551,17 +8556,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2     70.1    -30.8    -70.5     0.188 2.92e-05     34.7       146   Tank_phys compt
     3     76.7    -53.2     -145     0.157 0.000537       78       224   Tank_phys compt
     4      153     23.1     -226     0.102 1.42e-05      135       359   Tank_phys compt
-    5      146     6.47     -157    0.0975 0.000537     72.2       431   Tank_phys compt
-    6      133      7.5     -141    0.0812 1.36e-05     19.8       451   Tank_phys compt
+    5      146     6.46     -157    0.0975 0.000537     72.2       431   Tank_phys compt
+    6      133      7.5     -141    0.0812 1.36e-05     19.9       451   Tank_phys compt
     7      132     6.75     -143    0.0734 0.000537     2.27       453   Tank_phys compt
-    8      165    -38.6     -166         0 2.85e-05     60.9       514   Tank_phys phot
+    8      165    -38.7     -166         0 2.85e-05     60.9       514   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 71,   Parent ID = 22
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      165    -38.6     -166    0.0734        0        0         0   Tank_phys initStep
+    0      165    -38.7     -166    0.0734        0        0         0   Tank_phys initStep
     1      165    -38.7     -166    0.0693  0.00412  0.00665   0.00665   Tank_phys msc
     2      165    -38.7     -166     0.055   0.0143     0.03    0.0366   Tank_phys eIoni
 
@@ -8641,18 +8646,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      133      7.5     -141    0.0163        0        0         0   Tank_phys initStep
     1      133      7.5     -141     0.016 0.000283 0.000471  0.000471   Tank_phys msc
-    2      133     7.51     -141         0    0.016  0.00571   0.00618   Tank_phys eIoni
-    3      133     7.51     -141         0        0        0   0.00618   Tank_phys NoProcess
+    2      133      7.5     -141         0    0.016  0.00571   0.00618   Tank_phys eIoni
+    3      133      7.5     -141         0        0        0   0.00618   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 68,   Parent ID = 22
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      146     6.47     -157   0.00355        0        0         0   Tank_phys initStep
-    1      146     6.47     -157   0.00347 7.75e-05 3.29e-05  3.29e-05   Tank_phys msc
-    2      146     6.47     -157         0  0.00347 0.000396  0.000429   Tank_phys eIoni
-    3      146     6.47     -157         0        0        0  0.000429   Tank_phys NoProcess
+    0      146     6.46     -157   0.00355        0        0         0   Tank_phys initStep
+    1      146     6.46     -157   0.00347 7.75e-05 3.29e-05  3.29e-05   Tank_phys msc
+    2      146     6.46     -157         0  0.00347 0.000396  0.000429   Tank_phys eIoni
+    3      146     6.46     -157         0        0        0  0.000429   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 67,   Parent ID = 22
@@ -9963,9 +9968,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    13 -1.19e+03 -3.74e+03   -5e+03  2.69e-06        0        0  3.46e+04   Tank_phys Transportation
    14   -5e+03 -4.83e+03      809  2.69e-06        0 7.03e+03  4.16e+04 expHall_phys Transportation
    15   -5e+03 -4.83e+03      809  2.69e-06        0        0  4.16e+04   Tank_phys Transportation
-   16 -4.83e+03   -5e+03 1.03e+03  2.69e-06        0      331  4.19e+04 expHall_phys Transportation
+   16 -4.83e+03   -5e+03 1.03e+03  2.69e-06        0      330  4.19e+04 expHall_phys Transportation
    17 -4.83e+03   -5e+03 1.03e+03  2.69e-06        0        0  4.19e+04   Tank_phys Transportation
-   18   -5e+03 -3.83e+03 2.06e+03  2.69e-06        0 1.57e+03  4.35e+04 expHall_phys Transportation
+   18   -5e+03 -3.83e+03 2.06e+03  2.69e-06        0 1.56e+03  4.35e+04 expHall_phys Transportation
    19   -5e+03 -3.83e+03 2.06e+03  2.69e-06        0        0  4.35e+04   Tank_phys Transportation
    20 -2.46e+03 -1.05e+03    5e+03  2.69e-06        0 4.78e+03  4.83e+04 expHall_phys Transportation
    21 7.51e+03 9.45e+03    1e+04  2.69e-06        0 1.53e+04  6.36e+04 World_log_PV Transportation
@@ -10006,7 +10011,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2     36.9    -13.6    -8.47     0.225 0.000537       26      65.1   Tank_phys compt
     3    -23.7    -77.1    -25.9     0.169 0.000537     89.6       155   Tank_phys compt
     4    -37.2    -73.3    -14.6     0.141 2.92e-05       18       173   Tank_phys compt
-    5     -109    -67.3    -51.2     0.131 1.42e-05     80.4       253   Tank_phys compt
+    5     -109    -67.3    -51.1     0.131 1.42e-05     80.4       253   Tank_phys compt
     6     -140    -73.8    -42.3    0.0981 2.92e-05     33.3       286   Tank_phys compt
     7     -114     -104      -31    0.0848 2.92e-05     41.8       328   Tank_phys compt
     8     -156     -208     -132    0.0826 1.42e-05      151       479   Tank_phys compt
@@ -10161,10 +10166,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -109    -67.3    -51.2   0.00942        0        0         0   Tank_phys initStep
-    1     -109    -67.3    -51.2   0.00911 0.000308 0.000178  0.000178   Tank_phys msc
-    2     -109    -67.3    -51.2         0  0.00911   0.0021   0.00228   Tank_phys eIoni
-    3     -109    -67.3    -51.2         0        0        0   0.00228   Tank_phys NoProcess
+    0     -109    -67.3    -51.1   0.00942        0        0         0   Tank_phys initStep
+    1     -109    -67.3    -51.1   0.00911 0.000308 0.000178  0.000178   Tank_phys msc
+    2     -109    -67.3    -51.1         0  0.00911   0.0021   0.00228   Tank_phys eIoni
+    3     -109    -67.3    -51.1         0        0        0   0.00228   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 55,   Parent ID = 51
@@ -10281,7 +10286,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     6      397 1.56e+03    5e+03     3e-06        0        0   1.6e+04   Tank_phys Transportation
     7 3.24e+03   -5e+03 1.81e+03     3e-06        0 7.83e+03  2.38e+04 expHall_phys Transportation
     8 3.24e+03   -5e+03 1.81e+03     3e-06        0        0  2.38e+04   Tank_phys Transportation
-    9 4.52e+03 -2.56e+03 -2.74e+03     3e-06        0 5.32e+03  2.91e+04   Tank_phys OpRayleigh
+    9 4.52e+03 -2.56e+03 -2.75e+03     3e-06        0 5.32e+03  2.91e+04   Tank_phys OpRayleigh
    10 4.57e+03 2.33e+03   -5e+03     3e-06        0 5.38e+03  3.45e+04 expHall_phys Transportation
    11 4.57e+03 2.33e+03   -5e+03     3e-06        0        0  3.45e+04   Tank_phys Transportation
    12 3.56e+03    5e+03     -149     3e-06        0 5.63e+03  4.02e+04 expHall_phys Transportation
@@ -10496,37 +10501,37 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     -188      115      202     0.237 1.42e-05      248       424   Tank_phys compt
     4     -167      146      242     0.217 2.92e-05     55.6       479   Tank_phys compt
     5     -142      166      249     0.126 2.92e-05     32.3       512   Tank_phys compt
-    6     -154       86      211     0.118 1.42e-05     89.8       601   Tank_phys compt
+    6     -154       86      211     0.118 1.42e-05     89.8       602   Tank_phys compt
     7     -158     83.6      206     0.118        0     6.36       608   Tank_phys Rayl
-    8     -197     57.8      152    0.0979 1.42e-05     71.7       680   Tank_phys compt
-    9     -179     52.8      138    0.0953 2.92e-05     23.3       703   Tank_phys compt
+    8     -197     57.7      152    0.0979 1.42e-05     71.7       680   Tank_phys compt
+    9     -179     52.7      138    0.0953 2.92e-05     23.3       703   Tank_phys compt
    10     -157     31.8      129    0.0918 0.000537     32.1       735   Tank_phys compt
-   11      -83     -5.7      172    0.0892 1.36e-05     93.7       829   Tank_phys compt
-   12      -39    -71.3      263    0.0673 1.42e-05      121       949   Tank_phys compt
-   13    -36.7      -37      139    0.0646 1.36e-05      129  1.08e+03   Tank_phys compt
-   14    -91.7     -119    -5.14    0.0561 2.92e-05      175  1.25e+03   Tank_phys compt
-   15    -96.6     -119   -0.342    0.0531 1.42e-05     6.85  1.26e+03   Tank_phys compt
-   16    -74.2     -141     82.9    0.0531        0     88.9  1.35e+03   Tank_phys Rayl
-   17    -69.9     -147      106    0.0529 1.36e-05       24  1.37e+03   Tank_phys compt
-   18    -78.7     -173      211    0.0452 1.42e-05      109  1.48e+03   Tank_phys compt
-   19    -58.2     -236      116    0.0404 1.42e-05      116   1.6e+03   Tank_phys compt
-   20    -10.5     -250      130         0 2.85e-05     51.7  1.65e+03   Tank_phys phot
+   11      -83    -5.79      172    0.0892 1.36e-05     93.7       829   Tank_phys compt
+   12    -38.9    -71.5      263    0.0673 1.42e-05      121       949   Tank_phys compt
+   13    -36.7    -37.1      139    0.0646 1.36e-05      129  1.08e+03   Tank_phys compt
+   14    -91.6     -119     -5.1    0.0561 2.92e-05      175  1.25e+03   Tank_phys compt
+   15    -96.5     -120   -0.308    0.0531 1.42e-05     6.85  1.26e+03   Tank_phys compt
+   16    -74.2     -142     82.9    0.0531        0     88.9  1.35e+03   Tank_phys Rayl
+   17    -69.8     -147      106    0.0529 1.36e-05       24  1.37e+03   Tank_phys compt
+   18    -78.6     -173      211    0.0452 1.42e-05      109  1.48e+03   Tank_phys compt
+   19    -58.1     -236      116    0.0404 1.42e-05      116   1.6e+03   Tank_phys compt
+   20    -10.4     -250      130         0 2.85e-05     51.8  1.65e+03   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 101,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -10.5     -250      130    0.0403        0        0         0   Tank_phys initStep
-    1    -10.5     -250      130    0.0381  0.00223  0.00234   0.00234   Tank_phys msc
-    2    -10.5     -250      130    0.0217   0.0164   0.0183    0.0206   Tank_phys eIoni
+    0    -10.4     -250      130    0.0403        0        0         0   Tank_phys initStep
+    1    -10.4     -250      130    0.0381  0.00223  0.00234   0.00234   Tank_phys msc
+    2    -10.4     -250      130    0.0217   0.0164   0.0183    0.0206   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 102,   Parent ID = 101
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -10.5     -250      130  3.85e-06        0        0         0   Tank_phys initStep
+    0    -10.4     -250      130  3.85e-06        0        0         0   Tank_phys initStep
     1 1.26e+03 -1.12e+03     94.4  3.85e-06 3.85e-06 1.54e+03  1.54e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -10534,27 +10539,27 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2    -10.5     -250      130    0.0217        0        0    0.0206   Tank_phys initStep
-    3    -10.5     -250      130    0.0212 0.000474 0.000779    0.0214   Tank_phys msc
-    4    -10.5     -250      130         0   0.0212  0.00937    0.0307   Tank_phys eIoni
-    5    -10.5     -250      130         0        0        0    0.0307   Tank_phys NoProcess
+    2    -10.4     -250      130    0.0217        0        0    0.0206   Tank_phys initStep
+    3    -10.4     -250      130    0.0212 0.000474 0.000779    0.0214   Tank_phys msc
+    4    -10.4     -250      130         0   0.0212  0.00937    0.0307   Tank_phys eIoni
+    5    -10.4     -250      130         0        0        0    0.0307   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 100,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -58.2     -236      116   0.00483        0        0         0   Tank_phys initStep
-    1    -58.2     -236      116   0.00479 3.55e-05 5.57e-05  5.57e-05   Tank_phys msc
-    2    -58.2     -236      116         0  0.00479 0.000688  0.000743   Tank_phys eIoni
-    3    -58.2     -236      116         0        0        0  0.000743   Tank_phys NoProcess
+    0    -58.1     -236      116   0.00483        0        0         0   Tank_phys initStep
+    1    -58.1     -236      116   0.00479 3.55e-05 5.57e-05  5.57e-05   Tank_phys msc
+    2    -58.1     -236      116         0  0.00479 0.000688  0.000743   Tank_phys eIoni
+    3    -58.1     -236      116         0        0        0  0.000743   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 103,   Parent ID = 100
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -58.2     -236      116  2.62e-06        0        0         0   Tank_phys initStep
+    0    -58.1     -236      116  2.62e-06        0        0         0   Tank_phys initStep
     1 1.36e+03   -1e+03   -5e+03  2.62e-06        0 5.36e+03  5.36e+03 expHall_phys Transportation
     2 1.36e+03   -1e+03   -5e+03  2.62e-06        0        0  5.36e+03   Tank_phys Transportation
     3    5e+03 -3.14e+03 -3.03e+03  2.62e-06        0 4.65e+03     1e+04 expHall_phys Transportation
@@ -10566,17 +10571,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -78.7     -173      211   0.00766        0        0         0   Tank_phys initStep
-    1    -78.7     -173      211   0.00746 0.000194 0.000124  0.000124   Tank_phys msc
-    2    -78.7     -173      211         0  0.00746  0.00148   0.00161   Tank_phys eIoni
-    3    -78.7     -173      211         0        0        0   0.00161   Tank_phys NoProcess
+    0    -78.6     -173      211   0.00766        0        0         0   Tank_phys initStep
+    1    -78.6     -173      211   0.00746 0.000194 0.000124  0.000124   Tank_phys msc
+    2    -78.6     -173      211         0  0.00746  0.00148   0.00161   Tank_phys eIoni
+    3    -78.6     -173      211         0        0        0   0.00161   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 105,   Parent ID = 99
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -78.7     -173      211  2.74e-06        0        0         0   Tank_phys initStep
+    0    -78.6     -173      211  2.74e-06        0        0         0   Tank_phys initStep
     1      887     -649      321  2.74e-06 2.74e-06 1.08e+03  1.08e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -10584,7 +10589,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -78.7     -173      211  2.22e-06        0        0         0   Tank_phys initStep
+    0    -78.6     -173      211  2.22e-06        0        0         0   Tank_phys initStep
     1     -223 -2.55e+03      946  2.22e-06 2.22e-06 2.49e+03  2.49e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -10592,65 +10597,65 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -69.9     -147      106  0.000171        0        0         0   Tank_phys initStep
-    1    -69.9     -147      106  0.000171        0 5.07e-07  5.07e-07   Tank_phys msc
-    2    -69.9     -147      106         0 0.000171 6.33e-06  6.84e-06   Tank_phys eIoni
-    3    -69.9     -147      106         0        0        0  6.84e-06   Tank_phys NoProcess
+    0    -69.8     -147      106  0.000171        0        0         0   Tank_phys initStep
+    1    -69.8     -147      106  0.000171        0 5.07e-07  5.07e-07   Tank_phys msc
+    2    -69.8     -147      106         0 0.000171 6.33e-06  6.84e-06   Tank_phys eIoni
+    3    -69.8     -147      106         0        0        0  6.84e-06   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 97,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -96.6     -119   -0.342     0.003        0        0         0   Tank_phys initStep
-    1    -96.6     -119   -0.342   0.00297 2.96e-05 2.48e-05  2.48e-05   Tank_phys msc
-    2    -96.6     -119   -0.342         0  0.00297 0.000304  0.000329   Tank_phys eIoni
-    3    -96.6     -119   -0.342         0        0        0  0.000329   Tank_phys NoProcess
+    0    -96.5     -120   -0.308     0.003        0        0         0   Tank_phys initStep
+    1    -96.5     -120   -0.308   0.00297 2.96e-05 2.48e-05  2.48e-05   Tank_phys msc
+    2    -96.5     -120   -0.308         0  0.00297 0.000304  0.000329   Tank_phys eIoni
+    3    -96.5     -120   -0.308         0        0        0  0.000329   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 96,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -91.7     -119    -5.14   0.00851        0        0         0   Tank_phys initStep
-    1    -91.7     -119    -5.14   0.00798 0.000529 0.000149  0.000149   Tank_phys msc
-    2    -91.7     -119    -5.14         0  0.00798  0.00167   0.00182   Tank_phys eIoni
-    3    -91.7     -119    -5.14         0        0        0   0.00182   Tank_phys NoProcess
+    0    -91.6     -119     -5.1   0.00851        0        0         0   Tank_phys initStep
+    1    -91.6     -119     -5.1   0.00798 0.000529 0.000149  0.000149   Tank_phys msc
+    2    -91.6     -119     -5.1         0  0.00798  0.00167   0.00182   Tank_phys eIoni
+    3    -91.6     -119     -5.1         0        0        0   0.00182   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 95,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -36.7      -37      139   0.00269        0        0         0   Tank_phys initStep
-    1    -36.7      -37      139   0.00262 6.95e-05 2.06e-05  2.06e-05   Tank_phys msc
-    2    -36.7      -37      139         0  0.00262 0.000247  0.000267   Tank_phys eIoni
-    3    -36.7      -37      139         0        0        0  0.000267   Tank_phys NoProcess
+    0    -36.7    -37.1      139   0.00269        0        0         0   Tank_phys initStep
+    1    -36.7    -37.1      139   0.00262 6.95e-05 2.06e-05  2.06e-05   Tank_phys msc
+    2    -36.7    -37.1      139         0  0.00262 0.000247  0.000267   Tank_phys eIoni
+    3    -36.7    -37.1      139         0        0        0  0.000267   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 106,   Parent ID = 95
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -36.7      -37      139  3.33e-06        0        0         0   Tank_phys initStep
-    1      -95 -2.01e+03 1.27e+03  3.33e-06 3.33e-06 2.28e+03  2.28e+03   Tank_phys OpAbsorption
+    0    -36.7    -37.1      139  3.33e-06        0        0         0   Tank_phys initStep
+    1      -95 -2.02e+03 1.27e+03  3.33e-06 3.33e-06 2.28e+03  2.28e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 94,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      -39    -71.3      263    0.0219        0        0         0   Tank_phys initStep
-    1      -39    -71.3      263    0.0213 0.000555 0.000791  0.000791   Tank_phys msc
-    2      -39    -71.3      263         0   0.0213  0.00944    0.0102   Tank_phys eIoni
-    3      -39    -71.3      263         0        0        0    0.0102   Tank_phys NoProcess
+    0    -38.9    -71.5      263    0.0219        0        0         0   Tank_phys initStep
+    1    -38.9    -71.5      263    0.0213 0.000555 0.000791  0.000791   Tank_phys msc
+    2    -38.9    -71.5      263         0   0.0213  0.00944    0.0102   Tank_phys eIoni
+    3    -38.9    -71.5      263         0        0        0    0.0102   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 107,   Parent ID = 94
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      -39    -71.3      263  3.17e-06        0        0         0   Tank_phys initStep
+    0    -38.9    -71.5      263  3.17e-06        0        0         0   Tank_phys initStep
     1   -5e+03     -750 4.43e+03  3.17e-06        0 6.51e+03  6.51e+03 expHall_phys Transportation
     2   -5e+03     -750 4.43e+03  3.17e-06        0        0  6.51e+03   Tank_phys Transportation
     3 -4.78e+03     -660    5e+03  3.17e-06        0      620  7.13e+03 expHall_phys Transportation
@@ -10664,10 +10669,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      -83     -5.7      172   0.00253        0        0         0   Tank_phys initStep
-    1      -83     -5.7      172   0.00245 7.29e-05 1.86e-05  1.86e-05   Tank_phys msc
-    2      -83     -5.7      172         0  0.00245 0.000221   0.00024   Tank_phys eIoni
-    3      -83     -5.7      172         0        0        0   0.00024   Tank_phys NoProcess
+    0      -83    -5.79      172   0.00253        0        0         0   Tank_phys initStep
+    1      -83    -5.79      172   0.00245 7.29e-05 1.86e-05  1.86e-05   Tank_phys msc
+    2      -83    -5.79      172         0  0.00245 0.000221   0.00024   Tank_phys eIoni
+    3      -83    -5.79      172         0        0        0   0.00024   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 92,   Parent ID = 50
@@ -10684,20 +10689,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -179     52.8      138   0.00254        0        0         0   Tank_phys initStep
-    1     -179     52.8      138    0.0025 4.18e-05 1.87e-05  1.87e-05   Tank_phys msc
-    2     -179     52.8      138         0   0.0025 0.000228  0.000246   Tank_phys eIoni
-    3     -179     52.8      138         0        0        0  0.000246   Tank_phys NoProcess
+    0     -179     52.7      138   0.00254        0        0         0   Tank_phys initStep
+    1     -179     52.7      138    0.0025 4.18e-05 1.87e-05  1.87e-05   Tank_phys msc
+    2     -179     52.7      138         0   0.0025 0.000228  0.000246   Tank_phys eIoni
+    3     -179     52.7      138         0        0        0  0.000246   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 90,   Parent ID = 50
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -197     57.8      152    0.0198        0        0         0   Tank_phys initStep
-    1     -197     57.8      152     0.019   0.0008 0.000663  0.000663   Tank_phys msc
-    2     -197     57.8      152         0    0.019   0.0077   0.00836   Tank_phys eIoni
-    3     -197     57.8      152         0        0        0   0.00836   Tank_phys NoProcess
+    0     -197     57.7      152    0.0198        0        0         0   Tank_phys initStep
+    1     -197     57.7      152     0.019   0.0008 0.000663  0.000663   Tank_phys msc
+    2     -197     57.7      152         0    0.019   0.0077   0.00836   Tank_phys eIoni
+    3     -197     57.7      152         0        0        0   0.00836   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 50
@@ -11454,8 +11459,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4  2.6e+03    5e+03 3.68e+03  4.11e-06        0        0  8.61e+03   Tank_phys Transportation
     5    5e+03 2.88e+03 3.67e+03  4.11e-06        0  3.2e+03  1.18e+04 expHall_phys Transportation
     6    5e+03 2.88e+03 3.67e+03  4.11e-06        0        0  1.18e+04   Tank_phys Transportation
-    7    5e+03 2.88e+03 3.66e+03  4.11e-06        0     2.18  1.18e+04   Tank_phys OpRayleigh
-    8    5e+03 2.87e+03 3.66e+03  4.11e-06        0     3.05  1.18e+04 expHall_phys Transportation
+    7    5e+03 2.88e+03 3.66e+03  4.11e-06        0      2.2  1.18e+04   Tank_phys OpRayleigh
+    8    5e+03 2.87e+03 3.66e+03  4.11e-06        0     3.07  1.18e+04 expHall_phys Transportation
     9    5e+03 2.87e+03 3.66e+03  4.11e-06        0        0  1.18e+04   Tank_phys Transportation
    10 -2.09e+03   -5e+03 3.15e+03  4.11e-06        0 1.06e+04  2.24e+04 expHall_phys Transportation
    11 -2.09e+03   -5e+03 3.15e+03  4.11e-06        0        0  2.24e+04   Tank_phys Transportation
@@ -11692,8 +11697,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5     -912 4.79e+03    5e+03  3.47e-06        0 1.18e+03  1.32e+04 expHall_phys Transportation
     6     -912 4.79e+03    5e+03  3.47e-06        0        0  1.32e+04   Tank_phys Transportation
     7 -1.75e+03 4.31e+03 4.34e+03  3.47e-06        0 1.17e+03  1.43e+04   Tank_phys OpRayleigh
-    8 -3.72e+03    5e+03      650  3.47e-06        0 4.24e+03  1.86e+04 expHall_phys Transportation
-    9 -3.72e+03    5e+03      650  3.47e-06        0        0  1.86e+04   Tank_phys Transportation
+    8 -3.72e+03    5e+03      649  3.47e-06        0 4.24e+03  1.86e+04 expHall_phys Transportation
+    9 -3.72e+03    5e+03      649  3.47e-06        0        0  1.86e+04   Tank_phys Transportation
    10 -3.76e+03 4.86e+03      468  3.47e-06 3.47e-06      233  1.88e+04   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -11817,35 +11822,35 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     -181      193     51.2     0.211 1.42e-05     89.8       348   Tank_phys compt
     4     -174     92.4     92.3     0.151 1.42e-05      109       457   Tank_phys compt
     5     -116     65.6     11.9     0.145 2.92e-05      103       559   Tank_phys compt
-    6    -69.6    -7.02    -44.4     0.114 0.000537      103       662   Tank_phys compt
+    6    -69.6    -6.99    -44.3     0.114 0.000537      103       662   Tank_phys compt
     7    -53.3     20.7    -94.7      0.11 0.000537     59.8       722   Tank_phys compt
     8    -60.6     67.9     -127     0.084 1.42e-05     57.4       780   Tank_phys compt
-    9    -6.37     76.3    -42.9    0.0793 1.36e-05      100       880   Tank_phys compt
-   10    -11.2     47.8     6.54    0.0773 0.000537     57.3       937   Tank_phys compt
-   11    -11.8     46.7     7.22    0.0708 1.36e-05     1.42       938   Tank_phys compt
+    9    -6.39     76.4    -42.9    0.0793 1.36e-05      100       880   Tank_phys compt
+   10    -11.2     47.8     6.56    0.0773 0.000537     57.3       937   Tank_phys compt
+   11    -11.9     46.8     7.25    0.0708 1.36e-05     1.42       938   Tank_phys compt
    12     11.2     44.9      126    0.0586 1.36e-05      121  1.06e+03   Tank_phys compt
-   13     22.5     55.2      114    0.0586        0     19.2  1.08e+03   Tank_phys Rayl
+   13     22.5     55.3      114    0.0586        0     19.2  1.08e+03   Tank_phys Rayl
    14     75.1      104      109    0.0491 1.36e-05       72  1.15e+03   Tank_phys compt
-   15     6.63     89.9     60.1    0.0468 1.42e-05     85.2  1.24e+03   Tank_phys compt
-   16     4.08     81.8     57.5    0.0411 1.42e-05     8.91  1.24e+03   Tank_phys compt
-   17    -3.04     89.1     61.9         0 0.000538     11.2  1.26e+03   Tank_phys phot
+   15     6.65       90     60.1    0.0468 1.42e-05     85.2  1.24e+03   Tank_phys compt
+   16      4.1     81.8     57.5    0.0411 1.42e-05     8.92  1.24e+03   Tank_phys compt
+   17    -3.02     89.2       62         0 0.000538     11.2  1.26e+03   Tank_phys phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 76,   Parent ID = 60
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.04     89.1     61.9    0.0405        0        0         0   Tank_phys initStep
-    1    -3.04     89.1     61.9    0.0391  0.00142  0.00236   0.00236   Tank_phys msc
-    2    -3.04     89.1     61.9    0.0126   0.0265   0.0186     0.021   Tank_phys eIoni
+    0    -3.02     89.2       62    0.0405        0        0         0   Tank_phys initStep
+    1    -3.02     89.2       62    0.0391  0.00142  0.00236   0.00236   Tank_phys msc
+    2    -3.02     89.2       62    0.0126   0.0265   0.0186     0.021   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 78,   Parent ID = 76
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.04     89.1     61.9  2.74e-06        0        0         0   Tank_phys initStep
-    1    5e+03      539 1.81e+03  2.74e-06        0 5.32e+03  5.32e+03 expHall_phys Transportation
+    0    -3.02     89.2       62  2.74e-06        0        0         0   Tank_phys initStep
+    1    5e+03      540 1.81e+03  2.74e-06        0 5.32e+03  5.32e+03 expHall_phys Transportation
     2    1e+04      843  4.3e+03  2.74e-06        0 5.59e+03  1.09e+04 World_log_PV Transportation
     3  1.5e+04 1.15e+03  6.8e+03  2.74e-06        0 5.59e+03  1.65e+04  OutOfWorld Transportation
 
@@ -11854,7 +11859,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.04     89.1     61.9   2.5e-06        0        0         0   Tank_phys initStep
+    0    -3.02     89.2       62   2.5e-06        0        0         0   Tank_phys initStep
     1 2.21e+03 4.48e+03    5e+03   2.5e-06        0 6.97e+03  6.97e+03 expHall_phys Transportation
     2 2.21e+03 4.48e+03    5e+03   2.5e-06        0        0  6.97e+03   Tank_phys Transportation
     3    5e+03 4.36e+03 2.45e+03   2.5e-06        0 3.78e+03  1.08e+04 expHall_phys Transportation
@@ -11872,17 +11877,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2    -3.04     89.1     61.9    0.0126        0        0     0.021   Tank_phys initStep
-    3    -3.04     89.1     61.9    0.0126 1.08e-05 0.000296    0.0213   Tank_phys msc
-    4    -3.04     89.1     61.9         0   0.0126   0.0037     0.025   Tank_phys eIoni
-    5    -3.04     89.1     61.9         0        0        0     0.025   Tank_phys NoProcess
+    2    -3.02     89.2       62    0.0126        0        0     0.021   Tank_phys initStep
+    3    -3.02     89.2       62    0.0126 1.08e-05 0.000296    0.0213   Tank_phys msc
+    4    -3.02     89.2       62         0   0.0126   0.0037     0.025   Tank_phys eIoni
+    5    -3.02     89.2       62         0        0        0     0.025   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 80,   Parent ID = 76
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.04     89.1     61.9   3.4e-06        0        0         0   Tank_phys initStep
+    0    -3.02     89.2       62   3.4e-06        0        0         0   Tank_phys initStep
     1 2.77e+03     -252     -445   3.4e-06        0 2.84e+03  2.84e+03   Tank_phys OpRayleigh
     2 -2.42e+03 -2.44e+03   -5e+03   3.4e-06        0 7.24e+03  1.01e+04 expHall_phys Transportation
     3 -2.42e+03 -2.44e+03   -5e+03   3.4e-06        0        0  1.01e+04   Tank_phys Transportation
@@ -11903,7 +11908,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.04     89.1     61.9  2.96e-06        0        0         0   Tank_phys initStep
+    0    -3.02     89.2       62  2.96e-06        0        0         0   Tank_phys initStep
     1     -987   -5e+03 -3.96e+03  2.96e-06        0 6.56e+03  6.56e+03 expHall_phys Transportation
     2     -987   -5e+03 -3.96e+03  2.96e-06        0        0  6.56e+03   Tank_phys Transportation
     3 -1.28e+03 -3.91e+03   -5e+03  2.96e-06        0 1.54e+03   8.1e+03 expHall_phys Transportation
@@ -11915,20 +11920,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.08     81.8     57.5   0.00576        0        0         0   Tank_phys initStep
-    1     4.08     81.8     57.5   0.00576        0 7.54e-05  7.54e-05   Tank_phys msc
-    2     4.08     81.8     57.5         0  0.00576 0.000943   0.00102   Tank_phys eIoni
-    3     4.08     81.8     57.5         0        0        0   0.00102   Tank_phys NoProcess
+    0      4.1     81.8     57.5   0.00576        0        0         0   Tank_phys initStep
+    1      4.1     81.8     57.5   0.00576        0 7.54e-05  7.54e-05   Tank_phys msc
+    2      4.1     81.8     57.5         0  0.00576 0.000943   0.00102   Tank_phys eIoni
+    3      4.1     81.8     57.5         0        0        0   0.00102   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 74,   Parent ID = 60
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     6.63     89.9     60.1   0.00229        0        0         0   Tank_phys initStep
-    1     6.63     89.9     60.1   0.00218 0.000111 1.58e-05  1.58e-05   Tank_phys msc
-    2     6.63     89.9     60.1         0  0.00218 0.000182  0.000198   Tank_phys eIoni
-    3     6.63     89.9     60.1         0        0        0  0.000198   Tank_phys NoProcess
+    0     6.65       90     60.1   0.00229        0        0         0   Tank_phys initStep
+    1     6.65       90     60.1   0.00218 0.000111 1.58e-05  1.58e-05   Tank_phys msc
+    2     6.65       90     60.1         0  0.00218 0.000182  0.000198   Tank_phys eIoni
+    3     6.65       90     60.1         0        0        0  0.000198   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 73,   Parent ID = 60
@@ -11965,17 +11970,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -11.8     46.7     7.22   0.00642        0        0         0   Tank_phys initStep
-    1    -11.8     46.7     7.22    0.0062 0.000219 9.11e-05  9.11e-05   Tank_phys msc
-    2    -11.8     46.7     7.22         0   0.0062  0.00107   0.00116   Tank_phys eIoni
-    3    -11.8     46.7     7.22         0        0        0   0.00116   Tank_phys NoProcess
+    0    -11.9     46.8     7.25   0.00642        0        0         0   Tank_phys initStep
+    1    -11.9     46.8     7.25    0.0062 0.000219 9.11e-05  9.11e-05   Tank_phys msc
+    2    -11.9     46.8     7.24         0   0.0062  0.00107   0.00116   Tank_phys eIoni
+    3    -11.9     46.8     7.24         0        0        0   0.00116   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 82,   Parent ID = 71
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -11.8     46.7     7.22  4.11e-06        0        0         0   Tank_phys initStep
+    0    -11.9     46.8     7.25  4.11e-06        0        0         0   Tank_phys initStep
     1 2.23e+03   -5e+03 -1.28e+03  4.11e-06        0 5.67e+03  5.67e+03 expHall_phys Transportation
     2 2.23e+03   -5e+03 -1.28e+03  4.11e-06        0        0  5.67e+03   Tank_phys Transportation
     3    5e+03 -3.51e+03 -1.49e+03  4.11e-06        0 3.15e+03  8.82e+03 expHall_phys Transportation
@@ -11989,20 +11994,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -11.2     47.8     6.54   0.00146        0        0         0   Tank_phys initStep
-    1    -11.2     47.8     6.54   0.00146        0 7.58e-06  7.58e-06   Tank_phys msc
-    2    -11.2     47.8     6.54         0  0.00146 9.47e-05  0.000102   Tank_phys eIoni
-    3    -11.2     47.8     6.54         0        0        0  0.000102   Tank_phys NoProcess
+    0    -11.2     47.8     6.56   0.00146        0        0         0   Tank_phys initStep
+    1    -11.2     47.8     6.56   0.00146        0 7.58e-06  7.58e-06   Tank_phys msc
+    2    -11.2     47.8     6.56         0  0.00146 9.47e-05  0.000102   Tank_phys eIoni
+    3    -11.2     47.8     6.56         0        0        0  0.000102   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 69,   Parent ID = 60
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -6.37     76.3    -42.9   0.00469        0        0         0   Tank_phys initStep
-    1    -6.37     76.3    -42.9   0.00464 5.44e-05  5.3e-05   5.3e-05   Tank_phys msc
-    2    -6.37     76.3    -42.9         0  0.00464 0.000649  0.000702   Tank_phys eIoni
-    3    -6.37     76.3    -42.9         0        0        0  0.000702   Tank_phys NoProcess
+    0    -6.39     76.4    -42.9   0.00469        0        0         0   Tank_phys initStep
+    1    -6.39     76.4    -42.9   0.00464 5.44e-05  5.3e-05   5.3e-05   Tank_phys msc
+    2    -6.39     76.4    -42.9         0  0.00464 0.000649  0.000702   Tank_phys eIoni
+    3    -6.39     76.4    -42.9         0        0        0  0.000702   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 68,   Parent ID = 60
@@ -12029,11 +12034,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -69.6    -7.02    -44.4    0.0304        0        0         0   Tank_phys initStep
-    1    -69.6    -7.02    -44.4    0.0291  0.00133  0.00142   0.00142   Tank_phys msc
-    2    -69.6    -7.03    -44.4    0.0102   0.0189   0.0144    0.0158   Tank_phys eIoni
-    3    -69.6    -7.03    -44.4         0   0.0102  0.00255    0.0183   Tank_phys eIoni
-    4    -69.6    -7.03    -44.4         0        0        0    0.0183   Tank_phys NoProcess
+    0    -69.6    -6.99    -44.3    0.0304        0        0         0   Tank_phys initStep
+    1    -69.6    -6.99    -44.3    0.0291  0.00133  0.00142   0.00142   Tank_phys msc
+    2    -69.6       -7    -44.3    0.0102   0.0189   0.0144    0.0158   Tank_phys eIoni
+    3    -69.6       -7    -44.3         0   0.0102  0.00255    0.0183   Tank_phys eIoni
+    4    -69.6       -7    -44.3         0        0        0    0.0183   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 65,   Parent ID = 60
@@ -12328,15 +12333,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5     88.8     -309     35.5     0.192        0     7.13       392   Tank_phys Rayl
     6     84.5     -327     25.3      0.15 1.36e-05     20.5       413   Tank_phys compt
     7     88.7     -330     26.5     0.106 1.42e-05     5.26       418   Tank_phys compt
-    8     87.3     -325     7.86    0.0849 1.36e-05     19.2       437   Tank_phys compt
+    8     87.3     -325     7.87    0.0849 1.36e-05     19.2       437   Tank_phys compt
     9     65.9     -406     8.78    0.0839 1.42e-05       84       521   Tank_phys compt
    10       55     -432       19    0.0721 1.42e-05     30.2       552   Tank_phys compt
-   11     66.8     -465    -40.3    0.0608 2.92e-05     68.8       620   Tank_phys compt
+   11     66.8     -465    -40.3    0.0608 2.92e-05     68.7       620   Tank_phys compt
    12      179     -445     19.3     0.056 2.92e-05      129       749   Tank_phys compt
    13      184     -441     13.6     0.055 0.000537     7.93       757   Tank_phys compt
    14      218     -469    -20.9    0.0446 0.000537     56.1       813   Tank_phys compt
-   15      217     -457    -12.2    0.0446        0     14.4       828   Tank_phys Rayl
-   16      206     -433    -28.2    0.0408 0.000537     31.1       859   Tank_phys compt
+   15      217     -457    -12.1    0.0446        0     14.4       828   Tank_phys Rayl
+   16      206     -433    -28.1    0.0408 0.000537     31.1       859   Tank_phys compt
    17      204     -438    -32.9         0 1.36e-05     7.11       866   Tank_phys phot
 
 *********************************************************************************************************
@@ -12346,15 +12351,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      204     -438    -32.9    0.0408        0        0         0   Tank_phys initStep
     1      204     -438    -32.9    0.0389  0.00191  0.00239   0.00239   Tank_phys msc
-    2      204     -438      -33     0.022   0.0169   0.0186    0.0209   Tank_phys eIoni
-    3      204     -438      -33    0.0025   0.0195     0.01     0.031   Tank_phys eIoni
+    2      204     -438    -32.9     0.022   0.0169   0.0186    0.0209   Tank_phys eIoni
+    3      204     -438    -32.9    0.0025   0.0195     0.01     0.031   Tank_phys eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 113,   Parent ID = 110
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      204     -438      -33  3.77e-06        0        0         0   Tank_phys initStep
+    0      204     -438    -32.9  3.77e-06        0        0         0   Tank_phys initStep
     1 -3.73e+03      464 -4.18e+03  3.77e-06 3.77e-06 5.79e+03  5.79e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -12362,7 +12367,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      204     -438      -33  2.17e-06        0        0         0   Tank_phys initStep
+    0      204     -438    -32.9  2.17e-06        0        0         0   Tank_phys initStep
     1  4.7e+03 2.95e+03 -1.22e+03  2.17e-06        0 5.76e+03  5.76e+03   Tank_phys OpRayleigh
     2 1.03e+03    5e+03 2.55e+03  2.17e-06        0 5.65e+03  1.14e+04 expHall_phys Transportation
     3 1.03e+03    5e+03 2.55e+03  2.17e-06        0        0  1.14e+04   Tank_phys Transportation
@@ -12375,7 +12380,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      204     -438      -33  2.04e-06        0        0         0   Tank_phys initStep
+    0      204     -438    -32.9  2.04e-06        0        0         0   Tank_phys initStep
     1 -1.97e+03     -514 -1.67e+03  2.04e-06 2.04e-06 2.72e+03  2.72e+03   Tank_phys OpAbsorption
 
 *********************************************************************************************************
@@ -12383,20 +12388,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    3      204     -438      -33    0.0025        0        0     0.031   Tank_phys initStep
-    4      204     -438      -33    0.0025        0 1.82e-05     0.031   Tank_phys msc
-    5      204     -438      -33         0   0.0025 0.000228    0.0312   Tank_phys eIoni
-    6      204     -438      -33         0        0        0    0.0312   Tank_phys NoProcess
+    3      204     -438    -32.9    0.0025        0        0     0.031   Tank_phys initStep
+    4      204     -438    -32.9    0.0025        0 1.82e-05     0.031   Tank_phys msc
+    5      204     -438    -32.9         0   0.0025 0.000228    0.0312   Tank_phys eIoni
+    6      204     -438    -32.9         0        0        0    0.0312   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 109,   Parent ID = 59
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      206     -433    -28.2   0.00324        0        0         0   Tank_phys initStep
-    1      206     -433    -28.2    0.0032 3.59e-05 2.81e-05  2.81e-05   Tank_phys msc
-    2      206     -433    -28.2         0   0.0032 0.000345  0.000373   Tank_phys eIoni
-    3      206     -433    -28.2         0        0        0  0.000373   Tank_phys NoProcess
+    0      206     -433    -28.1   0.00324        0        0         0   Tank_phys initStep
+    1      206     -433    -28.1    0.0032 3.59e-05 2.81e-05  2.81e-05   Tank_phys msc
+    2      206     -433    -28.1         0   0.0032 0.000345  0.000373   Tank_phys eIoni
+    3      206     -433    -28.1         0        0        0  0.000373   Tank_phys NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 108,   Parent ID = 59
@@ -12483,7 +12488,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     87.3     -325     7.86    0.0209        0        0         0   Tank_phys initStep
+    0     87.3     -325     7.87    0.0209        0        0         0   Tank_phys initStep
     1     87.3     -325     7.86    0.0196  0.00126 0.000727  0.000727   Tank_phys msc
     2     87.3     -325     7.86         0   0.0196  0.00814   0.00887   Tank_phys eIoni
     3     87.3     -325     7.86         0        0        0   0.00887   Tank_phys NoProcess
@@ -13579,9 +13584,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     1.28    0.187    0.296  2.52e-06        0        0         0   Tank_phys initStep
     1    5e+03 -4.53e+03 -4.01e+03  2.52e-06        0 7.85e+03  7.85e+03 expHall_phys Transportation
-    2    5e+03 -4.53e+03 -4.01e+03  2.52e-06        0        0  7.85e+03   Tank_phys Transportation
-    3  4.4e+03   -5e+03 -4.23e+03  2.52e-06        0      789  8.64e+03 expHall_phys Transportation
- 
+    2    5e+03 -4.53e+03 -4.01e+03  2.52e
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
@@ -13593,21 +13596,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.060000s Real=2.092069s Sys=0.000000s
+  User=1.890000s Real=1.902257s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.
 Number of events: 1000
-Average number of Cerenkov photons created per event: 17.2 +- 5.71
-Average number of scintillation photons created per event: 76.1 +- 8.87
-Average number of optical Rayleigh interactions per event: 8.99 +- 3.35
-Average number of optical absorption interactions per event: 38.8 +- 6.42
-Average number of optical Mie interactions per event: 0.106 +- 0.327
-Average number of optical boundary interactions per event: 214 +- 30.8
+Average number of Cerenkov photons created per event: 17.3 +- 5.99
+Average number of scintillation photons created per event: 75.9 +- 8.93
+Average number of optical Rayleigh interactions per event: 8.75 +- 3.36
+Average number of optical absorption interactions per event: 39 +- 6.62
+Average number of optical Mie interactions per event: 0.128 +- 0.352
+Average number of optical boundary interactions per event: 212 +- 31.8
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.038 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.035 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

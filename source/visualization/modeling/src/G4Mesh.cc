@@ -93,7 +93,9 @@ G4Mesh::G4Mesh (G4VPhysicalVolume* containerVolume,const G4Transform3D& transfor
   G4LogicalVolume*   lv1 = nullptr;
   G4LogicalVolume*   lv2 = nullptr;
 
-  // Check if this is a container for a parameterisation
+  // Check if this is a container for a parameterisation.
+  // A simple parameterisation may only be one level.
+  // Nested parameterisations may be 2- or 3-level.
   G4bool isContainer = false;
   if (lv0->GetNoDaughters()) {
     fMeshDepth++;
@@ -106,13 +108,15 @@ G4Mesh::G4Mesh (G4VPhysicalVolume* containerVolume,const G4Transform3D& transfor
       fMeshDepth++;
       pv2 = lv1->GetDaughter(0);
       lv2 = pv2->GetLogicalVolume();
-      if (dynamic_cast<G4PVParameterised*>(pv2)) {
+      if (dynamic_cast<G4PVParameterised*>(pv2) &&
+          dynamic_cast<G4VNestedParameterisation*>(pv2->GetParameterisation())) {
         isContainer = true;
         fpParameterisedVolume = pv2;
       } else if (lv2->GetNoDaughters()) {
         fMeshDepth++;
         pv3 = lv2->GetDaughter(0);
-        if (dynamic_cast<G4PVParameterised*>(pv3)) {
+        if (dynamic_cast<G4PVParameterised*>(pv3) &&
+            dynamic_cast<G4VNestedParameterisation*>(pv3->GetParameterisation())) {
           isContainer = true;
           fpParameterisedVolume = pv3;
         }

@@ -33,22 +33,20 @@
 #include "G4CoulombBarrier.hh"
 #include "globals.hh"
 
-
 class G4GEMCoulombBarrier : public G4CoulombBarrier
 {
 public:
   explicit G4GEMCoulombBarrier(G4int anA, G4int aZ);
 
-  virtual ~G4GEMCoulombBarrier();
+  ~G4GEMCoulombBarrier() override = default;
 
-  virtual G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
-
-private:
+  G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const override;
 
   G4GEMCoulombBarrier(const G4GEMCoulombBarrier & right) = delete;
-  const G4GEMCoulombBarrier & operator=(const G4GEMCoulombBarrier & right) = delete;
-  G4bool operator==(const G4GEMCoulombBarrier & right) const = delete;
-  G4bool operator!=(const G4GEMCoulombBarrier & right) const = delete;
+  const G4GEMCoulombBarrier & operator=
+  (const G4GEMCoulombBarrier & right) = delete;
+
+private:
   
   G4double CalcCompoundRadius(G4int ARes) const;
 

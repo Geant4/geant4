@@ -32,7 +32,7 @@
 
 #include "G4ios.hh"
 
-G4Point3DList::~G4Point3DList () {}
+G4Point3DList::~G4Point3DList () = default;
 
 std::ostream& operator << (std::ostream& os, const G4Point3DList& points)
 {

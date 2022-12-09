@@ -27,8 +27,7 @@
 // Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
 // Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 // 
-//
-//
+
 #include "G4MIRDRightScapula.hh"
 
 #include "globals.hh"
@@ -47,24 +46,13 @@
 #include "G4HumanPhantomColour.hh"
 #include "G4Box.hh"
 
-G4MIRDRightScapula::G4MIRDRightScapula()
-{
-}
-
-G4MIRDRightScapula::~G4MIRDRightScapula()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 						 const G4String& colourName, G4bool wireFrame,G4bool)
 {
- 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* skeleton = material -> GetMaterial("skeleton");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* skeleton = material -> GetMaterial("skeleton");
  
   G4double ax_in = 17.* cm;
   G4double by_in = 9.8* cm;
@@ -72,52 +60,45 @@ G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4V
   G4double by_out = 9.8*cm;
   G4double dz= 16.4* cm;
 
-
-  G4EllipticalTube* inner_scapula = new G4EllipticalTube("ScapulaIn", ax_in, by_in, (dz+ 1.*cm)/2);
-  G4EllipticalTube* outer_scapula = new G4EllipticalTube("ScapulaOut", ax_out, by_out, dz/2);
+  auto* inner_scapula = new G4EllipticalTube("ScapulaIn", ax_in, by_in, (dz+ 1.*cm)/2);
+  auto* outer_scapula = new G4EllipticalTube("ScapulaOut", ax_out, by_out, dz/2);
   
- 
-  
-
-  G4Box* subtraction = new G4Box("subtraction",ax_out, ax_out, ax_out);
+  auto* subtraction = new G4Box("subtraction",ax_out, ax_out, ax_out);
 
   G4double xx = -ax_out * 0.242 ; //(sin 14deg)
   G4double yy  = - ax_out * 0.97; // (cos 14 deg)
 						   
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm -> rotateZ(14.* degree);
 
- 
-
-  G4SubtractionSolid* scapula_first =  new G4SubtractionSolid("Scapula_first",
+  auto* scapula_first =  new G4SubtractionSolid("Scapula_first",
 							      outer_scapula,
 							      subtraction,
 							      rm, 
 							      G4ThreeVector(xx, yy, 0. *cm));
-
+							      
   G4double xx2 = ax_out * 0.62470 ; //(cos 51.34deg)
   G4double yy2 = ax_out * 0.78087; // (sin 51.34 deg)
 						   
-  G4RotationMatrix* rm2 = new G4RotationMatrix();
+  auto* rm2 = new G4RotationMatrix();
   rm2 -> rotateZ(38.6598* degree);
 
-
-  G4SubtractionSolid* scapula_bone =  new G4SubtractionSolid("Scapula",
+  auto* scapula_bone =  new G4SubtractionSolid("Scapula",
 							     scapula_first,
 							     subtraction,
 							     rm2, 
 							     G4ThreeVector(xx2, yy2, 0. *cm));
 
-  G4SubtractionSolid* scapula =  new G4SubtractionSolid("Scapula",
+  auto* scapula =  new G4SubtractionSolid("Scapula",
 							scapula_bone,
 							inner_scapula);
 
-  G4LogicalVolume* logicRightScapula = new G4LogicalVolume(scapula,
+  auto* logicRightScapula = new G4LogicalVolume(scapula,
 							   skeleton,
 							   "logical" + volumeName,
-							   0, 0, 0);
+							   nullptr, nullptr, nullptr);
 
-  G4VPhysicalVolume* physRightScapula = new G4PVPlacement(0,
+  G4VPhysicalVolume* physRightScapula = new G4PVPlacement(nullptr,
 							  G4ThreeVector(0. * cm, 0. * cm, 24.1 *cm),
 							  "physicalRightScapula",
 							  logicRightScapula,
@@ -125,12 +106,11 @@ G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4V
 							  false,
 							  0, true);
 
-
   // Visualization Attributes
   //G4VisAttributes* RightScapulaVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* RightScapulaVisAtt = new G4VisAttributes(colour);
+  auto* RightScapulaVisAtt = new G4VisAttributes(colour);
   RightScapulaVisAtt->SetForceSolid(wireFrame);
   logicRightScapula->SetVisAttributes(RightScapulaVisAtt);
   G4cout << "RightScapula created !!!!!!" << G4endl;
@@ -151,6 +131,5 @@ G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4V
   G4double RightScapulaMass = (RightScapulaVol)*RightScapulaDensity;
   G4cout << "Mass of RightScapula = " << RightScapulaMass/gram << " g" << G4endl;
 
-  
   return physRightScapula;
 }

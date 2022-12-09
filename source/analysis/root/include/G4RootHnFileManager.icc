@@ -53,11 +53,11 @@ G4bool G4RootHnFileManager<HT>::WriteExtra(
   // TO DO
   // rfile->add_ziper('Z', toolx::compress_buffer);
   // rfile->set_compression(fState.GetCompressionLevel());
-  if ( ! rfile ) return false;
+  if (rfile == nullptr) return false;
 
   // no directory supported in this mode
   auto hdirectory = &(rfile->dir());
-  if ( ! hdirectory ) return false;
+  if (hdirectory == nullptr) return false;
 
   // write histo
   result &= Write(hdirectory, ht, htName);

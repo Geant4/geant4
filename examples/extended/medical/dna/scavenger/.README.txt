@@ -95,7 +95,7 @@ which is invoked only in multi-threading mode.
 To not register a molecule, add this command:
 G4MoleculeCounter::Instance()->DontRegister(G4O2::Definition());
 
-\section SCAVENGER_s3 AN EVENT: PRIMARY GENERATOR
+\section SCAVENGER_s4 AN EVENT: PRIMARY GENERATOR
     
 The primary kinematic consists of a single particle starting at the
 center of the box. The type of the particle and its energy are set
@@ -273,6 +273,8 @@ root plotG.C > scorer.txt
 
 The results show the molecular species (G values) as a function of
 time (ns). Please ignore the O_2^0 molecule.
+The function (plotG()) should have the same name as the
+file without file extension (plotG).
   
 \section SCAVENGER_s12 OTHER
 

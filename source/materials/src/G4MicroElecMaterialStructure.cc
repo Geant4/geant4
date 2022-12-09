@@ -88,7 +88,7 @@ G4MicroElecMaterialStructure::G4MicroElecMaterialStructure(const G4String& matNa
   else {
     ReadMaterialFile();
   }
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -41,6 +41,7 @@
 #include <string_view>
 
 class G4GenericAnalysisManager;
+class G4GenericAnalysisMessenger;
 class G4GenericFileManager;
 class G4HnInformation;
 class G4VNtupleFileManager;
@@ -53,18 +54,17 @@ class G4GenericAnalysisManager : public  G4ToolsAnalysisManager
   friend class G4ThreadLocalSingleton<G4GenericAnalysisManager>;
 
   public:
-    virtual ~G4GenericAnalysisManager();
+    ~G4GenericAnalysisManager() override;
 
     // Static methods
     static G4GenericAnalysisManager* Instance();
     static G4bool IsInstance();
 
     // MT/MPI
-    virtual void SetNtupleMerging(G4bool mergeNtuples,
-                   G4int nofReducedNtupleFiles = 0) override;
-    virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
-    virtual void SetBasketSize(unsigned int basketSize)  override;
-    virtual void SetBasketEntries(unsigned int basketEntries)  override;
+    void SetNtupleMerging(G4bool mergeNtuples, G4int nofReducedNtupleFiles = 0) override;
+    void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
+    void SetBasketSize(unsigned int basketSize) override;
+    void SetBasketEntries(unsigned int basketEntries) override;
 
     // write in an extra file
     G4bool WriteH1(G4int id, const G4String& fileName);
@@ -80,14 +80,9 @@ class G4GenericAnalysisManager : public  G4ToolsAnalysisManager
 
   protected:
     // Virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName) override;
-    virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl(G4bool reset = true) override;
-    virtual G4bool ResetImpl() final;
-    virtual G4bool IsOpenFileImpl() const final;
+    G4bool OpenFileImpl(const G4String& fileName) override;
     // File manager access
-    virtual std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName) final;
-
+    std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName) final;
 
   private:
     G4GenericAnalysisManager();
@@ -100,6 +95,7 @@ class G4GenericAnalysisManager : public  G4ToolsAnalysisManager
     static constexpr std::string_view fkClass { "G4GenericAnalysisManager" };
 
     // Data members
+    std::unique_ptr<G4GenericAnalysisMessenger>  fMessenger;
     std::shared_ptr<G4GenericFileManager> fFileManager { nullptr };
     // add G4GenericNtupleManager
     // this class will be analogic to file managers but with ntuples

@@ -65,11 +65,11 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #endif    
   if( G4RegularNavigationHelper::Instance()->GetStepLengths().size() == 0 ||
       aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0)  { // we are only counting dose deposit
-    return theEnergies.size();
+    return (G4int)theEnergies.size();
   }
   if( G4RegularNavigationHelper::Instance()->GetStepLengths().size() == 1 ) {
     theEnergies.push_back(edep);
-    return theEnergies.size();
+    return (G4int)theEnergies.size();
   }
 
   if( !thePhantomParam ) GetPhantomParam(TRUE);
@@ -86,7 +86,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
   G4double stepLength = aStep->GetStepLength();
   G4double slSum = 0.;
   unsigned int ii;
-  for( ii = 0; ii < rnsl.size(); ii++ ){
+  for( ii = 0; ii < rnsl.size(); ++ii ){
     G4double sl = rnsl[ii].second;
     slSum += sl;
 #ifdef VERBOSE_ENERSPLIT
@@ -105,7 +105,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #endif
   //----- No iterations to correct elost and msc => distribute energy deposited according to geometrical step length in each voxel
   if( theNIterations == 0 ) { 
-    for( ii = 0; ii < rnsl.size(); ii++ ){
+    for( ii = 0; ii < rnsl.size(); ++ii ){
       G4double sl = rnsl[ii].second;
       G4double edepStep = edep * sl/slSum; //divide edep along steps, proportional to step length
 #ifdef VERBOSE_ENERSPLIT
@@ -122,7 +122,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
     // print corrected energy at iteration 0 
     if(verbose)  {
       G4double slSum = 0.;
-      for( ii = 0; ii < rnsl.size(); ii++ ){
+      for( ii = 0; ii < rnsl.size(); ++ii ){
 	G4double sl = rnsl[ii].second;
 	slSum += sl;
       }
@@ -143,10 +143,10 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
     G4EmCalculator emcalc;
     G4double totalELost = 0.;
     std::vector<G4double> stepLengths;
-    for( int iiter = 1; iiter <= theNIterations; iiter++ ) {
+    for( G4int iiter = 1; iiter <= theNIterations; ++iiter ) {
       //--- iter1: distribute true step length in each voxel: geom SL in each voxel is multiplied by a constant so that the sum gives the total true step length
       if( iiter == 1 ) {
-	for( ii = 0; ii < rnsl.size(); ii++ ){
+	for( ii = 0; ii < rnsl.size(); ++ii ){
 	  G4double sl = rnsl[ii].second;
 	  stepLengths.push_back( sl * slRatio );
 #ifdef VERBOSE_ENERSPLIT
@@ -154,7 +154,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #endif
 	}
 	
-	for( ii = 0; ii < rnsl.size(); ii++ ){
+	for( ii = 0; ii < rnsl.size(); ++ii ){
 	  const G4Material* mate = thePhantomParam->GetMaterial( rnsl[ii].first );
 	  G4double dEdx = 0.;
 	  if( kinEnergyPre > 0. ) {  //t check this 
@@ -179,7 +179,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 	//-- Get ratios for each energy 
 	slSum = 0.;
 	kinEnergyPre = kinEnergyPreOrig;
-	for( ii = 0; ii < rnsl.size(); ii++ ){
+	for( ii = 0; ii < rnsl.size(); ++ii ){
 	  const G4Material* mate = thePhantomParam->GetMaterial( rnsl[ii].first );
 	  stepLengths[ii] = theElossExt->TrueStepLength( kinEnergyPre, rnsl[ii].second , mate, part );
 	  kinEnergyPre -= theEnergies[ii];
@@ -198,7 +198,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #ifdef VERBOSE_ENERSPLIT
 	if(verbose) G4cout << "G4EnergySplitter::SplitEnergyInVolumes" << ii << " RN: iter" << iiter << " step ratio " << slRatio << G4endl;
 #endif
-	for( ii = 0; ii < rnsl.size(); ii++ ){
+	for( ii = 0; ii < rnsl.size(); ++ii ){
 	  stepLengths[ii] *= slratio;
 #ifdef VERBOSE_ENERSPLIT
 	  if(verbose) G4cout  << "G4EnergySplitter::SplitEnergyInVolumes"<< ii << " RN: iter" << iiter << " corrected step length " << stepLengths[ii] << G4endl;
@@ -208,7 +208,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 	//---- Recalculate energy lost with this new step lengths
         kinEnergyPre = aStep->GetPreStepPoint()->GetKineticEnergy();
 	totalELost = 0.;
-	for( ii = 0; ii < rnsl.size(); ii++ ){
+	for( ii = 0; ii < rnsl.size(); ++ii ){
 	  const G4Material* mate = thePhantomParam->GetMaterial( rnsl[ii].first );
 	  G4double dEdx = 0.;
 	  if( kinEnergyPre > 0. ) {
@@ -238,7 +238,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #ifdef VERBOSE_ENERSPLIT
       G4double elostTot = 0.; 
 #endif
-      for( ii = 0; ii < theEnergies.size(); ii++ ){
+      for( ii = 0; ii < theEnergies.size(); ++ii ){
 	theEnergies[ii] *= enerRatio;
 #ifdef VERBOSE_ENERSPLIT
 	elostTot += theEnergies[ii];
@@ -253,7 +253,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
     
   }
   
-  return theEnergies.size();
+  return (G4int)theEnergies.size();
 }
 
 
@@ -261,8 +261,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 void G4EnergySplitter::GetPhantomParam(G4bool mustExist)
 {
   G4PhysicalVolumeStore* pvs = G4PhysicalVolumeStore::GetInstance();
-  std::vector<G4VPhysicalVolume*>::iterator cite;
-  for( cite = pvs->begin(); cite != pvs->end(); cite++ ) {
+  for( auto cite = pvs->cbegin(); cite != pvs->cend(); ++cite ) {
     //    G4cout << " PV " << (*cite)->GetName() << " " << (*cite)->GetTranslation() << G4endl;
     if( IsPhantomVolume( *cite ) ) {
       const G4PVParameterised* pvparam = static_cast<const G4PVParameterised*>(*cite);
@@ -301,13 +300,13 @@ G4bool G4EnergySplitter::IsPhantomVolume( G4VPhysicalVolume* pv )
 //-----------------------------------------------------------------------
 void G4EnergySplitter::GetLastVoxelID( G4int& voxelID)
 {	
-  voxelID = (*(G4RegularNavigationHelper::Instance()->GetStepLengths().begin())).first;
+  voxelID = (*(G4RegularNavigationHelper::Instance()->GetStepLengths().cbegin())).first;
 }
 
 //-----------------------------------------------------------------------
 void G4EnergySplitter::GetFirstVoxelID( G4int& voxelID)
 {
-  voxelID =  (*(G4RegularNavigationHelper::Instance()->GetStepLengths().rbegin())).first;
+  voxelID =  (*(G4RegularNavigationHelper::Instance()->GetStepLengths().crbegin())).first;
 }
 
 //-----------------------------------------------------------------------
@@ -319,7 +318,7 @@ void G4EnergySplitter::GetVoxelID( G4int stepNo, G4int& voxelID )
 	      FatalErrorInArgument,
 	      G4String("stepNo = " + G4UIcommand::ConvertToString(stepNo) + ", number of voxels = " + G4UIcommand::ConvertToString(G4int(G4RegularNavigationHelper::Instance()->GetStepLengths().size())) ).c_str());
   }
-  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::Instance()->GetStepLengths().begin();
+  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::Instance()->GetStepLengths().cbegin();
   advance( ite, stepNo );
   voxelID = (*ite).first;
 
@@ -329,7 +328,7 @@ void G4EnergySplitter::GetVoxelID( G4int stepNo, G4int& voxelID )
 //-----------------------------------------------------------------------
 void G4EnergySplitter::GetStepLength( G4int stepNo, G4double& stepLength )
 {
-  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::Instance()->GetStepLengths().begin();
+  std::vector< std::pair<G4int,G4double> >::const_iterator ite = G4RegularNavigationHelper::Instance()->GetStepLengths().cbegin();
   advance( ite, stepNo );
   stepLength = (*ite).second;
 }

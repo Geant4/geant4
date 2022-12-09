@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file GpsPrimaryGeneratorAction.cc
-/// \brief Implementation of the GpsPrimaryGeneratorActionclass
+/// \file common/src/GpsPrimaryGeneratorAction.cc
+/// \brief Implementation of the Common::GpsPrimaryGeneratorActionclass
 
 #include "GpsPrimaryGeneratorAction.hh"
 
@@ -33,14 +33,12 @@
 #include "G4GeneralParticleSource.hh"
 #include "G4SystemOfUnits.hh"
 
-const G4String GpsPrimaryGeneratorAction::fgkDefaultParticleName = "e-";
-const G4double GpsPrimaryGeneratorAction::fgkDefaultEnergy = 1.*MeV;
+namespace Common
+{
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GpsPrimaryGeneratorAction::GpsPrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction(),
-    fGeneralParticleSource(nullptr)
 {
   fGeneralParticleSource  = new G4GeneralParticleSource();
 }
@@ -59,5 +57,9 @@ void GpsPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // this function is called at the begining of event
 
   fGeneralParticleSource->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 }
 

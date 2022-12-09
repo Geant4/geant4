@@ -35,20 +35,27 @@
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+#include "DetectorMessenger.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ProductionCuts.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::DetectorConstruction()
-: G4VUserDetectorConstruction(),
-  fpPhysiWorld(NULL), fpLogicWorld(NULL), fpSolidWorld(NULL)
-{}
+: G4VUserDetectorConstruction()
+{
+    // create commands for interactive definition of the detector
+    fDetectorMessenger = new DetectorMessenger(this);
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::~DetectorConstruction()
-{}
+{
+    delete fDetectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -86,6 +93,9 @@ void DetectorConstruction::DefineMaterials()
     a = 15.9994*g/mole;
     G4Element* elO  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 
+    a = 14.0067*g/mole;
+    G4Element* elN  = new G4Element(name="Nitrogen"  ,symbol="N" , z= 7., a);
+
 // Definition of Tetrahydrofurane (THF)
 
     density=1.346*g/cm3;
@@ -94,22 +104,46 @@ void DetectorConstruction::DefineMaterials()
     fpTHFMaterial->AddElement(elC, nAtoms=4);
     fpTHFMaterial->AddElement(elH, nAtoms=8);
     fpTHFMaterial->AddElement(elO, nAtoms=1);
+
+// Definition of Nitrogen in nanodosimetry experiments
+
+    density = 0.34e-6*g/cm3;
+
+    fpN2Material = new G4Material("N2", density, nComponents=1);
+    fpN2Material->AddElement(elN, nAtoms=2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
-// WORLD VOLUME
+    G4double diameter;
+    G4double highz;
+    G4Material* targetMaterial;
+    G4Material* worldMaterial;
 
-    fWorldSizeX  = 10*nanometer;
-    fWorldSizeY  = 10*nanometer;
-    fWorldSizeZ  = 10*nanometer;
+    if (fGeomType == "dna"){
+        // nanometric geometry
+        fWorldSize  = 20.*nm;
+        diameter = 2.3*nm;
+        highz = 3.4*nm;
+        targetMaterial = fpTHFMaterial;
+        worldMaterial = fpWaterMaterial;
+    } else {
+        // macrometric geometry (experimental target in nanodosimetry)
+        fWorldSize  = 2*cm;
+        diameter = 1*cm;
+        highz = 1*cm;;
+        targetMaterial = fpN2Material;
+        worldMaterial = fpN2Material;
+    }
+
 
     fpSolidWorld = new G4Box("World", //its name
-                             fWorldSizeX/2,fWorldSizeY/2,fWorldSizeZ/2);  //its size
+                             fWorldSize/2,fWorldSize/2,fWorldSize/2);  //its size
 
     fpLogicWorld = new G4LogicalVolume(fpSolidWorld,        //its solid
-                                       fpWaterMaterial,        //its material
+                                       worldMaterial,        //its material
                                        "World");                //its name
 
     fpPhysiWorld = new G4PVPlacement(0,                        //no rotation
@@ -120,13 +154,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                                      false,                        //no boolean operation
                                      0);                        //copy number
 
-    G4double diameter=2.3*nanometer;
-    G4double highz=3.4*nanometer;
+    G4Tubs* solidTarget = new G4Tubs("Target",0, diameter/2., highz/2., 0*degree, 360*degree);
 
-    fpSolidTarget = new G4Tubs("Target",0, diameter/2., highz/2., 0*degree, 360*degree);
-
-    G4LogicalVolume* logicTarget = new G4LogicalVolume(fpSolidTarget,   //its solid
-                                                       fpTHFMaterial,  //its material
+    G4LogicalVolume* logicTarget = new G4LogicalVolume(solidTarget,   //its solid
+                                                       targetMaterial,  //its material
                                                        "Target");   //its name
 
     new G4PVPlacement(0,                             //no rotation
@@ -148,3 +179,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
     return fpPhysiWorld;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+  void DetectorConstruction::SetGeometry(const G4String& name)
+  {
+    fGeomType = name;
+
+    // tell RunManager about changes
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+
+  }

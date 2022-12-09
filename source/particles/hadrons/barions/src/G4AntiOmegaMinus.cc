@@ -97,7 +97,7 @@ G4AntiOmegaMinus* G4AntiOmegaMinus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiOmegaMinus*>(anInstance);
+  theInstance = static_cast<G4AntiOmegaMinus*>(anInstance);
   return theInstance;
 }
 

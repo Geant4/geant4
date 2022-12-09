@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.cc
+/// \file B4/B4d/src/DetectorConstruction.cc
 /// \brief Implementation of the B4d::DetectorConstruction class
 
 #include "DetectorConstruction.hh"
@@ -59,18 +59,6 @@ namespace B4d
 
 G4ThreadLocal
 G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DetectorConstruction::DetectorConstruction()
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DetectorConstruction::~DetectorConstruction()
-{
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -146,16 +134,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                  defaultMaterial,  // its material
                  "World");         // its name
 
-  auto worldPV
-    = new G4PVPlacement(
-                 0,                // no rotation
-                 G4ThreeVector(),  // at (0,0,0)
-                 worldLV,          // its logical volume
-                 "World",          // its name
-                 0,                // its mother  volume
-                 false,            // no boolean operation
-                 0,                // copy number
-                 fCheckOverlaps);  // checking overlaps
+  auto worldPV = new G4PVPlacement(nullptr,  // no rotation
+    G4ThreeVector(),                         // at (0,0,0)
+    worldLV,                                 // its logical volume
+    "World",                                 // its name
+    nullptr,                                 // its mother  volume
+    false,                                   // no boolean operation
+    0,                                       // copy number
+    fCheckOverlaps);                         // checking overlaps
 
   //
   // Calorimeter
@@ -170,15 +156,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                  defaultMaterial, // its material
                  "Calorimeter");  // its name
 
-  new G4PVPlacement(
-                 0,                // no rotation
-                 G4ThreeVector(),  // at (0,0,0)
-                 calorLV,          // its logical volume
-                 "Calorimeter",    // its name
-                 worldLV,          // its mother  volume
-                 false,            // no boolean operation
-                 0,                // copy number
-                 fCheckOverlaps);  // checking overlaps
+  new G4PVPlacement(nullptr,  // no rotation
+    G4ThreeVector(),          // at (0,0,0)
+    calorLV,                  // its logical volume
+    "Calorimeter",            // its name
+    worldLV,                  // its mother  volume
+    false,                    // no boolean operation
+    0,                        // copy number
+    fCheckOverlaps);          // checking overlaps
 
   //
   // Layer
@@ -214,15 +199,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                  absorberMaterial, // its material
                  "AbsoLV");          // its name
 
-   new G4PVPlacement(
-                 0,                // no rotation
-                 G4ThreeVector(0., 0., -gapThickness/2), //  its position
-                 absorberLV,       // its logical volume
-                 "Abso",           // its name
-                 layerLV,          // its mother  volume
-                 false,            // no boolean operation
-                 0,                // copy number
-                 fCheckOverlaps);  // checking overlaps
+  new G4PVPlacement(nullptr,                   // no rotation
+    G4ThreeVector(0., 0., -gapThickness / 2),  //  its position
+    absorberLV,                                // its logical volume
+    "Abso",                                    // its name
+    layerLV,                                   // its mother  volume
+    false,                                     // no boolean operation
+    0,                                         // copy number
+    fCheckOverlaps);                           // checking overlaps
 
   //
   // Gap
@@ -237,15 +221,14 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                  gapMaterial,      // its material
                  "GapLV");      // its name
 
-  new G4PVPlacement(
-                 0,                // no rotation
-                 G4ThreeVector(0., 0., absoThickness/2), //  its position
-                 gapLV,            // its logical volume
-                 "Gap",            // its name
-                 layerLV,          // its mother  volume
-                 false,            // no boolean operation
-                 0,                // copy number
-                 fCheckOverlaps);  // checking overlaps
+  new G4PVPlacement(nullptr,                   // no rotation
+    G4ThreeVector(0., 0., absoThickness / 2),  //  its position
+    gapLV,                                     // its logical volume
+    "Gap",                                     // its name
+    layerLV,                                   // its mother  volume
+    false,                                     // no boolean operation
+    0,                                         // copy number
+    fCheckOverlaps);                           // checking overlaps
 
   //
   // print parameters

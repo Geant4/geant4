@@ -57,7 +57,7 @@ void EventAction::Initialize()
     fDNAGeometry->GetChromosomeMapper()->GetChromosomeKeys();
   for(const auto& key : keys)
   {
-    uint32_t key_i = G4::hashing::crc32::hash(key);
+    uint32_t key_i = G4::hashing::crc32::Hash(key);
     fChromoHitMap[key_i] = nullptr;
   }
   fInitialized = true;
@@ -88,7 +88,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
   //ChromosomeHit* theHit;
   for(const auto& it : keys)
   {
-    uint32_t key_i = G4::hashing::crc32::hash(it);
+    uint32_t key_i = G4::hashing::crc32::Hash(it);
     fChromoHitMap[key_i] = new ChromosomeHit(it);
   }
 }
@@ -121,7 +121,7 @@ void EventAction::EndOfEventAction(const G4Event*)
 void EventAction::AddChromosomeEdep(const G4String& key, const G4double& e,
                                     const G4bool& isDNA)
 {
-  uint32_t key_i = G4::hashing::crc32::hash(key);
+  uint32_t key_i = G4::hashing::crc32::Hash(key);
   auto it = fChromoHitMap.find(key_i);
   if(it != fChromoHitMap.end())
   {

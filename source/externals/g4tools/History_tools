@@ -1,7 +1,44 @@
+6.1.0:
+- tools/fpng, fpng.icc: a pure header, thread safe, png writer.
+- tools/toojpeg, toojpeg.icc: a pure header, thread safe, jpeg writer.
+- tools/offscreen/session, sg_viewer: to handle offscreen graphics.
+- tools/sg/gl2ps_action: revisit lightening logic to be closer than the OpenGL one.
+- tools/sg/zb_action: revisit lightening logic to be closer than the OpenGL one.
+- tools/sg/zb_action: handle blending (transparency).
+- tools/sg/plots_viewer: handle blending (transparency).
+- tools/zb/buffer: handle blending (transparency).
+- tools/sg/torche, head_light, gl2ps_action, render_action: handle ambient color lightening.
+- toolx/sg/GL_action: handle ambient color lightening.
+- tools/sg/write_paper: gl2ps, zb formats: handle transparency.
+- tools/gl2ps: handle the TOOLS_GL2PS_PORTABLE_SORT to be able to produce same output
+  file on all platforms. (Related to the fact that qsort, for "same objects", may not
+  produce the same "equal" sub lists on all platforms).
+
+- tools/typedefs, rroot/file, wroot/file and toolx/Windows/glarea, Qt/session, mpi/wrmpi:
+  some #ifdef for MinGW. The ones in wroot/file are important to produce good .root files.
+- tools/gl2ps: replace the usage of sprintf, by strcpy or std::ostringstream.
+
+- Fixed compilation warnings on Intel-icx compiler for variables
+  set but not used in plotter::rep_bins2D_xy_random_one() and
+  plots::update_sg().
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+- toolx/X11/base_session: show_window(): check that the window is not already mapped. (Else it hangs in the XIfEvent).
+
+- tools/version: pass to 6.1.0.
+
 6.0.1:
+- intel-icx: fix compilation warnings for the variable "size"
+  set but not used glutess/render/static_RenderFan, static_RenderStrip.
+- intel-icx: fix compilation warnings #3179: deprecated conversion of string literal to char*.
+- tools/typedefs, rroot/file, wroot/file and toolx/Windows/glarea, Qt/session, mpi/wrmpi:
+  some #ifdef for MinGW. The ones in wroot/file are importants to produce good .root files.
+- tools/gl2ps: replace the usage of sprintf, by strcpy or std::ostringstream.
+- Fixed compilation warnings on Intel-icx compiler for variables
+  set but not used in plotter::rep_bins2D_xy_random_one() and
+  plots::update_sg().
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
 - toolx/X11/base_session: show_window(): check that the window is not already mapped. (Else it hangs in the XIfEvent).
 - tools/version: pass to 6.0.1.
-
 
 6.0.0: toolx directory and namespace.
 - have code related to "externals" under toolx directory and namespaced with toolx. It concerns code related to Qt, Windows, X11, Xt, OpenGL, hdf5, expat, mpi, zlib.

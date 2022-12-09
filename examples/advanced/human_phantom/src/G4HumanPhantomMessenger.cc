@@ -38,64 +38,63 @@
 #include "G4RunManager.hh"
 
 G4HumanPhantomMessenger::G4HumanPhantomMessenger(G4HumanPhantomConstruction* myUsrPhtm)
-  :myUserPhantom(myUsrPhtm),bps(false)
+  :fUserPhantom(myUsrPhtm),fBps(false)
 { 
-  phantomDir = new G4UIdirectory("/phantom/");
-  phantomDir->SetGuidance("Set Your Phantom.");
+  fPhantomDir = new G4UIdirectory("/phantom/");
+  fPhantomDir->SetGuidance("Set Your Phantom.");
   
-  bpDir = new G4UIdirectory("/bodypart/");
-  bpDir->SetGuidance("Add Body Part to Phantom");
+  fDir = new G4UIdirectory("/bodypart/");
+  fDir->SetGuidance("Add Body Part to Phantom");
 
-  modelCmd = new G4UIcmdWithAString("/phantom/setPhantomModel",this);
-  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNLFemale, ORNLMale, MIX, MIRDHead, ORNLHead.");
-  modelCmd->SetParameterName("phantomModel",true);
-  modelCmd->SetDefaultValue("MIRD");
-  modelCmd->SetCandidates("MIRD ORNLFemale ORNLMale MIX MIRDHead ORNLHead");
-  modelCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fModelCmd = new G4UIcmdWithAString("/phantom/setPhantomModel",this);
+  fModelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNLFemale, ORNLMale, MIX, MIRDHead, ORNLHead.");
+  fModelCmd->SetParameterName("phantomModel",true);
+  fModelCmd->SetDefaultValue("MIRD");
+  fModelCmd->SetCandidates("MIRD ORNLFemale ORNLMale MIRDHead ORNLHead");
+  fModelCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
-  sexCmd = new G4UIcmdWithAString("/phantom/setPhantomSex",this);
-  sexCmd->SetGuidance("Set sex of Phantom: Male or Female.");
-  sexCmd->SetParameterName("phantomSex",true);
-  sexCmd->SetDefaultValue("Female");
-  sexCmd->SetCandidates("Male Female");
-  sexCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fSexCmd = new G4UIcmdWithAString("/phantom/setPhantomSex",this);
+  fSexCmd->SetGuidance("Set sex of Phantom: Male or Female.");
+  fSexCmd->SetParameterName("phantomSex",true);
+  fSexCmd->SetDefaultValue("Female");
+  fSexCmd->SetCandidates("Male Female");
+  fSexCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
   
-  bodypartCmd = new G4UIcmdWithAString("/bodypart/addBodyPart",this);
-  bodypartCmd->SetGuidance("Add a Body Part to Phantom");
-  bodypartCmd->SetParameterName("bpName",true);
-  bodypartCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fBodypartCmd = new G4UIcmdWithAString("/bodypart/addBodyPart",this);
+  fBodypartCmd->SetGuidance("Add a Body Part to Phantom");
+  fBodypartCmd->SetParameterName("bpName",true);
+  fBodypartCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  endCmd = new G4UIcmdWithoutParameter("/phantom/buildNewPhantom",this);
-  endCmd->SetGuidance("Build your Phantom.");
-  endCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  fEndCmd = new G4UIcmdWithoutParameter("/phantom/buildNewPhantom",this);
+  fEndCmd->SetGuidance("Build your Phantom.");
+  fEndCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 G4HumanPhantomMessenger::~G4HumanPhantomMessenger()
 {
-  delete  modelCmd;
-  delete  sexCmd;
-  delete  bodypartCmd;
-  delete  endCmd;
-  delete  phantomDir;
-  delete  bpDir;
+  delete  fModelCmd;
+  delete  fSexCmd;
+  delete  fBodypartCmd;
+  delete  fEndCmd;
+  delete  fPhantomDir;
+  delete  fDir;
 }
 
 void G4HumanPhantomMessenger::SetNewValue(G4UIcommand* command,G4String newValue){ 
 
-  if( command == modelCmd )
+  if( command == fModelCmd )
     { 
-      myUserPhantom->SetPhantomModel(newValue); 
+      fUserPhantom->SetPhantomModel(newValue); 
     }       
-  if( command == sexCmd )
+  if( command == fSexCmd )
     { 
-      myUserPhantom->SetPhantomSex(newValue); 
+      fUserPhantom->SetPhantomSex(newValue); 
     }
-  if( command == bodypartCmd )
+  if( command == fBodypartCmd )
     {
       AddBodyPart(newValue);
     }
-  if( command == endCmd )
+  if( command == fEndCmd )
     { 
       G4cout << 
 	" ****************>>>> NEW PHANTOM CONSTRUCTION <<<<***************** " 
@@ -105,24 +104,23 @@ void G4HumanPhantomMessenger::SetNewValue(G4UIcommand* command,G4String newValue
 
 void  G4HumanPhantomMessenger::AddBodyPart(G4String newBodyPartSensitivity)
 {
-
   char* str = new char[newBodyPartSensitivity.length()+1];
 
   strcpy(str, newBodyPartSensitivity.c_str()); 
   
   std::string bpart = strtok(str," ");
 
-  std::string sensitivity = strtok(NULL," ");
+  std::string sensitivity = strtok(nullptr," ");
 
   if(sensitivity=="yes"){
-    bps=true;
+    fBps=true;
   }else{
-    bps=false;
+    fBps=false;
   }
 
   G4cout << " >>> Body Part = " << bpart << "\n"
 	 << " >>> Sensitivity = " << sensitivity << G4endl;
 
-  myUserPhantom->SetBodyPartSensitivity(bpart,bps);
+  fUserPhantom->SetBodyPartSensitivity(bpart,fBps);
 }
 

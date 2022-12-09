@@ -85,7 +85,7 @@ G4PionMinus* G4PionMinus::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4PionMinus*>(anInstance);
+  theInstance = static_cast<G4PionMinus*>(anInstance);
   return theInstance;
 }
 

@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-18-08 Susanna Guatelli (human_phantom-V11-00-02)
+- README file updated
+- code review
+- error (not affecting the simulation) in gdml format removed
+
+## 2022-23-06 Susanna Guatelli (human_phantom-V11-00-01)
+- MIX phantom eliminated as obsolete
+- code review
 
 ## 2021-12-10 Ben Morgan (human_phantom-V11-00-00)
 - Change to new Markdown History format

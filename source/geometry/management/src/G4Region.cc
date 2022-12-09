@@ -175,7 +175,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   // its material to the list if not already present
   //
   G4Region* currentRegion = nullptr;
-  size_t noDaughters = lv->GetNoDaughters();
+  std::size_t noDaughters = lv->GetNoDaughters();
   G4Material* volMat = lv->GetMaterial();
   if((volMat == nullptr) && fInMassGeometry)
   {
@@ -217,10 +217,10 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
 
     if (pParam->GetMaterialScanner() != nullptr)
     {
-      size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
-      for (size_t mat=0; mat<matNo; ++mat)
+      std::size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
+      for (std::size_t mat=0; mat<matNo; ++mat)
       {
-        volMat = pParam->GetMaterialScanner()->GetMaterial(mat);
+        volMat = pParam->GetMaterialScanner()->GetMaterial((G4int)mat);
         if(!volMat && fInMassGeometry)
         {
           std::ostringstream message;
@@ -242,10 +242,10 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     }
     else
     {
-      size_t repNo = daughterPVol->GetMultiplicity();
-      for (size_t rep=0; rep<repNo; ++rep)
+      std::size_t repNo = daughterPVol->GetMultiplicity();
+      for (std::size_t rep=0; rep<repNo; ++rep)
       {
-        volMat = pParam->ComputeMaterial(rep, daughterPVol);
+        volMat = pParam->ComputeMaterial((G4int)rep, daughterPVol);
         if((volMat == nullptr) && fInMassGeometry)
         {
           std::ostringstream message;
@@ -270,7 +270,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   }
   else
   {
-    for (size_t i=0; i<noDaughters; ++i)
+    for (std::size_t i=0; i<noDaughters; ++i)
     {
       G4LogicalVolume* daughterLVol = lv->GetDaughter(i)->GetLogicalVolume();
       if (!daughterLVol->IsRootRegion())
@@ -416,7 +416,7 @@ G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
   G4LogicalVolume* currLog = thePhys->GetLogicalVolume();
   if (currLog->GetRegion()==this) {return true;}
 
-  G4int nDaughters = currLog->GetNoDaughters();
+  std::size_t nDaughters = currLog->GetNoDaughters();
   while (nDaughters--)  // Loop checking, 06.08.2015, G.Cosmo
   {
     if (BelongsTo(currLog->GetDaughter(nDaughters))) {return true;}
@@ -475,12 +475,12 @@ G4Region* G4Region::GetParentRegion(G4bool& unique) const
   //
   for(auto lvItr=lvStore->cbegin(); lvItr!=lvStore->cend(); ++lvItr)
   {
-    G4int nD = (*lvItr)->GetNoDaughters();
+    std::size_t nD = (*lvItr)->GetNoDaughters();
     G4Region* aR = (*lvItr)->GetRegion();
 
     // Loop over all daughters of each logical volume
     //
-    for(auto iD=0; iD<nD; ++iD)
+    for(std::size_t iD=0; iD<nD; ++iD)
     {
       if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
       { 

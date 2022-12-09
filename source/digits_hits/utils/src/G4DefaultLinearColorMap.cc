@@ -28,14 +28,6 @@
 
 #include "G4DefaultLinearColorMap.hh"
 
-G4DefaultLinearColorMap::G4DefaultLinearColorMap(G4String mName)
-  : G4VScoreColorMap(mName)
-{
-  ;
-}
-
-G4DefaultLinearColorMap::~G4DefaultLinearColorMap() { ; }
-
 void G4DefaultLinearColorMap::GetMapColor(G4double val, G4double color[4])
 {
   G4double value;

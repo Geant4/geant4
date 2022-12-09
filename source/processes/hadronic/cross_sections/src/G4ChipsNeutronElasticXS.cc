@@ -175,12 +175,12 @@ G4double G4ChipsNeutronElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ,
   G4double pEn=pMom;
   onlyCS=false;
 
-  G4bool in=false;                     // By default the isotope must be found in the AMDB
+  G4bool in=false;                   // By default the isotope must be found in the AMDB
   lastP   = 0.;                      // New momentum history (nothing to compare with)
   lastN   = tgN;                     // The last N of the calculated nucleus
   lastZ   = tgZ;                     // The last Z of the calculated nucleus
-  lastI   = colN.size();             // Size of the Associative Memory DB in the heap
-  if(lastI) for(G4int i=0; i<lastI; i++) // Loop over proj/tgZ/tgN lines of DB
+  lastI   = (G4int)colN.size();      // Size of the Associative Memory DB in the heap
+  if(lastI) for(G4int i=0; i<lastI; ++i) // Loop over proj/tgZ/tgN lines of DB
   {                                  // The nucleus with projPDG is found in AMDB
     if(colN[i]==tgN && colZ[i]==tgZ) // Isotope is foind in AMDB
     {

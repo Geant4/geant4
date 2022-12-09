@@ -200,7 +200,8 @@ G4bool G4BiasingOperatorStateNotifier::Notify( G4ApplicationState requestedState
 {
   if ( ( fPreviousState == G4State_Idle ) && ( requestedState == G4State_GeomClosed ) )
     {
-      for ( size_t i = 0 ; i < G4VBiasingOperator::fOperators.Size() ; i++ ) G4VBiasingOperator::fOperators[i]->StartRun();
+      for ( G4int i = 0; i < (G4int)G4VBiasingOperator::fOperators.Size(); ++i )
+        G4VBiasingOperator::fOperators[i]->StartRun();
     }
 
   fPreviousState = requestedState;

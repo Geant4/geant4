@@ -70,23 +70,23 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple,
                 G4int nofMainManagers, G4int nofReducedFiles,
                 G4bool rowWise, G4bool rowMode);
     G4RootNtupleManager() = delete;
-    virtual ~G4RootNtupleManager() = default;
+    ~G4RootNtupleManager() override = default;
 
-   private:
+  private:
     // Methods from the templated base class
-    virtual void CreateTNtupleFromBooking(
-                    RootNtupleDescription*  ntupleDescription) final;
-    virtual void FinishTNtuple(
-                    RootNtupleDescription*  ntupleDescription,
-                    G4bool fromBooking) final;
-    virtual G4bool Reset() final;
-    virtual void Clear() final;
+    void CreateTNtupleFromBooking(RootNtupleDescription* ntupleDescription) final;
+    void FinishTNtuple(RootNtupleDescription* ntupleDescription, G4bool fromBooking) final;
+    G4bool Reset() final;
+    void Clear() final;
     virtual G4bool Merge();
 
     // Set functions
     void SetFileManager(const std::shared_ptr<G4RootFileManager>& fileManager);
     void SetNtupleFile(std::shared_ptr<G4RootFile> file);
     void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
+
+    // New cycle option
+    void SetNewCycle(G4bool value) final;
 
     // Access functions
     const std::vector<RootNtupleDescription*>& GetNtupleDescriptionVector() const;

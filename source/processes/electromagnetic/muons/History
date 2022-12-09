@@ -1,9 +1,29 @@
 # Category emmuons History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-23 Gabriele Cosmo (emmuons-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-07-22 V.Ivanchenko (emmuons-V11-00-06)
+- G4MuonToMuonPairProductionModel - code clean-up
+
+## 2022-07-18 V.Ivanchenko (emmuons-V11-00-05)
+- G4MuonToMuonPairProductionModel - added extra constant and improve 
+    formulas by Siddharth Yajaman
+
+## 2022-07-14 V.Ivanchenko (emmuons-V11-00-04)
+- G4MuonToMuonPairProductionModel, G4MuonToMuonPairProduction - new 
+  model and process proposed by Siddharth Yajaman
+
+## 2022-07-04 V.Ivanchenko (emmuons-V11-00-03)
+- G4MuPairProductionModel, G4MuPairProduction - make more public and 
+    protected method in view of coming new muon pair production by muon
+    process/model; moved one method to source; use G4lrint
 
 ## 2022-06-10 V.Ivanchenko (emmuons-V11-00-02)
 - G4MuIonisation - use G4MuBetheBloch model above 0.2 MeV

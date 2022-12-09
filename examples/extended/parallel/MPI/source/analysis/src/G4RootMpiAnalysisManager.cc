@@ -53,6 +53,7 @@ G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool /*isMaster*/)
 
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4RootMpiNtupleFileManager>(fState);
+  SetNtupleFileManager(fNtupleFileManager);
   fNtupleFileManager->SetFileManager(fFileManager);
   fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
@@ -99,62 +100,56 @@ G4bool G4RootMpiAnalysisManager::OpenFileImpl(const G4String& fileName)
     SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
   }
 
-  auto finalResult = true;
+  auto result = true;
 
   // Open file
   // In difference from base class a file is open also on slave ranks
-  auto result = fFileManager->OpenFile(fileName);
-  finalResult = finalResult && result;
+  result &= fFileManager->OpenFile(fileName);
 
   // Open ntuple file(s) and create ntuples from bookings
-  result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
-  finalResult = finalResult && result;
+  result &= fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
 
-  return finalResult;
+  return result;
 }  
 
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::WriteImpl() 
 {
 
-  auto finalResult = true;
+  auto result = true;
 
   // Call base class method
-  auto result = G4RootAnalysisManager::WriteImpl();
-  finalResult = finalResult && result;
+  result &= G4ToolsAnalysisManager::WriteImpl();
 
   // Write file also on Slave
   // (skipped in base class)
   if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave )  {
     // write all open files
-    result = fFileManager->WriteFiles();
-    finalResult = finalResult && result;
+    result &= fFileManager->WriteFiles();
   }
 
-  Message(kVL2, "write", "slave files", "", finalResult);
+  Message(kVL2, "write", "slave files", "", result);
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::CloseFileImpl(G4bool reset)
 {
-  auto finalResult = true;
+  auto result = true;
 
   // Call base class method
-  auto result = G4RootAnalysisManager::CloseFileImpl(reset);
-  finalResult = finalResult && result;
+  result &= G4RootAnalysisManager::CloseFileImpl(reset);
 
   // Close file also on Slave
   // (skipped in base class)
   if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave )  {
     // close all open files
-    result = fFileManager->CloseFiles();
-    finalResult = finalResult && result;
+    result &= fFileManager->CloseFiles();
   }
 
-  Message(kVL2, "close", "slave files", "", finalResult);
+  Message(kVL2, "close", "slave files", "", result);
 
-  return finalResult;
+  return result;
 
 }

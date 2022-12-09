@@ -45,19 +45,19 @@ G4MCTGenEvent::~G4MCTGenEvent()
 G4int G4MCTGenEvent::AddGenEvent(const void* genevent)
 {
   eventList.push_back(const_cast<void*>(genevent));
-  return eventList.size();
+  return (G4int)eventList.size();
 }
 
 // --------------------------------------------------------------------
 G4int G4MCTGenEvent::GetNofEvents() const
 {
-  return eventList.size();
+  return (G4int)eventList.size();
 }
 
 // --------------------------------------------------------------------
 const void* G4MCTGenEvent::GetGenEvent(G4int i)
 {
-  G4int size = eventList.size();
+  G4int size = (G4int)eventList.size();
   if(i >= 0 && i < size)
     return eventList[i];
   else

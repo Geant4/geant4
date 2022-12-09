@@ -35,6 +35,8 @@
 #include "G4UIQt.hh"
 #include "G4SystemOfUnits.hh"
 
+#define G4warn G4cout
+
 G4Qt3DViewer::G4Qt3DViewer
 (G4Qt3DSceneHandler& sceneHandler, const G4String& name)
 : G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
@@ -56,7 +58,7 @@ void G4Qt3DViewer::Initialise()
   auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
   if (!uiQt) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4Qt3DViewer::G4Qt3DViewer requires G4UIQt"
+    G4warn << "G4Qt3DViewer::G4Qt3DViewer requires G4UIQt"
          << G4endl;
     return;
   }
@@ -237,55 +239,78 @@ void G4Qt3DViewer::KernelVisitDecision () {
   }
 }
 
-G4bool G4Qt3DViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
+G4bool G4Qt3DViewer::CompareForKernelVisit(G4ViewParameters& vp)
 {
-  // Typical comparison.  Taken from OpenGL.
+  // Typical comparison.  Taken from OpenInventor.
   if (
-      (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (lastVP.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
-      (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (lastVP.GetCBDAlgorithmNumber() !=
-       fVP.GetCBDAlgorithmNumber())                               ||
-      (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
-      (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
-      (lastVP.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
-      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
-      (lastVP.GetDefaultVisAttributes()->GetColour() !=
-       fVP.GetDefaultVisAttributes()->GetColour())                ||
-      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
-       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
-      (lastVP.GetVisAttributesModifiers() !=
-       fVP.GetVisAttributesModifiers())                           ||
-      (lastVP.IsSpecialMeshRendering() !=
-       fVP.IsSpecialMeshRendering())
-      ) {
+     (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+     (vp.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
+     (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
+     (vp.IsCulling ()          != fVP.IsCulling ())          ||
+     (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+     (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+     (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+     (vp.GetCBDAlgorithmNumber() !=
+      fVP.GetCBDAlgorithmNumber())                           ||
+     (vp.IsSection ()          != fVP.IsSection ())          ||
+     (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
+     // This assumes use of generic clipping (sectioning, slicing,
+     // DCUT, cutaway).  If a decision is made to implement locally,
+     // this will need changing.  See G4OpenGLViewer::SetView,
+     // G4OpenGLStoredViewer.cc::CompareForKernelVisit and
+     // G4OpenGLStoredSceneHander::CreateSection/CutawayPolyhedron.
+     (vp.IsExplode ()          != fVP.IsExplode ())          ||
+     (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+     (vp.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+     (vp.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
+     (vp.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+     (vp.GetDefaultVisAttributes()->GetColour() !=
+      fVP.GetDefaultVisAttributes()->GetColour())            ||
+     (vp.GetDefaultTextVisAttributes()->GetColour() !=
+      fVP.GetDefaultTextVisAttributes()->GetColour())        ||
+     (vp.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+     (vp.IsPicking ()          != fVP.IsPicking ())          ||
+     // Scaling for Open Inventor is done by the scene handler so it
+     // needs a kernel visit.  (In this respect, it differs from the
+     // OpenGL drivers, where it's done in SetView.)
+     (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
+     (vp.GetVisAttributesModifiers() !=
+      fVP.GetVisAttributesModifiers())                       ||
+     (vp.IsSpecialMeshRendering() !=
+      fVP.IsSpecialMeshRendering())                          ||
+     (vp.GetSpecialMeshRenderingOption() !=
+      fVP.GetSpecialMeshRenderingOption())
+     )
+  return true;
+
+  if (vp.IsDensityCulling () &&
+      (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  if (vp.GetCBDAlgorithmNumber() > 0) {
+    if (vp.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (vp.GetCBDParameters() != fVP.GetCBDParameters()) return true;
   }
 
-  if (lastVP.IsDensityCulling () &&
-      (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
+  if (vp.IsSection () &&
+      (vp.GetSectionPlane () != fVP.GetSectionPlane ()))
     return true;
 
-  if (lastVP.GetCBDAlgorithmNumber() > 0) {
-    if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
-    else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  if (vp.IsCutaway ()) {
+    if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
+    if (vp.GetCutawayPlanes ().size () !=
+        fVP.GetCutawayPlanes ().size ()) return true;
+    for (size_t i = 0; i < vp.GetCutawayPlanes().size(); ++i)
+    if (vp.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+      return true;
   }
 
-  if (lastVP.IsExplode () &&
-      (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+  if (vp.IsExplode () &&
+      (vp.GetExplodeFactor () != fVP.GetExplodeFactor ()))
     return true;
 
-  if (lastVP.IsSpecialMeshRendering() &&
-      (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
+  if (vp.IsSpecialMeshRendering() &&
+      (vp.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
   return false;

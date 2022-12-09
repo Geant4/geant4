@@ -56,7 +56,7 @@ GenerateMultiBody(G4double initialMass,
   finalState.clear();
 
   //daughters' mass
-  G4int numberOfDaughters = masses.size();
+  G4int numberOfDaughters = (G4int)masses.size();
   G4double sumofmasses =
     std::accumulate(masses.begin(), masses.end(), 0.);
   

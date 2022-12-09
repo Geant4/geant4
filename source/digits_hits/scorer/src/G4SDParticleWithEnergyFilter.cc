@@ -60,10 +60,10 @@ G4SDParticleWithEnergyFilter::~G4SDParticleWithEnergyFilter()
 G4bool G4SDParticleWithEnergyFilter::Accept(const G4Step* aStep) const
 {
   if(!fParticleFilter->Accept(aStep))
-    return FALSE;
+    return false;
   if(!fKineticFilter->Accept(aStep))
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
 void G4SDParticleWithEnergyFilter::add(const G4String& particleName)

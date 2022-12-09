@@ -109,7 +109,7 @@ void G4JAEAPolarizedElasticScatteringModel::Initialise(const G4ParticleDefinitio
     const char* path = G4FindDataDir("G4LEDATA");
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
     for(G4int i=0; i<numOfCouples; ++i)
       {
@@ -117,9 +117,9 @@ void G4JAEAPolarizedElasticScatteringModel::Initialise(const G4ParticleDefinitio
 	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
 	const G4ElementVector* theElementVector = material->GetElementVector();
-	G4int nelm = material->GetNumberOfElements();
+	std::size_t nelm = material->GetNumberOfElements();
 
-	for (G4int j=0; j<nelm; ++j)
+	for (std::size_t j=0; j<nelm; ++j)
 	  {
 	    G4int Z = G4lrint((*theElementVector)[j]->GetZ());
 	    if(Z < 1)          { Z = 1; }
@@ -145,7 +145,7 @@ void G4JAEAPolarizedElasticScatteringModel::InitialiseLocal(const G4ParticleDefi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4JAEAPolarizedElasticScatteringModel::ReadData(size_t Z, const char* path)
+void G4JAEAPolarizedElasticScatteringModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1)
     {
@@ -243,7 +243,7 @@ G4double G4JAEAPolarizedElasticScatteringModel::ComputeCrossSectionPerAtom(
     if(!pv) { return xs; }
   }
 
-  G4int n = pv->GetVectorLength() - 1;
+  std::size_t n = pv->GetVectorLength() - 1;
 
   G4double e = GammaEnergy;
   if(e >= pv->Energy(n)) {

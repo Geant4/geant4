@@ -42,24 +42,18 @@
 //
 
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-{
-  SetUnit("MeV");
-}
+  : G4PSMinKinEAtGeneration(name, "MeV", depth) 
+{}
 
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name,
                                                  const G4String& unit,
                                                  G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
-  , EvtMap(0)
+  , EvtMap(nullptr)
 {
   SetUnit(unit);
 }
-
-G4PSMinKinEAtGeneration::~G4PSMinKinEAtGeneration() { ; }
 
 G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -69,10 +63,10 @@ G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   //
   //- check for newly produced particle. e.g. Step number is 1.
   if(aStep->GetTrack()->GetCurrentStepNumber() != 1)
-    return FALSE;
+    return false;
   //- check for this is not a primary particle. e.g. ParentID != 0 .
   if(aStep->GetTrack()->GetParentID() == 0)
-    return FALSE;
+    return false;
 
   //===============================================
   //- This is a newly produced secondary particle.
@@ -87,10 +81,10 @@ G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int index      = GetIndex(aStep);
   G4double kinetic = aStep->GetPreStepPoint()->GetKineticEnergy();
 
-  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
   {
     auto filler = G4VScoreHistFiller::Instance();
-    if(!filler)
+    if(filler == nullptr)
     {
       G4Exception(
         "G4PSMinKinEAtGeneration::ProcessHits", "SCORER0123", JustWarning,
@@ -109,15 +103,15 @@ G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   // -
   // If mapValue exits (e.g not NULL ), compare it with
   // current track's kinetic energy.
-  if(mapValue && (kinetic > *mapValue))
-    return FALSE;
+  if((mapValue != nullptr) && (kinetic > *mapValue))
+    return false;
 
   // -
   // Current Track is a newly produced secondary and has lower
   // kinetic energy than previous one in this geometry.
   //
   EvtMap->set(index, kinetic);
-  return TRUE;
+  return true;
 }
 
 void G4PSMinKinEAtGeneration::Initialize(G4HCofThisEvent* HCE)
@@ -130,21 +124,16 @@ void G4PSMinKinEAtGeneration::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSMinKinEAtGeneration::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSMinKinEAtGeneration::clear() { EvtMap->clear(); }
-
-void G4PSMinKinEAtGeneration::DrawAll() { ; }
 
 void G4PSMinKinEAtGeneration::PrintAll()
 {
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, energy] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  energy: " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  energy: " << *(energy) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }

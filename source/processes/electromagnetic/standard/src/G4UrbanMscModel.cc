@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //   
 // GEANT4 Class file
@@ -48,7 +47,6 @@
 // -------------------------------------------------------------------
 // In its present form the model can be  used for simulation 
 //   of the e-/e+ multiple scattering
-//
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,7 +111,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   latDisplasmentbackup = false;
   dispAlg96 = true;
 
-  rangecut = geombig;
   drr      = 0.35;
   finalr   = 10.*CLHEP::um;
 
@@ -431,7 +428,7 @@ void G4UrbanMscModel::StartTracking(G4Track* track)
   firstStep = true; 
   insideskin = false;
   fr = facrange;
-  tlimit = tgeom = rangeinit = rangecut = geombig;
+  tlimit = tgeom = rangeinit = geombig;
   smallstep     = 1.e10;
   stepmin       = tlimitminfix;
   tlimitmin     = 10.*tlimitminfix;            
@@ -503,13 +500,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         G4cout << "G4Urban::Distance to boundary geomlimit= "
             <<geomlimit<<" safety= " << presafety<<G4endl;
       */
-
-      // is it far from boundary ?
-      if(distance < presafety)
-        {
-          latDisplasment = false;   
-          return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
-        }
 
       smallstep += 1.;
       insideskin = false;
@@ -586,7 +576,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       tlimit = std::max(tlimit, stepmin); 
 
       // randomise if not 'small' step and step determined by msc
-      tPathLength = ((tlimit < tPathLength)&&(smallstep > skin)&& !insideskin) 
+      tPathLength = (tlimit < tPathLength && smallstep > skin && !insideskin) 
         ? std::min(tPathLength, Randomizetlimit()) 
 	: std::min(tPathLength, tlimit);
     }
@@ -595,13 +585,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // there no small step/single scattering at boundaries
   else if(steppingAlgorithm == fUseSafety)
     {
-      // is far from boundary
-      if(distance < presafety)
-        {
-          latDisplasment = false;
-          return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
-        }
-
       if(firstStep || (stepStatus == fGeomBoundary)) {
         rangeinit = currentRange;
         fr = facrange;
@@ -634,20 +617,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // there is small step/single scattering at boundaries
   else if(steppingAlgorithm == fUseSafetyPlus)
     {
-      // is far from boundary
-      if(distance < presafety)
-        {
-          latDisplasment = false;
-          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
-        }
-
       if(firstStep || (stepStatus == fGeomBoundary)) {
         rangeinit = currentRange;
         fr = facrange;
-        rangecut = geombig;
         if(mass < masslimite)
           {
-            rangecut = msc[idx]->ecut;
             if(lambda0 > lambdalimit) {
               fr *= (0.84+0.16*lambda0/lambdalimit);
             }
@@ -668,15 +642,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         G4double tmax = drr*currentRange+
                         finalr*(1.-drr)*(2.-finalr/currentRange);
         tPathLength = std::min(tPathLength,tmax); 
-      }
-
-      // condition safety
-      if(currentRange > rangecut) {
-        if(firstStep) {
-          tPathLength = std::min(tPathLength,facsafety*presafety);
-        } else if(stepStatus != fGeomBoundary && presafety > stepmin) {
-          tPathLength = std::min(tPathLength,presafety);
-        } 
       }
 
       // randomise if step determined by msc
@@ -733,9 +698,9 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   if ((tau <= tausmall) || insideskin) {
     zPathLength = std::min(tPathLength, lambda0); 
 
-  } else  if (tPathLength < currentRange*dtrl) {
-    if(tau < taulim) zPathLength = tPathLength*(1.-0.5*tau);
-    else             zPathLength = lambda0*(1.-G4Exp(-tau));
+  } else if (tPathLength < currentRange*dtrl) {
+    zPathLength = (tau < taulim) ? tPathLength*(1.-0.5*tau)
+      : lambda0*(1.-G4Exp(-tau));
 
   } else if(currentKinEnergy < mass || tPathLength == currentRange)  {
     par1 = 1./currentRange;
@@ -896,6 +861,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     // is step extreme small ?
     G4bool extremesmallstep = false;
     G4double tsmall = std::min(tlimitmin,lambdalimit);
+
     G4double theta0;
     if(trueStepLength > tsmall) {
       theta0 = ComputeTheta0(trueStepLength,kinEnergy);
@@ -906,18 +872,16 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     }
 
     static const G4double onesixth = 1./6.;
+    static const G4double one12th = 1./12.;
     static const G4double theta0max = CLHEP::pi*onesixth;
-    //G4cout << "Theta0= " << theta0 << " theta0max= " << theta0max 
-    //             << "  sqrt(tausmall)= " << sqrt(tausmall) << G4endl;
 
     // protection for very small angles
     G4double theta2 = theta0*theta0;
 
     if(theta2 < tausmall) { return cth; }
-    
     if(theta0 > theta0max) { return SimpleScattering(); }
 
-    G4double x = theta2*(1.0 - theta2/12.);
+    G4double x = theta2*(1.0 - theta2*one12th);
     if(theta2 > numlim) {
       G4double sth = 2*std::sin(0.5*theta0);
       x = sth*sth;
@@ -1212,21 +1176,14 @@ void G4UrbanMscModel::InitialiseModelCache()
   // it is assumed, that for the second run only addition
   // of a new G4MaterialCutsCouple is possible
   auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
   if(numOfCouples != msc.size()) { msc.resize(numOfCouples, nullptr); }
   
-  for(size_t j=0; j<numOfCouples; ++j) {
+  for(G4int j=0; j<(G4int)numOfCouples; ++j) {
     auto aCouple = theCoupleTable->GetMaterialCutsCouple(j);
 
-    // cut may be changed before runs
-    G4double cut = aCouple->GetProductionCuts()->GetProductionCut(1);
-    if(nullptr != msc[j]) {
-      msc[j]->ecut = cut;
-      continue; 
-    }
     // new couple
     msc[j] = new mscData();
-    msc[j]->ecut = cut;
     G4double Zeff = aCouple->GetMaterial()->GetIonisation()->GetZeffective();
     msc[j]->sqrtZ = std::sqrt(Zeff);
     G4double lnZ = G4Log(Zeff);

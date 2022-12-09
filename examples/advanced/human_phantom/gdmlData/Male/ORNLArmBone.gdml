@@ -58,7 +58,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
 
  <solids>
 
-  <eltube aunit="cm" lunit="cm" name="OneArmBone" dx="1.21" dy="2.65" dz="31.10" />
+  <eltube lunit="cm" name="OneArmBone" dx="1.21" dy="2.65" dz="31.10" />
 
   <union name="ArmBone">
    <first ref="OneArmBone" />

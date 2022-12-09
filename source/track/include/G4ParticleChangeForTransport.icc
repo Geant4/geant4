@@ -93,38 +93,18 @@ inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
 {
   // use base class's method at first
   InitializeStatusChange(track);
-  //  InitializeLocalEnergyDeposit(track);
-  InitializeSteppingControl(track);
-  //  InitializeTrueStepLength(track);
-  //  InitializeSecondaries(track);
+  InitializeSteppingControl();
 
   // set Energy/Momentum etc. equal to those of the parent particle
   const G4DynamicParticle* pParticle = track.GetDynamicParticle();
-  //  theEnergyChange          = pParticle->GetKineticEnergy();
-  //  theMomentumChange        = pParticle->GetMomentumDirection();
   theVelocityChange     = track.GetVelocity();
   isVelocityChanged     = false;
   thePolarizationChange = pParticle->GetPolarization();
-  //  theProperTimeChange      = pParticle->GetProperTime();
 
-  // set Position/Time etc. equal to those of the parent track
-  //  thePositionChange      = track.GetPosition();
   // set TimeChange equal to local time of the parent track
-  theTimeChange = track.GetLocalTime();
-  // set initial Local/Global time of the parent track
-  theLocalTime0  = track.GetLocalTime();
+  theLocalTime0 = theTimeChange = track.GetLocalTime();
+  // set initial Global time of the parent track
   theGlobalTime0 = track.GetGlobalTime();
-
-  // set touchable equal to the next touchable of the parent track
-  // not set as for now
-  // theTouchableChange     = track.GetNextTouchable();
-
-  // NOTE: almost nothing is initialized here.
-  // theMomentumChange, theProperTimeChange, thePositionChange
-  // and theTimeChange are set by G4Transportation::AlongStepDoIt();
-  // the others are not needed.
-  // Take care when implementing the PostStep related things!
-  // (P. Urban)
 }
 
 inline void G4ParticleChangeForTransport::SetPointerToVectorOfAuxiliaryPoints(

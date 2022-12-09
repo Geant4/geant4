@@ -344,8 +344,8 @@ G4int G4DNACPA100ExcitationModel::RandomSelect(G4double k, const G4String& parti
         if (table != 0)
         {
             G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const size_t n(table->NumberOfComponents());
-            size_t i(n);
+            const G4int n = (G4int)table->NumberOfComponents();
+            G4int i(n);
             G4double value = 0.;
 
  //Verification

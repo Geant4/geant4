@@ -61,14 +61,14 @@ public:
   PhysicsListMessenger(PhysicsList* p = 0);
   virtual ~PhysicsListMessenger();
     
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
+  void SetNewValue(G4UIcommand*, G4String) override;
+  
 private:
   
   PhysicsList* fPhysicsList;
     
-  G4UIcmdWithAString*        fPListCmd;
-  G4UIcmdWithoutParameter*   fListCmd;  
+  G4UIcmdWithAString* fPListCmd;
+  G4UIcmdWithoutParameter* fListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

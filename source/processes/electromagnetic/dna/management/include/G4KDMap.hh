@@ -52,21 +52,23 @@
 #include <cmath>
 #include <iostream>
 
+#include "G4Types.hh"
+
 class G4KDNode_Base;
 
 class __1DSortOut
 {
 public :
-  __1DSortOut(size_t dimension);
+  __1DSortOut(std::size_t dimension);
   __1DSortOut(const __1DSortOut& right);
-  int GetDimension();
-  G4KDNode_Base* GetMidle(size_t& /*G4KDNode_deque*/);
+  G4int GetDimension();
+  G4KDNode_Base* GetMidle(std::size_t& /*G4KDNode_deque*/);
 
   std::deque<G4KDNode_Base*>::iterator Insert(G4KDNode_Base*);
   G4KDNode_Base* PopOutMiddle();
   void Sort();
   void Erase(std::deque<G4KDNode_Base*>::iterator &);
-  size_t Size()
+  std::size_t Size()
   {
     return fContainer.size();
   }
@@ -74,12 +76,12 @@ public :
 protected :
   struct sortOutNDim
   {
-     sortOutNDim( size_t dimension)
+     sortOutNDim(std::size_t dimension)
      {
   	   fDimension = dimension;
      }
-     bool operator() (G4KDNode_Base* const& lhs, G4KDNode_Base* const& rhs);
-     size_t fDimension;
+     G4bool operator() (G4KDNode_Base* const& lhs, G4KDNode_Base* const& rhs);
+     std::size_t fDimension;
   };
 
   std::deque<G4KDNode_Base*> fContainer;
@@ -89,10 +91,10 @@ protected :
 class G4KDMap
 {
 public:
-  G4KDMap(size_t dimensions): fSortOut(dimensions, __1DSortOut(dimensions))
+  G4KDMap(std::size_t dimensions): fSortOut(dimensions, __1DSortOut(dimensions))
   {
         fIsSorted = false;
-//        for(size_t i = 0 ; i < dimensions ; i++)
+//        for(std::size_t i = 0 ; i < dimensions ; ++i)
 //        {
 //            fSortOut[i] = new __1DSortOut(i);
 //        }
@@ -101,19 +103,19 @@ public:
   void Insert(G4KDNode_Base* pos);
   void Sort();
 
-  G4KDNode_Base* PopOutMiddle(size_t dimension);
-  size_t GetDimension()
+  G4KDNode_Base* PopOutMiddle(std::size_t dimension);
+  std::size_t GetDimension()
   {
       return fSortOut.size();
   }
 
-  size_t GetSize()
+  std::size_t GetSize()
   {
       return fMap.size();
   }
 
 private:
-  bool fIsSorted;
+  G4bool fIsSorted;
   std::vector<__1DSortOut> fSortOut;
   std::map<G4KDNode_Base*, std::vector<std::deque<G4KDNode_Base*>::iterator>> fMap;
 

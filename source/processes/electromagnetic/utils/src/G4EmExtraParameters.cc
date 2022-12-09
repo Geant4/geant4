@@ -206,7 +206,7 @@ void G4EmExtraParameters::FillStepFunction(const G4ParticleDefinition* part, G4V
     proc->SetStepFunction(dRoverRange, finalRange);
 
     // all heavy ions
-  } else if (part->IsGeneralIon()) {
+  } else if ("GenericIon" == part->GetParticleName()) {
     proc->SetStepFunction(dRoverRangeIons, finalRangeIons);
 
     // light nucleus and anti-nucleus
@@ -224,8 +224,8 @@ void G4EmExtraParameters::AddPAIModel(const G4String& particle,
                                       const G4String& type)
 {
   G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesPAI.size();
-  for(G4int i=0; i<nreg; ++i) {
+  std::size_t nreg =  m_regnamesPAI.size();
+  for(std::size_t i=0; i<nreg; ++i) {
     if((m_particlesPAI[i] == particle || 
         m_particlesPAI[i] == "all" || 
         particle == "all") && 
@@ -263,8 +263,8 @@ void G4EmExtraParameters::AddPhysics(const G4String& region,
                                      const G4String& type)
 {
   G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesPhys.size();
-  for(G4int i=0; i<nreg; ++i) {
+  std::size_t nreg =  m_regnamesPhys.size();
+  for(std::size_t i=0; i<nreg; ++i) {
     if(r == m_regnamesPhys[i]) { return; }
   }
   m_regnamesPhys.push_back(r);
@@ -284,8 +284,8 @@ const std::vector<G4String>& G4EmExtraParameters::TypesPhysics() const
 void G4EmExtraParameters::SetSubCutRegion(const G4String& region)
 {
   const G4String& r = CheckRegion(region);
-  G4int nreg =  m_regnamesSubCut.size();
-  for(G4int i=0; i<nreg; ++i) {
+  std::size_t nreg =  m_regnamesSubCut.size();
+  for(std::size_t i=0; i<nreg; ++i) {
     if(r == m_regnamesSubCut[i]) { 
       return; 
     }
@@ -298,8 +298,8 @@ G4EmExtraParameters::SetProcessBiasingFactor(const G4String& procname,
                                              G4double val, G4bool wflag)
 {
   if(val > 0.0) {
-    G4int n =  m_procBiasedXS.size();
-    for(G4int i=0; i<n; ++i) {
+    std::size_t n =  m_procBiasedXS.size();
+    for(std::size_t i=0; i<n; ++i) {
       if(procname == m_procBiasedXS[i]) { 
 	m_factBiasedXS[i] = val;
 	m_weightBiasedXS[i]= wflag;
@@ -325,8 +325,8 @@ G4EmExtraParameters::ActivateForcedInteraction(const G4String& procname,
 {
   const G4String& r = CheckRegion(region);
   if(length >= 0.0) {
-    G4int n =  m_procForced.size();
-    for(G4int i=0; i<n; ++i) {
+    std::size_t n =  m_procForced.size();
+    for(std::size_t i=0; i<n; ++i) {
       if(procname == m_procForced[i] && r == m_regnamesForced[i] ) { 
 	m_lengthForced[i] = length;
 	m_weightForced[i] = wflag;
@@ -354,8 +354,8 @@ G4EmExtraParameters::ActivateSecondaryBiasing(const G4String& procname,
 {
   const G4String& r = CheckRegion(region);
   if(factor >= 0.0 && energyLim >= 0.0) {
-    G4int n =  m_procBiasedSec.size();
-    for(G4int i=0; i<n; ++i) {
+    std::size_t n =  m_procBiasedSec.size();
+    for(std::size_t i=0; i<n; ++i) {
       if(procname == m_procBiasedSec[i] && r == m_regnamesBiasedSec[i] ) { 
 	m_factBiasedSec[i] = factor;
 	m_elimBiasedSec[i] = energyLim;
@@ -378,13 +378,13 @@ G4EmExtraParameters::ActivateSecondaryBiasing(const G4String& procname,
 void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
 {
   const G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  G4int n = m_regnamesSubCut.size();
-  for(G4int i=0; i<n; ++i) { 
+  std::size_t n = m_regnamesSubCut.size();
+  for(std::size_t i=0; i<n; ++i) { 
     const G4Region* reg = regionStore->GetRegion(m_regnamesSubCut[i], false);
     if(nullptr != reg) { ptr->ActivateSubCutoff(reg); }
   }
   n = m_procBiasedXS.size();
-  for(G4int i=0; i<n; ++i) {
+  for(std::size_t i=0; i<n; ++i) {
     if(ptr->GetProcessName() == m_procBiasedXS[i]) {
       ptr->SetCrossSectionBiasingFactor(m_factBiasedXS[i], 
 					m_weightBiasedXS[i]);
@@ -392,7 +392,7 @@ void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
     }
   }
   n = m_procForced.size();
-  for(G4int i=0; i<n; ++i) {
+  for(std::size_t i=0; i<n; ++i) {
     if(ptr->GetProcessName() == m_procForced[i]) {
       ptr->ActivateForcedInteraction(m_lengthForced[i],
 				     m_regnamesForced[i],
@@ -401,7 +401,7 @@ void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
     }
   }
   n = m_procBiasedSec.size();
-  for(G4int i=0; i<n; ++i) {
+  for(std::size_t i=0; i<n; ++i) {
     if(ptr->GetProcessName() == m_procBiasedSec[i]) {
       ptr->ActivateSecondaryBiasing(m_regnamesBiasedSec[i],
 				    m_factBiasedSec[i], 
@@ -413,8 +413,8 @@ void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
 
 void G4EmExtraParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
 {
-  G4int n = m_procBiasedXS.size();
-  for(G4int i=0; i<n; ++i) {
+  std::size_t n = m_procBiasedXS.size();
+  for(std::size_t i=0; i<n; ++i) {
     if(ptr->GetProcessName() == m_procBiasedXS[i]) {
       ptr->SetCrossSectionBiasingFactor(m_factBiasedXS[i], 
 					m_weightBiasedXS[i]);
@@ -422,7 +422,7 @@ void G4EmExtraParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
     }
   }
   n = m_procForced.size();
-  for(G4int i=0; i<n; ++i) {
+  for(std::size_t i=0; i<n; ++i) {
     if(ptr->GetProcessName() == m_procForced[i]) {
       ptr->ActivateForcedInteraction(m_lengthForced[i],
 				     m_regnamesForced[i],
@@ -431,7 +431,7 @@ void G4EmExtraParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
     }
   }
   n = m_procBiasedSec.size();
-  for(G4int i=0; i<n; ++i) {
+  for(std::size_t i=0; i<n; ++i) {
     if(ptr->GetProcessName() == m_procBiasedSec[i]) {
       ptr->ActivateSecondaryBiasing(m_regnamesBiasedSec[i],
 				    m_factBiasedSec[i], 

@@ -87,7 +87,7 @@ G4MuonMinus* G4MuonMinus::Definition()
   table->Insert(mode);
   anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4MuonMinus*>(anInstance);
+  theInstance = static_cast<G4MuonMinus*>(anInstance);
   return theInstance;
 }
 

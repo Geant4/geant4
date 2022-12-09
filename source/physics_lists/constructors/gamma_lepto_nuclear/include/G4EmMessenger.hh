@@ -70,6 +70,7 @@ private:
   G4UIcmdWithABool*   theEN;
   G4UIcmdWithABool*   theMUN;
   G4UIcmdWithABool*   theGMM;
+  G4UIcmdWithABool*   theMMM;
   G4UIcmdWithABool*   thePMM;
   G4UIcmdWithABool*   thePH;
   G4UIcmdWithABool*   theNu;

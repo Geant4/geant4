@@ -67,7 +67,7 @@ void G4UIcommand::G4UIcommandCommonConstructorCode(const char* theCommandPath)
 {
   commandPath            = theCommandPath;
   commandName            = theCommandPath;
-  G4int commandNameIndex = commandName.rfind('/');
+  G4int commandNameIndex = (G4int)commandName.rfind('/');
   commandName.erase(0, commandNameIndex + 1);
 #ifdef G4MULTITHREADED
   if((messenger != nullptr) && messenger->CommandsShouldBeInMaster() &&
@@ -121,8 +121,8 @@ G4UIcommand::~G4UIcommand()
     fUImanager->RemoveCommand(this);
   }
 
-  G4int n_parameterEntry = parameter.size();
-  for(G4int i_thParameter = 0; i_thParameter < n_parameterEntry;
+  std::size_t n_parameterEntry = parameter.size();
+  for(std::size_t i_thParameter = 0; i_thParameter < n_parameterEntry;
       ++i_thParameter)
   {
     delete parameter[i_thParameter];
@@ -146,13 +146,13 @@ G4bool G4UIcommand::operator!=(const G4UIcommand& right) const
 G4int G4UIcommand::DoIt(G4String parameterList)
 {
   G4String correctParameters;
-  G4int n_parameterEntry = parameter.size();
+  std::size_t n_parameterEntry = parameter.size();
   if(n_parameterEntry != 0)
   {
     G4String aToken;
     G4String correctToken;
     G4Tokenizer parameterToken(parameterList);
-    for(G4int i_thParameter = 0; i_thParameter < n_parameterEntry;
+    for(std::size_t i_thParameter = 0; i_thParameter < n_parameterEntry;
         ++i_thParameter)
     {
       if(i_thParameter > 0)
@@ -168,7 +168,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
           G4String additionalToken = parameterToken();
           if(additionalToken.empty())
           {
-            return fParameterUnreadable + i_thParameter;
+            return G4int(fParameterUnreadable + i_thParameter);
           }
           aToken += " ";
           aToken += additionalToken;
@@ -180,8 +180,8 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         G4String anotherToken;
         while(!((anotherToken = parameterToken()).empty()))
         {
-          G4int idxs = anotherToken.find("#");
-          if(idxs == G4int(std::string::npos))
+          std::size_t idxs = anotherToken.find("#");
+          if(idxs == std::string::npos)
           {
             aToken += " ";
             aToken += anotherToken;
@@ -207,7 +207,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
           {
             G4Tokenizer cvSt(messenger->GetCurrentValue(this));
             G4String parVal;
-            for(G4int ii = 0; ii < i_thParameter; ++ii)
+            for(std::size_t ii = 0; ii < i_thParameter; ++ii)
             {
               parVal = cvSt();
               if(parVal[0] == '"')
@@ -217,7 +217,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
                   G4String additionalToken = cvSt();
                   if(additionalToken.empty())
                   {
-                    return fParameterUnreadable + i_thParameter;
+                    return G4int(fParameterUnreadable + i_thParameter);
                   }
                   parVal += " ";
                   parVal += additionalToken;
@@ -232,7 +232,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
                 G4String additionalToken = cvSt();
                 if(additionalToken.empty())
                 {
-                  return fParameterUnreadable + i_thParameter;
+                  return G4int(fParameterUnreadable + i_thParameter);
                 }
                 aCVToken += " ";
                 aCVToken += additionalToken;
@@ -248,7 +248,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         }
         else
         {
-          return fParameterUnreadable + i_thParameter;
+          return G4int(fParameterUnreadable + i_thParameter);
         }
       }
       else
@@ -256,7 +256,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         G4int stat = parameter[i_thParameter]->CheckNewValue(aToken);
         if(stat != 0)
         {
-          return stat + i_thParameter;
+          return stat + G4int(i_thParameter);
         }
         correctParameters.append(aToken);
       }
@@ -345,8 +345,8 @@ G4bool G4UIcommand::IsAvailable()
   G4ApplicationState currentState =
     G4StateManager::GetStateManager()->GetCurrentState();
 
-  G4int nState = availabelStateList.size();
-  for(G4int i = 0; i < nState; ++i)
+  std::size_t nState = availabelStateList.size();
+  for(std::size_t i = 0; i < nState; ++i)
   {
     if(availabelStateList[i] == currentState)
     {
@@ -393,13 +393,13 @@ G4String G4UIcommand::UnitsList(const char* unitCategory)
   }
   G4UnitsContainer& UCnt = UTbl[i]->GetUnitsList();
   retStr                 = UCnt[0]->GetSymbol();
-  G4int je               = UCnt.size();
-  for(G4int j = 1; j < je; ++j)
+  std::size_t je         = UCnt.size();
+  for(std::size_t j = 1; j < je; ++j)
   {
     retStr += " ";
     retStr += UCnt[j]->GetSymbol();
   }
-  for(G4int k = 0; k < je; ++k)
+  for(std::size_t k = 0; k < je; ++k)
   {
     retStr += " ";
     retStr += UCnt[k]->GetName();
@@ -421,8 +421,8 @@ void G4UIcommand::List()
     G4cout << "    ---- available only in worker thread" << G4endl;
   }
   G4cout << "Guidance :" << G4endl;
-  G4int n_guidanceEntry = commandGuidance.size();
-  for(G4int i_thGuidance = 0; i_thGuidance < n_guidanceEntry; ++i_thGuidance)
+  std::size_t n_guidanceEntry = commandGuidance.size();
+  for(std::size_t i_thGuidance = 0; i_thGuidance < n_guidanceEntry; ++i_thGuidance)
   {
     G4cout << commandGuidance[i_thGuidance] << G4endl;
   }
@@ -430,10 +430,10 @@ void G4UIcommand::List()
   {
     G4cout << " Range of parameters : " << rangeString << G4endl;
   }
-  G4int n_parameterEntry = parameter.size();
+  std::size_t n_parameterEntry = parameter.size();
   if(n_parameterEntry > 0)
   {
-    for(G4int i_thParameter = 0; i_thParameter < n_parameterEntry;
+    for(std::size_t i_thParameter = 0; i_thParameter < n_parameterEntry;
         ++i_thParameter)
     {
       parameter[i_thParameter]->List();
@@ -649,7 +649,7 @@ G4int G4UIcommand::TypeCheck(const char* t)
   for(auto& i : parameter)
   {
     is >> aNewValue;
-    type = toupper(i->GetParameterType());
+    type = (char)std::toupper(i->GetParameterType());
     switch(type)
     {
       case 'D':
@@ -898,7 +898,7 @@ G4int G4UIcommand::RangeCheck(const char* t)
   std::istringstream is(t);
   for(unsigned i = 0; i < parameter.size(); ++i)
   {
-    type = toupper(parameter[i]->GetParameterType());
+    type = (char)std::toupper(parameter[i]->GetParameterType());
     switch(type)
     {
       case 'D':
@@ -1246,7 +1246,7 @@ G4int G4UIcommand::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
   if(arg1.type == IDENTIFIER)
   {
     unsigned i = IndexOf(arg1.S);
-    newValtype = toupper(parameter[i]->GetParameterType());
+    newValtype = (char)std::toupper(parameter[i]->GetParameterType());
     switch(newValtype)
     {
       case 'I':
@@ -1259,7 +1259,7 @@ G4int G4UIcommand::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
         else if(arg2.type == IDENTIFIER)
         {
           unsigned iii     = IndexOf(arg2.S);
-          char newValtype2 = toupper(parameter[iii]->GetParameterType());
+          char newValtype2 = (char)std::toupper(parameter[iii]->GetParameterType());
           if(newValtype2 == 'I')
           {
             return CompareInt(newVal[i].I, op, newVal[iii].I);
@@ -1296,7 +1296,7 @@ G4int G4UIcommand::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
         else if(arg2.type == IDENTIFIER)
         {
           unsigned iii     = IndexOf(arg2.S);
-          char newValtype2 = toupper(parameter[iii]->GetParameterType());
+          char newValtype2 = (char)std::toupper(parameter[iii]->GetParameterType());
           if(newValtype2 == 'I')
           {
             return CompareLong(newVal[i].L, op, newVal[iii].I);
@@ -1337,7 +1337,7 @@ G4int G4UIcommand::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
         else if(arg2.type == IDENTIFIER)
         {
           unsigned iii     = IndexOf(arg2.S);
-          char newValtype2 = toupper(parameter[iii]->GetParameterType());
+          char newValtype2 = (char)std::toupper(parameter[iii]->GetParameterType());
           if(newValtype2 == 'I')
           {
             return CompareDouble(newVal[i].D, op, newVal[iii].I);
@@ -1359,7 +1359,7 @@ G4int G4UIcommand::Eval2(const yystype& arg1, G4int op, const yystype& arg2)
   if(arg2.type == IDENTIFIER)
   {
     unsigned i = IndexOf(arg2.S);
-    newValtype = toupper(parameter[i]->GetParameterType());
+    newValtype = (char)std::toupper(parameter[i]->GetParameterType());
     switch(newValtype)
     {
       case 'I':
@@ -1655,8 +1655,8 @@ G4int G4UIcommand::Follow(G4int expect, G4int ifyes, G4int ifno)
 
 G4int G4UIcommand::G4UIpGetc()
 {  // emulation of getc()
-  G4int length = rangeString.length();
-  if(bp < length)
+  std::size_t length = rangeString.length();
+  if(bp < (G4int)length)
   {
     return rangeString[bp++];
   }

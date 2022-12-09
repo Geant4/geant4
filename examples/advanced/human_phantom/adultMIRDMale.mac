@@ -6,7 +6,7 @@
 #
 # Initialize New Phantom
 #
-# Choose model: ORNL, MIRD, MIX
+# Choose model: ORNLFemale, ORNLMale, MIRD, MIRDHead, ORNLHead
 #
 /phantom/setPhantomModel MIRD
 #

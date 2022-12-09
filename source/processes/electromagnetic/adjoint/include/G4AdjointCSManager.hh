@@ -67,7 +67,7 @@ class G4AdjointCSManager
 
   // Registration of the different models and processes
 
-  size_t RegisterEmAdjointModel(G4VEmAdjointModel*);
+  std::size_t RegisterEmAdjointModel(G4VEmAdjointModel*);
 
   void RegisterEmProcess(G4VEmProcess* aProcess,
                          G4ParticleDefinition* aPartDef);
@@ -90,7 +90,7 @@ class G4AdjointCSManager
   G4double GetTotalForwardCS(G4ParticleDefinition* aPartDef, G4double Ekin,
                              const G4MaterialCutsCouple* aCouple);
 
-  G4double GetAdjointSigma(G4double Ekin_nuc, size_t index_model,
+  G4double GetAdjointSigma(G4double Ekin_nuc, std::size_t index_model,
                            G4bool is_scat_proj_to_proj,
                            const G4MaterialCutsCouple* aCouple);
 
@@ -195,7 +195,7 @@ class G4AdjointCSManager
 
   std::vector<G4VEmAdjointModel*> fAdjointModels;
 
-  std::vector<size_t> fIndexOfAdjointEMModelInAction;
+  std::vector<std::size_t> fIndexOfAdjointEMModelInAction;
   std::vector<G4bool> fIsScatProjToProj;
   std::vector<std::vector<G4double>> fLastAdjointCSVsModelsAndElements;
 
@@ -224,8 +224,8 @@ class G4AdjointCSManager
   G4double fMassRatio              = 1.;  // ion
   G4double fLastCSCorrectionFactor = 1.;
 
-  size_t fCurrentParticleIndex = 0;
-  size_t fCurrentMatIndex      = 0;
+  std::size_t fCurrentParticleIndex = 0;
+  std::size_t fCurrentMatIndex      = 0;
 
   G4bool fCSMatricesBuilt = false;
   G4bool fSigmaTableBuilt = false;

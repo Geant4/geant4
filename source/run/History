@@ -1,8 +1,20 @@
 # Category run History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-11-18 Gabriele Cosmo (run-V11-00-11)
+- More compilation warnings fixes for implicit type conversions.
+
+## 2022-11-17 Gabriele Cosmo (run-V11-00-10)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-02 Ben Morgan (run-V11-00-09)
+- Explicitly check for nullptr before derefencing possible null pointers
+  - Fixes Coverity 104621, 104660, 104662.
 
 ## 2022-05-17 Ben Morgan (run-V11-00-08)
 - Apply patches from Seth Johnson:

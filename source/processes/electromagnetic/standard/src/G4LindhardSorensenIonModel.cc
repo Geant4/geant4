@@ -246,31 +246,42 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
   if(eloss >= preKinEnergy) { return; }
 
   const G4ParticleDefinition* p = dp->GetDefinition();
+  SetParticle(p);
   const G4Material* mat = couple->GetMaterial();
   const G4double eDensity = mat->GetElectronDensity();
-  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.75);
+  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
   const G4double tmax = MaxSecondaryEnergy(p, e);
   const G4double escaled = e*pRatio;
   const G4double tau = e/mass;
 
-  G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
-  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  const G4int Z = std::max(80, p->GetAtomicNumber());
+  const G4double q20 = corr->EffectiveChargeSquareRatio(p, mat, preKinEnergy);
+  const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
+  const G4int Z = p->GetAtomicNumber();
 
   G4double res;
   if(escaled <= fElimit) {
+    // data from ICRU73 or ICRU90
     res = fIonData->GetDEDX(mat, Z, escaled, G4Log(escaled));
+    /*
+    G4cout << "GetDEDX for Z=" << Z << " in " << mat->GetName()
+	   << " Escaled=" << escaled << " E=" 
+	   << e << " dEdx=" << res << G4endl;
+    */
     if(res > 0.0) {
-      G4double cut = couple->GetProductionCuts()->GetProductionCut(1);
+      auto pcuts = couple->GetProductionCuts();
+      G4double cut = (nullptr == pcuts) ? tmax : pcuts->GetProductionCut(1);
       if(cut < tmax) {
-	const G4double x   = cut/tmax;
+	const G4double x = cut/tmax;
 	res += (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) 
 	  *q2*CLHEP::twopi_mc2_rcl2*eDensity;
       }
+      res *= length;
     } else {
-      res = eloss*q2*corr->EffectiveChargeCorrection(p,mat,e)/chargeSquare;
+      // simplified correction
+      res = eloss*q2/q20;
     }
   } else {
+    // Lindhard-Sorensen model
     const G4double gam = tau + 1.0;
     const G4double beta2 = tau * (tau+2.0)/(gam*gam);
     G4double deltaL0 = 2.0*corr->BarkasCorrection(p, mat, e)*(charge-1.)/charge;
@@ -288,9 +299,11 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
   }
   if(res > preKinEnergy) { res = preKinEnergy; }
   else if(res < 0.0)     { res = eloss; }
-  //G4cout << "G4LindhardSorensenIonModel::CorrectionsAlongStep: E(GeV)=" 
-  //       << preKinEnergy/GeV << " eloss(MeV)=" << eloss 
-  //<< " res(MeV)=" << res << G4endl;
+  /*
+  G4cout << "G4LindhardSorensenIonModel::CorrectionsAlongStep: E(GeV)=" 
+         << preKinEnergy/GeV << " eloss(MeV)=" << eloss 
+	 << " res(MeV)=" << res << G4endl;
+  */
   eloss = res;
 }
 

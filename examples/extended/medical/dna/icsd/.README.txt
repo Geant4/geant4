@@ -1,10 +1,9 @@
-
 ///\file "medical/dna/icsd/.README.txt"
 ///\brief Example icsd README page
 
 /*! \page Exampleicsd Example icsd
 
-\author Sylvain Meylan , Carmen Villagrasa (a)       \n
+\author Sylvain Meylan , Yann Perrot, Marcin Pietrzak, Carmen Villagrasa (a)       \n
 (a) carmen.villagrasa _irsn _ fr             \n
 
 This example is provided by the Geant4-DNA collaboration \n
@@ -14,6 +13,8 @@ shall cite the following Geant4-DNA collaboration publications: \n
 [2] Phys. Med. 31 (2015) 861-874 \n
 In addition, for this example using DNA-materials cross-sections, please cite: \n
 [3] Rad. Phys and Chem. 130 (2017) 459-479 \n
+For this example using N2 cross-sections, please cite:\n
+[4] Phys. Med. 102 (2022) 103-109\n
 
 \section icsd_s1 INTRODUCTION                                                  
                                                                        
@@ -29,11 +30,18 @@ http://geant4-dna.org
 
 \section icsd_s2 GEOMETRY SET-UP AND PRIMARY PARTICLES
  
-As indicated in the introduction, the geometry used in this exercise is very simple: a cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin that is centered in a cubic world of 10 nanometers side length filled with liquid water.
+As indicated in the introduction, the geometry used in this exercise is a cylinder.
+Two options are proposed: one nanometric cylinder made of DNA or a macroscopic volume with low nitrogen density.
+The selection of the geometry is performed in the macro file:
 
-This cylinder is filled with THF material. The definition of the THF material must be done using the G4String="THF". Currently, other materials are available than also use the G4Strings to be recognized by the model classes "TMP", "PY" or "PU" for the DNA-like materials and "deoxyribose","adenine", "guanine", "thymine" or "cytosine" for the derived DNA materials. 
+--> /icsd/setGeom dna: a cylinder of 2.3 nanometers diameter and 3.4 nanometers height, typical dimensions of a 10 base pairs piece of chromatin that is centered in a cubic world of 10 nanometers side length filled with liquid water.
+This cylinder is filled with THF material. The definition of the THF material must be done using the G4String="THF". Currently, other materials are available than also use the G4Strings to be recognized by the model classes "TMP", "PY" or "PU" for the DNA-like materials and "deoxyribose","adenine", "guanine", "thymine" or "cytosine" for the derived DNA materials.
 
-Primary particles are electrons starting at (-1.15 nanometers, 0,0) (at the cylinder's edge) and initial momentum (1,0,0)
+--> /icsd/setGeom nanodosimeter: a cylinder of 10 mm nanometers diameter and 10 nanometers height filled with low pressure nitrogen (0.34 µg/cm3)  mimicking the size of a short of segment od DNA of 2.3 nm in both diameter and height
+The obtained results can be compared to experimental data from Jet Counter nanodosimeter as shown in Pietrazk et al.
+Phys. Med. 102 (2022) 103-109
+
+Primary particles are electrons starting at the cylinder's edge) and initial momentum (1,0,0)
 
 \section icsd_s3 PHYSICS LIST
                                                                         

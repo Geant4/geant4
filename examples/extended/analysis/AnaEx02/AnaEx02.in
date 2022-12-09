@@ -8,11 +8,6 @@
 # initialize
 /run/initialize
 
-# e- 500MeV 
-/gun/particle e-
-/gun/energy 500 MeV
-/run/beamOn 1000
-
 # Test commands defined in this example
 /control/verbose 2
 #
@@ -25,3 +20,7 @@
 #
 /run/beamOn 1
 
+# e- 500MeV
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 1000

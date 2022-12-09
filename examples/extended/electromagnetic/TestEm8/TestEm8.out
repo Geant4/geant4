@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-beta-01    (30-June-2022)
+ Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -531,14 +531,14 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  2.28699 keV    e-  264.86 keV    e+  258.447 keV proton 0 eV 
+ Energy thresholds :  gamma  2.28689 keV    e-  264.843 keV    e+  258.466 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
- Energy thresholds :  gamma  25 eV     e-  5.46873 keV    e+  5.35456 keV proton 180 keV
+ Energy thresholds :  gamma  25 eV     e-  5.46873 keV    e+  5.35479 keV proton 180 keV
  Region(s) which use this couple : 
     GasDetector
 
@@ -555,8 +555,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.070000s Real=0.066498s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0168737
+  User=0.070000s Real=0.068840s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0167496
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -565,23 +565,23 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0168737
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.874 +- 0.44599 keV    RMS/Emean = 0.83583
-   Mean number of steps in absorber= 1.264  mean number of ion-clusters = 844.03 MeanCluster= 843.64
+   Mean energy deposit in absorber = 16.75 +- 0.42583 keV    RMS/Emean = 0.80396
+   Mean number of steps in absorber= 1.263  mean number of ion-clusters = 837.9 MeanCluster= 837.44
 
- ====== Energy deposit distribution   Noverflows= 0.017 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.016 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1         3           3       0.003
-    2         6          89       0.089
-    3         9         262       0.262
-    4        12         233       0.233
-    5        15         155       0.155
-    6        18         105       0.105
-    7        21          48       0.048
-    8        24          26       0.026
+    2         6          92       0.092
+    3         9         257       0.257
+    4        12         232       0.232
+    5        15         160        0.16
+    6        18         102       0.102
+    7        21          52       0.052
+    8        24          25       0.025
     9        27          14       0.014
    10        30           8       0.008
-   11        33          12       0.012
+   11        33          11       0.011
    12        36           7       0.007
    13        39           7       0.007
    14        42           3       0.003

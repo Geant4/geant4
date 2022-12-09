@@ -62,9 +62,9 @@ G4ElementSelector::SelectZandA(const G4Track& track, G4Nucleus* target)
   // for halogens and oxigen.
   // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
 
-  size_t i = 0;
+  std::size_t i = 0;
   const G4Material* mat = track.GetMaterial();
-  size_t numberOfElements = mat->GetNumberOfElements();
+  std::size_t numberOfElements = mat->GetNumberOfElements();
   const G4ElementVector* theElementVector = mat->GetElementVector();
 
   if(1 < numberOfElements) {
@@ -103,7 +103,7 @@ G4ElementSelector::SelectZandA(const G4Track& track, G4Nucleus* target)
 
   // select isotope
   const G4IsotopeVector* isv = elm->GetIsotopeVector();
-  size_t ni = isv->size();
+  std::size_t ni = isv->size();
   i = 0;
 
   if(1 < ni) {
@@ -116,9 +116,8 @@ G4ElementSelector::SelectZandA(const G4Track& track, G4Nucleus* target)
     }
   }
 
-  G4int A = elm->GetIsotope(i)->GetN();
+  G4int A = elm->GetIsotope((G4int)i)->GetN();
   target->SetParameters(A, Z);
 
   return elm;
 }
-

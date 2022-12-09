@@ -6,6 +6,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-29 Gabriele Cosmo (global-V11-00-33)
+- Updated tag IDs for geant4-11-01-ref-00.
+
+## 2022-11-18 Gabriele Cosmo (global-V11-00-32)
+- More compilation warnings fixes for implicit type conversions.
+
+## 2022-11-09 Gabriele Cosmo (global-V11-00-31)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-31 Gabriele Cosmo (global-V11-00-30)
+- Updated tag IDs for geant4-11-00-ref-09.
+
+## 2022-10-04 Gabriele Cosmo (global-V11-00-29)
+- Fixed compilation warning on Intel-icx compiler for variable set but not
+  used, in G4AnalyticalPolSolver::QuarticRoots().
+
+## 2022-09-30 Gabriele Cosmo (global-V11-00-28)
+- Updated tag IDs for geant4-11-00-ref-08.
+
+## 2022-09-22 Ben Morgan (global-V11-00-27)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+
+## 2022-08-29 Gabriele Cosmo (global-V11-00-26)
+- Updated tag IDs for geant4-11-00-ref-07.
+
+## 2022-08-04 Ben Morgan (global-V11-00-25)
+- Move implementation details of G4Exception to source file.
+- Remove obsolete re-declaration of G4Exception in G4Timer.
+
+## 2022-07-03 Ben Morgan (global-V11-00-24)
+- Additional clang-tidy fixes for header-only code or missed in global-V11-00-06)
+
 ## 2022-06-24 Gabriele Cosmo (global-V11-00-23)
 - Updated tag IDs for geant4-11-00-ref-06 and geant4-11-01-beta-01.
 

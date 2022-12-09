@@ -49,6 +49,7 @@ geant4_add_module(G4hadronic_xsect
     G4IonsShenCrossSection.hh
     G4IsotopeList.hh
     G4KokoulinMuonNuclearXS.hh
+    G4MuNeutrinoNucleusTotXsc.hh
     G4NeutrinoElectronCcXsc.hh
     G4NeutrinoElectronNcXsc.hh
     G4NeutrinoElectronTotXsc.hh
@@ -60,13 +61,13 @@ geant4_add_module(G4hadronic_xsect
     G4ParticleInelasticXS.hh
     G4PhotoNuclearCrossSection.hh
     G4PiData.hh
+    G4TauNeutrinoNucleusTotXsc.hh
     G4UPiNuclearCrossSection.hh
     G4VComponentCrossSection.hh
     G4VCrossSectionDataSet.hh
     G4VCrossSectionRatio.hh
     G4ZeroXS.hh
     G4CrossSectionFactoryRegistry.hh
-    G4MuNeutrinoNucleusTotXsc.hh
   SOURCES
     G4BGGNucleonElasticXS.cc
     G4BGGNucleonInelasticXS.cc
@@ -111,6 +112,7 @@ geant4_add_module(G4hadronic_xsect
     G4HadronXSDataTable.cc
     G4IonsShenCrossSection.cc
     G4KokoulinMuonNuclearXS.cc
+    G4MuNeutrinoNucleusTotXsc.cc
     G4NeutrinoElectronCcXsc.cc
     G4NeutrinoElectronNcXsc.cc
     G4NeutrinoElectronTotXsc.cc
@@ -122,13 +124,13 @@ geant4_add_module(G4hadronic_xsect
     G4ParticleInelasticXS.cc
     G4PhotoNuclearCrossSection.cc
     G4PiData.cc
+    G4TauNeutrinoNucleusTotXsc.cc
     G4UPiNuclearCrossSection.cc
     G4VComponentCrossSection.cc
     G4VCrossSectionDataSet.cc
     G4VCrossSectionRatio.cc
     G4ZeroXS.cc
-    G4CrossSectionFactoryRegistry.cc
-    G4MuNeutrinoNucleusTotXsc.cc)
+    G4CrossSectionFactoryRegistry.cc)
 
 geant4_module_link_libraries(G4hadronic_xsect
   PUBLIC

@@ -56,13 +56,18 @@ using namespace CLHEP;
  
 ////////////////////////////////////////////////////////////////////////
 //
-// Private enum: Not for external use - used by distanceToOut
+// Private enums: Not for external use
 
-enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
+namespace
+{
+  // used by DistanceToOut()
+  //
+  enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
 
-// used by normal
-
-enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+  // used by ApproxSurfaceNormal()
+  //
+  enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -1408,7 +1413,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
   // Vars for intersection within tolerance
 
-  ESide    sidetol = kNull ;
+  ESide sidetol = kNull ;
   G4double slentol = kInfinity ;
 
   // Vars for phi intersection:
@@ -1978,7 +1983,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl ;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16) ;
+        G4long oldprc = message.precision(16) ;
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -2111,7 +2116,7 @@ G4VSolid* G4Cons::Clone() const
 
 std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

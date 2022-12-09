@@ -94,7 +94,7 @@ class G4OpWLS2 : public G4VDiscreteProcess
   G4OpWLS2(const G4OpWLS2& right) = delete;
   G4OpWLS2& operator=(const G4OpWLS2& right) = delete;
 
-  size_t idx_wls2 = 0;
+  std::size_t idx_wls2 = 0;
 };
 
 ////////////////////
@@ -113,10 +113,10 @@ inline G4PhysicsTable* G4OpWLS2::GetIntegralTable() const
 
 inline void G4OpWLS2::DumpPhysicsTable() const
 {
-  G4int PhysicsTableSize = theIntegralTable->entries();
+  std::size_t PhysicsTableSize = theIntegralTable->entries();
   G4PhysicsFreeVector* v;
 
-  for(G4int i = 0; i < PhysicsTableSize; ++i)
+  for(std::size_t i = 0; i < PhysicsTableSize; ++i)
   {
     v = (G4PhysicsFreeVector*) (*theIntegralTable)[i];
     v->DumpValues();

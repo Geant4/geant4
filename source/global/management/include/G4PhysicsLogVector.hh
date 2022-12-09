@@ -56,7 +56,7 @@ public:
   explicit G4PhysicsLogVector(G4double Emin, G4double Emax, std::size_t Nbin,
                               G4bool spline = false);
 
-  virtual ~G4PhysicsLogVector() = default;
+  ~G4PhysicsLogVector() override = default;
 
 protected:
 

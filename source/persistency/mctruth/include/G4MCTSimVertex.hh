@@ -211,24 +211,24 @@ inline G4int G4MCTSimVertex::GetInParticleTrackID() const
 
 inline G4int G4MCTSimVertex::GetNofOutParticles() const
 {
-  return outParticleTrackIDList.size();
+  return (G4int)outParticleTrackIDList.size();
 }
 
 inline G4int G4MCTSimVertex::AddOutParticle(const G4MCTSimParticle* out)
 {
   outParticleTrackIDList.push_back(out->GetTrackID());
-  return outParticleTrackIDList.size();
+  return (G4int)outParticleTrackIDList.size();
 }
 
 inline G4int G4MCTSimVertex::AddOutParticle(G4int out)
 {
   outParticleTrackIDList.push_back(out);
-  return outParticleTrackIDList.size();
+  return (G4int)outParticleTrackIDList.size();
 }
 
 inline G4int G4MCTSimVertex::GetOutParticleTrackID(G4int i) const
 {
-  G4int size = outParticleTrackIDList.size();
+  G4int size = (G4int)outParticleTrackIDList.size();
   if(i >= 0 && i < size)
     return outParticleTrackIDList[i];
   else

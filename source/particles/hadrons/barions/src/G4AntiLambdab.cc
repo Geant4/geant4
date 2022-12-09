@@ -76,7 +76,7 @@ G4AntiLambdab* G4AntiLambdab::Definition()
                 false,      1.470e-3*ns,          NULL,
                 false,       "lambda_b");
   }
-  theInstance = reinterpret_cast<G4AntiLambdab*>(anInstance);
+  theInstance = static_cast<G4AntiLambdab*>(anInstance);
   return theInstance;
 }
 

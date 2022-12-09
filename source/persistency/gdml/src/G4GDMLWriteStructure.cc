@@ -432,7 +432,7 @@ const G4LogicalSkinSurface* G4GDMLWriteStructure::GetSkinSurface(
   const G4LogicalVolume* const lvol)
 {
   G4LogicalSkinSurface* surf = 0;
-  G4int nsurf = G4LogicalSkinSurface::GetNumberOfSkinSurfaces();
+  std::size_t nsurf = G4LogicalSkinSurface::GetNumberOfSkinSurfaces();
   if(nsurf)
   {
     const G4LogicalSkinSurfaceTable* stable =
@@ -454,7 +454,7 @@ const G4LogicalBorderSurface* G4GDMLWriteStructure::GetBorderSurface(
   const G4VPhysicalVolume* const pvol)
 {
   G4LogicalBorderSurface* surf = nullptr;
-  G4int nsurf = G4LogicalBorderSurface::GetNumberOfBorderSurfaces();
+  std::size_t nsurf = G4LogicalBorderSurface::GetNumberOfBorderSurfaces();
   if(nsurf)
   {
     const G4LogicalBorderSurfaceTable* btable =
@@ -611,7 +611,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(
   solidrefElement->setAttributeNode(NewAttribute("ref", solidref));
   volumeElement->appendChild(solidrefElement);
 
-  G4int daughterCount = volumePtr->GetNoDaughters();
+  std::size_t daughterCount = volumePtr->GetNoDaughters();
 
   if(levelNo == maxLevel)  // Stop exporting if reached levels limit
   {
@@ -620,7 +620,7 @@ G4Transform3D G4GDMLWriteStructure::TraverseVolumeTree(
 
   std::map<G4int, std::vector<G4int> > assemblyIDToAddedImprints;
 
-  for(G4int i = 0; i < daughterCount; ++i)  // Traverse all the children!
+  for(std::size_t i = 0; i < daughterCount; ++i)  // Traverse all the children!
   {
     const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
     const G4String ModuleName              = Modularize(physvol, depth);

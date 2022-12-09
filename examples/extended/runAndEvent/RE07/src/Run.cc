@@ -31,38 +31,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
 
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4Positron.hh"
-#include "G4Track.hh"
-
 #include "G4SystemOfUnits.hh"
+#include "G4Track.hh"
 #include "G4UnitsTable.hh"
+
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-  : G4Run()
-  , fDetector(det)
-  , fParticle(nullptr)
-  , fEkin(0.)
-  , fChargedStep(0)
-  , fNeutralStep(0)
-  , fN_gamma(0)
-  , fN_elec(0)
-  , fN_pos(0)
+  : G4Run(),
+    fDetector(det),
+    fParticle(nullptr),
+    fEkin(0.),
+    fChargedStep(0),
+    fNeutralStep(0),
+    fN_gamma(0),
+    fN_elec(0),
+    fN_pos(0)
 {
   // initialize cumulative quantities
   //
-  for(G4int k = 0; k < kMaxAbsor; k++)
-  {
+  for (G4int k = 0; k < kMaxAbsor; k++) {
     fSumEAbs[k] = fSum2EAbs[k] = fSumLAbs[k] = fSum2LAbs[k] = 0.;
     fEnergyDeposit[k].clear();
   }
@@ -77,7 +76,7 @@ Run::~Run() {}
 void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 {
   fParticle = particle;
-  fEkin     = energy;
+  fEkin = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,16 +105,13 @@ void Run::AddNeutralStep() { fNeutralStep += 1.0; }
 void Run::AddSecondaryTrack(const G4Track* track)
 {
   const G4ParticleDefinition* d = track->GetDefinition();
-  if(d == G4Gamma::Gamma())
-  {
+  if (d == G4Gamma::Gamma()) {
     ++fN_gamma;
   }
-  else if(d == G4Electron::Electron())
-  {
+  else if (d == G4Electron::Electron()) {
     ++fN_elec;
   }
-  else if(d == G4Positron::Positron())
-  {
+  else if (d == G4Positron::Positron()) {
     ++fN_pos;
   }
 }
@@ -128,12 +124,11 @@ void Run::Merge(const G4Run* run)
 
   // pass information about primary particle
   fParticle = localRun->fParticle;
-  fEkin     = localRun->fEkin;
+  fEkin = localRun->fEkin;
 
   // accumulate sums
   //
-  for(G4int k = 0; k < kMaxAbsor; k++)
-  {
+  for (G4int k = 0; k < kMaxAbsor; k++) {
     fSumEAbs[k] += localRun->fSumEAbs[k];
     fSum2EAbs[k] += localRun->fSum2EAbs[k];
     fSumLAbs[k] += localRun->fSumLAbs[k];
@@ -154,10 +149,9 @@ void Run::Merge(const G4Run* run)
 
 void Run::EndOfRun()
 {
-  G4int nEvt    = numberOfEvent;
+  G4int nEvt = numberOfEvent;
   G4double norm = G4double(nEvt);
-  if(norm > 0)
-    norm = 1. / norm;
+  if (norm > 0) norm = 1. / norm;
   G4double qnorm = std::sqrt(norm);
 
   fChargedStep *= norm;
@@ -166,61 +160,52 @@ void Run::EndOfRun()
   // compute and print statistic
   //
   G4double beamEnergy = fEkin;
-  G4double sqbeam     = std::sqrt(beamEnergy / GeV);
+  G4double sqbeam = std::sqrt(beamEnergy / GeV);
 
   G4double MeanEAbs, MeanEAbs2, rmsEAbs, resolution, rmsres;
   G4double MeanLAbs, MeanLAbs2, rmsLAbs;
 
   std::ios::fmtflags mode = G4cout.flags();
-  G4int prec              = G4cout.precision(2);
+  G4int prec = G4cout.precision(2);
   G4cout << "\n------------------------------------------------------------\n";
-  G4cout << std::setw(14) << "material" << std::setw(17) << "Edep       RMS"
-         << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean" << std::setw(23)
-         << "total tracklen \n \n";
+  G4cout << std::setw(14) << "material" << std::setw(17) << "Edep       RMS" << std::setw(33)
+         << "sqrt(E0(GeV))*rmsE/Emean" << std::setw(23) << "total tracklen \n \n";
 
-  for(G4int k = 1; k <= fDetector->GetNbOfAbsor(); k++)
-  {
-    MeanEAbs  = fSumEAbs[k] * norm;
+  for (G4int k = 1; k <= fDetector->GetNbOfAbsor(); k++) {
+    MeanEAbs = fSumEAbs[k] * norm;
     MeanEAbs2 = fSum2EAbs[k] * norm;
-    rmsEAbs   = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs * MeanEAbs));
+    rmsEAbs = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs * MeanEAbs));
 
     resolution = 100. * sqbeam * rmsEAbs / MeanEAbs;
-    rmsres     = resolution * qnorm;
+    rmsres = resolution * qnorm;
 
     // Save mean and RMS
-    fSumEAbs[k]  = MeanEAbs;
+    fSumEAbs[k] = MeanEAbs;
     fSum2EAbs[k] = rmsEAbs;
 
-    MeanLAbs  = fSumLAbs[k] * norm;
+    MeanLAbs = fSumLAbs[k] * norm;
     MeanLAbs2 = fSum2LAbs[k] * norm;
-    rmsLAbs   = std::sqrt(std::abs(MeanLAbs2 - MeanLAbs * MeanLAbs));
+    rmsLAbs = std::sqrt(std::abs(MeanLAbs2 - MeanLAbs * MeanLAbs));
 
     // print
     //
     G4cout << std::setw(14) << fDetector->GetAbsorMaterial(k)->GetName() << ": "
-           << std::setprecision(5) << std::setw(6)
-           << G4BestUnit(MeanEAbs, "Energy") << " :  " << std::setprecision(4)
-           << std::setw(5) << G4BestUnit(rmsEAbs, "Energy") << std::setw(10)
-           << resolution << " +- " << std::setw(5) << rmsres << " %"
-           << std::setprecision(3) << std::setw(10)
-           << G4BestUnit(MeanLAbs, "Length") << " +- " << std::setw(4)
+           << std::setprecision(5) << std::setw(6) << G4BestUnit(MeanEAbs, "Energy") << " :  "
+           << std::setprecision(4) << std::setw(5) << G4BestUnit(rmsEAbs, "Energy") << std::setw(10)
+           << resolution << " +- " << std::setw(5) << rmsres << " %" << std::setprecision(3)
+           << std::setw(10) << G4BestUnit(MeanLAbs, "Length") << " +- " << std::setw(4)
            << G4BestUnit(rmsLAbs, "Length") << G4endl;
   }
   G4cout << "\n------------------------------------------------------------\n";
 
   G4cout << " Beam particle " << fParticle->GetParticleName()
          << "  E = " << G4BestUnit(beamEnergy, "Energy") << G4endl;
-  G4cout << " Mean number of gamma       " << (G4double) fN_gamma * norm
-         << G4endl;
-  G4cout << " Mean number of e-          " << (G4double) fN_elec * norm
-         << G4endl;
-  G4cout << " Mean number of e+          " << (G4double) fN_pos * norm
-         << G4endl;
-  G4cout << std::setprecision(6) << " Mean number of charged steps  "
-         << fChargedStep << G4endl;
+  G4cout << " Mean number of gamma       " << (G4double)fN_gamma * norm << G4endl;
+  G4cout << " Mean number of e-          " << (G4double)fN_elec * norm << G4endl;
+  G4cout << " Mean number of e+          " << (G4double)fN_pos * norm << G4endl;
+  G4cout << std::setprecision(6) << " Mean number of charged steps  " << fChargedStep << G4endl;
   G4cout << " Mean number of neutral steps  " << fNeutralStep << G4endl;
-  G4cout << "------------------------------------------------------------\n"
-         << G4endl;
+  G4cout << "------------------------------------------------------------\n" << G4endl;
 
   G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);

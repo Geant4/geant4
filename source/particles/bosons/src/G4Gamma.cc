@@ -73,7 +73,7 @@ G4Gamma*  G4Gamma::Definition()
              false,           "photon",          22
 	      );
   }
-  theInstance = reinterpret_cast<G4Gamma*>(anInstance);
+  theInstance = static_cast<G4Gamma*>(anInstance);
   return theInstance;
 }
 

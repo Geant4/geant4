@@ -55,7 +55,6 @@ geant4_add_module(G4hadronic_radioactivedecay
 geant4_module_link_libraries(G4hadronic_radioactivedecay
   PUBLIC
     G4globman
-    G4hadronic_util
     G4heprandom
     G4intercoms
     G4partman

@@ -26,7 +26,7 @@ endif()
 if(DEFINED ENV{G4PIIDATA})
   message(STATUS "G4PIIDATA environment variable defined")
 else()
-  message(STATUS "Please set G4PIIDATA enviroment (e.g. G4PII1.3) in your system!")
+  message(STATUS "Please set G4PIIDATA enviroment variable (e.g. G4PII1.3) in your system!")
 endif()
 
 
@@ -44,24 +44,7 @@ include_directories(${PROJECT_SOURCE_DIR}/application/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/application/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/application/include/*.hh)
 
-#-----------------------------------------------------------------------------------
-# Setup Geant4 physics mode
-#
-# ON : simulate Geant4 with PIXE data
-# OFF: simulate Geant4 with original Geant4 low energy physics processes
-#       based on EEDL/EPDL/EADL data libraries
-option(PHYSICS_MODE "Please select Geant4 Physics model. ON:PIXE, OFF:OriginalGeant4Physics" ON)
-if(PHYSICS_MODE)
-  add_executable(eRosita eRosita.cc ${sources} ${headers})
-else()
-  add_definitions(-DORIGINAL_PHYSICS)
-  file(GLOB sourcesOriginal ${PROJECT_SOURCE_DIR}/physics/src/*.cc)
-  file(GLOB headersOriginal ${PROJECT_SOURCE_DIR}/physics/include/*.hh)
-  include_directories(${PROJECT_SOURCE_DIR}/physics/include)
-  add_executable(eRosita eRosita.cc ${sources} ${headers}
-                                  ${sourcesOriginal} ${headersOriginal} )
-endif()
-
+add_executable(eRosita eRosita.cc ${sources} ${headers})
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
@@ -77,6 +60,7 @@ target_link_libraries(eRosita ${Geant4_LIBRARIES})
 set(EXAMPLEeRosita_SCRIPTS
   eRosita.in
   eRositaLong.in
+  vis.mac
 )
 
 foreach(_script ${EXAMPLEeRosita_SCRIPTS})

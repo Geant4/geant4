@@ -22,8 +22,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file EmDNAChemistry.cc
-/// \brief Implementation of the EmDNAChemistry class
+/// \file scavenger/src/EmDNAChemistry.cc
+/// \brief Implementation of the scavenger::EmDNAChemistry class
 
 #include "EmDNAChemistry.hh"
 #include "G4PhysicalConstants.hh"
@@ -34,6 +34,7 @@
 #include "G4ProcessManager.hh"
 #include "G4DNAElectronSolvation.hh"
 #include "G4DNAVibExcitation.hh"
+#include "G4DNASancheExcitationModel.hh"
 #include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
 #include "G4DNAMolecularDissociation.hh"
 #include "G4DNAMolecularReactionTable.hh"

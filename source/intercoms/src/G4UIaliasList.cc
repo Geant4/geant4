@@ -34,8 +34,8 @@
 // --------------------------------------------------------------------
 G4UIaliasList::~G4UIaliasList()
 {
-  G4int n_treeEntry = alias.size();
-  for(G4int i = 0; i < n_treeEntry; ++i)
+  std::size_t n_treeEntry = alias.size();
+  for(std::size_t i = 0; i < n_treeEntry; ++i)
   {
     delete alias[i];
     delete value[i];
@@ -109,12 +109,12 @@ G4String* G4UIaliasList::FindAlias(const char* aliasName)
 // --------------------------------------------------------------------
 G4int G4UIaliasList::FindAliasID(const char* aliasName)
 {
-  G4int i_entry = alias.size();
-  for(G4int i = 0; i < i_entry; ++i)
+  std::size_t i_entry = alias.size();
+  for(std::size_t i = 0; i < i_entry; ++i)
   {
     if(*(alias[i]) == aliasName)
     {
-      return i;
+      return (G4int)i;
     }
   }
   return -1;
@@ -123,10 +123,10 @@ G4int G4UIaliasList::FindAliasID(const char* aliasName)
 // --------------------------------------------------------------------
 void G4UIaliasList::List()
 {
-  G4int i_entry = alias.size();
-  for(G4int i1 = 0; i1 < i_entry - 1; ++i1)
+  std::size_t i_entry = alias.size();
+  for(std::size_t i1 = 0; i1 < i_entry - 1; ++i1)
   {
-    for(G4int i2 = i1 + 1; i2 < i_entry; ++i2)
+    for(std::size_t i2 = i1 + 1; i2 < i_entry; ++i2)
     {
       if(*(alias[i1]) > *(alias[i2]))
       {
@@ -140,7 +140,7 @@ void G4UIaliasList::List()
     }
   }
 
-  for(G4int i = 0; i < i_entry; ++i)
+  for(std::size_t i = 0; i < i_entry; ++i)
   {
     G4cout << "  " << *(alias[i]) << " : " << *(value[i]) << G4endl;
   }

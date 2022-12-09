@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.cc
+/// \file B1/src/ActionInitialization.cc
 /// \brief Implementation of the B1::ActionInitialization class
 
 #include "ActionInitialization.hh"
@@ -38,19 +38,9 @@ namespace B1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ActionInitialization::BuildForMaster() const
 {
-  RunAction* runAction = new RunAction;
+  auto runAction = new RunAction;
   SetUserAction(runAction);
 }
 
@@ -60,10 +50,10 @@ void ActionInitialization::Build() const
 {
   SetUserAction(new PrimaryGeneratorAction);
 
-  RunAction* runAction = new RunAction;
+  auto runAction = new RunAction;
   SetUserAction(runAction);
 
-  EventAction* eventAction = new EventAction(runAction);
+  auto eventAction = new EventAction(runAction);
   SetUserAction(eventAction);
 
   SetUserAction(new SteppingAction(eventAction));

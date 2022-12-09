@@ -47,7 +47,7 @@
 
 class G4PSPassageCellFluxForCylinder3D : public G4PSPassageCellFlux3D
 {
- public:  // with description
+ public:
   G4PSPassageCellFluxForCylinder3D(G4String name, G4int ni = 1, G4int nj = 1,
                                    G4int nk = 1, G4int depi = 2, G4int depj = 1,
                                    G4int depk = 0);
@@ -55,13 +55,13 @@ class G4PSPassageCellFluxForCylinder3D : public G4PSPassageCellFlux3D
                                    G4int ni = 1, G4int nj = 1, G4int nk = 1,
                                    G4int depi = 2, G4int depj = 1,
                                    G4int depk = 0);
-  virtual ~G4PSPassageCellFluxForCylinder3D();
+  ~G4PSPassageCellFluxForCylinder3D() override = default;
 
   void SetCylinderSize(G4ThreeVector cylSize, G4double startAng, G4double angSpan);
   void SetNumberOfSegments(G4int nSeg[3]);
 
- protected:  // with description
-  virtual G4double ComputeVolume(G4Step*, G4int idx);
+ protected:
+  G4double ComputeVolume(G4Step*, G4int idx) override;
 
  private:
   // Order of segmentation (Z PHI R) in CylinderMesh

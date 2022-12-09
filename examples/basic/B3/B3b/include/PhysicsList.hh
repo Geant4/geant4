@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file PhysicsList.hh
+/// \file B3/B3b/include/PhysicsList.hh
 /// \brief Definition of the B3::PhysicsList class
 
 #ifndef B3PhysicsList_h
@@ -46,7 +46,7 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList() override;
+  ~PhysicsList() override = default;
 
   void SetCuts() override;
 };

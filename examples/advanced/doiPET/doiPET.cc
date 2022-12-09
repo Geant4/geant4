@@ -60,10 +60,6 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
 	}
 	
-	// Choose the Random engine
-	
-	G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
 	//Initialize analysis
 	doiPETAnalysis* ptrAnalysis = doiPETAnalysis::GetInstance();
 

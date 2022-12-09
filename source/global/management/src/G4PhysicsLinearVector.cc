@@ -67,7 +67,7 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double Emin, G4double Emax,
   binVector[numberOfNodes - 1] = Emax;
   Initialise();
 
-  for(G4int i = 1; i <= idxmax; ++i)
+  for(std::size_t i = 1; i <= idxmax; ++i)
   {
     binVector[i] = edgeMin + i / invdBin;
   }

@@ -135,7 +135,7 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector& localPoint,
            << ", to be considered as 'mother safety'." << G4endl;
   }
 #endif
-  localNoDaughters = motherLogical->GetNoDaughters();
+  localNoDaughters = (G4int)motherLogical->GetNoDaughters();
 
   fBlockList.Enlarge(localNoDaughters);
   fBlockList.Reset();
@@ -160,7 +160,8 @@ G4VoxelSafety::SafetyForVoxelNode( const G4SmartVoxelNode* curVoxelNode,
 {
    G4double ourSafety = DBL_MAX;
 
-   G4int curNoVolumes, contentNo, sampleNo;
+   G4long curNoVolumes, contentNo;
+   G4int sampleNo;
    G4VPhysicalVolume* samplePhysical;
 
    G4double      sampleSafety = 0.0; 
@@ -171,7 +172,7 @@ G4VoxelSafety::SafetyForVoxelNode( const G4SmartVoxelNode* curVoxelNode,
 
    for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
    {
-      sampleNo = curVoxelNode->GetVolume(contentNo);
+      sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
       if ( !fBlockList.IsBlocked(sampleNo) ) 
       { 
         fBlockList.BlockVolume(sampleNo);
@@ -235,7 +236,7 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
   // fVoxelDepth  set by ComputeSafety or previous level call
 
   targetHeaderAxis =      targetVoxelHeader->GetAxis();
-  targetHeaderNoSlices =  targetVoxelHeader->GetNoSlices();
+  targetHeaderNoSlices =  (G4int)targetVoxelHeader->GetNoSlices();
   targetHeaderMin =       targetVoxelHeader->GetMinExtent();
   targetHeaderMax =       targetVoxelHeader->GetMaxExtent();
 

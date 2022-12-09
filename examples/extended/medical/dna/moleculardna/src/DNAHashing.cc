@@ -39,26 +39,26 @@ namespace G4::hashing
   {
     namespace crc32
     {
-      uint32_t hash(const char* str, size_t len)
+      uint32_t Hash(const char* str, size_t len)
       {
         uint32_t remainder = 0xFFFFFFFF;
         for(size_t idx = 0; idx < len; ++idx)
         {
           remainder =
-            (remainder >> 8) ^ crc_table[(remainder ^ str[idx]) & 0x000000FF];
+            (remainder >> 8) ^ fCrc_table[(remainder ^ str[idx]) & 0x000000FF];
         }
         return remainder ^ 0xFFFFFFFF;
       }
 
-      uint32_t hash(const std::string& str)
+      uint32_t Hash(const std::string& str)
       {
-        return hash(str.c_str(), str.size());
+        return Hash(str.c_str(), str.size());
       }
     }  // namespace crc32
 
     namespace fnv
     {
-      size_t hash(const std::string& str)
+      size_t Hash(const std::string& str)
       {
         size_t hash = fnv_offset_basis;
         for(size_t i = 0; i < str.length(); i++)
@@ -72,7 +72,7 @@ namespace G4::hashing
 
     namespace larson
     {
-      size_t hash(const char* str, unsigned int seed)
+      size_t Hash(const char* str, unsigned int seed)
       {
         size_t hash = seed;
         while(*str)
@@ -82,9 +82,9 @@ namespace G4::hashing
         return hash;
       }
 
-      size_t hash(std::string str, unsigned int seed)
+      size_t Hash(std::string str, unsigned int seed)
       {
-        return hash(str.c_str(), seed);
+        return Hash(str.c_str(), seed);
       }
     }  // namespace larson
   }  // namespace G4

@@ -71,7 +71,7 @@ G4DMesonZero* G4DMesonZero::Definition()
              false,           "D"
               );
   }
-  theInstance = reinterpret_cast<G4DMesonZero*>(anInstance);
+  theInstance = static_cast<G4DMesonZero*>(anInstance);
   return theInstance;
 }
 

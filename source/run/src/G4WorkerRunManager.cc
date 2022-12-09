@@ -221,7 +221,7 @@ void G4WorkerRunManager::RunInitialization()
 
   if(G4VScoreNtupleWriter::Instance())
   {
-    auto hce            = fSDM->PrepareNewEvent();
+    auto hce            = (fSDM != nullptr) ? fSDM->PrepareNewEvent() : nullptr;
     isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
     delete hce;
   }
@@ -544,7 +544,7 @@ void G4WorkerRunManager::ConstructScoringWorlds()
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(ScM == nullptr)
     return;
-  G4int nPar = ScM->GetNumberOfMesh();
+  G4int nPar = (G4int)ScM->GetNumberOfMesh();
   if(nPar < 1)
     return;
 

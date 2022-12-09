@@ -113,9 +113,9 @@ inline G4Parton* G4QGSMSplitableHadron::GetNextAntiParton()
 	return result;
 }
 
-inline void G4QGSMSplitableHadron::SetFirstParton(G4int PDGcode)
-{PDGcode++;}
-inline void G4QGSMSplitableHadron::SetSecondParton(G4int PDGcode)
-{PDGcode++;}
+inline void G4QGSMSplitableHadron::SetFirstParton(G4int)
+{}
+inline void G4QGSMSplitableHadron::SetSecondParton(G4int)
+{}
 #endif
 

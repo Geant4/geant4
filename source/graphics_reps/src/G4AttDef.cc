@@ -36,7 +36,7 @@ std::ostream& operator<<
 (std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
 {
   os << "G4AttDef: Deprecated output function.  Use const reference instead." << endl;
-  if (definitions) {
+  if (definitions != nullptr) {
     os << *definitions;
   } else {
     os << "G4AttCheck: ERROR: zero definitions pointer." << endl;

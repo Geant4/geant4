@@ -81,7 +81,7 @@ void G4NeutronCrossSectionXS::ConstructProcess()
   }
 
   G4ProcessVector* pv = neutron->GetProcessManager()->GetProcessList();
-  G4int n = pv->size();
+  G4int n = (G4int)pv->size();
   G4HadronicProcess* had = 0;
   for(G4int i=0; i<n; i++) {
     if(fHadronInelastic == ((*pv)[i])->GetProcessSubType()) {
@@ -93,4 +93,3 @@ void G4NeutronCrossSectionXS::ConstructProcess()
     }
   }
 }
-

@@ -33,6 +33,7 @@
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
 // ************************************************************
+
 #include "G4RunManager.hh"
 #include "GammaRayTelCalorimeterSD.hh"
 #include "GammaRayTelCalorimeterHit.hh"
@@ -48,172 +49,121 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelCalorimeterSD::GammaRayTelCalorimeterSD(G4String name):G4VSensitiveDetector(name)
-{
- G4RunManager* runManager = G4RunManager::GetRunManager();
-  Detector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
-  
-  NbOfCALBars  = Detector->GetNbOfCALBars();
-  NbOfCALLayers  = Detector->GetNbOfCALLayers();
+GammaRayTelCalorimeterSD::GammaRayTelCalorimeterSD(G4String name) :	G4VSensitiveDetector(name) {
+	auto *runManager = G4RunManager::GetRunManager();
+	detector = (GammaRayTelDetectorConstruction*) (runManager->GetUserDetectorConstruction());
 
-  //G4cout <<  NbOfCALBars << " bars " << G4endl;
-  //G4cout <<  NbOfCALLayers << " layers " << G4endl;
-  
-  NbOfCALChannels = NbOfCALBars*NbOfCALLayers;
-  
-  ChitXID = new G4int[NbOfCALChannels];
-  ChitYID = new G4int[NbOfCALChannels];
-  collectionName.insert("CalorimeterCollection");
+	numberOfCALBars = detector->GetNbOfCALBars();
+	numberOfCALLayers = detector->GetNbOfCALLayers();
+
+	// G4cout << NbOfCALBars << " bars " << G4endl;
+	// G4cout << NbOfCALLayers << " layers " << G4endl;
+
+	numberOfCALChannels = numberOfCALBars * numberOfCALLayers;
+
+	calHitXID = new G4int[numberOfCALChannels];
+	calHitYID = new G4int[numberOfCALChannels];
+	collectionName.insert("CalorimeterCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelCalorimeterSD::~GammaRayTelCalorimeterSD()
-{
-  delete [] ChitXID;
-  delete [] ChitYID;
+GammaRayTelCalorimeterSD::~GammaRayTelCalorimeterSD() {
+	delete[] calHitXID;
+	delete[] calHitYID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterSD::Initialize(G4HCofThisEvent*)
-{
-  CalorimeterCollection = new GammaRayTelCalorimeterHitsCollection
-    (SensitiveDetectorName,collectionName[0]);
-  for (G4int i=0;i<NbOfCALChannels;i++)
-      {
-	ChitXID[i] = -1;
-	ChitYID[i] = -1;
-      };
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool GammaRayTelCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
-{ 
-  
-  G4double edep = 0.;
-  edep = aStep->GetTotalEnergyDeposit();
-  if (edep == 0.) return false;      
-  
-  // This TouchableHistory is used to obtain the physical volume
-  // of the hit
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-  
-  G4VPhysicalVolume* cal_bar = theTouchable->GetVolume();  
-  G4VPhysicalVolume* cal_plane = theTouchable->GetVolume(1);
-
-  G4int CALBarNumber=cal_bar->GetCopyNo();
-  G4String CALBarName = cal_bar->GetName();
-  
-  G4int PlaneNumber = 0;
-  PlaneNumber=cal_plane->GetCopyNo();
-  G4String PlaneName = cal_plane->GetName();
-
-
-  G4int NChannel = 0;
-  
-  NChannel = PlaneNumber * NbOfCALBars + CALBarNumber; 
-  
-  if (PlaneName == "CALLayerX" )
-    
-    // The hit is on an X CsI plane
-    
-    {
-      // This is a new hit
-      if (ChitXID[NChannel]==-1)
-	{       
-	  GammaRayTelCalorimeterHit* CalorimeterHit = new GammaRayTelCalorimeterHit;
-	  CalorimeterHit->SetCALType(1);
-	  CalorimeterHit->AddEnergy(edep);
-	  CalorimeterHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  CalorimeterHit->SetCALPlaneNumber(PlaneNumber);
-	  CalorimeterHit->SetCALBarNumber(CALBarNumber);
-	  ChitXID[NChannel] = 
-	    CalorimeterCollection->insert(CalorimeterHit) -1;
+void GammaRayTelCalorimeterSD::Initialize(G4HCofThisEvent*) {
+    calorimeterCollection = new GammaRayTelCalorimeterHitsCollection(SensitiveDetectorName, collectionName[0]);
+	for (auto i = 0; i < numberOfCALChannels; i++) {
+		calHitXID[i] = -1;
+		calHitYID[i] = -1;
 	}
-      else // This is not new
-	{
-	  (*CalorimeterCollection)
-	    [ChitXID[NChannel]]->AddEnergy(edep);
-	}
-    }
- 
-  if (PlaneName == "CALLayerY")
-    // The hit is on an Y CsI plane    
-    {   
-      // This is a new hit
-      if (ChitYID[NChannel]==-1)
-	{       
-	  GammaRayTelCalorimeterHit* CalorimeterHit 
-	    = new GammaRayTelCalorimeterHit;
-	  CalorimeterHit->SetCALType(0);
-	  CalorimeterHit->AddEnergy(edep);
-	  CalorimeterHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-	  CalorimeterHit->SetCALPlaneNumber(PlaneNumber);
-	  CalorimeterHit->SetCALBarNumber(CALBarNumber);
-	  ChitYID[NChannel] = 
-	    CalorimeterCollection->insert(CalorimeterHit)-1;
-	}
-      else // This is not new
-	{
-	  (*CalorimeterCollection)
-	    [ChitYID[NChannel]]->AddEnergy(edep);
-	}
-    }
-  
-  return true;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void GammaRayTelCalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
-{
-  static G4int HCID = -1;
-  if(HCID<0)
-    { 
-      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
-    }
-  HCE->AddHitsCollection(HCID,CalorimeterCollection);
 
+auto GammaRayTelCalorimeterSD::ProcessHits(G4Step *step, G4TouchableHistory*) -> G4bool {
+	G4double depositedEnergy = 0.;
+	depositedEnergy = step->GetTotalEnergyDeposit();
+	if (depositedEnergy == 0.) {
+		return false;
+	}
 
-  for (G4int i=0;i<NbOfCALChannels;i++) 
-    {
-      ChitXID[i] = -1;
-      ChitYID[i] = -1;
-    };
+	// This TouchableHistory is used to obtain the physical volume of the hit
+	auto *theTouchable = (G4TouchableHistory*) (step->GetPreStepPoint()->GetTouchable());
+	auto *calorimeterBar = theTouchable->GetVolume();
+	auto *calorimeterPlane = theTouchable->GetVolume(1);
+	auto calorimeterBarNumber = calorimeterBar->GetCopyNo();
+	auto calorimeterBarName = calorimeterBar->GetName();
+
+	G4int planeNumber{0};
+	planeNumber = calorimeterPlane->GetCopyNo();
+
+	auto planeName = calorimeterPlane->GetName();
+
+	G4int NChannel = 0;
+	NChannel = planeNumber * numberOfCALBars + calorimeterBarNumber;
+
+	if (planeName == "CALLayerX") { // The hit is on a X CsI (cesium iodide) plane
+		if (calHitXID[NChannel] == -1) { // This is a new hit
+			auto *calorimeterHit = new GammaRayTelCalorimeterHit;
+			calorimeterHit->SetCALType(1);
+			calorimeterHit->AddEnergy(depositedEnergy);
+			calorimeterHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+			calorimeterHit->SetCALPlaneNumber(planeNumber);
+			calorimeterHit->SetCALBarNumber(calorimeterBarNumber);
+			calHitXID[NChannel] = calorimeterCollection->insert(calorimeterHit) - 1;
+		} else { // This is not new
+			(*calorimeterCollection)[calHitXID[NChannel]]->AddEnergy(depositedEnergy);
+		}
+	}
+
+	if (planeName == "CALLayerY") { // The hit is on an Y CsI (cesium iodide) plane
+		if (calHitYID[NChannel] == -1) { // This is a new hit
+			auto *calorimeterHit = new GammaRayTelCalorimeterHit;
+			calorimeterHit->SetCALType(0);
+			calorimeterHit->AddEnergy(depositedEnergy);
+			calorimeterHit->SetPosition(step->GetPreStepPoint()->GetPosition());
+			calorimeterHit->SetCALPlaneNumber(planeNumber);
+			calorimeterHit->SetCALBarNumber(calorimeterBarNumber);
+			calHitYID[NChannel] = calorimeterCollection->insert(calorimeterHit) - 1;
+		} else { // This is not new
+			(*calorimeterCollection)[calHitYID[NChannel]]->AddEnergy(depositedEnergy);
+		}
+	}
+
+	return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelCalorimeterSD::EndOfEvent(G4HCofThisEvent *HCE) {
+	static G4int collectionIdentifier = -1;
+	if (collectionIdentifier < 0) {
+		collectionIdentifier = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+	}
+	HCE->AddHitsCollection(collectionIdentifier, calorimeterCollection);
+
+	for (auto i = 0; i < numberOfCALChannels; i++) {
+		calHitXID[i] = -1;
+		calHitYID[i] = -1;
+	}
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterSD::clear()
-{} 
+void GammaRayTelCalorimeterSD::clear() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterSD::DrawAll()
-{} 
+void GammaRayTelCalorimeterSD::DrawAll() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterSD::PrintAll()
-{} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelCalorimeterSD::PrintAll() {
+}

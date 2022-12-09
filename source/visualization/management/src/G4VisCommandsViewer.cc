@@ -54,6 +54,8 @@
 #include <regex>
 #include <set>
 
+#define G4warn G4cout
+
 ////////////// /vis/viewer/addCutawayPlane ///////////////////////////////////////
 
 G4VisCommandViewerAddCutawayPlane::G4VisCommandViewerAddCutawayPlane () {
@@ -107,7 +109,7 @@ void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand*, G4String newV
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -122,11 +124,12 @@ void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand*, G4String newV
   x *= F; y *= F; z *= F;
 
   G4ViewParameters vp = viewer->GetViewParameters();
-  vp.AddCutawayPlane(G4Plane3D(G4Normal3D(nx,ny,nz), G4Point3D(x,y,z)));
+  // Make sure normal is normalised.
+  vp.AddCutawayPlane(G4Plane3D(G4Normal3D(nx,ny,nz).unit(), G4Point3D(x,y,z)));
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Cutaway planes for viewer \"" << viewer->GetName() << "\" now:";
     const G4Planes& cutaways = vp.GetCutawayPlanes();
-    for (size_t i = 0; i < cutaways.size(); ++i)
+    for (std::size_t i = 0; i < cutaways.size(); ++i)
       G4cout << "\n  " << i << ": " << cutaways[i];
     G4cout << G4endl;
   }
@@ -191,7 +194,7 @@ void G4VisCommandViewerCentreOn::SetNewValue (G4UIcommand* command, G4String new
   G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
       << G4endl;
     }
@@ -206,11 +209,11 @@ void G4VisCommandViewerCentreOn::SetNewValue (G4UIcommand* command, G4String new
   // Find physical volumes
   G4TransportationManager* transportationManager =
   G4TransportationManager::GetTransportationManager ();
-  size_t nWorlds = transportationManager->GetNoWorlds();
+  std::size_t nWorlds = transportationManager->GetNoWorlds();
   std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
   std::vector<G4VPhysicalVolume*>::iterator iterWorld =
   transportationManager->GetWorldsIterator();
-  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+  for (std::size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
     G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
     G4ModelingParameters mp;  // Default - no culling.
     searchModel.SetModelingParameters (&mp);
@@ -224,12 +227,12 @@ void G4VisCommandViewerCentreOn::SetNewValue (G4UIcommand* command, G4String new
   
   if (findingsVector.empty()) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cerr
+      G4warn
       << "WARNING: Volume \"" << pvName << "\" ";
       if (copyNo > 0) {
-        G4cerr << "copy number " << copyNo;
+        G4warn << "copy number " << copyNo;
       }
-      G4cerr << " not found." << G4endl;
+      G4warn << " not found." << G4endl;
     }
     return;
   }
@@ -297,12 +300,12 @@ void G4VisCommandViewerCentreOn::SetNewValue (G4UIcommand* command, G4String new
   // If this particular view is simple enough
   if (currentViewer->GetKernelVisitElapsedTimeSeconds() < 0.1) {
     // Interpolate
-    auto keepVerbose = fpVisManager->GetVerbosity();
+    auto keepVisVerbosity = fpVisManager->GetVerbosity();
     fpVisManager->SetVerboseLevel(G4VisManager::errors);
     if (newVP != saveVP) InterpolateToNewView(currentViewer, saveVP, newVP);
     // ...and twinkle
     Twinkle(currentViewer,newVP,foundPaths);
-    fpVisManager->SetVerboseLevel(keepVerbose);
+    fpVisManager->SetVerboseLevel(keepVisVerbosity);
   }
 
   if (verbosity >= G4VisManager::confirmations) {
@@ -374,14 +377,14 @@ void G4VisCommandViewerChangeCutawayPlane::SetNewValue (G4UIcommand*, G4String n
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
     return;
   }
 
-  size_t index;
+  std::size_t index;
   G4double x, y, z, nx, ny, nz;
   G4String unit;
   std::istringstream is (newValue);
@@ -390,12 +393,13 @@ void G4VisCommandViewerChangeCutawayPlane::SetNewValue (G4UIcommand*, G4String n
   x *= F; y *= F; z *= F;
 
   G4ViewParameters vp = viewer->GetViewParameters();
+  // Make sure normal is normalised.
   vp.ChangeCutawayPlane(index,
-			G4Plane3D(G4Normal3D(nx,ny,nz), G4Point3D(x,y,z)));
+			G4Plane3D(G4Normal3D(nx,ny,nz).unit(), G4Point3D(x,y,z)));
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Cutaway planes for viewer \"" << viewer->GetName() << "\" now:";
     const G4Planes& cutaways = vp.GetCutawayPlanes();
-    for (size_t i = 0; i < cutaways.size(); ++i)
+    for (std::size_t i = 0; i < cutaways.size(); ++i)
       G4cout << "\n  " << i << ": " << cutaways[i];
     G4cout << G4endl;
   }
@@ -434,7 +438,7 @@ void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* viewer = fpVisManager -> GetViewer (clearName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << clearName
+      G4warn << "ERROR: Viewer \"" << clearName
 	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -473,7 +477,7 @@ void G4VisCommandViewerClearCutawayPlanes::SetNewValue (G4UIcommand*, G4String) 
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -521,7 +525,7 @@ void G4VisCommandViewerClearTransients::SetNewValue (G4UIcommand*, G4String newV
   G4VViewer* viewer = fpVisManager -> GetViewer (clearName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << clearName
+      G4warn << "ERROR: Viewer \"" << clearName
 	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -563,7 +567,7 @@ void G4VisCommandViewerClearVisAttributesModifiers::SetNewValue (G4UIcommand*, G
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -633,7 +637,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* originalViewer = fpVisManager -> GetViewer (originalName);
   if (!originalViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << originalName
+      G4warn << "ERROR: Viewer \"" << originalName
 	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -676,7 +680,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
 
   if (errorWhileNaming) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: While naming clone viewer \"" << cloneName
+      G4warn << "ERROR: While naming clone viewer \"" << cloneName
 	     << "\"."
 	     << G4endl;
     }
@@ -685,7 +689,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
 
   if (fpVisManager -> GetViewer (cloneName)) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Putative clone viewer \"" << cloneName
+      G4warn << "ERROR: Putative clone viewer \"" << cloneName
 	     << "\" already exists."
 	     << G4endl;
     }
@@ -696,17 +700,10 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
     originalViewer->GetViewParameters().GetXGeometryString();
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  G4int keepVerbose = UImanager->GetVerboseLevel();
-  G4int newVerbose(0);
-  if (keepVerbose >= 2 ||
-      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
-    newVerbose = 2;
-  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand(G4String("/vis/viewer/select " + originalName));
   UImanager->ApplyCommand
     (G4String("/vis/viewer/create ! \"" + cloneName + "\" " + windowSizeHint));
   UImanager->ApplyCommand(G4String("/vis/viewer/set/all " + originalName));
-  UImanager->SetVerboseLevel(keepVerbose);
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << originalName << "\" cloned." << G4endl;
@@ -769,7 +766,7 @@ void G4VisCommandViewerColourByDensity::SetNewValue (G4UIcommand*, G4String newV
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
       << G4endl;
     }
@@ -785,7 +782,7 @@ void G4VisCommandViewerColourByDensity::SetNewValue (G4UIcommand*, G4String newV
 
   if (algorithmNumber < 0 || algorithmNumber > 1) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: Unrecognised algorithm number: " << algorithmNumber
       << G4endl;
     }
@@ -802,7 +799,7 @@ void G4VisCommandViewerColourByDensity::SetNewValue (G4UIcommand*, G4String newV
       d0 *= valueOfUnit; d1 *= valueOfUnit; d2 *= valueOfUnit;
     } else {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
+        G4warn <<
         "ERROR: Unrecognised or inappropriate unit: " << unit
         << G4endl;
       }
@@ -860,7 +857,7 @@ void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValu
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
   "ERROR: G4VisCommandsViewerCopyViewFrom::SetNewValue: no current viewer."
              << G4endl;
     }
@@ -871,7 +868,7 @@ void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValu
   G4VViewer* fromViewer = fpVisManager -> GetViewer (fromViewerName);
   if (!fromViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << fromViewerName
+      G4warn << "ERROR: Viewer \"" << fromViewerName
 	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -880,7 +877,7 @@ void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValu
 
   if (fromViewer == currentViewer) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
         "WARNING: G4VisCommandsViewerSet::SetNewValue:"
         "\n  from-viewer and current viewer are identical."
              << G4endl;
@@ -1010,8 +1007,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
-  G4int nHandlers = sceneHandlerList.size ();
-  if (nHandlers <= 0) {
+  std::size_t nHandlers = sceneHandlerList.size ();
+  if (nHandlers == 0) {
     G4ExceptionDescription ed;
     ed <<
     "ERROR: G4VisCommandViewerCreate::SetNewValue: no scene handlers."
@@ -1020,12 +1017,12 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     return;
   }
 
-  G4int iHandler;
-  for (iHandler = 0; iHandler < nHandlers; iHandler++) {
+  std::size_t iHandler;
+  for (iHandler = 0; iHandler < nHandlers; ++iHandler) {
     if (sceneHandlerList [iHandler] -> GetName () == sceneHandlerName) break;
   }
 
-  if (iHandler < 0 || iHandler >= nHandlers) {
+  if (iHandler >= nHandlers) {
     // Invalid command line argument or none.
     // This shouldn't happen!!!!!!
     G4ExceptionDescription ed;
@@ -1050,10 +1047,10 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
   if (newName == nextName) fId++;
   G4String newShortName = fpVisManager -> ViewerShortName (newName);
 
-  for (G4int ih = 0; ih < nHandlers; ih++) {
+  for (std::size_t ih = 0; ih < nHandlers; ++ih) {
     G4VSceneHandler* sh = sceneHandlerList [ih];
     const G4ViewerList& viewerList = sh -> GetViewerList ();
-    for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
+    for (std::size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       if (viewerList [iViewer] -> GetShortName () == newShortName ) {
 	G4ExceptionDescription ed;
 	ed <<
@@ -1117,7 +1114,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     }
     else {
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+	G4warn << "Issue /vis/viewer/refresh or flush to see effect."
 	       << G4endl;
       }
     }
@@ -1180,7 +1177,7 @@ void G4VisCommandViewerDolly::SetNewValue (G4UIcommand* command,
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandsViewerDolly::SetNewValue: no current viewer."
 	     << G4endl;
     }
@@ -1240,7 +1237,7 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* viewer = fpVisManager -> GetViewer (flushName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << flushName << "\"" <<
+      G4warn << "ERROR: Viewer \"" << flushName << "\"" <<
 	" not found - \"/vis/viewer/list\"\n  to see possibilities."
 	     << G4endl;
     }
@@ -1248,14 +1245,8 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 
   G4UImanager* ui = G4UImanager::GetUIpointer();
-  G4int keepVerbose = ui->GetVerboseLevel();
-  G4int newVerbose(0);
-  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
-    newVerbose = 2;
-  ui->SetVerboseLevel(newVerbose);
   ui->ApplyCommand(G4String("/vis/viewer/refresh " + flushName));
   ui->ApplyCommand(G4String("/vis/viewer/update " + flushName));
-  ui->SetVerboseLevel(keepVerbose);
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\""
 	   << " flushed." << G4endl;
@@ -1319,7 +1310,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandViewerInterpolate::SetNewValue: no current viewer."
 	     << G4endl;
     }
@@ -1392,7 +1383,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     // Default pattern is *.g4view, which translates to ^.*\\.g4view
     // Convert pattern into a regexp
     G4String regexp_pattern("^");
-    for (size_t i = 0; i < pattern.length(); ++i) {
+    for (G4int i = 0; i < (G4int)pattern.length(); ++i) {
       if (pattern[i] == '.') {
 	regexp_pattern += "\\.";
       } else if (pattern[i] == '*') {
@@ -1416,7 +1407,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
 
   if (safetyCount > safety) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "/vis/viewer/interpolate:"
       "\n  the number of way points has been limited to the maximum currently allowed: "
       << safety << G4endl;
@@ -1496,10 +1487,10 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
-  G4int nHandlers = sceneHandlerList.size ();
+  std::size_t nHandlers = sceneHandlerList.size ();
   G4bool found = false;
   G4bool foundCurrent = false;
-  for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
+  for (std::size_t iHandler = 0; iHandler < nHandlers; ++iHandler) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     G4cout
@@ -1510,12 +1501,12 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << ", scene \"" << pScene -> GetName () << "\"";
     }
     G4cout << ':';
-    G4int nViewers = viewerList.size ();
+    std::size_t nViewers = viewerList.size ();
     if (nViewers == 0) {
       G4cout << "\n            No viewers for this scene handler." << G4endl;
     }
     else {
-      for (int iViewer = 0; iViewer < nViewers; iViewer++) {
+      for (std::size_t iViewer = 0; iViewer < nViewers; ++iViewer) {
 	const G4VViewer* thisViewer = viewerList [iViewer];
 	G4String thisName = thisViewer -> GetName ();
 	G4String thisShortName = thisViewer -> GetShortName ();
@@ -1625,7 +1616,7 @@ void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandsViewerPan::SetNewValue: no current viewer."
 	     << G4endl;
     }
@@ -1688,7 +1679,7 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* viewer = fpVisManager -> GetViewer (rebuildName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << rebuildName
+      G4warn << "ERROR: Viewer \"" << rebuildName
 	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -1698,7 +1689,7 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
   if (!sceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << viewer->GetName() << "\"" <<
+      G4warn << "ERROR: Viewer \"" << viewer->GetName() << "\"" <<
 	" has no scene handler - report serious bug."
 	     << G4endl;
     }
@@ -1748,7 +1739,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* viewer = fpVisManager -> GetViewer (refreshName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << refreshName << "\"" <<
+      G4warn << "ERROR: Viewer \"" << refreshName << "\"" <<
 	" not found - \"/vis/viewer/list\"\n  to see possibilities."
 	     << G4endl;
     }
@@ -1758,7 +1749,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
   if (!sceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << refreshName << "\"" <<
+      G4warn << "ERROR: Viewer \"" << refreshName << "\"" <<
 	" has no scene handler - report serious bug."
 	     << G4endl;
     }
@@ -1781,7 +1772,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
     G4bool successful = scene -> AddWorldIfEmpty (warn);
     if (!successful) {
       if (verbosity >= G4VisManager::warnings) {
-	G4cout <<
+	G4warn <<
 	  "WARNING: Scene is empty.  Perhaps no geometry exists."
 	  "\n  Try /run/initialize."
 	       << G4endl;
@@ -1843,7 +1834,7 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* viewer = fpVisManager -> GetViewer (resetName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << resetName
+      G4warn << "ERROR: Viewer \"" << resetName
 	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
 	     << G4endl;
     }
@@ -1890,7 +1881,7 @@ void G4VisCommandViewerResetCameraParameters::SetNewValue (G4UIcommand*, G4Strin
   G4VViewer* viewer = fpVisManager -> GetViewer (resetName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << resetName
+      G4warn << "ERROR: Viewer \"" << resetName
       << "\" not found - \"/vis/viewer/list\" to see possibilities."
       << G4endl;
     }
@@ -1958,7 +1949,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsViewerSave::SetNewValue: no current viewer."
       << G4endl;
     }
@@ -1968,7 +1959,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4Scene* currentScene = currentViewer->GetSceneHandler()->GetScene();
   if (!currentScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsViewerSave::SetNewValue: no current scene."
       << G4endl;
     }
@@ -1996,7 +1987,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     static G4int sequenceNumber = 0;
     if (sequenceNumber >= maxNoOfFiles) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr
+        G4warn
         << "ERROR: G4VisCommandsViewerSave::SetNewValue: Maximum number, "
         << maxNoOfFiles
         << ", of files exceeded."
@@ -2021,7 +2012,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     std::ofstream ofs(filename);
     if (!ofs) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
+        G4warn <<
         "ERROR: G4VisCommandsViewerSave::SetNewValue: Trouble opening file \""
         << filename << "\"."
         << G4endl;
@@ -2034,18 +2025,18 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   
   if (verbosity >= G4VisManager::warnings) {
-    G4cout << "Viewer \"" << currentViewer -> GetName ()
+    G4warn << "Viewer \"" << currentViewer -> GetName ()
     << "\"" << " saved to ";
     if (filename == "-") {
-      G4cout << "G4cout.";
+      G4warn << "G4cout.";
     } else {
-      G4cout << "file \'" << filename << "\"." <<
+      G4warn << "file \'" << filename << "\"." <<
       "\n  Read the view back into this or any viewer with"
       "\n  \"/control/execute " << filename << "\" or use"
       "\n  \"/vis/viewer/interpolate\" if you have several saved files -"
       "\n  see \"help /vis/viewer/interpolate\" for guidance.";
     }
-    G4cout << G4endl;
+    G4warn << G4endl;
   }
 }
 
@@ -2104,7 +2095,7 @@ void G4VisCommandViewerScale::SetNewValue (G4UIcommand* command,
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandsViewerScale::SetNewValue: no current viewer."
 	     << G4endl;
     }
@@ -2157,8 +2148,8 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << selectName << "\"";
-      G4cerr << " not found - \"/vis/viewer/list\""
+      G4warn << "ERROR: Viewer \"" << selectName << "\"";
+      G4warn << " not found - \"/vis/viewer/list\""
 	"\n  to see possibilities."
 	     << G4endl;
     }
@@ -2167,7 +2158,7 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   if (viewer == fpVisManager -> GetCurrentViewer ()) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Viewer \"" << viewer -> GetName () << "\""
+      G4warn << "WARNING: Viewer \"" << viewer -> GetName () << "\""
 	     << " already selected." << G4endl;
     }
     return;
@@ -2219,7 +2210,7 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4warn <<
 	"WARNING: command \"/vis/viewer/update\" could not be applied: no current viewer."
 	     << G4endl;
     }
@@ -2229,7 +2220,7 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
   if (!sceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Viewer \"" << updateName << "\"" <<
+      G4warn << "ERROR: Viewer \"" << updateName << "\"" <<
 	" has no scene handler - report serious bug."
 	     << G4endl;
     }
@@ -2310,7 +2301,7 @@ void G4VisCommandViewerZoom::SetNewValue (G4UIcommand* command,
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandsViewerZoom::SetNewValue: no current viewer."
 	     << G4endl;
     }

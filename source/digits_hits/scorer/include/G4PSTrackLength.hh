@@ -47,10 +47,10 @@
 
 class G4PSTrackLength : public G4VPrimitiveScorer
 {
- public:  // with description
+ public:
   G4PSTrackLength(G4String name, G4int depth = 0);
   G4PSTrackLength(G4String name, const G4String& unit, G4int depth = 0);
-  virtual ~G4PSTrackLength();
+  ~G4PSTrackLength() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }
   // Multiply track weight
@@ -61,19 +61,14 @@ class G4PSTrackLength : public G4VPrimitiveScorer
   void DivideByVelocity(G4bool flg = true);
   // Divide by velocity
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
 
  protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
   virtual void DefineUnitAndCategory();
 
  private:

@@ -207,7 +207,7 @@ G4Material::G4Material(const G4String& name, G4double density,
   fChemicalFormula = fBaseMaterial->GetChemicalFormula();
   fMassOfMolecule  = fBaseMaterial->GetMassOfMolecule();
 
-  fNumberOfElements = fBaseMaterial->GetNumberOfElements();     
+  fNumberOfElements = (G4int)fBaseMaterial->GetNumberOfElements();     
   fNbComponents = fNumberOfElements;
 
   CopyPointersOfBaseMaterial();
@@ -387,6 +387,14 @@ G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
     G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
                  FatalException, ed, "");
   }
+  if(0 >= nAtoms) {
+    G4ExceptionDescription ed;
+    ed << "For material " << fName << " and added element "
+       << elm->GetName() << " with Natoms=" << nAtoms
+       << " problem: number of atoms should be above zero";
+    G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
+                 FatalException, ed, "");
+  }
 
   // filling
   G4bool isAdded = false;
@@ -530,7 +538,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
   }
 
   // filling 
-  G4int nelm = material->GetNumberOfElements();
+  G4int nelm = (G4int)material->GetNumberOfElements();
   for(G4int j=0; j<nelm; ++j) {
     auto elm = material->GetElement(j);
     auto frac = material->GetFractionVector();

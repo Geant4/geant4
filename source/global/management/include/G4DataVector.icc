@@ -61,9 +61,9 @@ inline std::size_t G4DataVector::index(const G4double& a)
 
 inline G4bool G4DataVector::contains(const G4double& a) const
 {
-  for(auto i = cbegin(); i != cend(); ++i)
+  for(double i : *this)
   {
-    if(!(*i != a))
+    if(!(i != a))
     {
       return true;
     }

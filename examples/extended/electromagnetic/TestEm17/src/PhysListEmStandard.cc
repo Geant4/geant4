@@ -44,6 +44,7 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4MuonToMuonPairProduction.hh"
 #include "G4hIonisation.hh"
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
@@ -77,6 +78,7 @@ void PhysListEmStandard::ConstructProcess()
   pmanager->AddProcess(new G4MuIonisation(),     -1, 2, 2);
   pmanager->AddProcess(new G4MuBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4MuPairProduction(), -1, 4, 4);
+  pmanager->AddProcess(new G4MuonToMuonPairProduction(), -1, 5, 5);
 
   // mu-
   particle = G4MuonMinus::MuonMinus();
@@ -84,6 +86,7 @@ void PhysListEmStandard::ConstructProcess()
   pmanager->AddProcess(new G4MuIonisation(),     -1, 2, 2);
   pmanager->AddProcess(new G4MuBremsstrahlung(), -1, 3, 3);
   pmanager->AddProcess(new G4MuPairProduction(), -1, 4, 4);
+  pmanager->AddProcess(new G4MuonToMuonPairProduction(), -1, 5, 5);
 
   // pi+
   particle = G4PionPlus::PionPlus();

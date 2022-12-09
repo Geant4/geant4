@@ -59,16 +59,8 @@
 G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
                                                        G4int direction,
                                                        G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , fDirection(direction)
-  , EvtMap(0)
-  , weighted(true)
-  , divideByArea(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-}
+  : G4PSCylinderSurfaceCurrent(name, direction, "percm2", depth) 
+{}
 
 G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
                                                        G4int direction,
@@ -77,7 +69,7 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
   , fDirection(direction)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
   , divideByArea(true)
 {
@@ -85,14 +77,12 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
   SetUnit(unit);
 }
 
-G4PSCylinderSurfaceCurrent::~G4PSCylinderSurfaceCurrent() { ; }
-
 G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,
                                                G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
   G4VSolid* solid      = ComputeCurrentSolid(aStep);
-  G4Tubs* tubsSolid    = static_cast<G4Tubs*>(solid);
+  auto  tubsSolid    = static_cast<G4Tubs*>(solid);
 
   G4int dirFlag = IsSelectedSurface(aStep, tubsSolid);
   // G4cout << " pos " << preStep->GetPosition() <<" dirFlag " << G4endl;
@@ -117,10 +107,10 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,
       G4int index = GetIndex(aStep);
       EvtMap->add(index, current);
 
-      if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+      if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
       {
         auto filler = G4VScoreHistFiller::Instance();
-        if(!filler)
+        if(filler == nullptr)
         {
           G4Exception("G4PSCylinderSurfaceCurrent::ProcessHits", "SCORER0123",
                       JustWarning,
@@ -135,7 +125,7 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4int G4PSCylinderSurfaceCurrent::IsSelectedSurface(G4Step* aStep,
@@ -197,28 +187,23 @@ void G4PSCylinderSurfaceCurrent::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSCylinderSurfaceCurrent::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSCylinderSurfaceCurrent::clear() { EvtMap->clear(); }
-
-void G4PSCylinderSurfaceCurrent::DrawAll() { ; }
 
 void G4PSCylinderSurfaceCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, current] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first << "  current  : ";
+    G4cout << "  copy no.: " << copy << "  current  : ";
     if(divideByArea)
     {
-      G4cout << *(itr->second) / GetUnitValue() << " [" << GetUnit() << "]";
+      G4cout << *(current) / GetUnitValue() << " [" << GetUnit() << "]";
     }
     else
     {
-      G4cout << *(itr->second) << " [tracks]";
+      G4cout << *(current) << " [tracks]";
     }
     G4cout << G4endl;
   }
@@ -232,7 +217,7 @@ void G4PSCylinderSurfaceCurrent::SetUnit(const G4String& unit)
   }
   else
   {
-    if(unit == "")
+    if(unit.empty())
     {
       unitName  = unit;
       unitValue = 1.0;

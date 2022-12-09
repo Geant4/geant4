@@ -1,9 +1,22 @@
 # Category emhighenergy History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-23 Gabriele Cosmo (emhighenergy-V11-00-04)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (emhighenergy-V11-00-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-05 Ben Morgan (emhighenergy-V11-00-02)
+- Resolve duplicated G4partman dependency as public
+
+## 2022-07-04 Vladimir Ivanchenko (emhighenergy-V11-00-01)
+- G4hPairProduction, G4hPairProductionModel - removed not needed methods
 
 ## 2021-12-10 Ben Morgan (emhighenergy-V11-00-00)
 - Change to new Markdown History format

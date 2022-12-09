@@ -48,41 +48,34 @@ class G4VScoreColorMap;
 // the singleton object.
 //
 
-typedef std::vector<G4VScoringMesh*> MeshVec;
-typedef std::vector<G4VScoringMesh*>::iterator MeshVecItr;
-typedef std::vector<G4VScoringMesh*>::const_iterator MeshVecConstItr;
-typedef std::map<G4String, G4VScoreColorMap*> ColorMapDict;
-typedef std::map<G4String, G4VScoreColorMap*>::iterator ColorMapDictItr;
-typedef std::map<G4String, G4VScoreColorMap*>::const_iterator
-  ColorMapDictConstItr;
-typedef std::map<G4int, G4VScoringMesh*> MeshMap;
-typedef std::map<G4int, G4VScoringMesh*>::iterator MeshMapItr;
-typedef std::map<G4int, G4VScoringMesh*>::const_iterator MeshMapConstItr;
+using MeshVec = std::vector<G4VScoringMesh *>;
+using MeshVecItr = MeshVec::iterator;
+using MeshVecConstItr = MeshVec::const_iterator;
+using ColorMapDict = std::map<G4String, G4VScoreColorMap *>;
+using ColorMapDictItr = ColorMapDict::iterator;
+using ColorMapDictConstItr = ColorMapDict::const_iterator;
+using MeshMap = std::map<G4int, G4VScoringMesh *>;
+using MeshMapItr = MeshMap::iterator;
+using MeshMapConstItr = MeshMap::const_iterator;
 
 class G4ScoringManager
 {
  public:  // with description
   static G4ScoringManager* GetScoringManager();
   // Returns the pointer to the singleton object.
- public:
+  
   static G4ScoringManager* GetScoringManagerIfExist();
+
+  ~G4ScoringManager();
 
  public:
   static void SetReplicaLevel(G4int);
   static G4int GetReplicaLevel();
 
- protected:
-  G4ScoringManager();
-
- public:
-  ~G4ScoringManager();
-
- public:  // with description
   void RegisterScoreColorMap(G4VScoreColorMap* colorMap);
   // Register a color map. Once registered, it is available by /score/draw and
   // /score/drawColumn commands.
 
- public:
   void Accumulate(G4VHitsCollection* map);
   void Merge(const G4ScoringManager* scMan);
   G4VScoringMesh* FindMesh(G4VHitsCollection* map);
@@ -102,34 +95,17 @@ class G4ScoringManager
   G4VScoreColorMap* GetScoreColorMap(const G4String& mapName);
   void ListScoreColorMaps();
 
- private:
-  static G4ThreadLocal G4ScoringManager* fSManager;
-  static G4ThreadLocal G4int replicaLevel;
-  G4int verboseLevel;
-  G4ScoringMessenger* fMessenger;
-  G4ScoreQuantityMessenger* fQuantityMessenger;
-
-  MeshVec fMeshVec;
-  G4VScoringMesh* fCurrentMesh;
-
-  G4VScoreWriter* writer;
-  G4VScoreColorMap* fDefaultLinearColorMap;
-  ColorMapDict* fColorMapDict;
-
-  MeshMap fMeshMap;
-
- public:
   inline void SetCurrentMesh(G4VScoringMesh* scm) { fCurrentMesh = scm; }
   inline G4VScoringMesh* GetCurrentMesh() const { return fCurrentMesh; }
-  inline void CloseCurrentMesh() { fCurrentMesh = 0; }
+  inline void CloseCurrentMesh() { fCurrentMesh = nullptr; }
   inline void SetVerboseLevel(G4int vl)
   {
     verboseLevel = vl;
-    for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++)
+    for(auto& itr : fMeshVec)
     {
-      (*itr)->SetVerboseLevel(vl);
+      itr->SetVerboseLevel(vl);
     }
-    if(writer)
+    if(writer != nullptr)
       writer->SetVerboseLevel(vl);
   }
   inline G4int GetVerboseLevel() const { return verboseLevel; }
@@ -149,12 +125,9 @@ class G4ScoringManager
  public:  // with description
   inline void SetScoreWriter(G4VScoreWriter* sw)
   {
-    if(writer)
-    {
-      delete writer;
-    }
+    delete writer;
     writer = sw;
-    if(writer)
+    if(writer != nullptr)
       writer->SetVerboseLevel(verboseLevel);
   }
   // Replace score writers.
@@ -162,25 +135,42 @@ class G4ScoringManager
  public:
   inline void SetFactor(G4double val = 1.0)
   {
-    if(writer)
+    if(writer != nullptr)
       writer->SetFactor(val);
   }
   inline G4double GetFactor() const
   {
-    if(writer)
+    if(writer != nullptr)
     {
       return writer->GetFactor();
     }
-    else
-    {
-      return -1.0;
-    }
+    
+    return -1.0;
   }
+
+ protected:
+  G4ScoringManager();
 
  private:
   // Disable copy constructor and assignement operator
   G4ScoringManager(const G4ScoringManager&);
   G4ScoringManager& operator=(const G4ScoringManager&);
+
+ private:
+  static G4ThreadLocal G4ScoringManager* fSManager;
+  static G4ThreadLocal G4int replicaLevel;
+  G4int verboseLevel;
+  G4ScoringMessenger* fMessenger;
+  G4ScoreQuantityMessenger* fQuantityMessenger;
+
+  MeshVec fMeshVec;
+  G4VScoringMesh* fCurrentMesh;
+
+  G4VScoreWriter* writer;
+  G4VScoreColorMap* fDefaultLinearColorMap;
+  ColorMapDict* fColorMapDict;
+
+  MeshMap fMeshMap;
 };
 
 #endif

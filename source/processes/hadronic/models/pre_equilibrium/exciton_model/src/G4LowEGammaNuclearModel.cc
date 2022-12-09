@@ -91,11 +91,11 @@ G4HadFinalState* G4LowEGammaNuclearModel::ApplyYourself(
   if(res) {
 
     theParticleChange.SetStatusChange(stopAndKill);
-    G4int nsec = res->size();
+    std::size_t nsec = res->size();
     if (verboseLevel > 1) {
       G4cout << "G4LowEGammaNuclearModel: " << nsec << " secondaries" << G4endl;
     }
-    for(G4int i=0; i<nsec; ++i) {
+    for(std::size_t i=0; i<nsec; ++i) {
       if((*res)[i]) {
 	G4double ekin = (*res)[i]->GetKineticEnergy();
 	G4ThreeVector dir(0.,0.,1.);

@@ -62,44 +62,51 @@ G4int G4RootRNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
   if ( isUserFileName ) isPerThread = false;
 
   // Get or open a file
-  auto rfile = fFileManager->GetRFile(fileName, isPerThread);
-  if ( ! rfile ) {
+  auto rfileTuple = fFileManager->GetRFile(fileName, isPerThread);
+  if (rfileTuple == nullptr) {
     if ( ! fFileManager->OpenRFile(fileName, isPerThread) ) return kInvalidId;
-    rfile = fFileManager->GetRFile(fileName, isPerThread);
+    rfileTuple = fFileManager->GetRFile(fileName, isPerThread);
+  }
+  auto rfile = std::get<0>(*rfileTuple);
+
+  // Get or open a directory if dirName is defined
+  tools::rroot::TDirectory* ntupleDirectory = nullptr;
+  if ( ntupleDirectory == nullptr ) {
+    // Retrieve directory only once as analysis manager supports only
+    // 1 ntuple directory par file)
+    if ( ! dirName.empty() ) {
+      ntupleDirectory = tools::rroot::find_dir(rfile->dir(), dirName);
+      if ( ntupleDirectory != nullptr ) {
+        std::get<2>(*rfileTuple) = ntupleDirectory;
+      }
+      else {
+        G4Analysis::Warn(
+          "Directory " + dirName + " not found in file " + fileName + ".",
+          fkClass, "ReadNtupleImpl");
+        return kInvalidId;
+      }
+    }
   }
 
   // Get key
   tools::rroot::key* key = nullptr;
-  tools::rroot::TDirectory* newDir = nullptr;
-  if ( ! dirName.empty() ) {
-    newDir = tools::rroot::find_dir(rfile->dir(), dirName);
-    if ( newDir ) {
-      key = newDir->find_key(ntupleName);
-    }
-    else {
-      G4Analysis::Warn(
-        "Directory " + dirName + " not found in file " + fileName + ".",
-        fkClass, "ReadNtupleImpl");
-      return kInvalidId;
-    }
+  if ( ntupleDirectory != nullptr ) {
+    key = ntupleDirectory->find_key(ntupleName);
   }
   else {
     key = rfile->dir().find_key(ntupleName);
   }
-
-  if ( ! key ) {
+  if (key == nullptr) {
     Warn("Key " + ntupleName + " for Ntuple not found in file " + fileName +
       ", directory " + dirName, fkClass, "ReadNtupleImpl");
-    delete newDir;
     return kInvalidId;
   }
 
   unsigned int size;
   char* charBuffer = key->get_object_buffer(*rfile, size);
-  if ( ! charBuffer ) {
+  if (charBuffer == nullptr) {
     Warn("Cannot get data buffer for Ntuple " + ntupleName +
          " in file " + fileName, fkClass, "ReadNtupleImpl");
-    delete newDir;
     return kInvalidId;
   }
 
@@ -119,7 +126,6 @@ G4int G4RootRNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
 
     delete buffer;
     delete tree;
-    delete newDir;
     return kInvalidId;
   }
 
@@ -127,6 +133,7 @@ G4int G4RootRNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
   auto rntupleDescription = new G4TRNtupleDescription<tools::rroot::ntuple>(rntuple);
 
   auto id = SetNtuple(rntupleDescription);
+
 
   Message(kVL2, "read", "ntuple", ntupleName, id > kInvalidId);
 

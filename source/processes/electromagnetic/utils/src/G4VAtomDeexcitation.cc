@@ -90,10 +90,10 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-  nCouples = theCoupleTable->GetTableSize();
+  nCouples = (G4int)theCoupleTable->GetTableSize();
 
   // needed for unit tests
-  size_t nn = std::max(nCouples, 1);
+  std::size_t nn = std::max(nCouples, 1);
   if(activeDeexcitationMedia.size() != nn) {
     activeDeexcitationMedia.resize(nn, false);
     activeAugerMedia.resize(nn, false);
@@ -109,7 +109,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   ignoreCuts = theParameters->DeexcitationIgnoreCut();
 
   // Define list of regions
-  size_t nRegions = deRegions.size();
+  std::size_t nRegions = deRegions.size();
   // check if deexcitation is active for the given run
   if(!isActive && 0 == nRegions) { return; }
 
@@ -129,7 +129,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
   // Identify active media
   const G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  for(size_t j=0; j<nRegions; ++j) {
+  for(std::size_t j=0; j<nRegions; ++j) {
     const G4Region* reg = regionStore->GetRegion(activeRegions[j], false);
     if(nullptr != reg && 0 < nCouples) {
       const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
@@ -149,9 +149,9 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
       }
     }
   }
-  G4int nelm = G4Element::GetNumberOfElements();
+  std::size_t nelm = G4Element::GetNumberOfElements();
   //G4cout << nelm << G4endl;
-  for(G4int k=0; k<nelm; ++k) {
+  for(std::size_t k=0; k<nelm; ++k) {
     G4int Z = (*(G4Element::GetElementTable()))[k]->GetZasInt();
     if(Z > 5 && Z < 93) { 
       activeZ[Z] = true;
@@ -200,8 +200,8 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   if(ss == "world" || ss == "World" || ss == "WORLD") {
     ss = "DefaultRegionForTheWorld";
   }
-  size_t n = deRegions.size();
-  for(size_t i=0; i<n; ++i) {
+  std::size_t n = deRegions.size();
+  for(std::size_t i=0; i<n; ++i) {
  
     // Region already exist
     if(ss == activeRegions[i]) {
@@ -221,8 +221,8 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   // it should be active for all G4Regions
   if(ss == "DefaultRegionForTheWorld") {
     G4RegionStore* regions = G4RegionStore::GetInstance();
-    G4int nn = regions->size();
-    for(G4int i=0; i<nn; ++i) {
+    std::size_t nn = regions->size();
+    for(std::size_t i=0; i<nn; ++i) {
       if(ss == (*regions)[i]->GetName()) { continue; }
       SetDeexcitationActiveRegion((*regions)[i]->GetName(), valDeexcitation,
                                   valAuger, valPIXE);
@@ -294,10 +294,10 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = 
     material->GetVecNbOfAtomsPerVolume();
-  const G4int nelm = material->GetNumberOfElements();
+  const std::size_t nelm = material->GetNumberOfElements();
 
   // loop over deexcitations
-  for(G4int i=0; i<nelm; ++i) {
+  for(std::size_t i=0; i<nelm; ++i) {
     G4int Z = (*theElementVector)[i]->GetZasInt();
     if(activeZ[Z] && Z < 93) {  
       G4int nshells = 
@@ -327,11 +327,11 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
               // sample deexcitation
               vdyn.clear();
               GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
-              G4int nsec = vdyn.size();
+              std::size_t nsec = vdyn.size();
               if(nsec > 0) {
                 G4ThreeVector r = prePos  + stot*delta;
                 G4double time   = preTime + stot*dt;
-                for(G4int j=0; j<nsec; ++j) {
+                for(std::size_t j=0; j<nsec; ++j) {
                   G4DynamicParticle* dp = vdyn[j];
                   G4double e = dp->GetKineticEnergy();
 

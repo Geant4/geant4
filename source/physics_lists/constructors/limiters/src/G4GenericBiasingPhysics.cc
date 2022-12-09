@@ -229,14 +229,14 @@ void G4GenericBiasingPhysics::AddParallelGeometry( G4int PDGlow, G4int PDGhigh, 
   
   fPDGlowParallelGeometries .push_back( PDGlow );
   fPDGhighParallelGeometries.push_back( PDGhigh );
-  G4int rangeIndex = fPDGlowParallelGeometries.size() - 1;
+  G4int rangeIndex = G4int(fPDGlowParallelGeometries.size() - 1);
   fPDGrangeParallelGeometries[rangeIndex].push_back( parallelGeometryName );
 
   if ( includeAntiParticle )
     {
       fPDGlowParallelGeometries .push_back( -PDGhigh );
       fPDGhighParallelGeometries.push_back( -PDGlow  );
-      rangeIndex = fPDGlowParallelGeometries.size() - 1;
+      rangeIndex = G4int(fPDGlowParallelGeometries.size() - 1);
       fPDGrangeParallelGeometries[rangeIndex].push_back( parallelGeometryName );
     }
   
@@ -342,7 +342,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
       if ( biasAll )
 	{
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
+	  for (G4int ip = 0 ; ip < (G4int)vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      biasedProcesses.push_back( process->GetProcessName() );
@@ -387,13 +387,13 @@ void G4GenericBiasingPhysics::ConstructProcess()
       auto PDG = particle->GetPDGEncoding();
 
       // -- include particle if in right PDG range:
-      for ( size_t i = 0 ; i < fPhysBiasByPDGRangeLow.size() ; i++ )
+      for ( std::size_t i = 0 ; i < fPhysBiasByPDGRangeLow.size() ; i++ )
 	if ( ( PDG >= fPhysBiasByPDGRangeLow[i] ) && ( PDG <= fPhysBiasByPDGRangeHigh[i] ) )
 	  {
 	    physBias = true;
 	    break;
 	  }
-      for ( size_t i = 0 ; i < fNonPhysBiasByPDGRangeLow.size() ; i++ )
+      for ( std::size_t i = 0 ; i < fNonPhysBiasByPDGRangeLow.size() ; i++ )
 	if ( ( PDG >= fNonPhysBiasByPDGRangeLow[i] ) && ( PDG <= fNonPhysBiasByPDGRangeHigh[i] ) )
 	  {
 	    nonPhysBias = true;
@@ -422,7 +422,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
 	{
 	  std::vector < G4String > biasedProcesses;
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
+	  for (G4int ip = 0 ; ip < (G4int)vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      biasedProcesses.push_back( process->GetProcessName() );
@@ -465,7 +465,7 @@ void G4GenericBiasingPhysics::ConstructProcess()
 	  G4int icount(0);
 	  
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (std::size_t ip = 0 ; ip < vprocess->size() ; ++ip)
+	  for (G4int ip = 0 ; ip < (G4int)vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      G4BiasingProcessInterface* pb = dynamic_cast< G4BiasingProcessInterface* >(process);
@@ -557,7 +557,7 @@ void G4GenericBiasingPhysics::AssociateParallelGeometries()
 	      G4ParallelGeometriesLimiterProcess* limiter = G4BiasingHelper::AddLimiterProcess(pmanager);
 
 	      // -- attached the requested worlds to this process:
-	      for ( auto geometry : geometries ) limiter->AddParallelWorld( geometry );
+	      for ( auto& geometry : geometries ) limiter->AddParallelWorld( geometry );
 	    }
 	}
       // -- increment index for next PDG range:

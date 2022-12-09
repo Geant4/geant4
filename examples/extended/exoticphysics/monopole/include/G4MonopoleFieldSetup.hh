@@ -73,7 +73,7 @@ public:
   void ConstructMagField ();
 
   //  static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
-  double GetZmagFieldValue() const { return fZmagFieldValue; }
+  G4double GetZmagFieldValue() const { return fZmagFieldValue; }
   
 private:
 

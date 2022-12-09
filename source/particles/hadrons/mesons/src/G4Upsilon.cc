@@ -70,7 +70,7 @@ G4Upsilon* G4Upsilon::Definition()
                 false,          0.0*ns,          NULL,
                 false,       "Upsilon",           553);
   }
-  theInstance = reinterpret_cast<G4Upsilon*>(anInstance);
+  theInstance = static_cast<G4Upsilon*>(anInstance);
   return theInstance;
 }
 

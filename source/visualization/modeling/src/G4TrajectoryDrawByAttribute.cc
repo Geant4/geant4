@@ -89,12 +89,12 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
       static G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
 	G4ExceptionDescription ed;
-	ed <<"Unable to extract attribute definition named "<<fAttName;
+	ed <<"Unable to extract attribute definition named "<<fAttName << '\n'
+        << "Available attributes:\n"
+        << *object.GetAttDefs();
 	G4Exception
 	  ("G4TrajectoryDrawByAttribute::Draw",
 	   "modeling0117", JustWarning, ed, ". Invalid attribute name");
-	G4cout << "Available attributes:\n"
-	       << *object.GetAttDefs();
 	warnedUnableToExtract = true;
       }
       return;
@@ -127,12 +127,12 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
     static G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
       G4ExceptionDescription ed;
-      ed <<"Unable to extract attribute value named "<<fAttName;
+      ed <<"Unable to extract attribute definition named "<<fAttName << '\n'
+      << "Available attributes:\n"
+      << *object.GetAttDefs();
       G4Exception
 	("G4TrajectoryDrawByAttribute::Draw",
 	 "modeling0118", JustWarning, ed, ". Invalid attribute name");
-	G4cout << "Available attributes:\n"
-	       << *object.GetAttDefs();
       warnedUnableToExtract = true;
     }
       return;

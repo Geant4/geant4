@@ -40,21 +40,9 @@ G4PSStepChecker::G4PSStepChecker(G4String name, G4int depth)
   : G4VPrimitiveScorer(name, depth)
 {}
 
-G4PSStepChecker::~G4PSStepChecker() {}
-
 G4bool G4PSStepChecker::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4cout << "G4PSStepChecker:: Step identified index= " << GetIndex(aStep)
          << G4endl;
-  return TRUE;
+  return true;
 }
-
-void G4PSStepChecker::Initialize(G4HCofThisEvent*) {}
-
-void G4PSStepChecker::EndOfEvent(G4HCofThisEvent*) {}
-
-void G4PSStepChecker::clear() {}
-
-void G4PSStepChecker::DrawAll() {}
-
-void G4PSStepChecker::PrintAll() {}

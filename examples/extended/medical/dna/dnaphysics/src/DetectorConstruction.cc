@@ -41,15 +41,16 @@
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "PhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-DetectorConstruction::DetectorConstruction() :
+DetectorConstruction::DetectorConstruction(PhysicsList* ptr) :
   G4VUserDetectorConstruction(), fpWaterMaterial(nullptr),
   fLogicWorld(nullptr),fPhysiWorld(nullptr)
 {
   // create commands for interactive definition of the detector  
-  fDetectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this, ptr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -57,16 +58,6 @@ DetectorConstruction::DetectorConstruction() :
 DetectorConstruction::~DetectorConstruction()
 {
   delete fDetectorMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VPhysicalVolume* DetectorConstruction::Construct()
-
-{
-  if(fPhysiWorld) { return fPhysiWorld; }
-  DefineMaterials();
-  return ConstructDetector();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,8 +89,12 @@ void DetectorConstruction::DefineMaterials()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
+
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  if(fPhysiWorld) { return fPhysiWorld; }
+  DefineMaterials();
+
   // WORLD VOLUME
   G4double worldSizeX = 100 * micrometer;
   G4double worldSizeY = worldSizeX;
@@ -138,7 +133,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // Search the material by its name   
   G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(

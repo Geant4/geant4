@@ -70,14 +70,14 @@ public:
 
 protected:
 
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
+  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
 
 private:
 
   G4bool statCode;
 
   // Water density table
-  const std::vector<G4double>* fpWaterDensity;
+  const std::vector<G4double>* fpWaterDensity = nullptr;
 
   //deexcitation manager to produce fluo photns and e-
   G4VAtomDeexcitation*      fAtomDeexcitation;
@@ -89,9 +89,13 @@ private:
   std::map<G4double,G4double> lowEnergyLimitForA, lowEnergyLimitOfModelForA, killBelowEnergyForA;
 
   G4bool isInitialised;
+  G4bool isIon = false;
   G4int verboseLevel;
   
   // Cross section
+  G4DNACrossSectionDataSet* mainTable = nullptr;
+  G4DNACrossSectionDataSet* currentTable = nullptr;
+  const G4ParticleDefinition* currParticle = nullptr;
 
   typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
   MapFile tableFile;
@@ -106,15 +110,6 @@ private:
   G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
 					  G4double incomingParticleEnergy, 
 					  G4int shell);
-
-  // SI: Not necessary anymore since we now use interface to angle generator
-  /*
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
-					 G4double incomingParticleEnergy, 
-					 G4double outgoingParticleEnergy, 
-					 G4double & cosTheta, 
-					 G4double & phi, G4int shell);
-  */
 
   G4double RejectionFunction(G4ParticleDefinition* particle, 
 							      G4double k, 
@@ -150,6 +145,9 @@ private:
 
   G4double slaterEffectiveCharge[3];
   G4double sCoefficient[3];
+  G4double localMinEnergy = 0.0;
+  G4double currentScaledEnergy = 0.0;
+  G4double massC12 = 0.0;
   
   // Partial cross section
   
@@ -157,7 +155,7 @@ private:
 			
   G4double Sum(G4double energy, const G4String& particle);
 
-  G4int RandomSelect(G4double energy,const G4String& particle );
+  G4int RandomSelect(G4double energy);
 
   G4ParticleDefinition* GetDNAIonParticleDefinition(const G4ParticleDefinition* particleDefinition);
    
@@ -167,20 +165,17 @@ private:
   G4DNARuddIonisationExtendedModel(const  G4DNARuddIonisationExtendedModel&);
 
   // Reusable particle definitions
-  G4ParticleDefinition* protonDef;
-  G4ParticleDefinition* hydrogenDef;
-  G4ParticleDefinition* alphaPlusPlusDef;
-  G4ParticleDefinition* alphaPlusDef;
-  G4ParticleDefinition* heliumDef;
+  G4ParticleDefinition* protonDef = nullptr;
+  G4ParticleDefinition* hydrogenDef = nullptr;
+  G4ParticleDefinition* alphaPlusPlusDef = nullptr;
+  G4ParticleDefinition* alphaPlusDef = nullptr;
+  G4ParticleDefinition* heliumDef = nullptr;
 
-  //G4ParticleDefinition* lithiumDef;
-  //G4ParticleDefinition* berylliumDef;
-  //G4ParticleDefinition* boronDef;
-  G4ParticleDefinition* carbonDef;
-  G4ParticleDefinition* nitrogenDef;
-  G4ParticleDefinition* oxygenDef;
-  G4ParticleDefinition* siliconDef;
-  G4ParticleDefinition* ironDef;
+  G4ParticleDefinition* carbonDef = nullptr;
+  G4ParticleDefinition* nitrogenDef = nullptr;
+  G4ParticleDefinition* oxygenDef = nullptr;
+  G4ParticleDefinition* siliconDef = nullptr;
+  G4ParticleDefinition* ironDef = nullptr;
 
 };
 

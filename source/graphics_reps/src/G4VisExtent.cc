@@ -55,7 +55,7 @@ G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius):
   fZmax = centre.z () + halfSide;
 }
 
-G4VisExtent::~G4VisExtent () {}
+G4VisExtent::~G4VisExtent () = default;
 
 const G4VisExtent& G4VisExtent::GetNullExtent () {
   static const G4VisExtent nullExtent = G4VisExtent();

@@ -4,7 +4,8 @@
 # Original author: Gabriele Cosmo - CERN
 #
 ifeq ($(G4SYSTEM),Linux-clang)
-  CXX       := clang++
+  GCCBASE   := $(shell which g++ | sed -e "s=/bin/g++==")
+  CXX       := clang++ --gcc-toolchain=$(GCCBASE)
   CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
@@ -45,7 +46,7 @@ ifeq ($(G4SYSTEM),Linux-clang)
   G4RUNPATHOPTION := -Wl,-rpath, 
   G4STATIC_MODE += -Wl,--whole-archive
   G4NOSTATIC_MODE += -Wl,--no-whole-archive
-  CC := clang
+  CC := clang --gcc-toolchain=$(GCCBASE)
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl

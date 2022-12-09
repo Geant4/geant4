@@ -90,10 +90,8 @@ hid_t G4Hdf5RFileManager::OpenDirectory(hid_t file, const G4String& directoryNam
     Warn("Cannot open directory " + directoryName, fkClass, "OpenDirectory");
     return kInvalidId;
   }
-  else {
-    Message(kVL2, "open", "read directory", directoryName);
-    return directory;
-  }
+  Message(kVL2, "open", "read directory", directoryName);
+  return directory;
 }
 
 //_____________________________________________________________________________
@@ -104,7 +102,7 @@ hid_t  G4Hdf5RFileManager::GetRDirectory(const G4String& directoryType,
 {
   // Get or open a file
   auto rfile = GetRFile(fileName, isPerThread);
-  if ( ! rfile ) {
+  if (rfile == nullptr) {
     // Try to open it if not found in the map
     if ( OpenRFile(fileName, isPerThread) < 0 ) return kInvalidId;
     rfile = GetRFile(fileName, isPerThread);
@@ -158,11 +156,10 @@ G4Hdf5File* G4Hdf5RFileManager::GetRFile(const G4String& fileName,
   G4String name = GetFullFileName(fileName, isPerThread);
 
   auto it = fRFiles.find(name);
-  if  ( it != fRFiles.end() )
+  if (it != fRFiles.end()) {
     return &(it->second);
-  else {
-    return nullptr;
   }
+  return nullptr;
 }
 
 //_____________________________________________________________________________

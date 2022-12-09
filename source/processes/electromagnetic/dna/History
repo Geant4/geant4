@@ -6,13 +6,84 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-11-24 Vladimir Ivanchenko (emdna-V11-00-39)
+- G4DNARuddIonisationExtendedModel - fixed common work between DNA physics and
+    radioactive decay module - before this update test2.in macro crash, because 
+    only 5 ions have data needed for this model; with this modification of the
+    model scaling relation to the carbon ion is used for any ion, which has
+    no data; low-energy limit is used now more correctly - all ions are stopped 
+    but not killed, because they may have radioactive decay at rest; all commented
+    lines are removed from the class
+
+## 2022-11-23 Gabriele Cosmo (emdna-V11-00-38)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-22 Hoang Tran (emdna-V11-00-37)
+- delete unused tests in dna (G4DNAProcessTest.cc and G4DNATest.cc)
+
+## 2022-11-18 Gabriele Cosmo (emdna-V11-00-36)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-08 Vladimir Ivanchenko (emdna-V11-00-35)
+- G4DNAUeharaScreenedRutherfordElasticModel - code cleanup; introduced 
+    low and high energy limit for the model; removed missleading G4Exception
+
+## 2022-11-01 Hoang Tran (emdna-V11-00-34)
+- Fix Coverity issues for ref-09
+
+## 2022-10-10 Hoang Tran (emdna-V11-00-33)
+- minor correction of IRT-syn model (chemistry). Contact reactions should not happen
+after 1 ps.
+
+## 2022-10-21 Yann Perrot, Le Tuan Anh (emdna-V11-00-32)
+- Add nitrogen models from PTra code
+
+## 2022-10-10 Hoang Tran (emdna-V11-00-31)
+- Fixed minor mistake of file name in G4DNARPWBAIonisationModel,
+- Added protection for HighEnergyLimit/LowEnergyLimit in G4DNARPWBAIonisationModel and
+G4DNARPWBAExcitationModel
+
+## 2022-10-07 Gabriele Cosmo (emdna-V11-00-30)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used in G4ITNavigator2.
+
+## 2022-10-05 Hoang Tran (emdna-V11-00-29)
+- Fix user's report for IRT model.
+   If the first IRTSampling won't give any reactions, end the simu. No StepProcessor in this simu
+
+## 2022-10-03 Hoang Tran (emdna-V11-00-28)
+- Fix Coverity static analysis for ref-08
+ uninit_member in G4DNAMillerGreenExcitationModel, G4DNARuddIonisationModel, G4DNADingfelderChargeDecreaseModel,
+ G4DNADingfelderChargeIncreaseModel,G4DNARuddIonisationExtendedModel, G4DNAGillespieDirectMethod
+ Use auto & instead of auto : G4ITFinder, G4DNAScavengerMaterial, G4MoleculeCounter, G4OCTREE
+
+## 2022-09-08 Hoang Tran (emdna-V11-00-27)
+- Resolve dependency inconsistencies :
+    dna/management/include/G4ChemicalMoleculeFinder.hh includes G4Molecule.hh from G4emdna-molman
+    dna/management/include/G4UserMeshAction.hh includes G4DNAMesh.hh from G4emdna-utils
+    dna/management/include/G4OctreeFinder.hh includes G4IRTUtils.hh from G4emdna-utils
+
+## 2022-09-05 Ben Morgan (emdna-V11-00-26)
+- Partially resolve dependency inconsistencies
+  - NB: cannot be resolved fully without introducing a cycle between
+    G4emdna-man, G4emdna-molman, G4emdna-utils.
+
+## 2022-09-01 Seth R Johnson (emdna-V11-00-25)
+- Define G4CT_MAX_COUNT for changing "compile time counter" depth to fix build
+  errors on NVHPC compiler.
+
+## 2022-08-30 Vladimir Ivanchenko (emdna-V11-00-24)
+- G4DNAExcitation, G4DNAVibExcitation, G4DNARotExcitation - class 
+    cleanup according to the recent G4VEmProcess base class; model
+    headers are moved to source; C++11 keywards are introduced. 
+
 ## 2022-06-21 Igor Semeniouk (emdna-V11-00-23)
 - G4DNABornIonisationModel1.cc, G4DNACPA100ElasticModel.cc,
-G4DNACPA100IonisationModel.cc, G4DNAChampionElasticModel.cc,
-G4DNAELSEPAElasticModel.cc, G4DNAEmfietzoglouIonisationModel.cc,
-G4DNAIonElasticModel.cc, G4DNAQuinnPlasmonExcitationModel.cc,
-G4DNARPWBAIonisationModel.cc, G4DNARelativisticIonisationModel.cc,
-G4DNASancheExcitationModel.cc :
+  G4DNACPA100IonisationModel.cc, G4DNAChampionElasticModel.cc,
+  G4DNAELSEPAElasticModel.cc, G4DNAEmfietzoglouIonisationModel.cc,
+  G4DNAIonElasticModel.cc, G4DNAQuinnPlasmonExcitationModel.cc,
+  G4DNARPWBAIonisationModel.cc, G4DNARelativisticIonisationModel.cc,
+  G4DNASancheExcitationModel.cc :
   use G4FindDataDir("G4LEDATA") to find dataset path on place of getenv.
 
 ## 2022-06-03 Hoang Tran (emdna-V11-00-22)

@@ -66,6 +66,8 @@
 #include "G4Polyhedra.hh"
 #include "G4Tet.hh"
 #include "G4DisplacedSolid.hh"
+#include "G4UnionSolid.hh"
+#include "G4IntersectionSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
@@ -78,7 +80,7 @@
 #include "G4VScoringMesh.hh"
 #include "G4Mesh.hh"
 #include "G4DefaultLinearColorMap.hh"
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
 #include "G4RunManagerFactory.hh"
@@ -91,6 +93,8 @@
 #include "G4SystemOfUnits.hh"
 
 #include <set>
+
+#define G4warn G4cout
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -344,14 +348,14 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
   G4bool scoreMapHits = false;
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
-    size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
-      G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
+    std::size_t nMeshes = scoringManager->GetNumberOfMesh();
+    for (std::size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh((G4int)iMesh);
       if (mesh && mesh->IsActive()) {
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
         const G4String& mapNam = const_cast<G4THitsMap<G4double>&>(hits).GetName();
-	for(MeshScoreMap::const_iterator i = scoreMap.begin();
-	    i != scoreMap.end(); ++i) {
+	for(MeshScoreMap::const_iterator i = scoreMap.cbegin();
+	    i != scoreMap.cend(); ++i) {
 	  const G4String& scoreMapName = i->first;
 	  if (scoreMapName == mapNam) {
 	    G4DefaultLinearColorMap colorMap("G4VSceneHandlerColorMap");
@@ -387,13 +391,13 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4StatDouble>& hits) {
   G4bool scoreMapHits = false;
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
-    size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
-      G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
+    std::size_t nMeshes = scoringManager->GetNumberOfMesh();
+    for (std::size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh((G4int)iMesh);
       if (mesh && mesh->IsActive()) {
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
-	for(MeshScoreMap::const_iterator i = scoreMap.begin();
-	    i != scoreMap.end(); ++i) {
+	for(MeshScoreMap::const_iterator i = scoreMap.cbegin();
+	    i != scoreMap.cend(); ++i) {
 	  const G4String& scoreMapName = i->first;
 	  const G4THitsMap<G4StatDouble>* foundHits = i->second;
 	  if (foundHits == &hits) {
@@ -426,7 +430,7 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4StatDouble>& hits) {
 
 void G4VSceneHandler::AddCompound(const G4Mesh& mesh)
 {
-  G4cerr <<
+  G4warn <<
   "There has been an attempt to draw a mesh with option \""
   << fpViewer->GetViewParameters().GetSpecialMeshRenderingOption()
   << "\":\n" << mesh
@@ -468,7 +472,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
       G4Circle dot (polymarker);
       dot.SetWorldSize  (0.);
       dot.SetScreenSize (0.1);  // Very small circle.
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (std::size_t iPoint = 0; iPoint < polymarker.size (); ++iPoint) {
         dot.SetPosition (polymarker[iPoint]);
         AddPrimitive (dot);
       }
@@ -477,7 +481,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     case G4Polymarker::circles:
     {
       G4Circle circle (polymarker);  // Default circle
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (std::size_t iPoint = 0; iPoint < polymarker.size (); ++iPoint) {
         circle.SetPosition (polymarker[iPoint]);
         AddPrimitive (circle);
       }
@@ -486,7 +490,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     case G4Polymarker::squares:
     {
       G4Square square (polymarker);  // Default square
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (std::size_t iPoint = 0; iPoint < polymarker.size (); ++iPoint) {
         square.SetPosition (polymarker[iPoint]);
         AddPrimitive (square);
       }
@@ -504,9 +508,9 @@ void G4VSceneHandler::RemoveViewerFromList (G4VViewer* pViewer) {
 
 
 void G4VSceneHandler::AddPrimitive (const G4Plotter&) {
-  G4cerr << "WARNING: Plotter not implemented for " << fSystem.GetName() << G4endl;
-  G4cerr << "  Open a plotter-aware graphics system or remove plotter with" << G4endl;
-  G4cerr << "  /vis/scene/removeModel Plotter" << G4endl;
+  G4warn << "WARNING: Plotter not implemented for " << fSystem.GetName() << G4endl;
+  G4warn << "  Open a plotter-aware graphics system or remove plotter with" << G4endl;
+  G4warn << "  /vis/scene/removeModel Plotter" << G4endl;
 }
 
 void G4VSceneHandler::SetScene (G4Scene* pScene) {
@@ -520,6 +524,31 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
 {
+  // Sometimes solids that have no substance get requested. They may
+  // be part of the geometry tree but have been "spirited away", for
+  // example by a Boolean subtraction in wich the original volume
+  // is entirely inside the subtractor.
+  // The problem is that the Boolean Processor still returns a
+  // polyhedron in these cases (IMHO it should not), so the
+  // workaround is to return before the damage is done.
+  auto pSolid = &solid;
+  auto pBooleanSolid = dynamic_cast<const G4BooleanSolid*>(pSolid);
+  if (pBooleanSolid) {
+    G4ThreeVector bmin, bmax;
+    pBooleanSolid->BoundingLimits(bmin, bmax);
+    G4bool isGood = false;
+    for (G4int i=0; i<100000; ++i) {
+      G4double x = bmin.x() + (bmax.x() - bmin.x())*G4QuickRand();
+      G4double y = bmin.y() + (bmax.y() - bmin.y())*G4QuickRand();
+      G4double z = bmin.z() + (bmax.z() - bmin.z())*G4QuickRand();
+      if (pBooleanSolid->Inside(G4ThreeVector(x,y,z)) == kInside) {
+        isGood = true;
+        break;
+      }
+    }
+    if (!isGood) return;
+  }
+  
   const G4ViewParameters::DrawingStyle style = GetDrawingStyle(fpVisAttribs);
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
 
@@ -546,25 +575,25 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
         if (verbosity >= G4VisManager::errors &&
             problematicSolids.find(&solid) == problematicSolids.end()) {
           problematicSolids.insert(&solid);
-          G4cerr <<
+          G4warn <<
           "ERROR: G4VSceneHandler::RequestPrimitives"
           "\n  Polyhedron not available for " << solid.GetName ();
           G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
           if (pPVModel) {
-            G4cerr << "\n  Touchable path: " << pPVModel->GetFullPVPath();
+            G4warn << "\n  Touchable path: " << pPVModel->GetFullPVPath();
           }
           static G4bool explanation = false;
           if (!explanation) {
             explanation = true;
-            G4cerr <<
+            G4warn <<
             "\n  This means it cannot be visualized in the usual way on most systems."
             "\n  1) The solid may not have implemented the CreatePolyhedron method."
             "\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
             "\n     the resultant polyhedron, may have failed."
             "\n  Try RayTracer. It uses Geant4's tracking algorithms instead.";
           }
-          G4cerr << "\n  Drawing solid with cloud of points.";
-          G4cerr << G4endl;
+          G4warn << "\n  Drawing solid with cloud of points.";
+          G4warn << G4endl;
         }
       }
     }
@@ -660,7 +689,7 @@ void G4VSceneHandler::ProcessScene()
     // Create modeling parameters from view parameters...
     G4ModelingParameters* pMP = CreateModelingParameters();
 
-    for(size_t i = 0; i < runDurationModelList.size(); i++)
+    for(std::size_t i = 0; i < runDurationModelList.size(); ++i)
     {
       if(runDurationModelList[i].fActive)
       {
@@ -702,7 +731,7 @@ void G4VSceneHandler::ProcessScene()
         const G4Run* run = runManager->GetCurrentRun();
         const std::vector<const G4Event*>* events =
           run ? run->GetEventVector() : 0;
-        size_t nKeptEvents = 0;
+        std::size_t nKeptEvents = 0;
         if(events)
           nKeptEvents = events->size();
         if(nKeptEvents)
@@ -736,7 +765,7 @@ void G4VSceneHandler::ProcessScene()
             {
               if(verbosity >= G4VisManager::warnings)
               {
-                G4cout << "WARNING: Cannot refresh events accumulated over more"
+                G4warn << "WARNING: Cannot refresh events accumulated over more"
                           "\n  than one runs.  Refreshed just the last run."
                        << G4endl;
               }
@@ -762,11 +791,11 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
 {
   const std::vector<G4Scene::Model>& EOEModelList =
     fpScene -> GetEndOfEventModelList ();
-  size_t nModels = EOEModelList.size();
+  std::size_t nModels = EOEModelList.size();
   if (nModels) {
     G4ModelingParameters* pMP = CreateModelingParameters();
     pMP->SetEvent(event);
-    for (size_t i = 0; i < nModels; i++) {
+    for (std::size_t i = 0; i < nModels; ++i) {
       if (EOEModelList[i].fActive) {
 	fpModel = EOEModelList[i].fpModel;
 	fpModel -> SetModelingParameters(pMP);
@@ -783,11 +812,11 @@ void G4VSceneHandler::DrawEndOfRunModels()
 {
   const std::vector<G4Scene::Model>& EORModelList =
     fpScene -> GetEndOfRunModelList ();
-  size_t nModels = EORModelList.size();
+  std::size_t nModels = EORModelList.size();
   if (nModels) {
     G4ModelingParameters* pMP = CreateModelingParameters();
     pMP->SetEvent(0);
-    for (size_t i = 0; i < nModels; i++) {
+    for (std::size_t i = 0; i < nModels; ++i) {
       if (EORModelList[i].fActive) {
         fpModel = EORModelList[i].fpModel;
 	fpModel -> SetModelingParameters(pMP);
@@ -908,32 +937,69 @@ G4DisplacedSolid* G4VSceneHandler::CreateSectionSolid()
 
 G4DisplacedSolid* G4VSceneHandler::CreateCutawaySolid()
 {
-  // To be reviewed.
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+  if (vp.IsCutaway()) {
+
+    std::vector<G4DisplacedSolid*> cutaway_solids;
+
+    G4double radius = fpScene->GetExtent().GetExtentRadius();
+    G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
+    G4VSolid* cutawayBox =
+    new G4Box("_cutaway_box", safe, safe, safe);  // world box...
+
+    for (int plane_no = 0; plane_no < int(vp.GetCutawayPlanes().size()); plane_no++){
+
+      const G4Normal3D originalNormal(0,0,1);  // ...so this is original normal.
+
+      const G4Plane3D& sp = vp.GetCutawayPlanes()[plane_no]; //];
+      const G4double& a = sp.a();
+      const G4double& b = sp.b();
+      const G4double& c = sp.c();
+      const G4double& d = sp.d();
+      const G4Normal3D newNormal(-a,-b,-c);  // Convention: keep a*x+b*y+c*z+d>=0
+      // Not easy to see why the above gives the right convention, but it has been
+      // arrived at by trial and error to agree with the OpenGL implementation
+      // of clipping planes.
+
+      G4Transform3D requiredTransform;  // Null transform
+      // Calculate the rotation
+      // If newNormal is (0,0,1), no need to do anything
+      // Treat (0,0,-1) as a special case, since cannot define axis in this case
+      if (newNormal == G4Normal3D(0,0,-1)) {
+        requiredTransform = G4Rotate3D(pi,G4Vector3D(1,0,0));
+      } else if (newNormal != originalNormal) {
+        const G4double& angle = std::acos(newNormal.dot(originalNormal));
+        const G4Vector3D& axis = originalNormal.cross(newNormal);
+        requiredTransform = G4Rotate3D(angle, axis);
+      }
+      // Translation
+      requiredTransform = requiredTransform * G4TranslateZ3D(d + safe);
+      cutaway_solids.push_back
+      (new G4DisplacedSolid("_displaced_cutaway_box", cutawayBox, requiredTransform));
+    }
+
+    if (cutaway_solids.size() == 1){
+      return (G4DisplacedSolid*) cutaway_solids[0];
+    } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+      G4UnionSolid* union2 =
+      new G4UnionSolid("_union_2", cutaway_solids[0], cutaway_solids[1]);
+      if (cutaway_solids.size() == 2)
+        return (G4DisplacedSolid*)union2;
+      else
+        return (G4DisplacedSolid*)
+        new G4UnionSolid("_union_3", union2, cutaway_solids[2]);
+    } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection){
+      G4IntersectionSolid* intersection2 =
+      new G4IntersectionSolid("_intersection_2", cutaway_solids[0], cutaway_solids[1]);
+      if (cutaway_solids.size() == 2)
+        return (G4DisplacedSolid*)intersection2;
+      else
+        return (G4DisplacedSolid*)
+        new G4IntersectionSolid("_intersection_3", intersection2, cutaway_solids[2]);
+    }
+  }
+
   return 0;
-  /*** An alternative way of getting a cutaway is to use
-  Command /vis/scene/add/volume
-  Guidance :
-  Adds a physical volume to current scene, with optional clipping volume.
-  If physical-volume-name is "world" (the default), the top of the
-  main geometry tree (material world) is added.  If "worlds", the
-  top of all worlds - material world and parallel worlds, if any - are
-    added.  Otherwise a search of all worlds is made, taking the first
-    matching occurrence only.  To see a representation of the geometry
-    hierarchy of the worlds, try "/vis/drawTree [worlds]" or one of the
-    driver/browser combinations that have the required functionality, e.g., HepRep.
-    If clip-volume-type is specified, the subsequent parameters are used to
-    to define a clipping volume.  For example,
-    "/vis/scene/add/volume ! ! ! -box km 0 1 0 1 0 1" will draw the world
-    with the positive octant cut away.  (If the Boolean Processor issues
-    warnings try replacing 0 by 0.000000001 or something.)
-    If clip-volume-type is prepended with '-', the clip-volume is subtracted
-    (cutaway). (This is the default if there is no prepended character.)
-    If '*' is prepended, the intersection of the physical-volume and the
-    clip-volume is made. (You can make a section/DCUT with a thin box, for
-    example).
-    For "box", the parameters are xmin,xmax,ymin,ymax,zmin,zmax.
-    Only "box" is programmed at present.
-   ***/
 }
 
 void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
@@ -1126,7 +1192,7 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
       lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
     if (lineSegmentsPerCircle < pVisAttribs->GetMinLineSegmentsPerCircle()) {
       lineSegmentsPerCircle = pVisAttribs->GetMinLineSegmentsPerCircle();
-      G4cout <<
+      G4warn <<
 	"G4VSceneHandler::GetNoOfSides: attempt to set the"
 	"\nnumber of line segments per circle < " << lineSegmentsPerCircle
 	     << "; forced to " << pVisAttribs->GetMinLineSegmentsPerCircle() << G4endl;
@@ -1139,7 +1205,7 @@ std::ostream& operator << (std::ostream& os, const G4VSceneHandler& sh) {
 
   os << "Scene handler " << sh.fName << " has "
      << sh.fViewerList.size () << " viewer(s):";
-  for (size_t i = 0; i < sh.fViewerList.size (); i++) {
+  for (std::size_t i = 0; i < sh.fViewerList.size (); ++i) {
     os << "\n  " << *(sh.fViewerList [i]);
   }
 
@@ -1238,8 +1304,26 @@ void G4VSceneHandler::StandardSpecialMeshRendering(const G4Mesh& mesh)
     case G4Mesh::sphere: [[fallthrough]];
     case G4Mesh::invalid: break;
   }
-  if (!implemented) {
-    G4VSceneHandler::AddCompound(mesh);  // Base class function - just print warning
+  if (implemented) {
+    // Draw container if not marked invisible...
+    auto container = mesh.GetContainerVolume();
+    auto containerLogical = container->GetLogicalVolume();
+    auto containerVisAtts = containerLogical->GetVisAttributes();
+    if (containerVisAtts == nullptr || containerVisAtts->IsVisible()) {
+      auto solid = containerLogical->GetSolid();
+      auto polyhedron = solid->GetPolyhedron();
+      // Always draw as wireframe
+      G4VisAttributes tmpVisAtts;
+      if (containerVisAtts != nullptr) tmpVisAtts = *containerVisAtts;
+      tmpVisAtts.SetForceWireframe();
+      polyhedron->SetVisAttributes(tmpVisAtts);
+      BeginPrimitives(mesh.GetTransform());
+      AddPrimitive(*polyhedron);
+      EndPrimitives();
+    }
+  } else {
+    // Invoke base class function
+    G4VSceneHandler::AddCompound(mesh);
   }
   return;
 }
@@ -1324,10 +1408,7 @@ void G4VSceneHandler::Draw3DRectMeshAsDots(const G4Mesh& mesh)
       auto& dotsInMap = dotsByMaterial[material];
       const auto& range = positionByMaterial.equal_range(material);
       for (auto posByMat = range.first; posByMat != range.second; ++posByMat) {
-        const G4double x = posByMat->second.getX() + (2.*G4UniformRand()-1.)*halfX;
-        const G4double y = posByMat->second.getY() + (2.*G4UniformRand()-1.)*halfY;
-        const G4double z = posByMat->second.getZ() + (2.*G4UniformRand()-1.)*halfZ;
-        dotsInMap.push_back(G4ThreeVector(x,y,z));
+        dotsInMap.push_back(GetPointInBox(posByMat->second, halfX, halfY, halfZ));
         ++nDots;
       }
 
@@ -1610,28 +1691,7 @@ void G4VSceneHandler::DrawTetMeshAsDots(const G4Mesh& mesh)
       auto& dotsInMap = dotsByMaterial[material];
       const auto& range = verticesByMaterial.equal_range(material);
       for (auto vByMat = range.first; vByMat != range.second; ++vByMat) {
-        const std::vector<G4ThreeVector>& vertices = vByMat->second;
-        // Calculate extent/bounding box
-        G4double xmin, xmax, ymin, ymax, zmin, zmax;
-        xmin = ymin = zmin = DBL_MAX;
-        xmax = ymax = zmax = -DBL_MAX;
-        for (const auto& vertex: vertices) {
-          if (xmin > vertex.x()) xmin = vertex.x();
-          if (ymin > vertex.y()) ymin = vertex.y();
-          if (zmin > vertex.z()) zmin = vertex.z();
-          if (xmax < vertex.x()) xmax = vertex.x();
-          if (ymax < vertex.y()) ymax = vertex.y();
-          if (zmax < vertex.z()) zmax = vertex.z();
-        }
-        // Place dot at random in the extent/bounding box. Yes, I know this will
-        // be bigger than the tetrahedron, so sometimes the position will be outside
-        // the tetrahedron, but it will still give a reasonable visual representation.
-        // If you have a smart algorithm for generating a random point in a
-        // tetrahedron, please let us know.
-        const G4double x = xmin + G4UniformRand()*(xmax - xmin);
-        const G4double y = ymin + G4UniformRand()*(ymax - ymin);
-        const G4double z = zmin + G4UniformRand()*(zmax - zmin);
-        dotsInMap.push_back(G4ThreeVector(x,y,z));
+        dotsInMap.push_back(GetPointInTet(vByMat->second));
         ++nDots;
       }
 
@@ -1719,8 +1779,6 @@ void G4VSceneHandler::DrawTetMeshAsSurfaces(const G4Mesh& mesh)
     << G4endl;
   }
 
-  const auto& container = mesh.GetContainerVolume();
-
   // This map is static so that once filled it stays filled.
   static std::map<G4String,std::map<const G4Material*,G4Polyhedron>> surfacesByMaterialAndMesh;
   auto& surfacesByMaterial = surfacesByMaterialAndMesh[mesh.GetContainerVolume()->GetName()];
@@ -1736,7 +1794,7 @@ void G4VSceneHandler::DrawTetMeshAsSurfaces(const G4Mesh& mesh)
     tmpMP.SetCullingInvisible(true);  // ... or invisble volumes.
     const G4bool useFullExtent = true;  // To avoid calculating the extent
     G4PhysicalVolumeModel tmpPVModel
-    (container,
+    (mesh.GetContainerVolume(),
      G4PhysicalVolumeModel::UNLIMITED,
      G4Transform3D(),  // so that positions are in local coordinates
      &tmpMP,
@@ -1835,4 +1893,43 @@ void G4VSceneHandler::DrawTetMeshAsSurfaces(const G4Mesh& mesh)
 
   firstPrint = false;
   return;
+}
+
+G4ThreeVector
+G4VSceneHandler::GetPointInBox(const G4ThreeVector& pos,
+                               G4double halfX,
+                               G4double halfY,
+                               G4double halfZ) const
+{
+  G4double x = pos.getX() + (2.*G4QuickRand() - 1.)*halfX;
+  G4double y = pos.getY() + (2.*G4QuickRand() - 1.)*halfY;
+  G4double z = pos.getZ() + (2.*G4QuickRand() - 1.)*halfZ;
+  return G4ThreeVector(x, y, z);
+}
+
+G4ThreeVector
+G4VSceneHandler::GetPointInTet(const std::vector<G4ThreeVector>& vertices) const
+{
+  G4double p = G4QuickRand();
+  G4double q = G4QuickRand();
+  G4double r = G4QuickRand();
+  if (p + q > 1.)
+  {
+    p = 1. - p;
+    q = 1. - q;
+  }
+  if (q + r > 1.)
+  {
+    G4double tmp = r;
+    r = 1. - p - q;
+    q = 1. - tmp;
+  }
+  else if (p + q + r > 1.)
+  {
+    G4double tmp = r;
+    r = p + q + r - 1.;
+    p = 1. - q - tmp;
+  }
+  G4double a = 1. - p - q - r;
+  return vertices[0]*a + vertices[1]*p + vertices[2]*q + vertices[3]*r;
 }

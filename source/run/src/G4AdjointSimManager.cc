@@ -140,8 +140,9 @@ void G4AdjointSimManager::RunAdjointSimulation(G4int nb_evt)
   // Make the run
   //------------
   nb_evt_of_last_run = nb_evt;
-  G4RunManager::GetRunManager()->BeamOn(
-    nb_evt * theAdjointPrimaryGeneratorAction->GetNbOfAdjointPrimaryTypes());
+  G4RunManager::GetRunManager()
+    ->BeamOn( G4int(nb_evt*theAdjointPrimaryGeneratorAction
+                           ->GetNbOfAdjointPrimaryTypes()) );
 
   // Back to Fwd Simulation Mode
   //--------------------------------
@@ -489,8 +490,8 @@ void G4AdjointSimManager::RegisterAtEndOfAdjointTrack()
   std::vector<G4ParticleDefinition*>* aList =
     theAdjointPrimaryGeneratorAction->GetListOfPrimaryFwdParticles();
   last_fwd_part_index = -1;
-  std::size_t i       = 0;
-  while(i < aList->size() && last_fwd_part_index < 0)
+  G4int i = 0;
+  while(i < (G4int)aList->size() && last_fwd_part_index < 0)
   {
     if((*aList)[i]->GetParticleName() == last_fwd_part_name)
       last_fwd_part_index = i;

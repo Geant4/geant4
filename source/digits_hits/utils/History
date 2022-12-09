@@ -1,9 +1,29 @@
 # Category detutil History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-29 I. Hrivnacova (detutil-V11-00-06)
+- Added support for ntuple merging in G4TScoreNtupleWriter;
+  it can be activated with
+     G4TScoreNtupleWriter::SetNtupleMerging()
+
+## 2022-11-17 Gabriele Cosmo (detutil-V11-00-05)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-05 Ben Morgan (detutil-V11-00-04)
+- Remove large commented-out blocks of dead code
+
+## 2022-09-27 Ben Morgan (detutil-V11-00-03)
+- Remove inclusion of unused interfaces from G4detscorer
+- Apply core+recommended clang-tidy fixes, plus some code cleanup
+
+## 2022-09-01 Gabriele Cosmo (detutil-V11-00-02)
+- G4VScoringMesh: fixed reported Coverity defects for use of auto&.
+  Some minor code cleanup.
 
 ## 2022-05-17 Makoto Asai (detutil-V11-00-01)
 - G4VScoringMesh.hh : Fixing virtual keyword.

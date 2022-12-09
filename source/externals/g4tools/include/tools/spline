@@ -203,7 +203,7 @@ protected:
   static int TMath_FloorNint(double x) { return TMath_Nint(::floor(x)); }
 
   size_t find_x(double x) const {
-    int klow=0, khig=fNp-1;
+    int klow=0, khig=int(fNp-1);
     //
     // If out of boundaries, extrapolate
     // It may be badly wrong
@@ -277,7 +277,7 @@ protected:
     //  f  at tau(i), i=1,...,n, is generated and then solved by gauss elim-
     //  ination, with s(i) ending up in c(2,i), all i.
     //     c(3,.) and c(4,.) are used initially for temporary storage.
-    l = fNp-1;
+    l = int(fNp-1);
     // compute first differences of x sequence and store in C also,
     // compute first divided difference of data and store in D.
    {for (size_t m=1; m<fNp ; ++m) {
@@ -450,12 +450,12 @@ protected:
     // If out of boundaries, extrapolate
     // It may be badly wrong
     if(x<=fXmin) klow=0;
-    else if(x>=fXmax) klow=fNp-1;
+    else if(x>=fXmax) klow=int(fNp-1);
     else {
       if(fKstep) { // Equidistant knots, use histogramming :
-        klow = mn<int>(int((x-fXmin)/fDelta),fNp-1);
+        klow = mn<int>(int((x-fXmin)/fDelta),int(fNp-1));
       } else {
-        int khig=fNp-1;
+        int khig=int(fNp-1);
         int khalf;
         // Non equidistant knots, binary search
         while((khig-klow)>1) {

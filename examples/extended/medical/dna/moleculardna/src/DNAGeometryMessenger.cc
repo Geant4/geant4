@@ -151,7 +151,7 @@ void DNAGeometryMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   // Fractals
   if(command == fpNewPlacementVolumeFile.get())
   {
-    std::vector<G4String> cmd = utility::split(newValue, ' ');
+    std::vector<G4String> cmd = utility::Split(newValue, ' ');
     // input validation
     if(!(cmd.size() == 2 || cmd.size() == 3))
     {
@@ -180,7 +180,7 @@ void DNAGeometryMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
         }
       }
 
-      if(utility::path_exists(path))
+      if(utility::Path_exists(path))
       {
         fpDNAGeometry->AddVoxelFile(vname, path, twist);
       }
@@ -196,7 +196,7 @@ void DNAGeometryMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if(command == fpVoxelPlacementsFile.get())
   {
     G4String path = newValue;
-    if(utility::path_exists(path))
+    if(utility::Path_exists(path))
     {
       fpDNAGeometry->SetFractalFilename(path);
     }
@@ -231,7 +231,7 @@ void DNAGeometryMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if(command == fpAddMoleculeSize.get())
   {
-    std::vector<G4String> cmd = utility::split(newValue, ' ');
+    std::vector<G4String> cmd = utility::Split(newValue, ' ');
     // input validation
     if(cmd.size() == 4)
     {

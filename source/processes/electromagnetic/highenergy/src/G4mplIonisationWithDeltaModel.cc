@@ -127,8 +127,8 @@ G4mplIonisationWithDeltaModel::Initialise(const G4ParticleDefinition* p,
     if(!dedx0) { dedx0 = new std::vector<G4double>; }
     G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-    G4int n = dedx0->size();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+    G4int n = (G4int)dedx0->size();
     if(n < numOfCouples) { dedx0->resize(numOfCouples); }
     G4Pow* g4calc = G4Pow::GetInstance();
 

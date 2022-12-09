@@ -64,7 +64,7 @@ class G4DNAGillespieDirectMethod
   G4double VolumeOfNode(const Voxel& voxel);
   G4DNAMolecularReactionTable* fMolecularReactions;
   G4DNAMesh* fpMesh = nullptr;
-  G4double fTimeStep;
+  G4double fTimeStep = DBL_MAX;
   G4DNAEventSet* fpEventSet = nullptr;
   G4double fVerbose         = 0;
   std::map<G4double /*Propensity*/, ReactionData*> fReactionDataMap;

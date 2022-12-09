@@ -88,7 +88,7 @@ G4int G4XmlRNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
 
   auto handler = fFileManager->GetHandler<tools::aida::ntuple>(
                                  fullFileName, ntupleName, "ReadNtupleImpl");
-  if ( ! handler ) return kInvalidId;
+  if (handler == nullptr) return kInvalidId;
 
   auto rntuple = static_cast<tools::aida::ntuple*>(handler->object());
   auto id = SetNtuple(new G4TRNtupleDescription<tools::aida::ntuple>(rntuple));
@@ -109,7 +109,7 @@ G4bool G4XmlRNtupleManager::SetNtupleIColumn(G4int ntupleId,
     " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleIColumn");
-  if ( ! ntupleDescription )  return false;
+  if (ntupleDescription == nullptr) return false;
 
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
@@ -138,7 +138,7 @@ G4bool G4XmlRNtupleManager::SetNtupleFColumn(G4int ntupleId,
 
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleFColumn");
-  if ( ! ntupleDescription )  return false;
+  if (ntupleDescription == nullptr) return false;
 
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
@@ -166,7 +166,7 @@ G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId,
     " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleDColumn");
-  if ( ! ntupleDescription )  return false;
+  if (ntupleDescription == nullptr) return false;
 
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
@@ -194,7 +194,7 @@ G4bool G4XmlRNtupleManager::SetNtupleSColumn(G4int ntupleId,
     " ntupleId " + to_string(ntupleId) + " " + columnName);
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleSColumn");
-  if ( ! ntupleDescription )  return false;
+  if (ntupleDescription == nullptr) return false;
 
   // not supported
   //tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;

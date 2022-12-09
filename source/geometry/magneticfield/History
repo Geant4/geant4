@@ -1,9 +1,39 @@
 # Category field History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2022-11-28 Gabriele Cosmo (field-V11-00-05)
+- Fixed restore of stream precision in G4FieldManager::ReportBadEpsilonValue().
+
+## 2022-11-14 John Apostolakis (field-V11-00-04)
+- Revised G4FieldManager to ensure that epsilon_min / _max parameters
+  are less than a 'maximum accepted' accuracy (now=0.02) to ensure robust
+  behaviour of the integration. Improved their Set methods, adding 
+   - warnings if min > max, with corrective behaviour,  and
+   - a fatal exception in case of values outside the accepted range.
+   
+  To cope with needs of legacy applications or existing needs for performance,
+  the value of the 'ceiling' maximum accepted accuracy can be modified using
+  the new static method 
+       G4FieldManager::SetMaxAcceptedEpsilon( maxAccept, softFail);
+  but must remain under or equal to a final ceiling currently of
+       fMaxFinalEpsilon=0.03
+  
+## 2022-11-10 Gabriele Cosmo (field-V11-00-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-05 Divyansh Tiwari, John Apostolakis (field-V11-00-02)
+
+- Introduced G4BorisScheme and G4BorisDriver, a 2nd order symplectic
+  integration method, created as part of GSoC 2022.
+
+## 2022-10-05 Gabriele Cosmo (field-V11-00-01)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used.
 
 ## 2021-12-10 Ben Morgan (field-V11-00-00)
 - Change to new Markdown History format

@@ -130,17 +130,18 @@
  8- MACROS
 
  Several macros are included.
- boundary.mac: Set the surface to the various types and configurations of
+ - boundary.mac: Set the surface to the various types and configurations of
                model, type, etc., shoot optical photons, and record statistics
- electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
- fresnel.mac:  Shoot optical photons of fixed polarization and random direction
+ - coated.mac: To show reflection/refraction from thin film coating
+ - electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
+ - fresnel.mac:  Shoot optical photons of fixed polarization and random direction
                at a surface, and plot reflectance/transmittance vs incident
                angle.
- complexRindex.mac: Use a dielectric-metal surface with a complex index of
+ - complexRindex.mac: Use a dielectric-metal surface with a complex index of
                refraction.
- OpNovice2.mac: Shoot an optical photon inside a box.
- scint_by_particle.mac: Configure scintillation to have particle-specific
+ - OpNovice2.mac: Shoot an optical photon inside a box.
+ - scint_by_particle.mac: Configure scintillation to have particle-specific
                yields and yield ratios. Shoot different types of particles.
- vis.mac:      Configure visualization.
- wls.mac:      Configure two wavelength-shifting processes, and shoot optical
+ - vis.mac:    Configure visualization.
+ - wls.mac:    Configure two wavelength-shifting processes, and shoot optical
                photons.
