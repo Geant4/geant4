@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -27,6 +27,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 /cell/radiusSize 3 3 3 um
 /dnageom/setSmartVoxels 1
 /dnageom/checkOverlaps false
+/scheduler/endTime 1 us
 /dnageom/radicalKillDistance 9 nm
 /dnageom/interactionDirectRange 7 angstrom
 /dnageom/placementSize 30 30 100 nm
@@ -513,6 +514,23 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+min MeanLife (from G4NuclideTable)                1 ns 
+Max life time (from G4DeexPrecoParameters)        1000 ps 
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        3.171e+10 y  
+======================================================================
 
 Region <DefaultRegionForTheWorld> --  -- appears in <world> world volume
  This region is in the mass world.
@@ -521,11 +539,10 @@ Region <DefaultRegionForTheWorld> --  -- appears in <world> world volume
  Materials : G4_Galactic G4_WATER 
  Production cuts :   gamma 1 um      e- 1 um      e+ 1 um  proton 1 um 
 
-Region <DefaultRegionForParallelWorld> --  -- appears in <DNAWorld> world volume
- This region is in the parallel world.
- Root logical volume(s) : DNAWorld 
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_WATER G4_DNA_PHOSPHATE G4_DNA_DEOXYRIBOSE G4_DNA_ADENINE G4_DNA_THYMINE G4_DNA_CYTOSINE G4_DNA_GUANINE 
+ Materials : 
  Production cuts :   gamma 1 um      e- 1 um      e+ 1 um  proton 1 um 
 
 ========= Table of registered couples ============================
@@ -543,49 +560,6 @@ Index : 1     used in the geometry : Yes
  Energy thresholds :  gamma  100 eV     e-  242.143 eV     e+  239.346 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
-    DefaultRegionForParallelWorld
-
-Index : 2     used in the geometry : Yes
- Material : G4_DNA_PHOSPHATE
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  203.632 eV     e+  201.101 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForParallelWorld
-
-Index : 3     used in the geometry : Yes
- Material : G4_DNA_DEOXYRIBOSE
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  240.342 eV     e+  237.62 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForParallelWorld
-
-Index : 4     used in the geometry : Yes
- Material : G4_DNA_ADENINE
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  224.845 eV     e+  222.255 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForParallelWorld
-
-Index : 5     used in the geometry : Yes
- Material : G4_DNA_THYMINE
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  226.863 eV     e+  224.24 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForParallelWorld
-
-Index : 6     used in the geometry : Yes
- Material : G4_DNA_CYTOSINE
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  226.072 eV     e+  223.461 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForParallelWorld
-
-Index : 7     used in the geometry : Yes
- Material : G4_DNA_GUANINE
- Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  223.369 eV     e+  220.792 eV  proton 100 eV 
- Region(s) which use this couple : 
-    DefaultRegionForParallelWorld
 
 ==================================================================
 
@@ -593,20 +567,20 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   84655 kByte
-    Total CPU time elapsed for geometry optimisation: 66 seconds
+    Total CPU time elapsed for geometry optimisation: 59 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      50.40        33.02         0.13        42138k CellLogical
-      49.47        32.41         0.16        42138k DNAPhysLV
+      49.97        29.53         0.08        42138k DNAPhysLV
+      49.89        29.48         0.07        42138k CellLogical
        0.08         0.05         0.00          380k prism
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.78      42137k    311671   314256     703064        33.02    CellLogical
-      49.78      42137k    311671   314256     703064        32.41    DNAPhysLV
+      49.78      42137k    311671   314256     703064        29.53    DNAPhysLV
+      49.78      42137k    311671   314256     703064        29.48    CellLogical
        0.45        379k      1273     3780      14482         0.05    prism
 ### Run 0 starts.
 AnalysisManager::Initialize() GetRunID : 0
@@ -623,7 +597,7 @@ DNAIndependentReactionTimeModel will be used ==========================
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.600000s Real=0.618376s Sys=0.020000s
+  User=0.350000s Real=0.353076s Sys=0.000000s
 ... write file : molecular-dna.root - done
 ... close file : molecular-dna.root - done
 G4 kernel has come to Quit state.
@@ -639,10 +613,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 1082
+Total navigation history collections cleaned: 1080
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.961 MB
+Pool ID '20G4NavigationLevelRep', size : 0.958 MB
 Pool ID '19G4ElectronOccupancy', size : 0.000961 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 19.6 MB

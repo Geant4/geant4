@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -151,6 +151,23 @@ Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
 Threshold for very long decay time at rest        3.171e+10 y  
 ======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+min MeanLife (from G4NuclideTable)                1 ps 
+Max life time (from G4DeexPrecoParameters)        1 ps 
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        3.171e+10 y  
+======================================================================
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -194,6 +211,8 @@ Threshold for very long decay time at rest        3.171e+10 y
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
+  Process: RadioactiveDecay
 
   Process: RadioactiveDecay
 
@@ -406,8 +425,6 @@ Threshold for very long decay time at rest        3.171e+10 y
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -538,17 +555,17 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.180000s Real=0.181400s Sys=0.000000s
+  User=0.160000s Real=0.157666s Sys=0.010000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 7818	protonInelastic= 2182
+	hadElastic= 7798	protonInelastic= 2202
 
 
- MeanFreePath:	4.7785 cm  +- 4.7263 cm 	massic: 49.123 g/cm2 
- CrossSection:	0.20927 cm^-1 		massic: 2.0357 mm2/g 
- crossSection per atom:	3.3096 barn  
+ MeanFreePath:	4.765 cm  +- 4.6997 cm 	massic: 48.985 g/cm2 
+ CrossSection:	0.20986 cm^-1 		massic: 2.0415 mm2/g 
+ crossSection per atom:	3.3189 barn  
 
  Verification: crossSections from G4HadronicProcessStore
 
@@ -557,59 +574,59 @@ Run Summary
 
  List of nuclear reactions: 
 
-               proton + Mo98 --> N gamma or e- + Tc99[761.950]:       1   Q =  5.7325 MeV
-              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1907   Q =  -2.477 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.550]:      35   Q = -2.6122 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[152.090]:      17   Q = -2.6246 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[190.210]:      44   Q = -2.6627 MeV
-     proton + Mo98 --> N gamma or e- + neutron + Tc98[203.670]:      32   Q = -2.6762 MeV
+               proton + Mo98 --> N gamma or e- + Tc99[142.683]:       2   Q =  6.3518 MeV
+              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1931   Q = -2.4772 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[138.550]:      35   Q = -2.6116 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[152.090]:      18   Q = -2.6246 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[190.210]:      49   Q = -2.6627 MeV
+     proton + Mo98 --> N gamma or e- + neutron + Tc98[203.670]:      25   Q = -2.6762 MeV
       proton + Mo98 --> N gamma or e- + neutron + Tc98[21.800]:      44   Q = -2.4943 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[65.430]:      60   Q = -2.5386 MeV
-      proton + Mo98 --> N gamma or e- + neutron + Tc98[81.680]:       7   Q = -2.5542 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:       8   Q = -0.0072636 meV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[65.430]:      64   Q = -2.5386 MeV
+      proton + Mo98 --> N gamma or e- + neutron + Tc98[81.680]:       4   Q = -2.5542 MeV
+               proton + Mo98 --> N gamma or e- + proton + Mo98:       6   Q = -0.0039177 meV
      proton + Mo98 --> N gamma or e- + proton + Mo98[1432.206]:       6   Q = -1.4322 MeV
-     proton + Mo98 --> N gamma or e- + proton + Mo98[1510.039]:       2   Q =   -1.51 MeV
-     proton + Mo98 --> N gamma or e- + proton + Mo98[1758.480]:       3   Q = -1.7585 MeV
+     proton + Mo98 --> N gamma or e- + proton + Mo98[1510.039]:       6   Q =   -1.51 MeV
+     proton + Mo98 --> N gamma or e- + proton + Mo98[1758.480]:       1   Q = -1.7585 MeV
+     proton + Mo98 --> N gamma or e- + proton + Mo98[2017.520]:       1   Q = -2.0175 MeV
      proton + Mo98 --> N gamma or e- + proton + Mo98[2343.610]:       1   Q = -2.3436 MeV
-      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       3   Q = -734.75 keV
-      proton + Mo98 --> N gamma or e- + proton + Mo98[787.384]:      12   Q = -787.38 keV
-                               proton + Mo98 --> proton + Mo98:    7818   Q = -0.0056122 meV
+      proton + Mo98 --> N gamma or e- + proton + Mo98[734.750]:       4   Q = -734.75 keV
+      proton + Mo98 --> N gamma or e- + proton + Mo98[787.384]:       5   Q = -787.38 keV
+                               proton + Mo98 --> proton + Mo98:    7798   Q = -0.0056297 meV
 
                           number of gamma or e- (ic): N = 1 --> 10
 
  List of generated particles:
-           Mo98:    7826  Emean =  33.222 keV	( 518.57 meV --> 405.32 keV)
-  Mo98[1432.206]:       6  Emean =  165.57 keV	( 21.409 keV --> 341.51 keV)
-  Mo98[1510.039]:       2  Emean =  145.28 keV	( 18.524 keV --> 272.04 keV)
-  Mo98[1758.480]:       3  Emean =  71.318 keV	( 13.92 keV --> 181.72 keV)
-  Mo98[2343.610]:       1  Emean =  36.963 keV	( 36.963 keV --> 36.963 keV)
-  Mo98[734.750]:       3  Emean =  153.54 keV	( 66.149 keV --> 231.68 keV)
-  Mo98[787.384]:      12  Emean =  146.07 keV	( 31.877 keV --> 279.38 keV)
-           Tc98:    1907  Emean =  116.62 keV	( 14.658 keV --> 274.97 keV)
-  Tc98[138.550]:      35  Emean =  118.45 keV	( 12.678 keV --> 261.05 keV)
-  Tc98[152.090]:      17  Emean =  142.42 keV	( 35.387 keV --> 261.28 keV)
-  Tc98[190.210]:      44  Emean =  144.17 keV	( 33.248 keV --> 266.75 keV)
-  Tc98[203.670]:      32  Emean =  142.86 keV	( 41.605 keV --> 298.43 keV)
-   Tc98[21.800]:      44  Emean =  125.66 keV	( 21.659 keV --> 231.97 keV)
-   Tc98[65.430]:      60  Emean =  132.06 keV	( 38.601 keV --> 268.33 keV)
-   Tc98[81.680]:       7  Emean =  160.97 keV	( 27.194 keV --> 247.45 keV)
-  Tc99[761.950]:       1  Emean =  104.51 keV	( 104.51 keV --> 104.51 keV)
-             e-:     473  Emean =  110.06 keV	( 84.762 keV --> 806.59 keV)
-          gamma:   12901  Emean =  960.17 keV	( 7.8419 keV --> 12.214 MeV)
-        neutron:    2146  Emean =  1.6388 MeV	( 58.385 keV --> 7.0739 MeV)
-         proton:      35  Emean =  6.7599 MeV	( 4.0174 MeV --> 9.3731 MeV)
+           Mo98:    7804  Emean =  31.206 keV	( 1.3422 eV  --> 403.53 keV)
+  Mo98[1432.206]:       6  Emean =  224.21 keV	( 126.73 keV --> 300.52 keV)
+  Mo98[1510.039]:       6  Emean =  150.39 keV	( 18.524 keV --> 272.04 keV)
+  Mo98[1758.480]:       1  Emean =  181.72 keV	( 181.72 keV --> 181.72 keV)
+  Mo98[2017.520]:       1  Emean =  193.92 keV	( 193.92 keV --> 193.92 keV)
+  Mo98[2343.610]:       1  Emean =  62.403 keV	( 62.403 keV --> 62.403 keV)
+  Mo98[734.750]:       4  Emean =  142.52 keV	( 29.751 keV --> 241.27 keV)
+  Mo98[787.384]:       5  Emean =  103.65 keV	( 10.408 keV --> 313.8 keV)
+           Tc98:    1931  Emean =  117.14 keV	( 14.665 keV --> 291.04 keV)
+  Tc98[138.550]:      35  Emean =  133.94 keV	( 40.69 keV --> 320.52 keV)
+  Tc98[152.090]:      18  Emean =  110.93 keV	( 25.339 keV --> 255.09 keV)
+  Tc98[190.210]:      49  Emean =  146.49 keV	( 21.929 keV --> 315.76 keV)
+  Tc98[203.670]:      25  Emean =  131.06 keV	( 26.511 keV --> 298.43 keV)
+   Tc98[21.800]:      44  Emean =  126.59 keV	( 28.388 keV --> 242.12 keV)
+   Tc98[65.430]:      64  Emean =  124.32 keV	( 22.251 keV --> 257.01 keV)
+   Tc98[81.680]:       4  Emean =  216.27 keV	( 164.12 keV --> 266.07 keV)
+  Tc99[142.683]:       2  Emean =   106.3 keV	( 101.81 keV --> 110.79 keV)
+             e-:     495  Emean =     107 keV	( 84.731 keV --> 700.33 keV)
+          gamma:   12934  Emean =  960.48 keV	( 2.3247 keV --> 12.215 MeV)
+        neutron:    2170  Emean =  1.6875 MeV	( 38.554 keV --> 7.0739 MeV)
+         proton:      30  Emean =  6.6805 MeV	( 4.2667 MeV --> 9.5255 MeV)
 
-   Momentum balance: Pmean =  36.092 eV 	( 0.00079635 meV --> 2.0456 keV) 
+   Momentum balance: Pmean =  37.746 eV 	( 0.0014549 meV --> 1.8102 keV) 
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1778184878595597097, 490839719696109760, 1795636378797985139, 724265205952420050, 186692711742091506, 1740349965354549304, 150176419925325636, 2015144202567626119, 1829156676318289330, 463382076856931107, 473792035389981632, 1139332937110680876, 1434785253413254801, 678894643109774082, 813977053751020918, 1369367491946283346, 582182315345334364} counter= 5sumtot= 1525258901377397410
+N=17 V[N]={281867578912529177, 1008169992557050867, 441141655812162890, 1421161416840085828, 90532170532765785, 585143957149682564, 1181430029626050153, 701892136130618154, 1862493997955616835, 91359392859621772, 701770584419271747, 836724647394341620, 988989190233214407, 1854690824141859109, 1102135435508942143, 1416033946703855256, 503802136449408912} counter= 4sumtot= 1234281037944913513
 ---------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 0.021 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

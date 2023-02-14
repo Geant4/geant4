@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -839,8 +839,6 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -1020,7 +1018,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.030000s Real=0.034076s Sys=0.000000s
+  User=0.030000s Real=0.029566s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
@@ -1095,11 +1093,11 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.260000s Real=0.267783s Sys=0.010000s
+  User=0.240000s Real=0.246492s Sys=0.010000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.03 nanoGy  +- 146.913 picoGy 
+ Dose in scoring volume : 4.91863 nanoGy  +- 146.393 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
@@ -1122,19 +1120,19 @@ G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.0183 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00481 MB
+Pool ID '17G4DynamicParticle', size : 0.00385 MB
 Pool ID '16G4SmartVoxelNode', size : 0.000961 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.00865 MB
+Pool ID '7G4Track', size : 0.00769 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.044 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.042 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

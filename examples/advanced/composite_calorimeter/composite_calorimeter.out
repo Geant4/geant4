@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,8 +78,6 @@ HcalTB96 is registered to the default region.
 *  Magnetic Field is off  *
 *                         *
 ***************************
-G4FieldManager/SetEpsMin :  eps_min =      1e-05
-G4FieldManager/SetEpsMax :  eps_max =       0.01 ( Note: unchanged eps_min=     1e-05 )
 *******************************************************
 *                                                     *
 * Constructing a CCaloSD  with name HadronCalorimeter
@@ -1010,16 +1008,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            8k CrystalMatrix
+     100.00         0.01         0.00            1k CrystalMatrixLayer
        0.00         0.00         0.00            0k HcalTB96
        0.00         0.00         0.00            0k HadronCalorimeter
-       0.00         0.00         0.00            3k HadronCalorimeterBox0       0.00         0.00         0.00            2k HadronCalorimeterBox1       0.00         0.00         0.00            1k HadronCalorimeterScntLayer2       0.00         0.00         0.00            0k HadronCalorimeterScntLayer1       0.00         0.00         0.00            0k HadronCalorimeterScntLayer0       0.00         0.00         0.00            1k CrystalMatrixLayer
+       0.00         0.00         0.00            3k HadronCalorimeterBox0       0.00         0.00         0.00            2k HadronCalorimeterBox1       0.00         0.00         0.00            1k HadronCalorimeterScntLayer2       0.00         0.00         0.00            0k HadronCalorimeterScntLayer1       0.00         0.00         0.00            0k HadronCalorimeterScntLayer0       0.00         0.00         0.00            8k CrystalMatrix
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.44          7k        12      112        196         0.01    CrystalMatrix
-      20.31          3k         6       44         83         0.00    HadronCalorimeterBox0      14.44          2k         5       30         60         0.00    HadronCalorimeterBox1       4.81          0k         1       12         14         0.00    CrystalMatrixLayer
+      49.44          7k        12      112        196         0.00    CrystalMatrix
+      20.31          3k         6       44         83         0.00    HadronCalorimeterBox0      14.44          2k         5       30         60         0.00    HadronCalorimeterBox1       4.81          0k         1       12         14         0.01    CrystalMatrixLayer
        3.70          0k         2        7         13         0.00    HadronCalorimeterScntLayer2       2.08          0k         1        4          8         0.00    HadronCalorimeter
        1.98          0k         1        4          6         0.00    HadronCalorimeterScntLayer0       1.67          0k         1        3          6         0.00    HadronCalorimeterScntLayer1       1.57          0k         1        3          4         0.00    HcalTB96
 ### Run 0 starts.
@@ -1086,7 +1084,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=17.640000s Real=17.826814s Sys=0.000000s
+  User=15.730000s Real=15.856976s Sys=0.000000s
 ### Run 0 end.
 ... write file : ccal.root - done
 ... close file : ccal.root - done
@@ -1104,12 +1102,12 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 49
+Total navigation history collections cleaned: 50
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0731 MB
+Pool ID '20G4NavigationLevelRep', size : 0.074 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0385 MB
+Pool ID '17G4DynamicParticle', size : 0.0308 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00769 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00385 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -1117,13 +1115,13 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.0759 MB
+Pool ID '7G4Track', size : 0.0606 MB
 Pool ID '18G4TouchableHistory', size : 0.00577 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.0144 MB
-Pool ID '10G4Fragment', size : 0.00673 MB
+Pool ID '10G4Fragment', size : 0.00577 MB
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 0.23 MB
+Dynamic pools deleted: 15 / Total memory freed: 0.21 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

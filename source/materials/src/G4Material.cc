@@ -204,6 +204,15 @@ G4Material::G4Material(const G4String& name, G4double density,
   fPressure = pressure;
 
   fBaseMaterial = bmat;
+  auto ptr = bmat;
+  if(nullptr != ptr) {
+    while(1) {
+      ptr = ptr->GetBaseMaterial();
+      if(nullptr == ptr) { break; }
+      else { fBaseMaterial = ptr; }
+    }
+  }
+
   fChemicalFormula = fBaseMaterial->GetChemicalFormula();
   fMassOfMolecule  = fBaseMaterial->GetMassOfMolecule();
 

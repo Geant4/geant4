@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -589,7 +589,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.870000s Real=6.920041s Sys=0.010000s
+  User=6.350000s Real=6.375698s Sys=0.000000s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -649,7 +649,7 @@ N=17 V[N]={1688224171856633815, 1204397957432844994, 970316653270356218, 2007108
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.240000s Real=2.266308s Sys=0.000000s
+  User=2.100000s Real=2.121501s Sys=0.000000s
 
  The run consists of 1000 C12 of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -720,7 +720,7 @@ N=17 V[N]={1649824727118647661, 1046390055990695993, 1480625329608636178, 146408
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.150000s Real=1.166945s Sys=0.000000s
+  User=1.070000s Real=1.078480s Sys=0.000000s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
@@ -785,7 +785,7 @@ N=17 V[N]={1933654448227140629, 1457435173727069612, 1930983674723996504, 139968
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.000524s Sys=0.000000s
+  User=0.000000s Real=0.000418s Sys=0.000000s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 mg/cm3)
 
@@ -848,7 +848,7 @@ N=17 V[N]={338928760304083625, 441887219544588962, 851684438601283227, 181798748
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.011792s Sys=0.000000s
+  User=0.010000s Real=0.010388s Sys=0.000000s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -920,7 +920,7 @@ N=17 V[N]={2080744500207456733, 1944926083755594869, 710688226310155038, 2297318
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.520000s Real=3.599527s Sys=0.060000s
+  User=3.250000s Real=3.300516s Sys=0.040000s
 
  The run consists of 10 Xe131 of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
@@ -998,7 +998,7 @@ N=17 V[N]={987077746800997428, 2082610003558889367, 593302383828085190, 10950096
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.660000s Real=0.660069s Sys=0.000000s
+  User=0.620000s Real=0.624546s Sys=0.000000s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
@@ -1012,9 +1012,7 @@ Run Summary
 mixmax state, file version 1.0
 N=17 V[N]={869322257438941195, 384251251088241991, 2180024558785132357, 853258939912875777, 176205193257164154, 1881574772054670531, 1781061241614129969, 1557037857960190014, 3008773993715497, 1252849085205759056, 1318002576626930808, 2123391528790226507, 2148130426532606502, 816744514228099003, 1633700286528463369, 415258349704432768, 1236702284415004523} counter= 13sumtot= 2183779824427032413
 ---------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 56 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

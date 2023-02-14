@@ -194,7 +194,6 @@ void G4HadProcesses::BuildNeutronInelasticAndCapture(G4HadronicProcess* nInel)
     auto neutron = G4Neutron::Neutron();
     G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
     nInel->AddDataSet(new G4NeutronInelasticXS());
-    nCap->AddDataSet(new G4NeutronCaptureXS());
     ph->RegisterProcess(nInel, neutron);
     ph->RegisterProcess(nCap, neutron);
     if( param->ApplyFactorXS() ) {

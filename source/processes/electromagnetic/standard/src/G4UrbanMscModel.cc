@@ -151,7 +151,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   InitialiseParameters(p);
 
   latDisplasmentbackup = latDisplasment;
-  dispAlg96 = (G4EmParameters::Instance()->LateralDisplacementAlg96());
+  dispAlg96 = G4EmParameters::Instance()->LateralDisplacementAlg96();
+  fPosiCorrection = G4EmParameters::Instance()->MscPositronCorrection();
 
   // initialise cache only once
   if(0 == msc.size()) {
@@ -983,7 +984,7 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   }
   G4double y = trueStepLength/currentRadLength;
 
-  if(particle == positron)
+  if(fPosiCorrection && particle == positron)
   {
     static const G4double xl= 0.6;
     static const G4double xh= 0.9;

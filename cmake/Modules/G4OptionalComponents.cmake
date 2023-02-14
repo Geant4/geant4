@@ -296,11 +296,6 @@ endif()
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   find_package(VecGeom 1.2.0 REQUIRED)
-  # Shim until VecGeom supports config mode properly
-  include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
-  # Backward Compatibility
-  set(VECGEOM_LIBRARIES VecGeom::vecgeom)
-
   geant4_save_package_variables(VecGeom VecGeom_DIR)
 
   # If VecCore_DIR is set, means updated VecGeom install used, so

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -215,7 +215,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.620000s Real=0.622088s Sys=0.000000s
+  User=0.590000s Real=0.594056s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -252,9 +252,7 @@ Run Summary
  Initial seed (index) = 0
  Current couple of seeds = 487149134, 312236109
 ----------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.017 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

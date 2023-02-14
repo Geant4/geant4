@@ -225,8 +225,8 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
                                                    G4Parton *& Parton1, G4Parton *& Parton2)
 {
   // Note! convention aEnd = q or (qq)bar and bEnd = qbar or qq.
-  G4int aEnd;
-  G4int bEnd;
+  G4int aEnd=0;
+  G4int bEnd=0;
   G4int HadronEncoding = aPart->GetPDGEncoding();
   if (aPart->GetBaryonNumber() == 0)
   {

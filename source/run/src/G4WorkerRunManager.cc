@@ -136,7 +136,7 @@ G4WorkerRunManager::~G4WorkerRunManager()
   userWorkerThreadInitialization = nullptr;
   userActionInitialization       = nullptr;
   physicsList                    = nullptr;
-  if(verboseLevel > 0)
+  if(verboseLevel > 1)
     G4cout << "Destroying WorkerRunManager (" << this << ")" << G4endl;
 }
 

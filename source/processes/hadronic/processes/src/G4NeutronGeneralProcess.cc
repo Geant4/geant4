@@ -48,8 +48,8 @@
 #include "G4NeutronGeneralProcess.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ProcessManager.hh"
 #include "G4HadronicProcess.hh"
+#include "G4CrossSectionDataStore.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
@@ -62,7 +62,6 @@
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
 #include "G4Neutron.hh"
-#include "G4Nucleus.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronElasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -86,14 +85,6 @@ G4NeutronGeneralProcess::G4NeutronGeneralProcess(const G4String& pname)
 {
   SetVerboseLevel(1);
   SetProcessSubType(fNeutronGeneral);
-
-  fElasticXS = new G4NeutronElasticXS();
-  fInelasticXS = new G4NeutronInelasticXS();
-  fCaptureXS = new G4NeutronCaptureXS();
-
-  AddDataSet(fElasticXS);
-  AddDataSet(fInelasticXS);
-  AddDataSet(fCaptureXS);
 
   fNeutron = G4Neutron::Neutron();
 
@@ -120,6 +111,58 @@ G4bool G4NeutronGeneralProcess::IsApplicable(const G4ParticleDefinition&)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4NeutronGeneralProcess::SetInelasticProcess(G4HadronicProcess* ptr)
+{
+  fInelastic = ptr;
+  fXSSInelastic = ptr->GetCrossSectionDataStore();
+  fInelasticXS = InitialisationXS(ptr);
+  if(nullptr == fInelasticXS) {
+    fInelasticXS = new G4NeutronInelasticXS();
+    ptr->AddDataSet(fInelasticXS);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4NeutronGeneralProcess::SetElasticProcess(G4HadronicProcess* ptr)
+{
+  fElastic = ptr;
+  fXSSElastic = ptr->GetCrossSectionDataStore();
+  fElasticXS = InitialisationXS(ptr);
+  if(nullptr == fElasticXS) {
+    fElasticXS = new G4NeutronElasticXS();
+    ptr->AddDataSet(fElasticXS);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4NeutronGeneralProcess::SetCaptureProcess(G4HadronicProcess* ptr)
+{
+  fCapture = ptr;
+  fXSSCapture = ptr->GetCrossSectionDataStore();
+  fCaptureXS = InitialisationXS(ptr);
+  if(nullptr == fCaptureXS) {
+    fCaptureXS = new G4NeutronCaptureXS();
+    ptr->AddDataSet(fCaptureXS);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VCrossSectionDataSet*
+G4NeutronGeneralProcess::InitialisationXS(G4HadronicProcess* proc)
+{
+  G4VCrossSectionDataSet* ptr = nullptr;
+  auto xsv = proc->GetCrossSectionDataStore()->GetDataSetList();
+  if(!xsv.empty()) {
+    ptr = xsv[0];
+  }
+  return ptr;
+}
+
+//....Ooooo0ooooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4NeutronGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
@@ -211,7 +254,6 @@ void G4NeutronGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part
   fElastic->BuildPhysicsTable(part);
   fInelastic->BuildPhysicsTable(part);
   fCapture->BuildPhysicsTable(part);
-  fCaptureXS->BuildPhysicsTable(part);
 
   if(isMaster) {
     std::size_t nmat = G4Material::GetNumberOfMaterials();
@@ -349,7 +391,7 @@ G4double G4NeutronGeneralProcess::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* G4NeutronGeneralProcess::PostStepDoIt(const G4Track& track,
                                                          const G4Step& step)
 {
-  fSelectedProc = nullptr;
+  fSelectedProc = this;
   // time limit
   if(0.0 == fLambda) {
     theTotalResult->Initialize(track);
@@ -365,46 +407,26 @@ G4VParticleChange* G4NeutronGeneralProcess::PostStepDoIt(const G4Track& track,
   */
   if (0 == idxEnergy) {
     if(q <= GetProbability(1)) {
-      SelectedProcess(step, fElastic, fElasticXS);
+      SelectedProcess(step, fElastic, fXSSElastic);
     } else if(q <= GetProbability(2)) {
-      SelectedProcess(step, fInelastic, fInelasticXS);
+      SelectedProcess(step, fInelastic, fXSSInelastic);
     } else {
-      SelectedProcess(step, fCapture, fCaptureXS);
+      SelectedProcess(step, fCapture, fXSSCapture);
     }
   } else {
     if(q <= GetProbability(4)) {
-      SelectedProcess(step, fInelastic, fInelasticXS);
+      SelectedProcess(step, fInelastic, fXSSInelastic);
     } else {
-      SelectedProcess(step, fElastic, fElasticXS);
+      SelectedProcess(step, fElastic, fXSSElastic);
     }
   }
-  const G4Element* elm = fCurrMat->GetElement(0);
-  G4int nelm = (G4int)fCurrMat->GetNumberOfElements();
-  if(1 < nelm) {
-    auto natom = fCurrMat->GetVecNbOfAtomsPerVolume();
-    G4double sig = 0.0;
-    for(G4int i=0; i<nelm; ++i) {
-      sig += natom[i] *
-        fXS->ComputeCrossSectionPerElement(fCurrE, fCurrLogE, fNeutron,
-                                           fCurrMat->GetElement(i),
-                                           fCurrMat);
-      fXsec[i] = sig;
-    }
-    sig *= G4UniformRand();
-    for(G4int i=0; i<nelm; ++i) {
-      if(fXsec[i] >= sig) {
-        elm = fCurrMat->GetElement(i);
-        break;
-      }
-    }
+  // total cross section is needed for selection of an element
+  if(fCurrMat->GetNumberOfElements() > 1) {
+    fCurrentXSS->ComputeCrossSection(track.GetDynamicParticle(), fCurrMat);
   }
-  fSelectedProc->GetCrossSectionDataStore()->SetForcedElement(elm);
-  const G4Isotope* iso = fXS->SelectIsotope(elm, fCurrE, fCurrLogE);
-  fSelectedProc->GetTargetNucleusPointer()->SetIsotope(iso);
   /*
-  G4cout << "## neutron E(MeV)=" << fCurrE << "  " 
+    G4cout << "## neutron E(MeV)=" << fCurrE << " inside " << fCurrMat->GetName() 
 	 << fSelectedProc->GetProcessName()
-	 << " on Z=" << iso->GetZ() << " A=" << iso->GetN() 
 	 << " time(ns)=" << track.GetGlobalTime()/ns << G4endl; 
   */
   // sample secondaries
@@ -457,7 +479,7 @@ void G4NeutronGeneralProcess::ProcessDescription(std::ostream& out) const
 
 const G4String& G4NeutronGeneralProcess::GetSubProcessName() const
 {
-  return (fSelectedProc) ? fSelectedProc->GetProcessName()
+  return (nullptr != fSelectedProc) ? fSelectedProc->GetProcessName()
     : G4VProcess::GetProcessName();
 }
 
@@ -465,7 +487,8 @@ const G4String& G4NeutronGeneralProcess::GetSubProcessName() const
 
 G4int G4NeutronGeneralProcess::GetSubProcessSubType() const
 {
-  return (fSelectedProc) ? fSelectedProc->GetProcessSubType() : 16;
+  return (nullptr != fSelectedProc) ? fSelectedProc->GetProcessSubType()
+    : fNeutronGeneral;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -76,6 +76,9 @@ http://geant4-dna.org
     /world/worldSize 10200 nm
     /cell/radiusSize 3 3 3 um
 
+    # Commands for the time of chemistry simulation
+    /scheduler/endTime 1 us
+
     # Set Smartless for logicalVolume
     /dnageom/setSmartVoxels 1
     # Check overlaps in DNA geometry region
@@ -126,6 +129,12 @@ http://geant4-dna.org
     # For the visualization, large amount of RAM is needed. For example
     # using cylinders DNA geometries, to visualize 200 cylinders, ~2.5 GB
     # are needed. For 2000 cylinders, ~11 GB are needed.
+
+    The DNA parallel world can be activated using the "useParallelPhysicsWorld" flag
+    in the PhysicsList.cc and DetectorConstruction.cc files for the physics stage.
+    Setting "useParallelPhysicsWorld = false" means that particles will only interact
+    with the water volume. Energy deposition in water caused by direct damage is
+    recorded using octree data structures associated with DNA volumes.
 
 2 - PHYSICS LIST
 

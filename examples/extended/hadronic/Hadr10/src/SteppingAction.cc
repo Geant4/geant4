@@ -397,8 +397,9 @@ void SteppingAction::UserSteppingAction( const G4Step* theStep ) {
     const G4double zMom = theStep->GetPostStepPoint()->GetMomentum().z();
     // The compute here the angular deflection, in degrees, between the initial direction of
     // the primary particle - which is along the x-axis, and its direction when it decays.
-    const G4double deflection_angle_in_degrees =
-      57.29*std::acos( theStep->GetPostStepPoint()->GetMomentumDirection().x() );
+    G4double xDirection = std::min( theStep->GetPostStepPoint()->GetMomentumDirection().x(), 1.0 );
+    if ( xDirection < -1.0 ) xDirection = -1.0;
+    const G4double deflection_angle_in_degrees = 57.29*std::acos( xDirection );
     const G4double delta_ekin = fPrimaryParticleInitialKineticEnergy - eKin;
     //G4cout << std::setprecision(6)
     //       << " Decay: tPos[ns]=" << tPos << " ; rPos[mm]=" << rPos << " ; deltaR[mum]="

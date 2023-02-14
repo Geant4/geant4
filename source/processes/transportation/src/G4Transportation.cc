@@ -95,10 +95,10 @@ G4Transportation::G4Transportation( G4int verbosity, const G4String& aName )
 
   fpLogger = new G4TransportationLogger("G4Transportation", verbosity);
 
-  auto trParams= G4TransportationParameters::Instance();
   if( G4TransportationParameters::Exists() )
   {
-    SetThresholdWarningEnergy(  trParams->GetWarningEnergy() );
+    auto trParams= G4TransportationParameters::Instance();
+     
     SetThresholdWarningEnergy(  trParams->GetWarningEnergy() );
     SetThresholdImportantEnergy( trParams->GetImportantEnergy() );
     SetThresholdTrials( trParams->GetNumberOfTrials() );

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -523,17 +523,17 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            2k World
+       0.00         0.00         0.00            2k World
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00          1k         5       13         86         0.01    World
+     100.00          1k         5       13         86         0.00    World
 ### Run 0 starts.
 ... set ntuple merging row mode : row-wise - done
 ... create file : SolidTargetCyclotron.root - done
@@ -566,7 +566,7 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=25.030000s Real=25.298618s Sys=0.020000s
+  User=21.540000s Real=21.679623s Sys=0.000000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.

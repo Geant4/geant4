@@ -218,8 +218,15 @@ protected:
   G4HadProjectile thePro;
 
   G4ParticleChange* theTotalResult;
+  G4CrossSectionDataStore* theCrossSectionDataStore;
+
   G4double fWeight = 1.0;
+  G4double aScaleFactor = 1.0;
+  G4double theLastCrossSection = 0.0;
+  G4double mfpKinEnergy = DBL_MAX;
   G4long epReportLevel = 0;
+
+  G4HadXSType fXSType = fHadNoIntegral;
 
 private:
     
@@ -227,7 +234,6 @@ private:
   G4Nucleus targetNucleus;
     
   G4HadronicInteraction* theInteraction = nullptr;
-  G4CrossSectionDataStore* theCrossSectionDataStore;
   G4HadronicProcessStore* theProcessStore;
   const G4HadronicProcess* masterProcess = nullptr;
   const G4ParticleDefinition* firstParticle = nullptr;
@@ -238,13 +244,8 @@ private:
   std::vector<G4double>* theEnergyOfCrossSectionMax = nullptr;
   std::vector<G4TwoPeaksHadXS*>* fXSpeaks = nullptr;
      
-  G4double aScaleFactor = 1.0;
-  G4double theLastCrossSection = 0.0;
-  G4double mfpKinEnergy = DBL_MAX;
   G4double theMFP = DBL_MAX;
   G4double minKinEnergy;
-
-  G4HadXSType fXSType = fHadNoIntegral;
 
   // counters
   G4int nMatWarn = 0;

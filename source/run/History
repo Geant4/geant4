@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-02-03 Gabriele Cosmo (run-V11-00-12)
+- Reduced printout in destruction of run-manager (master and workers), to be
+  coherent with verbose level greater than 1.
+
+## 2022-12-30 Vladimir Ivanchenko
+- G4PhysicsListHelper - added forgotten process of muon pair production by muons
+    (problem #2523); added general processes
+
 ## 2022-11-18 Gabriele Cosmo (run-V11-00-11)
 - More compilation warnings fixes for implicit type conversions.
 

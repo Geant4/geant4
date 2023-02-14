@@ -1,0 +1,161 @@
+
+                 Geant4 11.1 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                           10 February 2023
+
+List of fixes included in this public patch since the public release 11.1.0:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Fixed configuration/use of TGS visualisation driver in geant4-config
+        Addresses problem report #2525.
+      o Use PROJECT_ or Geant4_ scoped _SOURCE/BINARY_DIR variables in place of
+        CMAKE_  scope version to ease use of Geant4 as a CMake subproject. 
+        Based on GitHub PR#52 (https://github.com/Geant4/geant4/pull/52).
+      o Removed no longer required G4VecGeomShim module.
+        VecGeom supports/supplies full imported targets since 1.1.18
+        Use of VECGEOM_LIBRARIES variable is required to allow build against
+        CUDA-enabled VecGeom.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o Reduced printout for setting any valid value for epsilon_min/_max in
+        G4FieldManager.
+    + management:
+      o G4LogicalVolume: use std::shared_ptr for handling visualization attributes.
+        Ignore calls to SetVisAttributes() from worker threads.
+    + solids/Boolean:
+      o Fixed hang-out in G4MultiUnion, caused by oveflow of 'size-1' when 'size'
+        value is zero.
+    + solids/specific:
+      o G4QuadrangularFacet: fixed references to triangles in the warning message
+        in the check for collinear vertices.
+
+  o Global:
+    ------
+    + G4DataVector: simplified and corrected inline methods implementation.
+    + Updated date and version for 11.1.1.
+
+  o Materials:
+    ---------
+    + G4Material: allow recursive search for based material.
+      Addressing problem report #2520.
+
+  o Particles:
+    ---------
+    + G4AntiNeutron: set the "PDG stable" flag to "false", as for G4Neutron.
+    + G4(Anti)OmegacZero: updated mean life time.
+
+  o Physics Lists:
+    -------------
+    + builders
+      o Updated table of processes.
+    + constructors/decay
+      o G4RadioactiveDecayPhysics: assigned RadioactiveDecay process to G4Triton
+        (which is the only light ion that decays). Note: before, triton did not
+        have beta decay, i.e. it was wrongly treated as stable even when radioactive
+        decay physics was enabled; anti_triton did not, and still does not, have
+        beta decay (because RadioactiveDecay, in its current implementation, does
+        not handle any kind of anti-ions): in practice, this is an acceptable
+        approximation because of its relatively long lifetime and the fact
+        that annihilation and nuclear capture are more likely to happen before
+        decay.
+    + constructors/electromagnetic
+      o G4GammaGeneralProcess: in all cases select the sub-process.
+        Addressing problem report #2521.
+    + util
+      o G4HadProcesses: avoid double instantiation of capture cross-section.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + standard
+      o G4UrbanMscModel: added flag for multiple-scattering positron correction.
+      o Fixed compilation warning in G4GoudsmithSoundersonMscModel.
+    + utils
+      o G4EmParameters, G4EmParametersMessenger: added parameter, UI command
+        and Get/Set methods for positron correction in multiple-scattering.
+
+  o Processes - Hadronic:
+    --------------------
+    + management
+      o G4HadronicProcess: moved some class members to protected.
+    + models/lend
+      o Fixed potential uninitialised variables.
+    + models/particle_hp
+      o Minor cleanup in G4ParticleHPDeExGammas header for data initialisation.
+    + models/parton_string/qgsm
+      o Fixed potential uninitialised variables in G4QGSMSplitableHadron.
+    + processes
+      o G4NeutronGeneralProcess: optimized code: initialisation methods are
+        moved to source; avoid double instantiation of capture cross-section;
+        reduced number of calls to cross-section, added cross-section data store
+        pointer. Added setter method for setting minimum energy limit.
+      o G4HadronElasticProcess: removed obsolete try/catch diagnostics not
+        applicable for hadron elastic models; added forgotten integral approach
+        for charged particles.
+
+  o Processes - Transportation:
+    --------------------------
+    + Fixed inadvertent creation of G4TransportationParameters in
+      G4Transportation constructor, determining a change of default looper
+      parameters, responsible for observed warnings at run-time.
+    + Fixed compilation warning about unused variable with G4VERBOSE unset.
+
+  o Run:
+    ---
+    + G4PhysicsListHelper: added forgotten process of muon pair production by
+      muons and added general process. Addressing problem report #2523.
+    + Reduced printout in destruction of run-manager (master and workers),
+      to be coherent with verbose level greater than 1.
+
+  o Visualization:
+    -------------
+    + modeling
+      o Fixed transform in G4TextModel; the rotation part of the transform was
+        being ignored. This impacted the implementation of
+        "/vis/scene/add/localAxes".
+      o G4AxesModel: Tidied.
+
+  o Examples:
+    --------
+    + extended/eventgenerator/exgps
+    + extended/exoticphysics
+    + extended/geometry/vecGeomNavigation
+      o Use PROJECT_ or Geant4_ scoped _SOURCE/BINARY_DIR variables in place of
+        CMAKE_  scope version to ease use of Geant4 as a CMake subproject. 
+        Based on GitHub PR#52 (https://github.com/Geant4/geant4/pull/52).
+    + extended/hadronic/Hadr10
+      o In DetectorMessenger, define "/mydet/update" command also for PreInit
+        state and call "/run/initialize" after geometry update in hadr10.in script,
+        to avoid run-time warning messages in output for reinitialisation of
+        geometry.
+      o In SteppingAction, protecting the argument of acos to be within range.
+    + extended/medical
+      o Use PROJECT_ or Geant4_ scoped _SOURCE/BINARY_DIR variables in place of
+        CMAKE_  scope version to ease use of Geant4 as a CMake subproject. 
+        Based on GitHub PR#52 (https://github.com/Geant4/geant4/pull/52).
+    + extended/medical/dna/moleculardna
+      o Fixed materials definition and corrected mistake in PhysicsList.
+      o Updated imput macros.
+    + extended/parallel/MPI
+      o Use PROJECT_ or Geant4_ scoped _SOURCE/BINARY_DIR variables in place of
+        CMAKE_  scope version to ease use of Geant4 as a CMake subproject. 
+        Based on GitHub PR#52 (https://github.com/Geant4/geant4/pull/52).
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.1 series.
+  o  Technical notes distributed for release 11.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.1.1 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

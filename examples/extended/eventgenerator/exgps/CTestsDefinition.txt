@@ -1,31 +1,31 @@
 geant4_add_test(gps-build
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps
-  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps
+  SOURCE_DIR ${PROJECT_SOURCE_DIR}/examples/extended/eventgenerator/exgps
+  BINARY_DIR ${PROJECT_BINARY_DIR}/examples/extended/eventgenerator/exgps
   BUILD exgps
   LABELS PhysicsChecks)
 
-set(_wd ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/stattest)
+set(_wd ${PROJECT_BINARY_DIR}/examples/extended/eventgenerator/exgps/stattest)
 file(MAKE_DIRECTORY ${_wd})
 
-set(_wd2 ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/stattest-full)
+set(_wd2 ${PROJECT_BINARY_DIR}/examples/extended/eventgenerator/exgps/stattest-full)
 file(MAKE_DIRECTORY ${_wd2})
 
 configure_file(
-	${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/x-ray-spectrum-geant4-180kV.dat
+	${PROJECT_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/x-ray-spectrum-geant4-180kV.dat
 	${_wd2}/x-ray-spectrum-geant4-180kV.dat
 	COPYONLY)
 
 geant4_add_test(gps-run-simple
-  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
-	        ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/exgps_MT.in
+  COMMAND ${PROJECT_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
+	        ${PROJECT_SOURCE_DIR}/examples/extended/eventgenerator/exgps/exgps_MT.in
   WORKING_DIRECTORY ${_wd}
   ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
   DEPENDS gps-build
   LABELS PhysicsChecks)
 
 geant4_add_test(gps-run
-  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
-	        ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/run.mac
+  COMMAND ${PROJECT_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
+	        ${PROJECT_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/run.mac
   WORKING_DIRECTORY ${_wd2}
   ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
   DEPENDS gps-build
@@ -35,7 +35,7 @@ find_package(StatTest QUIET)
 if(STATTEST_FOUND)
 	stattest_add_test(gps-simple-checkOutput
     G4TEST gps-run-simple
-    CONFIG "${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/conf-simple.qa"
+    CONFIG "${PROJECT_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/conf-simple.qa"
     REFERENCE "${GEANT4_TEST_REFERENCES_URL}/examples/extended/eventgenerator/exgps/reference-V10-01-ref-01-simple.root"
     INPUT "${_wd}/exgps_t*.root"
     IMG "${_wd}/gps-simple.pdf"
@@ -43,7 +43,7 @@ if(STATTEST_FOUND)
 
   stattest_add_test(gps-checkOutput
 	  G4TEST gps-run
-    CONFIG "${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/conf.qa"
+    CONFIG "${PROJECT_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/conf.qa"
     REFERENCE "${GEANT4_TEST_REFERENCES_URL}/examples/extended/eventgenerator/exgps/reference-V10-01-ref-01.root"
     INPUT "${_wd2}/exgps_t*.root"
     IMG "${_wd2}/gps.pdf"

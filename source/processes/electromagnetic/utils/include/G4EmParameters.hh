@@ -205,6 +205,9 @@ public:
   G4bool PhotoeffectBelowKShell() const;
   void SetPhotoeffectBelowKShell(G4bool v);
 
+  G4bool MscPositronCorrection() const;
+  void SetMscPositronCorrection(G4bool v);
+
   // 5d
   void SetOnIsolated(G4bool val);
   G4bool OnIsolated() const;
@@ -421,6 +424,7 @@ private:
   G4bool fPolarisation;
   G4bool fMuDataFromFile;
   G4bool fPEKShell;
+  G4bool fMscPosiCorr;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
   G4bool fIsPrinted;

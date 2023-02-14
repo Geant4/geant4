@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-09 Vladimir Ivanchenko (materials-V11-00-20)
+- G4Material - allowed recursive search for based material (fix problem #2520)
+
 ## 2022-11-16 Gabriele Cosmo (materials-V11-00-19)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

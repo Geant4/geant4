@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -314,7 +314,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=1.930000s Real=1.958096s Sys=0.000000s
+  User=1.290000s Real=1.298699s Sys=0.000000s
 
  Process calls frequency --->  eIoni= 328414  msc= 138727  Transportation= 22903
 
@@ -345,9 +345,7 @@ N=17 V[N]={1654413378427596061, 2083774194714727894, 435632633583180387, 1249217
 mixmax state, file version 1.0
 N=17 V[N]={1654413378427596061, 2083774194714727894, 435632633583180387, 1249217075862885945, 1841610948578514178, 2195212315604842651, 604850147562425736, 71370128272451398, 692251873205795303, 688961742426314054, 1568443410653060393, 934486371783296866, 250285745308568758, 981911920856436405, 1911439761393675093, 1678696166129964874, 1107850824324498422} counter= 3sumtot= 1503664564978682810
 ---------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.014 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

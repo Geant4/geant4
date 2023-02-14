@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -515,7 +515,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.960000s Real=0.963480s Sys=0.000000s
+  User=0.990000s Real=0.995499s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -614,7 +614,7 @@ N=17 V[N]={387689516187099455, 1947743697759783307, 984698709684866192, 15571250
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.500000s Real=0.501066s Sys=0.000000s
+  User=0.530000s Real=0.527098s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -718,7 +718,7 @@ N=17 V[N]={1239212255599460965, 1328488509436437337, 1766244005004820777, 289170
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.910000s Real=1.921789s Sys=0.000000s
+  User=1.830000s Real=1.847042s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -828,7 +828,7 @@ N=17 V[N]={536854359441855123, 1009932311112986142, 1367456349214626552, 2965156
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.520000s Real=0.515694s Sys=0.000000s
+  User=0.520000s Real=0.520304s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -939,7 +939,7 @@ N=17 V[N]={841703379855331740, 1160090687504734640, 968124569867711035, 10157294
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=7.990000s Real=8.052453s Sys=0.000000s
+  User=8.180000s Real=8.238345s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -986,9 +986,7 @@ mixmax state, file version 1.0
 N=17 V[N]={617661458496339327, 1853949536333809702, 576578364478647478, 412964137124411421, 1032844685672237211, 1031821778618090704, 544078291082236998, 194159493452279161, 171481080002404738, 70495838368000371, 205172618800321456, 1143344309854547675, 1442959377549137764, 1052598822626686356, 1979034980715068385, 1710881825679836342, 1632809550286451542} counter= 16sumtot= 1837778093858342925
 ---------------------------------------
 #
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.054 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

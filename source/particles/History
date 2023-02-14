@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-02-07 Sandro Wenzel (particles-V11-00-17)
+- G4OmegacZero, G4AntiOmegacZero : fixed mean lifetime according to the PDG.
+  Thanks to Francesco Mazzaschi of ALICE for reporting it.
+
+## 2023-01-11 Alberto Ribon (particles-V11-00-16)
+- G4AntiNeutron : set the "PDG stable" flag to "false", as for G4Neutron 
+  (this has no practical consequences, i.e. anti_neutron decays regardless
+  of this flag, but it is confusing).
+
 ## 2022-11-18 Gabriele Cosmo (particles-V11-00-15)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1
   in G4IonTable.

@@ -16,7 +16,7 @@ include(InstallRequiredSystemLibraries)
 
 #-----------------------------------------------------------------------
 # Copy/Generate common resource files into formats CPack generators like
-file(WRITE ${CMAKE_BINARY_DIR}/README.txt "
+file(WRITE ${PROJECT_BINARY_DIR}/README.txt "
 Geant4
 ======
 A toolkit for the simulation of the passage of particles through matter.
@@ -155,7 +155,7 @@ configure_file(
   CMakeCPackOptions.cmake
   @ONLY
   )
-set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_BINARY_DIR}/CMakeCPackOptions.cmake)
+set(CPACK_PROJECT_CONFIG_FILE ${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake)
 include(CPack)
 
 #-----------------------------------------------------------------------

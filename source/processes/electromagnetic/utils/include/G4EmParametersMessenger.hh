@@ -104,6 +104,7 @@ private:
   G4UIcmdWithABool*          icru90Cmd;
   G4UIcmdWithABool*          mudatCmd;
   G4UIcmdWithABool*          peKCmd;
+  G4UIcmdWithABool*          mscPCmd;
 
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;

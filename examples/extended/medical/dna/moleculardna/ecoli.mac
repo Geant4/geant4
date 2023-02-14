@@ -4,10 +4,10 @@
 #/tracking/verbose 2
 
 /world/worldSize 8 um
+/scheduler/endTime 1 us
+/dnageom/setSmartVoxels 1
 
-/dnageom/setSmartVoxels 20
-
-/dnageom/radicalKillDistance 6 nm
+/dnageom/radicalKillDistance 4 nm
 /dnageom/interactionDirectRange 6 angstrom
 
 /dnageom/placementSize 50 50 50 nm
@@ -25,15 +25,15 @@
 /dnadamage/directDamageUpper 17.5 eV
 
 /dnadamage/indirectOHBaseChance 1.0
-/dnadamage/indirectOHStrandChance 0.42
-/dnadamage/inductionOHChance 0.05
+/dnadamage/indirectOHStrandChance 0.4
+/dnadamage/inductionOHChance 0.
 
 /dnadamage/indirectHBaseChance 1.0
-/dnadamage/indirectHStrandChance 1.0
+/dnadamage/indirectHStrandChance 0.4
 /dnadamage/inductionHChance 0.00
 
 /dnadamage/indirectEaqBaseChance 1.0
-/dnadamage/indirectEaqStrandChance 1.0
+/dnadamage/indirectEaqStrandChance 0.4
 /dnadamage/inductionEaqChance 0.00
 
 
@@ -60,7 +60,7 @@
 /gps/pos/type Surface
 /gps/pos/shape Ellipsoid
 /gps/pos/centre 0 0 0 nm
-/gps/pos/halfx 950 nm
+/gps/pos/halfx 900 nm
 /gps/pos/halfy 400 nm
 /gps/pos/halfz 400 nm
 /gps/ang/type cos

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1030,10 +1030,10 @@ View them with "/vis/plot" or "/vis/reviewPlots".
 
  ----> print histograms statistic 
 
-EAbs: mean = 199.356 MeV rms = 50.7758 MeV
-EGap: mean = 19.0703 MeV rms = 8.10234 MeV
-LAbs: mean = 8.63977 cm  rms = 2.54192 cm 
-LGap: mean = 4.44924 cm  rms = 1.40914 cm 
+EAbs: mean = 217.841 MeV rms = 48.9819 MeV
+EGap: mean = 19.6955 MeV rms = 10.0698 MeV
+LAbs: mean = 9.0012 cm  rms = 2.28215 cm 
+LGap: mean = 4.59033 cm  rms = 1.30923 cm 
 There are 4 h1 histograms
   0 with     40 entries: Edep in absorber (MeV)
   1 with     40 entries: Edep in gap (MeV)
@@ -1048,13 +1048,13 @@ View them with "/vis/plot" or "/vis/reviewPlots".
 
  ----> print histograms statistic 
 
-EAbs: mean = 192.132 MeV rms = 64.2554 MeV
-EGap: mean = 17.8005 MeV rms = 12.5426 MeV
-LAbs: mean = 8.82292 cm  rms = 2.51538 cm 
-LGap: mean = 4.4112 cm  rms = 1.63167 cm 
+EAbs: mean = 189.975 MeV rms = 56.6818 MeV
+EGap: mean = 17.0704 MeV rms = 11.9265 MeV
+LAbs: mean = 8.89565 cm  rms = 2.51711 cm 
+LGap: mean = 4.48712 cm  rms = 1.60457 cm 
 There are 4 h1 histograms
   0 with     50 entries: Edep in absorber (MeV)
-  1 with     50 entries: Edep in gap (MeV)
+  1 with     49 entries: Edep in gap (MeV)
   2 with     50 entries: trackL in absorber (mm)
   3 with     50 entries: trackL in gap (mm)
 List them with "/analysis/list".

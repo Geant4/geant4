@@ -202,7 +202,7 @@ G4RunManager::~G4RunManager()
   // set the application state to the quite state
   if(pStateManager->GetCurrentState() != G4State_Quit)
   {
-    if(verboseLevel > 0)
+    if(verboseLevel > 1)
       G4cout << "G4 kernel has come to Quit state." << G4endl;
     pStateManager->SetNewState(G4State_Quit);
   }

@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-20 Vladimir Ivanchenko (global-V11-00-34)
+- G4DataVector: simplified inline methods in order to remove compilation
+  warnings at some CMSSW platforms
+
 ## 2022-11-29 Gabriele Cosmo (global-V11-00-33)
 - Updated tag IDs for geant4-11-01-ref-00.
 

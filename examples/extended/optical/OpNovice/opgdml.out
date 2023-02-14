@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13584,11 +13584,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     1.28    0.187    0.296  2.52e-06        0        0         0   Tank_phys initStep
     1    5e+03 -4.53e+03 -4.01e+03  2.52e-06        0 7.85e+03  7.85e+03 expHall_phys Transportation
-    2    5e+03 -4.53e+03 -4.01e+03  2.52e
+    2    5e+03 -4.53e+03 -4.01e+03  2.
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 ==================================================================
 
@@ -13596,7 +13598,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.890000s Real=1.902257s Sys=0.000000s
+  User=1.700000s Real=1.716990s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.
@@ -13608,9 +13610,7 @@ Average number of optical absorption interactions per event: 39 +- 6.62
 Average number of optical Mie interactions per event: 0.128 +- 0.352
 Average number of optical boundary interactions per event: 212 +- 31.8
 
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.035 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

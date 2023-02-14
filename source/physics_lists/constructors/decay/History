@@ -1,8 +1,22 @@
 # Category phys-ctor-decay History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2023-01-11 Alberto Ribon (phys-ctor-decay-V11-00-04)
+- G4RadioactiveDecayPhysics : assigned the RadioactiveDecay process
+  to G4Triton (which is the only light ion that decays).
+  Note: before, triton did not have beta decay, i.e. it was wrongly
+  treated as stable even when radioactive decay physics was enabled;
+  anti_triton did not, and still does not, have beta decay
+  (because RadioactiveDecay, in its current implementation, does
+  not handle any kind of anti-ions): in practice, this is an acceptable
+  approximation because of its relatively long lifetime and the fact
+  that annihilation and nuclear capture are more likely to happen
+  before decay.
 
 ## 2022-11-16 Vladimir Ivanchenko (phys-ctor-decay-V11-00-03)
 - added calls to G4EmBuilder and G4PhysListUtil in order to 

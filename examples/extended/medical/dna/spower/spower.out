@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -465,7 +465,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=30.420000s Real=30.697638s Sys=0.010000s
+  User=26.380000s Real=26.529485s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -490,7 +490,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=33.960000s Real=34.245215s Sys=0.000000s
+  User=27.420000s Real=27.572881s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -515,7 +515,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=36.490000s Real=36.760644s Sys=0.010000s
+  User=31.880000s Real=32.070183s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -540,7 +540,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=35.630000s Real=35.875099s Sys=0.000000s
+  User=33.080000s Real=33.273208s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -565,16 +565,14 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=38.170000s Real=38.443291s Sys=0.000000s
+  User=30.350000s Real=30.508619s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
  total Stopping Power (keV/um)   = 10.50 +- 0.68
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.33 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

@@ -380,13 +380,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
           //
           fEndGlobalTimeComputed = false;
   
+#ifdef G4VERBOSE
           // Check that the integration preserved the energy 
           //     -  and if not correct this!
           G4double  startEnergy= track.GetKineticEnergy();
           G4double  endEnergy= fTransportEndKineticEnergy; 
       
           G4double absEdiff = std::fabs(startEnergy- endEnergy);
-#ifdef G4VERBOSE
           if( (verboseLevel > 1) && ( absEdiff > perThousand * endEnergy) )
           {
             ReportInexactEnergy(startEnergy, endEnergy); 

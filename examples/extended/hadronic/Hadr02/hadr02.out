@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -865,8 +865,6 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -1006,35 +1004,33 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.120000s Real=0.185613s Sys=0.000000s
+  User=0.100000s Real=0.093488s Sys=0.000000s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.677   RMS(GeV) 4.026
-Average number of steps              58.24
-Average number of gamma              0.62
+Average energy deposit (GeV)         7.073   RMS(GeV) 3.998
+Average number of steps              61.25
+Average number of gamma              0.55
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           13.29
-Average number of protons            12.39
+Average number of neutrons           11.96
+Average number of protons            11.37
 Average number of antiprotons        0
-Average number of pi+ & pi-          7.59
-Average number of pi0                4.13
-Average number of kaons              0.07
+Average number of pi+ & pi-          6.88
+Average number of pi0                3.6
+Average number of kaons              0.04
 Average number of muons              0
-Average number of deuterons+tritons  2.67
-Average number of He3+alpha          1.54
-Average number of ions               0.45
+Average number of deuterons+tritons  2.44
+Average number of He3+alpha          1.6
+Average number of ions               0.47
 ========================================================
 
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.095 MB
+Dynamic pools deleted: 14 / Total memory freed: 0.097 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

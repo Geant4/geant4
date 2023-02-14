@@ -641,11 +641,6 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
   return massSum;
 }
 
-void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
-{
-  fVisAttributes = new G4VisAttributes(VA);
-}
-
 // ********************************************************************
 // Change the daughters volume type -- checking proposed values
 //
@@ -676,4 +671,24 @@ G4bool G4LogicalVolume::ChangeDaughtersType(EVolume aType)
     }
   }
   return works;
+}
+
+// ********************************************************************
+// SetVisAttributes - copy version
+// ********************************************************************
+//
+void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
+{
+  if (G4Threading::IsWorkerThread()) return;
+  fVisAttributes = std::make_shared<const G4VisAttributes>(VA);
+}
+
+// ********************************************************************
+// SetVisAttributes
+// ********************************************************************
+//
+void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
+{
+  if (G4Threading::IsWorkerThread()) return;
+  fVisAttributes = std::shared_ptr<const G4VisAttributes>(pVA,[](const G4VisAttributes*){});
 }
