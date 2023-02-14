@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -973,7 +973,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=42.740000s Real=43.116712s Sys=0.020000s
+  User=40.450000s Real=40.746936s Sys=0.010000s
 #
 ########################################
 #
@@ -987,9 +987,7 @@ Run Summary
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
 Dynamic pools deleted: 14 / Total memory freed: 0.18 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

@@ -323,26 +323,6 @@ G4bool G4LogicalVolume::operator == ( const G4LogicalVolume& lv) const
 }
 
 // ********************************************************************
-// GetVisAttributes
-// ********************************************************************
-//
-inline
-const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const
-{
-  return fVisAttributes;
-}
-
-// ********************************************************************
-// SetVisAttributes
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
-{
-  fVisAttributes = pVA;
-}
-
-// ********************************************************************
 // SetBiasWeight
 // ********************************************************************
 //
@@ -360,4 +340,14 @@ inline
 G4double G4LogicalVolume::GetBiasWeight() const
 {
   return fBiasWeight;
+}
+
+// ********************************************************************
+// GetVisAttributes
+// ********************************************************************
+//
+inline
+const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const
+{
+  return fVisAttributes.get();
 }

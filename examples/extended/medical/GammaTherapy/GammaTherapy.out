@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -662,7 +662,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.750000s Real=3.775916s Sys=0.000000s
+  User=3.370000s Real=3.397056s Sys=0.000000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
@@ -686,9 +686,7 @@ mixmax state, file version 1.0
 N=17 V[N]={868811246491154990, 305116273861624973, 763889555670262191, 1543227937352160365, 59551185052207865, 490056457312732075, 1169937754278509350, 1519540221460173381, 695242014668347949, 2280252941837865889, 233727860707683078, 1428385833700401411, 1232250928138607945, 1423991102878068020, 2297706300400700002, 1583295553813983302, 1667585771871221555} counter= 8sumtot= 1115824865786152733
 ---------------------------------------
 #
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.47 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

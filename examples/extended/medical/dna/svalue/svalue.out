@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -530,6 +530,23 @@ hIoni:  for pi-  XStype:3  SubType=2
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
       ===== Limit on energy threshold has been applied 
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+min MeanLife (from G4NuclideTable)                0.14427 ps 
+Max life time (from G4DeexPrecoParameters)        0.14427 ps 
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        3.171e+10 y  
+======================================================================
 
 ========= Table of registered couples ============================
 
@@ -548,7 +565,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.280000s Real=0.283824s Sys=0.000000s
+  User=0.260000s Real=0.258836s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -589,7 +606,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.500000s Real=0.502993s Sys=0.000000s
+  User=0.460000s Real=0.465890s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -630,7 +647,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.900000s Real=0.915798s Sys=0.000000s
+  User=0.670000s Real=0.670824s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -671,7 +688,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.070000s Real=1.079246s Sys=0.000000s
+  User=0.870000s Real=0.872884s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -712,7 +729,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.340000s Real=1.354113s Sys=0.000000s
+  User=1.050000s Real=1.059454s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -753,7 +770,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.520000s Real=1.535535s Sys=0.000000s
+  User=1.280000s Real=1.284644s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -794,7 +811,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.600000s Real=1.610134s Sys=0.000000s
+  User=1.480000s Real=1.486645s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -835,7 +852,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.840000s Real=1.856737s Sys=0.000000s
+  User=1.690000s Real=1.703035s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -876,7 +893,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.030000s Real=2.046352s Sys=0.000000s
+  User=1.870000s Real=1.883499s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -917,7 +934,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.240000s Real=2.256978s Sys=0.000000s
+  User=2.090000s Real=2.097916s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -958,7 +975,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.490000s Real=4.520209s Sys=0.000000s
+  User=4.140000s Real=4.158620s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -999,7 +1016,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.750000s Real=6.798877s Sys=0.000000s
+  User=6.200000s Real=6.232629s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1040,7 +1057,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.080000s Real=9.150033s Sys=0.000000s
+  User=9.460000s Real=9.522856s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1081,7 +1098,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.170000s Real=11.255943s Sys=0.000000s
+  User=10.240000s Real=10.290673s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1122,7 +1139,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=13.360000s Real=13.460213s Sys=0.000000s
+  User=12.140000s Real=12.208215s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1163,7 +1180,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=16.210000s Real=16.340518s Sys=0.000000s
+  User=14.220000s Real=14.298534s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1204,7 +1221,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=17.630000s Real=17.752552s Sys=0.010000s
+  User=16.810000s Real=16.905158s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1245,7 +1262,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=19.800000s Real=19.938036s Sys=0.000000s
+  User=18.310000s Real=18.411936s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1286,7 +1303,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=22.620000s Real=22.795364s Sys=0.000000s
+  User=20.290000s Real=20.391809s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -1311,9 +1328,7 @@ List them with "/analysis/list".
 View them with "/vis/plot" or "/vis/reviewPlots".
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 0.17 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

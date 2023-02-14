@@ -15,6 +15,7 @@
 
 /dnageom/setSmartVoxels 1
 /dnageom/checkOverlaps false
+/scheduler/endTime 1 us
 
 /dnageom/radicalKillDistance 9 nm
 /dnageom/interactionDirectRange 7 angstrom

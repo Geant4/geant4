@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -603,7 +603,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.750000s Real=0.760085s Sys=0.000000s
+  User=0.720000s Real=0.723484s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
@@ -713,7 +713,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.270000s Real=1.272901s Sys=0.000000s
+  User=1.200000s Real=1.206978s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
@@ -836,7 +836,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.490000s Real=0.488397s Sys=0.000000s
+  User=0.470000s Real=0.478074s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
@@ -959,7 +959,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.760000s Real=0.760738s Sys=0.000000s
+  User=0.730000s Real=0.736308s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
@@ -979,9 +979,7 @@ Beam Energy                  1 GeV
 ==================================================================
 
 #
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 0.14 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

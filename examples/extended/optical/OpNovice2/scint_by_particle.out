@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2051,7 +2051,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.960000s Real=10.043524s Sys=0.020000s
+  User=8.780000s Real=8.839789s Sys=0.010000s
 
     Run Summary
 ---------------------------------
@@ -2122,7 +2122,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.150000s Real=0.151533s Sys=0.000000s
+  User=0.140000s Real=0.134277s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2193,7 +2193,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.480000s Real=1.493132s Sys=0.000000s
+  User=1.320000s Real=1.329378s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2264,7 +2264,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.140000s Real=0.148565s Sys=0.000000s
+  User=0.130000s Real=0.133997s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2336,7 +2336,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.140000s Real=0.148913s Sys=0.000000s
+  User=0.130000s Real=0.133648s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2381,9 +2381,7 @@ List them with "/analysis/list".
 View them with "/vis/plot" or "/vis/reviewPlots".
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 16 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

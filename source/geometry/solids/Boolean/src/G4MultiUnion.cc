@@ -480,6 +480,12 @@ EInside G4MultiUnion::InsideWithExclusion(const G4ThreeVector& aPoint,
   // located around will correspond to kInside (cf. G4UnionSolid)
 
   std::size_t size = surfaces.size();
+
+  if (size == 0)
+  {
+    return EInside::kOutside;
+  }
+
   for (std::size_t i = 0; i < size - 1; ++i)
   {
     G4MultiUnionSurface& left = surfaces[i];
@@ -494,9 +500,7 @@ EInside G4MultiUnion::InsideWithExclusion(const G4ThreeVector& aPoint,
     }
   }
 
-  location = size ? EInside::kSurface : EInside::kOutside;
-
-  return location;
+  return EInside::kSurface;
 }
 
 //______________________________________________________________________________

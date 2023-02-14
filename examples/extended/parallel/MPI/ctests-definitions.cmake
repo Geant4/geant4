@@ -8,7 +8,7 @@ endif()
 message(STATUS "G4 Examples: mpi examples will use mpi launcher: " ${MPIEXEC})
 
 # Base output dir for MPI examples:
-set(G4MPI_CTESTS_BASE_OUTPUT_DIR "${CMAKE_BINARY_DIR}/examples/extended/parallel/MPI")
+set(G4MPI_CTESTS_BASE_OUTPUT_DIR "${PROJECT_BINARY_DIR}/examples/extended/parallel/MPI")
 
 # Set G4mpi_DIR fo later pass-down to examples
 set(G4mpi_DIR "${G4MPI_CTESTS_BASE_OUTPUT_DIR}/G4mpi")

@@ -40,6 +40,7 @@
 #include "G4DeexPrecoParameters.hh"
 #include "G4NuclideTable.hh"
 #include "G4PhysListUtil.hh"
+#include "G4Triton.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -99,6 +100,15 @@ void G4RadioactiveDecayPhysics::ConstructProcess()
 
   G4PhysicsListHelper::GetPhysicsListHelper()->
     RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());
+
+  // Triton (which is not a generic ion) is the only light ion that decays.
+  // Note that the anti_triton does not have beta decay, because RadioactiveDecay,
+  // in its current implementation, does not handle any kind of anti-ions: 
+  // in practice, this is an acceptable approximation because of its relatively
+  // long lifetime and the fact that annihilation and nuclear capture
+  // are more likely to happen before decay.
+  G4PhysicsListHelper::GetPhysicsListHelper()->
+    RegisterProcess(new G4RadioactiveDecay(), G4Triton::Triton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

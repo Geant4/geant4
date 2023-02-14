@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-01-17 Vladimir Ivanchenko (hadr-man-V11-00-09)
+- G4HadronicProcess - moved several class members to be protected, which 
+    is needed for hadron elastic process (and may be other processes)
+
 ## 2022-11-26 Gabriele Cosmo (hadr-man-V11-00-08)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

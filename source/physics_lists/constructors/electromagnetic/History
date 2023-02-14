@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-09 Vladimir Ivanchenko (phys-ctor-em-V11-00-36)
+- G4GammaGeneralProcess - in all cases select sub-process (fix problem #2521)
+
 ## 2022-11-24 Gabriele Cosmo (phys-ctor-em-V11-00-35)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

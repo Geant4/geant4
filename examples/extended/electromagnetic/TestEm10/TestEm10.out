@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -215,10 +215,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.154
 9.283e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.67 s
+total time for build X-ray TR energy loss tables = 0.62 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 2.19 s
+total time for build X-ray TR angle for energy loss tables = 2.02 s
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -305,10 +305,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.154
 9.283e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.67 s
+total time for build X-ray TR energy loss tables = 0.62 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 2.2 s
+total time for build X-ray TR angle for energy loss tables = 2.02 s
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -633,7 +633,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.250000s Real=0.251837s Sys=0.000000s
+  User=0.230000s Real=0.232935s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
  Mean energy deposit in absorber = 0.0469696 +-0.0185724  MeV 
@@ -646,9 +646,7 @@ Run Summary
 ----------------------------------------
 ... write file : testem10.root - done
 ... close file : testem10.root - done
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.054 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

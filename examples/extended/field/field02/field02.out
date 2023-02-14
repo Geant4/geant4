@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -5942,7 +5942,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.030000s Real=0.049036s Sys=0.020000s
+  User=0.030000s Real=0.042144s Sys=0.010000s
 #
 /calor/setAbsMat Air
 /calor/setWorldMat Xe20CO2
@@ -7315,12 +7315,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.014396s Sys=0.000000s
+  User=0.010000s Real=0.012213s Sys=0.010000s
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 0.02 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

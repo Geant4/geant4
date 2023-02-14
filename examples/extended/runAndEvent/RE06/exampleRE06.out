@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1115,7 +1115,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.540000s Real=1.880752s Sys=0.330000s
+  User=0.890000s Real=1.145521s Sys=0.250000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1398,7 +1398,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.290000s Real=2.782753s Sys=0.480000s
+  User=1.500000s Real=1.839031s Sys=0.330000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1712,7 +1712,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.430000s Real=0.548089s Sys=0.120000s
+  User=0.290000s Real=0.369952s Sys=0.080000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2055,7 +2055,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.980000s Real=1.253870s Sys=0.250000s
+  User=0.690000s Real=0.868679s Sys=0.170000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2269,9 +2269,7 @@ Index : 12     used in the geometry : Yes
 
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
 Dynamic pools deleted: 14 / Total memory freed: 0.79 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

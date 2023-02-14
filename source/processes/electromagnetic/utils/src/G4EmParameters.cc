@@ -135,6 +135,7 @@ void G4EmParameters::Initialise()
   fPolarisation = false;
   fMuDataFromFile = false;
   fPEKShell = true;
+  fMscPosiCorr = true;
   fDNA = false;
   fIsPrinted = false;
 
@@ -511,6 +512,17 @@ void G4EmParameters::SetPhotoeffectBelowKShell(G4bool v)
 {
   if(IsLocked()) { return; }
   fPEKShell = v;
+}
+
+G4bool G4EmParameters::MscPositronCorrection() const
+{
+  return fMscPosiCorr;
+}
+
+void G4EmParameters::SetMscPositronCorrection(G4bool v)
+{
+  if(IsLocked()) { return; }
+  fMscPosiCorr = v;
 }
 
 void G4EmParameters::ActivateDNA()

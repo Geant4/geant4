@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-21 V.Ivanchenko (emstand-V11-00-22)
+- G4GoudsmithSoundersonMscModel - fixed warning when build CMSSW
+
+## 2022-12-11 V.Ivanchenko
+- G4UrbanMscModel - added flag MscPositronCorrection
+
 ## 2022-11-23 Gabriele Cosmo (emstand-V11-00-21)
 - Fixed more compilation warnings for implicit type conversions.
 

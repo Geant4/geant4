@@ -192,6 +192,7 @@ private:
 
   G4bool latDisplasmentbackup;
   G4bool dispAlg96;
+  G4bool fPosiCorrection = true;
   G4bool isFirstInstance = false;
 };
 

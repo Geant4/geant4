@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -43,8 +43,6 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
    G2 (T/m) = 16.4947
    G3 (T/m) = 9.86677
    G4 (T/m) = -6.24449
-G4FieldManager/SetEpsMin :  eps_min =      1e-09
-G4FieldManager/SetEpsMax :  eps_max =      1e-08 ( Note: unchanged eps_min=     1e-09 )
 PhysicsList::SetCuts:CutLength : 1 um 
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
@@ -100,8 +98,6 @@ G4Material WARNING: duplicate name of material Vacuum
    G2 (T/m) = 16.4953
    G3 (T/m) = 9.86726
    G4 (T/m) = -6.2448
-G4FieldManager/SetEpsMin :  eps_min =      1e-09
-G4FieldManager/SetEpsMax :  eps_max =      1e-08 ( Note: unchanged eps_min=     1e-09 )
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -297,7 +293,7 @@ Index : 0     used in the geometry : Yes
 
 ==================================================================
 
-##### Create analysis manager   0x1a66b70
+##### Create analysis manager   0xc5eb70
 Using  analysis manager
 Ntuple-1 created
 Ntuple-2 created
@@ -397,36 +393,6 @@ Ntuple-3 created
 
 -> Event= 92: X0(mm)= -1.0300005046796 X0(mm) = 0.87888459437965 Z0(m) = -8.87 THETA(mrad)= -0.047884850770414 PHI(mrad)= 0.048436406562422 E0(MeV)= 2.999929222433
     =>IMAGE : X(microns)=-77.919382876133 Y(microns)=17.23898773902 THETA(mrad)=-16.345747254735 PHI(mrad)=28.782706961023
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Transport-001-ExcessSteps
-      issued by : G4Transportation::AlongStepDoIt
- Transportation is killing track that is looping or stuck. 
-   Track is proton and has 2.99993 MeV energy  ( pre-Step = 2.99993 ) 
-   momentum = (-1.22735,2.16099,75.0488) mag= 75.0899
-   position = (-0.0779194,0.017239,250) is in volume 'World',  its material is 'Vacuum' with density = 1e-25 g/cm^3 
- Total number of Steps by this track: 9122
- Length of this step = 2553.49 mm 
- Number of propagation trials = 1 ( vs maximum = 10 for 'important' particles ) 
-   ( Number of *calls* of Transport/AlongStepDoIt = 291906 )
- =============== Recommendations / advice ====================
- Recommendations to address this issue (Transport-001-ExcessSteps)
- This warning is controlled by the SetThresholdWarningEnergy  method of G4Transportation.  
- Current value of 'warning' threshold= 1 MeV 
- - If 'unimportant' particles (with energy low enough not to matter in your   application, then increase its value. 
- - If particles of high-enough energy to be important are being  killed, you can 
-   a) Increase the trial steps using the method  SetThresholdTrials().    Particles above the 'important' threshold 
-  will be given this many 'chances'.  The default value was 10, and the current value is 10
-   b) Increase the energy which you consider 'important' (above this they are killed only after extra trials), using the method SetThresholdImportantEnergy() 
-      Note: this can incur a potentially high cost in extra simulation time  if more tracks require very large number of integration steps . 
-   c) investigate alternative integration methods 
-    e.g.  Helical methods for uniform or almost uniform fields or else higher order RK methods such as DormandPrince78 
- This information is provided 5 times. Current count: 1 / 5
- =============================================================
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
 
 -> Event= 93: X0(mm)= 0.0078293329538488 X0(mm) = 0.0079533854502721 Z0(m) = -8.87 THETA(mrad)= -0.046118251874054 PHI(mrad)= 0.015762780425847 E0(MeV)= 3.0000343013789
     =>IMAGE : X(microns)=-0.57227779547528 Y(microns)=0.11587277392348 THETA(mrad)=-2.8887463925854 PHI(mrad)=1.8145096573758

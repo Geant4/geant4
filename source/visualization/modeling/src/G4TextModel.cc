@@ -51,7 +51,7 @@ G4TextModel::G4TextModel (const G4Text& g4Text, const G4Transform3D& transform)
   fGlobalTag = oss.str();
   fGlobalDescription = fGlobalTag;
 
-  fG4Text.SetPosition(fG4Text.GetPosition()+transform.getTranslation());
+  fG4Text.SetPosition(fG4Text.GetPosition().transform(transform));
 }
 
 void G4TextModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {

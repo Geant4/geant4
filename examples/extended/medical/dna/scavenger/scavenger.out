@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -531,7 +531,7 @@ DNAMolecularIRTModel will be used
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.580000s Real=0.597048s Sys=0.010000s
+  User=0.540000s Real=0.560173s Sys=0.010000s
 
 --------------------End of Global Run-----------------------
   The run has 1 events 
@@ -541,9 +541,7 @@ Number of events recorded by the species scorer = 1
 
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
 Dynamic pools deleted: 15 / Total memory freed: 3.6 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

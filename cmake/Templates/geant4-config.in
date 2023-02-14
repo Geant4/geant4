@@ -69,6 +69,7 @@ vis_libs="-lG4Tree \
 -lG4visHepRep \
 -lG4RayTracer \
 -lG4VRML \
+-lG4ToolsSG \
 -lG4vis_management \
 -lG4modeling"
 
@@ -214,7 +215,7 @@ feature_list="${feature_list} qt[${have_qt}]"
 
 if test "x${have_qt}" = "xyes" ; then
   vis_cflags="${vis_cflags} \
-  -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT @G4_QT_CFLAGS@"
+  -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT -DG4VIS_USE_TOOLSSG_QT_GLES @G4_QT_CFLAGS@"
   geant4_uses_opengl="yes"
 fi
 
@@ -232,7 +233,7 @@ have_motif="@G4_BUILTWITH_MOTIF@"
 feature_list="${feature_list} motif[${have_motif}]"
 
 if test "x${have_motif}" = "xyes" ; then
-  vis_cflags="${vis_cflags} -DG4UI_USE_XM -DG4VIS_USE_OPENGLXM"
+  vis_cflags="${vis_cflags} -DG4UI_USE_XM -DG4VIS_USE_OPENGLXM -DG4VIS_USE_TOOLSSG_XT_GLES"
   geant4_uses_x11="yes"
   geant4_uses_opengl="yes"
 fi
@@ -251,7 +252,7 @@ have_openglx11="@G4_BUILTWITH_OPENGLX11@"
 feature_list="${feature_list} opengl-x11[${have_openglx11}]"
 
 if test "x${have_openglx11}" = "xyes" ; then
-  vis_cflags="${vis_cflags} -DG4VIS_USE_OPENGLX"
+  vis_cflags="${vis_cflags} -DG4VIS_USE_OPENGLX -DG4VIS_USE_TOOLSSG_X11_GLES"
   geant4_uses_opengl="yes"
   geant4_uses_x11="yes"
 fi

@@ -6,6 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-02-10 Vladimir Ivanchenko (hadr-proc-V11-00-13)
+- G4NeutronGeneralProcess - added extra Set method
+
+## 2023-02-01 Vladimir Ivanchenko (hadr-proc-V11-00-12)
+- G4HadronElasticProcess, G4NeutronGeneralProcess - fixed problems identified 
+    by Coverity
+
+## 2023-01-17 Vladimir Ivanchenko
+- G4HadronElasticProcess - removed obsolete (try/catch construction not
+    applicable for hadron elastic models; added forgotten integral approach
+    for charged particles
+
+## 2022-12-30 Vladimir Ivanchenko
+- G4NeutronGeneralProcess - optimized code: initialisation methods are
+    moved to the source, avoid double instantiation of capture cross section;
+    reduced number of calls to cross section, added cross section data store
+    pointer
+
 ## 2022-11-26 Gabriele Cosmo (hadr-proc-V11-00-11)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

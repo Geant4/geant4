@@ -310,7 +310,8 @@ err:
 static int MCGIDI_energy_parseMadlandNixFromTOM( statusMessageReporting *smr, xDataTOM_element *functional, MCGIDI_energy *energy ) {
 
     int iE, length, nXs, i1, n;
-    double E, T_M, EFL, EFH, argList[3], xs[] = { 1e-5, 1e-3, 1e-1, 1e1, 1e3, 1e5, 3e7 }, norm;
+    double E=0., T_M=0., EFL=0., EFH=0., argList[3] = { 0., 0., 0. },
+           xs[] = { 1e-5, 1e-3, 1e-1, 1e1, 1e3, 1e5, 3e7 }, norm;
     ptwXYPoints *ptwXY_TM = NULL, *pdfXY = NULL;
     ptwXYPoint *point;
     ptwXPoints *cdfX = NULL;

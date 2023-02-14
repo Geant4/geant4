@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1166,7 +1166,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001115s Sys=0.000000s
+  User=0.000000s Real=0.000876s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -1185,7 +1185,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.010971s Sys=0.000000s
+  User=0.010000s Real=0.010241s Sys=0.000000s
 Set global field value to (0,0,1000) Gauss 
 
 ========= Table of registered couples ============================
@@ -1204,7 +1204,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.001552s Sys=0.000000s
+  User=0.000000s Real=0.001389s Sys=0.000000s
 Set global field value to (33000,0,0) Gauss 
 F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
                             Stepper Type chosen = 4
@@ -1247,7 +1247,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000388s Sys=0.000000s
+  User=0.000000s Real=0.000343s Sys=0.000000s
 /tracking/verbose 0
 #
 /calor/setAbsMat Xe20CO2
@@ -1320,12 +1320,10 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.140000s Real=0.135294s Sys=0.000000s
+  User=0.130000s Real=0.131883s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
 Dynamic pools deleted: 14 / Total memory freed: 1.6 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

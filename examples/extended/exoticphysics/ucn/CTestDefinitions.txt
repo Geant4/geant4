@@ -1,9 +1,9 @@
 ##### Perform simulation with default macro
 GEANT4_ADD_TEST(example-ext-exoticphysics-ExUCN
-				COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ExUCN
-						   ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ExUCN/ExUCN.in
-				SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/ExUCN
-				BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ExUCN
+				COMMAND ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/ExUCN
+						   ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/ExUCN/ExUCN.in
+				SOURCE_DIR ${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/ExUCN
+				BINARY_DIR ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/ExUCN
 				BUILD ExUCN PROJECT ExUCN 
 				ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
 				)

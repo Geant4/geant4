@@ -604,6 +604,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
       SelectEmProcess(step, theCompton);
     } else if(theRayleigh) {
       SelectEmProcess(step, theRayleigh);
+    } else {
+      SelectEmProcess(step, thePhotoElectric);
     }
     break;
 
@@ -616,6 +618,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
       SelectEmProcess(step, thePhotoElectric);
     } else if(theGammaNuclear) {
       SelectHadProcess(track, step, theGammaNuclear);
+    } else {
+      SelectEmProcess(step, theConversionEE);
     }
     break;
 
@@ -630,6 +634,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
       SelectHadProcess(track, step, theGammaNuclear);
     } else if(theConversionMM) {
       SelectedProcess(step, theConversionMM);
+    } else {
+      SelectEmProcess(step, theConversionEE);
     }
     break;
   }

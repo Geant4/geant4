@@ -188,12 +188,6 @@ configure_file(
 )
 
 configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4VecGeomShim.cmake
-  ${PROJECT_BINARY_DIR}/G4VecGeomShim.cmake
-  COPYONLY
-  )
-
-configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/Modules/G4X11Shim.cmake
   ${PROJECT_BINARY_DIR}/G4X11Shim.cmake
   COPYONLY
@@ -274,7 +268,6 @@ install(FILES
   ${PROJECT_BINARY_DIR}/G4EXPATShim.cmake
   ${PROJECT_BINARY_DIR}/G4FreetypeShim.cmake
   ${PROJECT_BINARY_DIR}/G4HDF5Shim.cmake
-  ${PROJECT_BINARY_DIR}/G4VecGeomShim.cmake
   ${PROJECT_BINARY_DIR}/G4MotifShim.cmake
   ${PROJECT_BINARY_DIR}/G4X11Shim.cmake
   ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake

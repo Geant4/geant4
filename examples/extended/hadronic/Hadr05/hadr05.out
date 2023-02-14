@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -119,37 +119,34 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=87.340000s Real=92.194527s Sys=0.050000s
+  User=98.350000s Real=100.668027s Sys=0.020000s
 
  ---> The run is 1000 proton of 5 GeV through calorimeter
 
  Process calls frequency :
-                  Decay=      3650            He3Inelastic=         3               NoProcess=   4066419
-        Radioactivation=     81190                    Rayl=    219865          Transportation=   4002565
-         alphaInelastic=         5                 annihil=     57840                   compt=   2660404
-                   conv=     54581              dInelastic=       123                   eBrem=    383877
-                  eIoni=   6188225   hBertiniCaptureAtRest=       529                   hIoni=   1434390
-             hadElastic=   4508608                 ionIoni=   4160978          kaon+Inelastic=        11
-        kaon0LInelastic=         8         kaon0SInelastic=         1         lambdaInelastic=         5
-                    msc=    260952                  muIoni=      7310    muMinusCaptureAtRest=         6
-               nCapture=     53035        neutronInelastic=     93136                    phot=    848626
-          photonNuclear=       197            pi+Inelastic=      1082            pi-Inelastic=       913
-        protonInelastic=      4037         sigma-Inelastic=         1              tInelastic=        12
-
+                  Decay=      3783            He3Inelastic=         3               NoProcess=   4068703
+        Radioactivation=     81330                    Rayl=    224135          Transportation=   4027850
+         alphaInelastic=         2                 annihil=     59782                   compt=   2705307
+                   conv=     56441              dInelastic=       100                   eBrem=    402418
+                  eIoni=   6306711   hBertiniCaptureAtRest=       504                   hIoni=   1428890
+             hadElastic=   4509772                 ionIoni=   4162963          kaon+Inelastic=         8
+        kaon0LInelastic=        18         kaon0SInelastic=         2         lambdaInelastic=         1
+                    msc=    262340                  muIoni=      7679    muMinusCaptureAtRest=         8
+               nCapture=     52853        neutronInelastic=     93059                    phot=    867782
+          photonNuclear=       214            pi+Inelastic=      1035            pi-Inelastic=       907
+        protonInelastic=      4048              tInelastic=         9 
 
 ------------------------------------------------------------
         material      Edep        rmsE        sqrt(E0(GeV))*rmsE/Edep     total tracklen 
  
- 1          Iron    4.0273 GeV   291.1 MeV     16.16 +- 0.511 %       2.141 m   +-  47.4 cm 
- 2  Scintillator       114 MeV    32.9 MeV     64.53 +-  2.04 %       22.05 cm  +-  6.69 cm 
+ 1          Iron     4.039 GeV   293.2 MeV     16.23 +- 0.513 %       2.158 m   +-  49.8 cm 
+ 2  Scintillator    112.21 MeV   31.76 MeV     63.28 +-     2 %       22.06 cm  +-  6.61 cm 
 
-   Total Edep = 4.141 GeV
-   Leakage :  primary = 0 eV    secondaries = 198.9 MeV  ---> total = 198.9 MeV
+   Total Edep = 4.151 GeV
+   Leakage :  primary = 0 eV    secondaries = 188.3 MeV  ---> total = 188.3 MeV
    Total energy released :  Edep + Eleak = 4.34 GeV
 ------------------------------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.31 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.3 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

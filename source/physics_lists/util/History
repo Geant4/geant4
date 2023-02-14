@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-30 Vladimir Ivanchenko (phys-util-V11-00-10)
+- G4HadProcesses - avoid double instantiation of capture cross section
+
 ## 2022-11-24 Gabriele Cosmo (phys-util-V11-00-09)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

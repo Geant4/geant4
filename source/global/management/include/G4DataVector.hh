@@ -70,7 +70,7 @@ class G4DataVector : public std::vector<G4double>
   inline void insertAt(std::size_t, const G4double&);
   // Insert an element at given position
 
-  inline std::size_t index(const G4double&);
+  inline std::size_t index(const G4double&) const;
   // Returns back index of the element same as given value
 
   inline G4bool contains(const G4double&) const;

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -829,8 +829,6 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -966,7 +964,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.03 nanoGy  +- 146.913 picoGy 
+ Dose in scoring volume : 4.91863 nanoGy  +- 146.393 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

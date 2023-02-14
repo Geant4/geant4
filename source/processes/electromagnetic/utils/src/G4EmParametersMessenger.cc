@@ -196,6 +196,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   peKCmd->AvailableForStates(G4State_PreInit);
   peKCmd->SetToBeBroadcasted(false);
 
+  mscPCmd = new G4UIcmdWithABool("/process/msc/PositronCorrection",this);
+  mscPCmd->SetGuidance("Enable msc positron correction");
+  mscPCmd->SetParameterName("mscPC",true);
+  mscPCmd->SetDefaultValue(true);
+  mscPCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  mscPCmd->SetToBeBroadcasted(false);
+
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
   minEnCmd->SetParameterName("emin",true);
@@ -474,6 +481,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete icru90Cmd;
   delete mudatCmd;
   delete peKCmd;
+  delete mscPCmd;
 
   delete minEnCmd;
   delete maxEnCmd;
@@ -563,6 +571,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetRetrieveMuDataFromFile(mudatCmd->GetNewBoolValue(newValue));
   } else if (command == peKCmd) {
     theParameters->SetPhotoeffectBelowKShell(peKCmd->GetNewBoolValue(newValue));
+  } else if (command == mscPCmd) {
+    theParameters->SetMscPositronCorrection(mscPCmd->GetNewBoolValue(newValue));
 
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));

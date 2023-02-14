@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -37,9 +37,7 @@ The minimal step is equal to 0.003 mm
    2. Creating ChordFinder.
    3. Updating Field Manager (chord finder, field-ptr).
    4/5. Updating eps_min and eps_max in Field Manager.
-G4FieldManager/SetEpsMin :  eps_min =      1e-05
 F01FieldSetup: requesting Max(imum) Epsilon = 0.005
-G4FieldManager/SetEpsMax :  eps_max =      0.005 ( Note: unchanged eps_min=     1e-05 )
  Changed FieldManager epsilon values to  epsilon_min= 1e-05 and epsilon_max= 0.005
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
  F01FieldSetup::CreateStepperAndChordFinder() called. 
@@ -78,7 +76,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000766s Sys=0.000000s
+  User=0.000000s Real=0.000545s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -103,7 +101,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000129s Sys=0.000000s
+  User=0.000000s Real=0.000102s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -128,7 +126,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000088s Sys=0.000000s
+  User=0.000000s Real=0.000078s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -153,7 +151,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000109s Sys=0.000000s
+  User=0.000000s Real=0.000103s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -178,7 +176,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000110s Sys=0.000000s
+  User=0.000000s Real=0.000080s Sys=0.000000s
  F01FieldSetup::CreateStepperAndChordFinder() called. 
    1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
@@ -212,7 +210,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000240s Sys=0.000000s
+  User=0.000000s Real=0.000191s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -239,7 +237,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.008705s Sys=0.000000s
+  User=0.010000s Real=0.007965s Sys=0.000000s
 #
 /calor/setAbsMat Xe20CO2
 /calor/setWorldMat Kr20CO2
@@ -308,10 +306,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.030000s Real=0.030045s Sys=0.000000s
-G4 kernel has come to Quit state.
+  User=0.030000s Real=0.031859s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.52 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

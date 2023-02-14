@@ -333,7 +333,6 @@ endif()
 set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS_EITHER@)
 if(Geant4_usolids_FOUND)
   find_dependency(VecGeom @VecGeom_VERSION@)
-  include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
 endif()
 
 # - Freetype

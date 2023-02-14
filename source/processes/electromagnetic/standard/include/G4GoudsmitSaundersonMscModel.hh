@@ -277,7 +277,7 @@ void G4GoudsmitSaundersonMscModel::SetParticle(const G4ParticleDefinition* p)
 inline
 G4double G4GoudsmitSaundersonMscModel::Randomizetlimit()
 {
-  G4double temptlimit = tlimit;
+  G4double temptlimit;
     do {
          temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.1*tlimit);
        } while ( (temptlimit<0.) || (temptlimit>2.*tlimit));

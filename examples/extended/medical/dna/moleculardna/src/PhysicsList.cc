@@ -76,7 +76,10 @@ PhysicsList::PhysicsList(const G4int& phylist)
   RegisterPhysics(new G4DecayPhysics());
   RegisterPhysics(new G4RadioactiveDecayPhysics());
 
-  RegisterPhysics(new ParallelWorldPhysics("DNAWorld", true));
+  G4bool useParallelPhysicsWorld = false;
+  if (useParallelPhysicsWorld) {
+    RegisterPhysics(new ParallelWorldPhysics("DNAWorld", true));
+  }
 
   RegisterPhysics(new ChemistryList());
 

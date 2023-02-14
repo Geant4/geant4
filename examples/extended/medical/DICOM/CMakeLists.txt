@@ -62,7 +62,7 @@ endif()
 if(DICOM_USE_HEAD)
     message(STATUS "${PROJECT_NAME}: Enabling DICOM_HEAD data download")
     set(CMAKE_MODULE_PATH
-        ${CMAKE_SOURCE_DIR}/cmake
+        ${PROJECT_SOURCE_DIR}/cmake
         ${CMAKE_MODULE_PATH})
   include(DownloadDICOMData)
 endif()
@@ -173,7 +173,7 @@ include(GNUInstallDirs)
 # Configuration for build tree
 #
 export(TARGETS ${${PROJECT_NAME}_INSTALL_LIBRARIES}
-    FILE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Build.cmake)
+    FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Build.cmake)
 
 set(PROJECT_TARGETS_FILE ${PROJECT_NAME}Build.cmake)
 set(PACKAGE_INCLUDE_INSTALL_DIR ${PROJECT_SOURCE_DIR}/include)
@@ -198,10 +198,10 @@ endmacro()
 
 configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
-    ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
 
 write_basic_package_version_file(
-    ${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${Geant4_VERSION}
     COMPATIBILITY SameMajorVersion )
 
@@ -226,17 +226,17 @@ set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
 
 configure_package_config_file(
     ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
-    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
+    ${PROJECT_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
     INSTALL_DESTINATION ${${PROJECT_NAME}_DIR}
     PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 
 write_basic_package_version_file(
-    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
+    ${PROJECT_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${Geant4_VERSION}
     COMPATIBILITY SameMajorVersion )
 
-install(FILES ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
-    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
+install(FILES ${PROJECT_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
+    ${PROJECT_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
     DESTINATION ${${PROJECT_NAME}_DIR} )
 
 set(MSG "DICOM settings:")

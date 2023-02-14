@@ -18,7 +18,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,32 +46,27 @@ Stripping off GDML names of materials, solids and volumes ...
 Enabled Check mode in G4Navigator
  *** SETTING MAGNETIC FIELD in Z direction : fieldValue = 2 tesla *** 
 
-*** Conversion of G4 -> VecGeom finished (0.0110709 s) ***
-*** Closing VecGeom geometry finished (0.00233708 s) ***
-*** Setup of syncing lookup structure finished (3.5409e-05 s) ***
+*** Conversion of G4 -> VecGeom finished (0.00226773 s) ***
+*** Closing VecGeom geometry finished (0.000551263 s) ***
+*** Setup of syncing lookup structure finished (2.4416e-05 s) ***
 TG4VecGeomNavigator created and registered to G4TransportationManager
  Setting up safety voxels for Svt_log with 340 daughters 
 Uncontained capacity for Svt_log: 8.83002e+07 units
 
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  Uncontained capacity for Svt_log: 8.83002e+07 units
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  Uncontained capacity for Svt_log: 8.83002e+07 units
+8.86155e+07 uncontained = 
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.83002e+07
 8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 8.86155e+07 uncontained = 8.83002e+07
 
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+8.86155e+07 uncontained = 8.83002e+07
+8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
@@ -82,43 +77,43 @@ VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncont
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-Uncontained capacity for Svt_log: 8.83002e+07 units
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
- FillUncontained:  trials 3815734 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764204
- FillUncontained:  trials 3813403 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764671
- FillUncontained:  trials 3815805 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76419
- FillUncontained:  trials 3813828 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764586
- FillUncontained:  trials 3815698 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764211
- FillUncontained:  trials 3813880 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764576
- FillUncontained:  trials 3812862 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76478
- FillUncontained:  trials 3815710 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764209
- FillUncontained:  trials 3816009 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764149
- FillUncontained:  trials 3814909 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764369
- FillUncontained:  trials 3812920 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764768
- FillUncontained:  trials 3816619 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764027
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
  FillUncontained:  trials 3812878 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764777
+ FillUncontained:  trials 3815805 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76419
+ FillUncontained:  trials 3812862 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76478
+ FillUncontained:  trials 3816619 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764027
+ FillUncontained:  trials 3814909 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764369
  FillUncontained:  trials 3815201 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764311
  FillUncontained:  trials 3816105 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76413
  FillUncontained:  trials 3814646 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764422
-Sampling points and keys took 26.2942s 
-Generating unique keys took 6.00274 s 
+ FillUncontained:  trials 3815734 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764204
+ FillUncontained:  trials 3812920 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764768
+ FillUncontained:  trials 3815710 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764209
+ FillUncontained:  trials 3813403 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764671
+ FillUncontained:  trials 3813880 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764576
+ FillUncontained:  trials 3815698 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764211
+ FillUncontained:  trials 3813828 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764586
+ FillUncontained:  trials 3816009 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764149
+Sampling points and keys took 18.2567s 
+Generating unique keys took 4.99656 s 
  We have 38052 sorted unique keys fraction 0.815586 estimated volume 9.56369e+07
-Generating safeties took 8.5413s 
+Generating safeties took 6.9944s 
  done 
 Setting up locate voxels for Svt_log with 340 daughters 
-Generating unique keys took 1.5853e-05s 
- Calculating locate candidates ... in parallel Generating locate voxels took 0.00140308s 
+Generating unique keys took 1.8239e-05s 
+ Calculating locate candidates ... in parallel Generating locate voxels took 0.00194117s 
  Setting up safety voxels for Dch_log with 40 daughters 
 Uncontained capacity for Dch_log: 8.26239e+08 units
 
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  Uncontained capacity for Dch_log: 8.26239e+08 units
-
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 9.40122e+09 uncontained = 
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  8.26239e+08
-8.26239e+08
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
 9.40122e+09 uncontained = 8.26239e+08
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
@@ -146,31 +141,33 @@ VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncont
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
+
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
+ FillUncontained:  trials 1705957 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0633076
+ FillUncontained:  trials 1717021 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628996
+ FillUncontained:  trials 1713048 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630455
+ FillUncontained:  trials 1717129 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628957
  FillUncontained:  trials 1715903 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629406
- FillUncontained:  trials 1714682 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629854
- FillUncontained:  trials 1717826 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628702
- FillUncontained:  trials 1713741 for num points = 108000 ( out of 108000 requested -  success ratio = 0.06302
  FillUncontained:  trials 1721713 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0627282
  FillUncontained:  trials 1713400 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630326
- FillUncontained:  trials 1711116 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0631167
- FillUncontained:  trials 1717129 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628957
- FillUncontained:  trials 1705957 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0633076
+ FillUncontained:  trials 1713741 for num points = 108000 ( out of 108000 requested -  success ratio = 0.06302
  FillUncontained:  trials 1722816 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626881
- FillUncontained:  trials 1721362 for num points = 108000 ( out of 108000 requested -  success ratio = 0.062741
+ FillUncontained:  trials 1711116 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0631167
  FillUncontained:  trials 1707491 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0632507
- FillUncontained:  trials 1713048 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630455
+ FillUncontained:  trials 1717826 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628702
+ FillUncontained:  trials 1714682 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629854
  FillUncontained:  trials 1716959 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629019
- FillUncontained:  trials 1717021 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628996
+ FillUncontained:  trials 1721362 for num points = 108000 ( out of 108000 requested -  success ratio = 0.062741
  FillUncontained:  trials 1723139 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626763
-Sampling points and keys took 1.17732s 
-Generating unique keys took 0.129283 s 
+Sampling points and keys took 0.676221s 
+Generating unique keys took 0.110471 s 
  We have 768 sorted unique keys fraction 0.444444 estimated volume 5.91992e+09
-Generating safeties took 0.0204644s 
+Generating safeties took 0.0120805s 
  done 
 Setting up locate voxels for Dch_log with 40 daughters 
-Generating unique keys took 3.1455e-05s 
- Calculating locate candidates ... in parallel Generating locate voxels took 0.00157498s 
-*** Setup of VecGeom navigators finished (42.21 s) ***
+Generating unique keys took 1.1465e-05s 
+ Calculating locate candidates ... in parallel Generating locate voxels took 0.00144961s 
+*** Setup of VecGeom navigators finished (31.0881 s) ***
 3
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
@@ -2994,7 +2991,7 @@ Step#    X (mm)    Y (mm)    Z (mm)    Ek (MeV) dE (MeV) Step(mm)    Track(mm) S
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.020000s Real=0.019899s Sys=0.010000s
+  User=0.010000s Real=0.017127s Sys=0.000000s
 /tracking/verbose 0
 /run/beamOn 10
 
@@ -3044,15 +3041,13 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.070000s Real=0.069410s Sys=0.000000s
+  User=0.060000s Real=0.065085s Sys=0.000000s
 
  ================================================================= 
  Final random number = 0.56769521327478
  ================================================================= 
 
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 1 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

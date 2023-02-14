@@ -57,6 +57,7 @@ class G4Track;
 class G4ParticleDefinition;
 class G4VParticleChange;
 class G4VCrossSectionDataSet;
+class G4CrossSectionDataStore;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -102,13 +103,15 @@ public:
   // Temporary method
   G4int GetSubProcessSubType() const;
 
+  void SetInelasticProcess(G4HadronicProcess*);
+  void SetElasticProcess(G4HadronicProcess*);
+  void SetCaptureProcess(G4HadronicProcess*);
+
   inline const G4VProcess* GetSelectedProcess() const;
 
-  inline void SetInelasticProcess(G4HadronicProcess*);
-  inline void SetElasticProcess(G4HadronicProcess*);
-  inline void SetCaptureProcess(G4HadronicProcess*);
-
   inline void SetTimeLimit(G4double val);
+
+  inline void SetMinEnergyLimit(G4double val);
 
   // hide copy constructor and assignment operator
   G4NeutronGeneralProcess(G4NeutronGeneralProcess &) = delete;
@@ -125,15 +128,15 @@ protected:
   inline G4double GetProbability(size_t idxt);
 
   inline void SelectedProcess(const G4Step& step, G4HadronicProcess* ptr,
-                              G4VCrossSectionDataSet* xs);
-
-  void SelectHadProcess(const G4Track&, const G4Step&, G4HadronicProcess*);
+                              G4CrossSectionDataStore*);
 
 private:
 
   // partial cross section
   G4double ComputeCrossSection(G4VCrossSectionDataSet*, const G4Material*,
-                               G4double kinEnergy, G4double loge); 
+                               G4double kinEnergy, G4double loge);
+
+  G4VCrossSectionDataSet* InitialisationXS(G4HadronicProcess*);
 
   // total cross section
   inline void CurrentCrossSection(const G4Track&);
@@ -147,10 +150,14 @@ private:
   G4HadronicProcess* fCapture = nullptr;
   G4HadronicProcess* fSelectedProc = nullptr;
 
-  G4VCrossSectionDataSet* fInelasticXS;
-  G4VCrossSectionDataSet* fElasticXS;
-  G4VCrossSectionDataSet* fCaptureXS;
-  G4VCrossSectionDataSet* fXS = nullptr;
+  G4VCrossSectionDataSet* fInelasticXS = nullptr;
+  G4VCrossSectionDataSet* fElasticXS = nullptr;
+  G4VCrossSectionDataSet* fCaptureXS = nullptr;
+
+  G4CrossSectionDataStore* fXSSInelastic = nullptr;
+  G4CrossSectionDataStore* fXSSElastic = nullptr;
+  G4CrossSectionDataStore* fXSSCapture = nullptr;
+  G4CrossSectionDataStore* fCurrentXSS = nullptr;
 
   const G4ParticleDefinition* fNeutron;
   const G4Material* fCurrMat = nullptr;
@@ -178,31 +185,6 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void
-G4NeutronGeneralProcess::SetInelasticProcess(G4HadronicProcess* ptr)
-{
-  fInelastic = ptr;
-  ptr->AddDataSet(fInelasticXS);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4NeutronGeneralProcess::SetElasticProcess(G4HadronicProcess* ptr)
-{
-  fElastic = ptr;
-  ptr->AddDataSet(fElasticXS);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4NeutronGeneralProcess::SetCaptureProcess(G4HadronicProcess* ptr)
-{
-  fCapture = ptr;
-  ptr->AddDataSet(fCaptureXS);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double
 G4NeutronGeneralProcess::ComputeGeneralLambda(std::size_t idxe, std::size_t idxt)
 {
@@ -224,11 +206,11 @@ inline G4double G4NeutronGeneralProcess::GetProbability(std::size_t idxt)
 inline void
 G4NeutronGeneralProcess::SelectedProcess(const G4Step& step,
                                          G4HadronicProcess* ptr,
-                                         G4VCrossSectionDataSet* xs)
+                                         G4CrossSectionDataStore* xs)
 
 {
   fSelectedProc = ptr;
-  fXS = xs;
+  fCurrentXSS = xs;
   step.GetPostStepPoint()->SetProcessDefinedStep(ptr);
 }
 
@@ -245,18 +227,11 @@ inline void G4NeutronGeneralProcess::CurrentCrossSection(const G4Track& track)
 {
   G4double energy = track.GetKineticEnergy();
   const G4Material* mat = track.GetMaterial();
-  G4bool recompute = false;
-  if(mat != fCurrMat) {
+  if(mat != fCurrMat || energy != fCurrE) {
     fCurrMat = mat;
     matIndex = mat->GetIndex();
-    recompute = true;
-  }
-  if(energy != fCurrE) {
     fCurrE = energy;
     fCurrLogE = track.GetDynamicParticle()->GetLogKineticEnergy();
-    recompute = true;
-  }
-  if(recompute) {
     fLambda = (energy <= fMiddleEnergy) ? ComputeGeneralLambda(0, 0)
       : ComputeGeneralLambda(1, 3);
     currentInteractionLength = 1.0/fLambda;
@@ -268,6 +243,13 @@ inline void G4NeutronGeneralProcess::CurrentCrossSection(const G4Track& track)
 inline void G4NeutronGeneralProcess::SetTimeLimit(G4double val)
 {
   fTimeLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4NeutronGeneralProcess::SetMinEnergyLimit(G4double val)
+{
+  fMinEnergy = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

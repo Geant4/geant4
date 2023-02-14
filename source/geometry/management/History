@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-01-09 Gabriele Cosmo (geommng-V11-00-10)
+- G4LogicalVolume: use std::shared_ptr for handling visualization attributes.
+  Ignore calls to SetVisAttributes() from worker threads.
+
 ## 2022-11-16 Gabriele Cosmo (geommng-V11-00-09)
 - Fixed more compilation warnings for implicit type conversions on
   macOS/XCode 14.1 in G4SmartVoxelNode source.

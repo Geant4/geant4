@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-00    (9-December-2022)
+ Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1066,20 +1066,20 @@ View them with "/vis/plot" or "/vis/reviewPlots".
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 188.96 MeV +- 48.8659 MeV
- mean Energy in Gap      : 46.7177 MeV +- 12.7612 MeV
+ mean Energy in Absorber : 187.631 MeV +- 47.785 MeV
+ mean Energy in Gap      : 46.3222 MeV +- 12.6821 MeV
 
- mean trackLength in Absorber : 46.7149 cm  +- 12.1118 cm 
- mean trackLength in Gap      : 23.7187 cm  +- 6.51829 cm 
+ mean trackLength in Absorber : 46.3801 cm  +- 11.8848 cm 
+ mean trackLength in Gap      : 23.543 cm  +- 6.47285 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 188.96 MeV rms = 48.8659 MeV
-EGap: mean = 46.7177 MeV rms = 12.7612 MeV
-LAbs: mean = 46.7149 cm  rms = 12.1118 cm 
-LGap: mean = 23.7187 cm  rms = 6.51829 cm 
+EAbs: mean = 187.631 MeV rms = 47.785 MeV
+EGap: mean = 46.3222 MeV rms = 12.6821 MeV
+LAbs: mean = 46.3801 cm  rms = 11.8848 cm 
+LGap: mean = 23.543 cm  rms = 6.47285 cm 
 ... create file : ./histo/AnaEx01_h1_EAbs.csv - done
 ... create file : ./histo/AnaEx01_h1_EGap.csv - done
 ... create file : ./histo/AnaEx01_h1_LAbs.csv - done

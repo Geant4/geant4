@@ -259,9 +259,11 @@ G4bool G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
     if(newEpsMax >= fEpsilonMin){
       fEpsilonMax = newEpsMax;
       succeeded = true;
-      // if(verbose)
-      G4cout << "G4FieldManager/SetEpsMax :  eps_max = " << std::setw(10) << fEpsilonMax
-      << " ( Note: unchanged eps_min=" << std::setw(10) << fEpsilonMin << " )" << G4endl;
+      if (fVerboseConstruction)
+      {
+        G4cout << "G4FieldManager/SetEpsMax :  eps_max = " << std::setw(10) << fEpsilonMax
+               << " ( Note: unchanged eps_min=" << std::setw(10) << fEpsilonMin << " )" << G4endl;
+      }
     } else {
       G4ExceptionDescription erm;
       erm << " Call to set eps_max = " << newEpsMax << " . The problem is that"
@@ -300,8 +302,11 @@ G4bool G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
     //*********
     succeeded= true;
 
-    G4cout << "G4FieldManager/SetEpsMin :  eps_min = "
-           << std::setw(10) << fEpsilonMin << G4endl;
+    if (fVerboseConstruction)
+    {
+      G4cout << "G4FieldManager/SetEpsMin :  eps_min = "
+             << std::setw(10) << fEpsilonMin << G4endl;
+    }
     if( fEpsilonMax < fEpsilonMin ){
       // Ensure consistency
       G4ExceptionDescription erm;
