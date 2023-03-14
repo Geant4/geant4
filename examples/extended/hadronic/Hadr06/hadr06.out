@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -421,7 +421,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.960000s Real=10.211356s Sys=0.000000s
+  User=1.930000s Real=1.962810s Sys=0.000000s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
@@ -450,7 +450,7 @@ Run Summary
              e-:   37803  Emean =  30.337 keV	( 100.02 eV  --> 10.171 MeV)	stable
           gamma:    2579  Emean =  493.43 keV	( 295.36 keV --> 4.4773 MeV)	stable
         neutron:   16536  Emean =   3.556 MeV	( 2.3421 keV --> 14.095 MeV)	mean life = 14.67 min
-         triton:    8232  Emean =  3.9097 MeV	( 30.195 keV --> 10.263 MeV)	mean life = 12.32 y  
+         triton:    8232  Emean =  3.9097 MeV	( 30.195 keV --> 10.263 MeV)	mean life = 17.774 y  
 
  List of particles emerging from the absorber :
       anti_nu_e:      24  Emean =  6.3907 MeV	( 2.7957 MeV --> 11.056 MeV) 	Eleak/event = 15.338 keV

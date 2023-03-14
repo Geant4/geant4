@@ -29,6 +29,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 February 2023 Ben Morgan (cmake-V10-07-58)
+- Remove no longer required G4VecGeomShim module.
+  - VecGeom supports/supplies full imported targets since 1.1.18
+  - Use of VECGEOM_LIBRARIES variable required to allow build against CUDA-enabled VecGeom
+
 14 July 2022 - Ben Morgan (cmake-V10-07-57)
 - Address [Bugzilla 2485](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2485)
   - Update extraction of include paths from VecGeom to use imported target

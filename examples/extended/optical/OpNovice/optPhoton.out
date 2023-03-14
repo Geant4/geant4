@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1371,7 +1371,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001646s Sys=0.000000s
+  User=0.000000s Real=0.000899s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: opticalphoton with energy 3 eV .
@@ -1411,7 +1411,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.160000s Real=0.161130s Sys=0.000000s
+  User=0.090000s Real=0.096978s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: opticalphoton with energy 3 eV .

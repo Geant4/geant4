@@ -60,18 +60,36 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4PhysicsModelCatalog.hh"
 
+#include "G4ElectroNuclearCrossSection.hh"
+#include "G4PhotoNuclearCrossSection.hh"
+#include "G4GammaNuclearXS.hh"
+
+
 G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
  : G4HadronicInteraction("G4ElectroVDNuclearModel"),
    leptonKE(0.0), photonEnergy(0.0), photonQ2(0.0), secID(-1)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(1*PeV);
+
   electroXS = 
     (G4ElectroNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
     GetCrossSectionDataSet(G4ElectroNuclearCrossSection::Default_Name());
+  if ( electroXS == nullptr ) {
+    electroXS = new G4ElectroNuclearCrossSection;
+  }
+
   gammaXS = 
     (G4PhotoNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
     GetCrossSectionDataSet(G4PhotoNuclearCrossSection::Default_Name());
+  if ( gammaXS == nullptr ) {
+    gammaXS = 
+      (G4GammaNuclearXS*)G4CrossSectionDataSetRegistry::Instance()->
+      GetCrossSectionDataSet(G4GammaNuclearXS::Default_Name());
+    if ( gammaXS == nullptr ) {
+      gammaXS = new G4PhotoNuclearCrossSection;
+    }
+  } 
 
   // reuse existing pre-compound model
   G4GeneratorPrecompoundInterface* precoInterface 
@@ -134,7 +152,7 @@ G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
     G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum() );
     
     // Need to call GetElementCrossSection before calling GetEquivalentPhotonEnergy.
-    G4Material* mat = 0;
+    const G4Material* mat = aTrack.GetMaterial();
     G4int targZ = targetNucleus.GetZ_asInt();
     electroXS->GetElementCrossSection(&lepton, targZ, mat);
     
@@ -164,7 +182,7 @@ G4ElectroVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
 
   // Get gamma cross section at Q**2 = 0 (real gamma)
   G4int targZ = targetNucleus.GetZ_asInt();
-  G4Material* mat = 0;
+  const G4Material* mat = aTrack.GetMaterial();
   G4double sigNu =
     gammaXS->GetElementCrossSection(&photon, targZ, mat);
 

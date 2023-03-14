@@ -16,6 +16,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 23 February 2023 Alberto Ribon (particles-V10-07-14)
+- G4XicZero, G4AntiXicZero : updated mean lifetime values according to the
+  PDG-2022.
+- Note: the particles' properties in Geant4 are currently consistent with
+  those of PDG-2017; the mean lifetimes have similar (within few percent)
+  values with respect to the latest PDG version, PDG-2022, except for
+  Xi_c0 and Omega_c0. For this reason, only the latter two have been
+  updated, while the rest will be updated in the near future.
+
+- 7 February 2023 Sandro Wenzel
+- G4OmegacZero, G4AntiOmegacZero : fixed mean lifetime according to the PDG.
+  Thanks to Francesco Mazzaschi of ALICE for reporting it.
+
+- 13 January 2023 Alberto Ribon (particles-V10-07-13)
+- G4Triton, G4AntiTriton : corrected the lifetime value for triton and 
+  anti_triton : the half-life (12.32 years) was incorrectly used instead of
+  the mean lifetime (17.774 years) for triton, whereas anti_triton was
+  considered as stable (i.e. with lifetime set to -1).
+  Thanks to the user Francisco Ogallar Ruiz for spotting and reporting it!
+- G4AntiNeutron : set the "PDG stable" flag to "false", as for G4Neutron 
+  (this has no practical consequences, i.e. anti_neutron decays regardless
+  of this flag, but it was confusing to have the flag "true").
+
 - 12 August 2022 Alberto Ribon (particles-V10-07-12)
   Fixed three bugs regarding the transportation of hypernuclei and anti-hypernuclei:
 - G4Ion : set (forgotten) isGeneralIon to false for hypernuclei and 

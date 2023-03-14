@@ -65,7 +65,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
     // hadrons can't/can be created during the string fragmentation of ordinary
     // (i.e. not heavy) projectile hadron nuclear reactions.
     if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
-      SetProbCCbar(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+      SetProbCCbar(0.0005);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
       SetProbBBbar(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
     } else {
       SetProbCCbar(0.0);

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -959,7 +959,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.040000s Real=0.063153s Sys=0.000000s
+  User=0.020000s Real=0.018779s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
@@ -1037,11 +1037,11 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.260000s Real=0.305971s Sys=0.000000s
+  User=0.150000s Real=0.148844s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 4.90104 nanoGy  +- 144.998 picoGy 
+ Dose in scoring volume : 4.85181 nanoGy  +- 144.745 picoGy 
 ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -667,7 +667,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000731s Sys=0.000000s
+  User=0.000000s Real=0.000497s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -701,7 +701,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000166s Sys=0.000000s
+  User=0.000000s Real=0.000109s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -735,7 +735,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000138s Sys=0.000000s
+  User=0.000000s Real=0.000098s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -769,7 +769,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000942s Sys=0.000000s
+  User=0.000000s Real=0.000125s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -803,7 +803,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000134s Sys=0.000000s
+  User=0.000000s Real=0.000075s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -844,7 +844,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001325s Sys=0.000000s
+  User=0.000000s Real=0.000082s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -878,7 +878,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.013407s Sys=0.000000s
+  User=0.000000s Real=0.006267s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.
@@ -948,7 +948,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.007135s Sys=0.000000s
+  User=0.000000s Real=0.007834s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 0 events have been kept for refreshing and/or reviewing.

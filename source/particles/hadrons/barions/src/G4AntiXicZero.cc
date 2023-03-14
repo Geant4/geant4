@@ -72,7 +72,7 @@ G4AntiXicZero* G4AntiXicZero::Definition()
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            -1,       -4132,
-                false,     0.112e-3*ns,          NULL,
+                false,     1.519e-4*ns,          NULL,
                 false,       "xi_c");
   }
   theInstance = reinterpret_cast<G4AntiXicZero*>(anInstance);

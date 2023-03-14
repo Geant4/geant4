@@ -140,7 +140,10 @@ protected:
   G4double coeff;
   G4double cosTetMaxElec = 1.0;
   G4double cosTetMaxNuc = 1.0;
-  G4double cosThetaMax = -1.0;
+
+  // for the combined mode it is cos(thetaMax)
+  // for single scattering it is cos(thetaMin)
+  G4double cosThetaMax = 1.0;
 
   G4double chargeSquare = 0.0;
   G4double charge3 = 0.0;

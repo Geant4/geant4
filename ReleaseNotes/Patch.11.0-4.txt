@@ -1,0 +1,111 @@
+
+                 Geant4 11.0 - patch-04 Release Notes
+                 ------------------------------------
+
+                                                            3 March 2023
+
+List of fixes included in this public patch since the public release 11.0.3:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Removed no longer required G4VecGeomShim module.
+        VecGeom supports/supplies full imported targets since 1.1.18
+        Use of VECGEOM_LIBRARIES variable is required to allow build against
+        CUDA-enabled VecGeom.
+
+  o Analysis
+    --------
+    + Added a protection against nullptr in G4VAnalysisManager::GetNofNtuples()
+      Addressing problem report #2518.
+    + Do not remove non-empty HDF5 output files.
+
+  o Global:
+    ------
+    + Updated date and version for 11.0.4.
+
+  o Materials:
+    ---------
+    + G4Material: added an extra check on number of atoms in method
+      AddElementByNumberOfAtoms(..). Addressing problem report #2514.
+
+  o Particles:
+    ---------
+    + G4XicZero, G4AntiXicZero, G4OmegacZero, G4AntiOmegacZero: updated mean
+      lifetime values according to PDG-2022.
+    + G4Triton, G4AntiTriton: corrected the lifetime value for triton and
+      anti_triton. The half-life (12.32 years) was incorrectly used instead of
+      the mean lifetime (17.774 years) for triton, whereas the anti_triton was
+      incorrectly treated as stable.
+    + G4AntiNeutron: set the "PDG stable" flag to "false", as for G4Neutron.
+      This has no practical consequences, i.e. anti_neutron decays regardless
+      of this flag.
+
+  o Physics Lists:
+    -------------
+    + constructors/decay
+      o G4RadioactiveDecayPhysics: assigned RadioactiveDecay process to G4Triton
+        (which is the only light ion that decays). Note: before, triton did not
+        have beta decay, i.e. it was wrongly treated as stable even when
+        radioactive decay physics was enabled; anti_triton did not, and still
+        does not, have beta decay (because RadioactiveDecay, in its current
+        implementation, does not handle any kind of anti-ions): in practice,
+        this is an acceptable approximation because of its relatively long
+        lifetime and the fact that annihilation and nuclear capture are more
+        likely to happen before decay.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + standard:
+      o G4WentzelOKandVIxSection: fixed numeric instability for the extreme
+        case of very small kinetic energy (< 1 eV). Improved comments and
+        fixed single scattering per region. Addressing problem report #2530.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o G4ComponentAntiNuclNuclearXS: fix and extension in methods
+        GetTotalElementCrossSection() and GetInelasticElementCrossSection();
+        a bug was causing undefined values for, respectively, the total and
+        inelastic cross-sections of anti-proton interactions with light target
+        nuclei (d, H3, He3 and He4).
+      o G4NeutronInelasticXS, G4ParticleInelasticXS: fixed computation of 
+        isotope cross-sections. Addressing problem report #2498.
+    + models/cascade
+      o G4NumIntTwoBodyAngDst: corrected incomplete initialization of a vector.
+        Addressing problem report #2515.
+      o G4TwoBodyAngularDist: corrected the charge exchange reaction of pion+
+        on neutron producing in the final state pion0 and proton.
+        Addressing problem report #2516.
+    + models/lepto_nuclear
+      o G4ElectroVDNuclearModel: added protections against null pointers to
+        gamma cross-section and material, responsible for rare crashes.
+    + models/particle_hp
+      o G4ParticleHPContAngularPar: added protection against zero probability
+        for both discrete and continuous emission.
+    + models/parton_string
+      o G4DiffractiveSplitableHadron: fixed rare large energy violations seen
+        with FTF when dealing with charm and bottom hadron nuclear interactions.
+      o G4LundStringFragmentation, G4QGSMFragmentation: corrected value for
+        the probability of charm/anti-charm creation from the vacuum (a factor
+        of 10 higher was set to enhance the production of charm hadrons for
+        testing purposes).
+      o G4QGSMFragmentation: bug-fix in the method GetLightConeZ(), which
+        might cause rare access to arrays with a wrong index.
+    + util
+      o G4Nucleus: corrected method GetN_asInt() for the case of hypernuclei.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.0 series.
+  o  Technical notes distributed for release 11.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.0.4 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

@@ -1186,7 +1186,11 @@ G4int G4VAnalysisManager::GetNofP2s() const
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::GetNofNtuples() const
 {
-  return fVNtupleManager->GetNofNtuples();
+  if (fVNtupleManager != nullptr) {
+    return fVNtupleManager->GetNofNtuples();
+  }
+
+  return 0;
 }
 
 // GetH1Id(), GetH2Id in .icc

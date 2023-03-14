@@ -70,7 +70,7 @@ G4AntiTriton* G4AntiTriton::Definition()
                     1,              +1,             0,
                     0,               0,             0,
        "anti_nucleus",               0,            -3, -1000010030,
-                 true,            -1.0,          NULL,
+                 true,     17.774*year,       nullptr,
 		false,        "static",    1000010030,
 		 0.0,                0
               );

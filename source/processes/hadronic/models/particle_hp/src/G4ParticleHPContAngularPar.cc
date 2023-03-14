@@ -197,7 +197,7 @@ G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode,
         running[j+1] = running[j] + delta;
       }
 
-      G4double tot_prob_DIS = running[nDiscreteEnergies];
+      G4double tot_prob_DIS = std::max( running[nDiscreteEnergies], 0.0 );
 
       G4double delta1;
       for (G4int j = nDiscreteEnergies; j < nEnergies; j++) {
@@ -239,8 +239,11 @@ G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode,
 
         running[j+1] = running[j] + ( ( e_high - e_low ) * delta1);
       }
-      G4double tot_prob_CON = running[ nEnergies ] - running[ nDiscreteEnergies ];
+      G4double tot_prob_CON = std::max( running[ nEnergies ] - running[ nDiscreteEnergies ], 0.0 );
 
+      // Give up in the pathological case of null probabilities 
+      if ( tot_prob_DIS == 0.0 && tot_prob_CON == 0.0 ) return result;
+      
       // Normalize random 
       random *= (tot_prob_DIS + tot_prob_CON);
       // 2nd Judge Discrete or not

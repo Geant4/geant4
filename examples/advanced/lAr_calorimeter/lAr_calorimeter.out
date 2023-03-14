@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -989,14 +989,14 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.29 seconds
+    Total CPU time elapsed for geometry optimisation: 0.17 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      51.72         0.15         0.00          152k EmModuleLogical
-      44.83         0.13         0.00          238k HadModuleLogical
-       3.45         0.01         0.00            4k Mother
+      52.94         0.09         0.00          152k EmModuleLogical
+      47.06         0.08         0.00          238k HadModuleLogical
+       0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
        0.00         0.00         0.00            0k FCALEnvelopeLogical
@@ -1006,9 +1006,9 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.17        238k      1385     2370       3792         0.13    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.15    EmModuleLogical
-       0.93          3k         8       42        146         0.01    Mother
+      60.17        238k      1385     2370       3792         0.08    HadModuleLogical
+      38.50        152k      1129     1152       2426         0.09    EmModuleLogical
+       0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
        0.08          0k         1        4          6         0.00    LArgLogical
@@ -1370,7 +1370,7 @@ Edep in FCAL1 FCAl2 : 19868.4 0
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=8.150000s Real=16.995423s Sys=0.010000s
+  User=5.010000s Real=5.183704s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

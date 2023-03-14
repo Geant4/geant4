@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 October 2022 - Alberto Ribon (hadr-cross-V10-07-25)
+- G4ComponentAntiNuclNuclearXS : Vladimir Uzhinsky's bug-fix
+  of the GetTotalElementCrossSection and GetInelasticElementCrossSection
+  methods:
+  *  A bug was causing undefined values for, respectively, the total and
+     inelastic cross-sections of anti-proton interactions with light target
+     nuclei (d, H3, He3 and He4).
+
+29 September 2022 - Vladimir Ivanchenko (hadr-cross-V10-07-24)
+- G4ParticleInelasticXS - fixed computation of isotope x-section #2498
+
+18 August 2022 - Vladimir Ivanchenko
+- G4NeutronInelasticXS - fixed computation of isotope x-section #2498
+
 04 February 2022 - Vladimir Ivanchenko (hadr-cross-V10-07-23)
 - G4HadronNucleonXsc - fixed compilation warning on unused variable
 

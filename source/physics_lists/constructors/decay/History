@@ -13,7 +13,19 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06-October-2020 Vladimir Ivanchenko  (phys-ctor-decay-V10-07-03)
+11-January-2023 Alberto Ribon        (phys-ctor-decay-V10-07-04) 
+- G4RadioactiveDecayPhysics : assigned the RadioactiveDecay process
+  to G4Triton (which is the only light ion that decays).
+  Note: before, triton did not have beta decay, i.e. it was wrongly
+  treated as stable even when radioactive decay physics was enabled;
+  anti_triton did not, and still does not, have beta decay
+  (because RadioactiveDecay, in its current implementation, does
+  not handle any kind of anti-ions): in practice, this is an acceptable
+  approximation because of its relatively long lifetime and the fact
+  that annihilation and nuclear capture are more likely to happen
+  before decay.
+
+06-October-2021 Vladimir Ivanchenko  (phys-ctor-decay-V10-07-03)
 - G4RadioactiveDecayPhysics - Use SetAuger(..) method instead of 
     the obsolete SetAugerCascade(..)
 

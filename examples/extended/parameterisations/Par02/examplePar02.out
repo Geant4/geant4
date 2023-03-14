@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -29,25 +29,25 @@ G4GDML: Reading 'Par02FullDetector.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Geometry loaded from  file .......Par02FullDetector.gdml 
 
+ecal !!!
+
+ecal !!!
+
+ecal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+ecal !!!
+
 tracker !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-ecal !!!
-
-ecal !!!
-
-ecal !!!
-
-ecal !!!
 
 ecal !!!
 Instantiating Visualization Manager.......

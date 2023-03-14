@@ -14,10 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
- 9 February 2022 Gabriele Cosmo (hadr-casc-V11-00-01)
------------------------------------------------------
-- Fixed compilation warnings on Intel compilers for unused variables.
-- Use const iterator in G4InuclEvaporation::BreakItUp(..).
+13 November 2022 Alberto Ribon (hadr-casc-V10-07-05)
+----------------------------------------------------
+(Two bug-fixes found and suggested by Sven Menke)
+- G4NumIntTwoBodyAngDst.hh : corrected the incomplete initialization of the
+  vector angDist (fixing bug #2515).
+- G4TwoBodyAngularDist.cc : corrected the charge exchange reaction of pion+ on
+  neutron producing in the final state pion0 and proton (fixing bug #2516)
 
  4 August 2021 Alberto Ribon (hadr-casc-V10-07-04)
 --------------------------------------------------

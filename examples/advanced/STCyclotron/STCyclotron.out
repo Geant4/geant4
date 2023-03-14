@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -160,7 +160,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=36.920000s Real=83.958375s Sys=0.030000s
+  User=22.770000s Real=23.354743s Sys=0.050000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.

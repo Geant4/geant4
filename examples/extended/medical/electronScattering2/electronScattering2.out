@@ -15,7 +15,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -844,4 +844,4 @@ Number of Events Processed:20000
      230   0.010496  0.0040222         12          5 
      231   0.011387  0.0043405         12          4 
      232   0.020416    0.01651         10          5 
-### deleting electronFilter 0x1325560
+### deleting electronFilter 0x1aff510

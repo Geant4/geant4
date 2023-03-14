@@ -352,10 +352,10 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
     }
   }
   if(cost1 > cost2) {
-
-    G4double w1 = 1. - cost1 + screenZ;
-    G4double w2 = 1. - cost2 + screenZ;
-    G4double z1 = w1*w2/(w1 + rndmEngineMod->flat()*(w2 - w1)) - screenZ;
+    G4double w1 = 1. - cost1;
+    G4double w2 = 1. - cost2;
+    G4double w3 = rndmEngineMod->flat()*(w2 - w1);
+    G4double z1 = ((w2 - w3)*screenZ + w1*w2)/(screenZ + w1 + w3);
 
     G4double fm = 1.0;
     if(fNucFormfactor == fExponentialNF) {

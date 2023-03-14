@@ -191,7 +191,8 @@ G4ParticleInelasticXS::IsoCrossSection(G4double ekin, G4double logE,
 
   // compute isotope cross section if applicable 
   const G4double emax = pv->GetMaxEnergy(); 
-  if(ekin <= emax && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
+  const G4double elim = 20*CLHEP::MeV;
+  if(ekin <= elim && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
     auto pviso = data[index]->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pviso != nullptr) { 
       xs = pviso->LogVectorValue(ekin, logE);

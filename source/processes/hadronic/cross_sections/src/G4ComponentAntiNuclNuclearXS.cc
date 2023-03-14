@@ -112,18 +112,18 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
   else {}
 
   if ( i == 0  &&  j == 0 ) return sigmaTotal * millibarn;   // Pbar/Nbar + P 
-  if ( i > 0   &&  j >= 0 ) { fRadiusEff = ReffTot[i][j]; }  // Light anti-nuclei + Light nuclei
+  if ( i >= 0  &&  j >= 0 ) { fRadiusEff = ReffTot[i][j]; }  // Light anti-nuclei + Light nuclei
 
   if ( j < 0 ) {
-    if      ( i  == 0 ) { fRadiusEff = 1.34 * theG4Pow->powA(A, 0.23)      // Anti-proton/Anti-neutron + Nucleus
+    if      ( i  == 0 ) { fRadiusEff = 1.34 * theG4Pow->powA(A, 0.23)  // Anti-proton/Anti-neutron + Nucleus
                                      + 1.35 / theG4Pow->A13(A); } 
-    else if ( i  == 1 ) { fRadiusEff = 1.46 * theG4Pow->powA(A, 0.21)      // Anti-deuteron + Nucleus
+    else if ( i  == 1 ) { fRadiusEff = 1.46 * theG4Pow->powA(A, 0.21)  // Anti-deuteron + Nucleus
                                      + 1.45 / theG4Pow->A13(A); }
-    else if ( i  == 2 ) { fRadiusEff = 1.40 * theG4Pow->powA(A, 0.21)      // Anti-Tritium + Nucleus
+    else if ( i  == 2 ) { fRadiusEff = 1.40 * theG4Pow->powA(A, 0.21)  // Anti-tritium + Nucleus
                                      + 1.63 / theG4Pow->A13(A); }
-    else if ( i  == 3 ) { fRadiusEff = 1.40 * theG4Pow->powA(A, 0.21)      // Anti-He3 + Nucleus
+    else if ( i  == 3 ) { fRadiusEff = 1.40 * theG4Pow->powA(A, 0.21)  // Anti-He3 + Nucleus
                                      + 1.63 / theG4Pow->A13(A); }
-    else if ( i  == 4 ) { fRadiusEff = 1.35 * theG4Pow->powA(A, 0.21)      // Anti-Tritium + Nucleus
+    else if ( i  == 4 ) { fRadiusEff = 1.35 * theG4Pow->powA(A, 0.21)  // Anti-alpha + Nucleus
                                      + 1.10 / theG4Pow->A13(A); }
     else {}
   }
@@ -186,18 +186,18 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
   else {}
 
   if ( i == 0  &&  j == 0 ) return (sigmaTotal - sigmaElastic) * millibarn;  // Pbar/Nbar + P 
-  if ( i > 0   &&  j >= 0 ) { fRadiusEff = ReffInel[i][j]; }                 // Light anti-nuclei + Light nuclei
+  if ( i >= 0  &&  j >= 0 ) { fRadiusEff = ReffInel[i][j]; }                 // Light anti-nuclei + Light nuclei
 
   if ( j < 0) {
-    if      ( i  == 0 ) { fRadiusEff = 1.31*theG4Pow->powA(A, 0.22)      // Anti-proton/Anti-neutron + Nucleus
+    if      ( i  == 0 ) { fRadiusEff = 1.31*theG4Pow->powA(A, 0.22)  // Anti-proton/Anti-neutron + Nucleus
                                      + 0.90/theG4Pow->A13(A); }
-    else if ( i  == 1 ) { fRadiusEff = 1.38*theG4Pow->powA(A, 0.21)      // Anti-deuteron + Nucleus
+    else if ( i  == 1 ) { fRadiusEff = 1.38*theG4Pow->powA(A, 0.21)  // Anti-deuteron + Nucleus
                                      + 1.55/theG4Pow->A13(A); }
-    else if ( i  == 2 ) { fRadiusEff = 1.34*theG4Pow->powA(A, 0.21)      // Anti-Tritium + Nucleus
+    else if ( i  == 2 ) { fRadiusEff = 1.34*theG4Pow->powA(A, 0.21)  // Anti-tritium + Nucleus
                                      + 1.51/theG4Pow->A13(A); }
-    else if ( i  == 3 ) { fRadiusEff = 1.34*theG4Pow->powA(A, 0.21)      // Anti-He3 + Nucleus
+    else if ( i  == 3 ) { fRadiusEff = 1.34*theG4Pow->powA(A, 0.21)  // Anti-He3 + Nucleus
                                      + 1.51/theG4Pow->A13(A); }
-    else if ( i  == 4 ) { fRadiusEff = 1.30*theG4Pow->powA(A, 0.21)      // Anti-Tritium + Nucleus
+    else if ( i  == 4 ) { fRadiusEff = 1.30*theG4Pow->powA(A, 0.21)  // Anti-alpha + Nucleus
                                      + 1.05/theG4Pow->A13(A); }
     else {}
   }

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -615,6 +615,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        1e+27  ns
+======================================================================
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -653,6 +668,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                  QMDModel: 100 MeV/n ---> 6 GeV/n
         Model:                      FTFP: 5.99 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: RadioactiveDecay
 
   Process: RadioactiveDecay
 
@@ -1164,7 +1181,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.030000s Real=0.703445s Sys=0.010000s
+  User=0.010000s Real=0.043835s Sys=0.010000s
 
 [=========================================================== DICOM ===========================================================]
 
@@ -1211,5 +1228,5 @@ Dynamic pools deleted: 11 / Total memory freed: 0.036 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 
-[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=8.350000s Real=44.561247s Sys=0.610000s
+[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=5.260000s Real=7.981993s Sys=0.340000s
 

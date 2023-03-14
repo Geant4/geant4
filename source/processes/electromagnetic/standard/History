@@ -14,6 +14,13 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 February 2023: V.Ivanchenko (emstand-V10-07-30)
+- G4WentzelOKandVIxSection - fix numeric instability for the extreme case of 
+    very small kinetic energy (< 1 eV)
+
+21 February 2023: V.Ivanchenko
+- G4WentzelOKandVIxSection - fix #2530, improved comments
+
 04 March 2022: V.Ivanchenko (emstand-V10-07-29)
 - G4UniversalFluctuation - removed unnecessary "if"
 

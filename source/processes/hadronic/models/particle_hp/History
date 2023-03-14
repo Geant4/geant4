@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 Oct 2022 Alberto Ribon (hadr-hpp-V10-07-14)
+----------------------------------------------
+- G4ParticleHPContAngularPar.cc : added protection against zero probability
+  for both discrete and continuous emission.
+
 01 Jul 2022 Alberto Ribon (hadr-hpp-V10-07-13)
 ----------------------------------------------
 - G4ParticleHPContAngularPar.cc : added protections against evaluations of

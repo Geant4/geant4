@@ -1,0 +1,1301 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+G4VModularPhysicsList::ReplacePhysics: G4EmStandard with type : 2 is replaced with G4EmStandard_opt4
+Using 
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered models:
+  None
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+Registered filters:
+  None
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+/run/verbose 1
+/tracking/verbose 0
+/event/verbose 0
+/WLS/setPhotonDetGeometry Circle
+/run/geometryModified
+/WLS/setNumOfLayers 2
+/run/geometryModified
+/WLS/setSurfaceRoughness 0.999
+/run/geometryModified
+/WLS/setXYRatio 0.8
+/run/geometryModified
+/WLS/setWLSLength 1. m
+/run/geometryModified
+/WLS/setWLSRadius 0.5 mm
+/run/geometryModified
+/WLS/setClad1Radius 0.3 mm
+/run/geometryModified
+/WLS/setClad2Radius 0.1 mm
+/run/geometryModified
+/WLS/setPhotonDetHalfLength 0.6 mm
+/run/geometryModified
+/WLS/setGap 0.15 mm
+/run/geometryModified
+/WLS/setAlignment 0.1 deg
+/run/geometryModified
+/WLS/setMirror true
+/run/geometryModified
+/WLS/setBarLength 1.1 m
+/run/geometryModified
+/WLS/setBarBase 9.5 mm
+/run/geometryModified
+/WLS/setHoleRadius 0.9 mm
+/run/geometryModified
+/WLS/setCoatingThickness 0.3 mm
+/run/geometryModified
+/WLS/setCoatingRadius 1.775 mm
+/run/geometryModified
+/run/initialize
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
+G4NistMaterialBuilder: BuildMaterial #286
+New material nComponents= 1
+G4NistElementBuilder: Build Element <H>  Z= 1  Aeff= 1.00794  with natural isotope composition
+G4Material: Mean excitation energy is changed for G4_Galactic Iold= 19.2eV Inew= 21.8 eV
+G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
+G4NistMaterialBuilder: BuildMaterial #104
+New material nComponents= 4
+G4NistElementBuilder: Build Element <C>  Z= 6  Aeff= 12.0107  with natural isotope composition
+G4NistElementBuilder: Build Element <N>  Z= 7  Aeff= 14.0068  with natural isotope composition
+G4NistElementBuilder: Build Element <O>  Z= 8  Aeff= 15.9994  with natural isotope composition
+G4NistElementBuilder: Build Element <Ar>  Z= 18  Aeff= 39.9477  with natural isotope composition
+G4NistMaterialBuilder::FindOrBuildMaterial PMMA
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <PMMA> is not found.
+New material PMMA is prepared  nMaterials= 309 nComponents= 777 nCurrent= 3
+G4NistMaterialBuilder: BuildMaterial #308
+New material nComponents= 3
+G4NistMaterialBuilder::FindOrBuildMaterial Pethylene
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Pethylene> is not found.
+New material Pethylene is prepared  nMaterials= 310 nComponents= 780 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #309
+New material nComponents= 2
+G4NistMaterialBuilder::FindOrBuildMaterial FPethylene
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <FPethylene> is not found.
+New material FPethylene is prepared  nMaterials= 311 nComponents= 782 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #310
+New material nComponents= 2
+G4NistMaterialBuilder::FindOrBuildMaterial Polystyrene
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Polystyrene> is not found.
+New material Polystyrene is prepared  nMaterials= 312 nComponents= 784 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #311
+New material nComponents= 2
+G4NistMaterialBuilder::FindOrBuildMaterial Silicone
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Silicone> is not found.
+New material Silicone is prepared  nMaterials= 313 nComponents= 786 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #312
+New material nComponents= 2
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Al
+G4NistMaterialBuilder: BuildMaterial #13
+New material nComponents= 1
+G4NistElementBuilder: Build Element <Al>  Z= 13  Aeff= 26.9815  with natural isotope composition
+G4NistMaterialBuilder::FindOrBuildMaterial TiO2
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TiO2> is not found.
+New material TiO2 is prepared  nMaterials= 314 nComponents= 788 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #313
+New material nComponents= 2
+G4NistElementBuilder: Build Element <Ti>  Z= 22  Aeff= 47.8667  with natural isotope composition
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+### Birks coefficients used in run time
+   Polystyrene     0.126 mm/MeV     0.01323 g/cm^2/MeV  massFactor=  101.167 effCharge= 0.027027
+/hits/verbose 2
+/process/optical/verbose 1
+/run/physicsModified
+/gps/particle e-
+/gps/energy 10 MeV
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/radius 0.5 mm
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+/gps/ang/type iso
+/gps/ang/mintheta 0.0 deg
+/gps/ang/maxtheta 90.0 deg
+/run/printProgress 1
+/run/beamOn 10
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.01 mm)
+Step function for muons/hadrons                    (0.1, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    1
+Use built-in Birks satuaration                     1
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 1
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            1 MeV
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.08
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      3
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              1
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Fluorescence ANSTO data files enabled              0
+Auger electron cascade enabled                     0
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  0
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  0  0
+### ===  Ignore cuts flag:   0
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 20 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LowEPComptonModel : Emin=    0 eV  Emax=   20 MeV Fluo
+        KleinNishina : Emin=   20 MeV Emax=  100 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+      BetheHeitler5D : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+eIoni:  for e-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni : Emin=    0 eV  Emax=  100 keV  deltaVI
+        MollerBhabha : Emin=  100 keV Emax=  100 TeV  deltaVI
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
+
+ePairProd:  for e-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+eIoni:  for e+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni : Emin=    0 eV  Emax=  100 keV
+        MollerBhabha : Emin=  100 keV Emax=  100 TeV  deltaVI
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  AngularGen2BS
+
+ePairProd:  for e+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+hIoni:  for proton  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+nuclearStopping:  for proton SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+ionIoni:  for GenericIon  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+         ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
+
+nuclearStopping:  for GenericIon SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+ionIoni:  for alpha  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
+          BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
+
+nuclearStopping:  for alpha SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+hIoni:  for anti_proton  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for anti_proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for anti_proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+hIoni:  for kaon+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for kaon+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+hIoni:  for kaon-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
+
+hBrems:  for kaon-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+muIoni:  for mu+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
+          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+muIoni:  for mu-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
+          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
+        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+
+muBrems:  for mu-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+hIoni:  for pi+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
+
+hBrems:  for pi+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+hIoni:  for pi-  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
+
+hBrems:  for pi-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy (MeV)            0.1
+Pre-compound excitation high energy (MeV)           30
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 2e+05
+Limit excitation energy for Fermi BreakUp (MeV)     20
+Level density (1/MeV)                               0.075
+Use simple level density model                      1
+Use discrete excitation energy of the residual      0
+Time limit for long lived isomeres (ns)             1
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Coating
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.94006 keV    e-  353.752 keV    e+  343.944 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : Polystyrene
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.11747 keV    e-  283.267 keV    e+  276.345 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : FPethylene
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.29509 keV    e-  361.129 keV    e+  351.337 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 4     used in the geometry : Yes
+ Material : Pethylene
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.1663 keV    e-  325.767 keV    e+  317.398 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 5     used in the geometry : Yes
+ Material : PMMA
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.41092 keV    e-  306.404 keV    e+  298.561 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 6     used in the geometry : Yes
+ Material : G4_Al
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.84707 keV    e-  461.19 keV    e+  445.1 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+### Run 0 starts.
+... set ntuple merging row mode : row-wise - done
+... create file : wls.root - done
+... open analysis file : wls.root - done
+... open analysis file : wls.root - done
+--> Event 0 starts.
+
+-------->Hits Collection: in this event there are 37 hits in the photon detector: 
+Arrival time: 11.2445 ns Arrival position: (-117.487 um , 505.877 um ) Exit position: (-114.301 um , 490.239 um ) Energy: 2.56808 eV 
+Arrival time: 25.0233 ns Arrival position: (-133.744 um , 467.677 um ) Exit position: (-43.5411 um , 340.842 um ) Energy: 2.68759 eV 
+Arrival time: 23.5267 ns Arrival position: (-109.049 um , 158.468 um ) Exit position: (-57.9671 um , 261.992 um ) Energy: 2.67562 eV 
+Arrival time: 31.0541 ns Arrival position: (-198.872 um , -15.5225 um ) Exit position: (-269.732 um , 44.8068 um ) Energy: 2.71499 eV 
+Arrival time: 8.63861 ns Arrival position: (19.1587 um , -39.0009 um ) Exit position: ( 157.19 um , 14.1645 um ) Energy: 2.57686 eV 
+Arrival time: 7.29859 ns Arrival position: (284.499 um , 48.1158 um ) Exit position: ( 360.36 um , 101.618 um ) Energy: 2.81574 eV 
+Arrival time: 6.61303 ns Arrival position: (7.48218 um , -111.46 um ) Exit position: (-22.3386 um , -210.545 um ) Energy: 2.65906 eV 
+Arrival time: 13.3884 ns Arrival position: (349.772 um , -407.969 um ) Exit position: (204.149 um , -385.013 um ) Energy: 2.40408 eV 
+Arrival time: 8.06577 ns Arrival position: (-398.232 um , -44.9609 um ) Exit position: (-338.064 um , -117.426 um ) Energy: 2.82095 eV 
+Arrival time: 56.3968 ns Arrival position: (100.991 um , -287.911 um ) Exit position: (195.387 um , -405.521 um ) Energy: 2.55642 eV 
+Arrival time: 6.46325 ns Arrival position: (473.451 um , 33.5794 um ) Exit position: (383.079 um , 46.3446 um ) Energy: 2.55504 eV 
+Arrival time: 9.79287 ns Arrival position: (-280.971 um , -55.4339 um ) Exit position: (-344.194 um , -184.966 um ) Energy: 2.80766 eV 
+Arrival time: 8.74547 ns Arrival position: (-35.8833 um , -303.491 um ) Exit position: (-63.603 um , -374.455 um ) Energy:  2.5646 eV 
+Arrival time: 13.6627 ns Arrival position: (-168.053 um , 20.8505 um ) Exit position: (-126.964 um , -35.1372 um ) Energy: 2.35613 eV 
+Arrival time: 19.2039 ns Arrival position: (-114.371 um , -116.73 um ) Exit position: (-129.763 um , -141.768 um ) Energy: 2.58719 eV 
+Arrival time:  16.172 ns Arrival position: (-56.7904 um , 351.093 um ) Exit position: (-72.1451 um ,  301.04 um ) Energy: 2.78108 eV 
+Arrival time: 6.84535 ns Arrival position: (-236.179 um , -58.1903 um ) Exit position: (-321.071 um , -41.9977 um ) Energy:  2.5905 eV 
+Arrival time: 17.8443 ns Arrival position: ( 201.43 um , 442.444 um ) Exit position: (192.201 um , 255.219 um ) Energy:  2.6038 eV 
+Arrival time: 9.88035 ns Arrival position: (377.274 um , -191.407 um ) Exit position: ( 230.74 um , -172.364 um ) Energy: 2.58697 eV 
+Arrival time:  79.616 ns Arrival position: (-317.256 um ,  -290.1 um ) Exit position: (-352.928 um , -212.839 um ) Energy: 2.04834 eV 
+Arrival time: 25.9338 ns Arrival position: (-86.8957 um , 273.648 um ) Exit position: (-103.714 um , 344.048 um ) Energy: 2.69755 eV 
+Arrival time: 11.0794 ns Arrival position: (-242.159 um , -195.751 um ) Exit position: (-204.479 um , -177.929 um ) Energy: 2.92527 eV 
+Arrival time: 12.9743 ns Arrival position: (18.4436 um , 263.232 um ) Exit position: (4.44114 um , 317.987 um ) Energy: 2.71004 eV 
+Arrival time: 12.7752 ns Arrival position: (174.334 um , 443.152 um ) Exit position: (136.313 um , 469.966 um ) Energy: 2.21481 eV 
+Arrival time: 14.7638 ns Arrival position: (330.153 um , 155.971 um ) Exit position: (177.579 um , 149.636 um ) Energy: 2.73096 eV 
+Arrival time: 15.6645 ns Arrival position: (-106.047 um , 321.056 um ) Exit position: (-20.7305 um , 348.919 um ) Energy: 2.81009 eV 
+Arrival time: 21.9842 ns Arrival position: (268.884 um , -397.932 um ) Exit position: (141.495 um , -381.931 um ) Energy: 2.75972 eV 
+Arrival time: 8.43696 ns Arrival position: (127.179 um , -150.198 um ) Exit position: (140.269 um , -153.419 um ) Energy: 2.68891 eV 
+Arrival time: 8.26757 ns Arrival position: (-320.431 um , -51.2532 um ) Exit position: (-352.812 um , -17.9441 um ) Energy: 2.54924 eV 
+Arrival time: 18.9521 ns Arrival position: (-91.998 um , -177.118 um ) Exit position: (-237.09 um , -218.551 um ) Energy: 2.27101 eV 
+Arrival time: 10.6415 ns Arrival position: (233.946 um , -21.2807 um ) Exit position: (171.613 um , -97.8046 um ) Energy: 2.75765 eV 
+Arrival time: 8.02218 ns Arrival position: ( 3.4562 um , -398.42 um ) Exit position: (127.363 um , -419.825 um ) Energy:  2.7212 eV 
+Arrival time: 8.72176 ns Arrival position: (-185.092 um , -149.496 um ) Exit position: (-199.802 um , -105.467 um ) Energy: 2.82969 eV 
+Arrival time: 19.6642 ns Arrival position: (-184.758 um , -205.666 um ) Exit position: (-127.113 um , -200.417 um ) Energy: 2.89465 eV 
+Arrival time: 28.6018 ns Arrival position: (-137.685 um , -52.1927 um ) Exit position: (-192.454 um , -78.5266 um ) Energy: 2.32511 eV 
+Arrival time: 13.8698 ns Arrival position: (95.4091 um , -4.04361 um ) Exit position: (87.0542 um , -17.5972 um ) Energy: 2.80513 eV 
+Arrival time: 7.04938 ns Arrival position: (-84.9767 um , -278.502 um ) Exit position: (15.1659 um , -206.754 um ) Energy: 2.30093 eV 
+--> Event 1 starts.
+
+-------->Hits Collection: in this event there are 12 hits in the photon detector: 
+Arrival time: 42.4048 ns Arrival position: (56.5824 um , -296.548 um ) Exit position: (147.776 um , -408.884 um ) Energy: 2.61096 eV 
+Arrival time: 11.5398 ns Arrival position: (229.171 um ,  17.088 um ) Exit position: (  212.5 um , -41.0977 um ) Energy: 2.66378 eV 
+Arrival time: 7.07492 ns Arrival position: (45.7657 um , -376.868 um ) Exit position: (  57.83 um , -406.442 um ) Energy: 2.44747 eV 
+Arrival time: 8.78327 ns Arrival position: (328.479 um , -294.224 um ) Exit position: (363.029 um , -208.784 um ) Energy: 2.70743 eV 
+Arrival time: 11.2607 ns Arrival position: (-294.894 um , -266.746 um ) Exit position: (-198.741 um , -188.348 um ) Energy: 2.66441 eV 
+Arrival time: 12.9896 ns Arrival position: (457.407 um , 173.083 um ) Exit position: (337.996 um , 209.299 um ) Energy: 2.72083 eV 
+Arrival time: 6.51189 ns Arrival position: (-501.418 um , 232.693 um ) Exit position: (-376.157 um , 155.904 um ) Energy: 2.85268 eV 
+Arrival time: 11.7844 ns Arrival position: (-82.9997 um , 303.405 um ) Exit position: (-141.519 um , 252.978 um ) Energy:  2.7541 eV 
+Arrival time:  11.302 ns Arrival position: (428.003 um , 34.8677 um ) Exit position: (386.667 um , -84.9859 um ) Energy: 2.61248 eV 
+Arrival time: 13.3468 ns Arrival position: (-134.893 um , 429.486 um ) Exit position: (-173.57 um , 352.859 um ) Energy:  2.4166 eV 
+Arrival time: 21.0659 ns Arrival position: (-71.1032 um ,  323.08 um ) Exit position: (-124.641 um , 391.543 um ) Energy:  2.5773 eV 
+Arrival time:  10.361 ns Arrival position: (-3.20425 um , 299.941 um ) Exit position: (-33.0028 um , 364.086 um ) Energy: 2.82981 eV 
+--> Event 2 starts.
+
+-------->Hits Collection: in this event there are 1 hits in the photon detector: 
+Arrival time: 19.5499 ns Arrival position: (134.287 um , 484.189 um ) Exit position: (133.842 um , 429.888 um ) Energy: 2.48711 eV 
+--> Event 3 starts.
+
+-------->Hits Collection: in this event there are 6 hits in the photon detector: 
+Arrival time: 9.70237 ns Arrival position: (-279.966 um , 84.0345 um ) Exit position: (-277.113 um ,  75.604 um ) Energy: 2.80951 eV 
+Arrival time:  7.4113 ns Arrival position: (-72.3871 um , -9.81056 um ) Exit position: (-67.5411 um , -71.3372 um ) Energy:  2.7907 eV 
+Arrival time: 10.4448 ns Arrival position: (-121.366 um , 330.677 um ) Exit position: (-199.694 um , 367.958 um ) Energy: 2.41226 eV 
+Arrival time: 10.3085 ns Arrival position: (318.073 um , 358.969 um ) Exit position: (345.476 um ,   244.2 um ) Energy:  2.6847 eV 
+Arrival time: 11.2121 ns Arrival position: (-218.212 um , 131.216 um ) Exit position: (-253.728 um , 102.118 um ) Energy: 2.25409 eV 
+Arrival time: 12.3365 ns Arrival position: (-283.186 um , 82.9119 um ) Exit position: (-285.788 um , -8.92062 um ) Energy: 2.62439 eV 
+--> Event 4 starts.
+
+-------->Hits Collection: in this event there are 8 hits in the photon detector: 
+Arrival time: 14.3779 ns Arrival position: (84.1559 um , -475.383 um ) Exit position: (84.1776 um , -407.84 um ) Energy: 2.66913 eV 
+Arrival time: 23.4245 ns Arrival position: (267.438 um , -215.041 um ) Exit position: (229.327 um , -234.92 um ) Energy: 2.79043 eV 
+Arrival time: 34.1063 ns Arrival position: (187.142 um , -429.332 um ) Exit position: (371.985 um , -95.4522 um ) Energy: 2.48221 eV 
+Arrival time: 22.9609 ns Arrival position: (17.5836 um , 264.107 um ) Exit position: (19.1967 um , 211.421 um ) Energy: 2.81308 eV 
+Arrival time: 10.6997 ns Arrival position: (-71.204 um , -438.654 um ) Exit position: (-48.6781 um , -372.999 um ) Energy: 2.36363 eV 
+Arrival time: 39.1743 ns Arrival position: (-3.72742 um , -297.599 um ) Exit position: (-102.592 um , -373.254 um ) Energy: 2.75415 eV 
+Arrival time: 16.9082 ns Arrival position: (50.1936 um , 539.532 um ) Exit position: (-42.3562 um , 421.215 um ) Energy: 2.75638 eV 
+Arrival time: 13.4445 ns Arrival position: (129.097 um , -385.595 um ) Exit position: (97.2668 um , -336.865 um ) Energy: 2.63829 eV 
+--> Event 5 starts.
+
+-------->Hits Collection: in this event there are 13 hits in the photon detector: 
+Arrival time: 16.3964 ns Arrival position: (324.656 um , -91.4635 um ) Exit position: (384.776 um , -59.3172 um ) Energy: 2.70386 eV 
+Arrival time: 20.4774 ns Arrival position: (-7.18226 um , -308.421 um ) Exit position: (-4.75541 um , -192.916 um ) Energy: 2.78996 eV 
+Arrival time: 11.3045 ns Arrival position: (432.115 um , 17.1736 um ) Exit position: (283.032 um , 52.6264 um ) Energy: 2.66903 eV 
+Arrival time: 57.3564 ns Arrival position: (190.485 um ,  -467.7 um ) Exit position: (134.592 um , -468.532 um ) Energy: 2.77256 eV 
+Arrival time: 63.0357 ns Arrival position: ( 276.63 um , -348.455 um ) Exit position: ( 223.07 um , -322.429 um ) Energy: 2.84001 eV 
+Arrival time: 20.2643 ns Arrival position: (-158.086 um , -106.951 um ) Exit position: ( -152.5 um , -135.032 um ) Energy: 2.32564 eV 
+Arrival time: 13.3506 ns Arrival position: (-15.9569 um , 88.0148 um ) Exit position: (7.62479 um , 8.83038 um ) Energy: 2.65018 eV 
+Arrival time: 49.8119 ns Arrival position: (-193.427 um , -291.729 um ) Exit position: (-316.422 um , -286.703 um ) Energy: 2.57846 eV 
+Arrival time: 46.3881 ns Arrival position: (-182.942 um , 227.958 um ) Exit position: (-288.726 um , 304.785 um ) Energy: 2.85036 eV 
+Arrival time: 20.0159 ns Arrival position: (59.4319 um , -363.682 um ) Exit position: (-46.7998 um , -330.874 um ) Energy: 2.69771 eV 
+Arrival time: 11.4543 ns Arrival position: (151.454 um ,  97.743 um ) Exit position: (261.932 um , 65.1326 um ) Energy: 2.30984 eV 
+Arrival time: 20.3021 ns Arrival position: (-261.126 um , -275.749 um ) Exit position: (-330.351 um , -17.9689 um ) Energy: 2.20974 eV 
+Arrival time: 19.4802 ns Arrival position: (-296.709 um , 40.1412 um ) Exit position: (-284.335 um , -6.4025 um ) Energy:  2.3415 eV 
+--> Event 6 starts.
+
+-------->Hits Collection: in this event there are 13 hits in the photon detector: 
+Arrival time: 34.5041 ns Arrival position: (-71.0456 um , -170.631 um ) Exit position: (-85.7928 um , -166.522 um ) Energy: 2.41794 eV 
+Arrival time: 25.9371 ns Arrival position: (-78.6537 um , -33.028 um ) Exit position: (-217.765 um , -42.9747 um ) Energy: 2.88534 eV 
+Arrival time: 7.47688 ns Arrival position: ( 68.928 um , 344.062 um ) Exit position: (121.413 um , 454.295 um ) Energy: 2.48723 eV 
+Arrival time: 24.8903 ns Arrival position: (122.318 um , -339.851 um ) Exit position: (123.205 um , -274.845 um ) Energy: 2.40497 eV 
+Arrival time: 39.9663 ns Arrival position: (-37.7559 um , 249.532 um ) Exit position: (-60.8343 um , 245.282 um ) Energy: 2.46705 eV 
+Arrival time: 30.1752 ns Arrival position: (-47.9926 um , -506.197 um ) Exit position: (-107.681 um , -496.373 um ) Energy: 2.52031 eV 
+Arrival time: 21.1313 ns Arrival position: (-129.649 um ,  -313.7 um ) Exit position: (-6.18836 um , -237.04 um ) Energy: 2.99415 eV 
+Arrival time: 6.50914 ns Arrival position: (-478.013 um , -48.2595 um ) Exit position: (-358.524 um , -145.991 um ) Energy: 2.38242 eV 
+Arrival time: 31.4737 ns Arrival position: (43.0346 um , 407.255 um ) Exit position: (-16.0831 um , 386.911 um ) Energy: 2.57921 eV 
+Arrival time: 6.90086 ns Arrival position: (116.204 um , 281.908 um ) Exit position: (41.9878 um , 297.119 um ) Energy:  2.8545 eV 
+Arrival time: 14.7096 ns Arrival position: (-80.5579 um , 276.092 um ) Exit position: (-90.3551 um , 389.066 um ) Energy: 2.87833 eV 
+Arrival time: 7.14189 ns Arrival position: (287.003 um , 330.607 um ) Exit position: (189.956 um , 367.417 um ) Energy: 2.70161 eV 
+Arrival time: 6.06392 ns Arrival position: (-39.4718 um , 196.984 um ) Exit position: (7.88024 um , 204.379 um ) Energy:  2.7588 eV 
+--> Event 7 starts.
+
+-------->Hits Collection: in this event there are 27 hits in the photon detector: 
+Arrival time: 5.89197 ns Arrival position: (-25.9136 um , 57.8255 um ) Exit position: (-43.1834 um , 36.9145 um ) Energy:  2.2862 eV 
+Arrival time: 10.1941 ns Arrival position: (-448.424 um , 61.8959 um ) Exit position: (-389.475 um , -107.072 um ) Energy: 2.75528 eV 
+Arrival time: 15.5815 ns Arrival position: (-174.206 um , 114.702 um ) Exit position: (-295.864 um , 130.961 um ) Energy:  2.4197 eV 
+Arrival time: 7.33731 ns Arrival position: (-69.6803 um , 130.604 um ) Exit position: (-206.871 um , 141.522 um ) Energy: 2.73061 eV 
+Arrival time: 20.6333 ns Arrival position: ( 26.329 um , -456.491 um ) Exit position: (-76.381 um , -418.794 um ) Energy: 2.77421 eV 
+Arrival time: 6.73298 ns Arrival position: (-14.2277 um , 383.703 um ) Exit position: (-122.699 um , 412.134 um ) Energy: 2.53498 eV 
+Arrival time: 11.3591 ns Arrival position: (184.184 um , 167.617 um ) Exit position: (169.812 um , 236.525 um ) Energy: 2.22462 eV 
+Arrival time: 25.2815 ns Arrival position: (-351.803 um , 255.855 um ) Exit position: (-318.886 um , 294.898 um ) Energy: 2.92683 eV 
+Arrival time: 10.8299 ns Arrival position: (-25.3652 um , -295.27 um ) Exit position: (-9.57949 um , -333.079 um ) Energy: 2.89283 eV 
+Arrival time: 20.1656 ns Arrival position: (308.847 um , 337.263 um ) Exit position: (203.448 um , 225.148 um ) Energy: 2.27376 eV 
+Arrival time: 25.5524 ns Arrival position: (-166.346 um , -17.1645 um ) Exit position: (-150.604 um , -146.52 um ) Energy: 2.72422 eV 
+Arrival time:  28.077 ns Arrival position: (-13.2083 um , 153.666 um ) Exit position: (-108.353 um ,  117.58 um ) Energy: 2.47789 eV 
+Arrival time: 12.5604 ns Arrival position: (-384.269 um , 95.5067 um ) Exit position: (-295.143 um , -298.549 um ) Energy: 2.44492 eV 
+Arrival time: 15.4139 ns Arrival position: (365.478 um , -268.122 um ) Exit position: (378.467 um , -98.137 um ) Energy: 2.81756 eV 
+Arrival time: 6.26063 ns Arrival position: (-180.205 um , -16.2509 um ) Exit position: (-244.379 um , 5.96106 um ) Energy: 2.48191 eV 
+Arrival time: 19.6107 ns Arrival position: (427.257 um , -226.929 um ) Exit position: (306.483 um , -190.538 um ) Energy: 2.24984 eV 
+Arrival time: 7.63738 ns Arrival position: (-58.3422 um , -5.83433 um ) Exit position: (35.5892 um , -40.505 um ) Energy: 2.49516 eV 
+Arrival time: 27.3782 ns Arrival position: (115.465 um ,  271.62 um ) Exit position: (121.307 um , 334.074 um ) Energy: 2.78419 eV 
+Arrival time:  9.6951 ns Arrival position: (285.133 um , -56.1371 um ) Exit position: (    314 um , 3.13577 um ) Energy: 2.56259 eV 
+Arrival time: 13.9095 ns Arrival position: (89.1658 um , -154.224 um ) Exit position: (183.566 um , -139.482 um ) Energy: 2.82719 eV 
+Arrival time: 32.0402 ns Arrival position: (152.402 um , 149.772 um ) Exit position: (100.115 um , 94.4457 um ) Energy: 2.83263 eV 
+Arrival time: 15.0737 ns Arrival position: (-95.055 um , 396.332 um ) Exit position: (-140.389 um , 434.131 um ) Energy: 2.60285 eV 
+Arrival time:  9.9522 ns Arrival position: (-125.143 um , 184.652 um ) Exit position: (-132.622 um , 189.161 um ) Energy: 2.43404 eV 
+Arrival time: 7.78918 ns Arrival position: (-25.214 um , 525.684 um ) Exit position: (-22.5521 um , 411.001 um ) Energy: 2.66544 eV 
+Arrival time: 19.6315 ns Arrival position: (-80.2471 um , 292.511 um ) Exit position: (-183.07 um , 247.327 um ) Energy: 2.74414 eV 
+Arrival time: 37.5481 ns Arrival position: (-16.5858 um , -133.775 um ) Exit position: (-51.8472 um , -145.485 um ) Energy:  2.6715 eV 
+Arrival time: 13.1989 ns Arrival position: (-93.092 um , -326.766 um ) Exit position: (-142.678 um , -404.452 um ) Energy: 2.60445 eV 
+--> Event 8 starts.
+
+-------->Hits Collection: in this event there are 24 hits in the photon detector: 
+Arrival time: 5.90108 ns Arrival position: (-196.401 um , 312.677 um ) Exit position: (-162.963 um , 322.158 um ) Energy: 2.72572 eV 
+Arrival time: 5.47309 ns Arrival position: (402.288 um , 184.706 um ) Exit position: (347.941 um , 202.824 um ) Energy: 2.23232 eV 
+Arrival time:  18.899 ns Arrival position: (14.8328 um , -327.518 um ) Exit position: (22.3706 um , -292.994 um ) Energy: 2.11554 eV 
+Arrival time: 36.5406 ns Arrival position: (-179.89 um , 158.615 um ) Exit position: (-180.981 um , 135.966 um ) Energy:  2.5096 eV 
+Arrival time: 29.1975 ns Arrival position: (270.657 um , 307.636 um ) Exit position: (185.267 um , 296.113 um ) Energy: 2.37209 eV 
+Arrival time: 12.0325 ns Arrival position: (56.2207 um , 397.159 um ) Exit position: (195.358 um , 371.018 um ) Energy: 2.56197 eV 
+Arrival time: 7.12188 ns Arrival position: (482.604 um , 66.8067 um ) Exit position: ( 392.54 um , -64.9803 um ) Energy: 2.41116 eV 
+Arrival time: 10.7774 ns Arrival position: (100.639 um , -543.867 um ) Exit position: (112.132 um , -382.599 um ) Energy: 2.46163 eV 
+Arrival time: 9.61806 ns Arrival position: (-71.0505 um , -161.086 um ) Exit position: (-174.868 um , -167.347 um ) Energy: 2.70282 eV 
+Arrival time: 9.54138 ns Arrival position: (360.882 um , -105.889 um ) Exit position: (206.744 um , -77.8865 um ) Energy: 2.52211 eV 
+Arrival time: 35.9872 ns Arrival position: (277.538 um , -269.564 um ) Exit position: (141.745 um , -269.298 um ) Energy: 2.87859 eV 
+Arrival time: 33.4677 ns Arrival position: (-191.464 um , -319.121 um ) Exit position: (-172.273 um ,  -439.4 um ) Energy: 2.76491 eV 
+Arrival time: 9.45446 ns Arrival position: (133.791 um , 247.739 um ) Exit position: (154.047 um , 241.031 um ) Energy: 2.83666 eV 
+Arrival time: 7.40529 ns Arrival position: (90.7149 um , -185.296 um ) Exit position: (74.7269 um , -189.236 um ) Energy: 2.52561 eV 
+Arrival time: 8.90038 ns Arrival position: (-197.236 um , 313.379 um ) Exit position: (-137.777 um , 304.298 um ) Energy: 2.52502 eV 
+Arrival time: 18.2066 ns Arrival position: (96.4693 um , 303.312 um ) Exit position: (170.865 um , 342.455 um ) Energy: 2.70145 eV 
+Arrival time: 12.8762 ns Arrival position: (266.219 um , 186.185 um ) Exit position: (144.109 um , 240.083 um ) Energy: 2.24266 eV 
+Arrival time: 16.9352 ns Arrival position: (252.486 um , -313.954 um ) Exit position: (195.552 um , -332.435 um ) Energy: 2.54839 eV 
+Arrival time: 7.55851 ns Arrival position: (-154.879 um , -415.423 um ) Exit position: (-188.604 um , -449.614 um ) Energy: 2.49187 eV 
+Arrival time: 8.24441 ns Arrival position: (367.305 um , -92.6994 um ) Exit position: (333.698 um , -136.834 um ) Energy:  2.6992 eV 
+Arrival time: 29.8361 ns Arrival position: (193.477 um , -117.68 um ) Exit position: (257.257 um , -172.677 um ) Energy: 2.80502 eV 
+Arrival time: 9.21439 ns Arrival position: (-94.5484 um , -195.908 um ) Exit position: (  -78.8 um , -162.866 um ) Energy: 2.40025 eV 
+Arrival time: 7.65026 ns Arrival position: (-217.514 um ,  445.33 um ) Exit position: (-6.16788 um , 432.756 um ) Energy: 2.59923 eV 
+Arrival time: 54.0134 ns Arrival position: (-118.036 um , 354.508 um ) Exit position: (-145.91 um , 295.647 um ) Energy: 2.68168 eV 
+--> Event 9 starts.
+
+-------->Hits Collection: in this event there are 19 hits in the photon detector: 
+Arrival time: 25.3417 ns Arrival position: (-172.419 um , -480.596 um ) Exit position: (-173.221 um , -397.841 um ) Energy: 2.86024 eV 
+Arrival time: 25.8748 ns Arrival position: (-297.354 um , 188.571 um ) Exit position: (-320.139 um , 204.402 um ) Energy: 2.88696 eV 
+Arrival time: 16.3462 ns Arrival position: (-49.4242 um , -289.063 um ) Exit position: (-111.986 um , -237.312 um ) Energy:  2.5387 eV 
+Arrival time:  19.934 ns Arrival position: (-160.93 um , 336.399 um ) Exit position: (-145.158 um , 424.602 um ) Energy: 2.70782 eV 
+Arrival time: 7.17255 ns Arrival position: (386.888 um , -175.594 um ) Exit position: (341.286 um , -234.564 um ) Energy: 2.85784 eV 
+Arrival time:  10.134 ns Arrival position: (-206.36 um , 207.954 um ) Exit position: (-174.052 um , 183.162 um ) Energy: 2.53528 eV 
+Arrival time: 15.6329 ns Arrival position: (17.5319 um , 175.035 um ) Exit position: (  28.23 um , 143.511 um ) Energy: 2.65182 eV 
+Arrival time: 9.06885 ns Arrival position: (-280.123 um ,   76.35 um ) Exit position: (-246.07 um , 158.443 um ) Energy: 2.89492 eV 
+Arrival time: 8.59584 ns Arrival position: (-103.908 um , -420.935 um ) Exit position: (-301.737 um , -268.572 um ) Energy: 2.84354 eV 
+Arrival time: 19.3873 ns Arrival position: (-492.305 um , -156.699 um ) Exit position: (-364.396 um , -169.523 um ) Energy: 2.81656 eV 
+Arrival time: 13.7845 ns Arrival position: (201.094 um , 128.645 um ) Exit position: (165.426 um , 13.7342 um ) Energy: 2.54668 eV 
+Arrival time: 18.1974 ns Arrival position: (166.494 um ,  114.32 um ) Exit position: (80.3843 um , 97.1626 um ) Energy: 2.90345 eV 
+Arrival time: 6.37531 ns Arrival position: (62.8041 um , -321.367 um ) Exit position: (-23.5113 um , -269.002 um ) Energy: 2.67043 eV 
+Arrival time: 8.20469 ns Arrival position: (-46.919 um , 209.308 um ) Exit position: (-64.8054 um , 278.715 um ) Energy: 2.74169 eV 
+Arrival time: 24.3423 ns Arrival position: (-408.132 um , 34.5439 um ) Exit position: (-316.63 um , 38.4751 um ) Energy: 2.43561 eV 
+Arrival time: 10.8613 ns Arrival position: (-124.36 um , -123.799 um ) Exit position: (-47.8515 um , -106.412 um ) Energy: 2.84139 eV 
+Arrival time: 8.35014 ns Arrival position: (-123.454 um , 257.799 um ) Exit position: (-263.965 um ,  214.11 um ) Energy: 2.66474 eV 
+Arrival time: 15.7394 ns Arrival position: (437.697 um , -197.26 um ) Exit position: (331.148 um , -200.378 um ) Energy: 2.69098 eV 
+Arrival time: 8.56224 ns Arrival position: (35.3904 um , 78.6387 um ) Exit position: (-35.122 um , 16.7806 um ) Energy: 2.40033 eV 
+ Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=9.510000s Real=10.014262s Sys=0.010000s
+
+ ----> print histograms statistics for the entire run 
+
+ Mean number of photons detected/event: 16 rms = 10.2859
+... write file : wls.root - done
+... close file : wls.root - done
+
+ ======================== run summary =====================
+Average number per event:
+ TIR:          1.68e+05 +- 9.6e+04
+ Exiting:      3.61e+05 +- 2.25e+05
+ Escaped Mid:  309 +- 200
+ Escaped End:  16.3 +- 10.5
+ Bounced:      1.38e+04 +- 8.93e+03
+ WLS Bounce:   0 +- 0
+ Clad1 Bounce: 9.3e+03 +- 6.08e+03
+ Clad2 Bounce: 0 +- 0
+ Reflected:    2.01e+04 +- 1.24e+04
+ Escaped:      0.3 +- 0.458
+ Mirror:       16.8 +- 8.99
+ Detector hit: 16 +- 10.3
+
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 16 of which, static: 0
+Dynamic pools deleted: 16 / Total memory freed: 1.3 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

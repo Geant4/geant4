@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -604,8 +604,8 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.117043s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.117391
+  User=0.000000s Real=0.003567s Sys=0.000000s
+	  User TOT = 0	  Real TOT = 0.00375673
  Summary of Run 0 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -677,8 +677,8 @@ Run 1 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.047231s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.164781
+  User=0.010000s Real=0.019960s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.023828
  Summary of Run 1 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -750,8 +750,8 @@ Run 2 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.056148s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.22109
+  User=0.000000s Real=0.001788s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0257227
  Summary of Run 2 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -823,8 +823,8 @@ Run 3 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.053449s Sys=0.000000s
-	  User TOT = 0.01	  Real TOT = 0.274699
+  User=0.000000s Real=0.008028s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0338518
  Summary of Run 3 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -896,8 +896,8 @@ Run 4 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.053017s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.327872
+  User=0.000000s Real=0.016610s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0505791
  Summary of Run 4 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -969,8 +969,8 @@ Run 5 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.033210s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.361238
+  User=0.000000s Real=0.012253s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.0629445
  Summary of Run 5 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1042,8 +1042,8 @@ Run 6 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.034873s Sys=0.000000s
-	  User TOT = 0.02	  Real TOT = 0.396257
+  User=0.000000s Real=0.043671s Sys=0.010000s
+	  User TOT = 0.01	  Real TOT = 0.106731
  Summary of Run 6 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1115,8 +1115,8 @@ Run 7 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.016673s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.413078
+  User=0.000000s Real=0.022993s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.129857
  Summary of Run 7 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1188,8 +1188,8 @@ Run 8 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.031154s Sys=0.000000s
-	  User TOT = 0.03	  Real TOT = 0.444382
+  User=0.000000s Real=0.002864s Sys=0.000000s
+	  User TOT = 0.01	  Real TOT = 0.132826
  Summary of Run 8 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1261,8 +1261,8 @@ Run 9 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.076934s Sys=0.010000s
-	  User TOT = 0.03	  Real TOT = 0.521501
+  User=0.010000s Real=0.001702s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.134642
  Summary of Run 9 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1334,8 +1334,8 @@ Run 10 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.060089s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.581752
+  User=0.000000s Real=0.008261s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.143001
  Summary of Run 10 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1407,8 +1407,8 @@ Run 11 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.096141s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.678063
+  User=0.000000s Real=0.001215s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.144324
  Summary of Run 11 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1480,8 +1480,8 @@ Run 12 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.142027s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.820239
+  User=0.000000s Real=0.009506s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.153934
  Summary of Run 12 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1553,8 +1553,8 @@ Run 13 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.112682s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.933067
+  User=0.000000s Real=0.040732s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.194787
  Summary of Run 13 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1626,8 +1626,8 @@ Run 14 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.054710s Sys=0.000000s
-	  User TOT = 0.04	  Real TOT = 0.987926
+  User=0.000000s Real=0.011303s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.206203
  Summary of Run 14 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1699,8 +1699,8 @@ Run 15 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.059676s Sys=0.010000s
-	  User TOT = 0.05	  Real TOT = 1.04776
+  User=0.000000s Real=0.001304s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.207618
  Summary of Run 15 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1772,8 +1772,8 @@ Run 16 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.050455s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 1.09839
+  User=0.000000s Real=0.021786s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.229524
  Summary of Run 16 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1845,8 +1845,8 @@ Run 17 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.216743s Sys=0.000000s
-	  User TOT = 0.05	  Real TOT = 1.31528
+  User=0.000000s Real=0.014531s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.244181
  Summary of Run 17 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1918,8 +1918,8 @@ Run 18 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.194182s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.50961
+  User=0.000000s Real=0.001458s Sys=0.010000s
+	  User TOT = 0.02	  Real TOT = 0.24574
  Summary of Run 18 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -1991,8 +1991,8 @@ Run 19 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.091896s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.60165
+  User=0.000000s Real=0.018252s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.264102
  Summary of Run 19 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2064,8 +2064,8 @@ Run 20 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.078174s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.67999
+  User=0.000000s Real=0.030494s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.294717
  Summary of Run 20 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2137,8 +2137,8 @@ Run 21 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.075706s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.75586
+  User=0.000000s Real=0.043691s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.338524
  Summary of Run 21 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2210,8 +2210,8 @@ Run 22 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.046079s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.8021
+  User=0.000000s Real=0.022776s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.361438
  Summary of Run 22 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2283,8 +2283,8 @@ Run 23 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.022888s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.82513
+  User=0.000000s Real=0.021571s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.383121
  Summary of Run 23 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2356,8 +2356,8 @@ Run 24 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.041285s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.86658
+  User=0.000000s Real=0.040437s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.423687
  Summary of Run 24 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2429,8 +2429,8 @@ Run 25 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.007908s Sys=0.010000s
-	  User TOT = 0.06	  Real TOT = 1.87463
+  User=0.000000s Real=0.014906s Sys=0.010000s
+	  User TOT = 0.02	  Real TOT = 0.438711
  Summary of Run 25 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2502,8 +2502,8 @@ Run 26 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.053190s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 1.92796
+  User=0.000000s Real=0.029854s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.46868
  Summary of Run 26 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2575,8 +2575,8 @@ Run 27 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.076619s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 2.00473
+  User=0.000000s Real=0.001786s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.470583
  Summary of Run 27 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2648,8 +2648,8 @@ Run 28 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.126000s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 2.13089
+  User=0.000000s Real=0.008735s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.479427
  Summary of Run 28 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2721,8 +2721,8 @@ Run 29 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.048999s Sys=0.000000s
-	  User TOT = 0.06	  Real TOT = 2.18004
+  User=0.000000s Real=0.072460s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.552026
  Summary of Run 29 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2794,8 +2794,8 @@ Run 30 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.197730s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 2.37793
+  User=0.000000s Real=0.025255s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.577409
  Summary of Run 30 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2867,8 +2867,8 @@ Run 31 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.133847s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 2.51193
+  User=0.000000s Real=0.017242s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.594779
  Summary of Run 31 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -2940,8 +2940,8 @@ Run 32 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.015625s Sys=0.000000s
-	  User TOT = 0.07	  Real TOT = 2.52771
+  User=0.000000s Real=0.042916s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.637813
  Summary of Run 32 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3013,8 +3013,8 @@ Run 33 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.063387s Sys=0.010000s
-	  User TOT = 0.07	  Real TOT = 2.59124
+  User=0.000000s Real=0.007268s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.645213
  Summary of Run 33 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3086,8 +3086,8 @@ Run 34 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030804s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 2.62221
+  User=0.000000s Real=0.046137s Sys=0.010000s
+	  User TOT = 0.02	  Real TOT = 0.692678
  Summary of Run 34 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3159,8 +3159,8 @@ Run 35 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.009303s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 2.63165
+  User=0.000000s Real=0.001654s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.694437
  Summary of Run 35 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3232,8 +3232,8 @@ Run 36 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.019460s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 2.65125
+  User=0.000000s Real=0.006302s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.700846
  Summary of Run 36 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3305,8 +3305,8 @@ Run 37 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005247s Sys=0.000000s
-	  User TOT = 0.08	  Real TOT = 2.65663
+  User=0.000000s Real=0.052981s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.753954
  Summary of Run 37 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3378,8 +3378,8 @@ Run 38 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.023599s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 2.68036
+  User=0.000000s Real=0.008727s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.762805
  Summary of Run 38 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3451,8 +3451,8 @@ Run 39 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.016557s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 2.69705
+  User=0.000000s Real=0.001505s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.764682
  Summary of Run 39 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3524,8 +3524,8 @@ Run 40 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.016665s Sys=0.000000s
-	  User TOT = 0.09	  Real TOT = 2.71385
+  User=0.000000s Real=0.019644s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.784441
  Summary of Run 40 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3597,8 +3597,8 @@ Run 41 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.060459s Sys=0.010000s
-	  User TOT = 0.09	  Real TOT = 2.77447
+  User=0.000000s Real=0.010854s Sys=0.000000s
+	  User TOT = 0.02	  Real TOT = 0.795405
  Summary of Run 41 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3670,8 +3670,8 @@ Run 42 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.040303s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 2.81491
+  User=0.010000s Real=0.036921s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.832442
  Summary of Run 42 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3743,8 +3743,8 @@ Run 43 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.072734s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 2.8878
+  User=0.000000s Real=0.027297s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.859873
  Summary of Run 43 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3816,8 +3816,8 @@ Run 44 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.054088s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 2.94205
+  User=0.000000s Real=0.039527s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.899542
  Summary of Run 44 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3889,8 +3889,8 @@ Run 45 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021746s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 2.96398
+  User=0.000000s Real=0.001555s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.901213
  Summary of Run 45 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -3962,8 +3962,8 @@ Run 46 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.039183s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 3.00334
+  User=0.000000s Real=0.001165s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.903051
  Summary of Run 46 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4035,8 +4035,8 @@ Run 47 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021601s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 3.02511
+  User=0.000000s Real=0.024866s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.928056
  Summary of Run 47 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4108,8 +4108,8 @@ Run 48 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.158567s Sys=0.000000s
-	  User TOT = 0.1	  Real TOT = 3.18383
+  User=0.000000s Real=0.001665s Sys=0.000000s
+	  User TOT = 0.03	  Real TOT = 0.929831
  Summary of Run 48 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4181,8 +4181,8 @@ Run 49 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.430266s Sys=0.010000s
-	  User TOT = 0.1	  Real TOT = 3.61427
+  User=0.010000s Real=0.009607s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 0.939545
  Summary of Run 49 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4254,8 +4254,8 @@ Run 50 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.335305s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 3.94972
+  User=0.000000s Real=0.009184s Sys=0.010000s
+	  User TOT = 0.04	  Real TOT = 0.948848
  Summary of Run 50 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4327,8 +4327,8 @@ Run 51 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.157628s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 4.11454
+  User=0.000000s Real=0.097756s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 1.04672
  Summary of Run 51 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4400,8 +4400,8 @@ Run 52 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.196120s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 4.31081
+  User=0.000000s Real=0.010503s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 1.05734
  Summary of Run 52 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4473,8 +4473,8 @@ Run 53 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.110819s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 4.42179
+  User=0.000000s Real=0.026820s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 1.08428
  Summary of Run 53 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4546,8 +4546,8 @@ Run 54 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.145284s Sys=0.000000s
-	  User TOT = 0.11	  Real TOT = 4.56725
+  User=0.000000s Real=0.085543s Sys=0.000000s
+	  User TOT = 0.04	  Real TOT = 1.16994
  Summary of Run 54 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4619,8 +4619,8 @@ Run 55 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.337410s Sys=0.010000s
-	  User TOT = 0.11	  Real TOT = 4.90497
+  User=0.010000s Real=0.004548s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.1746
  Summary of Run 55 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4692,8 +4692,8 @@ Run 56 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.167634s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 5.07277
+  User=0.000000s Real=0.010918s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.18563
  Summary of Run 56 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4765,8 +4765,8 @@ Run 57 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.228465s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 5.3014
+  User=0.000000s Real=0.012786s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.19853
  Summary of Run 57 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4838,8 +4838,8 @@ Run 58 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.103718s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 5.40528
+  User=0.000000s Real=0.007290s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.20594
  Summary of Run 58 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4911,8 +4911,8 @@ Run 59 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.188979s Sys=0.000000s
-	  User TOT = 0.12	  Real TOT = 5.59443
+  User=0.000000s Real=0.042316s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.24836
  Summary of Run 59 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -4984,8 +4984,8 @@ Run 60 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.221015s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 5.8156
+  User=0.000000s Real=0.002612s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.25109
  Summary of Run 60 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5057,8 +5057,8 @@ Run 61 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.188955s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 6.00472
+  User=0.000000s Real=0.001338s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.25252
  Summary of Run 61 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5130,8 +5130,8 @@ Run 62 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.117522s Sys=0.000000s
-	  User TOT = 0.13	  Real TOT = 6.12239
+  User=0.000000s Real=0.002269s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.25489
  Summary of Run 62 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5203,8 +5203,8 @@ Run 63 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.049660s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 6.17222
+  User=0.000000s Real=0.002291s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.25729
  Summary of Run 63 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5276,8 +5276,8 @@ Run 64 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.003617s Sys=0.010000s
-	  User TOT = 0.14	  Real TOT = 6.17596
+  User=0.000000s Real=0.003718s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.26111
  Summary of Run 64 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5349,8 +5349,8 @@ Run 65 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.030228s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 6.20636
+  User=0.000000s Real=0.002428s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.26365
  Summary of Run 65 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5422,8 +5422,8 @@ Run 66 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.057723s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 6.26423
+  User=0.000000s Real=0.039096s Sys=0.010000s
+	  User TOT = 0.05	  Real TOT = 1.30286
  Summary of Run 66 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5495,8 +5495,8 @@ Run 67 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.113815s Sys=0.000000s
-	  User TOT = 0.14	  Real TOT = 6.3782
+  User=0.000000s Real=0.010901s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.31388
  Summary of Run 67 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5568,8 +5568,8 @@ Run 68 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.117086s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.49545
+  User=0.000000s Real=0.023480s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.33748
  Summary of Run 68 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5641,8 +5641,8 @@ Run 69 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.083961s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.57957
+  User=0.000000s Real=0.038177s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.37578
  Summary of Run 69 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5714,8 +5714,8 @@ Run 70 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.085792s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.66551
+  User=0.000000s Real=0.002469s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.37836
  Summary of Run 70 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5787,8 +5787,8 @@ Run 71 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.068148s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.73381
+  User=0.000000s Real=0.022292s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.40075
  Summary of Run 71 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5860,8 +5860,8 @@ Run 72 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.120545s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.85455
+  User=0.000000s Real=0.020276s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.42114
  Summary of Run 72 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -5933,8 +5933,8 @@ Run 73 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.080724s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.93543
+  User=0.000000s Real=0.020795s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.44206
  Summary of Run 73 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6006,8 +6006,8 @@ Run 74 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.035824s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.97141
+  User=0.000000s Real=0.057122s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.49931
  Summary of Run 74 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6079,8 +6079,8 @@ Run 75 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021736s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 6.99332
+  User=0.000000s Real=0.002505s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.50193
  Summary of Run 75 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6152,8 +6152,8 @@ Run 76 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.041671s Sys=0.010000s
-	  User TOT = 0.15	  Real TOT = 7.03514
+  User=0.000000s Real=0.002067s Sys=0.000000s
+	  User TOT = 0.05	  Real TOT = 1.50409
  Summary of Run 76 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6225,8 +6225,8 @@ Run 77 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.029978s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 7.06527
+  User=0.000000s Real=0.042749s Sys=0.010000s
+	  User TOT = 0.05	  Real TOT = 1.54695
  Summary of Run 77 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6298,8 +6298,8 @@ Run 78 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.054810s Sys=0.000000s
-	  User TOT = 0.15	  Real TOT = 7.12023
+  User=0.010000s Real=0.035225s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.58231
  Summary of Run 78 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6371,8 +6371,8 @@ Run 79 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.048808s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 7.1692
+  User=0.000000s Real=0.012055s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.5948
  Summary of Run 79 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6444,8 +6444,8 @@ Run 80 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.117146s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 7.28651
+  User=0.000000s Real=0.026223s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.62114
  Summary of Run 80 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6517,8 +6517,8 @@ Run 81 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.255182s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 7.54185
+  User=0.000000s Real=0.053549s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.6748
  Summary of Run 81 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6590,8 +6590,8 @@ Run 82 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.048769s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 7.59077
+  User=0.000000s Real=0.056572s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.7315
  Summary of Run 82 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6663,8 +6663,8 @@ Run 83 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.125201s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 7.71613
+  User=0.000000s Real=0.017059s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.74869
  Summary of Run 83 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6736,8 +6736,8 @@ Run 84 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.262218s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 7.9785
+  User=0.000000s Real=0.045486s Sys=0.010000s
+	  User TOT = 0.06	  Real TOT = 1.7943
  Summary of Run 84 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6809,8 +6809,8 @@ Run 85 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.225997s Sys=0.010000s
-	  User TOT = 0.16	  Real TOT = 8.20466
+  User=0.000000s Real=0.031601s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.82641
  Summary of Run 85 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6882,8 +6882,8 @@ Run 86 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.176075s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 8.38089
+  User=0.000000s Real=0.042736s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.86973
  Summary of Run 86 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -6955,8 +6955,8 @@ Run 87 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.125474s Sys=0.010000s
-	  User TOT = 0.16	  Real TOT = 8.50653
+  User=0.000000s Real=0.031540s Sys=0.000000s
+	  User TOT = 0.06	  Real TOT = 1.90222
  Summary of Run 87 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7028,8 +7028,8 @@ Run 88 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.096981s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 8.60367
+  User=0.010000s Real=0.012828s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 1.91519
  Summary of Run 88 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7101,8 +7101,8 @@ Run 89 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.090958s Sys=0.010000s
-	  User TOT = 0.16	  Real TOT = 8.69477
+  User=0.000000s Real=0.001782s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 1.91708
  Summary of Run 89 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7174,8 +7174,8 @@ Run 90 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.105227s Sys=0.000000s
-	  User TOT = 0.16	  Real TOT = 8.80018
+  User=0.000000s Real=0.004418s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 1.9216
  Summary of Run 90 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7247,8 +7247,8 @@ Run 91 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.130998s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 8.93133
+  User=0.000000s Real=0.031519s Sys=0.010000s
+	  User TOT = 0.07	  Real TOT = 1.95325
  Summary of Run 91 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7320,8 +7320,8 @@ Run 92 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.111099s Sys=0.010000s
-	  User TOT = 0.17	  Real TOT = 9.04257
+  User=0.000000s Real=0.077311s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.03071
  Summary of Run 92 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7393,8 +7393,8 @@ Run 93 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.087065s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 9.12979
+  User=0.000000s Real=0.077421s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.10826
  Summary of Run 93 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7466,8 +7466,8 @@ Run 94 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.100082s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 9.23002
+  User=0.000000s Real=0.014351s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.12274
  Summary of Run 94 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7539,8 +7539,8 @@ Run 95 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.098292s Sys=0.000000s
-	  User TOT = 0.17	  Real TOT = 9.32847
+  User=0.000000s Real=0.002562s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.12541
  Summary of Run 95 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7612,8 +7612,8 @@ Run 96 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.160631s Sys=0.010000s
-	  User TOT = 0.18	  Real TOT = 9.48926
+  User=0.000000s Real=0.065202s Sys=0.010000s
+	  User TOT = 0.07	  Real TOT = 2.19073
  Summary of Run 96 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7685,8 +7685,8 @@ Run 97 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.081015s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 9.57042
+  User=0.000000s Real=0.094311s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.28518
  Summary of Run 97 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7758,8 +7758,8 @@ Run 98 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.102171s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 9.67274
+  User=0.000000s Real=0.088236s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.37355
  Summary of Run 98 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7831,8 +7831,8 @@ Run 99 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.118354s Sys=0.000000s
-	  User TOT = 0.18	  Real TOT = 9.79125
+  User=0.000000s Real=0.040499s Sys=0.010000s
+	  User TOT = 0.07	  Real TOT = 2.41419
  Summary of Run 99 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7904,8 +7904,8 @@ Run 100 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.133294s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 9.92469
+  User=0.000000s Real=0.004164s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.41847
  Summary of Run 100 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -7977,8 +7977,8 @@ Run 101 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.145626s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 10.0705
+  User=0.000000s Real=0.038416s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.457
  Summary of Run 101 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8050,8 +8050,8 @@ Run 102 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.052717s Sys=0.000000s
-	  User TOT = 0.19	  Real TOT = 10.1233
+  User=0.000000s Real=0.046077s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.5032
  Summary of Run 102 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8123,8 +8123,8 @@ Run 103 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.030000s Real=0.139084s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.2626
+  User=0.000000s Real=0.053670s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.55699
  Summary of Run 103 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8196,8 +8196,8 @@ Run 104 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.058279s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.321
+  User=0.000000s Real=0.076588s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.63371
  Summary of Run 104 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8269,8 +8269,8 @@ Run 105 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.039973s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.3611
+  User=0.000000s Real=0.093375s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.72723
  Summary of Run 105 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8342,8 +8342,8 @@ Run 106 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.015239s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.3765
+  User=0.000000s Real=0.034101s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.76147
  Summary of Run 106 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8415,8 +8415,8 @@ Run 107 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.048929s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.4256
+  User=0.000000s Real=0.099627s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.86124
  Summary of Run 107 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8488,8 +8488,8 @@ Run 108 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.081292s Sys=0.010000s
-	  User TOT = 0.22	  Real TOT = 10.5071
+  User=0.000000s Real=0.011145s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.87249
  Summary of Run 108 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8561,8 +8561,8 @@ Run 109 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.072268s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.5795
+  User=0.000000s Real=0.021588s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.89419
  Summary of Run 109 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8634,8 +8634,8 @@ Run 110 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.075475s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.6551
+  User=0.000000s Real=0.001329s Sys=0.010000s
+	  User TOT = 0.07	  Real TOT = 2.89563
  Summary of Run 110 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8707,8 +8707,8 @@ Run 111 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.119377s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.7747
+  User=0.000000s Real=0.003624s Sys=0.000000s
+	  User TOT = 0.07	  Real TOT = 2.89935
  Summary of Run 111 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8780,8 +8780,8 @@ Run 112 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.151771s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 10.9266
+  User=0.010000s Real=0.001176s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.90062
  Summary of Run 112 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8853,8 +8853,8 @@ Run 113 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.099850s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 11.0266
+  User=0.000000s Real=0.001152s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.90187
  Summary of Run 113 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8926,8 +8926,8 @@ Run 114 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.148282s Sys=0.010000s
-	  User TOT = 0.22	  Real TOT = 11.175
+  User=0.000000s Real=0.001271s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.90323
  Summary of Run 114 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -8999,8 +8999,8 @@ Run 115 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.112943s Sys=0.000000s
-	  User TOT = 0.22	  Real TOT = 11.2881
+  User=0.000000s Real=0.001135s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.90446
  Summary of Run 115 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9072,8 +9072,8 @@ Run 116 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.017894s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 11.3062
+  User=0.000000s Real=0.002503s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.90705
  Summary of Run 116 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9145,8 +9145,8 @@ Run 117 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.018837s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 11.3252
+  User=0.000000s Real=0.001298s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.90845
  Summary of Run 117 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9218,8 +9218,8 @@ Run 118 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.060372s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 11.3857
+  User=0.000000s Real=0.024473s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.93305
  Summary of Run 118 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9291,8 +9291,8 @@ Run 119 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.063469s Sys=0.000000s
-	  User TOT = 0.23	  Real TOT = 11.4493
+  User=0.000000s Real=0.002050s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.93521
  Summary of Run 119 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9364,8 +9364,8 @@ Run 120 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.024941s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 11.4744
+  User=0.000000s Real=0.001821s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.93713
  Summary of Run 120 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9437,8 +9437,8 @@ Run 121 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026351s Sys=0.010000s
-	  User TOT = 0.24	  Real TOT = 11.5009
+  User=0.000000s Real=0.008544s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.9458
  Summary of Run 121 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9510,8 +9510,8 @@ Run 122 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.037542s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 11.5386
+  User=0.000000s Real=0.032651s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 2.97857
  Summary of Run 122 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9583,8 +9583,8 @@ Run 123 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.046013s Sys=0.000000s
-	  User TOT = 0.24	  Real TOT = 11.5848
+  User=0.000000s Real=0.042413s Sys=0.010000s
+	  User TOT = 0.08	  Real TOT = 3.02111
  Summary of Run 123 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9656,8 +9656,8 @@ Run 124 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.044725s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.6296
+  User=0.000000s Real=0.001665s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.0229
  Summary of Run 124 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9729,8 +9729,8 @@ Run 125 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.066471s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.6963
+  User=0.000000s Real=0.010190s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.0332
  Summary of Run 125 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9802,8 +9802,8 @@ Run 126 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.049241s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.7457
+  User=0.000000s Real=0.043040s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.07637
  Summary of Run 126 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9875,8 +9875,8 @@ Run 127 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.043813s Sys=0.010000s
-	  User TOT = 0.25	  Real TOT = 11.7896
+  User=0.000000s Real=0.009802s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.08632
  Summary of Run 127 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -9948,8 +9948,8 @@ Run 128 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.031136s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.821
+  User=0.000000s Real=0.010329s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.09681
  Summary of Run 128 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10021,8 +10021,8 @@ Run 129 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.024891s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.846
+  User=0.000000s Real=0.035548s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.13248
  Summary of Run 129 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10094,8 +10094,8 @@ Run 130 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.032036s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.8782
+  User=0.000000s Real=0.030899s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.16351
  Summary of Run 130 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10167,8 +10167,8 @@ Run 131 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.031940s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.9103
+  User=0.000000s Real=0.080872s Sys=0.010000s
+	  User TOT = 0.08	  Real TOT = 3.2445
  Summary of Run 131 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10240,8 +10240,8 @@ Run 132 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028088s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.9385
+  User=0.000000s Real=0.046786s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.29141
  Summary of Run 132 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10313,8 +10313,8 @@ Run 133 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.035515s Sys=0.000000s
-	  User TOT = 0.25	  Real TOT = 11.9742
+  User=0.000000s Real=0.011273s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.3028
  Summary of Run 133 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10386,8 +10386,8 @@ Run 134 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.048127s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.0225
+  User=0.000000s Real=0.010766s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.31368
  Summary of Run 134 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10459,8 +10459,8 @@ Run 135 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.049069s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.0717
+  User=0.000000s Real=0.002019s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.31579
  Summary of Run 135 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10532,8 +10532,8 @@ Run 136 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.041199s Sys=0.010000s
-	  User TOT = 0.26	  Real TOT = 12.1131
+  User=0.000000s Real=0.001806s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.3177
  Summary of Run 136 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10605,8 +10605,8 @@ Run 137 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.040962s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.1542
+  User=0.000000s Real=0.063301s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.38112
  Summary of Run 137 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10678,8 +10678,8 @@ Run 138 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.035466s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.1898
+  User=0.000000s Real=0.054648s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.43588
  Summary of Run 138 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10751,8 +10751,8 @@ Run 139 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.031712s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.2217
+  User=0.000000s Real=0.088019s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.52404
  Summary of Run 139 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10824,8 +10824,8 @@ Run 140 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.035048s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.2569
+  User=0.000000s Real=0.017735s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.54189
  Summary of Run 140 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10897,8 +10897,8 @@ Run 141 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.046166s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.3032
+  User=0.000000s Real=0.028585s Sys=0.010000s
+	  User TOT = 0.08	  Real TOT = 3.57061
  Summary of Run 141 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -10970,8 +10970,8 @@ Run 142 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.058804s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.3622
+  User=0.000000s Real=0.022260s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.59299
  Summary of Run 142 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11043,8 +11043,8 @@ Run 143 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.137142s Sys=0.000000s
-	  User TOT = 0.26	  Real TOT = 12.4995
+  User=0.000000s Real=0.001228s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.59432
  Summary of Run 143 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11116,8 +11116,8 @@ Run 144 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.081140s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 12.5808
+  User=0.000000s Real=0.001527s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.59594
  Summary of Run 144 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11189,8 +11189,8 @@ Run 145 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005931s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 12.5868
+  User=0.000000s Real=0.002205s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.59823
  Summary of Run 145 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11262,8 +11262,8 @@ Run 146 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.212000s Sys=0.000000s
-	  User TOT = 0.27	  Real TOT = 12.799
+  User=0.000000s Real=0.001350s Sys=0.000000s
+	  User TOT = 0.08	  Real TOT = 3.59967
  Summary of Run 146 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11335,8 +11335,8 @@ Run 147 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.183451s Sys=0.010000s
-	  User TOT = 0.27	  Real TOT = 12.9826
+  User=0.010000s Real=0.001637s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.6014
  Summary of Run 147 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11408,8 +11408,8 @@ Run 148 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.085155s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 13.0679
+  User=0.000000s Real=0.001282s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.60277
  Summary of Run 148 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11481,8 +11481,8 @@ Run 149 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.130909s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 13.199
+  User=0.000000s Real=0.002263s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.60512
  Summary of Run 149 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11554,8 +11554,8 @@ Run 150 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.137124s Sys=0.000000s
-	  User TOT = 0.28	  Real TOT = 13.3363
+  User=0.000000s Real=0.001506s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.60672
  Summary of Run 150 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11627,8 +11627,8 @@ Run 151 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.167420s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 13.5039
+  User=0.000000s Real=0.003348s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.61017
  Summary of Run 151 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11700,8 +11700,8 @@ Run 152 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.129209s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 13.6332
+  User=0.000000s Real=0.009889s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.62017
  Summary of Run 152 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11773,8 +11773,8 @@ Run 153 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026357s Sys=0.000000s
-	  User TOT = 0.29	  Real TOT = 13.6598
+  User=0.000000s Real=0.044625s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.6649
  Summary of Run 153 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11846,8 +11846,8 @@ Run 154 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.026452s Sys=0.000000s
-	  User TOT = 0.3	  Real TOT = 13.6864
+  User=0.000000s Real=0.009952s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.67498
  Summary of Run 154 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11919,8 +11919,8 @@ Run 155 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.042785s Sys=0.000000s
-	  User TOT = 0.3	  Real TOT = 13.7293
+  User=0.000000s Real=0.010932s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.68602
  Summary of Run 155 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -11992,8 +11992,8 @@ Run 156 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.025610s Sys=0.000000s
-	  User TOT = 0.3	  Real TOT = 13.755
+  User=0.000000s Real=0.026183s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.71231
  Summary of Run 156 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12065,8 +12065,8 @@ Run 157 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.099208s Sys=0.000000s
-	  User TOT = 0.31	  Real TOT = 13.8544
+  User=0.000000s Real=0.033301s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.74574
  Summary of Run 157 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12138,8 +12138,8 @@ Run 158 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.059362s Sys=0.010000s
-	  User TOT = 0.31	  Real TOT = 13.9139
+  User=0.000000s Real=0.011837s Sys=0.000000s
+	  User TOT = 0.09	  Real TOT = 3.75771
  Summary of Run 158 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12211,8 +12211,8 @@ Run 159 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.102929s Sys=0.000000s
-	  User TOT = 0.31	  Real TOT = 14.017
+  User=0.010000s Real=0.023119s Sys=0.010000s
+	  User TOT = 0.1	  Real TOT = 3.78095
  Summary of Run 159 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12284,8 +12284,8 @@ Run 160 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.215439s Sys=0.000000s
-	  User TOT = 0.32	  Real TOT = 14.2326
+  User=0.000000s Real=0.009674s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 3.79074
  Summary of Run 160 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12357,8 +12357,8 @@ Run 161 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.159631s Sys=0.000000s
-	  User TOT = 0.32	  Real TOT = 14.3924
+  User=0.000000s Real=0.001533s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 3.79238
  Summary of Run 161 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12430,8 +12430,8 @@ Run 162 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.397145s Sys=0.000000s
-	  User TOT = 0.32	  Real TOT = 14.7897
+  User=0.000000s Real=0.006538s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 3.79902
  Summary of Run 162 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12503,8 +12503,8 @@ Run 163 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.103878s Sys=0.000000s
-	  User TOT = 0.32	  Real TOT = 14.8937
+  User=0.000000s Real=0.012620s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 3.81176
  Summary of Run 163 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12576,8 +12576,8 @@ Run 164 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.054898s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 14.9488
+  User=0.000000s Real=0.009235s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 3.82111
  Summary of Run 164 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12649,8 +12649,8 @@ Run 165 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.211387s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.1603
+  User=0.000000s Real=0.001201s Sys=0.000000s
+	  User TOT = 0.1	  Real TOT = 3.82241
  Summary of Run 165 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12722,8 +12722,8 @@ Run 166 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.201495s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.3619
+  User=0.010000s Real=0.008236s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.83075
  Summary of Run 166 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12795,8 +12795,8 @@ Run 167 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.028720s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.3908
+  User=0.000000s Real=0.052061s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.88292
  Summary of Run 167 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12868,8 +12868,8 @@ Run 168 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.032168s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.4231
+  User=0.000000s Real=0.002068s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.88509
  Summary of Run 168 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -12941,8 +12941,8 @@ Run 169 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.021911s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.4452
+  User=0.000000s Real=0.001367s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.88658
  Summary of Run 169 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13014,8 +13014,8 @@ Run 170 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026571s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.4719
+  User=0.000000s Real=0.006397s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.89309
  Summary of Run 170 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13087,8 +13087,8 @@ Run 171 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.060319s Sys=0.000000s
-	  User TOT = 0.33	  Real TOT = 15.5324
+  User=0.000000s Real=0.001279s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.89446
  Summary of Run 171 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13160,8 +13160,8 @@ Run 172 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.098472s Sys=0.010000s
-	  User TOT = 0.33	  Real TOT = 15.6311
+  User=0.000000s Real=0.001433s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.89599
  Summary of Run 172 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13233,8 +13233,8 @@ Run 173 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.098020s Sys=0.000000s
-	  User TOT = 0.34	  Real TOT = 15.7292
+  User=0.000000s Real=0.029439s Sys=0.000000s
+	  User TOT = 0.11	  Real TOT = 3.92596
  Summary of Run 173 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13306,8 +13306,8 @@ Run 174 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.038864s Sys=0.000000s
-	  User TOT = 0.34	  Real TOT = 15.7682
+  User=0.010000s Real=0.053778s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 3.97985
  Summary of Run 174 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13379,8 +13379,8 @@ Run 175 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.055239s Sys=0.000000s
-	  User TOT = 0.34	  Real TOT = 15.8236
+  User=0.000000s Real=0.002538s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 3.98252
  Summary of Run 175 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13452,8 +13452,8 @@ Run 176 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.042039s Sys=0.000000s
-	  User TOT = 0.34	  Real TOT = 15.8658
+  User=0.000000s Real=0.009051s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 3.99169
  Summary of Run 176 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13525,8 +13525,8 @@ Run 177 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.047052s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 15.913
+  User=0.000000s Real=0.042593s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 4.03441
  Summary of Run 177 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13598,8 +13598,8 @@ Run 178 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.075260s Sys=0.010000s
-	  User TOT = 0.35	  Real TOT = 15.9884
+  User=0.000000s Real=0.032921s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 4.06745
  Summary of Run 178 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13671,8 +13671,8 @@ Run 179 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.047033s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 16.0356
+  User=0.000000s Real=0.002811s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 4.07039
  Summary of Run 179 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13744,8 +13744,8 @@ Run 180 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.073914s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 16.1097
+  User=0.000000s Real=0.001689s Sys=0.000000s
+	  User TOT = 0.12	  Real TOT = 4.07217
  Summary of Run 180 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13817,8 +13817,8 @@ Run 181 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.067108s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 16.177
+  User=0.010000s Real=0.041028s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.11332
  Summary of Run 181 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13890,8 +13890,8 @@ Run 182 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.072106s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 16.2492
+  User=0.000000s Real=0.108975s Sys=0.010000s
+	  User TOT = 0.13	  Real TOT = 4.22242
  Summary of Run 182 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -13963,8 +13963,8 @@ Run 183 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.098125s Sys=0.010000s
-	  User TOT = 0.35	  Real TOT = 16.3475
+  User=0.000000s Real=0.078658s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.30121
  Summary of Run 183 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14036,8 +14036,8 @@ Run 184 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.133160s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 16.4808
+  User=0.000000s Real=0.044203s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.34554
  Summary of Run 184 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14109,8 +14109,8 @@ Run 185 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.187024s Sys=0.000000s
-	  User TOT = 0.35	  Real TOT = 16.668
+  User=0.000000s Real=0.001506s Sys=0.010000s
+	  User TOT = 0.13	  Real TOT = 4.34714
  Summary of Run 185 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14182,8 +14182,8 @@ Run 186 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.062663s Sys=0.000000s
-	  User TOT = 0.36	  Real TOT = 16.7309
+  User=0.000000s Real=0.001880s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.34913
  Summary of Run 186 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14255,8 +14255,8 @@ Run 187 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.091302s Sys=0.000000s
-	  User TOT = 0.36	  Real TOT = 16.8223
+  User=0.000000s Real=0.002335s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.35157
  Summary of Run 187 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14328,8 +14328,8 @@ Run 188 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.087952s Sys=0.000000s
-	  User TOT = 0.36	  Real TOT = 16.9104
+  User=0.000000s Real=0.007650s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.35933
  Summary of Run 188 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14401,8 +14401,8 @@ Run 189 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.063869s Sys=0.000000s
-	  User TOT = 0.36	  Real TOT = 16.9745
+  User=0.000000s Real=0.010415s Sys=0.000000s
+	  User TOT = 0.13	  Real TOT = 4.36986
  Summary of Run 189 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14474,8 +14474,8 @@ Run 190 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.194627s Sys=0.010000s
-	  User TOT = 0.37	  Real TOT = 17.1692
+  User=0.010000s Real=0.015444s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.38541
  Summary of Run 190 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14547,8 +14547,8 @@ Run 191 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.244572s Sys=0.000000s
-	  User TOT = 0.37	  Real TOT = 17.414
+  User=0.000000s Real=0.001290s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.3868
  Summary of Run 191 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14620,8 +14620,8 @@ Run 192 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.229245s Sys=0.000000s
-	  User TOT = 0.37	  Real TOT = 17.6433
+  User=0.000000s Real=0.003205s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.3901
  Summary of Run 192 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14693,8 +14693,8 @@ Run 193 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.093012s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 17.7365
+  User=0.000000s Real=0.006819s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.39702
  Summary of Run 193 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14766,8 +14766,8 @@ Run 194 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.164127s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 17.9008
+  User=0.000000s Real=0.014996s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.41213
  Summary of Run 194 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14839,8 +14839,8 @@ Run 195 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.176108s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 18.0771
+  User=0.000000s Real=0.001851s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.41408
  Summary of Run 195 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14912,8 +14912,8 @@ Run 196 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.164540s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 18.2418
+  User=0.000000s Real=0.002011s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.4162
  Summary of Run 196 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -14985,8 +14985,8 @@ Run 197 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.026388s Sys=0.010000s
-	  User TOT = 0.38	  Real TOT = 18.2684
+  User=0.000000s Real=0.001389s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.41768
  Summary of Run 197 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -15058,8 +15058,8 @@ Run 198 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.054865s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 18.3235
+  User=0.000000s Real=0.002367s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.42023
  Summary of Run 198 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -15131,8 +15131,8 @@ Run 199 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.069689s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 18.3933
+  User=0.000000s Real=0.001750s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.42207
  Summary of Run 199 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -15204,8 +15204,8 @@ Run 200 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.098558s Sys=0.000000s
-	  User TOT = 0.38	  Real TOT = 18.492
+  User=0.000000s Real=0.003243s Sys=0.000000s
+	  User TOT = 0.14	  Real TOT = 4.42542
  Summary of Run 200 :
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
@@ -15216,6 +15216,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.062 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.059 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

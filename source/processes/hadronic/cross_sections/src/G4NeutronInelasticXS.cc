@@ -157,8 +157,9 @@ G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4double logekin,
   if(pv == nullptr) { return xs; }
 
   // compute isotope cross section if applicable
-  const G4double emax = pv->GetMaxEnergy(); 
-  if(ekin <= emax && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
+  const G4double emax = pv->GetMaxEnergy();
+  const G4double elim = 20*CLHEP::MeV;
+  if(ekin <= elim && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
     auto pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pviso) { 
       xs = pviso->LogVectorValue(ekin, logekin); 

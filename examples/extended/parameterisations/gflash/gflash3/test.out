@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -898,9 +898,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0228886
+Internal Real Elapsed Time is: 0.00821212
 Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   12103 hits are stored in ExGflashHitsCollection 
@@ -913,9 +913,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0187393
+Internal Real Elapsed Time is: 0.00544971
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
   11926 hits are stored in ExGflashHitsCollection 
@@ -928,9 +928,9 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0169318
+Internal Real Elapsed Time is: 0.00558724
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
   11907 hits are stored in ExGflashHitsCollection 
@@ -943,7 +943,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0196785
+Internal Real Elapsed Time is: 0.00975125
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -958,7 +958,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0180682
+Internal Real Elapsed Time is: 0.00564934
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -973,9 +973,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0164666
+Internal Real Elapsed Time is: 0.00546522
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
   11985 hits are stored in ExGflashHitsCollection 
@@ -988,7 +988,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0179795
+Internal Real Elapsed Time is: 0.00528601
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -1003,7 +1003,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0188864
+Internal Real Elapsed Time is: 0.00546853
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -1018,7 +1018,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0177197
+Internal Real Elapsed Time is: 0.00536296
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -1033,9 +1033,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.0185539
+Internal Real Elapsed Time is: 0.00520253
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
   11939 hits are stored in ExGflashHitsCollection 
@@ -1049,10 +1049,10 @@ number of event = 10
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.020657
+Internal Real Elapsed Time /event is: 0.0068261
 
 ******************************************
-Total Real Elapsed Time is: 12.4539
-Total System Elapsed Time: 0.21
-Total GetUserElapsed Time: 2.51
+Total Real Elapsed Time is: 2.52044
+Total System Elapsed Time: 0.14
+Total GetUserElapsed Time: 1.62
 ******************************************

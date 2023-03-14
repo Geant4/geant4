@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07 October 2022 Alberto Ribon (hadr-util-V10-07-10)
+---------------------------------------------------
+- G4Nucleus : corrected the method GetN_asInt for the case of hypernuclei.
+
 09 February 2022 Gabriele Cosmo (hadr-util-V10-07-09)
 -----------------------------------------------------
 - Fixed compilation warning on Intel compilers for unused variables

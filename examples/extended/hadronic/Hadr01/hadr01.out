@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -968,7 +968,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=1.690000s Real=15.620208s Sys=0.200000s
+Initialisation time:  User=1.090000s Real=2.150313s Sys=0.100000s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
 EventAction: Event # 20 started
@@ -982,34 +982,34 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.060000s Real=1.948468s Sys=0.010000s
-RunAction::EndOfRunAction:  User=1.060000s Real=1.948549s Sys=0.010000s
+  User=0.630000s Real=0.652112s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.630000s Real=0.652166s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         623.9   RMS(MeV) 381.5
-Average number of steps              1178
-Average number of gamma              81.22
-Average number of e-                 103.5
-Average number of e+                 6.26
-Average number of neutrons           23.77
-Average number of protons            4.7
+Average energy deposit (MeV)         574   RMS(MeV) 357.6
+Average number of steps              999.1
+Average number of gamma              67.23
+Average number of e-                 86.58
+Average number of e+                 4.44
+Average number of neutrons           22.99
+Average number of protons            4.55
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.69
-Average number of pi0                0.3
+Average number of pi+ & pi-          0.48
+Average number of pi0                0.31
 Average number of kaons              0
-Average number of muons              0.07
-Average number of deuterons+tritons  2.43
-Average number of He3+alpha          0.72
-Average number of ions               5.89
-Average number of forward neutrons   0.59
-Average number of reflected neutrons 18.16
-Average number of leaked neutrons    1.05
-Average number of proton leak        1
-Average number of pion leak          0.41
+Average number of muons              0.02
+Average number of deuterons+tritons  2.06
+Average number of He3+alpha          0.55
+Average number of ions               6.09
+Average number of forward neutrons   0.68
+Average number of reflected neutrons 17.15
+Average number of leaked neutrons    0.84
+Average number of proton leak        1.29
+Average number of pion leak          0.31
 ========================================================
 
 #
@@ -1037,8 +1037,8 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0125 MB
-Pool ID '7G4Track', size : 0.025 MB
+Pool ID '17G4DynamicParticle', size : 0.0144 MB
+Pool ID '7G4Track', size : 0.0279 MB
 Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.00673 MB

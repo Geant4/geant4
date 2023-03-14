@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -682,17 +682,17 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=5.090000s Real=14.750078s Sys=0.090000s
+  User=3.080000s Real=3.742697s Sys=0.060000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
-The simulation took: 30.8789 s to run (real time)
+The simulation took: 6.0074 s to run (real time)
 Dose is being written to Dose.out
 i	j	k	Dose(Gy)G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.28 MB
+Dynamic pools deleted: 14 / Total memory freed: 0.51 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

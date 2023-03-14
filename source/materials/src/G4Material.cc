@@ -383,6 +383,15 @@ G4Material::AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms)
     G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
                  FatalException, ed, "");
   }
+  if(0 >= nAtoms) {
+    G4ExceptionDescription ed;
+    ed << "For material " << fName << " and added element "
+       << elm->GetName() << " with Natoms=" << nAtoms
+       << " problem: number of atoms should be above zero";
+    G4Exception ("G4Material::AddElementByNumberOfAtoms()", "mat031",
+                 FatalException, ed, "");
+  }
+
   // filling
   G4bool isAdded = false;
   if(!fElm->empty()) {

@@ -16,6 +16,14 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14, 2022 I. Hrivnacova (analysis-V10-07-32)
+- Added a protection against nullptr in G4VAnalysisManager::GetNofNtuples()
+  - addressing the problem report #2518.
+
+August 9, 2022 I. Hrivnacova
+- Do not remove non-empty HDF5 output files;
+  - addressing the problem reported in Users Forum by Luigi Pertoldi.
+
 March 2, 2022 I. Hrivnacova (analysis-V10-07-31)
 - Fix notifying about closing file in G4GenericAnalysisManager;
   this fixes saving scorers in analysis file in B3 example

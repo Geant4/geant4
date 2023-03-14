@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-03    (16-September-2022)
+ Geant4 version Name: geant4-11-00-patch-04    (3-March-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -980,14 +980,14 @@ G4HEPEvtInterface - reading 448 HEPEvt particles from pythia_event.data.
 G4HEPEvtInterface - reading 945 HEPEvt particles from pythia_event.data.
 >>> Event 4
      115 hits are stored in RE05TrackerHitsCollection.
-     56 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.1943071166685 (GeV)
+     71 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 12.534533531141 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 837 HEPEvt particles from pythia_event.data.
 >>> Event 5
-     52 hits are stored in RE05TrackerHitsCollection.
-     45 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.1123013966393 (GeV)
+     35 hits are stored in RE05TrackerHitsCollection.
+     7 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.9010937218702 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
 >>> Event 6
@@ -997,26 +997,26 @@ G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 627 HEPEvt particles from pythia_event.data.
 >>> Event 7
-     47 hits are stored in RE05TrackerHitsCollection.
-     32 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.0372077045388 (GeV)
+     44 hits are stored in RE05TrackerHitsCollection.
+     28 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.7352427292013 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 682 HEPEvt particles from pythia_event.data.
 >>> Event 8
-     64 hits are stored in RE05TrackerHitsCollection.
-     46 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.6393685748 (GeV)
+     83 hits are stored in RE05TrackerHitsCollection.
+     55 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.066530687916 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 330 HEPEvt particles from pythia_event.data.
 >>> Event 9
-     24 hits are stored in RE05TrackerHitsCollection.
-     22 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.1989361041661 (GeV)
+     15 hits are stored in RE05TrackerHitsCollection.
+     24 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.6422705074457 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.790000s Real=7.050435s Sys=0.000000s
+  User=1.040000s Real=1.237755s Sys=0.010000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1039,7 +1039,7 @@ TransportationManager deleted.
 Total navigation history collections cleaned: 436
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.714 MB
+Pool ID '20G4NavigationLevelRep', size : 0.712 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00385 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00192 MB
@@ -1054,15 +1054,15 @@ Pool ID '7G4Track', size : 1.2 MB
 Pool ID '18G4TouchableHistory', size : 0.0519 MB
 Pool ID '15G4CountedObjectIvE', size : 0.00673 MB
 Pool ID '12G4Trajectory', size : 0.0279 MB
-Pool ID '17G4TrajectoryPoint', size : 0.152 MB
+Pool ID '17G4TrajectoryPoint', size : 0.163 MB
 Pool ID '14RE05TrackerHit', size : 0.00481 MB
-Pool ID '18RE05CalorimeterHit', size : 0.00769 MB
+Pool ID '18RE05CalorimeterHit', size : 0.0106 MB
 Pool ID '11RE05MuonHit', size : 0.000961 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
-Pool ID '10G4Fragment', size : 0.00961 MB
+Pool ID '10G4Fragment', size : 0.00769 MB
 Pool ID '17G4ReactionProduct', size : 0.0106 MB
 Number of memory pools allocated: 22 of which, static: 0
-Dynamic pools deleted: 22 / Total memory freed: 3 MB
+Dynamic pools deleted: 22 / Total memory freed: 3.1 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

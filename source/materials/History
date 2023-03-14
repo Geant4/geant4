@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-10-22 Vladimir Ivanchenko (materials-V10-07-29)
+- G4Material - added an extra check (nAtoms>0) inside 
+    method AddElementByNumberOfAtoms(..) to address #2514 
+
 12-04-22 V.Ivanchenko (materials-V10-07-28)
 - G4DensityEffectData, G4IonisParamMat - fixed density effect correction
     for liquid hydrogen (problem #2346), code clean-up

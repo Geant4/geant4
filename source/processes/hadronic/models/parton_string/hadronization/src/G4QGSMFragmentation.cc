@@ -60,7 +60,7 @@ G4QGSMFragmentation::G4QGSMFragmentation()
     // hadrons can't/can be created during the string fragmentation of ordinary
     // (i.e. not heavy) projectile hadron nuclear reactions.
     if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
-      SetProbCCbar(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+      SetProbCCbar(0.0005);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
       SetProbBBbar(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
     } else {
       SetProbCCbar(0.0);
@@ -595,7 +595,8 @@ G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int 
 
   if ( d1 < 0. ) {
     q1 = absDecayQuarkCode/1000; q2 = (absDecayQuarkCode % 1000)/100; DiQold = IndexDiQ[q1-1][q2-1];
-    d1 = FFqq2qq[DiQold][absNewQuarkCode-1][0]; d2 = FFqq2qq[DiQold][absNewQuarkCode-1][1];
+    qA = absNewQuarkCode/1000;   qB = (absNewQuarkCode % 1000)/100;   DiQnew = IndexDiQ[qA-1][qB-1];
+    d1 = FFqq2qq[DiQold][DiQnew][0]; d2 = FFqq2qq[DiQold][DiQnew][1];
   }
 
   d2 +=lambda;  // Uzhi June 2020

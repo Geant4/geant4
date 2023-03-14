@@ -70,7 +70,7 @@ G4Triton* G4Triton::Definition()
                     1,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +3, 1000010030,
-                 true,      12.32*year,       nullptr,
+                 true,     17.774*year,       nullptr,
 		false,        "static",   -1000010030, 
 		 0.0,                0
               );

@@ -236,15 +236,14 @@ G4bool G4Hdf5FileManager::CreateNtupleFile(
 G4bool G4Hdf5FileManager::CloseNtupleFile(
   Hdf5NtupleDescription* ntupleDescription)
 {
-  // Do nothing if there is no file
-  if ( ntupleDescription->fFile == nullptr ) return true;
-
-  // Ntuple files will be closed with CloseFiles() calls
-  ntupleDescription->fFile.reset();
-
   // Notify not empty file
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
   auto result = SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
+
+  if ( ntupleDescription->fFile != nullptr ) {
+    // Ntuple files will be closed with CloseFiles() calls
+    ntupleDescription->fFile.reset();
+  }
 
   return result;
 }
