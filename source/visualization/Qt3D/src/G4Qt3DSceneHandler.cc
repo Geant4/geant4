@@ -326,6 +326,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
   material->setObjectName("materialForPolyline");
   material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+  material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
   material->setShininess(0.);
   material->setSpecular(0.);
   polylineEntity->addComponent(material);
@@ -407,6 +408,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForPolymarker");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       material->setShininess(0.);
       material->setSpecular(0.);
       polymarkerEntity->addComponent(material);
@@ -427,6 +429,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForCircle");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
 
       auto sphereMesh = new Qt3DExtras::QSphereMesh;
@@ -459,6 +462,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForSquare");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
 
       auto boxMesh = new Qt3DExtras::QCuboidMesh();
@@ -544,6 +548,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& /*text*/) {
 //  auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
 //  material->setObjectName("materialForText");
 //  material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+//  material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
 //  if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
 //
 //  auto textMesh = new Qt3DExtras::QExtrudedTextMesh();
@@ -604,6 +609,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Circle& circle)
   auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
   material->setObjectName("materialForCircle");
   material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+  material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
   if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
 
   auto sphereMesh = new Qt3DExtras::QSphereMesh;
@@ -671,6 +677,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Square& square)
   auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
   material->setObjectName("materialForSquare");
   material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+  material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
   if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
 
   auto boxMesh = new Qt3DExtras::QCuboidMesh();
@@ -933,6 +940,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForWireframe");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       material->setShininess(0.);
       material->setSpecular(0.);
       wireframeEntity->addComponent(material);
@@ -974,6 +982,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForWireFrame");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       material->setShininess(0.);
       material->setSpecular(0.);
       wireframeEntity->addComponent(material);
@@ -995,6 +1004,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForSurface");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
       surfaceEntity->addComponent(material);
 
@@ -1017,6 +1027,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForSurface");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
       surfaceEntity->addComponent(material);
 
@@ -1034,6 +1045,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForWireframe");
       material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+      material->setDiffuse(G4Qt3DUtils::ConvertToQColor(colour));
       material->setShininess(0.);
       material->setSpecular(0.);
       wireframeEntity->addComponent(material);
