@@ -189,7 +189,7 @@ void G4ProfilerMessenger::SetNewValue(G4UIcommand* command, G4String value)
     G4UIcmdWithABool* ui = itr.first;
     if(command == ui)
     {
-      command_line.push_back(itr.second);
+      command_line.push_back(itr.second.c_str());
       command_line.push_back(value);
       break;
     }

@@ -98,7 +98,7 @@ G4EmTableUtil::PrepareEmProcess(G4VEmProcess* proc,
   const G4DataVector* cuts = modelManager->Initialise(part, secPart, verb);
 
   if(1 < verb) {
-    G4cout << "### G4VEmProcess::PreparePhysicsTable() done for " 
+    G4cout << "### G4EmTableUtil::PreparePhysicsTable() done for " 
            << proc->GetProcessName()
            << " and particle " << part->GetParticleName()
            << G4endl;
@@ -118,7 +118,7 @@ void G4EmTableUtil::BuildEmProcess(G4VEmProcess* proc,
 {
   G4String num = part->GetParticleName();
   if(1 < verb) {
-    G4cout << "### G4VEmProcess::BuildPhysicsTable() for "
+    G4cout << "### G4EmTableUtil::BuildPhysicsTable() for "
            << proc->GetProcessName() << " and particle " << num
            << " buildLambdaTable=" << toBuild << " master= " << master 
            << G4endl;
@@ -178,7 +178,7 @@ void G4EmTableUtil::BuildEmProcess(G4VEmProcess* proc,
   }
 
   if(1 < verb) {
-    G4cout << "### G4VEmProcess::BuildPhysicsTable() done for "
+    G4cout << "### G4EmTableUtil::BuildPhysicsTable() done for "
            << proc->GetProcessName() << " and particle " << num
            << " baseMat=" << baseMat << G4endl;
   }
@@ -201,7 +201,7 @@ void G4EmTableUtil::BuildLambdaTable(G4VEmProcess* proc,
                                      const G4bool splineFlag)
 {
   if(1 < verboseLevel) {
-    G4cout << "G4EmProcess::BuildLambdaTable() for process "
+    G4cout << "G4EmTableUtil::BuildLambdaTable() for process "
            << proc->GetProcessName() << " and particle "
            << part->GetParticleName() << G4endl;
   }
@@ -290,7 +290,7 @@ void  G4EmTableUtil::BuildLambdaTable(G4VEnergyLossProcess* proc,
                                      const G4bool splineFlag)
 {
   if(1 < verboseLevel) {
-    G4cout << "G4EnergyLossProcess::BuildLambdaTable() for process "
+    G4cout << "G4EmTableUtil::BuildLambdaTable() for process "
            << proc->GetProcessName() << " and particle "
            << part->GetParticleName() << G4endl;
   }
@@ -340,8 +340,9 @@ G4EmTableUtil::CheckIon(G4VEnergyLossProcess* proc,
                         const G4int verb, G4bool& isIon)
 {
   if(1 < verb) {
-    G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
+    G4cout << "G4EmTableUtil::CheckIon for "
            << proc->GetProcessName() << " for " << part->GetParticleName() 
+           << " should be called from G4VEnergyLossProcess::PreparePhysicsTable" 
            << G4endl;
   }
   const G4ParticleDefinition* particle = partLocal;
@@ -356,6 +357,8 @@ G4EmTableUtil::CheckIon(G4VEnergyLossProcess* proc,
       const G4ParticleDefinition* theGIon = G4GenericIon::GenericIon();
       isIon = true; 
 
+      // this is a loop to compare pointers of G4GenericIon processes in order
+      // to confirm that for given particle the G4GenericIon physics is used 
       if(particle != theGIon) {
         G4ProcessManager* pm = theGIon->GetProcessManager();
         G4ProcessVector* v = pm->GetAlongStepProcessVector();
@@ -465,7 +468,7 @@ void G4EmTableUtil::BuildDEDXTable(G4VEnergyLossProcess* proc,
   for(std::size_t i=0; i<numOfCouples; ++i) {
 
     if(1 < verbose) {
-      G4cout << "G4VEnergyLossProcess::BuildDEDXVector idx= " << i 
+      G4cout << "G4EmTableUtil::BuildDEDXVector idx= " << i 
              << "  flagTable=" << table->GetFlag(i) 
              << " flagBuilder=" << bld->GetFlag(i) << G4endl;
     }
@@ -491,7 +494,7 @@ void G4EmTableUtil::BuildDEDXTable(G4VEnergyLossProcess* proc,
   }
 
   if(1 < verbose) {
-    G4cout << "G4VEnergyLossProcess::BuildDEDXTable(): table is built for "
+    G4cout << "G4EmTableUtil::BuildDEDXTable(): table is built for "
            << part->GetParticleName()
            << " and process " << proc->GetProcessName()
            << G4endl;
@@ -517,7 +520,7 @@ void G4EmTableUtil::PrepareMscProcess(G4VMultipleScattering* proc,
      part.GetParticleName() == "GenericIon") { isIon = true; }
 
   if(1 < verb) {
-    G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
+    G4cout << "### G4EmTableUtil::PrepearPhysicsTable() for "
            << proc->GetProcessName()
            << " and particle " << part.GetParticleName()
            << " isIon: " << isIon << " isMaster: " << master
@@ -590,7 +593,7 @@ void G4EmTableUtil::BuildMscProcess(G4VMultipleScattering* proc,
     }
   }
   if(1 < verb) {
-    G4cout << "### G4VMultipleScattering::BuildPhysicsTable() done for "
+    G4cout << "### G4EmTableUtil::BuildPhysicsTable() done for "
 	   << proc->GetProcessName()
 	   << " and particle " << part.GetParticleName() << G4endl;
   }
@@ -651,7 +654,7 @@ G4bool G4EmTableUtil::StoreTable(G4VProcess* ptr,
       if (1 < verb) G4cout << "Stored: " << name << G4endl;
     } else {
       res = false;
-      G4cout << "Fail to store: " << name << G4endl;
+      G4cout << "G4EmTableUtil::StoreTable fail to store: " << name << G4endl;
     }
   }
   return res;
@@ -668,8 +671,10 @@ G4bool G4EmTableUtil::RetrieveTable(G4VProcess* ptr,
 {
   G4bool res = true;
   if (nullptr == aTable) { return res; }
-  G4cout << tname << " table for " << part->GetParticleName() 
-	 << " will be retrieved " << G4endl;
+  if (0 < verb) {
+    G4cout << tname << " table for " << part->GetParticleName() 
+           << " will be retrieved " << G4endl;
+  }
   const G4String& name = 
     ptr->GetPhysicsTableFileName(part, dir, tname, ascii);
   if(G4PhysicsTableHelper::RetrievePhysicsTable(aTable, name, ascii, spline)) {
@@ -685,8 +690,8 @@ G4bool G4EmTableUtil::RetrieveTable(G4VProcess* ptr,
     }
   } else {
     res = false;
-    G4cout << "Fail to retrieve: " << tname << " from " << name << " for " 
-	   << part->GetParticleName() << G4endl;
+    G4cout << "G4EmTableUtil::RetrieveTable fail to retrieve: " << tname 
+           << " from " << name << " for " << part->GetParticleName() << G4endl;
   }
   return res;
 }

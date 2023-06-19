@@ -102,7 +102,8 @@ namespace G4INCL {
 				Pion2Type =  PiZero;
 			}
 			
-		}if(iso == -2){
+		}
+                else if(iso == -2){
 			if(rdm*7. < 1.){
 				particle1->setType(Neutron);
 				KaonType =  KZero;

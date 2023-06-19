@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-03-17 Alberto Ribon (phys-builders-V11-00-04)
+- G4HadronicBuilder : fixed bug in the method BuildKaonsFTFQGSP_BERT().
+  Thanks to Dmitri Konstantinov for reporting it.
+
 ## 2022-12-30 Vladimir Ivanchenko (phys-builders-V11-00-03)
 - Updated table of processes
 

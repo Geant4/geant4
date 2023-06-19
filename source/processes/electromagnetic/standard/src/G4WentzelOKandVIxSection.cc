@@ -346,34 +346,32 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
     }
   }
   if(cost1 > cost2) {
-
-    G4double w1 = 1. - cost1 + screenZ;
-    G4double w2 = 1. - cost2 + screenZ;
-    G4double z1 = w1*w2/(w1 + rndmEngineMod->flat()*(w2 - w1)) - screenZ;
-
+    G4double w1 = 1. - cost1;
+    G4double w2 = 1. - cost2;
+    G4double w3 = rndmEngineMod->flat()*(w2 - w1);
+    G4double z1 = ((w2 - w3)*screenZ + w1*w2)/(screenZ + w1 + w3);
     G4double fm = 1.0;
+
     if(fNucFormfactor == fExponentialNF) {
       fm += formf*z1;
       fm = 1.0/(fm*fm);
     } else if(fNucFormfactor == fGaussianNF) {
       fm = G4Exp(-2*formf*z1);
     } else if(fNucFormfactor == fFlatNF) {
-      static const G4double ccoef = 0.00508/MeV;
+      static const G4double ccoef = 0.00508/CLHEP::MeV;
       G4double x = std::sqrt(2.*mom2*z1)*ccoef*2.;
       fm = FlatFormfactor(x);
-      fm *= FlatFormfactor(x*0.6
-	    *fG4pow->A13(fNistManager->GetAtomicMassAmu(targetZ)));
+      fm *= FlatFormfactor(x*0.6*fG4pow->A13(fNistManager->GetAtomicMassAmu(targetZ)));
     }
+    // G4cout << " fm=" << fm << "  " << fMottXSection << G4endl;
     G4double grej;
-    if(fMottXSection) {
+    if(nullptr != fMottXSection) {
       fMottXSection->SetupKinematic(tkin, targetZ);
       grej = fMottXSection->RatioMottRutherfordCosT(std::sqrt(z1))*fm*fm;
     } else {
       grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2. - z1))
       *fm*fm/(1.0 + z1*factD);
     }
-    // G4cout << "SampleSingleScattering: E= " << tkin << " z1= " 
-    //	   << z1 << " grej= "<< grej << " mottFact= "<< fMottFactor<< G4endl;
     if(fMottFactor*rndmEngineMod->flat() <= grej ) {
       // exclude "false" scattering due to formfactor and spin effect
       G4double cost = 1.0 - z1;

@@ -51,8 +51,8 @@ G4LineCurrentMagField::~G4LineCurrentMagField()
 
 // -----------------------------------------------------------------
 
-void G4LineCurrentMagField::GetFieldValue( const G4double yTrack[7],
-                                                 G4double B[3]      ) const  
+void G4LineCurrentMagField::GetFieldValue(const G4double yTrack[],       // [7]
+                                                G4double B[]     ) const // [3]
 {
    //   G4double fFieldConstant = 100 ;
    G4double a = 1.00 ;   // mm

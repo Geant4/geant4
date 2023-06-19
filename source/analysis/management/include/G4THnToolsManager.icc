@@ -189,10 +189,10 @@ G4bool G4THnToolsManager<DIM, HT>::Fill(G4int id,
     G4String dims("xyz");
     G4String message =  " id " + to_string(id);
     for (unsigned int idim = 0; idim < DIM; ++idim) {
-      auto xyz = dims[idim];
+      auto xyz = dims.substr(idim,1);
       message +=
-        xyz + to_string(value[idim]) + " " +
-        xyz + "fcn(" + xyz + "value/" + xyz + "xunit) " +  to_string(newValue[idim]);
+        " " + xyz + " " + to_string(value[idim]) + " " +
+        xyz + "fcn(" + xyz + "value/" + xyz + "unit) " + to_string(newValue[idim]);
     }
     message += " weight " + to_string(weight);  
 

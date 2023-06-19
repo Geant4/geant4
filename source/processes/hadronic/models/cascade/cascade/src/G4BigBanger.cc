@@ -225,6 +225,17 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
     particles.resize(a);	// Use assignment to avoid temporaries
     for(G4int i = 0; i < a; i++) {
       G4int knd = i < z ? 1 : 2;
+      
+      // Set to 0.0 the 4-th component (total energy) of the Lorentz momentum scm_momentums[i]
+      // in order to avoid very rare cases of unphysical negative (total and kinetic) energy
+      // (as reported by ATLAS with Geant4 10.6, but never reproduced in our tests).
+      // Note that these 4-vectors are actually 3-vectors, with null 4-th component in nearly
+      // all cases. After calling the method  G4InuclElementaryParticle::fill  (see below),
+      // the 4-th component of the momentum is set (in the method  G4InuclParticle::setMomentum
+      // which in turn calls  G4DynamicParticle::SetMomentum ) to the square root of the sum of
+      // the square of the mass and the square of the magnitude of the 3-momentum.
+      scm_momentums[i].setE( 0.0 );
+
       particles[i].fill(scm_momentums[i], knd, G4InuclParticle::BigBanger);
     };
   };

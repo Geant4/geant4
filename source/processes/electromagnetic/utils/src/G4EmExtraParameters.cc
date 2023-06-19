@@ -225,20 +225,22 @@ void G4EmExtraParameters::AddPAIModel(const G4String& particle,
 {
   G4String r = CheckRegion(region);
   std::size_t nreg =  m_regnamesPAI.size();
-  for(std::size_t i=0; i<nreg; ++i) {
-    if((m_particlesPAI[i] == particle || 
-        m_particlesPAI[i] == "all" || 
-        particle == "all") && 
-       (m_regnamesPAI[i] == r || 
-        m_regnamesPAI[i] == "DefaultRegionForTheWorld" || 
-        r == "DefaultRegionForTheWorld") ) {
 
-      m_typesPAI[i] = type;
-      if(particle == "all") { m_particlesPAI[i] = particle; }
-      if(r == "DefaultRegionForTheWorld") { m_regnamesPAI[i] = r; }
-      return;
+  // in previously defined region other particles may be already defined
+  // type should be overrided for the same region and particle 
+  for(std::size_t i=0; i<nreg; ++i) {
+    if(m_regnamesPAI[i] == r) {
+      if (particle == "all") {
+	m_particlesPAI[i] = particle;
+	m_typesPAI[i] = type;
+        return;  
+      } else if(m_particlesPAI[i] == particle || m_particlesPAI[i] == "all") { 
+	m_typesPAI[i] = type;
+        return;  
+      }
     }
   }
+  // new regions and/or particles
   m_particlesPAI.push_back(particle);
   m_regnamesPAI.push_back(r);
   m_typesPAI.push_back(type);

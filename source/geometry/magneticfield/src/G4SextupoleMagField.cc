@@ -63,8 +63,8 @@ G4SextupoleMagField::~G4SextupoleMagField()
 {
 }
 
-void G4SextupoleMagField::GetFieldValue( const G4double y[4],
-                                        G4double B[3]  ) const
+void G4SextupoleMagField::GetFieldValue( const G4double y[],         // [4]
+                                               G4double B[]  ) const // [3]
 //  with displaced origin and rotation
 {
   G4ThreeVector r_global = G4ThreeVector(

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -319,13 +319,13 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -378,13 +378,13 @@ hIoni:  for anti_proton  XStype:3  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -410,13 +410,13 @@ hIoni:  for kaon+  XStype:3  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -442,13 +442,13 @@ hIoni:  for kaon-  XStype:3  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -474,13 +474,13 @@ muIoni:  for mu+  XStype:3  SubType=2
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -506,13 +506,13 @@ muIoni:  for mu-  XStype:3  SubType=2
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -538,13 +538,13 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -570,13 +570,13 @@ hIoni:  for pi-  XStype:3  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -1203,199 +1203,199 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 2
     123 hits stored in this event
 >>> Event: 3
-    520 hits stored in this event
+    253 hits stored in this event
 >>> Event: 4
-    172 hits stored in this event
->>> Event: 5
-    162 hits stored in this event
->>> Event: 6
-    156 hits stored in this event
->>> Event: 7
-    58 hits stored in this event
->>> Event: 8
-    99 hits stored in this event
->>> Event: 9
-    69 hits stored in this event
->>> Event: 10
-    66 hits stored in this event
->>> Event: 11
-    201 hits stored in this event
->>> Event: 12
-    112 hits stored in this event
->>> Event: 13
-    111 hits stored in this event
->>> Event: 14
-    619 hits stored in this event
->>> Event: 15
-    209 hits stored in this event
->>> Event: 16
-    338 hits stored in this event
->>> Event: 17
-    67 hits stored in this event
->>> Event: 18
-    130 hits stored in this event
->>> Event: 19
-    557 hits stored in this event
->>> Event: 20
-    100 hits stored in this event
->>> Event: 21
-    732 hits stored in this event
->>> Event: 22
-    98 hits stored in this event
->>> Event: 23
-    158 hits stored in this event
->>> Event: 24
-    85 hits stored in this event
->>> Event: 25
-    90 hits stored in this event
->>> Event: 26
-    194 hits stored in this event
->>> Event: 27
-    139 hits stored in this event
->>> Event: 28
-    71 hits stored in this event
->>> Event: 29
-    155 hits stored in this event
->>> Event: 30
-    50 hits stored in this event
->>> Event: 31
-    217 hits stored in this event
->>> Event: 32
-    129 hits stored in this event
->>> Event: 33
-    57 hits stored in this event
->>> Event: 34
-    68 hits stored in this event
->>> Event: 35
-    58 hits stored in this event
->>> Event: 36
-    46 hits stored in this event
->>> Event: 37
-    94 hits stored in this event
->>> Event: 38
-    99 hits stored in this event
->>> Event: 39
-    657 hits stored in this event
->>> Event: 40
-    68 hits stored in this event
->>> Event: 41
-    88 hits stored in this event
->>> Event: 42
-    49 hits stored in this event
->>> Event: 43
-    77 hits stored in this event
->>> Event: 44
-    409 hits stored in this event
->>> Event: 45
-    155 hits stored in this event
->>> Event: 46
-    115 hits stored in this event
->>> Event: 47
-    132 hits stored in this event
->>> Event: 48
-    582 hits stored in this event
->>> Event: 49
-    62 hits stored in this event
->>> Event: 50
-    77 hits stored in this event
->>> Event: 51
-    92 hits stored in this event
->>> Event: 52
-    75 hits stored in this event
->>> Event: 53
-    140 hits stored in this event
->>> Event: 54
-    231 hits stored in this event
->>> Event: 55
-    92 hits stored in this event
->>> Event: 56
-    207 hits stored in this event
->>> Event: 57
-    108 hits stored in this event
->>> Event: 58
-    105 hits stored in this event
->>> Event: 59
-    54 hits stored in this event
->>> Event: 60
-    86 hits stored in this event
->>> Event: 61
-    79 hits stored in this event
->>> Event: 62
-    498 hits stored in this event
->>> Event: 63
-    184 hits stored in this event
->>> Event: 64
-    63 hits stored in this event
->>> Event: 65
-    158 hits stored in this event
->>> Event: 66
-    69 hits stored in this event
->>> Event: 67
-    166 hits stored in this event
->>> Event: 68
-    116 hits stored in this event
->>> Event: 69
-    1574 hits stored in this event
->>> Event: 70
-    75 hits stored in this event
->>> Event: 71
-    949 hits stored in this event
->>> Event: 72
-    319 hits stored in this event
->>> Event: 73
-    61 hits stored in this event
->>> Event: 74
-    72 hits stored in this event
->>> Event: 75
-    148 hits stored in this event
->>> Event: 76
-    83 hits stored in this event
->>> Event: 77
-    71 hits stored in this event
->>> Event: 78
-    78 hits stored in this event
->>> Event: 79
-    125 hits stored in this event
->>> Event: 80
-    66 hits stored in this event
->>> Event: 81
-    86 hits stored in this event
->>> Event: 82
-    96 hits stored in this event
->>> Event: 83
-    66 hits stored in this event
->>> Event: 84
-    79 hits stored in this event
->>> Event: 85
-    96 hits stored in this event
->>> Event: 86
-    94 hits stored in this event
->>> Event: 87
-    213 hits stored in this event
->>> Event: 88
-    91 hits stored in this event
->>> Event: 89
-    63 hits stored in this event
->>> Event: 90
-    63 hits stored in this event
->>> Event: 91
     82 hits stored in this event
->>> Event: 92
-    371 hits stored in this event
->>> Event: 93
-    165 hits stored in this event
->>> Event: 94
-    84 hits stored in this event
->>> Event: 95
+>>> Event: 5
+    105 hits stored in this event
+>>> Event: 6
+    1424 hits stored in this event
+>>> Event: 7
+    2306 hits stored in this event
+>>> Event: 8
+    124 hits stored in this event
+>>> Event: 9
+    124 hits stored in this event
+>>> Event: 10
+    137 hits stored in this event
+>>> Event: 11
+    83 hits stored in this event
+>>> Event: 12
+    131 hits stored in this event
+>>> Event: 13
+    94495 hits stored in this event
+>>> Event: 14
+    621 hits stored in this event
+>>> Event: 15
+    268 hits stored in this event
+>>> Event: 16
+    277 hits stored in this event
+>>> Event: 17
+    116 hits stored in this event
+>>> Event: 18
+    194 hits stored in this event
+>>> Event: 19
+    56 hits stored in this event
+>>> Event: 20
+    179 hits stored in this event
+>>> Event: 21
+    282 hits stored in this event
+>>> Event: 22
+    1382 hits stored in this event
+>>> Event: 23
+    89 hits stored in this event
+>>> Event: 24
+    77 hits stored in this event
+>>> Event: 25
+    477 hits stored in this event
+>>> Event: 26
+    148 hits stored in this event
+>>> Event: 27
+    387 hits stored in this event
+>>> Event: 28
+    267 hits stored in this event
+>>> Event: 29
+    131 hits stored in this event
+>>> Event: 30
+    137 hits stored in this event
+>>> Event: 31
+    838 hits stored in this event
+>>> Event: 32
+    141 hits stored in this event
+>>> Event: 33
+    122 hits stored in this event
+>>> Event: 34
+    574 hits stored in this event
+>>> Event: 35
+    90 hits stored in this event
+>>> Event: 36
+    69 hits stored in this event
+>>> Event: 37
+    1099 hits stored in this event
+>>> Event: 38
+    38 hits stored in this event
+>>> Event: 39
+    78 hits stored in this event
+>>> Event: 40
+    128 hits stored in this event
+>>> Event: 41
+    66 hits stored in this event
+>>> Event: 42
+    133 hits stored in this event
+>>> Event: 43
+    550 hits stored in this event
+>>> Event: 44
+    643 hits stored in this event
+>>> Event: 45
     86 hits stored in this event
+>>> Event: 46
+    77 hits stored in this event
+>>> Event: 47
+    87 hits stored in this event
+>>> Event: 48
+    104 hits stored in this event
+>>> Event: 49
+    199 hits stored in this event
+>>> Event: 50
+    110 hits stored in this event
+>>> Event: 51
+    110 hits stored in this event
+>>> Event: 52
+    71 hits stored in this event
+>>> Event: 53
+    3666 hits stored in this event
+>>> Event: 54
+    329 hits stored in this event
+>>> Event: 55
+    76 hits stored in this event
+>>> Event: 56
+    113 hits stored in this event
+>>> Event: 57
+    4073 hits stored in this event
+>>> Event: 58
+    113 hits stored in this event
+>>> Event: 59
+    75 hits stored in this event
+>>> Event: 60
+    91 hits stored in this event
+>>> Event: 61
+    70 hits stored in this event
+>>> Event: 62
+    94 hits stored in this event
+>>> Event: 63
+    55 hits stored in this event
+>>> Event: 64
+    62 hits stored in this event
+>>> Event: 65
+    63 hits stored in this event
+>>> Event: 66
+    101 hits stored in this event
+>>> Event: 67
+    325 hits stored in this event
+>>> Event: 68
+    110 hits stored in this event
+>>> Event: 69
+    91 hits stored in this event
+>>> Event: 70
+    85 hits stored in this event
+>>> Event: 71
+    144 hits stored in this event
+>>> Event: 72
+    64 hits stored in this event
+>>> Event: 73
+    72 hits stored in this event
+>>> Event: 74
+    107 hits stored in this event
+>>> Event: 75
+    63 hits stored in this event
+>>> Event: 76
+    159 hits stored in this event
+>>> Event: 77
+    1405 hits stored in this event
+>>> Event: 78
+    100 hits stored in this event
+>>> Event: 79
+    89 hits stored in this event
+>>> Event: 80
+    60 hits stored in this event
+>>> Event: 81
+    85 hits stored in this event
+>>> Event: 82
+    98 hits stored in this event
+>>> Event: 83
+    41 hits stored in this event
+>>> Event: 84
+    164 hits stored in this event
+>>> Event: 85
+    253 hits stored in this event
+>>> Event: 86
+    58 hits stored in this event
+>>> Event: 87
+    155 hits stored in this event
+>>> Event: 88
+    135 hits stored in this event
+>>> Event: 89
+    129 hits stored in this event
+>>> Event: 90
+    87 hits stored in this event
+>>> Event: 91
+    56 hits stored in this event
+>>> Event: 92
+    84 hits stored in this event
+>>> Event: 93
+    78 hits stored in this event
+>>> Event: 94
+    601 hits stored in this event
+>>> Event: 95
+    249 hits stored in this event
 >>> Event: 96
-    61 hits stored in this event
+    266 hits stored in this event
 >>> Event: 97
-    176 hits stored in this event
+    158 hits stored in this event
 >>> Event: 98
-    361 hits stored in this event
+    155 hits stored in this event
 >>> Event: 99
-    108 hits stored in this event
+    80 hits stored in this event
 ### Run 2 starts.
 --> Event 0 starts.
 

@@ -667,11 +667,6 @@ void G4LossTableManager::BuildPhysicsTable(
         base_part_vector[i] = el->BaseParticle(); 
         tables_are_built[i] = false;
         all_tables_are_built= false;
-        if(!isActive[i]) { 
-          el->SetIonisation(false); 
-          tables_are_built[i] = true;
-        }
-  
         if(1 < verbose) { 
           G4cout << i <<".   "<< el->GetProcessName();
           if(el->Particle()) {
@@ -900,7 +895,6 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 
   //  if(1<verbose) G4cout << *range << G4endl;
 
-  std::vector<G4PhysicsTable*> listSub;
   std::vector<G4PhysicsTable*> listCSDA;
 
   for (i=0; i<n_dedx; ++i) {

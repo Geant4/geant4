@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -68,7 +68,6 @@ physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
 /testem/phys/SetGammaToMuPairFac 1000
-The cross section for GammaConversionToMuons is artificially increased by the CrossSecFactor=1000
 #
 /gun/particle gamma
 /gun/energy 100 TeV
@@ -167,6 +166,7 @@ CM System: emin(MeV)= 1019.46 epeak(MeV)= 1019.46 emax(MeV)= 4521
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
         good cross section parametrization from 211.317 MeV to 1e+12 GeV for all Z.
+        cross section factor: 1000
 
 AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=6
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
@@ -270,7 +270,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000611s Sys=0.000000s
+  User=0.000000s Real=0.000820s Sys=0.000000s
 ### RunAction::EndOfRunAction
 
  Number of process calls --->	GammaToMuPair : 5
@@ -388,7 +388,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000446s Sys=0.000000s
+  User=0.000000s Real=0.000553s Sys=0.000000s
 ### RunAction::EndOfRunAction
 
  Number of process calls --->	AnnihiToMuPair : 2	ee2hadr : 3

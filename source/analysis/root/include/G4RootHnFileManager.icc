@@ -37,7 +37,7 @@ template <typename HT>
 G4bool G4RootHnFileManager<HT>::Write(
   tools::wroot::directory* directory, HT* ht, const G4String& htName)
 {
-  // write histpgram
+  // write histogram
   return to(*directory, *ht, htName);
 }
 

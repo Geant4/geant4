@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-05-04 Gabriele Cosmo (run-V11-00-13)
+- Removed mistyped method declaration GetMasterTheadId() in G4MTRunManager.
+
 ## 2023-02-03 Gabriele Cosmo (run-V11-00-12)
 - Reduced printout in destruction of run-manager (master and workers), to be
   coherent with verbose level greater than 1.

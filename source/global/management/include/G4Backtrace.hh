@@ -37,13 +37,13 @@
 //  These should not interfere with debuggers and/or G4FPEDetection.
 //  In order to turn off handling for one or more signals, one can do:
 //
-//    G4BackTrace::DefaultSignals() = std::set<int>{};
-//    G4BackTrace::DefaultSignals() = std::set<int>{ SIGSEGV };
+//    G4Backtrace::DefaultSignals() = std::set<int>{};
+//    G4Backtrace::DefaultSignals() = std::set<int>{ SIGSEGV };
 //
 //  and so on, *before* creating the run-manager. After the run-manager
 //  has been created, one should disable the signals:
 //
-//    G4BackTrace::Disable(G4BackTrace::DefaultSignals());
+//    G4Backtrace::Disable(G4BackTrace::DefaultSignals());
 //
 //  Additionally, at runtime, the environment variable "G4BACKTRACE" can
 //  be set to select a specific set of signals or none, e.g. in bash:

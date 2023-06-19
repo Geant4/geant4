@@ -404,19 +404,19 @@ private Q_SLOTS :
   void ShowHelpCallback();
   void CommandHistoryCallback();
   void LookForHelpStringCallback();
-  void UpdateTabWidget(G4int);
+  void UpdateTabWidget(int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
-  void ThreadComboBoxCallback(G4int);
-  void TabCloseCallback(G4int);
-  void ToolBoxActivated(G4int);
+  void ThreadComboBoxCallback(int);
+  void TabCloseCallback(int);
+  void ToolBoxActivated(int);
   void VisParameterCallback(QWidget*);
   void ChangeColorCallback(QWidget*);
   void ChangeCursorAction(const QString&);
   void ChangeSurfaceStyle(const QString&);
   void OpenIconCallback(const QString&);
   void SaveIconCallback(const QString&);
-  void ViewerPropertiesIconCallback(G4int);
+  void ViewerPropertiesIconCallback(int);
   void ChangePerspectiveOrtho(const QString&);
 };
 

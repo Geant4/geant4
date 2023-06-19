@@ -24,74 +24,54 @@
 // ********************************************************************
 //
 //
-// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko, 21 April 2023
 //
-#ifndef G4ParticleHPGamma_h
-#define G4ParticleHPGamma_h 1
+// Data structure class for gamma levels to replace gamma data classes
+// of P. Arce
+//
+#ifndef G4ParticleHPNucLevel_h
+#define G4ParticleHPNucLevel_h 1
 
+#include "G4ReactionProduct.hh"
 #include "globals.hh"
-#include "G4ios.hh"
-#include <fstream>
-#include "G4DynamicParticleVector.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleHPLevel.hh"
 
-class G4ParticleHPGamma
+#include <vector>
+
+class G4ParticleHPNucLevel
 {
   public:
-  
-  G4ParticleHPGamma();
-  ~G4ParticleHPGamma();
-  
-  G4bool Init(std::istream & aDataFile);
-  
-  inline void SetNext(G4ParticleHPLevel * aLevel)
-  {
-    next = aLevel;
-  }
-  
-  G4DynamicParticleVector * GetDecayGammas()
-  {
-    G4DynamicParticleVector * theResult;
-    if(next == 0)
-    {
-      theResult = new G4DynamicParticleVector;
-    }
-    else
-    {
-      theResult = next->GetDecayGammas();
-    }
-    G4DynamicParticle * theNew = new G4DynamicParticle;
-    theNew->SetDefinition(G4Gamma::Gamma());
-    theNew->SetKineticEnergy(gammaEnergy);
-    theResult->push_back(theNew);
-    return theResult;
-  }
-  
-  inline G4double GetLevelEnergy()
-  {
-    return levelEnergy;
-  }
+    explicit G4ParticleHPNucLevel(G4double e);
+    ~G4ParticleHPNucLevel() = default;
 
-  inline G4double GetGammaEnergy()
-  {
-    return gammaEnergy;
-  }
-  
-  inline G4double GetWeight()
-  {
-    return probability;
-  }
+    void AddGamma(G4double e, G4double w, G4int idx);
+
+    void Normalize();
+
+    G4ReactionProduct* GetDecayGamma(G4int& idx) const;
+
+    inline G4double GetLevelEnergy() const { return levelEnergy; }
+
+    inline G4double GetNumberOfGammas() const { return nGammas; }
+
+    inline G4double GetGammaEnergy(G4int idx) const
+    {
+      return (idx < nGammas && idx >= 0) ? gammas[idx].gammaEnergy : 0.0;
+    }
+
+    G4ParticleHPNucLevel(const G4ParticleHPNucLevel&) = delete;
+    const G4ParticleHPNucLevel& operator=(const G4ParticleHPNucLevel&) = delete;
 
   private:
-  
-  G4double levelEnergy;
-  G4double gammaEnergy;
-  G4double probability;
-  
-  G4ParticleHPLevel * next;
-  static G4ThreadLocal int instancecount;
+    G4int nGammas = 0;
+    G4double levelEnergy;
+
+    struct gammaData
+    {
+        G4double gammaEnergy;
+        G4double cumProbability;
+        G4int next;
+    };
+    std::vector<gammaData> gammas;
 };
 
 #endif

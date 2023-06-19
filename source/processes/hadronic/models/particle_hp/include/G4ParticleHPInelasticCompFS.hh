@@ -27,36 +27,34 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 // June-2019 - E. Mendoza - re-build "two_body_reaction", to be used by
-//  incident charged particles (now isotropic emission in the CMS). 
-//  Also restrict nresp use below 20 MeV (for future developments). 
+//  incident charged particles (now isotropic emission in the CMS).
+//  Also restrict nresp use below 20 MeV (for future developments).
 //  Add photon emission when no data available.
 
 #ifndef G4ParticleHPInelasticCompFS_h
 #define G4ParticleHPInelasticCompFS_h 1
 
-#include "globals.hh"
-#include "G4HadProjectile.hh"
 #include "G4HadFinalState.hh"
-#include "G4ParticleHPFinalState.hh"
-#include "G4ParticleHPAngular.hh"
-#include "G4ParticleHPEnergyDistribution.hh"
-#include "G4ParticleHPEnAngCorrelation.hh"
-#include "G4ParticleHPPhotonDist.hh"
-#include "G4ParticleHPDeExGammas.hh"
-#include "G4Nucleus.hh"
-
+#include "G4HadProjectile.hh"
 #include "G4NRESP71M03.hh"
+#include "G4Nucleus.hh"
+#include "G4ParticleHPAngular.hh"
+#include "G4ParticleHPDeExGammas.hh"
+#include "G4ParticleHPEnAngCorrelation.hh"
+#include "G4ParticleHPEnergyDistribution.hh"
+#include "G4ParticleHPFinalState.hh"
+#include "G4ParticleHPPhotonDist.hh"
+#include "globals.hh"
 
 class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
 {
   public:
-  
     G4ParticleHPInelasticCompFS()
     {
       QI.resize(51);
       LR.resize(51);
-      for(G4int i=0; i<51; i++) {
-        hasXsec = true; 
+      for (G4int i = 0; i < 51; i++) {
+        hasXsec = true;
         theXsection[i] = 0;
         theEnergyDistribution[i] = 0;
         theAngularDistribution[i] = 0;
@@ -69,7 +67,7 @@ class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
 
     virtual ~G4ParticleHPInelasticCompFS()
     {
-      for(G4int i=0; i<51; i++) {
+      for (G4int i = 0; i < 51; i++) {
         if (theXsection[i] != 0) delete theXsection[i];
         if (theEnergyDistribution[i] != 0) delete theEnergyDistribution[i];
         if (theAngularDistribution[i] != 0) delete theAngularDistribution[i];
@@ -78,8 +76,8 @@ class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
       }
     }
 
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName,
-              G4String& aSFType, G4ParticleDefinition*);
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aSFType,
+              G4ParticleDefinition*);
 
     void InitGammas(G4double AR, G4double ZR);
 
@@ -96,12 +94,10 @@ class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
 
     G4int SelectExitChannel(G4double eKinetic);
 
-    void CompositeApply(const G4HadProjectile& theTrack,
-                        G4ParticleDefinition* aHadron);
+    void CompositeApply(const G4HadProjectile& theTrack, G4ParticleDefinition* aHadron);
 
-    inline void InitDistributionInitialState(G4ReactionProduct& anIncidentPart, 
-                                             G4ReactionProduct& aTarget, 
-                                             G4int it)
+    inline void InitDistributionInitialState(G4ReactionProduct& anIncidentPart,
+                                             G4ReactionProduct& aTarget, G4int it)
     {
       if (theAngularDistribution[it] != 0) {
         theAngularDistribution[it]->SetTarget(aTarget);
@@ -113,32 +109,30 @@ class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
         theEnergyAngData[it]->SetProjectileRP(anIncidentPart);
       }
     }
-  
+
   protected:
-  
     G4ParticleHPVector* theXsection[51];
     G4ParticleHPEnergyDistribution* theEnergyDistribution[51];
     G4ParticleHPAngular* theAngularDistribution[51];
     G4ParticleHPEnAngCorrelation* theEnergyAngData[51];
-  
+
     G4ParticleHPPhotonDist* theFinalStatePhotons[51];
-  
+
     G4ParticleHPDeExGammas theGammas;
     G4String gammaPath;
-  
+
   protected:
     std::vector<G4double> QI;
     std::vector<G4int> LR;
 
   private:
-    //                    (projectile, target, hadron, mu of hadron)   
+    //                    (projectile, target, hadron, mu of hadron)
     void two_body_reaction(G4ReactionProduct* proj, G4ReactionProduct* targ,
                            G4ReactionProduct* product, G4double resExcitationEnergy);
 
     G4NRESP71M03 nresp71_model;
-    G4bool use_nresp71_model(const G4ParticleDefinition* aDefinition, const G4int it, 
+    G4bool use_nresp71_model(const G4ParticleDefinition* aDefinition, const G4int it,
                              const G4ReactionProduct& theTarget, G4ReactionProduct& boosted);
-
 };
 
 #endif

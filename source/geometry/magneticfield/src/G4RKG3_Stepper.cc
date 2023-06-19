@@ -41,10 +41,10 @@ G4RKG3_Stepper::~G4RKG3_Stepper()
 {
 }
 
-void G4RKG3_Stepper::Stepper( const G4double yInput[8],
-                              const G4double dydx[6],
+void G4RKG3_Stepper::Stepper( const G4double yInput[], // [8]
+                              const G4double dydx[],   // [6]
                                     G4double Step,
-                                    G4double yOut[8],
+                                    G4double yOut[],   // [8]
                                     G4double yErr[] )
 {
    G4double  B[3];

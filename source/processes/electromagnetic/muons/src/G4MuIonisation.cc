@@ -124,6 +124,7 @@ G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
     theBaseParticle = bpart;
 
     mass = theParticle->GetPDGMass();
+    ratio = CLHEP::electron_mass_c2/mass;
     G4double q = theParticle->GetPDGCharge();
 
     G4EmParameters* param = G4EmParameters::Instance();
@@ -138,13 +139,11 @@ G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(0)->SetHighEnergyLimit(elow); 
 
-    // high energy fluctuation model
+    // fluctuation model
     if (nullptr == FluctModel()) {
       SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
     }
-    // low-energy fluctuation model
-    G4VEmFluctuationModel* f = G4EmStandUtil::ModelOfFluctuations(true);
-    AddEmModel(1, EmModel(0), f);
+    AddEmModel(1, EmModel(0), FluctModel());
 
     // high energy model
     if (nullptr == EmModel(1)) { SetEmModel(new G4MuBetheBlochModel()); }
@@ -152,7 +151,6 @@ G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
     EmModel(1)->SetHighEnergyLimit(emax);
     AddEmModel(1, EmModel(1), FluctModel());
 
-    ratio = CLHEP::electron_mass_c2/mass;
     isInitialised = true;
   }
 }

@@ -91,9 +91,17 @@ G4bool G4GammaConversionToMuons::IsApplicable(const G4ParticleDefinition& part)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition& p)
-// Build cross section and mean free path tables
-{  //here no tables, just calling PrintInfoDefinition
+{
   Energy5DLimit = G4EmParameters::Instance()->MaxEnergyFor5DMuPair();
+
+  auto table = G4Material::GetMaterialTable();
+  std::size_t nelm = 0;
+  for(auto const & mat : *table) {
+    std::size_t n = mat->GetNumberOfElements();
+    nelm = std::max(nelm, n);
+  }
+  fTemp.resize(nelm, 0);
+
   if(Energy5DLimit > 0.0 && nullptr != f5Dmodel) { 
     f5Dmodel = new G4BetheHeitler5DModel();
     f5Dmodel->SetLeptonPair(theMuonPlus, theMuonMinus);
@@ -108,15 +116,12 @@ void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 G4double G4GammaConversionToMuons::GetMeanFreePath(const G4Track& aTrack,
                                                    G4double, G4ForceCondition*)
-
 // returns the photon mean free path in GEANT4 internal units
-// (MeanFreePath is a private member of the class)
-
 {
-   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
-   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
-   const G4Material* aMaterial = aTrack.GetMaterial();
-   return ComputeMeanFreePath(GammaEnergy, aMaterial);
+  const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+  G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+  const G4Material* aMaterial = aTrack.GetMaterial();
+  return ComputeMeanFreePath(GammaEnergy, aMaterial);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -192,12 +197,11 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
   sigfac=4.*fine_structure_const*Z*Z*Rc*Rc;
   PowThres=1.479+0.00799*Dn;
   Ecor=-18.+4347./(B*Zthird);
-  
+
   G4double CorFuc=1.+.04*G4Log(1.+Ecor/Egam);
-  //G4double Eg=pow(1.-4.*Mmuon/Egam,PowThres)*pow( pow(Wsatur,PowSat)+
-  //            pow(Egam,PowSat),1./PowSat); // threshold and saturation
   G4double Eg=G4Exp(G4Log(1.-4.*Mmuon/Egam)*PowThres)*
-    G4Exp(G4Log( G4Exp(G4Log(Wsatur)*PowSat)+G4Exp(G4Log(Egam)*PowSat))/PowSat);
+    G4Exp(G4Log(G4Exp(G4Log(Wsatur)*PowSat) + G4Exp(G4Log(Egam)*PowSat))/PowSat);
+
   G4double CrossSection=7./9.*sigfac*G4Log(1.+WMedAppr*CorFuc*Eg);
   CrossSection *= CrossSecFactor; // increase the CrossSection by  (by default 1)
   return CrossSection;
@@ -210,8 +214,10 @@ void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
 { 
   if(fac < 0.0) return;
   CrossSecFactor=fac;
-  G4cout << "The cross section for GammaConversionToMuons is artificially "
-         << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+  if (verboseLevel > 0) {
+    G4cout << "The cross section for GammaConversionToMuons is artificially "
+	   << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -243,7 +249,6 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     std::vector<G4DynamicParticle*> fvect;
     f5Dmodel->SampleSecondaries(&fvect, aTrack.GetMaterialCutsCouple(), 
 				aTrack.GetDynamicParticle(), 0.0, DBL_MAX);
-    aParticleChange.SetNumberOfSecondaries((G4int)fvect.size());
     for(auto dp : fvect) { aParticleChange.AddSecondary(dp); }
     return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
   }  
@@ -276,33 +281,41 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double GammaMuonInv=Mmuon/Egam;
 
   // generate xPlus according to the differential cross section by rejection
-  G4double xmin=(Egam < LimitEnergy) ? GammaMuonInv : .5-sqrt(.25-GammaMuonInv);
+  G4double xmin=(Egam <= LimitEnergy) ? 0.5 : 0.5 - std::sqrt(0.25 - GammaMuonInv);
   G4double xmax=1.-xmin;
 
   G4double Ds2=(Dn*sqrte-2.);
   G4double sBZ=sqrte*B*Zthird/electron_mass_c2;
   G4double LogWmaxInv=1./G4Log(Winfty*(1.+2.*Ds2*GammaMuonInv)
 			       /(1.+2.*sBZ*Mmuon*GammaMuonInv));
-  G4double xPlus,xMinus,xPM,result,W;
+  G4double xPlus = 0.5;
+  G4double xMinus = 0.5;
+  G4double xPM = 0.25;
+
   G4int nn = 0;
   const G4int nmax = 1000;
-  do {
-    xPlus=xmin+G4UniformRand()*(xmax-xmin);
-    xMinus=1.-xPlus;
-    xPM=xPlus*xMinus;
-    G4double del=Mmuon*Mmuon/(2.*Egam*xPM);
-    W=Winfty*(1.+Ds2*del/Mmuon)/(1.+sBZ*del);
-    G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
-    result=(xxp > 0.) ? xxp*G4Log(W)*LogWmaxInv : 0.0;
-    if(result>1.) {
-      G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
-	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
+
+  // sampling for Egam > LimitEnergy
+  if (xmin < 0.5) {
+    G4double result,W;
+    do {
+      xPlus=xmin+G4UniformRand()*(xmax-xmin);
+      xMinus=1.-xPlus;
+      xPM=xPlus*xMinus;
+      G4double del=Mmuon*Mmuon/(2.*Egam*xPM);
+      W=Winfty*(1.+Ds2*del/Mmuon)/(1.+sBZ*del);
+      G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
+      result=(xxp > 0.) ? xxp*G4Log(W)*LogWmaxInv : 0.0;
+      if(result>1.) {
+	G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
+	       << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
+      }
+      ++nn;
+      if(nn >= nmax) { break; }
     }
-    ++nn;
-    if(nn >= nmax) { break; }
+    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
+    while (G4UniformRand() > result);
   }
-  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-  while (G4UniformRand() > result);
 
   // now generate the angular variables via the auxilary variables t,psi,rho
   G4double t;
@@ -406,7 +419,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   // rotate to actual gamma direction
   MuPlusDirection.rotateUz(GammaDirection);
   MuMinusDirection.rotateUz(GammaDirection);
-  aParticleChange.SetNumberOfSecondaries(2);
+
   // create G4DynamicParticle object for the particle1
   G4DynamicParticle* aParticle1 = 
     new G4DynamicParticle(theMuonPlus,MuPlusDirection,EPlus-Mmuon);
@@ -431,18 +444,24 @@ const G4Element* G4GammaConversionToMuons::SelectRandomAtom(
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
   const G4Element* elm = (*theElementVector)[0];
 
-  if (NumberOfElements > 1) { 
-    const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
+  if (NumberOfElements > 1) {
+    G4double e = std::max(aDynamicGamma->GetKineticEnergy(), LimitEnergy);
+    const G4double* natom = aMaterial->GetVecNbOfAtomsPerVolume();
 
-    G4double PartialSumSigma = 0.;
-    G4double rval = G4UniformRand()/MeanFreePath;
-
+    G4double sum = 0.;
     for (std::size_t i=0; i<NumberOfElements; ++i)
     { 
       elm = (*theElementVector)[i];
-      PartialSumSigma += NbOfAtomsPerVolume[i]
-	*GetCrossSectionPerAtom(aDynamicGamma, elm);
-      if (rval <= PartialSumSigma) { break; }
+      sum += natom[i]*ComputeCrossSectionPerAtom(e, elm->GetZasInt());
+      fTemp[i] = sum;
+    }
+    sum *= G4UniformRand();
+    for (std::size_t i=0; i<NumberOfElements; ++i)
+    { 
+      if(sum <= fTemp[i]) {
+	elm = (*theElementVector)[i];
+	break;
+      }
     }
   }
   return elm;
@@ -458,6 +477,7 @@ void G4GammaConversionToMuons::PrintInfoDefinition()
   G4cout << "        good cross section parametrization from "
          << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << HighestEnergyLimit/GeV << " GeV for all Z." << G4endl;
+  G4cout << "        cross section factor: " << CrossSecFactor << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

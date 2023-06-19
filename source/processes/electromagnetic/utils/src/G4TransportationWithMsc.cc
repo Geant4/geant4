@@ -44,6 +44,8 @@
 #include "G4EmConfigurator.hh"
 #include "G4VMscModel.hh"
 
+#include "G4ParticleChangeForMSC.hh"
+
 #include "G4DynamicParticle.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
@@ -72,6 +74,11 @@ G4TransportationWithMsc::G4TransportationWithMsc(ScatteringType type,
   fEmManager    = G4LossTableManager::Instance();
   fModelManager = new G4EmModelManager;
 
+  if(type == ScatteringType::MultipleScattering)
+  {
+    fParticleChangeForMSC = new G4ParticleChangeForMSC;
+  }
+
   G4ThreeVector zero;
   fSubStepDynamicParticle =
     new G4DynamicParticle(G4Electron::Definition(), zero);
@@ -85,6 +92,8 @@ G4TransportationWithMsc::G4TransportationWithMsc(ScatteringType type,
 G4TransportationWithMsc::~G4TransportationWithMsc()
 {
   delete fModelManager;
+  delete fParticleChangeForMSC;
+
   // fSubStepDynamicParticle is owned and also deleted by fSubStepTrack!
   delete fSubStepTrack;
   delete fSubStep;
@@ -103,7 +112,7 @@ void G4TransportationWithMsc::AddMscModel(G4VMscModel* mscModel, G4int order,
   }
 
   fModelManager->AddEmModel(order, mscModel, nullptr, region);
-  mscModel->SetParticleChange(&fParticleChange);
+  mscModel->SetParticleChange(fParticleChangeForMSC);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -136,15 +145,18 @@ void G4TransportationWithMsc::PreparePhysicsTable(
     }
 
     const G4int numberOfModels = fModelManager->NumberOfModels();
-    for(G4int i = 0; i < numberOfModels; ++i)
+    if(fType == ScatteringType::MultipleScattering)
     {
-      auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
-      msc->SetMasterThread(master);
-      msc->SetPolarAngleLimit(theParameters->MscThetaLimit());
-      G4double emax =
-        std::min(msc->HighEnergyLimit(), theParameters->MaxKinEnergy());
-      msc->SetHighEnergyLimit(emax);
-      msc->SetUseBaseMaterials(baseMat);
+      for(G4int i = 0; i < numberOfModels; ++i)
+      {
+        auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
+        msc->SetMasterThread(master);
+        msc->SetPolarAngleLimit(theParameters->MscThetaLimit());
+        G4double emax =
+          std::min(msc->HighEnergyLimit(), theParameters->MaxKinEnergy());
+        msc->SetHighEnergyLimit(emax);
+        msc->SetUseBaseMaterials(baseMat);
+      }
     }
 
     fModelManager->Initialise(fFirstParticle, G4Electron::Electron(),
@@ -168,13 +180,16 @@ void G4TransportationWithMsc::BuildPhysicsTable(
 
       // Initialisation of models.
       const G4int numberOfModels = fModelManager->NumberOfModels();
-      for(G4int i = 0; i < numberOfModels; ++i)
+      if(fType == ScatteringType::MultipleScattering)
       {
-        auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
-        auto msc0 =
-          static_cast<G4VMscModel*>(masterProcess->fModelManager->GetModel(i));
-        msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
-        msc->InitialiseLocal(fFirstParticle, msc0);
+        for(G4int i = 0; i < numberOfModels; ++i)
+        {
+          auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
+          auto msc0 =
+            static_cast<G4VMscModel*>(masterProcess->fModelManager->GetModel(i));
+          msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
+          msc->InitialiseLocal(fFirstParticle, msc0);
+        }
       }
     }
   }
@@ -202,11 +217,14 @@ void G4TransportationWithMsc::StartTracking(G4Track* track)
   fSubStepDynamicParticle->SetDefinition(currParticle);
 
   const G4int numberOfModels = fModelManager->NumberOfModels();
-  for(G4int i = 0; i < numberOfModels; ++i)
+  if(fType == ScatteringType::MultipleScattering)
   {
-    auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
-    msc->StartTracking(track);
-    msc->SetIonisation(ionisation, currParticle);
+    for(G4int i = 0; i < numberOfModels; ++i)
+    {
+      auto msc = static_cast<G4VMscModel*>(fModelManager->GetModel(i));
+      msc->StartTracking(track);
+      msc->SetIonisation(ionisation, currParticle);
+    }
   }
 
   // Ensure that field propagation state is also cleared / prepared
@@ -348,15 +366,15 @@ G4double G4TransportationWithMsc::AlongStepGetPhysicalInteractionLength(
             static constexpr G4double sFact     = 0.99;
 
             // The call to SampleScattering() *may* directly fill in the changed
-            // direction into fParticleChange, so we have to:
+            // direction into fParticleChangeForMSC, so we have to:
             // 1) Make sure the momentum direction is initialized.
-            fParticleChange.ProposeMomentumDirection(fTransportEndMomentumDir);
+            fParticleChangeForMSC->ProposeMomentumDirection(fTransportEndMomentumDir);
             // 2) Call SampleScattering(), which *may* change it.
             const G4ThreeVector displacement =
               mscModel->SampleScattering(fTransportEndMomentumDir, minSafety);
             // 3) Get the changed direction and inform G4Transportation.
             fMomentumChanged         = true;
-            fTransportEndMomentumDir = *fParticleChange.GetMomentumDirection();
+            fTransportEndMomentumDir = *fParticleChangeForMSC->GetProposedMomentumDirection();
 
             const G4double r2 = displacement.mag2();
             if(r2 > kMinDisplacement2)

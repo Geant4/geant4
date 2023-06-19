@@ -127,28 +127,30 @@ void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys)
 
 G4bool G4ScoringProbe::SetMaterial(G4String val)
 {
-  if(G4Threading::IsMasterThread())
+  if(val == "none")
   {
-    if(val == "none")
+    layeredMaterialName = val;
+    layeredMassFlg      = false;
+    layeredMaterial     = nullptr;
+  }
+  else
+  {
+    G4AutoLock l(&logvolmutex);
+    auto mat = G4NistManager::Instance()->FindOrBuildMaterial(val);
+    if(mat == nullptr)
     {
-      layeredMaterialName = val;
-      layeredMassFlg      = false;
-      layeredMaterial     = nullptr;
+      return false;
     }
-    else
+    layeredMaterialName = val;
+    layeredMassFlg      = true;
+    layeredMaterial     = mat;
+    if(G4Threading::IsMasterThread())
     {
-      auto mat = G4NistManager::Instance()->FindOrBuildMaterial(val);
-      if(mat == nullptr)
-      {
-        return false;
-      }
-      layeredMaterialName = val;
-      layeredMassFlg      = true;
-      layeredMaterial     = mat;
+      auto region = G4RegionStore::GetInstance()->GetRegion(regName);
+      assert(region != nullptr);
+      region->UpdateMaterialList();
     }
-    auto region = G4RegionStore::GetInstance()->GetRegion(regName);
-    assert(region != nullptr);
-    region->UpdateMaterialList();
+    l.unlock();
   }
   return true;
 }

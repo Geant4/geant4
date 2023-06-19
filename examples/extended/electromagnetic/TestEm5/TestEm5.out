@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -247,13 +247,13 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -310,13 +310,13 @@ hIoni:  for anti_proton  XStype:3  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -336,13 +336,13 @@ hIoni:  for kaon+  XStype:3  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -362,13 +362,13 @@ hIoni:  for kaon-  XStype:3  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -384,17 +384,17 @@ muIoni:  for mu+  XStype:3  SubType=2
       StepFunction=(0.2, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
-        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV  deltaVI
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -410,17 +410,17 @@ muIoni:  for mu-  XStype:3  SubType=2
       StepFunction=(0.2, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
-        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV  deltaVI
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -440,13 +440,13 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -466,13 +466,13 @@ hIoni:  for pi-  XStype:3  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -515,7 +515,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.990000s Real=0.995499s Sys=0.000000s
+  User=0.920000s Real=0.928860s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -614,7 +614,7 @@ N=17 V[N]={387689516187099455, 1947743697759783307, 984698709684866192, 15571250
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.530000s Real=0.527098s Sys=0.000000s
+  User=0.480000s Real=0.487443s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -718,51 +718,51 @@ N=17 V[N]={1239212255599460965, 1328488509436437337, 1766244005004820777, 289170
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.830000s Real=1.847042s Sys=0.000000s
+  User=1.790000s Real=1.802167s Sys=0.010000s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 96.2 MeV through 4.74 mm  of G4_POLYETHYLENE (density: 940 mg/cm3)
 
- Total energy deposit in absorber per event = 1.049 MeV +- 1.009 keV
+ Total energy deposit in absorber per event = 1.048 MeV +- 1.012 keV
 
- -----> Mean dE/dx = 2.212 MeV/cm	(2.354 MeV*cm2/g)
+ -----> Mean dE/dx = 2.212 MeV/cm	(2.353 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 1.749 MeV/cm	(1.861 MeV*cm2/g)
-   full dEdx       = 2.265 MeV/cm	(2.41 MeV*cm2/g)
+   full dEdx       = 2.265 MeV/cm	(2.409 MeV*cm2/g)
 
- Leakage :  primary = 95.12 MeV +- 2.333 keV   secondaries = 30.17 keV +- 3.13 keV
+ Leakage :  primary = 95.12 MeV +- 2.343 keV   secondaries = 27.08 keV +- 724.6 eV 
  Energy balance :  edep + eleak = 96.2 MeV
 
- Total track length (charged) in absorber per event = 5.175 mm  +- 3.834 um 
- Total track length (neutral) in absorber per event = 22.43 um  +- 2.426 um 
+ Total track length (charged) in absorber per event = 5.176 mm  +- 3.891 um 
+ Total track length (neutral) in absorber per event = 21.83 um  +- 2.267 um 
 
- Number of steps (charged) in absorber per event = 11.16 +- 0.02807
- Number of steps (neutral) in absorber per event = 0.00932 +- 0.000462
+ Number of steps (charged) in absorber per event = 11.12 +- 0.02803
+ Number of steps (neutral) in absorber per event = 0.01012 +- 0.0004762
 
- Number of secondaries per event : Gammas = 0.00878   electrons = 4.194   positrons = 2e-05
+ Number of secondaries per event : Gammas = 0.00968   electrons = 4.179   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
- Number of events with the primary particle reflected = 0.002 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.002 %
+ Number of events with the primary particle reflected = 0 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 7.366 mrad (central part only)
+  rms proj angle of transmit primary particle = 7.365 mrad (central part only)
   computed theta0 (Highland formula)          = 7.636 mrad
-  central part defined as +- 22.91 mrad   Tail ratio = 1.258 %
+  central part defined as +- 22.91 mrad   Tail ratio = 1.262 %
 ## Gamma process counts:
-   Photoeffect 289
-   Compton     19
+   Photoeffect 320
+   Compton     12
    Conversion  0
-   Rayleigh    6
+   Rayleigh    10
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={536854359441855123, 1009932311112986142, 1367456349214626552, 296515631841918939, 1945008116823094570, 1207116737531648682, 1277087404455360660, 628163819928597573, 1087430661817678910, 761745502824348962, 1612040051454149122, 1120049113972527537, 435968693369216435, 1243355685529661340, 1170000614029906197, 1324448633003502500, 1392366212685334356} counter= 11sumtot= 2274638834540555943
+N=17 V[N]={445516801888180624, 1579788386561753521, 2263896843532244990, 2096423020077971814, 924707696375966943, 680876823333778212, 796359742759019976, 1784894783147136787, 993138941825847484, 1718798230150178817, 405196966698966702, 762565805911693308, 1540937812259333697, 1433012635472421271, 1841345035944728023, 686998217669764047, 620929874914935640} counter= 17sumtot= 2128643544814370248
 ---------------------------------------
 #
 /run/setCut 1 mm
@@ -818,7 +818,7 @@ Index : 4     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={536854359441855123, 1009932311112986142, 1367456349214626552, 296515631841918939, 1945008116823094570, 1207116737531648682, 1277087404455360660, 628163819928597573, 1087430661817678910, 761745502824348962, 1612040051454149122, 1120049113972527537, 435968693369216435, 1243355685529661340, 1170000614029906197, 1324448633003502500, 1392366212685334356} counter= 11sumtot= 2274638834540555943
+N=17 V[N]={445516801888180624, 1579788386561753521, 2263896843532244990, 2096423020077971814, 924707696375966943, 680876823333778212, 796359742759019976, 1784894783147136787, 993138941825847484, 1718798230150178817, 405196966698966702, 762565805911693308, 1540937812259333697, 1433012635472421271, 1841345035944728023, 686998217669764047, 620929874914935640} counter= 17sumtot= 2128643544814370248
 ---------------------------------------
 --> Event 0 starts.
 --> Event 10000 starts.
@@ -828,30 +828,30 @@ N=17 V[N]={536854359441855123, 1009932311112986142, 1367456349214626552, 2965156
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.520000s Real=0.520304s Sys=0.000000s
+  User=0.480000s Real=0.478344s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run was 50000 proton of 175 GeV through 8 mm  of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit in absorber per event = 4.929 MeV +- 282.1 keV
+ Total energy deposit in absorber per event = 4.78 MeV +- 121 keV
 
- -----> Mean dE/dx = 6.159 MeV/cm	(2.281 MeV*cm2/g)
+ -----> Mean dE/dx = 5.972 MeV/cm	(2.212 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 4.024 MeV/cm	(1.49 MeV*cm2/g)
    full dEdx       = 6.048 MeV/cm	(2.24 MeV*cm2/g)
 
- Leakage :  primary = 174.7 GeV +- 282.1 keV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 174.7 GeV +- 121.1 keV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 174.7 GeV
 
  Total track length (charged) in absorber per event = 8.004 mm  +- 0 fm 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 1.269 +- 0.002321
+ Number of steps (charged) in absorber per event = 1.266 +- 0.002307
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0   electrons = 0.2695   positrons = 0.00084
+ Number of secondaries per event : Gammas = 0   electrons = 0.2664   positrons = 0.00086
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -860,9 +860,9 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02057 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02066 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02111 mrad
-  central part defined as +- 0.06333 mrad   Tail ratio = 1.274 %
+  central part defined as +- 0.06333 mrad   Tail ratio = 1.293 %
 ## Gamma process counts:
    Photoeffect 0
    Compton     0
@@ -872,7 +872,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={841703379855331740, 1160090687504734640, 968124569867711035, 1015729442736271829, 110291220627398616, 897091775881445973, 1940191567319486436, 374987352215883774, 2145359352825164785, 1848921451090203562, 632081604845479671, 2191521819734966939, 221688059177771397, 2081642112283026882, 2271182121773485595, 232878733694585983, 424070808877045087} counter= 11sumtot= 910811986600442336
+N=17 V[N]={2252079291490278474, 564825970820549864, 1356474669540624333, 1561971409888477125, 212954819950169613, 1503098223136454504, 307450644531012226, 361317507389786050, 970475807288250204, 1085654349447888547, 510403480031176694, 1552479574494195507, 2071644574856921443, 1908418382130254556, 361098093250487375, 1840509829600686597, 437984159534900243} counter= 16sumtot= 412096713672561747
 ---------------------------------------
 #
 /testem/det/setAbsMat Iron
@@ -929,7 +929,7 @@ Index : 5     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={841703379855331740, 1160090687504734640, 968124569867711035, 1015729442736271829, 110291220627398616, 897091775881445973, 1940191567319486436, 374987352215883774, 2145359352825164785, 1848921451090203562, 632081604845479671, 2191521819734966939, 221688059177771397, 2081642112283026882, 2271182121773485595, 232878733694585983, 424070808877045087} counter= 11sumtot= 910811986600442336
+N=17 V[N]={2252079291490278474, 564825970820549864, 1356474669540624333, 1561971409888477125, 212954819950169613, 1503098223136454504, 307450644531012226, 361317507389786050, 970475807288250204, 1085654349447888547, 510403480031176694, 1552479574494195507, 2071644574856921443, 1908418382130254556, 361098093250487375, 1840509829600686597, 437984159534900243} counter= 16sumtot= 412096713672561747
 ---------------------------------------
 --> Event 0 starts.
 --> Event 10000 starts.
@@ -939,30 +939,30 @@ N=17 V[N]={841703379855331740, 1160090687504734640, 968124569867711035, 10157294
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=8.180000s Real=8.238345s Sys=0.000000s
+  User=7.880000s Real=7.936934s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 100 GeV through 1 m   of Iron (density: 7.87 g/cm3 )
 
- Total energy deposit in absorber per event = 2.125 GeV +- 13.57 MeV
+ Total energy deposit in absorber per event = 2.157 GeV +- 14.45 MeV
 
- -----> Mean dE/dx = 21.25 MeV/cm	(2.7 MeV*cm2/g)
+ -----> Mean dE/dx = 21.57 MeV/cm	(2.741 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 11.21 MeV/cm	(1.425 MeV*cm2/g)
    full dEdx       = 21.61 MeV/cm	(2.745 MeV*cm2/g)
 
- Leakage :  primary = 97.87 GeV +- 13.57 MeV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 97.84 GeV +- 14.45 MeV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 100 GeV
 
- Total track length (charged) in absorber per event = 1 m   +- 5.573 nm 
+ Total track length (charged) in absorber per event = 1 m   +- 4.649 nm 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 47.63 +- 0.0306
+ Number of steps (charged) in absorber per event = 47.61 +- 0.03054
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0.04884   electrons = 46.58   positrons = 1.261
+ Number of secondaries per event : Gammas = 0.05008   electrons = 46.56   positrons = 1.259
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -971,9 +971,9 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.176 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.183 mrad (central part only)
   computed theta0 (Highland formula)          = 1.182 mrad
-  central part defined as +- 3.546 mrad   Tail ratio = 0.534 %
+  central part defined as +- 3.546 mrad   Tail ratio = 0.578 %
 ## Gamma process counts:
    Photoeffect 0
    Compton     0
@@ -983,10 +983,10 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={617661458496339327, 1853949536333809702, 576578364478647478, 412964137124411421, 1032844685672237211, 1031821778618090704, 544078291082236998, 194159493452279161, 171481080002404738, 70495838368000371, 205172618800321456, 1143344309854547675, 1442959377549137764, 1052598822626686356, 1979034980715068385, 1710881825679836342, 1632809550286451542} counter= 16sumtot= 1837778093858342925
+N=17 V[N]={420659126005140040, 1225235092154866899, 467064051926141271, 872620520104710954, 154210198302006135, 1217037251478269454, 785375312638799848, 507186188750151534, 16332779840598712, 2201933772516139148, 587833775645490031, 858673669071150570, 1743528740806934203, 783655146520683320, 1706382825534161226, 1073060800756282074, 982189721651594646} counter= 12sumtot= 1767920918420956359
 ---------------------------------------
 #
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.054 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.053 MB
 ============================================================

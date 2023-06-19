@@ -267,7 +267,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
                                         G4ThreeVector& normal,
                                         G4bool& isAllBehind )
 {
-  G4double s1, s2;
+  G4double s1=0., s2=0.;
   G4double normSign = outgoing ? +1 : -1;
   
   isAllBehind = allBehind;

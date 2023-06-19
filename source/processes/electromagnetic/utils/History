@@ -6,6 +6,25 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-02 J.Hahnfeld (emutils-V11-00-40)
+- Fixes to `G4TransportationWithMsc`:
+ * Protect code for MultipleScattering
+ * Fix type of particle change
+
+## 2023-04-08 V.Ivanchenko
+- G4LossTableManager - improved debug printout and removed unused lines of code
+
+## 2023-03-20 V.Ivanchenko
+- G4VEnergyLossProcess - fixed static analyzer warning
+- G4EmTableUtil - fixed verbose output and class comments
+
+## 2023-03-06 J.Allison
+- Allow /process/em/QuantumEntanglement in G4State_Idle.
+
+## 2023-02-21 V.Ivanchenko
+- G4EmExtraParameters - fixed AddPAIModel(...) method and improved comments
+- G4EmExtraParametersMessenger - fixed broadcasting 
+
 ## 2022-12-11 V.Ivanchenko (emutils-V11-00-39)
 - G4EmParameters, G4EmParametersMessenger, added parameter, UI command, 
     GetSet methods - MscPositronCorrection

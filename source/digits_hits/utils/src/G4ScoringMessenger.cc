@@ -235,14 +235,12 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   probeMatCmd->SetGuidance("To switch-off this overlaying, use \"none\".");
   probeMatCmd->SetParameterName("matName", true);
   probeMatCmd->SetDefaultValue("none");
-  probeMatCmd->SetToBeBroadcasted(false);
 
   probeLocateCmd = new G4UIcmdWith3VectorAndUnit("/score/probe/locate", this);
   probeLocateCmd->SetGuidance(
     "Locate a probe in the global coordinate system.");
   probeLocateCmd->SetParameterName("x", "y", "z", false);
   probeLocateCmd->SetDefaultUnit("mm");
-  probeLocateCmd->SetToBeBroadcasted(false);
 
   // Draw Scoring result
   drawCmd = new G4UIcommand("/score/drawProjection", this);

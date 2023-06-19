@@ -292,6 +292,20 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
 //
 void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv, G4bool search)
 {
+  // Check if logical volume is already belonging to another region
+  //
+  if ((lv->IsRootRegion()) && (lv->GetRegion() != this))
+  {
+    std::ostringstream message;
+    message << "Logical volume <" << lv->GetName() << "> is already set as" << G4endl
+            << "root for region <" << lv->GetRegion()->GetName() << ">." << G4endl
+            << "It cannot be root logical volume for another region <" << GetName()
+            << ">" << G4endl;
+    G4Exception("G4Region::AddRootLogicalVolume()", "GeomMgt0002", FatalException,
+                message, "A logical volume cannot belong to more than one region!");
+    return;
+  }
+
   // Check the logical volume is not already in the list
   //
   if (search) 

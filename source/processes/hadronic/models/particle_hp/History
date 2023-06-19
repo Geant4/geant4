@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-16 Vladimir Ivanchenko (hadr-hpp-V11-00-22)
+- G4ParticleHPInelasticBaseFS - real fix of memory leak reported by Coverity
+
+## 2023-06-07 Vladimir Ivanchenko
+- G4ParticleHPInelasticBaseFS - fix potential memory leak reported by Coverity
+
+## 2023-03-13 Vladimir Ivanchenko (hadr-hpp-V11-00-21)
+- G4ParticleHPNucLevel : added new data structure for nuclear levels
+- G4ParticleHPDeExGammas : rewitten in order to avoid usage of C-arrays,
+    which provoked a problem for CMS static build; code now fully based on
+    std::vector of G4ParticleHPNucLevel; public interfaces are not changed;
+    if in DB probability of decay for a given level is zero, it is 
+    substituted by 1.e-6
+- G4ParticleHPInelasticBaseFS, G4ParticleHPInelasticCompFS - gamma cascade
+    sampling is checked and simplified (removed unnecessary computations)
+
 ## 2023-02-06 Gabriele Cosmo (hadr-hpp-V11-00-20)
 - Minor cleanup in G4ParticleHPDeExGammas header for data initialisation.
 

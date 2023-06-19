@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -268,7 +268,7 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
-      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 GeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
@@ -375,14 +375,14 @@ muIoni:  for mu+  XStype:3  SubType=2
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
-      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 GeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
-      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       Sampling table 9x1001 from 0.85 GeV to 0.1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 GeV  ModifiedMephi
@@ -403,14 +403,14 @@ muIoni:  for mu-  XStype:3  SubType=2
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
-      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 GeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
-      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       Sampling table 9x1001 from 0.85 GeV to 0.1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 GeV  ModifiedMephi
@@ -450,7 +450,7 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
-      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 GeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 GeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
