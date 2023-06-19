@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -306,13 +306,13 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -365,13 +365,13 @@ hIoni:  for anti_proton  XStype:3  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -397,13 +397,13 @@ hIoni:  for kaon+  XStype:3  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -429,13 +429,13 @@ hIoni:  for kaon-  XStype:3  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -461,13 +461,13 @@ muIoni:  for mu+  XStype:3  SubType=2
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -493,13 +493,13 @@ muIoni:  for mu-  XStype:3  SubType=2
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -525,13 +525,13 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -557,13 +557,13 @@ hIoni:  for pi-  XStype:3  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -2398,7 +2398,7 @@ writing Event_1
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.300000s Real=4.323265s Sys=0.240000s
+  User=0.320000s Real=2.231503s Sys=0.270000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -2443,358 +2443,344 @@ Index : 2     used in the geometry : Yes
 CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
 <ExP01/TrackerChamberSD_HC> is not found.
 
--------->Storing hits in the ROOT file: in this event there are 121 hits in the tracker chambers: 
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0090734299234772  position[mm]: (-68.133390396475,41.446090092179,-1572.9727621245)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0020046523217718  position[mm]: (-68.785427910506,41.813879048734,-1564.8253202279)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.00022001548666743  position[mm]: (-68.886446543946,41.86983435498,-1563.5575954045)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.044784971901184  position[mm]: (-81.965354097834,49.093178355079,-1400)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0011180563337048  position[mm]: (-128.38589425311,80.012192969094,-792.52135349353)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.00069957861263339  position[mm]: (-128.59452978677,80.147252387339,-789.80613978182)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.024627266794535  position[mm]: (-133.0487926901,83.011692824545,-732.08715949577)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.015412767003177  position[mm]: (-136.18242973517,85.046267900214,-691.32326895333)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0075790684235893  position[mm]: (-137.33668252563,85.848089209745,-676.21092940629)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0045529830587111  position[mm]: (-138.11722052966,86.35624361187,-665.9727790121)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0038953101784737  position[mm]: (-138.92072753935,86.870161055752,-655.2699144743)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0035551566197513  position[mm]: (-140.6853630347,88.004701982929,-631.31289754528)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.01194338398864  position[mm]: (-142.98245283362,89.439210759528,-600)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0064112744200947  position[mm]: (-188.2739436008,117.28965872239,10.693678407221)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00074105462021135  position[mm]: (-188.42427089761,117.38270500179,12.743429508376)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0028336974732606  position[mm]: (-188.71471725826,117.56130925846,16.716674866274)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0068356549422707  position[mm]: (-190.29092947419,118.53528604673,38.140355696733)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0066341860012351  position[mm]: (-191.74775496892,119.41033405597,57.658802044953)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0063784052291113  position[mm]: (-192.65065250741,119.96321967266,69.890437892834)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0032409663376634  position[mm]: (-193.05870366097,120.21638200677,75.463396740081)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.014750565511368  position[mm]: (-195.60218630239,121.77672467832,110.18611439538)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.022385204045827  position[mm]: (-198.64228623215,123.63701134641,152.07443240877)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.011203953304504  position[mm]: (-200.57160096433,124.85178434493,179.56528119157)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0014175229221585  position[mm]: (-200.75545866934,124.97192315947,182.18941931718)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0015932721953755  position[mm]: (-200.97189792379,125.1154325413,185.30167093216)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0034966607116363  position[mm]: (-201.62041269167,125.54357074577,194.62479677523)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00038527283780982  position[mm]: (-201.9916237272,125.78816243967,200)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.01167748503264  position[mm]: (-246.17942323182,154.66050146603,822.724535452)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.015139065707285  position[mm]: (-249.20990679645,156.48107036796,863.78836818127)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0030510104174619  position[mm]: (-249.57212572843,156.66020986983,868.54908999305)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.01146675071289  position[mm]: (-250.96228905719,157.34051274965,886.72534140542)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0049279357838613  position[mm]: (-252.04752098574,157.87654706101,900.71895718241)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.010353781702576  position[mm]: (-253.84786669441,158.74832034924,923.48890235501)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0054373174353533  position[mm]: (-254.83563068644,159.24115337296,935.86829240657)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0032844105649368  position[mm]: (-255.35586527249,159.49363736232,942.38941432805)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.011912684228523  position[mm]: (-256.77925829373,160.17634631292,960.24599577467)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.014626368891835  position[mm]: (-259.97338224201,161.72979607862,1000)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.018110823920437  position[mm]: (-309.20070358907,186.69608747779,1634.9583722497)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.018924172127053  position[mm]: (-311.28517826467,187.67120094601,1662.1529202381)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.01134547086126  position[mm]: (-313.19667158946,188.65372265233,1687.2433223035)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.016538458941695  position[mm]: (-316.26795483509,190.27936558237,1728.4056071573)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.002561520294858  position[mm]: (-316.75302187543,190.5375091964,1734.9673478568)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0086992190638841  position[mm]: (-318.53086476543,191.49317355558,1759.2303420411)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.017429439497645  position[mm]: (-320.99926380025,192.83144767818,1792.6426413833)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.00023118229245426  position[mm]: (-321.18564669239,192.93872181695,1795.1709546754)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0022690690585589  position[mm]: (-321.54486608953,193.14578892213,1800)
-  trackID: 89  chamberNb: 4  energy deposit[MeV]: 0.001826708979032  position[mm]: (-321.19614568331,192.93596844416,1795.1707767856)
-  trackID: 88  chamberNb: 4  energy deposit[MeV]: 0.0016055782384081  position[mm]: (-320.99627469529,192.84031729536,1792.6428776223)
-  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.0032053120609869  position[mm]: (-318.55312610497,191.48586626211,1759.2303757203)
-  trackID: 86  chamberNb: 4  energy deposit[MeV]: 0.0028284021963428  position[mm]: (-316.7720154943,190.54302390785,1734.966838104)
-  trackID: 85  chamberNb: 4  energy deposit[MeV]: 0.0022409391334501  position[mm]: (-316.25549224422,190.28595354746,1728.4069698664)
-  trackID: 84  chamberNb: 4  energy deposit[MeV]: 0.0022717717724148  position[mm]: (-313.18780834647,188.66508435677,1687.2442541722)
-  trackID: 83  chamberNb: 4  energy deposit[MeV]: 0.001415657549856  position[mm]: (-311.27952515077,187.67693664309,1662.1534438013)
-  trackID: 82  chamberNb: 4  energy deposit[MeV]: 0.0064022998258934  position[mm]: (-309.24270126612,186.64890027995,1634.9621260006)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0093983394530061  position[mm]: (-255.12910653239,157.95969213495,961.26954682539)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.010499235019908  position[mm]: (-256.3338620308,158.7202241403,963.08337184687)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0046494814421554  position[mm]: (-255.45558749457,159.15822710333,963.44878692034)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.00047323137668761  position[mm]: (-254.97201217576,158.73224828423,963.47742496654)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0072701550512557  position[mm]: (-254.66155042622,158.05180116104,964.461598396)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.001333438491921  position[mm]: (-254.35418937504,157.57725362709,964.39774605867)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0058874830517409  position[mm]: (-254.22787246692,157.59509022574,964.95710088566)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0090745894454067  position[mm]: (-254.29597483892,157.37671696203,965.2142506081)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.00017674872962118  position[mm]: (-254.27997115841,157.40068722928,965.31562684653)
-  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0082800806323371  position[mm]: (-254.21873845265,157.33448233259,965.29517437174)
-  trackID: 114  chamberNb: 3  energy deposit[MeV]: 0.0015404170039259  position[mm]: (-254.28659980561,157.39476357047,965.31481591356)
-  trackID: 113  chamberNb: 3  energy deposit[MeV]: 0.0016481040309462  position[mm]: (-254.22056559299,157.59875714724,964.96222009244)
-  trackID: 112  chamberNb: 3  energy deposit[MeV]: 0.0026176729462575  position[mm]: (-254.35405682502,157.55953533034,964.3984275559)
-  trackID: 111  chamberNb: 3  energy deposit[MeV]: 0.0054515518710167  position[mm]: (-254.61907139127,158.07816669993,964.46458965237)
-  trackID: 110  chamberNb: 3  energy deposit[MeV]: 0.00124511305286  position[mm]: (-254.96825324681,158.72814009167,963.47345920701)
-  trackID: 109  chamberNb: 3  energy deposit[MeV]: 0.0015123987180076  position[mm]: (-255.45233182541,159.16229024918,963.45580370347)
-  trackID: 108  chamberNb: 3  energy deposit[MeV]: 0.0018064543308593  position[mm]: (-256.33941825285,158.72870087789,963.08684725311)
-  trackID: 73  chamberNb: 3  energy deposit[MeV]: 0.0027829202611266  position[mm]: (-255.3690291855,159.50780079476,942.38888988673)
-  trackID: 72  chamberNb: 3  energy deposit[MeV]: 0.0016558927748312  position[mm]: (-254.82700714329,159.23690131676,935.86955763607)
-  trackID: 71  chamberNb: 3  energy deposit[MeV]: 0.0013427299738391  position[mm]: (-253.85171278649,158.74182950211,923.48914316469)
-  trackID: 70  chamberNb: 3  energy deposit[MeV]: 0.0041902841948522  position[mm]: (-252.06682976024,157.84880314071,900.72078096218)
-  trackID: 69  chamberNb: 3  energy deposit[MeV]: 0.0014585905238933  position[mm]: (-250.97019469425,157.34323351453,886.72495828669)
-  trackID: 68  chamberNb: 3  energy deposit[MeV]: 0.0069145728887251  position[mm]: (-249.67829693424,156.60727884072,868.5551514791)
-  trackID: 68  chamberNb: 3  energy deposit[MeV]: 0.0028158693794828  position[mm]: (-249.66676655728,156.59154555314,868.55267131894)
-  trackID: 67  chamberNb: 3  energy deposit[MeV]: 0.0016671685311841  position[mm]: (-249.20028312453,156.48237825918,863.78945603957)
-  trackID: 66  chamberNb: 3  energy deposit[MeV]: 0.0025267299191218  position[mm]: (-246.16354488146,154.66582334153,822.72635612009)
-  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0049472673533557  position[mm]: (-202.08554999478,125.6458451032,194.66363063792)
-  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0019101980946852  position[mm]: (-201.85601568178,125.68148372122,194.51525002681)
-  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0031708612508658  position[mm]: (-201.82694743364,125.59705102404,194.39412473034)
-  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0041512482262743  position[mm]: (-201.83591943713,125.56916091702,194.37810103004)
-  trackID: 120  chamberNb: 2  energy deposit[MeV]: 0.0013010477539203  position[mm]: (-201.83959017408,125.58591319469,194.42033181747)
-  trackID: 120  chamberNb: 2  energy deposit[MeV]: 0.0026982040514797  position[mm]: (-201.83215594407,125.58091122669,194.4365386755)
-  trackID: 119  chamberNb: 2  energy deposit[MeV]: 0.0037238436283936  position[mm]: (-201.8509210585,125.65884332685,194.53203018808)
-  trackID: 118  chamberNb: 2  energy deposit[MeV]: 0.0015119878057339  position[mm]: (-202.08330798096,125.637518012,194.66501917424)
-  trackID: 59  chamberNb: 2  energy deposit[MeV]: 0.0015420082597568  position[mm]: (-200.96338919887,125.11291751307,185.30274509303)
-  trackID: 58  chamberNb: 2  energy deposit[MeV]: 0.0042190673564241  position[mm]: (-200.7876787118,124.96049963198,182.19002340294)
-  trackID: 57  chamberNb: 2  energy deposit[MeV]: 0.0032717387923051  position[mm]: (-200.55375120807,124.86782384051,179.56723565922)
-  trackID: 56  chamberNb: 2  energy deposit[MeV]: 0.0017936865155471  position[mm]: (-198.63730619071,123.62770493411,152.0756634395)
-  trackID: 55  chamberNb: 2  energy deposit[MeV]: 0.010297637632447  position[mm]: (-195.42088216648,121.92670293301,110.22291253273)
-  trackID: 55  chamberNb: 2  energy deposit[MeV]: 0.00021026655188131  position[mm]: (-195.41002771303,121.94705652637,110.1912264603)
-  trackID: 55  chamberNb: 2  energy deposit[MeV]: 0.0032202775180337  position[mm]: (-195.41851970918,121.94013863884,110.2121030513)
-  trackID: 121  chamberNb: 2  energy deposit[MeV]: 0.0012820509660092  position[mm]: (-195.41634884177,121.94577127227,110.18824523108)
-  trackID: 54  chamberNb: 2  energy deposit[MeV]: 0.0020244649862874  position[mm]: (-193.0528894873,120.22723997774,75.463914384929)
-  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.0021545146506582  position[mm]: (-192.6438355562,119.95179913586,69.892106050866)
-  trackID: 52  chamberNb: 2  energy deposit[MeV]: 0.0037448674420966  position[mm]: (-190.30774101286,118.55873960949,38.139893807)
-  trackID: 51  chamberNb: 2  energy deposit[MeV]: 0.0072120105192596  position[mm]: (-188.66943569532,117.45435534607,16.73694983913)
-  trackID: 51  chamberNb: 2  energy deposit[MeV]: 0.0024723509171545  position[mm]: (-188.66606312621,117.43898093081,16.732639614997)
-  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0020246642831034  position[mm]: (-188.60618957892,117.9849213996,12.812613787412)
-  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0057767382700173  position[mm]: (-188.75430507887,118.13379344789,13.277204711572)
-  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0053137493214109  position[mm]: (-188.74268200517,117.92446048495,13.525088900092)
-  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0032841692964165  position[mm]: (-188.76404100078,117.96064804836,13.406339784766)
-  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0043835255283911  position[mm]: (-188.76549574803,117.98517347472,13.379797211407)
-  trackID: 124  chamberNb: 2  energy deposit[MeV]: 0.0024488980164917  position[mm]: (-188.78006565556,117.95923651676,13.405843731999)
-  trackID: 123  chamberNb: 2  energy deposit[MeV]: 0.0031076971149512  position[mm]: (-188.75322273839,117.94289675319,13.532473076557)
-  trackID: 122  chamberNb: 2  energy deposit[MeV]: 0.0017955721203731  position[mm]: (-188.59814566963,117.99187321995,12.813025175318)
-  trackID: 49  chamberNb: 2  energy deposit[MeV]: 0.0016002102898758  position[mm]: (-188.27158332856,117.29868077434,10.693832291901)
-  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.0015267506815148  position[mm]: (-140.68059990313,87.997335513635,-631.31184981531)
-  trackID: 40  chamberNb: 1  energy deposit[MeV]: 0.0089863452015712  position[mm]: (-138.96377832302,86.775254620685,-655.25823644678)
-  trackID: 39  chamberNb: 1  energy deposit[MeV]: 0.0012859548551431  position[mm]: (-138.11953767526,86.349509382402,-665.97235030974)
-  trackID: 38  chamberNb: 1  energy deposit[MeV]: 0.0017521953472427  position[mm]: (-137.32939206827,85.855397402679,-676.2102763532)
-  trackID: 37  chamberNb: 1  energy deposit[MeV]: 0.0033577956398767  position[mm]: (-136.16440915297,85.063367322863,-691.32129082998)
-  trackID: 36  chamberNb: 1  energy deposit[MeV]: 0.0024477260295325  position[mm]: (-133.04951731541,82.995703322732,-732.08558540391)
-  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.001482353523142  position[mm]: (-128.58745542291,80.142614567361,-789.80502011292)
-  trackID: 34  chamberNb: 1  energy deposit[MeV]: 0.0025971237541136  position[mm]: (-128.39688502033,79.998556570381,-792.52058592984)
-  trackID: 28  chamberNb: 0  energy deposit[MeV]: 0.0013772128545696  position[mm]: (-68.883321827963,41.862743136279,-1563.5567297571)
-  trackID: 27  chamberNb: 0  energy deposit[MeV]: 0.0092242334361271  position[mm]: (-68.875913943428,41.875039154404,-1564.8243065923)
-  trackID: 26  chamberNb: 0  energy deposit[MeV]: 0.0013703907128359  position[mm]: (-68.139273170523,41.451117242967,-1572.9731598836)
+-------->Storing hits in the ROOT file: in this event there are 85 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0090587027587673  position[mm]: (-67.811229131297,41.750732687891,-1572.9497021026)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0019984942336731  position[mm]: (-68.459810898648,42.121423927618,-1564.8052401441)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.00022001548666743  position[mm]: (-68.5602984778,42.177826956396,-1563.5379790507)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.044619253838658  position[mm]: (-81.57392906468,49.460985126738,-1400)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0010992557884369  position[mm]: (-127.7224113941,80.592711206907,-792.64213159178)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.00069834567804018  position[mm]: (-127.92981368172,80.728729661438,-789.92791274047)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.02456911848874  position[mm]: (-132.35792118947,83.613663837299,-732.23008174199)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.015376817130105  position[mm]: (-135.47300364451,85.662653213768,-691.48112947253)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0075627916402477  position[mm]: (-136.62008616625,86.469826269149,-676.37432831772)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0045448442267735  position[mm]: (-137.39597598547,86.981561008994,-666.13993062332)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0038857764018834  position[mm]: (-138.19471366686,87.499127602098,-655.44098969154)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0035431511811362  position[mm]: (-139.94873118922,88.641617072316,-631.49275711757)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.011966528845736  position[mm]: (-142.24617938023,90.095237954074,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0034141034779064  position[mm]: (-187.27015123421,118.14673760099,10.420342052424)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0063174919294488  position[mm]: (-190.05708251288,119.93034442743,48.263788121144)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.024376928530457  position[mm]: (-193.82155455003,122.31890680168,97.728272349723)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0073535197936957  position[mm]: (-194.73984256149,122.91123919267,109.76815591762)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.019793717075536  position[mm]: (-197.80838876192,124.85459108751,149.67878590339)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.021361020245779  position[mm]: (-201.49203554212,127.06388008599,197.00767492902)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0010901308508757  position[mm]: (-201.67795078141,127.17601519302,199.41051055566)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00012939297790507  position[mm]: (-201.72367602743,127.20350214413,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.031661131508941  position[mm]: (-255.6919760353,160.61092317452,894.82017740214)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.004119265158144  position[mm]: (-257.0278571185,161.43150496182,911.9693497799)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.014414710036534  position[mm]: (-261.44600798488,164.02558549609,967.20264054488)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00077505099139992  position[mm]: (-261.97936373754,164.33017127872,973.73389832256)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0066618248176276  position[mm]: (-263.46638189227,165.17589325345,991.73687266689)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0014091261321808  position[mm]: (-264.13684942494,165.5645777266,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0052369473868404  position[mm]: (-314.82670976834,194.9460487497,1623.0570890071)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0038205878748022  position[mm]: (-315.62117661709,195.395432151,1632.9588783691)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.011753192301413  position[mm]: (-317.03735073523,196.16615952024,1650.3747248587)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.001758532221855  position[mm]: (-317.62308662581,196.45874192865,1657.3833928198)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.011374324811033  position[mm]: (-320.38257395135,197.89278860943,1690.6314745784)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0086118472224853  position[mm]: (-322.24235868665,198.83699148674,1713.1739688235)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.024390693292866  position[mm]: (-327.66702083868,201.82537614462,1778.1240141801)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.011177312604834  position[mm]: (-329.44597427661,202.88305410392,1800)
+  trackID: 83  chamberNb: 4  energy deposit[MeV]: 0.0012405941312011  position[mm]: (-327.66030262098,201.82469682295,1778.1248441585)
+  trackID: 82  chamberNb: 4  energy deposit[MeV]: 0.0025611183771983  position[mm]: (-322.22704352706,198.84455954363,1713.1757885531)
+  trackID: 81  chamberNb: 4  energy deposit[MeV]: 0.0031220399034399  position[mm]: (-320.37196455304,197.91272284171,1690.6328364671)
+  trackID: 80  chamberNb: 4  energy deposit[MeV]: 0.0019109477351964  position[mm]: (-317.63360941352,196.46324359933,1657.3828493253)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0015169246263133  position[mm]: (-317.03800333622,196.17490313417,1650.3746626521)
+  trackID: 78  chamberNb: 4  energy deposit[MeV]: 0.0094718726044215  position[mm]: (-315.60111360594,195.05915581818,1633.0245099792)
+  trackID: 78  chamberNb: 4  energy deposit[MeV]: 0.0095658209309336  position[mm]: (-315.51927290571,195.03643691555,1632.9460442888)
+  trackID: 77  chamberNb: 4  energy deposit[MeV]: 0.001535119578498  position[mm]: (-314.82400282188,194.95451539871,1623.0572864152)
+  trackID: 68  chamberNb: 3  energy deposit[MeV]: 0.001374372973673  position[mm]: (-263.47288396175,165.18013865372,991.73644709753)
+  trackID: 67  chamberNb: 3  energy deposit[MeV]: 0.0015690137063077  position[mm]: (-261.98305321733,164.32184534526,973.73436268086)
+  trackID: 66  chamberNb: 3  energy deposit[MeV]: 0.0015058729495501  position[mm]: (-261.43906849835,164.02047913912,967.20379837061)
+  trackID: 65  chamberNb: 3  energy deposit[MeV]: 0.012143736725219  position[mm]: (-257.17906680524,161.63664170804,911.98082542346)
+  trackID: 65  chamberNb: 3  energy deposit[MeV]: 0.0035483542283244  position[mm]: (-257.17479609922,161.66080982143,911.99164969441)
+  trackID: 64  chamberNb: 3  energy deposit[MeV]: 0.0022368526295534  position[mm]: (-255.69798714253,160.62370060845,894.81979641819)
+  trackID: 54  chamberNb: 2  energy deposit[MeV]: 0.0034315479866441  position[mm]: (-201.70309408058,127.18105447948,199.40989552263)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.0042749213136016  position[mm]: (-204.93714906444,122.72243900313,198.11706779415)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.012173391722019  position[mm]: (-204.78058708684,126.41057486253,192.52531373936)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.0015405571825655  position[mm]: (-205.6905244187,126.94267788524,191.38026379998)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 3.3264344046106e-05  position[mm]: (-206.14949977341,126.97903303935,191.06342862512)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.017594466486275  position[mm]: (-213.23504106639,130.5938259478,193.93546955629)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.006967569281041  position[mm]: (-213.66610521673,131.46347360835,199.34623066366)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.00037712417048436  position[mm]: (-213.25198849071,131.23228773481,200)
+  trackID: 101  chamberNb: 2  energy deposit[MeV]: 0.0052975161012672  position[mm]: (-206.14028464174,126.9343500391,191.04848475785)
+  trackID: 52  chamberNb: 2  energy deposit[MeV]: 0.0018624782387  position[mm]: (-197.80272959171,124.86413613805,149.67928211956)
+  trackID: 51  chamberNb: 2  energy deposit[MeV]: 0.0015383533035089  position[mm]: (-194.74852852672,122.90925165705,109.76795051874)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0034348932931971  position[mm]: (-193.59598995627,121.58604423602,97.927490411886)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.00027375329803814  position[mm]: (-193.71374931702,121.6657983958,97.705907708871)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0025221076877757  position[mm]: (-193.54179614331,121.6849806338,97.345515498208)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0009936827447706  position[mm]: (-193.72657502134,121.4087278567,97.180471730181)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.0077560532589761  position[mm]: (-193.44131962186,121.24040340265,97.050089426942)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.011730953900634  position[mm]: (-193.58899388414,121.2374787352,97.112705343704)
+  trackID: 106  chamberNb: 2  energy deposit[MeV]: 0.0013270740495338  position[mm]: (-193.72440910358,121.41496647812,97.177056320134)
+  trackID: 105  chamberNb: 2  energy deposit[MeV]: 0.0022526316833141  position[mm]: (-193.53820372597,121.67612082832,97.356105752893)
+  trackID: 104  chamberNb: 2  energy deposit[MeV]: 0.0016566765202895  position[mm]: (-193.70809080686,121.65823779127,97.708136179416)
+  trackID: 49  chamberNb: 2  energy deposit[MeV]: 0.0036272302874263  position[mm]: (-190.05755975989,119.95796791269,48.264156513145)
+  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.001526750516119  position[mm]: (-139.94401139863,88.6342225882,-631.49171060334)
+  trackID: 40  chamberNb: 1  energy deposit[MeV]: 0.0022465037178092  position[mm]: (-138.23831012411,87.404508480858,-655.42931623553)
+  trackID: 40  chamberNb: 1  energy deposit[MeV]: 0.005434286474774  position[mm]: (-138.25251246365,87.381497319453,-655.47119698177)
+  trackID: 113  chamberNb: 1  energy deposit[MeV]: 0.0013055305618685  position[mm]: (-138.24208929375,87.399675385816,-655.42540165098)
+  trackID: 39  chamberNb: 1  energy deposit[MeV]: 0.0012859548242812  position[mm]: (-137.39833323813,86.974840699345,-666.13950214828)
+  trackID: 38  chamberNb: 1  energy deposit[MeV]: 0.0017521950191435  position[mm]: (-136.61275225192,86.477090870348,-676.37367551229)
+  trackID: 37  chamberNb: 1  energy deposit[MeV]: 0.003357793123591  position[mm]: (-135.4548796346,85.679642996152,-691.47915186448)
+  trackID: 36  chamberNb: 1  energy deposit[MeV]: 0.002447724975278  position[mm]: (-132.35874070782,83.597678819618,-732.22850875437)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.001482353385675  position[mm]: (-127.92276684718,80.724049824188,-789.92679430992)
+  trackID: 34  chamberNb: 1  energy deposit[MeV]: 0.0025971224999009  position[mm]: (-127.73348289746,80.579140316855,-792.64136359755)
+  trackID: 28  chamberNb: 0  energy deposit[MeV]: 0.0013772127775768  position[mm]: (-68.557213580802,42.170718212037,-1563.5371143349)
+  trackID: 27  chamberNb: 0  energy deposit[MeV]: 0.00092816394962641  position[mm]: (-68.539813880341,42.176157681042,-1564.8043236268)
+  trackID: 27  chamberNb: 0  energy deposit[MeV]: 0.0067402070029068  position[mm]: (-68.554456663906,42.230745965801,-1564.766209515)
+  trackID: 114  chamberNb: 0  energy deposit[MeV]: 0.001555836647208  position[mm]: (-68.532853652479,42.174266418862,-1564.7988899296)
+  trackID: 26  chamberNb: 0  energy deposit[MeV]: 0.001370390639504  position[mm]: (-67.817083427317,41.755793070876,-1572.9500986147)
 writing Event_2
 >>> Event 0
     0 trajectories stored in this event.
 CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
 <ExP01/TrackerChamberSD_HC> is not found.
 
--------->Storing hits in the ROOT file: in this event there are 88 hits in the tracker chambers: 
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0060590509316663  position[mm]: (-41.567027098852,14.812185597486,-1580.5126132647)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0023727227093323  position[mm]: (-41.983061933516,14.956442607512,-1571.7520745984)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.011823503804018  position[mm]: (-43.264891778844,15.387677161813,-1544.9681494623)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.00061774573245988  position[mm]: (-43.60118430633,15.495243762419,-1538.0539096619)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.020311182861871  position[mm]: (-46.43030440148,16.458119634794,-1478.9806147615)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.026731939705666  position[mm]: (-50.341587611365,17.408203612291,-1400.6467585175)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 1.9851662612802e-05  position[mm]: (-50.373938236992,17.41474748234,-1400)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.023155525453624  position[mm]: (-81.938086136362,23.882061605507,-758.17017618579)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0024110188673382  position[mm]: (-82.146191767873,23.932568589072,-753.66920581655)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0033541678572421  position[mm]: (-82.698433488663,24.068187977285,-741.78354653077)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0042182007362596  position[mm]: (-83.059894180123,24.163326437894,-733.94721827057)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.00045498424869829  position[mm]: (-83.135864364146,24.181796749165,-732.29564818516)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.022770115504672  position[mm]: (-85.902426108478,24.675239960685,-677.91273971272)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.016654970523511  position[mm]: (-88.698811329601,25.39412172995,-620.8159987558)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0031454630657249  position[mm]: (-89.755936942711,25.610418520805,-600)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.023240983520257  position[mm]: (-124.54263166339,32.983925394818,67.494479781557)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.011160016930177  position[mm]: (-126.73326498797,33.499089914984,107.03984424785)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0079246853366732  position[mm]: (-127.7854733427,33.777474801304,125.83766778991)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0051309264251322  position[mm]: (-128.73588504153,34.043709730394,143.01090769267)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0027931727724685  position[mm]: (-129.09587428282,34.136649086942,149.67176679236)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0019549270140744  position[mm]: (-129.44696813844,34.222894724961,156.27096923719)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 2.791670810525e-05  position[mm]: (-129.48078685388,34.23111621269,156.90232520645)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0048365855768108  position[mm]: (-130.92497241968,34.578574099887,183.93346985356)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0060454355299678  position[mm]: (-131.77859161858,34.802785081447,200)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.012359019360115  position[mm]: (-166.9135084101,43.973981808327,817.16932004704)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.011109326223069  position[mm]: (-169.28954328401,44.633987052809,860.12472427742)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00051025776869541  position[mm]: (-169.49811044275,44.686407541934,864.08286753495)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00025788503966759  position[mm]: (-169.58085396929,44.707881480388,865.63624210648)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.039459201638804  position[mm]: (-175.38935471248,46.238825388641,974.68657386671)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0062771597640555  position[mm]: (-175.94588601012,46.362058958627,985.47413396184)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.005860559472538  position[mm]: (-176.69301112788,46.523421518326,1000)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.00095478658840939  position[mm]: (-209.89674922153,52.283295522603,1605.4567487525)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0028038709671797  position[mm]: (-210.63689769242,52.38165831344,1618.7698337084)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.012672842715424  position[mm]: (-212.46639712602,52.607439896089,1651.5533898208)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.018080823549104  position[mm]: (-214.92784689795,52.914879045115,1697.4924858098)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0030723820048113  position[mm]: (-215.38767554577,53.030961238553,1706.9123012401)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0011124546108168  position[mm]: (-215.66491013043,53.100193360839,1712.7075908464)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0071150915664793  position[mm]: (-217.04296923314,53.429822942858,1741.41075384)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.020934066974096  position[mm]: (-219.13763724605,53.901953021332,1785.724857415)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0031853378998612  position[mm]: (-219.82072643749,54.094270640359,1800)
-  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0063736028912042  position[mm]: (-219.1805550609,53.947828220433,1785.7273864073)
-  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0083278649194099  position[mm]: (-216.33705902875,53.161527396694,1741.5879473536)
-  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0053058357627951  position[mm]: (-215.94214464559,53.0534634057,1741.783067015)
-  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0011246748043993  position[mm]: (-215.93698429498,53.062888045805,1741.5526396808)
-  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0074851692744816  position[mm]: (-215.98990609331,53.118271201975,1741.5314913212)
-  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0074368055102641  position[mm]: (-215.89636049385,53.117577778813,1741.5920599008)
-  trackID: 89  chamberNb: 4  energy deposit[MeV]: 0.0018398800014397  position[mm]: (-215.94143153464,53.06438043493,1741.7834717345)
-  trackID: 72  chamberNb: 4  energy deposit[MeV]: 0.0027816209713819  position[mm]: (-215.66755162256,53.081078536117,1712.7087417157)
-  trackID: 71  chamberNb: 4  energy deposit[MeV]: 0.0043760847045095  position[mm]: (-215.37337993247,52.998028284574,1706.9158536504)
-  trackID: 70  chamberNb: 4  energy deposit[MeV]: 0.0059676305838393  position[mm]: (-214.98167609386,52.934029712279,1697.4941982568)
-  trackID: 69  chamberNb: 4  energy deposit[MeV]: 0.0075196685422648  position[mm]: (-212.46034720974,52.528051533266,1651.5613174301)
-  trackID: 68  chamberNb: 4  energy deposit[MeV]: 0.0061913672396704  position[mm]: (-210.55660650605,52.465073635817,1618.7856054179)
-  trackID: 68  chamberNb: 4  energy deposit[MeV]: 0.0034381302727217  position[mm]: (-210.53720999453,52.465824118286,1618.8024735848)
-  trackID: 67  chamberNb: 4  energy deposit[MeV]: 0.0015571743256259  position[mm]: (-209.90542687389,52.28582339572,1605.4566182028)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0014163614049655  position[mm]: (-175.95249049498,46.366704927783,985.47405833049)
-  trackID: 54  chamberNb: 3  energy deposit[MeV]: 0.0014783357048397  position[mm]: (-175.39527574362,46.244931195602,974.6865383254)
-  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0014030984288445  position[mm]: (-169.58260938335,44.715667010594,865.6363498968)
-  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.00309055046626  position[mm]: (-169.49374558596,44.708260574804,864.08408990239)
-  trackID: 51  chamberNb: 3  energy deposit[MeV]: 0.00781624851122  position[mm]: (-169.40350755212,44.671180920757,860.13051488176)
-  trackID: 51  chamberNb: 3  energy deposit[MeV]: 0.0019778115077513  position[mm]: (-169.39754704563,44.678400087153,860.13796071234)
-  trackID: 44  chamberNb: 2  energy deposit[MeV]: 0.001741797872797  position[mm]: (-129.48771805906,34.238698715369,156.90230273184)
-  trackID: 43  chamberNb: 2  energy deposit[MeV]: 0.0015882739690466  position[mm]: (-129.44785366795,34.213701138006,156.27142409139)
-  trackID: 42  chamberNb: 2  energy deposit[MeV]: 0.0013076036045265  position[mm]: (-129.09899760997,34.143239219991,149.67178845011)
-  trackID: 41  chamberNb: 2  energy deposit[MeV]: 0.0012689920263963  position[mm]: (-128.73710117318,34.050613349212,143.0110050928)
-  trackID: 40  chamberNb: 2  energy deposit[MeV]: 0.0026302037435915  position[mm]: (-127.80323655494,33.775672379206,125.83766342039)
-  trackID: 39  chamberNb: 2  energy deposit[MeV]: 0.0046098205828164  position[mm]: (-126.70440346578,33.524990206565,107.04382174092)
-  trackID: 38  chamberNb: 2  energy deposit[MeV]: 0.0016553683928634  position[mm]: (-124.55076087254,32.978643944209,67.494507972946)
-  trackID: 32  chamberNb: 1  energy deposit[MeV]: 0.001237012293884  position[mm]: (-88.703737139778,25.398776220794,-620.81604970035)
-  trackID: 31  chamberNb: 1  energy deposit[MeV]: 0.0015121915671956  position[mm]: (-85.89990610255,24.666895444452,-677.91215845447)
-  trackID: 30  chamberNb: 1  energy deposit[MeV]: 0.0013832595307494  position[mm]: (-83.14255753037,24.177713237192,-732.29560688026)
-  trackID: 29  chamberNb: 1  energy deposit[MeV]: 0.0014686994115656  position[mm]: (-83.068311748024,24.163926913255,-733.9472776833)
-  trackID: 28  chamberNb: 1  energy deposit[MeV]: 0.0021962634066212  position[mm]: (-82.690845096904,24.079640718843,-741.78266590921)
-  trackID: 27  chamberNb: 1  energy deposit[MeV]: 0.002125905456568  position[mm]: (-82.158324208583,23.937668535212,-753.66919786574)
-  trackID: 26  chamberNb: 1  energy deposit[MeV]: 0.0015179053915952  position[mm]: (-81.929581537308,23.880043028952,-758.16940536856)
-  trackID: 20  chamberNb: 0  energy deposit[MeV]: 0.0019105659637671  position[mm]: (-50.347393920461,17.418077578557,-1400.646629008)
-  trackID: 19  chamberNb: 0  energy deposit[MeV]: 0.0065770894970684  position[mm]: (-46.444721812012,16.538077321323,-1478.9749485238)
-  trackID: 19  chamberNb: 0  energy deposit[MeV]: 0.0010329094180693  position[mm]: (-46.446413893257,16.533308745906,-1478.9731932955)
-  trackID: 18  chamberNb: 0  energy deposit[MeV]: 0.0030500056184075  position[mm]: (-43.581361115498,15.48617352622,-1538.0515560126)
-  trackID: 17  chamberNb: 0  energy deposit[MeV]: 0.0094287127711173  position[mm]: (-42.900475176369,15.368409957504,-1544.8959316681)
-  trackID: 17  chamberNb: 0  energy deposit[MeV]: 0.010610251566384  position[mm]: (-42.805901664793,15.272578508213,-1544.8742453403)
-  trackID: 16  chamberNb: 0  energy deposit[MeV]: 0.001733501515401  position[mm]: (-41.983816380361,14.946269315985,-1571.7515052514)
-  trackID: 15  chamberNb: 0  energy deposit[MeV]: 0.002229154028653  position[mm]: (-41.5531934862,14.814311686382,-1580.5113024189)
-  trackID: 14  chamberNb: 0  energy deposit[MeV]: 5.2534842029252e-05  position[mm]: (-41.895984822244,12.927499619363,-1599.9910695759)
-  trackID: 14  chamberNb: 0  energy deposit[MeV]: 0.00084150595268255  position[mm]: (-41.880827278882,12.920288435962,-1599.904186239)
-  trackID: 14  chamberNb: 0  energy deposit[MeV]: 0.00022875114476576  position[mm]: (-41.844769317232,12.897184084283,-1599.8792596741)
-  trackID: 14  chamberNb: 0  energy deposit[MeV]: 0.001062395974784  position[mm]: (-41.835620286448,12.857253005118,-1599.834037577)
-  trackID: 14  chamberNb: 0  energy deposit[MeV]: 0.0014640852883831  position[mm]: (-41.856739817257,12.789399830467,-1599.827193336)
-  trackID: 14  chamberNb: 0  energy deposit[MeV]: 0.0034579783781152  position[mm]: (-41.859515691964,12.764504819263,-1599.8205544968)
+-------->Storing hits in the ROOT file: in this event there are 103 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 1.6378774621835e-05  position[mm]: (62.065447137969,-233.38460788787,-1599.7510715595)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0023667195515573  position[mm]: (62.70304003289,-235.8029203388,-1591.3476673982)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0064856332341563  position[mm]: (63.816949742504,-240,-1576.7690276535)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0015912721522829  position[mm]: (124.56180306715,-464.48368328178,-797.73105632151)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 6.9395163978314e-05  position[mm]: (124.58245420395,-464.56035385385,-797.46552528044)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.037171566437704  position[mm]: (134.35827777669,-500.79505186519,-671.92047329017)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.024740263509065  position[mm]: (138.95882837941,-516.79481035816,-615.80210527498)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0054984762782872  position[mm]: (140.26647944358,-521.35389528985,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0015080417840457  position[mm]: (190.85724645266,-697.82356997484,10.721900440444)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0072851015938033  position[mm]: (193.41570984098,-706.76193208715,41.639599392304)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00058317693477732  position[mm]: (193.76314843194,-707.97615415278,45.854576449922)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0022196512814668  position[mm]: (194.51159312365,-710.60046078838,54.938122484615)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.032246053574792  position[mm]: (201.11786978294,-733.32044802263,133.73068114157)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.023276792765156  position[mm]: (206.71134782229,-752.13827520981,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0025758135627583  position[mm]: (254.48588107611,-927.11066514292,806.28939655025)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.03404832911459  position[mm]: (257.08254374711,-936.80729191416,839.82942685799)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0058327653234152  position[mm]: (258.50095691496,-942.17148904805,858.40416064291)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.022407521536778  position[mm]: (260.8231861663,-950.80385830609,888.59376728858)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00099438669102343  position[mm]: (261.53807144131,-953.38331908952,897.48715836759)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0099248538080806  position[mm]: (263.54256279018,-960.45219938444,921.49654851938)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0023474053185383  position[mm]: (264.19550773059,-962.73159324454,929.20367987357)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.023427379828244  position[mm]: (269.87521322823,-982.35432245828,995.95788205626)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0007922943602239  position[mm]: (270.20152480818,-983.48888519868,999.78625316589)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 5.3388658597137e-05  position[mm]: (270.21981299098,-983.5521047701,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.024949126465868  position[mm]: (325.21517033557,-1175.2936063947,1649.6736511866)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0010972487148451  position[mm]: (325.73098028735,-1177.0556805354,1655.6287148387)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0065982205450568  position[mm]: (328.0544899328,-1185.0251655079,1682.5926408601)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.027919759805349  position[mm]: (333.53333927703,-1203.4412759164,1745.3665183069)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0032521887629734  position[mm]: (334.17935240083,-1205.4990835048,1752.4287629546)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0065781926641722  position[mm]: (335.21421346551,-1208.8733795456,1764.0091750507)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0036700935088452  position[mm]: (335.93124924233,-1211.2415668733,1772.1288066946)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0038257923284294  position[mm]: (337.83343886754,-1217.7145312311,1794.3589028305)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0011570724964946  position[mm]: (338.31096477195,-1219.3581360947,1800)
+  trackID: 80  chamberNb: 4  energy deposit[MeV]: 0.0034611116988729  position[mm]: (337.81354414274,-1217.7311182372,1794.357407657)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0060302910889644  position[mm]: (335.47764878169,-1213.9747118881,1772.1557637301)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0015376155487116  position[mm]: (335.73361857851,-1213.4267951839,1771.6903091322)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.012691394961645  position[mm]: (337.59776018313,-1212.0457232893,1771.0763895576)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0018672844013535  position[mm]: (337.58660373886,-1212.6161562611,1771.5994649441)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0098259708298107  position[mm]: (338.07830538942,-1212.878294621,1773.0082392204)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0081854198527553  position[mm]: (338.08274081288,-1212.0489528461,1772.3657088843)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0075517161351836  position[mm]: (338.06610609417,-1211.5996647717,1771.8041907038)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0044398859533406  position[mm]: (337.89701595498,-1211.3125212951,1771.5040667035)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0019165299059872  position[mm]: (338.02088162424,-1211.0985321188,1771.6944677846)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0012282398608258  position[mm]: (338.17092660651,-1211.1753390665,1771.8490124053)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0047336416177235  position[mm]: (338.23345768081,-1211.2005330678,1771.8285857404)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0021606957083742  position[mm]: (338.23485069684,-1211.203343449,1771.8154986731)
+  trackID: 96  chamberNb: 4  energy deposit[MeV]: 0.006519485510138  position[mm]: (338.19676342216,-1211.1158919683,1771.8533239366)
+  trackID: 95  chamberNb: 4  energy deposit[MeV]: 0.0014970084171816  position[mm]: (338.01566798652,-1211.105167201,1771.696290126)
+  trackID: 94  chamberNb: 4  energy deposit[MeV]: 0.0014138060236628  position[mm]: (337.57980109354,-1212.6130675946,1771.602482233)
+  trackID: 93  chamberNb: 4  energy deposit[MeV]: 0.0012395396665057  position[mm]: (335.73006219528,-1213.421212035,1771.691845657)
+  trackID: 78  chamberNb: 4  energy deposit[MeV]: 0.0018064763405887  position[mm]: (335.20359310763,-1208.8734401422,1764.0105937547)
+  trackID: 77  chamberNb: 4  energy deposit[MeV]: 0.0039914227389397  position[mm]: (334.19601129668,-1205.4316451581,1752.4536582068)
+  trackID: 77  chamberNb: 4  energy deposit[MeV]: 0.0018985959735347  position[mm]: (334.19407565745,-1205.4411166463,1752.4596390618)
+  trackID: 97  chamberNb: 4  energy deposit[MeV]: 0.0012275796549002  position[mm]: (334.20055298539,-1205.4297155138,1752.458202945)
+  trackID: 76  chamberNb: 4  energy deposit[MeV]: 0.0063271761141696  position[mm]: (333.5892921956,-1203.467446635,1745.3591304149)
+  trackID: 75  chamberNb: 4  energy deposit[MeV]: 0.0012488620550985  position[mm]: (328.05190327845,-1185.0192138329,1682.5948759036)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0019068077184516  position[mm]: (325.7267144161,-1177.0660601825,1655.6265562595)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0028124387879833  position[mm]: (325.21931009532,-1175.3122022589,1649.6689197743)
+  trackID: 60  chamberNb: 3  energy deposit[MeV]: 0.0018341986101387  position[mm]: (270.19809298989,-983.47920150578,999.78991796661)
+  trackID: 59  chamberNb: 3  energy deposit[MeV]: 0.0015494852794299  position[mm]: (269.92173684083,-982.32988922658,995.96549241679)
+  trackID: 59  chamberNb: 3  energy deposit[MeV]: 0.002205301247545  position[mm]: (269.91906752943,-982.32508785643,995.97820218471)
+  trackID: 104  chamberNb: 3  energy deposit[MeV]: 0.0019226265651647  position[mm]: (269.93258737666,-982.33221484606,995.96867508902)
+  trackID: 58  chamberNb: 3  energy deposit[MeV]: 0.0016288572093227  position[mm]: (264.20189576063,-962.73832708165,929.20157365339)
+  trackID: 57  chamberNb: 3  energy deposit[MeV]: 0.00139947799701  position[mm]: (263.54709269265,-960.44591112768,921.49834759473)
+  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.00016042813412111  position[mm]: (261.56052081517,-953.44366148239,897.75101738754)
+  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.0023479048388493  position[mm]: (261.56902848063,-953.44740534546,897.73906688043)
+  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0017311672676373  position[mm]: (261.54133614128,-953.39264034242,897.48460416019)
+  trackID: 54  chamberNb: 3  energy deposit[MeV]: 0.001733655929082  position[mm]: (260.82631028211,-950.79456724382,888.5966528633)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.01156502388039  position[mm]: (259.21346655692,-948.23071478362,858.73822122565)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0095989324608526  position[mm]: (260.8190272745,-947.25268243139,853.95854491057)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.001177642258136  position[mm]: (260.62803464323,-948.41685213778,852.75940145428)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.012072910383355  position[mm]: (260.42595662685,-951.74084661735,854.0085624242)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.00058324202457595  position[mm]: (260.18209304788,-951.15539554498,853.96235874358)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0097720540710614  position[mm]: (260.91526628856,-948.78439644249,854.20511727349)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0012447058445182  position[mm]: (261.34814833525,-948.77967227427,854.19959609896)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 5.0715529363579e-05  position[mm]: (261.46679242798,-948.91320858168,854.17054810976)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 6.3771206101989e-05  position[mm]: (261.56483768957,-949.10235754748,854.1758117549)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.010829389328332  position[mm]: (262.08999484128,-950.27705903415,854.03559677929)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0058913407481308  position[mm]: (261.94825105827,-950.50816693765,854.81438387427)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0078429615386393  position[mm]: (262.54657882084,-950.54495741739,854.86616340866)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0070642726575086  position[mm]: (262.25303104991,-950.44659717055,854.71770937554)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0017145590456276  position[mm]: (262.27301595235,-950.60565380372,854.69732311832)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.008342719956544  position[mm]: (262.23780191377,-950.60463292839,854.61067284815)
+  trackID: 110  chamberNb: 3  energy deposit[MeV]: 0.0019209085035123  position[mm]: (262.28004699775,-950.61428498623,854.69431554708)
+  trackID: 109  chamberNb: 3  energy deposit[MeV]: 0.0023126994207436  position[mm]: (261.57537069713,-949.09675725051,854.16702881587)
+  trackID: 108  chamberNb: 3  energy deposit[MeV]: 0.0015611162071334  position[mm]: (261.46044849978,-948.91642327523,854.17617017453)
+  trackID: 107  chamberNb: 3  energy deposit[MeV]: 0.0069853930529757  position[mm]: (261.37688701099,-948.76998679046,854.26467696815)
+  trackID: 106  chamberNb: 3  energy deposit[MeV]: 0.0036794650161301  position[mm]: (260.15658247843,-951.14627966029,853.95462778505)
+  trackID: 105  chamberNb: 3  energy deposit[MeV]: 0.010046523031549  position[mm]: (260.50395936029,-948.41847493679,852.74457556728)
+  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.0036076287734926  position[mm]: (257.10753848702,-937.28708698928,839.76899625462)
+  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.010481943334764  position[mm]: (256.89700028947,-937.31488141303,839.7035222772)
+  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.0038786273339187  position[mm]: (256.90651297985,-937.34352225388,839.70077257132)
+  trackID: 111  chamberNb: 3  energy deposit[MeV]: 0.0058448907402153  position[mm]: (257.09076441342,-937.24812644337,839.80472483548)
+  trackID: 44  chamberNb: 2  energy deposit[MeV]: 0.0017228888763837  position[mm]: (194.50646930621,-710.59232245205,54.941354863732)
+  trackID: 43  chamberNb: 2  energy deposit[MeV]: 0.0014921649289399  position[mm]: (193.77167950644,-707.97705662906,45.853972619717)
+  trackID: 42  chamberNb: 2  energy deposit[MeV]: 0.007093715850565  position[mm]: (193.4593888931,-706.70610246622,41.658761112075)
+  trackID: 41  chamberNb: 2  energy deposit[MeV]: 0.0060658475756077  position[mm]: (190.91277028151,-697.84144039574,10.717066275905)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.0060120464519151  position[mm]: (138.94615595711,-516.742490675,-615.78112056081)
+  trackID: 34  chamberNb: 1  energy deposit[MeV]: 0.00142108415495  position[mm]: (134.36400048706,-500.78949032518,-671.91903566651)
+  trackID: 33  chamberNb: 1  energy deposit[MeV]: 0.0049563081423153  position[mm]: (124.57833071044,-464.60275591882,-797.47413508079)
+  trackID: 32  chamberNb: 1  energy deposit[MeV]: 0.0013279874299945  position[mm]: (124.56902553135,-464.48531586328,-797.73179539343)
+  trackID: 21  chamberNb: 0  energy deposit[MeV]: 0.001733501156588  position[mm]: (62.712006508985,-235.79815823003,-1591.3465211942)
+  trackID: 20  chamberNb: 0  energy deposit[MeV]: 0.0022291531241383  position[mm]: (62.056125109545,-233.37496134786,-1599.7468702222)
 writing Event_3
 >>> Event 1
     0 trajectories stored in this event.
 CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
 <ExP01/TrackerChamberSD_HC> is not found.
 
--------->Storing hits in the ROOT file: in this event there are 121 hits in the tracker chambers: 
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0089536897481431  position[mm]: (-35.634580763703,-146.00720548478,-1552.6280343745)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.038677086094654  position[mm]: (-39.817612260033,-162.3183743958,-1458.2514192077)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0013244205185908  position[mm]: (-39.907064741462,-162.61986447555,-1456.499229187)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0062305021391862  position[mm]: (-40.639210146004,-165.11188084391,-1442.0197179823)
-  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.017161424553452  position[mm]: (-42.789504857373,-172.38982137058,-1400)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0092141886680288  position[mm]: (-75.168692577193,-282.56557609056,-767.05209916402)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.013834913810383  position[mm]: (-76.271160051297,-286.38381385211,-744.98785665778)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.010014747470841  position[mm]: (-78.457306329895,-293.72651023063,-702.30584347319)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0027346771183811  position[mm]: (-78.609227174078,-294.2331189578,-699.33501826807)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0088870624832832  position[mm]: (-80.547876670148,-300.6664867558,-661.47055931082)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0013510714069106  position[mm]: (-80.955538129647,-301.95310859731,-653.8691165573)
-  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.027800234340032  position[mm]: (-83.827316092288,-311.0374760666,-600)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.006602518291631  position[mm]: (-116.82237375826,-416.31314852191,28.965709450602)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0022547949305289  position[mm]: (-117.00589287751,-416.89187046604,32.434214382142)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0048508595780051  position[mm]: (-117.64836871634,-418.93681234558,44.689441769315)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.016209700971165  position[mm]: (-119.72853710438,-425.50584401393,84.404244132627)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0076387010325946  position[mm]: (-120.6910931689,-428.5486770843,102.8084732253)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.020782809041374  position[mm]: (-123.46775512637,-437.24432235738,155.45448669135)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0060435486260414  position[mm]: (-124.46315280989,-440.49460192696,174.78720709692)
-  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.01315975918006  position[mm]: (-125.78497326947,-444.74646355635,200)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0093140108190442  position[mm]: (-161.22174132181,-551.11108148287,827.69722247152)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0037276398738841  position[mm]: (-161.76832125088,-552.75175100922,837.44070742058)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0064275528969699  position[mm]: (-162.55807666807,-555.12707998706,851.46497454884)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.016005795220986  position[mm]: (-165.20070825853,-563.43469261563,899.97491230055)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00034283468241772  position[mm]: (-165.47394792079,-564.35387506221,905.34266500152)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.033664856632484  position[mm]: (-169.51788059141,-577.91634621358,984.53272447339)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0049301858145602  position[mm]: (-170.12645104401,-580.06298278101,997.34754490164)
-  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00088461319981639  position[mm]: (-170.25026256131,-580.50452487675,1000)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0020099638164453  position[mm]: (-198.51719141667,-680.4290076627,1605.1238467521)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.00063714202831891  position[mm]: (-198.58693002127,-680.67635855516,1606.6281771068)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0021857301468792  position[mm]: (-199.28863396549,-683.16456537198,1621.7759983677)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0025946794324607  position[mm]: (-199.54637910927,-684.05349363162,1627.2246664849)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.012824115514417  position[mm]: (-200.53051298868,-687.47303899937,1648.2452592305)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.011450748383712  position[mm]: (-201.91723929203,-692.42797239687,1678.7412030029)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.002091231760139  position[mm]: (-202.03605918373,-692.86235626102,1681.4024228386)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.010206760842588  position[mm]: (-203.29750390423,-697.43141973074,1709.4194233052)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0061042484633735  position[mm]: (-204.34915505296,-701.06677627668,1731.5557389369)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.002662331915166  position[mm]: (-204.65783366136,-702.13132556118,1738.0313985476)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0097427713491338  position[mm]: (-205.78211729895,-705.92449869396,1761.1499188076)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.010187739084686  position[mm]: (-206.65923847621,-708.80349928787,1778.5190915149)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0023573749903194  position[mm]: (-206.88511144961,-709.55592217478,1783.0511447284)
-  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0079755109408857  position[mm]: (-207.7347636528,-712.36559506897,1800)
-  trackID: 77  chamberNb: 4  energy deposit[MeV]: 0.0021577849088769  position[mm]: (-206.89216720098,-709.56724358307,1783.0495704067)
-  trackID: 76  chamberNb: 4  energy deposit[MeV]: 0.0023978011007194  position[mm]: (-206.67476489681,-708.80507670313,1778.5188594629)
-  trackID: 75  chamberNb: 4  energy deposit[MeV]: 0.0018657981845651  position[mm]: (-205.79320107288,-705.92347722926,1761.150034111)
-  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0026560765787372  position[mm]: (-204.64108787103,-702.12504295386,1738.0342245189)
-  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0019216146012053  position[mm]: (-204.33773969391,-701.06567653642,1731.5569955763)
-  trackID: 72  chamberNb: 4  energy deposit[MeV]: 0.0015861189205286  position[mm]: (-203.30176433888,-697.42336824805,1709.4209298115)
-  trackID: 71  chamberNb: 4  energy deposit[MeV]: 0.0024266234895262  position[mm]: (-202.0392591986,-692.84712510884,1681.4055847323)
-  trackID: 70  chamberNb: 4  energy deposit[MeV]: 0.0018659996965624  position[mm]: (-201.90374898367,-692.44113217392,1678.7497060995)
-  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0014687618142033  position[mm]: (-201.90334715007,-692.4367485523,1678.7364590609)
-  trackID: 69  chamberNb: 4  energy deposit[MeV]: 0.0013486670941199  position[mm]: (-200.57873121674,-687.5663523611,1648.2383709723)
-  trackID: 69  chamberNb: 4  energy deposit[MeV]: 0.0055077313521754  position[mm]: (-200.54617699059,-687.60224419941,1648.2229634058)
-  trackID: 91  chamberNb: 4  energy deposit[MeV]: 0.0021563920506281  position[mm]: (-200.57703003882,-687.57032728736,1648.2510761207)
-  trackID: 68  chamberNb: 4  energy deposit[MeV]: 0.0013668035935232  position[mm]: (-199.28873171696,-683.15699656995,1621.7775287457)
-  trackID: 67  chamberNb: 4  energy deposit[MeV]: 0.003479143584633  position[mm]: (-198.563663201,-680.66536139849,1606.6326800952)
-  trackID: 66  chamberNb: 4  energy deposit[MeV]: 0.0027920854582051  position[mm]: (-198.51552656916,-680.41012171326,1605.1281088987)
-  trackID: 58  chamberNb: 3  energy deposit[MeV]: 0.0023051414798322  position[mm]: (-170.14036003086,-580.06782319592,997.34683419162)
-  trackID: 57  chamberNb: 3  energy deposit[MeV]: 0.0012883222162125  position[mm]: (-169.51085134801,-577.91760533801,984.53311746343)
-  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.0023624531532051  position[mm]: (-165.3903485704,-564.47926217988,905.34227410436)
-  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.00012453844373573  position[mm]: (-165.33848866172,-564.51304258459,905.31264182449)
-  trackID: 56  chamberNb: 3  energy deposit[MeV]: 1.8388473084737e-05  position[mm]: (-165.34084312084,-564.54172513263,905.31345981503)
-  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.0015401114827398  position[mm]: (-165.3630282277,-564.51320280238,905.33075345167)
-  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.0019082072178721  position[mm]: (-165.35270118658,-564.50875528803,905.32865568181)
-  trackID: 96  chamberNb: 3  energy deposit[MeV]: 0.0012542852499674  position[mm]: (-165.36009027987,-564.51828380976,905.33438736513)
-  trackID: 95  chamberNb: 3  energy deposit[MeV]: 0.0012744699863391  position[mm]: (-165.34298900263,-564.53952346756,905.307114786)
-  trackID: 94  chamberNb: 3  energy deposit[MeV]: 0.0016370365749126  position[mm]: (-165.33100253915,-564.51385497895,905.30673208414)
-  trackID: 93  chamberNb: 3  energy deposit[MeV]: 0.0012186743417721  position[mm]: (-165.39392807169,-564.4848589804,905.34234375835)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0063836470656757  position[mm]: (-169.18971361882,-565.45307491892,900.945700512)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.010334682406412  position[mm]: (-172.05681963518,-569.18074618794,900.86749115101)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0045898167862692  position[mm]: (-172.14716162537,-567.47585204229,902.7040512752)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0085083663667758  position[mm]: (-173.94377240714,-569.30492442109,904.42039614011)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.003946974592851  position[mm]: (-174.01584144375,-568.22233026262,903.86079904514)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0066587593170653  position[mm]: (-174.18113183642,-567.72695716411,904.55900000115)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0065864588521126  position[mm]: (-174.26181310701,-567.89363094422,903.97018488747)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0010844571628904  position[mm]: (-174.13962049256,-567.78651045105,904.26062620604)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0078917205806795  position[mm]: (-173.88013881739,-567.6067731077,904.24600168759)
-  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.010154254378617  position[mm]: (-173.95137596528,-567.50863834316,904.28410575577)
-  trackID: 102  chamberNb: 3  energy deposit[MeV]: 0.0015934029965584  position[mm]: (-174.14206864606,-567.78357963769,904.25216664821)
-  trackID: 101  chamberNb: 3  energy deposit[MeV]: 0.008883561352379  position[mm]: (-174.15809503504,-568.25755512986,903.85551865553)
-  trackID: 101  chamberNb: 3  energy deposit[MeV]: 0.0022152677138806  position[mm]: (-174.14443508546,-568.25500951941,903.85656028857)
-  trackID: 100  chamberNb: 3  energy deposit[MeV]: 0.0044549156972348  position[mm]: (-174.24263503775,-569.39251760688,904.26745599683)
-  trackID: 100  chamberNb: 3  energy deposit[MeV]: 0.00057011200650783  position[mm]: (-174.40571813768,-569.42784884712,904.29648436593)
-  trackID: 100  chamberNb: 3  energy deposit[MeV]: 0.007639567730004  position[mm]: (-174.44741766115,-569.60680688681,904.18103538535)
-  trackID: 100  chamberNb: 3  energy deposit[MeV]: 0.00053955142089298  position[mm]: (-174.46082581364,-569.5896291706,904.16860391309)
-  trackID: 100  chamberNb: 3  energy deposit[MeV]: 0.0030640088299055  position[mm]: (-174.46158461586,-569.61165377697,904.16757483883)
-  trackID: 103  chamberNb: 3  energy deposit[MeV]: 0.002902879634672  position[mm]: (-174.44998619495,-569.59616808968,904.19837578336)
-  trackID: 99  chamberNb: 3  energy deposit[MeV]: 0.0023471989152216  position[mm]: (-172.1510127027,-567.46414776496,902.71283714876)
-  trackID: 98  chamberNb: 3  energy deposit[MeV]: 0.0056178109829076  position[mm]: (-172.09906976586,-569.20370226492,900.88817647017)
-  trackID: 97  chamberNb: 3  energy deposit[MeV]: 0.0041137646078234  position[mm]: (-169.19564730423,-565.4486219154,900.91358888414)
-  trackID: 54  chamberNb: 3  energy deposit[MeV]: 0.0032730484382278  position[mm]: (-162.58206354049,-555.12491639427,851.46548833886)
-  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0028942358465189  position[mm]: (-161.75021777919,-552.7430343608,837.44435909878)
-  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.0080901920007554  position[mm]: (-161.16769686577,-551.28182118933,827.69252041392)
-  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.001390064926186  position[mm]: (-161.15542784985,-551.25166805229,827.67467643045)
-  trackID: 52  chamberNb: 3  energy deposit[MeV]: 0.0030751629800059  position[mm]: (-161.14804191399,-551.23206122811,827.68192249133)
-  trackID: 45  chamberNb: 2  energy deposit[MeV]: 0.0020486319609384  position[mm]: (-124.47120113503,-440.48517335728,174.78897144755)
-  trackID: 44  chamberNb: 2  energy deposit[MeV]: 0.0021259983930633  position[mm]: (-123.5821496822,-437.29074053504,155.45372536242)
-  trackID: 44  chamberNb: 2  energy deposit[MeV]: 0.0051040327166555  position[mm]: (-123.55679815302,-437.24575904677,155.49237299162)
-  trackID: 44  chamberNb: 2  energy deposit[MeV]: 0.0013830171522288  position[mm]: (-123.5567544109,-437.2379572328,155.49161281029)
-  trackID: 104  chamberNb: 2  energy deposit[MeV]: 0.0013801006569586  position[mm]: (-123.58565881978,-437.2940269702,155.45989032863)
-  trackID: 43  chamberNb: 2  energy deposit[MeV]: 0.0058977194481524  position[mm]: (-120.76613117173,-428.57057335387,102.80795234459)
-  trackID: 43  chamberNb: 2  energy deposit[MeV]: 0.0015044999445206  position[mm]: (-120.76735316803,-428.56203132475,102.80697751755)
-  trackID: 42  chamberNb: 2  energy deposit[MeV]: 0.0021634429394288  position[mm]: (-119.71844654262,-425.49729053281,84.40684537704)
-  trackID: 41  chamberNb: 2  energy deposit[MeV]: 0.0015232027267971  position[mm]: (-117.65551599664,-418.9418932618,44.68858867582)
-  trackID: 40  chamberNb: 2  energy deposit[MeV]: 0.0017272921223297  position[mm]: (-117.01329620296,-416.89876473467,32.433120724663)
-  trackID: 39  chamberNb: 2  energy deposit[MeV]: 0.0051923940039914  position[mm]: (-116.77674054424,-416.32141233138,28.970271471289)
-  trackID: 32  chamberNb: 1  energy deposit[MeV]: 0.00196739195801  position[mm]: (-80.944839608281,-301.94831496913,-653.86718334805)
-  trackID: 31  chamberNb: 1  energy deposit[MeV]: 0.0010121485942106  position[mm]: (-80.567134289614,-300.8962593474,-661.48058007703)
-  trackID: 31  chamberNb: 1  energy deposit[MeV]: 0.013069591989532  position[mm]: (-80.754567455933,-300.88150223038,-661.44589034601)
-  trackID: 109  chamberNb: 1  energy deposit[MeV]: 0.0012785412341522  position[mm]: (-80.567558125648,-300.90327578827,-661.47973030668)
-  trackID: 30  chamberNb: 1  energy deposit[MeV]: 0.0098485809662294  position[mm]: (-78.447040076389,-294.28558714773,-699.31577083704)
-  trackID: 30  chamberNb: 1  energy deposit[MeV]: 0.0023760648232518  position[mm]: (-78.458145925736,-294.27620422291,-699.3106836901)
-  trackID: 29  chamberNb: 1  energy deposit[MeV]: 0.0028631841447241  position[mm]: (-78.447505416553,-293.7440310795,-702.30719757172)
-  trackID: 28  chamberNb: 1  energy deposit[MeV]: 0.0042774947010044  position[mm]: (-76.239037387538,-286.37166697883,-744.98172280433)
-  trackID: 27  chamberNb: 1  energy deposit[MeV]: 0.0014010113040661  position[mm]: (-75.175009965526,-282.57035884359,-767.05292847964)
-  trackID: 18  chamberNb: 0  energy deposit[MeV]: 0.0062646365368073  position[mm]: (-40.61163923224,-165.05937362273,-1442.0041136233)
-  trackID: 17  chamberNb: 0  energy deposit[MeV]: 0.002348033406396  position[mm]: (-39.921618939914,-162.61575704922,-1456.4984861389)
-  trackID: 16  chamberNb: 0  energy deposit[MeV]: 0.001935423128562  position[mm]: (-39.80982496422,-162.31005431761,-1458.2490494787)
-  trackID: 15  chamberNb: 0  energy deposit[MeV]: 0.00053825267714277  position[mm]: (-35.733983327486,-145.95269212363,-1552.6112421294)
-  trackID: 15  chamberNb: 0  energy deposit[MeV]: 0.006705106703858  position[mm]: (-35.794497593177,-145.97315070503,-1552.588955835)
-  trackID: 110  chamberNb: 0  energy deposit[MeV]: 0.0023627621964695  position[mm]: (-35.730527493026,-145.96711364702,-1552.6149174235)
+-------->Storing hits in the ROOT file: in this event there are 128 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0083143775590644  position[mm]: (12.942958536853,132.50138253228,-1588.7590575568)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0086971637922587  position[mm]: (13.305337450164,135.89023467758,-1567.7580472898)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0094762063232984  position[mm]: (13.914040342556,140.78563498189,-1537.5016026724)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.005241354336353  position[mm]: (14.144674263038,142.48874368692,-1527.1733662553)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 5.8826928665565e-05  position[mm]: (14.176451677836,142.73133729609,-1525.7043741963)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0015244610430675  position[mm]: (14.423373251389,144.60106640384,-1514.3936642315)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 3.9903651341812e-05  position[mm]: (14.436648474915,144.69970579906,-1513.7929142715)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0081712964009555  position[mm]: (14.903280863085,148.15094819694,-1492.7566356377)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0022312513921598  position[mm]: (14.973316403592,148.69976465404,-1489.4091614663)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.00061796457528152  position[mm]: (15.046526219168,149.28187450928,-1485.8493177282)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0061503660896382  position[mm]: (15.276109345018,151.09790337438,-1474.7776333188)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0010118682806867  position[mm]: (15.33559634486,151.56505473893,-1471.9644461759)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0077086649413501  position[mm]: (15.648001248088,153.90068990938,-1457.9011850557)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.00039235347032116  position[mm]: (15.696969037753,154.20265193891,-1456.0462273328)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0021833124842863  position[mm]: (15.893365942036,155.42230910249,-1448.565778174)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0062296631499808  position[mm]: (16.463630361619,158.89779870477,-1427.2887731102)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.010091557341288  position[mm]: (17.219282410984,163.35665146453,-1400)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.020889613625755  position[mm]: (33.365700955082,270.25593083772,-748.86382163784)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.033797296874574  position[mm]: (35.486324673878,283.55078313443,-668.68393607232)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0051360938706522  position[mm]: (35.67600632817,284.85357310639,-660.78741775899)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.024867250873748  position[mm]: (37.092342933895,294.82595613844,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00041814650934246  position[mm]: (49.379852133231,392.35035408341,4.2249424971876)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0057104527230424  position[mm]: (49.782255897206,395.72098112354,25.089188917219)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.016086099800417  position[mm]: (50.539858572023,402.36568293271,66.397609972339)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.032671334500673  position[mm]: (51.884737193664,414.97088432879,144.37782390726)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0054594325391559  position[mm]: (52.10014963787,416.87293153762,156.37355207028)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0079526608186792  position[mm]: (52.430952663196,419.75825747888,174.69004133241)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.002146434357344  position[mm]: (52.566258617913,420.91481964759,182.05714187969)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0062170357233742  position[mm]: (52.924209883615,423.73288765334,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.03496211643228  position[mm]: (65.140079367436,531.0653874058,880.66947171332)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 1.5912131504563e-05  position[mm]: (65.148702511445,531.1450252554,881.17057534973)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0022802232535688  position[mm]: (65.227336530875,531.87276498955,885.75533977207)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0016015476699792  position[mm]: (65.292323316139,532.4553265974,889.41895993752)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.026538378772526  position[mm]: (66.816288039815,546.31777789464,976.80907465014)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0038833125315803  position[mm]: (67.161608139602,549.95451396222,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0071321099818027  position[mm]: (75.17257763905,648.19403890404,1614.9995849684)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0030235657013224  position[mm]: (75.271686373664,649.33020562516,1622.044737408)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0045843225666738  position[mm]: (75.596500625998,652.90992321448,1644.3585381809)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0094710407828897  position[mm]: (75.854434122306,655.7547240605,1662.1650881645)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.026399682113959  position[mm]: (76.853005364696,666.50960274991,1729.2531323361)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.00015940415450722  position[mm]: (76.869582418699,666.76669444446,1730.8968440531)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.021147285034832  position[mm]: (77.505167852444,676.88930841413,1795.9066667788)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.00010087347210039  position[mm]: (77.52104308536,677.08834787714,1797.1940912608)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0021212363307537  position[mm]: (77.55659456695,677.52106505593,1800)
+  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.00282566966169  position[mm]: (77.669746510968,678.40927798555,1797.4680246533)
+  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.0046348322785017  position[mm]: (78.273912161504,679.0830210623,1796.7283227634)
+  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.0034555094012609  position[mm]: (79.145656931023,679.81958093756,1797.0227281281)
+  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.0081277550843116  position[mm]: (79.115181920745,679.83571657533,1797.3108497087)
+  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.0046216334692531  position[mm]: (79.146037506813,679.77554983079,1797.2318507369)
+  trackID: 87  chamberNb: 4  energy deposit[MeV]: 0.002883920669253  position[mm]: (79.165252395273,679.77949068849,1797.2371652092)
+  trackID: 99  chamberNb: 4  energy deposit[MeV]: 0.0014353072883626  position[mm]: (79.148690532879,679.77204809628,1797.2249175173)
+  trackID: 98  chamberNb: 4  energy deposit[MeV]: 0.00048060903315887  position[mm]: (79.191034010937,679.85705167938,1797.0260251479)
+  trackID: 98  chamberNb: 4  energy deposit[MeV]: 0.0041635873680844  position[mm]: (79.171197208335,679.87496919054,1797.0057709836)
+  trackID: 100  chamberNb: 4  energy deposit[MeV]: 0.0016638942702368  position[mm]: (79.194850143203,679.86530486581,1797.0295472316)
+  trackID: 86  chamberNb: 4  energy deposit[MeV]: 0.0016553919701257  position[mm]: (77.497420425985,676.89512290893,1795.906278662)
+  trackID: 85  chamberNb: 4  energy deposit[MeV]: 0.0013468102079267  position[mm]: (76.862049627974,666.76748637024,1730.8970867232)
+  trackID: 84  chamberNb: 4  energy deposit[MeV]: 0.0019055910055721  position[mm]: (76.862482997313,666.51594486449,1729.2525469706)
+  trackID: 83  chamberNb: 4  energy deposit[MeV]: 0.0021088148323289  position[mm]: (75.861310160512,655.76570749691,1662.1638536382)
+  trackID: 82  chamberNb: 4  energy deposit[MeV]: 0.0072631331535629  position[mm]: (75.672045083304,652.77625254348,1644.3966554877)
+  trackID: 82  chamberNb: 4  energy deposit[MeV]: 0.0043673526024628  position[mm]: (75.670686719194,652.77427347437,1644.4325461326)
+  trackID: 81  chamberNb: 4  energy deposit[MeV]: 0.00039537853540612  position[mm]: (75.197763616063,649.3633047864,1622.0482964443)
+  trackID: 81  chamberNb: 4  energy deposit[MeV]: 0.0065830281683293  position[mm]: (75.133116953098,649.37523644809,1622.0526068588)
+  trackID: 101  chamberNb: 4  energy deposit[MeV]: 0.0014288165839611  position[mm]: (75.198696444069,649.36569420793,1622.0560455568)
+  trackID: 80  chamberNb: 4  energy deposit[MeV]: 0.0039300074414082  position[mm]: (75.201864659535,648.20380292493,1614.9996318925)
+  trackID: 75  chamberNb: 3  energy deposit[MeV]: 0.0016822052232493  position[mm]: (66.825556943617,546.31447368543,976.8098803935)
+  trackID: 74  chamberNb: 3  energy deposit[MeV]: 0.0019501198844669  position[mm]: (65.303946910928,532.45704551701,889.41903003046)
+  trackID: 73  chamberNb: 3  energy deposit[MeV]: 0.0053934875010493  position[mm]: (65.270758409,531.85037018382,885.7619303942)
+  trackID: 72  chamberNb: 3  energy deposit[MeV]: 0.0013469341137367  position[mm]: (65.151441942575,531.15203847044,881.16970764545)
+  trackID: 71  chamberNb: 3  energy deposit[MeV]: 0.0013824708571239  position[mm]: (65.147852333768,531.06637108463,880.66948770357)
+  trackID: 63  chamberNb: 2  energy deposit[MeV]: 0.0014278782963555  position[mm]: (52.560545625753,420.92062127787,182.05666863657)
+  trackID: 62  chamberNb: 2  energy deposit[MeV]: 0.0063253656993439  position[mm]: (52.48758100428,419.78395251374,174.69015381112)
+  trackID: 61  chamberNb: 2  energy deposit[MeV]: 0.0014165926132952  position[mm]: (52.095051030139,416.87916967644,156.37298105777)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0043875299586233  position[mm]: (50.376940592502,416.71024815203,144.77517371753)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.00043343061837835  position[mm]: (50.336868303626,416.59159073687,144.47724088259)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.00073994320385391  position[mm]: (50.27792932333,416.32639622556,143.76114835375)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.00026215520457242  position[mm]: (50.34492420762,416.53144747439,143.10337320474)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0024866905637634  position[mm]: (50.659417032203,416.69284493588,142.07688493227)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.00012346934651204  position[mm]: (50.987578340316,416.29992868247,141.99125926622)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0020965360587512  position[mm]: (50.888017625489,415.53397804462,141.46371466377)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.00054094399791505  position[mm]: (51.061501428856,415.30464604081,140.86077260682)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0064081916965324  position[mm]: (51.292977567467,414.29652191377,140.63520614356)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.00028928427980815  position[mm]: (51.323376262689,414.28391530728,140.59606259649)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0013118451901339  position[mm]: (51.44417265513,414.07030423245,140.19804583343)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.006873739047737  position[mm]: (51.527751118727,414.46397440824,140.05423551426)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0060258465619023  position[mm]: (51.681862012061,414.32114527627,140.16415643584)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.005709559554119  position[mm]: (51.680391855878,414.23697759129,140.10294669064)
+  trackID: 60  chamberNb: 2  energy deposit[MeV]: 0.0032333815834971  position[mm]: (51.683725520528,414.21406871631,140.10803605752)
+  trackID: 146  chamberNb: 2  energy deposit[MeV]: 0.0039159116497272  position[mm]: (51.432386644907,414.08874093256,140.24020420061)
+  trackID: 146  chamberNb: 2  energy deposit[MeV]: 0.0013436553029379  position[mm]: (51.427661081155,414.09310784098,140.24416425565)
+  trackID: 145  chamberNb: 2  energy deposit[MeV]: 0.0033408038251634  position[mm]: (51.343708159315,414.29794019076,140.59443323556)
+  trackID: 144  chamberNb: 2  energy deposit[MeV]: 0.0018395374821689  position[mm]: (51.055497562036,415.30127132355,140.86927942735)
+  trackID: 143  chamberNb: 2  energy deposit[MeV]: 0.0024941411602606  position[mm]: (50.884602780268,415.54867515793,141.45696488468)
+  trackID: 142  chamberNb: 2  energy deposit[MeV]: 0.0013679390623602  position[mm]: (50.994835505268,416.29780559493,141.99286882656)
+  trackID: 141  chamberNb: 2  energy deposit[MeV]: 0.0049886511916063  position[mm]: (50.639511740163,416.68365966194,142.03886207218)
+  trackID: 140  chamberNb: 2  energy deposit[MeV]: 0.0033015519355598  position[mm]: (50.346216031637,416.55547595199,143.1072182963)
+  trackID: 139  chamberNb: 2  energy deposit[MeV]: 0.0023475493773179  position[mm]: (50.346949826868,416.58071131102,144.4802595332)
+  trackID: 138  chamberNb: 2  energy deposit[MeV]: 0.0082483582865541  position[mm]: (50.320471790683,416.77935999298,144.75311824783)
+  trackID: 59  chamberNb: 2  energy deposit[MeV]: 0.0032356154525792  position[mm]: (50.467862321763,402.35347333561,66.407341088442)
+  trackID: 59  chamberNb: 2  energy deposit[MeV]: 0.002471887100434  position[mm]: (50.481045198192,402.36042582112,66.400703770817)
+  trackID: 147  chamberNb: 2  energy deposit[MeV]: 0.0014020528308732  position[mm]: (50.469349171163,402.35724409915,66.414208409504)
+  trackID: 58  chamberNb: 2  energy deposit[MeV]: 0.0014024527213131  position[mm]: (49.78171080735,395.72888308139,25.088242038924)
+  trackID: 57  chamberNb: 2  energy deposit[MeV]: 0.001981612100345  position[mm]: (49.375058311422,392.33962519604,4.2273295399272)
+  trackID: 49  chamberNb: 1  energy deposit[MeV]: 0.0014118982347451  position[mm]: (35.669508793484,284.84899114883,-660.78619661106)
+  trackID: 48  chamberNb: 1  energy deposit[MeV]: 0.001407996986614  position[mm]: (35.494310475832,283.55012434871,-668.68370261366)
+  trackID: 47  chamberNb: 1  energy deposit[MeV]: 0.0014326543734966  position[mm]: (33.366010726619,270.26404957064,-748.86484971243)
+  trackID: 38  chamberNb: 0  energy deposit[MeV]: 0.0012703624822792  position[mm]: (16.465294071197,158.89110523911,-1427.2874621687)
+  trackID: 37  chamberNb: 0  energy deposit[MeV]: 0.0070603714518329  position[mm]: (16.055481126791,155.52088003624,-1448.563565775)
+  trackID: 37  chamberNb: 0  energy deposit[MeV]: 0.0035739166085652  position[mm]: (16.051444883738,155.52089844222,-1448.5367847468)
+  trackID: 148  chamberNb: 0  energy deposit[MeV]: 0.0023910886430879  position[mm]: (16.070809508375,155.51981807512,-1448.5612100277)
+  trackID: 36  chamberNb: 0  energy deposit[MeV]: 0.0022741105569575  position[mm]: (15.706108057308,154.19167784249,-1456.0439526923)
+  trackID: 35  chamberNb: 0  energy deposit[MeV]: 0.010830191888262  position[mm]: (15.50990229524,153.92452232718,-1457.8860506932)
+  trackID: 34  chamberNb: 0  energy deposit[MeV]: 0.001649851824892  position[mm]: (15.338679169598,151.57413259557,-1471.9656107996)
+  trackID: 33  chamberNb: 0  energy deposit[MeV]: 0.0029604649220334  position[mm]: (15.251437211696,151.04125427649,-1474.7623712051)
+  trackID: 33  chamberNb: 0  energy deposit[MeV]: 0.0019444213750499  position[mm]: (15.257943875754,151.0501806612,-1474.7584928688)
+  trackID: 149  chamberNb: 0  energy deposit[MeV]: 0.0015310095855806  position[mm]: (15.254246206683,151.04281523447,-1474.7706314519)
+  trackID: 32  chamberNb: 0  energy deposit[MeV]: 0.0015834353129151  position[mm]: (14.971679458856,148.70877172779,-1489.4102148846)
+  trackID: 31  chamberNb: 0  energy deposit[MeV]: 0.0015376708513123  position[mm]: (14.91215305217,148.15020737748,-1492.7563322756)
+  trackID: 30  chamberNb: 0  energy deposit[MeV]: 0.0021273433097418  position[mm]: (14.430004579942,144.71102996524,-1513.7939856646)
+  trackID: 29  chamberNb: 0  energy deposit[MeV]: 0.0015210219773683  position[mm]: (14.426221921329,144.6093207583,-1514.3947216912)
+  trackID: 28  chamberNb: 0  energy deposit[MeV]: 0.0057019333352833  position[mm]: (14.023020649128,142.41131901653,-1525.5920559203)
+  trackID: 28  chamberNb: 0  energy deposit[MeV]: 0.00095090007146886  position[mm]: (14.011342072482,142.37059743321,-1525.6783340128)
+  trackID: 28  chamberNb: 0  energy deposit[MeV]: 0.0063290869823297  position[mm]: (13.959649667041,142.39785127588,-1525.6569162786)
+  trackID: 151  chamberNb: 0  energy deposit[MeV]: 0.0012938570506185  position[mm]: (14.007326373433,142.3656614586,-1525.6816867534)
+  trackID: 150  chamberNb: 0  energy deposit[MeV]: 0.0065957324161889  position[mm]: (13.993034814252,142.35952130613,-1525.5640870881)
+  trackID: 27  chamberNb: 0  energy deposit[MeV]: 0.0020277541798664  position[mm]: (14.16858961863,142.49873147243,-1527.173927473)
+  trackID: 27  chamberNb: 0  energy deposit[MeV]: 0.001431769772147  position[mm]: (14.170691203229,142.4936687575,-1527.1678514668)
+  trackID: 26  chamberNb: 0  energy deposit[MeV]: 0.0015529881430057  position[mm]: (13.92238175283,140.78230623273,-1537.5008663507)
+  trackID: 25  chamberNb: 0  energy deposit[MeV]: 0.0022920216480297  position[mm]: (13.293105257045,135.88253550073,-1567.7558194151)
 writing Event_4
 >>> Event 2
     0 trajectories stored in this event.
  Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.000000s Real=0.006835s Sys=0.000000s
+  User=0.010000s Real=0.007799s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -2826,7 +2812,7 @@ Pool ID '16G4HitsCollection', size : 0.000961 MB
 Pool ID '7G4Track', size : 0.0336 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15ExP01TrackerHit', size : 0.0211 MB
+Pool ID '15ExP01TrackerHit', size : 0.0202 MB
 Number of memory pools allocated: 14 of which, static: 0
 Dynamic pools deleted: 14 / Total memory freed: 0.11 MB
 ============================================================

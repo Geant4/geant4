@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-02-23 Alberto Ribon (particles-V11-00-18)
+- G4XicZero, G4AntiXicZero : updated mean lifetime values according to the
+  PDG-2022.
+- Note: the particles' properties in Geant4 are currently consistent with
+  those of PDG-2017; the mean lifetimes have similar (within few percent)
+  values with respect to the latest PDG version, PDG-2022, except for
+  Xi_c0 and Omega_c0. For this reason, only the latter two have been
+  updated, while the rest will be updated in the near future.
+
 ## 2023-02-07 Sandro Wenzel (particles-V11-00-17)
 - G4OmegacZero, G4AntiOmegacZero : fixed mean lifetime according to the PDG.
   Thanks to Francesco Mazzaschi of ALICE for reporting it.

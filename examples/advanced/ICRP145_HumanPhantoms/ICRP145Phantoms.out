@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -495,13 +495,13 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.506176 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -581,13 +581,13 @@ hIoni:  for anti_proton  XStype:3  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.506176 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -613,13 +613,13 @@ hIoni:  for kaon+  XStype:3  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.949416 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -645,13 +645,13 @@ hIoni:  for kaon-  XStype:3  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.949416 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -673,17 +673,17 @@ muIoni:  for mu+  XStype:3  SubType=2
       StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=0.000000 eV  Emax=200.000000 keV  deltaVI
-        MuBetheBloch : Emin=200.000000 keV Emax=100.000000 TeV
+        MuBetheBloch : Emin=200.000000 keV Emax=100.000000 TeV  deltaVI
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 0.850000 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -705,17 +705,17 @@ muIoni:  for mu-  XStype:3  SubType=2
       StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=0.000000 eV  Emax=200.000000 keV  deltaVI
-        MuBetheBloch : Emin=200.000000 keV Emax=100.000000 TeV
+        MuBetheBloch : Emin=200.000000 keV Emax=100.000000 TeV  deltaVI
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 0.850000 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -760,13 +760,13 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.116561 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
@@ -792,13 +792,13 @@ hIoni:  for pi-  XStype:3  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
-      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.116561 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi

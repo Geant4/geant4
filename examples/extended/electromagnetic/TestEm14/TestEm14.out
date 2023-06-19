@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -133,6 +133,7 @@ physicsList->setCut() start.
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
         good cross section parametrization from 211.317 MeV to 1e+12 GeV for all Z.
+        cross section factor: 1
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Water> world volume
  This region is in the mass world.
@@ -182,7 +183,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.660000s Real=3.677722s Sys=0.000000s
+  User=4.040000s Real=4.063514s Sys=0.010000s
 
  ======================== run summary ======================
 
@@ -252,7 +253,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.690000s Real=3.705881s Sys=0.000000s
+  User=3.790000s Real=3.815473s Sys=0.000000s
 
  ======================== run summary ======================
 

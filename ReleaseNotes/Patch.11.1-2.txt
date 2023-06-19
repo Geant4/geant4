@@ -1,0 +1,157 @@
+
+                 Geant4 11.1 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                           15 June 2023
+
+List of fixes included in this public patch since the public release 11.1.1:
+
+  o Analysis:
+    --------
+    + Fixed creating histograms with user defined bins.
+      Addressing problem report #2541.
+    + Improved 'FillH*'' debug message.
+
+  o Digits_Hits:
+    -----------
+    + utils: fixed probe scorer with alternative material setting,
+      that didn't properly work in tasking mode.
+
+  o Event:
+    -----
+    + Added missing SetParticleWeight() method to G4ParticleGun.
+    + G4TrackStack: fixed incorrect information of maximum number of tracks.
+
+  o Geometry:
+    --------
+    + magneticfield
+      o Fixed compilation warnings on clang-15 for mismatched bounds
+        declarations in input parameters for steppers.
+    + management
+      o G4Region: issue fatal exception if attempting to add a root logical
+        volume which is already set as root for another region.
+    + solids/CSG
+      o In G4UTrap wrapper, fixed constructor for Right Angular Wedge.
+    + solids/specific
+      o Fixed uninitialised value in G4VCSGfaceted::SurfaceNormal().
+      o Fixed potential uninitialised value for boundary type in
+        G4VTwistSurface::GetBoundaryAtPZ().
+        Fixed more potential uninitialised values in G4PolyconeSide,
+        G4SolidExtentList and G4VTwistSurface.
+
+  o Global:
+    ------
+    + Fixed typo in G4Backtrace class description.
+    + Updated date and version for 11.1.2.
+
+  o Intercoms:
+    ---------
+    + Fixed compilation warning on gcc-13.1 for array subscript outside array
+      bounds in G4ProfilerMessenger::SetNewValue().
+
+  o Interfaces:
+    ----------
+    + In G4UIQt, replaced use of G4int by int in QT signal/slots.
+
+  o Particles:
+    ---------
+    + Updated mean lifetime values of G4XicZero and G4AntiXicZero according to
+      values in PDG-2022. Corrected values for G4[Anti]OmegacZero.
+
+  o Persistency:
+    -----------
+    + gdml
+      o Fixed cases of failure in exporting tessellated solids: make
+        G4ThreeVectorCompare:operator(v1,v2) obey the strict weak ordering
+        requirements.
+
+  o Physics Lists:
+    -------------
+    + builders
+      o G4HadronicBuilder: fixed bug in method BuildKaonsFTFQGSP_BERT().
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + highenergy
+      o G4GammaConversionToMuons: fixed FPE exception in compound, when
+        selecting element and addressed cross-section factor issue responsible
+        for differences in muon/pion production.
+        Addressing problem report #2543.
+    + muons
+      o G4MuBremsstrahlung, G4MuPairProduction: fixed setting of Spline flag,
+        which was lost for mu-, pi-, K-, pbar dedx and range tables; the
+        problem was mostly observed for mu- with momentum ~50 MeV/c, ~5 %
+        biased range. Addressing problem report #2531.
+      o G4MuBetheBlochModel: enabled option to use angular generator for
+        sampling of delta-electron direction.
+      o G4MuIonisation: implemented full schema of selection of the model of
+        energy loss fluctuation.
+    + standard
+      o G4WentzelOKandVIxSection: fixed numeric instability for the extreme
+        case of very small kinetic energy (< 1 eV). Improved comments and
+        fixed single scattering per region. Addressing problem report #2530.
+      o G4LinhardSorensenModel: updating effective charge of an ion at each
+        step of simulation or at each call to G4EmCalculator; added extra
+        protection and improved debug printout.
+        Avoid use of ICRU73 data for projectile Z>80.
+    + utils
+      o G4EmExtraParameters: fixed AddPAIModel() method and improved comments.
+      o G4EmExtraParametersMessenger: fixed broadcasting.
+      o Allow "/process/em/QuantumEntanglement" UI command in G4State_Idle.
+      o Fixed Coverity warning in G4VEnergyLossProcess.
+      o G4EmTableUtil: fixed verbose output and class comments.
+      o G4LossTableManager: improved debug printout and removed unused code.
+      o Fixes to G4TransportationWithMsc: protected code for MultipleScattering;
+        fixed type of particle change.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/cascade
+      o G4BigBanger: added protection in the method generateBangInSCM() to
+        avoid very rare cases of unphysical negative energy of one of the
+        secondaries produced by the Bertini model.
+        The problem was reported by ATLAS in production runs based on
+        release 10.6; the secondaries with negative (both total and kinetic)
+        energy were always neutrons, produced by the internal Bertini nuclear
+        de-excitation, after the intra-nuclear cascade.
+    + models/inclxx
+      o G4INCLNNToNLK2piChannel: fixed bug in the method fillFinalState().
+    + models/particle_hp
+      o Added G4ParticleHPNucLevel, new data structure for nuclear levels.
+      o G4ParticleHPDeExGammas: rewritten in order to avoid usage of C-arrays
+        and use std::vector instead; public interfaces are unchanged; if in DB
+        probability of decay for a give level is zero; it is substituted to
+        1.e-6.
+      o G4ParticleHPInelasticBaseFS, G4ParticleHPInelasticCompFS: gamma
+        cascade sampling is checked and simplified (removed unnecessary
+        computations).
+    + util
+      o G4Fragment: replaced G4HadronicException with standard G4Exception.
+
+  o Processes - Parameterisation:
+    ----------------------------
+    + Added missing virtual destructor to G4VFastSimSensitiveDetector.
+
+  o Run:
+    ---
+    + Removed mistyped method declaration GetMasterTheadId() in G4MTRunManager.
+
+  o Examples:
+    --------
+    + extended/geometry/vecGeomNavigation
+      o Stick to G4VecGeomNav package v0.2.1, compatible with VecGeom v1 series.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.1 series.
+  o  Technical notes distributed for release 11.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.1.2 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

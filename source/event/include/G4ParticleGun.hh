@@ -116,6 +116,8 @@ class G4ParticleGun : public G4VPrimaryGenerator
       { return particle_polarization; }
     inline G4int GetNumberOfParticles() const
       { return NumberOfParticlesToBeGenerated; }
+    inline G4double GetParticleWeight() const
+      { return particle_weight; }
 
   protected:  
 
@@ -128,6 +130,7 @@ class G4ParticleGun : public G4VPrimaryGenerator
      G4double              particle_momentum = 0.0;
      G4double              particle_charge = 0.0;
      G4ThreeVector         particle_polarization;
+     G4double              particle_weight = 1.0;
 
   private:
 

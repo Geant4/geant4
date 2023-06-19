@@ -81,6 +81,7 @@ G4EmExtraParametersMessenger::G4EmExtraParametersMessenger(G4EmExtraParameters* 
   mscoCmd->SetGuidance("  regName  : G4Region name");
   mscoCmd->SetGuidance("  emType   : G4EmStandard, G4EmStandard_opt1, ...");
   mscoCmd->AvailableForStates(G4State_PreInit);
+  mscoCmd->SetToBeBroadcasted(false);
 
   auto mregName = new G4UIparameter("regName",'s',false);
   mscoCmd->SetParameter(mregName);
@@ -250,7 +251,7 @@ G4EmExtraParametersMessenger::G4EmExtraParametersMessenger(G4EmExtraParameters* 
 
   qeCmd = new G4UIcmdWithABool("/process/em/QuantumEntanglement",this);
   qeCmd->SetGuidance("Enable quantum entanglement");
-  qeCmd->AvailableForStates(G4State_PreInit);
+  qeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   qeCmd->SetToBeBroadcasted(false);
 
   dirSplitTargetCmd = new G4UIcmdWith3VectorAndUnit("/process/em/setDirectionalSplittingTarget",this);

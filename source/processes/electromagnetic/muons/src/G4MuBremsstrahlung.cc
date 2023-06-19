@@ -79,7 +79,6 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   SetProcessSubType(fBremsstrahlung);
   SetSecondaryParticle(G4Gamma::Gamma());
   SetIonisation(false);
-  SetSpline(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

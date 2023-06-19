@@ -56,7 +56,10 @@ class G4TrackStack : public std::vector<G4StackedTrack>
     G4bool operator!=(const G4TrackStack&) const = delete;
   
     inline void PushToStack(const G4StackedTrack& aStackedTrack)
-      { push_back(aStackedTrack); }
+      {
+        push_back(aStackedTrack);
+        if(size()>maxEntry) maxEntry = size();
+      }
     inline G4StackedTrack PopFromStack()
       { G4StackedTrack st = back(); pop_back(); return st; }
     void TransferTo(G4TrackStack* aStack);
@@ -65,7 +68,7 @@ class G4TrackStack : public std::vector<G4StackedTrack>
     void clearAndDestroy();
 
     inline std::size_t GetNTrack() const { return size(); }
-    inline std::size_t GetMaxNTrack() const { return max_size(); }
+    inline std::size_t GetMaxNTrack() const { return maxEntry; }
     inline G4int GetSafetyValue1() const { return safetyValue1; }
     inline G4int GetSafetyValue2() const { return safetyValue2; }
     inline G4int GetNStick() const { return nstick; }
@@ -78,6 +81,7 @@ class G4TrackStack : public std::vector<G4StackedTrack>
     G4int safetyValue1{0};
     G4int safetyValue2{0};
     G4int nstick{0};
+    std::size_t maxEntry{0};
 };
 
 #endif

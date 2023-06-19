@@ -72,7 +72,7 @@ G4AntiOmegacZero* G4AntiOmegacZero::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -4332,
-                false,    0.0268e-3*ns,          NULL,
+                false,      2.68e-4*ns,          NULL,
                 false,       "omega_c");
 
  //Decay Table is not defined here, wth expectation of pre-assigned

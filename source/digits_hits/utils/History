@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-05-24 Makoto Asai (detutil-V11-00-07)
+- Additional fix for probe scorer.
+
+## 2023-04-28 Makoto Asai
+- Fixed probe scorer with alternative material setting, that didn't properly 
+  work in tasking mode.
+
 ## 2022-11-29 I. Hrivnacova (detutil-V11-00-06)
 - Added support for ntuple merging in G4TScoreNtupleWriter;
   it can be activated with

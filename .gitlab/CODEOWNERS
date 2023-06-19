@@ -100,6 +100,9 @@
 # Physics Lists
 /source/physics_lists/ @gunter @wenzel
 
+# Other
+/source/error_propagation @arce
+
 # Novice+Extended Examples (Individual Examples assigned to Responsibles)
 /examples/basic/    @ihrivnac @ahoward
 /examples/novice/   @ihrivnac @ahoward
@@ -113,11 +116,8 @@
 
 /examples/extended/analysis/AnaEx01/        @maire @ihrivnac
 /examples/extended/analysis/AnaEx02/        @maire @ihrivnac
-/examples/extended/analysis/AnaEx03/        @gybarran @ihrivnac
+/examples/extended/analysis/AnaEx03/        @ihrivnac
 /examples/extended/analysis/B1Con/          @tkoi @ihrivnac
-/examples/extended/analysis/B3aScoreWriter/ @ihrivnac
-/examples/extended/analysis/B4dScoreWriter/ @ihrivnac
-/examples/extended/analysis/shared/         @ihrivnac
 
 /examples/extended/biasing/B01/         @ahoward @ihrivnac
 /examples/extended/biasing/B02/         @ahoward @ihrivnac
@@ -128,6 +128,7 @@
 /examples/extended/biasing/GB04/        @mverderi @ihrivnac
 /examples/extended/biasing/GB05/        @mverderi @ihrivnac
 /examples/extended/biasing/GB06/        @mverderi @ihrivnac
+/examples/extended/biasing/GB07/        @mverderi @ihrivnac
 /examples/extended/biasing/ReverseMC01/ @ldesorgh @ihrivnac
 
 /examples/extended/common/ @ihrivnac
@@ -167,6 +168,7 @@
 /examples/extended/exoticphysics/monopole/   @vnivanch @ihrivnac
 /examples/extended/exoticphysics/phonon/     @asaim @ihrivnac
 /examples/extended/exoticphysics/ucn/        @ihrivnac
+/examples/extended/exoticphysics/saxs/       @vnivanch @ihrivnac
 
 /examples/extended/field/BlineTracer/ @ldesorgh @ihrivnac
 /examples/extended/field/field01/     @japost @ihrivnac
@@ -178,7 +180,8 @@
 
 /examples/extended/g3tog4/clGeometry/ @ihrivnac
 
-/examples/extended/geometry/transforms/ @maire @ihrivnac
+/examples/extended/geometry/transforms/        @maire @ihrivnac
+/examples/extended/geometry/vecGeomNavigation/ @japost @ihrivnac
 
 /examples/extended/hadronic/FissionFragment/ @bwendt @ihrivnac
 /examples/extended/hadronic/Hadr00/          @vnivanch @ihrivnac
@@ -188,7 +191,10 @@
 /examples/extended/hadronic/Hadr04/          @maire @ihrivnac
 /examples/extended/hadronic/Hadr06/          @maire @ihrivnac
 /examples/extended/hadronic/Hadr07/          @maire @ihrivnac
+/examples/extended/hadronic/Hadr08/          @ribon @ihrivnac
+/examples/extended/hadronic/Hadr09/          @ribon @ihrivnac
 /examples/extended/hadronic/NeutronSource/   @maire @ihrivnac
+/examples/extended/hadronic/ParticleFluence/ @ribon @ihrivnac
 
 /examples/extended/medical/DICOM/  @arce @ihrivnac
 /examples/extended/medical/DICOM2/ @jmadsen @ihrivnac
@@ -197,15 +203,22 @@
 /examples/extended/medical/dna/chem2/           @matkara @ihrivnac
 /examples/extended/medical/dna/chem3/           @matkara @ihrivnac
 /examples/extended/medical/dna/chem4/           @matkara @ihrivnac
+/examples/extended/medical/dna/chem5/           @matkara @ihrivnac
+/examples/extended/medical/dna/chem6/           @wshin @ihrivnac
 /examples/extended/medical/dna/clustering/      @matkara @ihrivnac
+/examples/extended/medical/dna/dnadamage1/      @ngoc @ihrivnac
 /examples/extended/medical/dna/dnaphysics/      @sincerti @ihrivnac
 /examples/extended/medical/dna/icsd/            @cvillagr @ihrivnac
+/examples/extended/medical/dna/jetcounter/      @ngoc @ihrivnac
 /examples/extended/medical/dna/mfp/             @sincerti @ihrivnac
 /examples/extended/medical/dna/microdosimetry/  @sincerti @ihrivnac
+/examples/extended/medical/dna/microprox/       @sincerti @ihrivnac
 /examples/extended/medical/dna/microyz/         @sincerti @ihrivnac
+/examples/extended/medical/dna/moleculardna/    @ngoc @ihrivnac
 /examples/extended/medical/dna/neuron/          @sincerti @ihrivnac
 /examples/extended/medical/dna/pdb4dna/         @sincerti @ihrivnac
 /examples/extended/medical/dna/range/           @sincerti @ihrivnac
+/examples/extended/medical/dna/scavenger/       @ngoc @ihrivnac
 /examples/extended/medical/dna/slowing/         @sincerti @ihrivnac
 /examples/extended/medical/dna/splitting/       @sincerti @ihrivnac
 /examples/extended/medical/dna/spower/          @sincerti @ihrivnac
@@ -235,6 +248,8 @@
 /examples/extended/parameterisations/gflash/ @mverderi @ihrivnac
 /examples/extended/parameterisations/Par01/  @mverderi @ihrivnac
 /examples/extended/parameterisations/Par02/  @ribon @ihrivnac
+/examples/extended/parameterisations/Par03/  @azaborow @ihrivnac
+/examples/extended/parameterisations/Par04/  @azaborow @ihrivnac
 
 /examples/extended/persistency/gdml/ @witoldp @ihrivnac
 /examples/extended/persistency/P01/  @witoldp @ihrivnac
@@ -258,7 +273,9 @@
 /examples/extended/runAndEvent/RE04/ @asaim @ihrivnac
 /examples/extended/runAndEvent/RE05/ @asaim @ihrivnac
 /examples/extended/runAndEvent/RE06/ @asaim @ihrivnac
+/examples/extended/runAndEvent/RE07  @jhahnfel @ihrivnac
 
+/examples/extended/visualization/movies/        @allison @ihrivnac
 /examples/extended/visualization/perspective/   @allison @ihrivnac
 /examples/extended/visualization/standalone/    @allison @ihrivnac
 /examples/extended/visualization/userVisAction/ @allison @ihrivnac

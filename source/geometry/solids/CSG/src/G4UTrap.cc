@@ -97,11 +97,17 @@ G4UTrap::G4UTrap( const G4String& pName,
   CheckPlanarity(pt);
 }
 
+// Constructor for Right Angular Wedge from STEP; this is different from
+// the UnplacedTrapezoid constructor taking four double's and constructing
+// a Trd1.
 G4UTrap::G4UTrap( const G4String& pName,
                         G4double pZ,
                         G4double pY,
                         G4double pX, G4double pLTX )
-  : Base_t(pName, pZ, pY, pX, pLTX)
+  : Base_t(pName, 0.5*pZ, /*theta=*/0, /*phi=*/0, /*dy1=*/0.5*pY,
+           /*dx1=*/0.5*pX, /*dx2=*/0.5*pLTX, /*Alpha1=*/0.5*(pLTX - pX)/pY,
+           /*dy2=*/0.5*pY, /*dx3=*/0.5*pX, /*dx4=*/0.5*pLTX,
+           /*Alpha2=*/0.5*(pLTX - pX)/pY)
 {
   CheckParameters();
 }

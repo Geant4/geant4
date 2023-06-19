@@ -232,6 +232,7 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
     particle->SetPolarization(particle_polarization.x(),
                               particle_polarization.y(),
                               particle_polarization.z());
+    particle->SetWeight( particle_weight );
     vertex->SetPrimary( particle );
   }
   evt->AddPrimaryVertex( vertex );

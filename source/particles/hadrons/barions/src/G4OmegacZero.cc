@@ -72,7 +72,7 @@ G4OmegacZero* G4OmegacZero::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        4332,
-                false,    0.0268e-3*ns,          NULL,
+                false,      2.68e-4*ns,          NULL,
                 false,       "omega_c");
   }
   theInstance = static_cast<G4OmegacZero*>(anInstance);

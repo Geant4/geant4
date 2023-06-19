@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -443,13 +443,13 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -502,13 +502,13 @@ hIoni:  for anti_proton  XStype:3  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -534,13 +534,13 @@ hIoni:  for kaon+  XStype:3  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -566,13 +566,13 @@ hIoni:  for kaon-  XStype:3  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -598,13 +598,13 @@ muIoni:  for mu+  XStype:3  SubType=2
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -630,13 +630,13 @@ muIoni:  for mu-  XStype:3  SubType=2
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -662,13 +662,13 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -694,13 +694,13 @@ hIoni:  for pi-  XStype:3  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -1195,11 +1195,11 @@ Track (trackID 4, parentID 1) is processed with stopping code 2
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -1.13 cm   1.52 mm   5.74 cm   4.12 MeV     0 eV      0 fm      0 fm     Target    initStep
-    1 -1.1235527 cm  1.5587528 mm  5.7378967 cm  1.3899868 MeV 2.7298258 MeV 143.89929 um  143.89929 um     Target      muIoni
-    2 -1.1219142 cm  1.5673753 mm  5.7372353 cm  232.72111 keV 1.1572657 MeV 26.894428 um  170.79372 um     Target      muIoni
-    3 -1.1219062 cm  1.5683802 mm  5.7372013 cm  6.7036276 keV 226.01749 keV  1.825361 um  172.61908 um     Target      muIoni
-    4 -1.1219061 cm  1.5683791 mm  5.7372016 cm          0 eV  6.7036276 keV 62.730091 nm  172.68181 um     Target      muIoni
-    5 -1.1219061 cm  1.5683791 mm  5.7372016 cm          0 eV          0 eV          0 fm  172.68181 um     Target  DecayWithSpin
+    1 -1.1235527 cm  1.5587528 mm  5.7378967 cm  1.3899866 MeV 2.7298261 MeV 143.89929 um  143.89929 um     Target      muIoni
+    2 -1.1219142 cm  1.5673753 mm  5.7372353 cm  232.72107 keV 1.1572655 MeV  26.89442 um  170.79371 um     Target      muIoni
+    3 -1.1219062 cm  1.5683802 mm  5.7372013 cm  6.7036221 keV 226.01745 keV 1.8253605 um  172.61907 um     Target      muIoni
+    4 -1.1219061 cm  1.5683791 mm  5.7372016 cm          0 eV  6.7036221 keV 62.730063 nm   172.6818 um     Target      muIoni
+    5 -1.1219061 cm  1.5683791 mm  5.7372016 cm          0 eV          0 eV          0 fm   172.6818 um     Target  DecayWithSpin
 Track (trackID 22, parentID 4) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -4505,132 +4505,132 @@ Track (trackID 3, parentID 1) is processed with stopping code 2
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   6.96 cm   6.17 cm  -1.82 m      80 MeV     0 eV      0 fm      0 fm CaptureMgnt    initStep
     1 -870.14641 um  14.333611 cm         -2 m   80.020703 MeV7.2955995e-15 meV 22.107334 cm  22.107334 cm CaptureMgnt  Transportation
-    2    1.17638 cm  17.712409 cm -2.0490225 m   80.005614 MeV 5.8731688 keV 6.0864215 cm  28.193755 cm      World      muIoni
-    3  1.2183047 cm  17.825411 cm -2.0506566 m   80.004267 MeV  131.2138 eV  2.0305516 mm   28.39681 cm      World      muIoni
-    4  1.4182393 cm  18.363461 cm -2.0584404 m   80.000621 MeV 2.4614033 keV  9.671316 mm  29.363942 cm      World      muIoni
-    5  2.0677591 cm  20.110772 cm -2.0837011 m   79.995219 MeV 3.6478029 keV 3.1394241 cm  32.503366 cm      World      muIoni
-    6  3.8248339 cm  24.840393 cm  -2.151934 m   79.979988 MeV 10.753548 keV 8.4861098 cm  40.989476 cm      World      muIoni
-    7  4.6972656 cm  27.193837 cm -2.1858944 m   79.968963 MeV 9.5635648 keV 4.2229025 cm  45.212378 cm      World      muIoni
-    8  5.3367351 cm  28.923234 cm -2.2108096 m   79.962046 MeV 5.8544189 keV 3.0995847 cm  48.311963 cm      World      muIoni
-    9  6.0795314 cm  30.940028 cm -2.2398409 m   79.953741 MeV  5.291728 keV 3.6121124 cm  51.924076 cm      World      muIoni
-   10  6.7820068 cm  32.844821 cm -2.2672172 m   79.946027 MeV 5.4395993 keV 3.4082784 cm  55.332354 cm      World      muIoni
-   11  7.6093891 cm  35.081306 cm  -2.299393 m   79.935662 MeV 7.9000607 keV 4.0048984 cm  59.337252 cm      World      muIoni
-   12  11.584369 cm  45.745159 cm -2.4526937 m   79.907917 MeV 26.690325 keV 19.092683 cm  78.429935 cm      World      muIoni
-   13   12.71512 cm  48.774314 cm -2.4961328 m   79.895994 MeV 10.259978 keV 5.4151571 cm  83.845092 cm      World      muIoni
-   14  15.814673 cm  57.037245 cm -2.6150282 m   79.860916 MeV  23.86935 keV 14.806925 cm  98.652017 cm      World      muIoni
-   15  16.250496 cm  58.190546 cm -2.6315285 m   79.855417 MeV 2.8490894 keV 2.0597657 cm  1.0071178 m       World      muIoni
-   16   17.93605 cm  62.644952 cm -2.6951894 m   79.839605 MeV 14.724317 keV 7.9504737 cm  1.0866226 m       World      muIoni
-   17  18.318495 cm  63.653495 cm -2.7096197 m   79.837864 MeV 1.7411575 keV 1.8015931 cm  1.1046385 m       World      muIoni
-   18    18.7197 cm  64.712766 cm -2.7247536 m   79.831861 MeV 3.3660455 keV 1.8903418 cm  1.1235419 m       World      muIoni
-   19   20.46586 cm  69.334313 cm -2.7907681 m   79.810416 MeV 15.555245 keV 8.2454163 cm  1.2059961 m       World      muIoni
-   20  21.256539 cm  71.413871 cm -2.8204426 m   79.799232 MeV 9.9963283 keV 3.7088447 cm  1.2430845 m       World      muIoni
-   21  22.097388 cm  73.630454 cm -2.8519578 m   79.787813 MeV 10.303308 keV 3.9436427 cm   1.282521 m       World      muIoni
-   22  23.963757 cm  78.548234 cm -2.9219805 m   79.771519 MeV 12.891518 keV 8.7578465 cm  1.3700994 m       World      muIoni
-   23  25.122004 cm  81.586948 cm -2.9651408 m   79.759728 MeV 7.3237046 keV 5.4040155 cm  1.4241396 m       World      muIoni
-   24  27.277244 cm  87.271866 cm -3.0457941 m   79.320825 MeV 15.100426 keV 10.100154 cm  1.5251411 m       World      muIoni
-   25  34.110891 cm  1.0513594 m  -3.2998061 m     79.2667 MeV 52.583235 keV 31.797134 cm  1.8431124 m       World      muIoni
-   26  36.636933 cm  1.1185751 m  -3.3956542 m   79.246445 MeV 18.180877 keV 11.976199 cm  1.9628744 m       World      muIoni
-   27  37.209259 cm  1.1336154 m  -3.4171148 m   79.235015 MeV 3.3931798 keV 2.6823926 cm  1.9896984 m       World      muIoni
-   28  39.324439 cm  1.1892519 m  -3.4966095 m    79.20529 MeV 15.939948 keV 9.9308842 cm  2.0890072 m       World      muIoni
-   29  39.925869 cm  1.2049942 m  -3.5190173 m    79.19836 MeV 5.9252451 keV 2.8037518 cm  2.1170447 m       World      muIoni
-   30  40.266061 cm   1.213881 m  -3.5316894 m   79.194336 MeV 1.3735587 keV 1.5847069 cm  2.1328918 m       World      muIoni
-   31  40.975802 cm  1.2323762 m  -3.5580775 m    79.18522 MeV 5.8309862 keV  3.299664 cm  2.1658884 m       World      muIoni
-   32  41.353583 cm  1.2422416 m  -3.5721679 m   79.133251 MeV 4.3479892 keV 1.7610694 cm  2.1834991 m       World      muIoni
-   33  41.523511 cm  1.2466478 m  -3.5784696 m    79.13181 MeV 1.4408722 keV 7.8748677 mm   2.191374 m       World      muIoni
-   34  41.763413 cm  1.2528624 m  -3.5873679 m   79.125846 MeV 3.7971136 keV 1.1115668 cm  2.2024897 m       World      muIoni
-   35  43.560056 cm  1.2994477 m  -3.6540806 m   79.100705 MeV 12.053623 keV 8.3328045 cm  2.2858177 m       World      muIoni
-   36   45.21404 cm  1.3426451 m  -3.7160488 m   79.077868 MeV 13.595331 keV 7.7328165 cm  2.3631459 m       World      muIoni
-   37  45.471606 cm  1.3493459 m  -3.7256567 m   79.074533 MeV 1.4477743 keV 1.1993616 cm  2.3751395 m       World      muIoni
-   38  49.770538 cm   1.460953 m  -3.8856782 m   79.042985 MeV 30.292239 keV 19.977796 cm  2.5749174 m       World      muIoni
-   39   51.40607 cm  1.5037926 m  -3.9467458 m   79.029632 MeV 12.296903 keV 7.6367436 cm  2.6512849 m       World      muIoni
-   40   51.70034 cm  1.5115649 m  -3.9577775 m   79.024545 MeV 2.9585428 keV 1.3811843 cm  2.6650967 m       World      muIoni
-   41  51.824366 cm  1.5148545 m  -3.9624433 m   79.018268 MeV 1.7093344 keV 5.8420142 mm  2.6709387 m       World      muIoni
-   42   53.96646 cm  1.5717324 m  -4.0431646 m   78.996801 MeV 18.031415 keV 10.104401 cm  2.7719828 m       World      muIoni
-   43  54.421249 cm  1.5838859 m  -4.0603933 m   78.991094 MeV  2.875734 keV 2.1568992 cm  2.7935517 m       World      muIoni
-   44  55.107246 cm  1.6022036 m  -4.0863607 m   78.983379 MeV 4.2070246 keV 3.2510039 cm  2.8260618 m       World      muIoni
-   45   55.32005 cm  1.6078734 m  -4.0943886 m   78.980315 MeV 1.9090032 keV 1.0055965 cm  2.8361178 m       World      muIoni
-   46  55.386226 cm  1.6096362 m  -4.0968853 m   78.976682 MeV 1.1950814 keV 3.1271239 mm  2.8392449 m       World      muIoni
-   47  63.872903 cm  1.8361426 m  -4.4176117 m   78.908519 MeV 66.351274 keV 40.171388 cm  3.2409588 m       World      muIoni
-   48  65.279008 cm  1.8740375 m  -4.4713986 m   78.897536 MeV 8.7154884 keV 6.7281317 cm  3.3082401 m       World      muIoni
-   49  65.427326 cm  1.8780317 m  -4.4770697 m   78.894237 MeV 1.2850604 keV 7.0933688 mm  3.3153334 m       World      muIoni
-   50  67.050907 cm  1.9217396 m  -4.5391036 m   78.879165 MeV 11.775707 keV 7.7602724 cm  3.3929362 m       World      muIoni
-   51  67.190771 cm  1.9255125 m  -4.5444586 m   78.871959 MeV 479.51721 eV  6.6982828 mm  3.3996345 m       World      muIoni
-   52  67.756732 cm  1.9408064 m  -4.5661776 m    78.86795 MeV 2.4884433 keV 2.7159744 cm  3.4267942 m       World      muIoni
-   53  67.817208 cm  1.9424328 m  -4.5684864 m   78.865111 MeV 288.03631 eV   2.888179 mm  3.4296824 m       World      muIoni
-   54  68.666448 cm  1.9652369 m  -4.6008542 m   78.859144 MeV 5.9674963 keV 4.0494637 cm   3.470177 m       World      muIoni
-   55   68.87332 cm  1.9707886 m  -4.6087383 m   78.808642 MeV 2.0921486 keV 9.8620861 mm  3.4800391 m       World      muIoni
-   56  68.923997 cm  1.9721385 m   -4.610658 m   78.806558 MeV 217.74777 eV  2.4008677 mm    3.48244 m       World      muIoni
-   57  70.935973 cm   2.025803 m  -4.6869532 m   78.789509 MeV 13.527755 keV  9.542358 cm  3.5778635 m       World      muIoni
-   58  72.757491 cm  2.0743563 m  -4.7558883 m   78.775072 MeV 13.250683 keV  8.626275 cm  3.6641263 m       World      muIoni
-   59  72.800645 cm   2.075499 m  -4.7575141 m   78.770188 MeV 121.58774 eV  2.0335983 mm  3.6661599 m       World      muIoni
-   60     73.466 cm  2.0931058 m  -4.7826012 m   78.758847 MeV 5.5714153 keV 3.1362907 cm  3.6975228 m       World      muIoni
-   61  74.040037 cm  2.1083183 m  -4.8043706 m   78.753419 MeV 4.1405663 keV 2.7171304 cm  3.7246941 m       World      muIoni
-   62  74.303502 cm  2.1153162 m   -4.814381 m    78.75038 MeV  1.420172 keV 1.2494806 cm  3.7371889 m       World      muIoni
-   63  77.060522 cm   2.188576 m  -4.9191757 m   78.727746 MeV 20.311753 keV  13.08017 cm  3.8679906 m       World      muIoni
-   64  77.562776 cm  2.2019989 m  -4.9383296 m   78.721496 MeV 3.2030189 keV 2.3922154 cm  3.8919128 m       World      muIoni
-   65  80.927918 cm  2.2914576 m  -5.0662554 m   78.688443 MeV 31.707716 keV 15.968826 cm   4.051601 m       World      muIoni
-   66  82.998968 cm  2.3460937 m  -5.1446693 m   78.671235 MeV 16.074148 keV 9.7789526 cm  4.1493906 m       World      muIoni
-   67  83.029681 cm  2.3468978 m  -5.1458232 m    78.65856 MeV 277.36559 eV  1.4395328 mm  4.1508301 m       World      muIoni
-   68  83.192921 cm  2.3511926 m  -5.1519861 m   78.656757 MeV 700.01686 eV  7.6871389 mm  4.1585172 m       World      muIoni
-   69  84.032619 cm  2.3732938 m  -5.1836827 m   78.641239 MeV 6.8316655 keV 3.9543021 cm  4.1980602 m       World      muIoni
-   70  84.075094 cm   2.374411 m  -5.1852791 m   78.640027 MeV 205.89941 eV  1.9941647 mm  4.2000544 m       World      muIoni
-   71  84.715733 cm  2.3912495 m  -5.2093312 m   78.614229 MeV 3.9738903 keV  3.005135 cm  4.2301058 m       World      muIoni
-   72  86.468175 cm  2.4371333 m  -5.2750478 m   78.601065 MeV 10.653154 keV 8.2043291 cm  4.3121491 m       World      muIoni
-   73  87.448342 cm  2.4624163 m  -5.3113104 m   78.586232 MeV 9.5882647 keV 4.5280003 cm  4.3574291 m       World      muIoni
-   74  90.908902 cm  2.5524622 m  -5.4401083 m   78.557292 MeV 27.198306 keV 16.091857 cm  4.5183476 m       World      muIoni
-   75  90.944777 cm  2.5534101 m  -5.4414653 m   78.555572 MeV 206.25362 eV  1.6937066 mm  4.5200413 m       World      muIoni
-   76  91.195382 cm  2.5600206 m  -5.4509214 m   78.548362 MeV 3.1723709 keV 1.1806642 cm   4.531848 m       World      muIoni
-   77  91.567796 cm  2.5698328 m  -5.4649477 m    78.54436 MeV 3.0078676 keV 1.7518128 cm  4.5493661 m       World      muIoni
-   78  94.049048 cm  2.6351956 m  -5.5583751 m   78.522431 MeV 20.935718 keV 11.669047 cm  4.6660566 m       World      muIoni
-   79  94.677881 cm   2.651897 m  -5.5822936 m   78.515908 MeV  4.322449 keV 2.9842518 cm  4.6958991 m       World      muIoni
-   80  96.018586 cm  2.6874753 m  -5.6332489 m   78.504177 MeV 8.7768509 keV 6.3576825 cm  4.7594759 m       World      muIoni
-   81  96.350842 cm  2.6962577 m  -5.6458561 m   78.501183 MeV 1.8110969 keV 1.5719787 cm  4.7751957 m       World      muIoni
-   82  99.544568 cm  2.7808689 m  -5.7673469 m   78.467535 MeV 23.390209 keV 15.145662 cm  4.9266523 m       World      muIoni
-   83  99.909881 cm  2.7905966 m  -5.7813415 m   78.463749 MeV  2.550512 keV 1.7430477 cm  4.9440828 m       World      muIoni
-   84   1.011353 m    2.823317 m  -5.8284424 m   78.424611 MeV 7.4355806 keV 5.8645391 cm  5.0027282 m       World      muIoni
-   85  1.0385641 m   2.8965094 m  -5.9337729 m   78.398963 MeV  19.17575 keV  13.11188 cm   5.133847 m       World      muIoni
-   86  1.0455156 m   2.9151326 m  -5.9606314 m   78.391499 MeV 6.3018056 keV 3.3414468 cm  5.1672615 m       World      muIoni
-   87  1.0760259 m   2.9966231 m  -6.0784322 m    78.36586 MeV 24.049381 keV 14.645359 cm  5.3137151 m       World      muIoni
-   88  1.0921225 m   3.0394051 m    -6.14045 m   78.346781 MeV 13.214738 keV 7.7042934 cm   5.390758 m       World      muIoni
-   89  1.0962154 m   3.0502847 m  -6.1562537 m   78.343195 MeV 2.1264444 keV 1.9618195 cm  5.4103762 m       World      muIoni
-   90  1.1150663 m   3.1002703 m  -6.2290218 m   78.327744 MeV 14.428793 keV 9.0272473 cm  5.5006487 m       World      muIoni
-   91  1.1208348 m   3.1155326 m  -6.2513086 m   78.321878 MeV 4.6215651 keV 2.7620966 cm  5.5282696 m       World      muIoni
-   92  1.1300528 m    3.139909 m  -6.2868348 m   78.314724 MeV 4.9453553 keV 4.4060062 cm  5.5723297 m       World      muIoni
-   93  1.1468476 m   3.1844867 m  -6.3518776 m   78.303068 MeV 11.655883 keV 8.0621447 cm  5.6529511 m       World      muIoni
-   94  1.1502979 m   3.1936515 m  -6.3652664 m   78.299826 MeV 1.4318128 keV 1.6587848 cm   5.669539 m       World      muIoni
-   95  1.2137558 m   3.3624434 m  -6.6124889 m    78.25483 MeV 42.978046 keV 30.600174 cm  5.9755407 m       World      muIoni
-   96   1.228555 m   3.4021494 m   -6.669999 m   78.242341 MeV 11.186015 keV 7.1435295 cm   6.046976 m       World      muIoni
-   97  1.2287098 m    3.402563 m  -6.6706003 m   78.240553 MeV 80.164689 eV  746.05543 um  6.0477221 m       World      muIoni
-   98  1.2289718 m   3.4032641 m  -6.6716193 m   78.239003 MeV 124.20772 eV  1.2643989 mm  6.0489865 m       World      muIoni
-   99  1.2747021 m   3.5254847 m  -6.8492151 m   78.211786 MeV 26.174747 keV   22.0385 cm  6.2693715 m       World      muIoni
-  100  1.2916067 m   3.5713488 m  -6.9159374 m   78.195235 MeV 15.310977 keV 8.2711304 cm  6.3520828 m       World      muIoni
-  101  1.3107701 m   3.6232933 m  -6.9914064 m   78.180549 MeV 13.534274 keV 9.3600447 cm  6.4456832 m       World      muIoni
-  102  1.3208171 m   3.6502618 m  -7.0304549 m   78.170767 MeV 7.6092078 keV  4.850803 cm  6.4941913 m       World      muIoni
-  103  1.3318188 m   3.6798571 m   -7.073211 m   78.157899 MeV  9.091885 keV 5.3150782 cm   6.547342 m       World      muIoni
-  104  1.3449923 m   3.7153924 m  -7.1243818 m   78.147569 MeV 8.2393639 keV 6.3676994 cm   6.611019 m       World      muIoni
-  105  1.3476717 m   3.7226141 m  -7.1347757 m   78.132892 MeV 4.7714445 keV 1.2936944 cm   6.623956 m       World      muIoni
-  106  1.3483117 m   3.7243414 m  -7.1372582 m   78.132344 MeV 548.05042 eV  3.0912592 mm  6.6270472 m       World      muIoni
-  107  1.4113311 m   3.8943909 m  -7.3815682 m   78.080881 MeV 49.121494 keV 30.426331 cm  6.9313105 m       World      muIoni
-  108  1.4468739 m   3.9906496 m  -7.5203346 m   78.049146 MeV 28.184495 keV  17.25839 cm  7.1038944 m       World      muIoni
-  109  1.4589743 m   4.0230283 m  -7.5672496 m    78.03803 MeV 8.7300981 keV 5.8273673 cm  7.1621681 m       World      muIoni
-  110  1.4651333 m   4.0394296 m  -7.5909659 m   78.030801 MeV 6.1362357 keV 2.9485665 cm  7.1916538 m       World      muIoni
-  111  1.4665559 m   4.0432276 m  -7.5964119 m   78.027642 MeV 738.15588 eV  6.7902627 mm   7.198444 m       World      muIoni
-  112  1.4709235 m    4.054868 m  -7.6131147 m   78.016556 MeV 3.9820756 keV 2.0822039 cm  7.2192661 m       World      muIoni
-  113  1.4985697 m   4.1286238 m  -7.7186852 m   77.994305 MeV 20.457303 keV 13.171712 cm  7.3509832 m       World      muIoni
-  114  1.5342147 m   4.2230596 m  -7.8546009 m   77.960959 MeV 31.532019 keV 16.929892 cm  7.5202821 m       World      muIoni
-  115  1.5374235 m     4.23159 m  -7.8669409 m   77.957058 MeV 1.9949147 keV 1.5340803 cm  7.5356229 m       World      muIoni
-  116  1.5790411 m   4.3420053 m  -8.0269389 m   77.898526 MeV 27.633049 keV 19.880408 cm   7.734427 m       World      muIoni
-  117  1.5811195 m   4.3475178 m  -8.0348453 m   77.887661 MeV 885.09595 eV  9.8599356 mm  7.7442869 m       World      muIoni
-  118  1.5822041 m   4.3503959 m  -8.0389703 m   77.886382 MeV 138.74365 eV  5.1453811 mm  7.7494323 m       World      muIoni
-  119  1.6072101 m   4.4166774 m  -8.1339792 m   77.868246 MeV 16.723653 keV 11.851267 cm   7.867945 m       World      muIoni
-  120   1.617744 m   4.4445695 m  -8.1740218 m   77.858824 MeV 8.0604126 keV 4.9923412 cm  7.9178684 m       World      muIoni
-  121  1.6328221 m   4.4844177 m  -8.2313105 m   77.843656 MeV  13.57331 keV 7.1394913 cm  7.9892633 m       World      muIoni
-  122  1.6432055 m   4.5118067 m  -8.2706536 m   77.834919 MeV 7.4868953 keV 4.9049543 cm  8.0383128 m       World      muIoni
-  123  1.6453706 m   4.5175646 m  -8.2789199 m   77.829607 MeV 1.4922398 keV 1.0303931 cm  8.0486168 m       World      muIoni
-  124  1.6673715 m   4.5760497 m  -8.3628201 m   77.810171 MeV 17.005936 keV 10.461268 cm  8.1532295 m       World      muIoni
-  125  1.6735953 m   4.5924129 m  -8.3864405 m   77.803465 MeV 5.4385698 keV 2.9400907 cm  8.1826304 m       World      muIoni
-  126  1.6796514 m   4.6083013 m   -8.409392 m   77.794284 MeV 4.7759041 keV  2.856375 cm  8.2111941 m       World      muIoni
-  127  1.7135854 m   4.6971933 m  -8.5378682 m   77.767988 MeV 26.296392 keV 15.987341 cm  8.3710675 m  OutOfWorld  Transportation
+    2  1.1763919 cm  17.712441 cm  -2.049023 m   80.005614 MeV 5.8732381 keV 6.0864787 cm  28.193812 cm      World      muIoni
+    3   1.218317 cm  17.825443 cm -2.0506571 m   80.004267 MeV 131.21389 eV  2.0305707 mm   28.39687 cm      World      muIoni
+    4  1.4182535 cm  18.363499 cm  -2.058441 m   80.000621 MeV 2.4614134 keV 9.6714069 mm   29.36401 cm      World      muIoni
+    5  2.0677793 cm  20.110827 cm -2.0837019 m   79.995218 MeV 3.6478373 keV 3.1394536 cm  32.503464 cm      World      muIoni
+    6  3.8248705 cm  24.840492 cm -2.1519355 m   79.979988 MeV  10.75365 keV 8.4861895 cm  40.989653 cm      World      muIoni
+    7  4.6973104 cm  27.193958 cm -2.1858961 m   79.968962 MeV 9.5636271 keV 4.2229422 cm  45.212595 cm      World      muIoni
+    8  5.3367858 cm  28.923371 cm -2.2108116 m   79.962046 MeV 5.8544652 keV 3.0996138 cm  48.312209 cm      World      muIoni
+    9   6.079589 cm  30.940184 cm -2.2398431 m    79.95374 MeV 5.2917768 keV 3.6121463 cm  51.924356 cm      World      muIoni
+   10   6.782071 cm  32.844995 cm -2.2672198 m   79.946027 MeV 5.4396454 keV 3.4083104 cm  55.332666 cm      World      muIoni
+   11  7.6094609 cm  35.081502 cm -2.2993958 m   79.935662 MeV 7.9001264 keV  4.004936 cm  59.337602 cm      World      muIoni
+   12  11.584478 cm  45.745455 cm  -2.452698 m   79.907917 MeV 26.690573 keV 19.092862 cm  78.430464 cm      World      muIoni
+   13   12.71524 cm  48.774639 cm -2.4961375 m   79.895993 MeV 10.260058 keV 5.4152079 cm  83.845672 cm      World      muIoni
+   14  15.814822 cm  57.037647 cm  -2.615034 m   79.860915 MeV 23.869551 keV 14.807064 cm  98.652736 cm      World      muIoni
+   15  16.250649 cm  58.190959 cm -2.6315344 m   79.855416 MeV 2.8491077 keV  2.059785 cm  1.0071252 m       World      muIoni
+   16  17.936219 cm  62.645407 cm  -2.695196 m   79.839604 MeV 14.724423 keV 7.9505483 cm  1.0866307 m       World      muIoni
+   17  18.318667 cm  63.653959 cm -2.7096263 m   79.837862 MeV 1.7411703 keV   1.80161 cm  1.1046468 m       World      muIoni
+   18  18.719876 cm   64.71324 cm -2.7247604 m    79.83186 MeV 3.3660597 keV 1.8903596 cm  1.1235504 m       World      muIoni
+   19  20.466053 cm  69.334831 cm -2.7907755 m   79.810415 MeV 15.555356 keV 8.2454936 cm  1.2060053 m       World      muIoni
+   20   21.25674 cm  71.414409 cm -2.8204503 m   79.799231 MeV 9.9963831 keV 3.7088794 cm  1.2430941 m       World      muIoni
+   21  22.097596 cm  73.631013 cm -2.8519657 m   79.787812 MeV 10.303371 keV 3.9436797 cm  1.2825309 m       World      muIoni
+   22  23.963983 cm  78.548839 cm -2.9219892 m   79.771518 MeV  12.89163 keV 8.7579286 cm  1.3701102 m       World      muIoni
+   23  25.122241 cm  81.587581 cm -2.9651498 m   79.759726 MeV 7.3237625 keV 5.4040662 cm  1.4241509 m       World      muIoni
+   24  27.277501 cm  87.272553 cm -3.0458039 m   79.320824 MeV 15.100554 keV 10.100248 cm  1.5251533 m       World      muIoni
+   25  34.111212 cm  1.0513679 m  -3.2998182 m   79.266698 MeV 52.583687 keV  31.79743 cm  1.8431277 m       World      muIoni
+   26  36.637278 cm  1.1185842 m  -3.3956673 m   79.246443 MeV 18.181036 keV 11.976311 cm  1.9628908 m       World      muIoni
+   27  37.209609 cm  1.1336247 m   -3.417128 m   79.235013 MeV 3.3932043 keV 2.6824176 cm  1.9897149 m       World      muIoni
+   28  39.324809 cm  1.1892618 m  -3.4966235 m   79.205288 MeV 15.940075 keV 9.9309768 cm  2.0890247 m       World      muIoni
+   29  39.926245 cm  1.2050042 m  -3.5190315 m   79.198358 MeV 5.9252741 keV  2.803778 cm  2.1170625 m       World      muIoni
+   30   40.26644 cm  1.2138911 m  -3.5317037 m   79.194333 MeV 1.3735691 keV 1.5847216 cm  2.1329097 m       World      muIoni
+   31  40.976188 cm  1.2323864 m  -3.5580921 m   79.185217 MeV 5.8310345 keV 3.2996948 cm  2.1659066 m       World      muIoni
+   32  41.353972 cm  1.2422519 m  -3.5721826 m    79.13308 MeV 4.5168405 keV 1.7610858 cm  2.1835175 m       World      muIoni
+   33  41.523902 cm  1.2466582 m  -3.5784843 m   79.131639 MeV 1.4408797 keV  7.874933 mm  2.1913924 m       World      muIoni
+   34  41.763806 cm  1.2528729 m  -3.5873828 m   79.125675 MeV 3.7971249 keV  1.111576 cm  2.2025082 m       World      muIoni
+   35  43.560464 cm  1.2994586 m  -3.6540959 m   79.100533 MeV 12.053734 keV 8.3328736 cm  2.2858369 m       World      muIoni
+   36  45.214461 cm  1.3426562 m  -3.7160647 m   79.077697 MeV 13.595443 keV 7.7328806 cm  2.3631657 m       World      muIoni
+   37  45.472029 cm  1.3493571 m  -3.7256727 m   79.074362 MeV 1.4477839 keV 1.1993716 cm  2.3751595 m       World      muIoni
+   38  49.770998 cm  1.4609651 m  -3.8856955 m   79.042813 MeV  30.29249 keV 19.977962 cm  2.5749391 m       World      muIoni
+   39  51.406543 cm  1.5038051 m  -3.9467636 m    79.02946 MeV 12.297011 keV 7.6368069 cm  2.6513071 m       World      muIoni
+   40  51.700816 cm  1.5115775 m  -3.9577953 m   79.024373 MeV 2.9585593 keV 1.3811957 cm  2.6651191 m       World      muIoni
+   41  51.824843 cm  1.5148671 m  -3.9624612 m   79.018096 MeV 1.7093349 keV 5.8420626 mm  2.6709612 m       World      muIoni
+   42  53.966954 cm  1.5717454 m  -4.0431832 m   78.996629 MeV 18.031548 keV 10.104485 cm   2.772006 m       World      muIoni
+   43  54.421748 cm  1.5838991 m  -4.0604121 m   78.990922 MeV 2.8757532 keV  2.156917 cm  2.7935752 m       World      muIoni
+   44   55.10775 cm   1.602217 m  -4.0863796 m   78.983207 MeV  4.207063 keV 3.2510308 cm  2.8260855 m       World      muIoni
+   45  55.320555 cm  1.6078868 m  -4.0944076 m   78.980143 MeV 1.9090101 keV 1.0056048 cm  2.8361415 m       World      muIoni
+   46  55.386732 cm  1.6096496 m  -4.0969043 m   78.976509 MeV 1.1950824 keV 3.1271497 mm  2.8392687 m       World      muIoni
+   47  63.873479 cm  1.8361579 m  -4.4176333 m   78.908346 MeV 66.351797 keV 40.171721 cm  3.2409859 m       World      muIoni
+   48  65.279595 cm  1.8740531 m  -4.4714207 m   78.897363 MeV 8.7155734 keV 6.7281873 cm  3.3082678 m       World      muIoni
+   49  65.427915 cm  1.8780474 m  -4.4770919 m   78.894065 MeV 1.2850661 keV 7.0934274 mm  3.3153612 m       World      muIoni
+   50  67.051509 cm  1.9217556 m  -4.5391262 m   78.878992 MeV 11.775803 keV 7.7603365 cm  3.3929646 m       World      muIoni
+   51  67.191374 cm  1.9255285 m  -4.5444813 m   78.871786 MeV  479.5199 eV  6.6983382 mm  3.3996629 m       World      muIoni
+   52   67.75734 cm  1.9408226 m  -4.5662005 m   78.867777 MeV 2.4884624 keV 2.7159969 cm  3.4268229 m       World      muIoni
+   53  67.817817 cm   1.942449 m  -4.5685093 m   78.864938 MeV 288.03672 eV  2.8882029 mm  3.4297111 m       World      muIoni
+   54  68.667064 cm  1.9652533 m  -4.6008773 m   78.858971 MeV 5.9675503 keV 4.0494972 cm   3.470206 m       World      muIoni
+   55  68.873937 cm  1.9708051 m  -4.6087615 m   78.808469 MeV 2.0921573 keV 9.8621675 mm  3.4800682 m       World      muIoni
+   56  68.924614 cm  1.9721549 m  -4.6106812 m   78.806385 MeV 217.74777 eV  2.4008875 mm  3.4824691 m       World      muIoni
+   57  70.936607 cm  2.0258198 m  -4.6869771 m   78.789336 MeV 13.527876 keV 9.5424368 cm  3.5778935 m       World      muIoni
+   58   72.75814 cm  2.0743735 m  -4.7559127 m   78.774899 MeV   13.2508 keV 8.6263462 cm  3.6641569 m       World      muIoni
+   59  72.801294 cm  2.0755163 m  -4.7575386 m   78.770015 MeV 121.58791 eV  2.0336151 mm  3.6661905 m       World      muIoni
+   60  73.466655 cm  2.0931232 m  -4.7826259 m   78.758674 MeV 5.5714492 keV 3.1363166 cm  3.6975537 m       World      muIoni
+   61  74.040697 cm  2.1083359 m  -4.8043954 m   78.753246 MeV 4.1405928 keV 2.7171529 cm  3.7247252 m       World      muIoni
+   62  74.304163 cm  2.1153338 m  -4.8144059 m   78.750207 MeV 1.4201813 keV 1.2494909 cm  3.7372201 m       World      muIoni
+   63  77.061206 cm  2.1885943 m  -4.9192015 m   78.727573 MeV 20.311918 keV 13.080278 cm  3.8680229 m       World      muIoni
+   64  77.563465 cm  2.2020172 m  -4.9383556 m   78.721322 MeV 3.2030367 keV 2.3922352 cm  3.8919453 m       World      muIoni
+   65  80.928634 cm  2.2914767 m  -5.0662824 m   78.688269 MeV 31.707931 keV 15.968958 cm  4.0516349 m       World      muIoni
+   66  82.999701 cm  2.3461133 m  -5.1446969 m   78.671061 MeV 16.074281 keV 9.7790331 cm  4.1494252 m       World      muIoni
+   67  83.030414 cm  2.3469173 m  -5.1458508 m   78.658386 MeV  277.3661 eV  1.4395447 mm  4.1508647 m       World      muIoni
+   68  83.193655 cm  2.3512122 m  -5.1520138 m   78.656583 MeV 700.02109 eV  7.6872022 mm  4.1585519 m       World      muIoni
+   69  84.033361 cm  2.3733136 m  -5.1837107 m   78.641065 MeV 6.8317238 keV 3.9543346 cm  4.1980953 m       World      muIoni
+   70  84.075836 cm  2.3744308 m   -5.185307 m   78.639853 MeV 205.89989 eV  1.9941811 mm  4.2000895 m       World      muIoni
+   71   84.71648 cm  2.3912694 m  -5.2093594 m   78.614055 MeV  3.973926 keV 3.0051597 cm  4.2301411 m       World      muIoni
+   72  86.468936 cm  2.4371535 m  -5.2750765 m   78.600891 MeV 10.653252 keV 8.2043967 cm   4.312185 m       World      muIoni
+   73  87.449112 cm  2.4624368 m  -5.3113394 m   78.586058 MeV 9.5883158 keV 4.5280375 cm  4.3574654 m       World      muIoni
+   74  90.909701 cm  2.5524834 m  -5.4401384 m   78.557117 MeV 27.198529 keV  16.09199 cm  4.5183853 m       World      muIoni
+   75  90.945576 cm  2.5534313 m  -5.4414954 m   78.555398 MeV 206.25393 eV  1.6937206 mm   4.520079 m       World      muIoni
+   76  91.196183 cm  2.5600419 m  -5.4509515 m   78.548187 MeV 3.1723821 keV 1.1806739 cm  4.5318858 m       World      muIoni
+   77    91.5686 cm  2.5698541 m   -5.464978 m   78.544186 MeV 3.0078827 keV 1.7518272 cm   4.549404 m       World      muIoni
+   78  94.049873 cm  2.6352175 m  -5.5584061 m   78.522256 MeV 20.935866 keV 11.669143 cm  4.6660955 m       World      muIoni
+   79  94.678711 cm  2.6519191 m  -5.5823248 m   78.515734 MeV  4.322469 keV 2.9842763 cm  4.6959382 m       World      muIoni
+   80  96.019427 cm  2.6874977 m  -5.6332806 m   78.504003 MeV 8.7769269 keV 6.3577347 cm  4.7595156 m       World      muIoni
+   81  96.351685 cm  2.6962802 m  -5.6458879 m   78.501008 MeV 1.8111092 keV 1.5719916 cm  4.7752355 m       World      muIoni
+   82  99.545438 cm   2.780892 m  -5.7673797 m    78.46736 MeV 23.390403 keV 15.145786 cm  4.9266933 m       World      muIoni
+   83  99.910753 cm  2.7906198 m  -5.7813743 m   78.463575 MeV 2.5505253 keV  1.743062 cm   4.944124 m       World      muIoni
+   84  1.0113618 m   2.8233404 m  -5.8284756 m   78.424436 MeV 7.4356488 keV 5.8645872 cm  5.0027698 m       World      muIoni
+   85  1.0385732 m   2.8965335 m   -5.933807 m   78.398788 MeV 19.175917 keV 13.111988 cm  5.1338897 m       World      muIoni
+   86  1.0455247 m   2.9151569 m  -5.9606657 m   78.391324 MeV 6.3018501 keV 3.3414742 cm  5.1673045 m       World      muIoni
+   87  1.0760352 m    2.996648 m  -6.0784675 m   78.365685 MeV 24.049574 keV 14.645479 cm  5.3137592 m       World      muIoni
+   88   1.092132 m   3.0394303 m  -6.1404858 m   78.346606 MeV 13.214841 keV 7.7043566 cm  5.3908028 m       World      muIoni
+   89  1.0962249 m   3.0503101 m  -6.1562896 m    78.34302 MeV 2.1264595 keV 1.9618356 cm  5.4104212 m       World      muIoni
+   90  1.1150759 m   3.1002961 m  -6.2290583 m   78.327568 MeV 14.428918 keV 9.0273213 cm  5.5006944 m       World      muIoni
+   91  1.1208445 m   3.1155585 m  -6.2513453 m   78.321702 MeV 4.6215916 keV 2.7621192 cm  5.5283156 m       World      muIoni
+   92  1.1300626 m   3.1399351 m  -6.2868718 m   78.314548 MeV 4.9454044 keV 4.4060423 cm   5.572376 m       World      muIoni
+   93  1.1468575 m   3.1845132 m  -6.3519152 m   78.302892 MeV 11.655987 keV 8.0622107 cm  5.6529981 m       World      muIoni
+   94  1.1503078 m    3.193678 m   -6.365304 m    78.29965 MeV 1.4318231 keV 1.6587984 cm  5.6695861 m       World      muIoni
+   95  1.2137662 m   3.3624713 m  -6.6125285 m   78.254654 MeV 42.978423 keV 30.600425 cm  5.9755903 m       World      muIoni
+   96  1.2285656 m   3.4021776 m  -6.6700391 m   78.242165 MeV 11.186107 keV  7.143588 cm  6.0470262 m       World      muIoni
+   97  1.2287204 m   3.4025912 m  -6.6706405 m   78.240377 MeV 80.164856 eV  746.06153 um  6.0477723 m       World      muIoni
+   98  1.2289824 m   3.4032923 m  -6.6716595 m   78.238827 MeV 124.20797 eV  1.2644092 mm  6.0490367 m       World      muIoni
+   99   1.274713 m   3.5255139 m  -6.8492567 m    78.21161 MeV 26.175003 keV  22.03868 cm  6.2694235 m       World      muIoni
+  100  1.2916178 m   3.5713784 m  -6.9159796 m   78.195059 MeV 15.311087 keV  8.271198 cm  6.3521355 m       World      muIoni
+  101  1.3107813 m   3.6233233 m  -6.9914492 m   78.180372 MeV 13.534387 keV 9.3601212 cm  6.4457367 m       World      muIoni
+  102  1.3208285 m    3.650292 m   -7.030498 m    78.17059 MeV 7.6092716 keV 4.8508426 cm  6.4942451 m       World      muIoni
+  103  1.3318302 m   3.6798876 m  -7.0732544 m   78.157722 MeV 9.0919536 keV 5.3151216 cm  6.5473963 m       World      muIoni
+  104  1.3450038 m   3.7154232 m  -7.1244257 m   78.147392 MeV 8.2394424 keV 6.3677514 cm  6.6110738 m       World      muIoni
+  105  1.3476832 m    3.722645 m  -7.1348197 m   78.132715 MeV 4.7714603 keV  1.293705 cm  6.6240109 m       World      muIoni
+  106  1.3483232 m   3.7243722 m  -7.1373022 m   78.132167 MeV 548.05145 eV  3.0912845 mm  6.6271022 m       World      muIoni
+  107  1.4113431 m   3.8944232 m  -7.3816142 m   78.080703 MeV 49.121896 keV 30.426579 cm   6.931368 m       World      muIoni
+  108  1.4468862 m   3.9906826 m  -7.5203817 m   78.048968 MeV 28.184724 keV 17.258531 cm  7.1039533 m       World      muIoni
+  109  1.4589867 m   4.0230615 m  -7.5672971 m   78.037853 MeV 8.7301692 keV 5.8274149 cm  7.1622274 m       World      muIoni
+  110  1.4651458 m    4.039463 m  -7.5910136 m   78.030623 MeV 6.1362703 keV 2.9485906 cm  7.1917133 m       World      muIoni
+  111  1.4665684 m   4.0432611 m  -7.5964596 m   78.027464 MeV 738.15981 eV  6.7903181 mm  7.1985036 m       World      muIoni
+  112   1.470936 m   4.0549015 m  -7.6131625 m   78.016379 MeV 3.9820927 keV 2.0822209 cm  7.2193259 m       World      muIoni
+  113  1.4985824 m   4.1286579 m  -7.7187339 m   77.994127 MeV  20.45748 keV 13.171819 cm   7.351044 m       World      muIoni
+  114  1.5342278 m   4.2230945 m  -7.8546507 m   77.960781 MeV 31.532244 keV  16.93003 cm  7.5203443 m       World      muIoni
+  115  1.5374365 m    4.231625 m  -7.8669908 m    77.95688 MeV 1.9949264 keV 1.5340928 cm  7.5356853 m       World      muIoni
+  116  1.5790545 m   4.3420412 m  -8.0269902 m   77.898348 MeV 27.633298 keV 19.880569 cm   7.734491 m       World      muIoni
+  117  1.5811329 m   4.3475538 m  -8.0348966 m   77.887483 MeV 885.10191 eV  9.8600158 mm   7.744351 m       World      muIoni
+  118  1.5822176 m   4.3504318 m  -8.0390216 m   77.886204 MeV  138.7437 eV  5.1454229 mm  7.7494964 m       World      muIoni
+  119  1.6072237 m   4.4167139 m  -8.1340313 m   77.868067 MeV 16.723793 keV 11.851363 cm    7.86801 m       World      muIoni
+  120  1.6177577 m   4.4446062 m  -8.1740742 m   77.858645 MeV 8.0604762 keV 4.9923818 cm  7.9179339 m       World      muIoni
+  121  1.6328359 m   4.4844548 m  -8.2313634 m   77.843477 MeV 13.573407 keV 7.1395493 cm  7.9893293 m       World      muIoni
+  122  1.6432194 m    4.511844 m  -8.2707069 m    77.83474 MeV 7.4869518 keV 4.9049941 cm  8.0383793 m       World      muIoni
+  123  1.6453845 m   4.5176019 m  -8.2789731 m   77.829429 MeV 1.4922477 keV 1.0304015 cm  8.0486833 m       World      muIoni
+  124  1.6673856 m   4.5760875 m  -8.3628741 m   77.809993 MeV 17.006063 keV 10.461353 cm  8.1532968 m       World      muIoni
+  125  1.6736094 m   4.5924508 m  -8.3864947 m   77.803286 MeV 5.4386041 keV 2.9401146 cm   8.182698 m       World      muIoni
+  126  1.6796656 m   4.6083394 m  -8.4094463 m   77.794106 MeV 4.7759325 keV 2.8563982 cm   8.211262 m       World      muIoni
+  127  1.7135851 m   4.6971934 m  -8.5378677 m   77.767819 MeV 26.286613 keV 15.980516 cm  8.3710671 m  OutOfWorld  Transportation
 Track (trackID 12, parentID 3) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -4921,181 +4921,181 @@ Track (trackID 3, parentID 1) is processed with stopping code 2
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -7.52 cm   6.55 cm  -57.1 cm   54.6 MeV     0 eV      0 fm      0 fm CaptureMgnt    initStep
     1 -11.690684 cm  6.4838288 cm         -2 m   54.574466 MeV6.8899464e-14 meV 1.7893398 m   1.7893398 m  CaptureMgnt  Transportation
-    2 -11.181779 cm   6.270823 cm -2.0073228 m   54.570322 MeV 1.4594133 keV 9.1684093 mm  1.7985082 m       World      muIoni
-    3  -6.012189 cm  4.1065946 cm -2.0817809 m   54.545119 MeV 19.440355 keV 9.3192673 cm  1.8917009 m       World      muIoni
-    4 -5.4559152 cm  3.8755204 cm  -2.089806 m   54.541542 MeV 2.0257376 keV 1.0034292 cm  1.9017352 m       World      muIoni
-    5  2.0266935 cm  7.6809612 mm -2.1977707 m    54.50611 MeV 25.521316 keV 13.498515 cm  2.0367203 m       World      muIoni
-    6  2.1726432 cm  7.0653901 mm -2.1998697 m   54.473923 MeV 296.64669 eV  2.6295878 mm  2.0393499 m       World      muIoni
-    7  10.188705 cm -2.6679585 cm -2.3154597 m   54.446451 MeV  25.75138 keV 14.465683 cm  2.1840068 m       World      muIoni
-    8  12.346474 cm -3.5836997 cm -2.3466787 m   54.435657 MeV 10.794371 keV 3.9039486 cm  2.2230463 m       World      muIoni
-    9    13.2978 cm -3.9876224 cm -2.3604233 m   54.431095 MeV 2.8939074 keV 1.7196823 cm  2.2402431 m       World      muIoni
-   10  14.846402 cm -4.6439035 cm  -2.382799 m   54.424327 MeV   6.76867 keV 2.7992111 cm  2.2682352 m       World      muIoni
-   11  15.236056 cm -4.8093262 cm -2.3884023 m     54.4225 MeV 781.94863 eV  7.0226044 mm  2.2752578 m       World      muIoni
-   12  18.853903 cm -6.3445859 cm -2.4402868 m   54.405014 MeV 15.320985 keV 6.5089117 cm  2.3403469 m       World      muIoni
-   13  18.897684 cm -6.3632539 cm -2.4409124 m   54.403331 MeV 142.93291 eV  786.04474 um   2.341133 m       World      muIoni
-   14  19.421483 cm -6.5868511 cm -2.4483986 m   54.398732 MeV 3.2226184 keV 9.4063879 mm  2.3505393 m       World      muIoni
-   15  21.012837 cm -7.2650384 cm -2.4711279 m   54.391897 MeV 5.0446973 keV 2.8563178 cm  2.3791025 m       World      muIoni
-   16  24.879399 cm -8.9119101 cm -2.5265244 m   54.371827 MeV 16.458807 keV 6.9534336 cm  2.4486369 m       World      muIoni
-   17  28.531636 cm  -10.45732 cm -2.5788403 m    54.35572 MeV 14.803084 keV 6.5648168 cm   2.514285 m       World      muIoni
-   18  29.033265 cm -10.669906 cm -2.5860548 m   54.351703 MeV 1.4158968 keV   9.04055 mm  2.5233256 m       World      muIoni
-   19  30.280181 cm -11.199326 cm -2.6039885 m   54.342983 MeV 4.2530737 keV 2.2474959 cm  2.5458005 m       World      muIoni
-   20  35.151572 cm -13.266004 cm -2.6741999 m   54.324958 MeV 16.819837 keV 8.7919461 cm    2.63372 m       World      muIoni
-   21  36.371822 cm -13.783213 cm -2.6917185 m   54.320727 MeV 2.2502766 keV 2.1967018 cm   2.655687 m       World      muIoni
-   22   39.48492 cm -15.100568 cm -2.7364863 m    54.30745 MeV 11.462728 keV 5.6096765 cm  2.7117838 m       World      muIoni
-   23  49.447761 cm -19.323935 cm -2.8802166 m   54.271682 MeV 33.639655 keV 17.991133 cm  2.8916951 m       World      muIoni
-   24  58.839949 cm  -23.33583 cm -3.0151409 m   54.238397 MeV 31.298447 keV  16.92204 cm  3.0609155 m       World      muIoni
-   25  61.093846 cm -24.313356 cm -3.0471613 m    54.10463 MeV 6.7244364 keV 4.0359259 cm  3.1012748 m       World      muIoni
-   26  65.607155 cm -26.292074 cm -3.1108879 m   54.041389 MeV   17.4337 keV 8.0558243 cm   3.181833 m       World      muIoni
-   27  66.662861 cm -26.756769 cm -3.1257826 m   54.033335 MeV 2.7348869 keV 1.8838721 cm  3.2006717 m       World      muIoni
-   28   69.24497 cm -27.897156 cm -3.1622762 m   54.025281 MeV   6.63441 keV 4.6136308 cm   3.246808 m       World      muIoni
-   29  72.087341 cm -29.157106 cm  -3.202496 m   54.014664 MeV  8.795323 keV 5.0835968 cm   3.297644 m       World      muIoni
-   30   72.68127 cm -29.420011 cm -3.2109141 m   54.005496 MeV 2.3597479 keV 1.0632519 cm  3.3082765 m       World      muIoni
-   31  73.714434 cm -29.875988 cm -3.2255477 m   53.999586 MeV 3.5563178 keV 1.8484489 cm   3.326761 m       World      muIoni
-   32  75.113913 cm -30.494925 cm -3.2453757 m   53.993077 MeV 3.8405044 keV 2.5046235 cm  3.3518072 m       World      muIoni
-   33  77.730727 cm -31.648518 cm -3.2825351 m   53.957733 MeV 7.6771939 keV 4.6890005 cm  3.3986972 m       World      muIoni
-   34  78.307459 cm -31.900687 cm -3.2907248 m   53.953854 MeV 1.7393389 keV 1.0329136 cm  3.4090264 m       World      muIoni
-   35  78.533035 cm -31.999232 cm -3.2939251 m   53.952098 MeV  624.9283 eV  4.0375701 mm  3.4130639 m       World      muIoni
-   36   78.75944 cm -32.098049 cm -3.2971385 m   53.941472 MeV 942.83582 eV  4.0531431 mm  3.4171171 m       World      muIoni
-   37  83.657941 cm -34.235948 cm -3.3667908 m   53.918222 MeV  15.10853 keV 8.7795537 cm  3.5049126 m       World      muIoni
-   38   84.10954 cm -34.432917 cm -3.3732312 m   53.917272 MeV 949.26437 eV  8.1088374 mm  3.5130215 m       World      muIoni
-   39  85.893078 cm -35.210997 cm -3.3986714 m   53.907645 MeV 6.8665806 keV 3.2028807 cm  3.5450503 m       World      muIoni
-   40  96.791477 cm -39.976658 cm -3.5544027 m   53.870031 MeV 33.819316 keV 19.596212 cm  3.7410124 m       World      muIoni
-   41  1.0007559 m  -41.434237 cm -3.6013344 m   53.856534 MeV   12.1451 keV 5.9106501 cm  3.8001189 m       World      muIoni
-   42  1.0048599 m  -41.614597 cm -3.6071948 m   53.845158 MeV 1.1680836 keV 7.3783461 mm  3.8074972 m       World      muIoni
-   43  1.0373752 m  -43.047968 cm -3.6535897 m   53.831799 MeV  11.73181 keV 5.8439659 cm  3.8659369 m       World      muIoni
-   44  1.0661537 m  -44.321497 cm -3.6947067 m   53.819226 MeV 11.401781 keV 5.1778369 cm  3.9177153 m       World      muIoni
-   45   1.075763 m  -44.745404 cm -3.7084001 m   53.815155 MeV 2.8327348 keV 1.7257441 cm  3.9349727 m       World      muIoni
-   46  1.1869818 m  -49.658991 cm -3.8669978 m   53.772688 MeV 40.926645 keV 19.984351 cm  4.1348162 m       World      muIoni
-   47  1.1920916 m  -49.887535 cm -3.8743215 m   53.765671 MeV 1.3146822 keV 9.2179251 mm  4.1440341 m       World      muIoni
-   48   1.229938 m  -51.583508 cm -3.9286161 m   53.750259 MeV 14.157465 keV 6.8322011 cm  4.2123562 m       World      muIoni
-   49   1.246476 m  -52.323376 cm -3.9524207 m   53.743252 MeV 5.4579473 keV 2.9914909 cm  4.2422711 m       World      muIoni
-   50  1.2598146 m  -52.915542 cm -3.9715954 m   53.737783 MeV 4.4394424 keV 2.4096752 cm  4.2663678 m       World      muIoni
-   51  1.2709701 m  -53.411287 cm -3.9876067 m   53.734373 MeV 3.4104825 keV 2.0134169 cm   4.286502 m       World      muIoni
-   52  1.2909722 m  -54.298935 cm -4.0161986 m    53.72682 MeV 5.8070732 keV 3.6005181 cm  4.3225072 m       World      muIoni
-   53  1.3618199 m  -57.446566 cm  -4.117623 m   53.702044 MeV 24.776158 keV 12.766019 cm  4.4501674 m       World      muIoni
-   54  1.3802428 m  -58.260952 cm -4.1439962 m    53.69772 MeV 4.3244653 keV 3.3185413 cm  4.4833528 m       World      muIoni
-   55  1.3980501 m  -59.049125 cm -4.1694982 m   53.684407 MeV 4.1582273 keV  3.208698 cm  4.5154397 m       World      muIoni
-   56  1.4191254 m   -59.97939 cm -4.1996434 m   53.674436 MeV 8.5247091 keV 3.7939999 cm  4.5533797 m       World      muIoni
-   57  1.4208861 m  -60.056782 cm -4.2021614 m   53.661053 MeV 2.0776653 keV   3.16848 mm  4.5565482 m       World      muIoni
-   58  1.4311159 m  -60.504874 cm -4.2167628 m   53.655447 MeV 3.9617383 keV 1.8382853 cm  4.5749311 m       World      muIoni
-   59  1.4822113 m  -62.732954 cm -4.2895961 m   53.630788 MeV 20.522637 keV 9.1716321 cm  4.6666474 m       World      muIoni
-   60  1.5193642 m   -64.36802 cm -4.3426484 m   53.619088 MeV 8.5291552 keV 6.6799981 cm  4.7334474 m       World      muIoni
-   61  1.5436341 m  -65.451015 cm -4.3770293 m   53.605944 MeV 8.7474763 keV  4.345537 cm  4.7769028 m       World      muIoni
-   62  1.5723972 m  -66.732206 cm -4.4177668 m   53.597894 MeV 8.0506278 keV 5.1487959 cm  4.8283907 m       World      muIoni
-   63  1.5959128 m  -67.785607 cm -4.4511192 m   53.590097 MeV  7.796769 keV 4.2146644 cm  4.8705374 m       World      muIoni
-   64  1.6449342 m  -70.007633 cm -4.5206244 m   53.563658 MeV 18.425058 keV  8.790804 cm  4.9584454 m       World      muIoni
-   65  1.6648409 m  -70.909654 cm -4.5488413 m   53.555921 MeV 6.6220075 keV 3.5690895 cm  4.9941363 m       World      muIoni
-   66  1.6696846 m    -71.1316 cm -4.5557105 m   53.553519 MeV  1.326412 keV 8.6932317 mm  5.0028295 m       World      muIoni
-   67  1.7920587 m  -76.736576 cm -4.7292509 m    53.50426 MeV 49.259246 keV 21.962155 cm  5.2224511 m       World      muIoni
-   68  1.8447706 m  -79.105878 cm -4.8036731 m    53.48319 MeV 19.997046 keV 9.4226294 cm  5.3166774 m       World      muIoni
-   69   1.844942 m  -79.113663 cm -4.8039162 m   53.482953 MeV 237.27591 eV  307.42387 um  5.3169848 m       World      muIoni
-   70  1.8526158 m  -79.462279 cm -4.8148021 m   53.480113 MeV 1.4113548 keV 1.3767507 cm  5.3307523 m       World      muIoni
-   71  1.8675108 m  -80.140488 cm -4.8359395 m   53.472379 MeV 6.4468498 keV  2.673289 cm  5.3574852 m       World      muIoni
-   72  1.8897005 m  -81.149072 cm -4.8673608 m    53.46261 MeV 7.4328654 keV 3.9766899 cm  5.3972521 m       World      muIoni
-   73  1.9436752 m  -83.606302 cm -4.9439253 m   53.442628 MeV 18.041289 keV  9.684637 cm  5.4940985 m       World      muIoni
-   74  1.9456676 m   -83.69677 cm -4.9467656 m   53.442266 MeV 362.32109 eV  3.5854167 mm  5.4976839 m       World      muIoni
-   75  1.9521098 m  -83.989689 cm -4.9559592 m   53.438765 MeV  2.148983 keV 1.1601904 cm  5.5092858 m       World      muIoni
-   76  1.9679293 m  -84.713075 cm -4.9785873 m    53.43299 MeV 4.5428414 keV 2.8541581 cm  5.5378274 m       World      muIoni
-   77  1.9824638 m  -85.373466 cm -4.9993207 m   53.426022 MeV 4.2931506 keV  2.616742 cm  5.5639948 m       World      muIoni
-   78  1.9882985 m  -85.637073 cm -5.0076419 m   53.423034 MeV 1.9152182 keV 1.0499255 cm   5.574494 m       World      muIoni
-   79  2.0036984 m  -86.331829 cm -5.0296018 m   53.416689 MeV  5.208218 keV 2.7706758 cm  5.6022008 m       World      muIoni
-   80  2.0120509 m  -86.706465 cm -5.0414871 m   53.413047 MeV 1.4566706 keV 1.5002054 cm  5.6172028 m       World      muIoni
-   81  2.0498268 m  -88.398498 cm -5.0952414 m   53.400423 MeV 11.044578 keV  6.784421 cm  5.6850471 m       World      muIoni
-   82  2.0808861 m  -89.786362 cm  -5.139425 m   53.390447 MeV 9.9759033 keV 5.5762868 cm  5.7408099 m       World      muIoni
-   83  2.0869924 m  -90.060473 cm -5.1481336 m   53.387072 MeV 1.9692484 keV 1.0983646 cm  5.7517936 m       World      muIoni
-   84  2.2344797 m  -96.682976 cm -5.3586949 m    53.34018 MeV 45.515556 keV 26.547122 cm  6.0172648 m       World      muIoni
-   85   2.261699 m  -97.935891 cm -5.3974405 m   53.329046 MeV 7.9480821 keV 4.8980503 cm  6.0662453 m       World      muIoni
-   86  2.2808821 m  -98.816734 cm -5.4246457 m   53.311318 MeV 7.3728357 keV 3.4434049 cm  6.1006793 m       World      muIoni
-   87  2.2821102 m  -98.873189 cm  -5.426388 m   53.309585 MeV 357.39502 eV  2.2050971 mm  6.1028844 m       World      muIoni
-   88    2.28609 m  -99.056368 cm -5.4320394 m   53.307145 MeV 1.2946203 keV 7.1507711 mm  6.1100352 m       World      muIoni
-   89  2.2864345 m  -99.072223 cm -5.4325289 m   53.306092 MeV         0 eV  619.16282 um  6.1106544 m       World      muIoni
-   90   2.354838 m  -1.0221673 m  -5.5296698 m   53.262605 MeV 23.847865 keV 12.289927 cm  6.2335536 m       World      muIoni
-   91  2.3918916 m  -1.0391276 m  -5.5825858 m    53.24562 MeV 15.681897 keV 6.6788782 cm  6.3003424 m       World      muIoni
-   92  2.4001277 m  -1.0429027 m  -5.5943867 m   53.239913 MeV 3.3482989 keV 1.4877655 cm  6.3152201 m       World      muIoni
-   93  2.4186059 m  -1.0513586 m  -5.6208577 m   53.230191 MeV 7.0434178 keV 3.3371585 cm  6.3485917 m       World      muIoni
-   94  2.5030771 m  -1.0898995 m  -5.7416932 m   53.203145 MeV 25.829357 keV 15.238806 cm  6.5009797 m       World      muIoni
-   95  2.5058344 m  -1.0911352 m  -5.7456239 m    53.19995 MeV 1.4728277 keV 4.9578183 mm  6.5059375 m       World      muIoni
-   96  2.5119589 m  -1.0938815 m  -5.7543624 m   53.192273 MeV 686.78199 eV  1.1018764 cm  6.5169563 m       World      muIoni
-   97  2.5476295 m   -1.109697 m  -5.8049891 m    53.17405 MeV 16.496792 keV  6.391877 cm  6.5808751 m       World      muIoni
-   98  2.5942562 m  -1.1302807 m  -5.8708747 m   53.155215 MeV 16.627577 keV 8.3298624 cm  6.6641737 m       World      muIoni
-   99  2.6064662 m  -1.1356384 m  -5.8880771 m    53.14939 MeV 4.1595374 keV    2.1765 cm  6.6859387 m       World      muIoni
-  100   2.678157 m  -1.1670906 m   -5.988938 m   53.126701 MeV 22.688469 keV 12.767844 cm  6.8136171 m       World      muIoni
-  101  2.6934682 m  -1.1737882 m  -6.0104137 m   53.115157 MeV  4.559861 keV 2.7211996 cm  6.8408291 m       World      muIoni
-  102  2.7623908 m  -1.2040695 m   -6.107135 m   53.093204 MeV 21.953088 keV 12.256574 cm  6.9633949 m       World      muIoni
-  103   2.774114 m  -1.2092104 m  -6.1236442 m   53.086732 MeV 3.3532738 keV 2.0890576 cm  6.9842855 m       World      muIoni
-  104  2.7915718 m  -1.2168253 m  -6.1481894 m   52.971115 MeV 5.2616095 keV 3.1068124 cm  7.0153536 m       World      muIoni
-  105  2.8705335 m  -1.2517011 m  -6.2592954 m   52.936766 MeV 30.033331 keV 14.069791 cm  7.1560515 m       World      muIoni
-  106  2.8780297 m  -1.2549819 m  -6.2698371 m   52.932039 MeV  2.326183 keV 1.3344778 cm  7.1693963 m       World      muIoni
-  107  2.8879759 m  -1.2593212 m  -6.2837931 m   52.925082 MeV 4.6986305 keV 1.7678421 cm  7.1870747 m       World      muIoni
-  108  2.8998457 m  -1.2644988 m  -6.3004694 m   52.918067 MeV 5.4711196 keV 2.1114015 cm  7.2081887 m       World      muIoni
-  109  2.9001771 m  -1.2646436 m  -6.3009355 m   52.917905 MeV  161.7579 eV  589.89784 um  7.2087786 m       World      muIoni
-  110  2.9721138 m   -1.296072 m  -6.4021059 m   52.887378 MeV 23.593539 keV 12.805528 cm  7.3368339 m       World      muIoni
-  111  3.0418018 m  -1.3265876 m   -6.499699 m   52.858257 MeV 24.294117 keV 12.374203 cm  7.4605759 m       World      muIoni
-  112  3.0456877 m  -1.3283162 m  -6.5051757 m   52.839337 MeV 649.57206 eV  6.9341685 mm  7.4675101 m       World      muIoni
-  113   3.083593 m  -1.3451666 m  -6.5587031 m   52.821412 MeV 12.508365 keV 6.7719539 cm  7.5352296 m       World      muIoni
-  114  3.0860486 m  -1.3462605 m  -6.5621716 m     52.7993 MeV 715.41486 eV  4.3882711 mm  7.5396179 m       World      muIoni
-  115   3.110087 m  -1.3569124 m  -6.5961444 m   52.789932 MeV 8.3767818 keV 4.2958821 cm  7.5825767 m       World      muIoni
-  116  3.1195811 m  -1.3611544 m  -6.6095634 m   52.784799 MeV 2.1475896 keV 1.6976573 cm  7.5995533 m       World      muIoni
-  117  3.1345099 m  -1.3678225 m  -6.6306698 m   52.779147 MeV 4.4828853 keV 2.6698589 cm  7.6262519 m       World      muIoni
-  118  3.1356648 m  -1.3683339 m  -6.6322987 m   52.776641 MeV 69.928695 eV  2.0611974 mm  7.6283131 m       World      muIoni
-  119   3.148764 m  -1.3741388 m  -6.6507642 m   52.772093 MeV 2.5631205 keV   2.33722 cm  7.6516853 m       World      muIoni
-  120  3.2319294 m  -1.4108978 m  -6.7678916 m   52.743168 MeV  27.66887 keV 14.827891 cm  7.7999642 m       World      muIoni
-  121  3.2433888 m  -1.4159165 m  -6.7841043 m   52.738161 MeV 3.8542911 keV 2.0478201 cm  7.8204424 m       World      muIoni
-  122  3.3197327 m  -1.4492673 m  -6.8918144 m   52.626673 MeV 25.423855 keV  13.61698 cm  7.9566122 m       World      muIoni
-  123  3.3297626 m  -1.4535484 m  -6.9060253 m   52.622313 MeV 3.0388494 keV 1.7913086 cm  7.9745253 m       World      muIoni
-  124  3.3314611 m   -1.454274 m  -6.9084351 m   52.620442 MeV 633.40392 eV  3.0361996 mm  7.9775615 m       World      muIoni
-  125  3.3903072 m  -1.4794199 m  -6.9919669 m   52.598592 MeV 20.514158 keV 10.522722 cm  8.0827887 m       World      muIoni
-  126  3.4024659 m  -1.4845749 m  -7.0091598 m   52.596172 MeV 2.4195645 keV 2.1679578 cm  8.1044683 m       World      muIoni
-  127  3.4304371 m  -1.4964434 m  -7.0487746 m   52.582494 MeV 7.7118298 keV 4.9925771 cm   8.154394 m       World      muIoni
-  128  3.4555941 m  -1.5070774 m  -7.0844364 m   52.569038 MeV 7.4814769 keV 4.4919068 cm  8.1993131 m       World      muIoni
-  129  3.4851705 m  -1.5195028 m  -7.1262637 m   52.553886 MeV 9.7829728 keV 5.2713254 cm  8.2520264 m       World      muIoni
-  130  3.5083807 m  -1.5292811 m  -7.1590932 m   52.527429 MeV 9.5705917 keV 4.1377611 cm   8.293404 m       World      muIoni
-  131  3.5108063 m  -1.5303047 m  -7.1625249 m   52.524948 MeV 550.16238 eV  4.3252496 mm  8.2977292 m       World      muIoni
-  132  3.5228388 m  -1.5353771 m  -7.1795398 m   52.520147 MeV 3.7565459 keV 2.1447987 cm  8.3191772 m       World      muIoni
-  133  3.6427011 m  -1.5857578 m  -7.3489712 m   52.478081 MeV 40.378029 keV 21.357082 cm   8.532748 m       World      muIoni
-  134  3.6606354 m  -1.5932669 m  -7.3743777 m   52.469986 MeV 4.1665145 keV 3.1992494 cm  8.5647405 m       World      muIoni
-  135  3.6638075 m  -1.5946141 m  -7.3788824 m   52.466783 MeV 757.83006 eV   5.671828 mm  8.5704123 m       World      muIoni
-  136    3.67599 m  -1.5997996 m  -7.3961795 m   52.458581 MeV 3.7742375 keV 2.1782891 cm  8.5921952 m       World      muIoni
-  137  3.6991528 m  -1.6096407 m  -7.4290789 m   52.449424 MeV 8.0618869 keV 4.1421344 cm  8.6336166 m       World      muIoni
-  138  3.7250661 m  -1.6206856 m  -7.4658116 m   52.440793 MeV 7.6400684 keV 4.6290229 cm  8.6799068 m       World      muIoni
-  139  3.7475926 m  -1.6302832 m  -7.4976963 m   52.426469 MeV 13.095617 keV 4.0201894 cm  8.7201087 m       World      muIoni
-  140  3.7821408 m  -1.6449322 m  -7.5464617 m   52.412059 MeV 13.294702 keV 6.1532475 cm  8.7816412 m       World      muIoni
-  141  3.8334046 m  -1.6667032 m  -7.6189721 m   52.390377 MeV 19.184559 keV 9.1431535 cm  8.8730727 m       World      muIoni
-  142  3.8920961 m  -1.6919624 m  -7.7027332 m   52.370913 MeV 17.121929 keV 10.535029 cm   8.978423 m       World      muIoni
-  143  3.9138374 m   -1.701309 m  -7.7335912 m   52.364351 MeV 5.5539104 keV 3.8887742 cm  9.0173107 m       World      muIoni
-  144  3.9259467 m  -1.7065047 m  -7.7507218 m   52.359019 MeV 5.3324215 keV 2.1612315 cm  9.0389231 m       World      muIoni
-  145  3.9469232 m  -1.7154955 m  -7.7803964 m   52.343724 MeV 8.6103784 keV 3.7435626 cm  9.0763587 m       World      muIoni
-  146  3.9681252 m  -1.7245523 m  -7.8105042 m   52.333418 MeV 5.6905216 keV 3.7921416 cm  9.1142801 m       World      muIoni
-  147  3.9727924 m  -1.7265427 m  -7.8171146 m   52.328882 MeV 1.9460829 keV 8.3331884 mm  9.1226133 m       World      muIoni
-  148  3.9953737 m  -1.7361825 m  -7.8490785 m    52.31766 MeV 9.4038692 keV 4.0305497 cm  9.1629188 m       World      muIoni
-  149  4.0117263 m  -1.7431975 m  -7.8722864 m   52.310555 MeV 5.0322954 keV 2.9244278 cm  9.1921631 m       World      muIoni
-  150  4.0218485 m  -1.7475635 m  -7.8867277 m   52.301719 MeV 4.3647158 keV 1.8167785 cm  9.2103308 m       World      muIoni
-  151  4.0265515 m   -1.749589 m  -7.8934539 m   52.291196 MeV 1.7523678 keV  8.453609 mm  9.2187845 m       World      muIoni
-  152  4.0292465 m  -1.7507462 m  -7.8973084 m   52.288427 MeV 767.52662 eV  4.8434895 mm  9.2236279 m       World      muIoni
-  153  4.0414746 m  -1.7559892 m  -7.9148085 m   52.284946 MeV 2.0955386 keV 2.1983406 cm  9.2456113 m       World      muIoni
-  154  4.0522796 m  -1.7606388 m  -7.9302775 m   52.279152 MeV 4.7990799 keV  1.943338 cm  9.2650447 m       World      muIoni
-  155  4.0780374 m  -1.7717198 m  -7.9671917 m   52.263714 MeV 10.774263 keV 4.6356357 cm  9.3114011 m       World      muIoni
-  156  4.1154819 m  -1.7878157 m  -8.0207841 m   52.252258 MeV 10.129006 keV 6.7329976 cm  9.3787311 m       World      muIoni
-  157  4.1273681 m  -1.7929298 m  -8.0377694 m    52.24556 MeV 3.7084577 keV 2.1352668 cm  9.4000837 m       World      muIoni
-  158  4.1686079 m  -1.8105842 m  -8.0966768 m   52.197478 MeV 15.044073 keV 7.4043869 cm  9.4741276 m       World      muIoni
-  159  4.1918392 m  -1.8206149 m  -8.1296507 m   52.188117 MeV 8.3543783 keV 4.1564205 cm  9.5156918 m       World      muIoni
-  160  4.2177526 m  -1.8317988 m  -8.1664035 m   52.152219 MeV 10.250296 keV 4.6339564 cm  9.5620314 m       World      muIoni
-  161   4.246876 m  -1.8444005 m  -8.2077685 m   52.141374 MeV 8.4307981 keV 5.2134849 cm  9.6141662 m       World      muIoni
-  162  4.2472924 m  -1.8445804 m  -8.2083603 m   52.139527 MeV 694.17278 eV  745.67346 um  9.6149119 m       World      muIoni
-  163  4.2673297 m  -1.8532295 m  -8.2368266 m   52.122504 MeV 7.4479795 keV 3.5869645 cm  9.6507815 m       World      muIoni
-  164  4.2938898 m  -1.8647227 m  -8.2744071 m   52.108959 MeV 9.6879265 keV 4.7432383 cm  9.6982139 m       World      muIoni
-  165  4.3314021 m  -1.8810106 m  -8.3274765 m   52.093987 MeV  12.48631 keV 6.6998817 cm  9.7652127 m       World      muIoni
-  166  4.3493038 m  -1.8887374 m  -8.3528816 m   52.081984 MeV 5.9346903 keV 3.2024833 cm  9.7972376 m       World      muIoni
-  167   4.370128 m  -1.8977587 m  -8.3824935 m   52.072315 MeV 8.5794757 keV 3.7308159 cm  9.8345457 m       World      muIoni
-  168   4.382852 m  -1.9032912 m   -8.400577 m   52.067643 MeV 3.3967311 keV 2.2793047 cm  9.8573388 m       World      muIoni
-  169   4.473384 m  -1.9427429 m  -8.5293744 m   52.036598 MeV 28.181658 keV 16.230026 cm  10.019639 m       World      muIoni
-  170  4.4757775 m  -1.9438019 m  -8.5328202 m    52.03413 MeV 924.11178 eV  4.3271393 mm  10.023966 m       World      muIoni
-  171  4.5235059 m  -1.9648965 m   -8.601507 m   52.015665 MeV 16.926651 keV 8.6260503 cm  10.110227 m       World      muIoni
-  172  4.5428057 m   -1.973429 m  -8.6292875 m   52.006717 MeV 7.7487713 keV 3.4886197 cm  10.145113 m       World      muIoni
-  173  4.5581618 m  -1.9802633 m  -8.6514317 m   51.996198 MeV 6.8438345 keV 2.7800782 cm  10.172914 m       World      muIoni
-  174  4.5657827 m  -1.9836548 m   -8.662442 m    51.98734 MeV 3.2704672 keV 1.3813302 cm  10.186727 m       World      muIoni
-  175  4.5673905 m  -1.9843695 m  -8.6647716 m   51.976443 MeV 510.95766 eV  2.9193206 mm  10.189646 m       World      muIoni
-  176  4.5858257 m  -1.9925367 m  -8.6914956 m   51.969841 MeV 6.6024614 keV  3.347738 cm  10.223124 m  OutOfWorld  Transportation
+    2 -11.181775 cm  6.2708214 cm -2.0073229 m   54.570322 MeV 1.4594202 keV 9.1684774 mm  1.7985083 m       World      muIoni
+    3 -6.0121468 cm  4.1065769 cm -2.0817815 m   54.545118 MeV 19.440478 keV 9.3193365 cm  1.8917017 m       World      muIoni
+    4 -5.4558689 cm   3.875501 cm -2.0898067 m   54.541542 MeV 2.0257455 keV 1.0034366 cm   1.901736 m       World      muIoni
+    5  2.0267954 cm  7.6805379 mm -2.1977722 m    54.50611 MeV 25.521477 keV 13.498615 cm  2.0367222 m       World      muIoni
+    6  2.1727462 cm  7.0649622 mm -2.1998712 m   54.473923 MeV 296.64725 eV  2.6296073 mm  2.0393518 m       World      muIoni
+    7  10.188868 cm -2.6680264 cm -2.3154621 m   54.446451 MeV 25.751562 keV  14.46579 cm  2.1840097 m       World      muIoni
+    8  12.346653 cm -3.5837744 cm -2.3466813 m   54.435656 MeV 10.794438 keV 3.9039775 cm  2.2230495 m       World      muIoni
+    9  13.297985 cm -3.9877002 cm  -2.360426 m   54.431095 MeV 2.8939227 keV  1.719695 cm  2.2402464 m       World      muIoni
+   10  14.846599 cm -4.6439862 cm -2.3828018 m   54.424326 MeV  6.768711 keV 2.7992318 cm  2.2682387 m       World      muIoni
+   11  15.236256 cm   -4.80941 cm -2.3884052 m   54.422499 MeV 781.95238 eV  7.0226564 mm  2.2752614 m       World      muIoni
+   12   18.85413 cm -6.3446813 cm -2.4402901 m   54.405013 MeV 15.321071 keV   6.50896 cm   2.340351 m       World      muIoni
+   13  18.897911 cm -6.3633494 cm -2.4409156 m    54.40333 MeV 142.93291 eV  786.05056 um   2.341137 m       World      muIoni
+   14  19.421714 cm -6.5869483 cm -2.4484019 m   54.398732 MeV 3.2226262 keV 9.4064575 mm  2.3505435 m       World      muIoni
+   15  21.013079 cm -7.2651407 cm -2.4711314 m   54.391897 MeV 5.0447262 keV  2.856339 cm  2.3791069 m       World      muIoni
+   16   24.87967 cm -8.9120246 cm -2.5265283 m   54.371826 MeV 16.458901 keV 6.9534851 cm  2.4486417 m       World      muIoni
+   17  28.531934 cm -10.457446 cm -2.5788446 m    54.35572 MeV 14.803176 keV 6.5648654 cm  2.5142904 m       World      muIoni
+   18  29.033567 cm -10.670034 cm -2.5860592 m   54.351702 MeV 1.4159033 keV 9.0406169 mm   2.523331 m       World      muIoni
+   19  30.280492 cm -11.199457 cm -2.6039929 m   54.342982 MeV  4.253095 keV 2.2475126 cm  2.5458061 m       World      muIoni
+   20  35.151919 cm -13.266151 cm -2.6742049 m   54.324957 MeV 16.819944 keV 8.7920111 cm  2.6337263 m       World      muIoni
+   21  36.372179 cm -13.783364 cm -2.6917236 m   54.320726 MeV 2.2502909 keV 2.1967181 cm  2.6556934 m       World      muIoni
+   22    39.4853 cm -15.100729 cm -2.7364918 m   54.307449 MeV 11.462803 keV 5.6097179 cm  2.7117906 m       World      muIoni
+   23  49.448214 cm -19.324127 cm -2.8802232 m    54.27168 MeV 33.639888 keV 17.991266 cm  2.8917033 m       World      muIoni
+   24  58.840472 cm -23.336052 cm -3.0151484 m   54.238396 MeV 31.298654 keV 16.922165 cm  3.0609249 m       World      muIoni
+   25  61.094385 cm -24.313585 cm  -3.047169 m   54.104628 MeV 6.7244879 keV 4.0359557 cm  3.1012845 m       World      muIoni
+   26  65.607727 cm -26.292319 cm -3.1108962 m   54.041388 MeV 17.433809 keV 8.0558837 cm  3.1818433 m       World      muIoni
+   27  66.663442 cm -26.757017 cm  -3.125791 m   54.033333 MeV 2.7349025 keV  1.883886 cm  3.2006822 m       World      muIoni
+   28   69.24557 cm -27.897413 cm -3.1622848 m   54.025279 MeV 6.6344622 keV 4.6136648 cm  3.2468188 m       World      muIoni
+   29  72.087962 cm -29.157373 cm -3.2025049 m   54.014662 MeV 8.7953835 keV 5.0836342 cm  3.2976552 m       World      muIoni
+   30  72.681895 cm  -29.42028 cm  -3.210923 m   54.005494 MeV 2.3597589 keV 1.0632598 cm  3.3082878 m       World      muIoni
+   31  73.715066 cm  -29.87626 cm -3.2255567 m   53.999584 MeV 3.5563283 keV 1.8484625 cm  3.3267724 m       World      muIoni
+   32  75.114556 cm -30.495202 cm -3.2453849 m   53.993075 MeV 3.8405255 keV 2.5046419 cm  3.3518188 m       World      muIoni
+   33  77.731389 cm -31.648803 cm -3.2825446 m   53.957731 MeV 7.6772523 keV  4.689035 cm  3.3987091 m       World      muIoni
+   34  78.308126 cm -31.900974 cm -3.2907343 m   53.953852 MeV 1.7393457 keV 1.0329212 cm  3.4090384 m       World      muIoni
+   35  78.533703 cm  -31.99952 cm -3.2939347 m   53.952096 MeV 624.92916 eV  4.0375998 mm   3.413076 m       World      muIoni
+   36   78.76011 cm -32.098338 cm  -3.297148 m    53.94147 MeV 942.83672 eV  4.0531729 mm  3.4171291 m       World      muIoni
+   37  83.658647 cm -34.236253 cm -3.3668009 m    53.91822 MeV 15.108639 keV 8.7796183 cm  3.5049253 m       World      muIoni
+   38   84.11025 cm -34.433223 cm -3.3732414 m    53.91727 MeV 949.26886 eV  8.1088971 mm  3.5130342 m       World      muIoni
+   39  85.893801 cm -35.211309 cm -3.3986817 m   53.907643 MeV 6.8666223 keV 3.2029043 cm  3.5450633 m       World      muIoni
+   40   96.79228 cm -39.977006 cm -3.5544142 m   53.870028 MeV 33.819561 keV 19.596356 cm  3.7410268 m       World      muIoni
+   41  1.0007641 m  -41.434596 cm -3.6013462 m   53.856531 MeV 12.145177 keV 5.9106935 cm  3.8001337 m       World      muIoni
+   42  1.0048682 m  -41.614958 cm -3.6072066 m   53.845155 MeV 1.1680888 keV 7.3784003 mm  3.8075121 m       World      muIoni
+   43  1.0373837 m   -43.04834 cm -3.6536019 m   53.831796 MeV 11.731878 keV 5.8440088 cm  3.8659522 m       World      muIoni
+   44  1.0661625 m  -44.321878 cm -3.6947192 m   53.819223 MeV 11.401844 keV 5.1778749 cm   3.917731 m       World      muIoni
+   45  1.0757718 m  -44.745788 cm -3.7084127 m   53.815152 MeV 2.8327496 keV 1.7257567 cm  3.9349886 m       World      muIoni
+   46  1.1869914 m  -49.659413 cm -3.8670116 m   53.772685 MeV 40.926915 keV 19.984498 cm  4.1348335 m       World      muIoni
+   47  1.1921013 m  -49.887959 cm -3.8743353 m   53.765668 MeV 1.3146887 keV 9.2179927 mm  4.1440515 m       World      muIoni
+   48   1.229948 m  -51.583945 cm -3.9286303 m   53.750256 MeV 14.157556 keV 6.8322512 cm   4.212374 m       World      muIoni
+   49  1.2464861 m  -52.323819 cm  -3.952435 m   53.743249 MeV 5.4579852 keV 2.9915129 cm  4.2422892 m       World      muIoni
+   50  1.2598248 m  -52.915989 cm -3.9716099 m    53.73778 MeV 4.4394651 keV 2.4096929 cm  4.2663861 m       World      muIoni
+   51  1.2709804 m  -53.411737 cm -3.9876213 m    53.73437 MeV  3.410499 keV 2.0134316 cm  4.2865204 m       World      muIoni
+   52  1.2909826 m  -54.299392 cm -4.0162134 m   53.726817 MeV 5.8071134 keV 3.6005444 cm  4.3225259 m       World      muIoni
+   53  1.3618309 m  -57.447047 cm -4.1176385 m   53.702041 MeV 24.776318 keV 12.766113 cm   4.450187 m       World      muIoni
+   54  1.3802539 m  -58.261439 cm -4.1440119 m   53.697716 MeV 4.3245011 keV 3.3185656 cm  4.4833726 m       World      muIoni
+   55  1.3980612 m  -59.049618 cm -4.1695142 m   53.684403 MeV 4.1582604 keV 3.2087215 cm  4.5154599 m       World      muIoni
+   56  1.4191368 m   -59.97989 cm -4.1996596 m   53.674433 MeV 8.5247641 keV 3.7940277 cm  4.5534001 m       World      muIoni
+   57  1.4208975 m  -60.057283 cm -4.2021776 m    53.66105 MeV 2.0776659 keV 3.1685032 mm  4.5565686 m       World      muIoni
+   58  1.4311274 m  -60.505378 cm -4.2167791 m   53.655444 MeV  3.961759 keV 1.8382988 cm  4.5749516 m       World      muIoni
+   59  1.4822231 m  -62.733475 cm  -4.289613 m   53.630784 MeV 20.522757 keV 9.1716992 cm  4.6666686 m       World      muIoni
+   60  1.5193763 m  -64.368553 cm -4.3426656 m   53.619085 MeV 8.5292235 keV  6.680047 cm  4.7334691 m       World      muIoni
+   61  1.5436464 m  -65.451556 cm -4.3770468 m   53.605941 MeV 8.7475295 keV 4.3455688 cm  4.7769248 m       World      muIoni
+   62  1.5724097 m  -66.732757 cm -4.4177846 m    53.59789 MeV 8.0506886 keV 5.1488336 cm  4.8284131 m       World      muIoni
+   63  1.5959255 m  -67.786166 cm -4.4511372 m   53.590093 MeV 7.7968196 keV 4.2146952 cm  4.8705601 m       World      muIoni
+   64  1.6449472 m   -70.00821 cm -4.5206429 m   53.563654 MeV 18.425173 keV 8.7908682 cm  4.9584687 m       World      muIoni
+   65  1.6648541 m  -70.910238 cm   -4.54886 m   53.555917 MeV  6.622053 keV 3.5691155 cm  4.9941599 m       World      muIoni
+   66  1.6696978 m  -71.132185 cm -4.5557292 m   53.553515 MeV 1.3264186 keV 8.6932952 mm  5.0028532 m       World      muIoni
+   67  1.7920728 m  -76.737204 cm -4.7292709 m   53.504256 MeV 49.259539 keV 21.962315 cm  5.2224763 m       World      muIoni
+   68  1.8447851 m  -79.106525 cm -4.8036936 m   53.483186 MeV 19.997167 keV 9.4226982 cm  5.3167033 m       World      muIoni
+   69  1.8449565 m  -79.114309 cm -4.8039367 m   53.482949 MeV 237.27591 eV  307.42611 um  5.3170108 m       World      muIoni
+   70  1.8526303 m  -79.462928 cm -4.8148228 m   53.480109 MeV 1.4113621 keV 1.3767608 cm  5.3307784 m       World      muIoni
+   71  1.8675254 m  -80.141143 cm -4.8359603 m   53.472375 MeV 6.4468803 keV 2.6733085 cm  5.3575114 m       World      muIoni
+   72  1.8897153 m  -81.149734 cm -4.8673818 m   53.462606 MeV 7.4329146 keV 3.9767189 cm  5.3972786 m       World      muIoni
+   73  1.9436903 m  -83.606983 cm -4.9439469 m   53.442624 MeV 18.041411 keV 9.6847076 cm  5.4941257 m       World      muIoni
+   74  1.9456828 m  -83.697452 cm -4.9467872 m   53.442261 MeV 362.32129 eV  3.5854428 mm  5.4977112 m       World      muIoni
+   75   1.952125 m  -83.990373 cm -4.9559809 m    53.43876 MeV 2.1489927 keV 1.1601988 cm  5.5093131 m       World      muIoni
+   76  1.9679447 m  -84.713764 cm -4.9786092 m   53.432986 MeV  4.542873 keV 2.8541789 cm  5.5378549 m       World      muIoni
+   77  1.9824792 m   -85.37416 cm -4.9993427 m   53.426018 MeV 4.2931815 keV  2.616761 cm  5.5640225 m       World      muIoni
+   78   1.988314 m  -85.637769 cm -5.0076639 m   53.423029 MeV 1.9152274 keV 1.0499331 cm  5.5745219 m       World      muIoni
+   79   2.003714 m  -86.332531 cm  -5.029624 m   53.416684 MeV 5.2082488 keV  2.770696 cm  5.6022288 m       World      muIoni
+   80  2.0120666 m  -86.707169 cm -5.0415094 m   53.413043 MeV 1.4566801 keV 1.5002163 cm   5.617231 m       World      muIoni
+   81  2.0498427 m  -88.399216 cm  -5.095264 m   53.400418 MeV 11.044652 keV 6.7844704 cm  5.6850757 m       World      muIoni
+   82  2.0809023 m   -89.78709 cm  -5.139448 m   53.390442 MeV 9.9759673 keV 5.5763274 cm   5.740839 m       World      muIoni
+   83  2.0870087 m  -90.061203 cm -5.1481566 m   53.387067 MeV  1.969257 keV 1.0983726 cm  5.7518227 m       World      muIoni
+   84   2.234497 m  -96.683756 cm -5.3587195 m   53.340174 MeV 45.515881 keV 26.547315 cm  6.0172959 m       World      muIoni
+   85  2.2617165 m  -97.936681 cm -5.3974654 m   53.329041 MeV 7.9481443 keV 4.8980859 cm  6.0662767 m       World      muIoni
+   86  2.2808998 m  -98.817531 cm -5.4246707 m   53.311312 MeV 7.3728801 keV 3.4434299 cm   6.100711 m       World      muIoni
+   87  2.2821278 m  -98.873986 cm -5.4264131 m   53.309579 MeV 357.39502 eV  2.2051131 mm  6.1029161 m       World      muIoni
+   88  2.2861077 m  -99.057167 cm -5.4320646 m    53.30714 MeV 1.2946252 keV 7.1508231 mm  6.1100669 m       World      muIoni
+   89  2.2864522 m  -99.073022 cm  -5.432554 m   53.306087 MeV         0 eV  619.16732 um  6.1106861 m       World      muIoni
+   90  2.3548561 m  -1.0221755 m  -5.5296956 m     53.2626 MeV  23.84802 keV 12.290016 cm  6.2335863 m       World      muIoni
+   91  2.3919101 m   -1.039136 m   -5.582612 m   53.245614 MeV 15.681993 keV 6.6789267 cm  6.3003755 m       World      muIoni
+   92  2.4001462 m  -1.0429111 m   -5.594413 m   53.239907 MeV 3.3483138 keV 1.4877763 cm  6.3152533 m       World      muIoni
+   93  2.4186246 m  -1.0513671 m  -5.6208841 m   53.230186 MeV  7.043459 keV 3.3371827 cm  6.3486251 m       World      muIoni
+   94  2.5030964 m  -1.0899083 m  -5.7417206 m   53.203139 MeV 25.829536 keV 15.238917 cm  6.5010143 m       World      muIoni
+   95  2.5058537 m  -1.0911439 m  -5.7456513 m   53.199944 MeV 1.4728287 keV 4.9578543 mm  6.5059722 m       World      muIoni
+   96  2.5119782 m  -1.0938903 m  -5.7543899 m   53.192267 MeV  686.7867 eV  1.1018843 cm   6.516991 m       World      muIoni
+   97  2.5476491 m  -1.1097059 m  -5.8050169 m   53.174044 MeV 16.496886 keV 6.3919234 cm  6.5809102 m       World      muIoni
+   98  2.5942761 m  -1.1302898 m   -5.870903 m   53.155209 MeV 16.627674 keV 8.3299228 cm  6.6642095 m       World      muIoni
+   99  2.6064863 m  -1.1356475 m  -5.8881056 m   53.149384 MeV 4.1595578 keV 2.1765157 cm  6.6859746 m       World      muIoni
+  100  2.6781776 m  -1.1670999 m  -5.9889672 m   53.126695 MeV 22.688624 keV 12.767937 cm   6.813654 m       World      muIoni
+  101  2.6934888 m  -1.1737975 m  -6.0104429 m   53.115151 MeV 4.5598897 keV 2.7212193 cm  6.8408662 m       World      muIoni
+  102   2.762412 m  -1.2040791 m   -6.107165 m   53.093197 MeV 21.953237 keV 12.256663 cm  6.9634328 m       World      muIoni
+  103  2.7741352 m    -1.20922 m  -6.1236743 m   53.086726 MeV 3.3532868 keV 2.0890727 cm  6.9843235 m       World      muIoni
+  104  2.7915931 m   -1.216835 m  -6.1482197 m   52.971109 MeV 5.2616492 keV 3.1068348 cm  7.0153919 m       World      muIoni
+  105  2.8705554 m  -1.2517111 m  -6.2593265 m    52.93676 MeV 30.033511 keV 14.069892 cm  7.1560908 m       World      muIoni
+  106  2.8780516 m  -1.2549919 m  -6.2698682 m   52.932032 MeV 2.3261948 keV 1.3344875 cm  7.1694357 m       World      muIoni
+  107  2.8879979 m  -1.2593312 m  -6.2838243 m   52.925076 MeV 4.6986501 keV 1.7678549 cm  7.1871142 m       World      muIoni
+  108  2.8998678 m  -1.2645089 m  -6.3005008 m   52.918061 MeV  5.471142 keV 2.1114167 cm  7.2082284 m       World      muIoni
+  109  2.9001992 m  -1.2646537 m  -6.3009669 m   52.917899 MeV  161.7581 eV   589.9021 um  7.2088183 m       World      muIoni
+  110  2.9721364 m  -1.2960823 m   -6.402138 m   52.887371 MeV 23.593693 keV  12.80562 cm  7.3368745 m       World      muIoni
+  111   3.041825 m  -1.3265981 m  -6.4997318 m    52.85825 MeV 24.294282 keV 12.374292 cm  7.4606174 m       World      muIoni
+  112   3.045711 m  -1.3283267 m  -6.5052085 m    52.83933 MeV 649.57565 eV  6.9342185 mm  7.4675516 m       World      muIoni
+  113  3.0836165 m  -1.3451772 m  -6.5587363 m   52.821406 MeV 12.508451 keV 6.7720027 cm  7.5352717 m       World      muIoni
+  114  3.0860721 m  -1.3462711 m  -6.5622048 m   52.799294 MeV 715.41486 eV  4.3883028 mm    7.53966 m       World      muIoni
+  115  3.1101107 m  -1.3569231 m  -6.5961778 m   52.789925 MeV 8.3768259 keV 4.2959131 cm  7.5826191 m       World      muIoni
+  116  3.1196049 m  -1.3611652 m   -6.609597 m   52.784792 MeV 2.1476017 keV 1.6976695 cm  7.5995958 m       World      muIoni
+  117  3.1345338 m  -1.3678333 m  -6.6307036 m    52.77914 MeV 4.4829175 keV 2.6698781 cm  7.6262946 m       World      muIoni
+  118  3.1356887 m  -1.3683447 m  -6.6323325 m   52.776634 MeV 69.928798 eV  2.0612123 mm  7.6283558 m       World      muIoni
+  119  3.1487879 m  -1.3741497 m  -6.6507981 m   52.772086 MeV 2.5631359 keV 2.3372368 cm  7.6517282 m       World      muIoni
+  120  3.2319539 m   -1.410909 m  -6.7679263 m    52.74316 MeV 27.669058 keV 14.827998 cm  7.8000081 m       World      muIoni
+  121  3.2434134 m  -1.4159277 m  -6.7841391 m   52.738154 MeV   3.85431 keV 2.0478348 cm  7.8204865 m       World      muIoni
+  122  3.3197579 m  -1.4492788 m    -6.89185 m   52.626666 MeV 25.424022 keV 13.617078 cm  7.9566573 m       World      muIoni
+  123  3.3297879 m  -1.4535599 m   -6.906061 m   52.622305 MeV 3.0388656 keV 1.7913215 cm  7.9745705 m       World      muIoni
+  124  3.3314864 m  -1.4542854 m  -6.9084709 m   52.620434 MeV 633.40443 eV  3.0362214 mm  7.9776067 m       World      muIoni
+  125  3.3903329 m  -1.4794315 m  -6.9920032 m   52.598584 MeV 20.514286 keV 10.522797 cm  8.0828347 m       World      muIoni
+  126  3.4024917 m  -1.4845865 m  -7.0091963 m   52.596165 MeV  2.419579 keV 2.1679734 cm  8.1045144 m       World      muIoni
+  127  3.4304631 m  -1.4964552 m  -7.0488113 m   52.582487 MeV 7.7118863 keV  4.992613 cm  8.1544405 m       World      muIoni
+  128  3.4556202 m  -1.5070892 m  -7.0844734 m   52.569031 MeV 7.4815301 keV  4.491939 cm  8.1993599 m       World      muIoni
+  129  3.4851969 m  -1.5195147 m   -7.126301 m   52.553878 MeV 9.7830368 keV 5.2713632 cm  8.2520736 m       World      muIoni
+  130  3.5084073 m  -1.5292931 m  -7.1591307 m   52.527421 MeV 9.5706447 keV 4.1377908 cm  8.2934515 m       World      muIoni
+  131  3.5108329 m  -1.5303167 m  -7.1625624 m    52.52494 MeV 550.16263 eV  4.3252807 mm  8.2977767 m       World      muIoni
+  132  3.5228655 m  -1.5353891 m  -7.1795774 m   52.520139 MeV  3.756564 keV  2.144814 cm  8.3192249 m       World      muIoni
+  133  3.6427286 m  -1.5857702 m    -7.34901 m   52.478072 MeV 40.378279 keV 21.357235 cm  8.5327972 m       World      muIoni
+  134   3.660663 m  -1.5932794 m  -7.3744168 m   52.469978 MeV 4.1665477 keV 3.1992724 cm    8.56479 m       World      muIoni
+  135  3.6638352 m  -1.5946265 m  -7.3789215 m   52.466774 MeV 757.83324 eV  5.6718686 mm  8.5704618 m       World      muIoni
+  136  3.6760178 m  -1.5998121 m  -7.3962187 m   52.458572 MeV  3.774257 keV 2.1783047 cm  8.5922449 m       World      muIoni
+  137  3.6991807 m  -1.6096533 m  -7.4291183 m   52.449415 MeV 8.0619369 keV 4.1421641 cm  8.6336665 m       World      muIoni
+  138  3.7250943 m  -1.6206983 m  -7.4658513 m   52.440785 MeV   7.64012 keV 4.6290561 cm  8.6799571 m       World      muIoni
+  139  3.7476209 m  -1.6302959 m  -7.4977362 m   52.426461 MeV 13.095687 keV 4.0202182 cm  8.7201593 m       World      muIoni
+  140  3.7821693 m   -1.644945 m   -7.546502 m   52.412051 MeV 13.294776 keV 6.1532916 cm  8.7816922 m       World      muIoni
+  141  3.8334335 m  -1.6667162 m  -7.6190129 m   52.390369 MeV 19.184671 keV 9.1432189 cm  8.8731244 m       World      muIoni
+  142  3.8921255 m  -1.6919756 m  -7.7027746 m   52.370904 MeV 17.122049 keV 10.535104 cm  8.9784754 m       World      muIoni
+  143  3.9138668 m  -1.7013223 m  -7.7336328 m   52.364342 MeV 5.5539545 keV  3.888802 cm  9.0173634 m       World      muIoni
+  144  3.9259763 m   -1.706518 m  -7.7507636 m    52.35901 MeV 5.3324412 keV  2.161247 cm  9.0389759 m       World      muIoni
+  145  3.9469529 m  -1.7155088 m  -7.7804383 m   52.343715 MeV 8.6104201 keV 3.7435893 cm  9.0764118 m       World      muIoni
+  146  3.9681551 m  -1.7245657 m  -7.8105463 m    52.33341 MeV 5.6905612 keV 3.7921687 cm  9.1143335 m       World      muIoni
+  147  3.9728223 m  -1.7265561 m  -7.8171568 m   52.328873 MeV 1.9460905 keV  8.333248 mm  9.1226667 m       World      muIoni
+  148  3.9954037 m   -1.736196 m   -7.849121 m   52.317652 MeV 9.4039181 keV 4.0305785 cm  9.1629725 m       World      muIoni
+  149  4.0117565 m   -1.743211 m   -7.872329 m   52.310546 MeV  5.032328 keV 2.9244487 cm   9.192217 m       World      muIoni
+  150  4.0218787 m  -1.7475771 m  -7.8867704 m   52.301711 MeV 4.3647311 keV 1.8167915 cm  9.2103849 m       World      muIoni
+  151  4.0265818 m  -1.7496026 m  -7.8934967 m   52.291187 MeV 1.7523754 keV 8.4536694 mm  9.2188386 m       World      muIoni
+  152  4.0292768 m  -1.7507598 m  -7.8973512 m   52.288418 MeV  767.5279 eV  4.8435241 mm  9.2236821 m       World      muIoni
+  153  4.0415051 m  -1.7560029 m  -7.9148514 m   52.284937 MeV 2.0955527 keV 2.1983563 cm  9.2456657 m       World      muIoni
+  154  4.0523101 m  -1.7606525 m  -7.9303205 m   52.279143 MeV 4.7990987 keV 1.9433519 cm  9.2650992 m       World      muIoni
+  155  4.0780681 m  -1.7717335 m  -7.9672349 m   52.263705 MeV 10.774329 keV 4.6356688 cm  9.3114559 m       World      muIoni
+  156  4.1155129 m  -1.7878296 m  -8.0208277 m   52.252248 MeV 10.129082 keV 6.7330457 cm  9.3787863 m       World      muIoni
+  157  4.1273991 m  -1.7929437 m  -8.0378132 m   52.245551 MeV 3.7084771 keV  2.135282 cm  9.4001392 m       World      muIoni
+  158  4.1686392 m  -1.8105982 m   -8.096721 m   52.197469 MeV 15.044165 keV 7.4044397 cm  9.4741835 m       World      muIoni
+  159  4.1918706 m   -1.820629 m  -8.1296951 m   52.188108 MeV 8.3544363 keV 4.1564501 cm   9.515748 m       World      muIoni
+  160  4.2177843 m   -1.831813 m  -8.1664481 m    52.15221 MeV 10.250362 keV 4.6339894 cm  9.5620879 m       World      muIoni
+  161  4.2469078 m  -1.8444148 m  -8.2078135 m   52.141364 MeV 8.4308616 keV 5.2135221 cm  9.6142232 m       World      muIoni
+  162  4.2473243 m  -1.8445947 m  -8.2084053 m   52.139518 MeV 694.17278 eV  745.67877 um  9.6149688 m       World      muIoni
+  163  4.2673617 m  -1.8532438 m  -8.2368718 m   52.122495 MeV 7.4480263 keV 3.5869901 cm  9.6508387 m       World      muIoni
+  164   4.293922 m  -1.8647372 m  -8.2744526 m   52.108949 MeV 9.6879898 keV 4.7432721 cm  9.6982715 m       World      muIoni
+  165  4.3314346 m  -1.8810251 m  -8.3275223 m   52.093977 MeV 12.486394 keV 6.6999293 cm  9.7652708 m       World      muIoni
+  166  4.3493365 m   -1.888752 m  -8.3529276 m   52.081975 MeV 5.9347303 keV 3.2025061 cm  9.7972958 m       World      muIoni
+  167  4.3701608 m  -1.8977734 m  -8.3825397 m   52.072305 MeV 8.5795209 keV 3.7308424 cm  9.8346042 m       World      muIoni
+  168  4.3828849 m  -1.9033059 m  -8.4006234 m   52.067633 MeV 3.3967478 keV 2.2793209 cm  9.8573975 m       World      muIoni
+  169  4.4734175 m  -1.9427579 m  -8.5294216 m   52.036589 MeV 28.181848 keV 16.230141 cm  10.019699 m       World      muIoni
+  170   4.475811 m  -1.9438169 m  -8.5328675 m    52.03412 MeV 924.11345 eV  4.3271701 mm  10.024026 m       World      muIoni
+  171  4.5235397 m  -1.9649116 m  -8.6015548 m   52.015655 MeV 16.926757 keV 8.6261116 cm  10.110287 m       World      muIoni
+  172  4.5428397 m  -1.9734442 m  -8.6293355 m   52.006707 MeV  7.748817 keV 3.4886444 cm  10.145174 m       World      muIoni
+  173  4.5581959 m  -1.9802786 m  -8.6514798 m   51.996188 MeV 6.8438778 keV 2.7800979 cm  10.172975 m       World      muIoni
+  174  4.5658169 m  -1.9836701 m  -8.6624902 m    51.98733 MeV 3.2704812 keV   1.38134 cm  10.186788 m       World      muIoni
+  175  4.5674247 m  -1.9843848 m  -8.6648198 m   51.976433 MeV 510.95835 eV  2.9193413 mm  10.189707 m       World      muIoni
+  176  4.5858256 m  -1.9925369 m  -8.6914942 m   51.969841 MeV 6.5921864 keV 3.3415217 cm  10.223123 m  OutOfWorld  Transportation
 Track (trackID 16, parentID 3) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -5697,10 +5697,10 @@ Track (trackID 5, parentID 1) is processed with stopping code 2
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -9.4 mm  -3.73 mm   5.91 cm   4.12 MeV     0 eV      0 fm      0 fm     Target    initStep
-    1 -9.4183823 mm -3.7955751 mm  5.8978369 cm  1.3145482 MeV 2.8052645 MeV 143.89929 um  143.89929 um     Target      muIoni
-    2 -9.4164957 mm -3.8001937 mm  5.8961043 cm  182.44144 keV 1.1321068 MeV 24.594769 um  168.49406 um     Target      muIoni
-    3  -9.416287 mm -3.8002868 mm  5.8960562 cm          0 eV  182.44144 keV 1.3130804 um  169.80714 um     Target      muIoni
-    4  -9.416287 mm -3.8002868 mm  5.8960562 cm          0 eV          0 eV          0 fm  169.80714 um     Target  DecayWithSpin
+    1 -9.4183823 mm -3.7955751 mm  5.8978369 cm   1.314548 MeV 2.8052647 MeV 143.89929 um  143.89929 um     Target      muIoni
+    2 -9.4164957 mm -3.8001937 mm  5.8961043 cm   182.4414 keV 1.1321066 MeV 24.594761 um  168.49405 um     Target      muIoni
+    3  -9.416287 mm -3.8002867 mm  5.8960562 cm          0 eV   182.4414 keV   1.31308 um  169.80713 um     Target      muIoni
+    4  -9.416287 mm -3.8002867 mm  5.8960562 cm          0 eV          0 eV          0 fm  169.80713 um     Target  DecayWithSpin
 Track (trackID 17, parentID 5) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -5793,121 +5793,121 @@ Track (trackID 3, parentID 1) is processed with stopping code 2
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -15.1 cm   10.2 cm   58.9 cm   36.6 MeV     0 eV      0 fm      0 fm CaptureMgnt    initStep
     1 -24.031374 cm  3.8411112 cm          2 m   36.580154 MeV2.5903341e-13 meV 5.4706854 m   5.4706854 m  CaptureMgnt  Transportation
-    2 -21.502628 cm  8.5399779 cm  2.0142425 m   36.567021 MeV 11.378424 keV 5.5229044 cm  5.5259144 m       World      muIoni
-    3 -20.902905 cm  9.6548984 cm  2.0176407 m   36.561819 MeV 4.0976256 keV 1.3107985 cm  5.5390224 m       World      muIoni
-    4 -19.800077 cm  11.702129 cm  2.0239026 m   36.555377 MeV 4.8126837 keV 2.4082155 cm  5.5631046 m       World      muIoni
-    5 -17.934608 cm  15.159074 cm  2.0344125 m   36.416638 MeV 8.7255505 keV 4.0663343 cm  5.6037679 m       World      muIoni
-    6 -16.256366 cm  18.249583 cm  2.0437775 m   36.405762 MeV 7.0279052 keV  3.639339 cm  5.6401613 m       World      muIoni
-    7 -15.610827 cm  19.440724 cm  2.0473854 m     36.3994 MeV  2.212877 keV 1.4020384 cm  5.6541817 m       World      muIoni
-    8 -13.436816 cm  23.469867 cm  2.0596384 m   36.387487 MeV 10.402298 keV 4.7393801 cm  5.7015755 m       World      muIoni
-    9 -12.358272 cm  25.464947 cm  2.0656767 m   36.379705 MeV  7.781848 keV 2.3469588 cm  5.7250451 m       World      muIoni
-   10 -11.748069 cm  26.592034 cm   2.069093 m   36.375357 MeV 2.7665997 keV  1.326419 cm  5.7383093 m       World      muIoni
-   11 -10.542859 cm  28.820078 cm  2.0758443 m   36.370322 MeV 3.3869132 keV 2.6215483 cm  5.7645248 m       World      muIoni
-   12 -6.0723711 cm  37.027398 cm  2.1007018 m    36.34453 MeV 23.372561 keV 9.6708252 cm   5.861233 m       World      muIoni
-   13 -5.8302843 cm  37.473505 cm  2.1020579 m   36.340741 MeV 2.2307179 keV 5.2536412 mm  5.8664867 m       World      muIoni
-   14 -2.4402024 cm  43.727214 cm  2.1210782 m   36.321587 MeV 17.175194 keV 7.3633881 cm  5.9401205 m       World      muIoni
-   15 -7.0691087 mm  46.955782 cm  2.1309507 m   36.310725 MeV 8.4171622 keV   3.79508 cm  5.9780713 m       World      muIoni
-   16  2.2631925 cm  52.436743 cm  2.1479101 m   36.294979 MeV 13.390504 keV 6.4605733 cm  6.0426771 m       World      muIoni
-   17  4.2229572 cm  56.067139 cm   2.159087 m   36.281969 MeV  12.01369 keV 4.2743163 cm  6.0854202 m       World      muIoni
-   18  4.4174034 cm  56.428256 cm  2.1601884 m   36.280804 MeV 1.1650987 keV 4.2467144 mm   6.089667 m       World      muIoni
-   19  6.3041156 cm  59.934358 cm  2.1708889 m    36.26939 MeV 8.8004258 keV 4.1227997 cm   6.130895 m       World      muIoni
-   20  9.9361501 cm  66.718001 cm  2.1916885 m   36.244763 MeV 15.596144 keV 7.9709477 cm  6.2106044 m       World      muIoni
-   21  9.9853708 cm  66.810116 cm  2.1919723 m   36.242507 MeV 97.277889 eV  1.0823015 mm  6.2116867 m       World      muIoni
-   22  11.993797 cm  70.566312 cm   2.203562 m   36.228905 MeV 10.662529 keV  4.414299 cm  6.2558297 m       World      muIoni
-   23  13.580231 cm    73.5318 cm  2.2126311 m   36.218808 MeV 6.7247772 keV 3.4833074 cm  6.2906628 m       World      muIoni
-   24  17.568949 cm  80.971481 cm  2.2354988 m   36.199667 MeV 17.836249 keV 8.7457662 cm  6.3781205 m       World      muIoni
-   25  17.796452 cm  81.396738 cm  2.2368263 m   36.197092 MeV 1.1156631 keV 5.0022321 mm  6.3831227 m       World      muIoni
-   26  21.058138 cm   87.56033 cm  2.2559073 m   36.177468 MeV 17.893614 keV 7.2297825 cm  6.4554205 m       World      muIoni
-   27  21.958134 cm  89.284641 cm  2.2611482 m   36.170862 MeV 5.1576698 keV 2.0144274 cm  6.4755648 m       World      muIoni
-   28  22.686365 cm  90.678906 cm  2.2653843 m   36.165792 MeV 4.0061471 keV 1.6290307 cm  6.4918551 m       World      muIoni
-   29  22.822941 cm  90.939915 cm  2.2661813 m   36.162394 MeV 275.08018 eV  3.0517321 mm  6.4949068 m       World      muIoni
-   30  23.435977 cm  92.111307 cm  2.2697668 m   36.153822 MeV 3.9059692 keV 1.3698671 cm  6.5086055 m       World      muIoni
-   31  25.312603 cm  95.691169 cm  2.2807346 m   36.140197 MeV 10.474704 keV 4.1880903 cm  6.5504864 m       World      muIoni
-   32  25.541153 cm  96.129009 cm  2.2820768 m   36.135111 MeV  1.264839 keV 5.1181397 mm  6.5556045 m       World      muIoni
-   33  30.571871 cm  1.0578948 m   2.3116552 m   36.104342 MeV 27.365846 keV 11.286385 cm  6.6684684 m       World      muIoni
-   34  30.740883 cm  1.0611557 m    2.312645 m   36.102084 MeV 458.64177 eV  3.8039141 mm  6.6722723 m       World      muIoni
-   35   30.91328 cm  1.0644803 m   2.3136559 m   36.093401 MeV   1.88983 keV 3.8790645 mm  6.6761514 m       World      muIoni
-   36  34.697881 cm  1.1375611 m   2.3358065 m   36.072868 MeV 20.533034 keV  8.522794 cm  6.7613793 m       World      muIoni
-   37  36.956778 cm  1.1808881 m    2.348995 m   36.059448 MeV 12.274492 keV 5.0610598 cm  6.8119899 m       World      muIoni
-   38  39.285884 cm  1.2254225 m   2.3625099 m   36.048145 MeV 10.191677 keV 5.2042921 cm  6.8640328 m       World      muIoni
-   39  42.371008 cm  1.2840818 m   2.3804672 m   36.028349 MeV 18.118829 keV 6.8667269 cm  6.9327001 m       World      muIoni
-   40  46.466687 cm  1.3610935 m   2.4044864 m   36.006176 MeV 17.953842 keV 9.0472221 cm  7.0231723 m       World      muIoni
-   41  47.194622 cm  1.3747842 m   2.4088042 m   35.999679 MeV 3.0993512 keV  1.609559 cm  7.0392679 m       World      muIoni
-   42  49.533509 cm   1.418963 m    2.422785 m    35.98611 MeV 10.846422 keV 5.1906404 cm  7.0911743 m       World      muIoni
-   43  50.099333 cm   1.429578 m   2.4261527 m   35.981129 MeV 3.5553103 keV  1.249145 cm  7.1036658 m       World      muIoni
-   44  51.532533 cm  1.4563925 m   2.4346483 m   35.973146 MeV 6.8940658 keV 3.1568992 cm  7.1352347 m       World      muIoni
-   45  55.780643 cm  1.5356465 m   2.4597608 m    35.94844 MeV 23.164088 keV 9.3362281 cm   7.228597 m       World      muIoni
-   46  58.603616 cm  1.5879958 m   2.4762982 m   35.928703 MeV 17.896715 keV 6.1732288 cm  7.2903293 m       World      muIoni
-   47  61.900679 cm  1.6492307 m   2.4955201 m   35.910147 MeV 18.556087 keV 7.2154483 cm  7.3624838 m       World      muIoni
-   48  64.259078 cm  1.6932301 m   2.5092677 m   35.899204 MeV 9.8777725 keV 5.1779914 cm  7.4142637 m       World      muIoni
-   49  67.378818 cm  1.7515505 m    2.527404 m   35.883982 MeV 13.714423 keV  6.858196 cm  7.4828457 m       World      muIoni
-   50  71.953601 cm  1.8354686 m   2.5531839 m   35.856035 MeV 27.946693 keV 9.8994607 cm  7.5818403 m       World      muIoni
-   51  73.171059 cm  1.8577278 m   2.5600037 m   35.837946 MeV 5.8151705 keV 2.6271654 cm  7.6081119 m       World      muIoni
-   52   73.51299 cm  1.8639725 m    2.561912 m   35.832655 MeV  2.805722 keV 7.3708658 mm  7.6154828 m       World      muIoni
-   53  74.001683 cm  1.8728907 m   2.5646416 m   35.829188 MeV 2.1466544 keV 1.0529368 cm  7.6260122 m       World      muIoni
-   54  74.790355 cm  1.8872833 m   2.5690628 m   35.821407 MeV 5.9253185 keV 1.6996894 cm  7.6430091 m       World      muIoni
-   55   76.04911 cm  1.9102921 m    2.576105 m   35.816246 MeV 5.1610394 keV 2.7155936 cm   7.670165 m       World      muIoni
-   56   77.41618 cm  1.9352062 m   2.5837335 m   35.809046 MeV 5.8297397 keV 2.9424382 cm  7.6995894 m       World      muIoni
-   57  89.110687 cm  2.1478547 m   2.6490347 m   35.748817 MeV   60.2293 keV 25.131826 cm  7.9509076 m       World      muIoni
-   58   94.68146 cm  2.2506845 m   2.6804337 m   35.720513 MeV 27.207301 keV 12.109228 cm  8.0719999 m       World      muIoni
-   59  96.232348 cm  2.2791437 m   2.6891285 m   35.707435 MeV 7.7012774 keV 3.3556732 cm  8.1055567 m       World      muIoni
-   60  96.989112 cm  2.2930105 m   2.6933625 m   35.701045 MeV 3.2106492 keV 1.6354947 cm  8.1219116 m       World      muIoni
-   61  98.735491 cm  2.3249153 m   2.7031152 m   35.690029 MeV  9.448553 keV 3.7656515 cm  8.1595681 m       World      muIoni
-   62  1.0231438 m   2.3903085 m   2.7230792 m   35.674496 MeV 14.534831 keV 7.7173243 cm  8.2367414 m       World      muIoni
-   63  1.0310202 m    2.404692 m   2.7274863 m   35.668997 MeV 3.9790438 keV 1.6980764 cm  8.2537221 m       World      muIoni
-   64  1.0417525 m   2.4242773 m   2.7334724 m   35.653357 MeV 5.9844464 keV 2.3121331 cm  8.2768435 m       World      muIoni
-   65  1.0495039 m    2.438446 m   2.7377921 m   35.647879 MeV 4.4788208 keV 1.6718221 cm  8.2935617 m       World      muIoni
-   66  1.1315952 m   2.5888353 m   2.7835123 m   35.599796 MeV 44.487101 keV 17.733191 cm  8.4708936 m       World      muIoni
-   67  1.1400161 m   2.6039217 m   2.7879599 m   35.594151 MeV  5.644136 keV 1.7840846 cm  8.4887344 m       World      muIoni
-   68  1.1579456 m   2.6360196 m   2.7974271 m   35.582767 MeV 9.7330067 keV 3.7965382 cm  8.5266998 m       World      muIoni
-   69  1.1620814 m   2.6434792 m   2.7996397 m   35.575199 MeV 1.4150603 keV 8.8116543 mm  8.5355115 m       World      muIoni
-   70  1.1724567 m   2.6622111 m   2.8052164 m   35.570748 MeV 3.4160714 keV 2.2127647 cm  8.5576391 m       World      muIoni
-   71  1.2416198 m   2.7867769 m   2.8424986 m   35.533924 MeV 34.300246 keV  14.72773 cm  8.7049164 m       World      muIoni
-   72  1.3221265 m   2.9276857 m    2.885822 m   35.494188 MeV 38.605185 keV 16.796971 cm  8.8728861 m       World      muIoni
-   73  1.3629496 m   2.9975677 m   2.9075512 m   35.465254 MeV 21.888971 keV 8.3798692 cm  8.9566848 m       World      muIoni
-   74  1.3816313 m   3.0294804 m   2.9174765 m   35.445901 MeV  9.030437 keV 3.8287558 cm  8.9949724 m       World      muIoni
-   75  1.4010512 m   3.0623631 m   2.9277175 m   35.415861 MeV 7.8195228 keV 3.9538395 cm  9.0345108 m       World      muIoni
-   76  1.4077508 m    3.073707 m   2.9313185 m   35.384123 MeV 4.6100908 keV 1.3657913 cm  9.0481687 m       World      muIoni
-   77  1.4093013 m   3.0763369 m   2.9321575 m   35.379478 MeV 487.69478 eV  3.1660587 mm  9.0513348 m       World      muIoni
-   78  1.4236322 m   3.1006719 m   2.9399041 m   35.369156 MeV 4.6731537 keV 2.9284435 cm  9.0806192 m       World      muIoni
-   79  1.4726988 m   3.1836325 m   2.9664591 m    35.34512 MeV 24.035985 keV 9.9976166 cm  9.1805954 m       World      muIoni
-   80  1.4874355 m   3.2085845 m   2.9744373 m   35.332946 MeV 8.1257614 keV 3.0057021 cm  9.2106524 m       World      muIoni
-   81  1.4919498 m   3.2162684 m   2.9768981 m   35.331502 MeV 1.4447035 keV 9.2453451 mm  9.2198977 m       World      muIoni
-   82  1.4926693 m   3.2174932 m   2.9772903 m   35.330868 MeV 633.93277 eV  1.4736473 mm  9.2213714 m       World      muIoni
-   83  1.5005668 m   3.2309408 m   2.9815976 m   35.326823 MeV  4.044938 keV 1.6179085 cm  9.2375505 m       World      muIoni
-   84  1.5918095 m   3.3863471 m   3.0315811 m   35.276376 MeV 48.615986 keV 18.701633 cm  9.4245668 m       World      muIoni
-   85  1.6240358 m   3.4417694 m   3.0495335 m   35.259908 MeV 16.467993 keV 6.6576861 cm  9.4911436 m       World      muIoni
-   86  1.6424392 m   3.4731898 m   3.0596952 m   35.250186 MeV 9.7219105 keV 3.7804625 cm  9.5289483 m       World      muIoni
-   87  1.6503535 m   3.4867555 m   3.0640421 m   35.244792 MeV 3.4447726 keV 1.6295953 cm  9.5452442 m       World      muIoni
-   88  1.6573535 m   3.4987551 m   3.0679008 m    35.24219 MeV 2.6019875 keV 1.4418086 cm  9.5596623 m       World      muIoni
-   89  1.6630681 m   3.5085393 m   3.0710527 m   35.237051 MeV 4.0663989 keV 1.1761033 cm  9.5714233 m       World      muIoni
-   90  1.6747358 m   3.5285566 m   3.0774987 m   35.230775 MeV  5.007402 keV 2.4049535 cm  9.5954729 m       World      muIoni
-   91  1.6846574 m   3.5456207 m   3.0829714 m   35.221502 MeV 3.3077409 keV  2.048347 cm  9.6159563 m       World      muIoni
-   92  1.7144129 m   3.5968462 m   3.0993576 m   35.200363 MeV 17.094222 keV 6.1465128 cm  9.6774215 m       World      muIoni
-   93  1.7623096 m   3.6794558 m   3.1256477 m    35.17849 MeV  21.87347 keV 9.9043774 cm  9.7764652 m       World      muIoni
-   94   1.764765 m   3.6837172 m   3.1269981 m   35.176069 MeV 552.66974 eV  5.1001578 mm  9.7815654 m       World      muIoni
-   95  1.7774258 m   3.7057035 m   3.1339512 m   35.171703 MeV 4.3667883 keV 2.6306678 cm  9.8078721 m       World      muIoni
-   96  1.8244389 m   3.7874777 m   3.1598865 m   35.144691 MeV 25.965008 keV 9.7826123 cm  9.9056982 m       World      muIoni
-   97  1.8597276 m   3.8490492 m   3.1790836 m   35.125913 MeV 18.778005 keV 7.3517992 cm  9.9792162 m       World      muIoni
-   98  1.8605919 m   3.8505454 m   3.1795469 m   35.125574 MeV 338.83885 eV  1.7889601 mm  9.9810052 m       World      muIoni
-   99  1.8683833 m   3.8640452 m   3.1837256 m   35.119559 MeV 3.4377194 keV 1.6137243 cm  9.9971424 m       World      muIoni
-  100  1.8695784 m    3.866121 m   3.1843671 m   35.114859 MeV 1.0381564 keV 2.4797448 mm  9.9996221 m       World      muIoni
-  101  1.8893189 m    3.900451 m   3.1949491 m   34.758976 MeV 6.3016532 keV 4.0990384 cm  10.040613 m       World      muIoni
-  102  1.8914945 m   3.9042255 m   3.1961324 m   34.756252 MeV 1.6122743 keV 4.5144542 mm  10.045127 m       World      muIoni
-  103  1.9475594 m   4.0015108 m   3.2266822 m   34.725966 MeV  27.99248 keV 11.636628 cm  10.161493 m       World      muIoni
-  104  1.9586884 m    4.020633 m   3.2326474 m   34.718644 MeV  5.122585 keV  2.291498 cm  10.184408 m       World      muIoni
-  105  1.9626168 m   4.0273687 m   3.2347376 m   34.715426 MeV 1.6277508 keV 8.0728854 mm  10.192481 m       World      muIoni
-  106  2.0020649 m   4.0949261 m    3.255722 m   34.694079 MeV 18.423734 keV 8.0997082 cm  10.273478 m       World      muIoni
-  107   2.003265 m   4.0969928 m   3.2563574 m   34.689865 MeV 1.0216869 keV 2.4728995 mm  10.275951 m       World      muIoni
-  108  2.0566885 m   4.1889298 m    3.284593 m    34.66152 MeV 28.345728 keV 11.001736 cm  10.385968 m       World      muIoni
-  109  2.0574886 m   4.1903198 m   3.2850279 m   34.659085 MeV 347.37287 eV  1.6616834 mm   10.38763 m       World      muIoni
-  110  2.0695022 m   4.2112049 m   3.2915732 m    34.64901 MeV 7.2670339 keV 2.4967165 cm  10.412597 m       World      muIoni
-  111  2.1028486 m   4.2691005 m   3.3097557 m   34.633332 MeV 12.158987 keV 6.9242371 cm   10.48184 m       World      muIoni
-  112  2.1603415 m   4.3694178 m   3.3411425 m   34.603168 MeV 27.641365 keV 11.980922 cm  10.601649 m       World      muIoni
-  113  2.1609267 m   4.3704482 m   3.3414622 m   34.601749 MeV   187.293 eV  1.2273167 mm  10.602876 m       World      muIoni
-  114  2.1909347 m   4.4232482 m   3.3578902 m   34.580842 MeV 17.976613 keV  6.291432 cm  10.665791 m       World      muIoni
-  115  2.2170456 m   4.4690989 m   3.3724053 m   34.525894 MeV 14.433951 keV 5.4724375 cm  10.720515 m       World      muIoni
-  116  2.2226075 m   4.4788409 m   3.3755209 m   34.523508 MeV 2.3859869 keV 1.1642586 cm  10.732158 m  OutOfWorld  Transportation
+    2 -21.502613 cm  8.5400055 cm  2.0142426 m   36.567021 MeV 11.378492 keV 5.5229369 cm  5.5259148 m       World      muIoni
+    3 -20.902887 cm  9.6549326 cm  2.0176408 m   36.561819 MeV 4.0976394 keV 1.3108062 cm  5.5390228 m       World      muIoni
+    4 -19.800052 cm  11.702175 cm  2.0239027 m   36.555377 MeV 4.8127098 keV 2.4082297 cm  5.5631051 m       World      muIoni
+    5 -17.934572 cm  15.159141 cm  2.0344127 m   36.416638 MeV 8.7255938 keV 4.0663582 cm  5.6037687 m       World      muIoni
+    6 -16.256321 cm  18.249668 cm  2.0437777 m   36.405762 MeV 7.0279478 keV 3.6393603 cm  5.6401623 m       World      muIoni
+    7 -15.610778 cm  19.440816 cm  2.0473857 m     36.3994 MeV 2.2128862 keV 1.4020466 cm  5.6541828 m       World      muIoni
+    8 -13.436754 cm  23.469983 cm  2.0596387 m   36.387486 MeV 10.402358 keV 4.7394079 cm  5.7015769 m       World      muIoni
+    9 -12.358204 cm  25.465074 cm  2.0656771 m   36.379705 MeV  7.781885 keV 2.3469726 cm  5.7250466 m       World      muIoni
+   10 -11.747997 cm  26.592168 cm  2.0690934 m   36.375357 MeV 2.7666104 keV 1.3264268 cm  5.7383109 m       World      muIoni
+   11  -10.54278 cm  28.820224 cm  2.0758447 m   36.370321 MeV 3.3869346 keV 2.6215637 cm  5.7645265 m       World      muIoni
+   12 -6.0722658 cm  37.027593 cm  2.1007024 m    36.34453 MeV 23.372685 keV 9.6708818 cm  5.8612353 m       World      muIoni
+   13 -5.8301775 cm  37.473702 cm  2.1020585 m   36.340741 MeV 2.2307209 keV 5.2536719 mm   5.866489 m       World      muIoni
+   14 -2.4400758 cm  43.727448 cm  2.1210789 m   36.321586 MeV 17.175282 keV 7.3634312 cm  5.9401233 m       World      muIoni
+   15 -7.0677418 mm  46.956035 cm  2.1309514 m   36.310725 MeV   8.41721 keV 3.7951022 cm  5.9780743 m       World      muIoni
+   16  2.2633465 cm  52.437028 cm   2.147911 m   36.294979 MeV 13.390585 keV 6.4606111 cm  6.0426804 m       World      muIoni
+   17  4.2231227 cm  56.067445 cm  2.1590879 m   36.281968 MeV 12.013742 keV 4.2743412 cm  6.0854238 m       World      muIoni
+   18    4.41757 cm  56.428564 cm  2.1601893 m   36.280803 MeV 1.1650993 keV 4.2467392 mm  6.0896706 m       World      muIoni
+   19  6.3042932 cm  59.934686 cm  2.1708899 m   36.269389 MeV 8.8004764 keV 4.1228238 cm  6.1308988 m       World      muIoni
+   20  9.9363488 cm  66.718369 cm  2.1916896 m   36.244762 MeV  15.59624 keV 7.9709942 cm  6.2106088 m       World      muIoni
+   21  9.9855698 cm  66.810485 cm  2.1919735 m   36.242506 MeV 97.278047 eV  1.0823078 mm  6.2116911 m       World      muIoni
+   22  11.994008 cm  70.566703 cm  2.2035632 m   36.228904 MeV 10.662584 keV 4.4143247 cm  6.2558343 m       World      muIoni
+   23   13.58045 cm  73.532207 cm  2.2126324 m   36.218807 MeV 6.7248178 keV 3.4833277 cm  6.2906676 m       World      muIoni
+   24  17.569192 cm  80.971932 cm  2.2355002 m   36.199666 MeV 17.836342 keV 8.7458172 cm  6.3781258 m       World      muIoni
+   25  17.796697 cm  81.397192 cm  2.2368277 m   36.197091 MeV 1.1156665 keV 5.0022613 mm   6.383128 m       World      muIoni
+   26  21.058401 cm   87.56082 cm  2.2559088 m   36.177467 MeV   17.8937 keV 7.2298246 cm  6.4554263 m       World      muIoni
+   27  21.958402 cm   89.28514 cm  2.2611498 m   36.170861 MeV 5.1576893 keV 2.0144391 cm  6.4755707 m       World      muIoni
+   28  22.686638 cm  90.679414 cm  2.2653859 m   36.165791 MeV 4.0061617 keV 1.6290402 cm  6.4918611 m       World      muIoni
+   29  22.823215 cm  90.940424 cm  2.2661829 m   36.162393 MeV 275.08018 eV  3.0517499 mm  6.4949128 m       World      muIoni
+   30  23.436254 cm  92.111823 cm  2.2697684 m   36.153821 MeV 3.9059811 keV  1.369875 cm  6.5086116 m       World      muIoni
+   31  25.312891 cm  95.691706 cm  2.2807363 m   36.140196 MeV 10.474759 keV 4.1881147 cm  6.5504927 m       World      muIoni
+   32  25.541442 cm  96.129548 cm  2.2820785 m   36.135109 MeV 1.2648429 keV 5.1181695 mm  6.5556109 m       World      muIoni
+   33  30.572188 cm  1.0579007 m   2.3116571 m   36.104341 MeV 27.365987 keV  11.28645 cm  6.6684754 m       World      muIoni
+   34  30.741202 cm  1.0611617 m   2.3126469 m   36.102083 MeV 458.64199 eV  3.8039362 mm  6.6722793 m       World      muIoni
+   35  30.913599 cm  1.0644863 m   2.3136578 m   36.093399 MeV 1.8898307 keV  3.879087 mm  6.6761584 m       World      muIoni
+   36  34.698222 cm  1.1375675 m   2.3358084 m   36.072866 MeV 20.533135 keV 8.5228435 cm  6.7613868 m       World      muIoni
+   37  36.957132 cm  1.1808947 m   2.3489971 m   36.059447 MeV 12.274552 keV 5.0610892 cm  6.8119977 m       World      muIoni
+   38  39.286252 cm  1.2254294 m    2.362512 m   36.048144 MeV  10.19174 keV 5.2043222 cm   6.864041 m       World      muIoni
+   39  42.371393 cm  1.2840891 m   2.3804694 m   36.028347 MeV 18.118914 keV 6.8667667 cm  6.9327086 m       World      muIoni
+   40  46.467095 cm  1.3611012 m   2.4044887 m   36.006174 MeV 17.953942 keV 9.0472746 cm  7.0231814 m       World      muIoni
+   41  47.195035 cm   1.374792 m   2.4088066 m   35.999677 MeV 3.0993615 keV 1.6095683 cm  7.0392771 m       World      muIoni
+   42  49.533936 cm   1.418971 m   2.4227875 m   35.986108 MeV 10.846479 keV 5.1906704 cm  7.0911838 m       World      muIoni
+   43  50.099762 cm  1.4295861 m   2.4261552 m   35.981127 MeV 3.5553197 keV 1.2491522 cm  7.1036753 m       World      muIoni
+   44  51.532971 cm  1.4564008 m   2.4346508 m   35.973144 MeV 6.8941039 keV 3.1569175 cm  7.1352445 m       World      muIoni
+   45  55.781105 cm  1.5356552 m   2.4597635 m   35.948438 MeV 23.164198 keV 9.3362822 cm  7.2286073 m       World      muIoni
+   46  58.604095 cm  1.5880049 m    2.476301 m   35.928701 MeV 17.896799 keV 6.1732645 cm  7.2903399 m       World      muIoni
+   47  61.901177 cm  1.6492401 m   2.4955231 m   35.910145 MeV 18.556181 keV   7.21549 cm  7.3624948 m       World      muIoni
+   48  64.259589 cm  1.6932398 m   2.5092706 m   35.899201 MeV 9.8778325 keV 5.1780213 cm   7.414275 m       World      muIoni
+   49  67.379348 cm  1.7515604 m   2.5274071 m    35.88398 MeV 13.714505 keV 6.8582356 cm  7.4828574 m       World      muIoni
+   50  71.954157 cm  1.8354791 m   2.5531872 m   35.856033 MeV 27.946818 keV 9.8995178 cm  7.5818526 m       World      muIoni
+   51  73.171622 cm  1.8577384 m    2.560007 m   35.837944 MeV 5.8151999 keV 2.6271805 cm  7.6081244 m       World      muIoni
+   52  73.513555 cm  1.8639831 m   2.5619152 m   35.832653 MeV 2.8057268 keV 7.3709083 mm  7.6154953 m       World      muIoni
+   53  74.002251 cm  1.8729014 m   2.5646449 m   35.829185 MeV 2.1466595 keV 1.0529429 cm  7.6260247 m       World      muIoni
+   54  74.790927 cm  1.8872941 m   2.5690661 m   35.821404 MeV  5.925335 keV 1.6996992 cm  7.6430217 m       World      muIoni
+   55   76.04969 cm   1.910303 m   2.5761083 m   35.816243 MeV 5.1610649 keV 2.7156093 cm  7.6701778 m       World      muIoni
+   56  77.416767 cm  1.9352172 m   2.5837369 m   35.809043 MeV 5.8297715 keV 2.9424551 cm  7.6996023 m       World      muIoni
+   57  89.111342 cm  2.1478669 m   2.6490385 m   35.748814 MeV 60.229606 keV 25.131971 cm  7.9509221 m       World      muIoni
+   58  94.682147 cm  2.2506974 m   2.6804377 m    35.72051 MeV  27.20744 keV 12.109298 cm   8.072015 m       World      muIoni
+   59  96.233045 cm  2.2791567 m   2.6891325 m   35.707431 MeV 7.7013206 keV 3.3556924 cm   8.105572 m       World      muIoni
+   60  96.989813 cm  2.2930236 m   2.6933666 m   35.701042 MeV 3.2106633 keV 1.6355041 cm   8.121927 m       World      muIoni
+   61  98.736202 cm  2.3249285 m   2.7031193 m   35.690026 MeV 9.4486001 keV 3.7656731 cm  8.1595837 m       World      muIoni
+   62  1.0231511 m   2.3903222 m   2.7230834 m   35.674493 MeV 14.534918 keV 7.7173685 cm  8.2367574 m       World      muIoni
+   63  1.0310276 m   2.4047057 m   2.7274906 m   35.668994 MeV 3.9790587 keV 1.6980861 cm  8.2537383 m       World      muIoni
+   64  1.0417599 m   2.4242911 m   2.7334767 m   35.653353 MeV 5.9844764 keV 2.3121463 cm  8.2768597 m       World      muIoni
+   65  1.0495114 m   2.4384599 m   2.7377964 m   35.647875 MeV  4.478838 keV 1.6718316 cm  8.2935781 m       World      muIoni
+   66  1.1316031 m   2.5888501 m   2.7835168 m   35.599792 MeV  44.48733 keV 17.733293 cm   8.470911 m       World      muIoni
+   67  1.1400241 m   2.6039366 m   2.7879645 m   35.594148 MeV 5.6441556 keV 1.7840948 cm  8.4887519 m       World      muIoni
+   68  1.1579537 m   2.6360347 m   2.7974317 m   35.582764 MeV 9.7330571 keV 3.7965599 cm  8.5267175 m       World      muIoni
+   69  1.1620895 m   2.6434943 m   2.7996444 m   35.575196 MeV 1.4150661 keV 8.8117047 mm  8.5355292 m       World      muIoni
+   70  1.1724649 m   2.6622263 m   2.8052211 m   35.570744 MeV 3.4160919 keV 2.2127774 cm   8.557657 m       World      muIoni
+   71  1.2416284 m   2.7867928 m   2.8425035 m    35.53392 MeV 34.300429 keV 14.727814 cm  8.7049351 m       World      muIoni
+   72  1.3221356 m   2.9277024 m   2.8858271 m   35.494184 MeV 38.605381 keV 16.797067 cm  8.8729058 m       World      muIoni
+   73  1.3629589 m   2.9975848 m   2.9075564 m    35.46525 MeV 21.889077 keV  8.379917 cm   8.956705 m       World      muIoni
+   74  1.3816407 m   3.0294976 m   2.9174818 m   35.445897 MeV 9.0304845 keV 3.8287776 cm  8.9949928 m       World      muIoni
+   75  1.4010607 m   3.0623805 m   2.9277228 m   35.415857 MeV 7.8195647 keV  3.953862 cm  9.0345314 m       World      muIoni
+   76  1.4077604 m   3.0737246 m   2.9313239 m   35.384119 MeV 4.6101044 keV  1.365799 cm  9.0481894 m       World      muIoni
+   77  1.4093109 m   3.0763544 m   2.9321629 m   35.379474 MeV 487.69503 eV  3.1660767 mm  9.0513555 m       World      muIoni
+   78  1.4236419 m   3.1006895 m   2.9399096 m   35.369151 MeV 4.6731831 keV 2.9284602 cm  9.0806401 m       World      muIoni
+   79  1.4727087 m   3.1836507 m   2.9664647 m   35.345115 MeV 24.036105 keV 9.9976734 cm  9.1806168 m       World      muIoni
+   80  1.4874456 m   3.2086028 m   2.9744429 m   35.332942 MeV 8.1257981 keV 3.0057191 cm   9.210674 m       World      muIoni
+   81  1.4919599 m   3.2162867 m   2.9769038 m   35.331497 MeV 1.4447097 keV 9.2453975 mm  9.2199194 m       World      muIoni
+   82  1.4926793 m   3.2175115 m    2.977296 m   35.330863 MeV   633.933 eV  1.4736557 mm   9.221393 m       World      muIoni
+   83  1.5005769 m   3.2309592 m   2.9816033 m   35.326818 MeV 4.0449499 keV 1.6179176 cm  9.2375722 m       World      muIoni
+   84  1.5918201 m   3.3863663 m   3.0315871 m   35.276371 MeV 48.616214 keV 18.701739 cm  9.4245896 m       World      muIoni
+   85  1.6240467 m    3.441789 m   3.0495396 m   35.259903 MeV 16.468077 keV 6.6577238 cm  9.4911668 m       World      muIoni
+   86  1.6424501 m   3.4732096 m   3.0597013 m   35.250181 MeV 9.7219558 keV 3.7804839 cm  9.5289717 m       World      muIoni
+   87  1.6503644 m   3.4867753 m   3.0640482 m   35.244787 MeV 3.4447836 keV 1.6296045 cm  9.5452677 m       World      muIoni
+   88  1.6573645 m    3.498775 m    3.067907 m   35.242185 MeV 2.6019986 keV 1.4418168 cm  9.5596859 m       World      muIoni
+   89  1.6630791 m   3.5085592 m   3.0710589 m   35.237046 MeV  4.066408 keV 1.1761099 cm   9.571447 m       World      muIoni
+   90  1.6747469 m   3.5285767 m   3.0775049 m   35.230771 MeV 5.0074268 keV 2.4049671 cm  9.5954967 m       World      muIoni
+   91  1.6846686 m   3.5456409 m   3.0829777 m   35.221497 MeV 3.3077561 keV 2.0483586 cm  9.6159802 m       World      muIoni
+   92  1.7144243 m   3.5968666 m   3.0993639 m   35.200358 MeV 17.094298 keV 6.1465475 cm  9.6774457 m       World      muIoni
+   93  1.7623212 m   3.6794767 m   3.1256542 m   35.178485 MeV 21.873588 keV 9.9044333 cm    9.77649 m       World      muIoni
+   94  1.7647766 m   3.6837381 m   3.1270046 m   35.176064 MeV 552.67187 eV  5.1001866 mm  9.7815902 m       World      muIoni
+   95  1.7774375 m   3.7057245 m   3.1339578 m   35.171698 MeV  4.366814 keV 2.6306827 cm  9.8078971 m       World      muIoni
+   96  1.8244509 m   3.7874992 m   3.1598932 m   35.144685 MeV 25.965127 keV 9.7826675 cm  9.9057237 m       World      muIoni
+   97  1.8597398 m   3.8490711 m   3.1790904 m   35.125907 MeV 18.778104 keV 7.3518407 cm  9.9792421 m       World      muIoni
+   98   1.860604 m   3.8505673 m   3.1795538 m   35.125568 MeV 338.83945 eV  1.7889701 mm  9.9810311 m       World      muIoni
+   99  1.8683955 m   3.8640671 m   3.1837324 m   35.119554 MeV  3.437733 keV 1.6137334 cm  9.9971684 m       World      muIoni
+  100  1.8695907 m    3.866143 m   3.1843739 m   35.114854 MeV 1.0381568 keV 2.4797588 mm  9.9996482 m       World      muIoni
+  101  1.8893312 m   3.9004731 m    3.194956 m    34.75897 MeV 6.3016949 keV 4.0990615 cm  10.040639 m       World      muIoni
+  102  1.8915068 m   3.9042476 m   3.1961394 m   34.756247 MeV 1.6122785 keV 4.5144794 mm  10.045153 m       World      muIoni
+  103  1.9475721 m   4.0015336 m   3.2266893 m   34.725961 MeV 27.992623 keV 11.636693 cm   10.16152 m       World      muIoni
+  104  1.9587012 m   4.0206558 m   3.2326546 m   34.718639 MeV 5.1226082 keV 2.2915108 cm  10.184435 m       World      muIoni
+  105  1.9626296 m   4.0273916 m   3.2347447 m   34.715421 MeV 1.6277566 keV 8.0729305 mm  10.192508 m       World      muIoni
+  106  2.0020779 m   4.0949494 m   3.2557292 m   34.694073 MeV 18.423834 keV 8.0997535 cm  10.273506 m       World      muIoni
+  107  2.0032781 m    4.097016 m   3.2563647 m    34.68986 MeV 1.0216878 keV 2.4729133 mm  10.275979 m       World      muIoni
+  108  2.0567019 m   4.1889535 m   3.2846005 m   34.661514 MeV 28.345858 keV 11.001798 cm  10.385997 m       World      muIoni
+  109  2.0575019 m   4.1903435 m   3.2850353 m   34.659079 MeV 347.37329 eV  1.6616926 mm  10.387658 m       World      muIoni
+  110  2.0695156 m   4.2112288 m   3.2915807 m   34.649004 MeV 7.2670693 keV 2.4967304 cm  10.412626 m       World      muIoni
+  111  2.1028622 m   4.2691247 m   3.3097632 m   34.633326 MeV 12.159064 keV 6.9242757 cm  10.481868 m       World      muIoni
+  112  2.1603555 m   4.3694426 m   3.3411503 m   34.603163 MeV  27.64151 keV 11.980989 cm  10.601678 m       World      muIoni
+  113  2.1609406 m    4.370473 m   3.3414699 m   34.601743 MeV  187.2933 eV  1.2273235 mm  10.602906 m       World      muIoni
+  114  2.1909488 m   4.4232733 m    3.357898 m   34.580836 MeV 17.976691 keV  6.291467 cm   10.66582 m       World      muIoni
+  115  2.2170598 m   4.4691242 m   3.3724132 m   34.525888 MeV 14.434021 keV 5.4724679 cm  10.720545 m       World      muIoni
+  116  2.2226073 m    4.478841 m   3.3755207 m   34.523505 MeV 2.3826768 keV 1.1612451 cm  10.732157 m  OutOfWorld  Transportation
 Track (trackID 22, parentID 3) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -7249,10 +7249,11 @@ Track (trackID 3, parentID 1) is processed with stopping code 2
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -3.32 mm  -3.01 mm   2.67 cm   4.12 MeV     0 eV      0 fm      0 fm     Target    initStep
-    1 -3.3686738 mm -2.9412546 mm  2.6794096 cm  1.3111664 MeV 2.8086463 MeV 143.89929 um  143.89929 um     Target      muIoni
-    2 -3.3848592 mm -2.9322244 mm  2.6792743 cm  151.87971 keV 1.1592867 MeV 24.493534 um  168.39283 um     Target      muIoni
-    3 -3.3849255 mm -2.9317332 mm  2.6792677 cm          0 eV  151.87971 keV 1.0342495 um  169.42708 um     Target      muIoni
-    4 -3.3849255 mm -2.9317332 mm  2.6792677 cm          0 eV          0 eV          0 fm  169.42708 um     Target  DecayWithSpin
+    1 -3.3686738 mm -2.9412546 mm  2.6794096 cm  1.3111661 MeV 2.8086465 MeV 143.89929 um  143.89929 um     Target      muIoni
+    2 -3.3848592 mm -2.9322244 mm  2.6792743 cm  151.87968 keV 1.1592864 MeV 24.493527 um  168.39281 um     Target      muIoni
+    3 -3.3849255 mm -2.9317332 mm  2.6792677 cm  27.707372 keV 124.17231 keV 1.0342493 um  169.42706 um     Target      muIoni
+    4 -3.3849276 mm -2.9317003 mm  2.6792678 cm          0 eV  27.707372 keV 156.19345 nm  169.58325 um     Target      muIoni
+    5 -3.3849276 mm -2.9317003 mm  2.6792678 cm          0 eV          0 eV          0 fm  169.58325 um     Target  DecayWithSpin
 Track (trackID 23, parentID 3) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -8307,87 +8308,87 @@ Track (trackID 2, parentID 1) is processed with stopping code 2
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   10.8 cm   3.75 cm   -1.8 m    88.8 MeV     0 eV      0 fm      0 fm CaptureMgnt    initStep
     1  9.1956586 cm  21.993789 cm         -2 m   88.756705 MeV1.1117761e-14 meV 34.860637 cm  34.860637 cm CaptureMgnt  Transportation
-    2  10.029535 cm  22.061416 cm -2.0058383 m   88.753767 MeV 1.9238701 keV 1.0201856 cm  35.880823 cm      World      muIoni
-    3  27.389135 cm  23.465012 cm -2.1273643 m    88.71979 MeV 31.457035 keV 21.237064 cm  57.117887 cm      World      muIoni
-    4  42.788854 cm  24.646359 cm -2.2348324 m   88.688681 MeV 28.805115 keV 18.815992 cm  75.933879 cm      World      muIoni
-    5  69.640321 cm   26.64672 cm  -2.421707 m   88.634992 MeV 50.603057 keV 32.775431 cm  1.0870931 m       World      muIoni
-    6  74.542487 cm  26.973421 cm -2.4555021 m    88.62592 MeV 7.6087892 keV 5.9631732 cm  1.1467248 m       World      muIoni
-    7  88.401327 cm  27.882153 cm -2.5509812 m   88.599885 MeV 24.936901 keV 16.854016 cm   1.315265 m       World      muIoni
-    8   90.28494 cm  28.021424 cm -2.5640061 m   88.594334 MeV 1.8978354 keV 2.2943125 cm  1.3382081 m       World      muIoni
-    9  92.933644 cm  28.215913 cm -2.5823308 m   88.588531 MeV 4.1694296 keV  3.226669 cm  1.3704748 m       World      muIoni
-   10   94.04599 cm  28.295537 cm -2.5900377 m   88.577019 MeV 3.0560175 keV 1.3555886 cm  1.3840307 m       World      muIoni
-   11  94.260109 cm  28.310949 cm -2.5915219 m   88.572861 MeV 1.5964664 keV  2.609842 mm  1.3866405 m       World      muIoni
-   12  1.1201344 m   29.589971 cm -2.7146707 m   88.535469 MeV 36.016159 keV 21.644268 cm  1.6030832 m       World      muIoni
-   13  1.1427685 m   29.755791 cm -2.7304114 m   88.529409 MeV 4.5643091 keV 2.7619278 cm  1.6307025 m       World      muIoni
-   14  1.1809758 m   30.038172 cm -2.7569682 m   88.521732 MeV 6.6683702 keV 4.6615818 cm  1.6773183 m       World      muIoni
-   15  1.2138805 m   30.277277 cm  -2.779833 m    88.51294 MeV 6.8203432 keV 4.0140151 cm  1.7174585 m       World      muIoni
-   16  1.2385358 m   30.456497 cm -2.7969875 m   88.507009 MeV 3.1396446 keV 3.0089434 cm  1.7475479 m       World      muIoni
-   17   1.310603 m   30.983067 cm  -2.847176 m   88.488173 MeV 12.756562 keV 8.7979008 cm  1.8355269 m       World      muIoni
-   18  1.3540035 m   31.299325 cm -2.8774379 m   88.480022 MeV 8.1504927 keV 5.3003664 cm  1.8885306 m       World      muIoni
-   19  1.3676489 m   31.397168 cm -2.8869559 m   88.473434 MeV 2.6170386 keV 1.6665732 cm  1.9051963 m       World      muIoni
-   20   1.435826 m   31.881433 cm -2.9345795 m   88.458469 MeV 13.457713 keV  8.330413 cm  1.9885004 m       World      muIoni
-   21  1.4787998 m   32.184441 cm -2.9645706 m   88.452241 MeV 4.5102096 keV 5.2491912 cm  2.0409923 m       World      muIoni
-   22  1.5838832 m   32.923761 cm -3.0377375 m   88.429673 MeV 19.003511 keV  12.82599 cm  2.1692522 m       World      muIoni
-   23  1.7307128 m   33.953323 cm -3.1396785 m   88.398545 MeV  28.79699 keV 17.904455 cm  2.3482968 m       World      muIoni
-   24  1.7411664 m   34.027092 cm -3.1469362 m   88.392715 MeV 3.5717216 keV 1.2747483 cm  2.3610443 m       World      muIoni
-   25  1.8330289 m   34.678911 cm -3.2107071 m   88.340752 MeV 22.284459 keV 11.201758 cm  2.4730619 m       World      muIoni
-   26  1.8557478 m   34.844162 cm -3.2264734 m   88.320006 MeV 3.3687405 keV 2.7702963 cm  2.5007648 m       World      muIoni
-   27  1.8888316 m   35.088812 cm -3.2494122 m   88.301265 MeV 7.8504041 keV 4.0332604 cm  2.5410974 m       World      muIoni
-   28  1.8917846 m   35.110777 cm -3.2514653 m   88.299761 MeV 294.85803 eV  3.6032483 mm  2.5447007 m       World      muIoni
-   29  1.9507111 m   35.550557 cm  -3.292441 m   88.288055 MeV   10.6623 keV 7.1907494 cm  2.6166082 m       World      muIoni
-   30  1.9526185 m   35.564897 cm -3.2937668 m   88.287696 MeV 358.96747 eV  2.3273694 mm  2.6189355 m       World      muIoni
-   31   2.135137 m   36.937379 cm -3.4206925 m   88.248784 MeV 37.488823 keV  22.27367 cm  2.8416722 m       World      muIoni
-   32  2.1432675 m   36.998019 cm -3.4263416 m   88.245749 MeV 1.4321985 keV 9.9189183 mm  2.8515912 m       World      muIoni
-   33  2.1592549 m   37.116744 cm -3.4374532 m   88.241526 MeV 2.3014435 keV 1.9505726 cm  2.8710969 m       World      muIoni
-   34  2.1666857 m   37.171101 cm -3.4426198 m    88.23901 MeV 963.54256 eV  9.0667593 mm  2.8801636 m       World      muIoni
-   35  2.2657353 m   37.894614 cm -3.5115156 m   88.189838 MeV 16.783318 keV  12.08711 cm  3.0010347 m       World      muIoni
-   36  2.2834403 m   38.016923 cm -3.5238167 m   88.184252 MeV 3.2519829 keV 2.1593518 cm  3.0226283 m       World      muIoni
-   37   2.328453 m   38.327872 cm -3.5550796 m   88.175028 MeV  7.549617 keV 5.4892455 cm  3.0775207 m       World      muIoni
-   38  2.4904346 m   39.446799 cm  -3.667793 m   88.140485 MeV 33.282689 keV 19.765541 cm  3.2751761 m       World      muIoni
-   39  2.5430759 m   39.815223 cm -3.7040846 m   88.125782 MeV  11.68942 keV 6.4045088 cm  3.3392212 m       World      muIoni
-   40  2.5890935 m    40.13825 cm -3.7357304 m   88.113704 MeV 7.4769234 keV 5.5942027 cm  3.3951632 m       World      muIoni
-   41  2.5968732 m   40.193291 cm -3.7410849 m   88.111712 MeV 972.50387 eV  9.4602981 mm  3.4046235 m       World      muIoni
-   42  2.7579315 m   41.333116 cm  -3.851956 m   88.082849 MeV  27.72728 keV 19.586271 cm  3.6004863 m       World      muIoni
-   43  2.7651304 m   41.383155 cm -3.8568812 m   88.080873 MeV 916.51064 eV  8.7367681 mm   3.609223 m       World      muIoni
-   44  2.8886221 m   42.241407 cm -3.9413092 m   88.060184 MeV 19.397726 keV  14.98399 cm  3.7590629 m       World      muIoni
-   45  2.9913802 m   42.954008 cm -4.0116107 m    88.03804 MeV 20.542169 keV 12.470897 cm  3.8837719 m       World      muIoni
-   46  3.0492821 m   43.345217 cm -4.0513101 m   88.025441 MeV 11.001275 keV  7.031344 cm  3.9540853 m       World      muIoni
-   47  3.0525567 m   43.367306 cm -4.0535475 m   88.021326 MeV 386.44617 eV  3.9721576 mm  3.9580575 m       World      muIoni
-   48  3.1321316 m   43.902033 cm -4.1079577 m   88.006018 MeV 15.307454 keV 9.6546519 cm   4.054604 m       World      muIoni
-   49  3.1398072 m   43.952899 cm  -4.113189 m   88.001653 MeV 1.2351186 keV 9.3026825 mm  4.0639067 m       World      muIoni
-   50  3.1718073 m   44.162921 cm  -4.135002 m   87.990944 MeV 6.7369829 keV 3.8784395 cm  4.1026911 m       World      muIoni
-   51  3.2484333 m   44.660289 cm -4.1872814 m   87.975174 MeV 14.720064 keV 9.2894709 cm  4.1955858 m       World      muIoni
-   52  3.2588283 m    44.72664 cm -4.1943691 m   87.970796 MeV 3.0854606 keV 1.2598878 cm  4.2081847 m       World      muIoni
-   53  3.3095839 m   45.047379 cm -4.2289851 m   87.961208 MeV 7.6217129 keV 6.1519835 cm  4.2697045 m       World      muIoni
-   54  3.3169154 m   45.092522 cm -4.2339918 m   87.957495 MeV 958.08611 eV   8.889426 mm  4.2785939 m       World      muIoni
-   55  3.3410244 m   45.241278 cm -4.2504441 m   87.950894 MeV 3.8876227 keV  2.922556 cm  4.3078195 m       World      muIoni
-   56  3.3567848 m   45.341449 cm -4.2611679 m   87.943962 MeV 4.6553113 keV 1.9089113 cm  4.3269086 m       World      muIoni
-   57  3.4162746 m   45.721014 cm -4.3016132 m    87.92992 MeV 12.954852 keV 7.2036542 cm  4.3989452 m       World      muIoni
-   58  3.5995567 m   46.882885 cm -4.4262888 m    87.89401 MeV 33.653513 keV 22.197184 cm   4.620917 m       World      muIoni
-   59  3.7224828 m   47.664029 cm -4.5100797 m    87.86619 MeV 26.094724 keV 14.897246 cm  4.7698895 m       World      muIoni
-   60  3.7693129 m   47.963889 cm  -4.541978 m   87.857311 MeV 7.3658522 keV 5.6741117 cm  4.8266306 m       World      muIoni
-   61   3.829412 m   48.350329 cm -4.5828824 m   87.845924 MeV 9.5009072 keV 7.2801164 cm  4.8994317 m       World      muIoni
-   62    3.85449 m   48.511024 cm -4.5999403 m   87.841939 MeV 3.9852575 keV 3.0372041 cm  4.9298038 m       World      muIoni
-   63  3.9201606 m   48.927162 cm -4.6446679 m   87.826522 MeV 13.728409 keV 7.9564484 cm  5.0093683 m       World      muIoni
-   64   4.001006 m   49.460216 cm -4.6996498 m     87.8073 MeV 15.630532 keV 9.7915302 cm  5.1072836 m       World      muIoni
-   65  4.0576162 m   49.838128 cm -4.7381398 m   87.793322 MeV 9.8047265 keV 6.8560084 cm  5.1758436 m       World      muIoni
-   66  4.1004627 m   50.126342 cm -4.7672272 m   87.788208 MeV 5.1132216 keV 5.1867263 cm  5.2277109 m       World      muIoni
-   67  4.1122412 m   50.206826 cm -4.7752376 m   87.784742 MeV 2.3008515 keV 1.4266971 cm  5.2419779 m       World      muIoni
-   68  4.1138094 m   50.217827 cm -4.7763103 m   87.783161 MeV 145.76319 eV  1.9031931 mm  5.2438811 m       World      muIoni
-   69  4.1182342 m   50.248892 cm -4.7793357 m   87.761091 MeV 627.66044 eV  5.3692311 mm  5.2492503 m       World      muIoni
-   70  4.1793632 m   50.691447 cm -4.8209881 m   87.747225 MeV 12.407881 keV 7.4103059 cm  5.3233534 m       World      muIoni
-   71  4.2165057 m   50.963708 cm -4.8463073 m     87.7389 MeV 7.1462469 keV 4.5033792 cm  5.3683872 m       World      muIoni
-   72  4.2695454 m   51.359617 cm -4.8824646 m    87.72836 MeV 9.4976936 keV  6.431361 cm  5.4327008 m       World      muIoni
-   73  4.2924689 m   51.531161 cm -4.8981355 m   87.722495 MeV 4.5174301 keV 2.7820967 cm  5.4605217 m       World      muIoni
-   74  4.2940225 m   51.542568 cm -4.8991993 m   87.720736 MeV 422.58185 eV  1.8863882 mm  5.4624081 m       World      muIoni
-   75  4.2940722 m   51.542935 cm -4.8992334 m   87.720726 MeV 9.5443258 eV  60.420908 um  5.4624685 m       World      muIoni
-   76  4.3399628 m   51.880817 cm -4.9306822 m   87.710311 MeV 8.8598004 keV 5.5734938 cm  5.5182035 m       World      muIoni
-   77  4.3984552 m   52.300355 cm -4.9707885 m   87.698097 MeV 10.833888 keV  7.104569 cm  5.5892492 m       World      muIoni
-   78  4.4119501 m   52.399376 cm -4.9800426 m   87.587416 MeV 4.4119205 keV 1.6392984 cm  5.6056421 m       World      muIoni
-   79  4.5260514 m   53.213738 cm -5.0583895 m   87.563512 MeV 22.691583 keV 13.864957 cm  5.7442917 m       World      muIoni
-   80   4.679074 m   54.361032 cm -5.1635239 m   87.526676 MeV 34.208394 keV 18.601306 cm  5.9303048 m       World      muIoni
-   81  4.7301012 m   54.740955 cm -5.1983757 m   87.513492 MeV 11.352751 keV  6.191016 cm  5.9922149 m       World      muIoni
-   82  4.9679533 m   56.519001 cm -5.3603726 m   87.462055 MeV  51.43701 keV 28.832815 cm  6.2805431 m  OutOfWorld  Transportation
+    2  10.029543 cm  22.061417 cm -2.0058383 m   88.753767 MeV 1.9238764 keV 1.0201958 cm  35.880833 cm      World      muIoni
+    3  27.389317 cm  23.465027 cm -2.1273656 m    88.71979 MeV 31.457334 keV 21.237277 cm   57.11811 cm      World      muIoni
+    4  42.789191 cm  24.646386 cm -2.2348347 m   88.688681 MeV 28.805391 keV 18.816181 cm  75.934291 cm      World      muIoni
+    5  69.640928 cm  26.646766 cm -2.4217112 m   88.634991 MeV 50.603515 keV  32.77576 cm  1.0871005 m       World      muIoni
+    6  74.543143 cm   26.97347 cm -2.4555066 m   88.625919 MeV 7.6088678 keV  5.963233 cm  1.1467328 m       World      muIoni
+    7  88.402121 cm   27.88221 cm -2.5509867 m   88.599883 MeV 24.937139 keV 16.854185 cm  1.3152747 m       World      muIoni
+    8  90.285753 cm  28.021482 cm -2.5640117 m   88.594333 MeV 1.8978507 keV 2.2943354 cm   1.338218 m       World      muIoni
+    9  92.934484 cm  28.215973 cm -2.5823366 m   88.588529 MeV 4.1694716 keV 3.2267013 cm  1.3704851 m       World      muIoni
+   10  94.046841 cm  28.295598 cm -2.5900436 m   88.577017 MeV 3.0560348 keV 1.3556022 cm  1.3840411 m       World      muIoni
+   11  94.260962 cm   28.31101 cm -2.5915278 m   88.572859 MeV 1.5964667 keV 2.6098681 mm  1.3866509 m       World      muIoni
+   12  1.1201447 m   29.590044 cm -2.7146778 m   88.535468 MeV 36.016468 keV 21.644485 cm  1.6030958 m       World      muIoni
+   13  1.1427791 m   29.755865 cm -2.7304187 m   88.529407 MeV 4.5643325 keV 2.7619555 cm  1.6307153 m       World      muIoni
+   14  1.1809868 m   30.038249 cm -2.7569758 m   88.521731 MeV 6.6684286 keV 4.6616285 cm  1.6773316 m       World      muIoni
+   15  1.2138917 m   30.277356 cm -2.7798408 m   88.512938 MeV 6.8204036 keV 4.0140552 cm  1.7174722 m       World      muIoni
+   16  1.2385473 m   30.456578 cm -2.7969955 m   88.507008 MeV 3.1396699 keV 3.0089735 cm  1.7475619 m       World      muIoni
+   17  1.3106153 m   30.983153 cm -2.8471844 m   88.488171 MeV 12.756667 keV 8.7979888 cm  1.8355418 m       World      muIoni
+   18  1.3540161 m   31.299414 cm -2.8774467 m    88.48002 MeV 8.1505618 keV 5.3004194 cm   1.888546 m       World      muIoni
+   19  1.3676617 m   31.397258 cm -2.8869647 m   88.473431 MeV 2.6170576 keV 1.6665899 cm  1.9052119 m       World      muIoni
+   20  1.4358394 m   31.881528 cm -2.9345888 m   88.458466 MeV 13.457826 keV 8.3304963 cm  1.9885169 m       World      muIoni
+   21  1.4788137 m   32.184538 cm -2.9645802 m   88.452239 MeV 4.5102678 keV 5.2492436 cm  2.0410093 m       World      muIoni
+   22  1.5838982 m   32.923865 cm -3.0377479 m    88.42967 MeV 19.003681 keV 12.826118 cm  2.1692705 m       World      muIoni
+   23  1.7307292 m   33.953437 cm -3.1396898 m   88.398542 MeV 28.797252 keV 17.904634 cm  2.3483168 m       World      muIoni
+   24   1.741183 m   34.027206 cm -3.1469477 m   88.392713 MeV 3.5717344 keV  1.274761 cm  2.3610644 m       World      muIoni
+   25  1.8330463 m   34.679031 cm -3.2107192 m   88.340749 MeV 22.284642 keV  11.20187 cm  2.4730831 m       World      muIoni
+   26  1.8557655 m   34.844283 cm -3.2264856 m   88.320003 MeV 3.3687653 keV  2.770324 cm  2.5007864 m       World      muIoni
+   27  1.8888496 m   35.088936 cm -3.2494247 m   88.301262 MeV 7.8504646 keV 4.0333007 cm  2.5411194 m       World      muIoni
+   28  1.8918026 m     35.1109 cm -3.2514778 m   88.299758 MeV   294.859 eV  3.6032843 mm  2.5447227 m       World      muIoni
+   29  1.9507298 m   35.550685 cm -3.2924539 m   88.288052 MeV   10.6624 keV 7.1908212 cm  2.6166309 m       World      muIoni
+   30  1.9526372 m   35.565025 cm -3.2937797 m   88.287693 MeV 358.96791 eV  2.3273926 mm  2.6189583 m       World      muIoni
+   31  2.1351575 m    36.93752 cm -3.4207067 m   88.248781 MeV 37.489159 keV 22.273893 cm  2.8416972 m       World      muIoni
+   32   2.143288 m   36.998161 cm -3.4263559 m   88.245746 MeV 1.4322064 keV 9.9190173 mm  2.8516162 m       World      muIoni
+   33  2.1592756 m   37.116887 cm -3.4374675 m   88.241523 MeV 2.3014595 keV  1.950592 cm  2.8711221 m       World      muIoni
+   34  2.1667065 m   37.171245 cm -3.4426342 m   88.239006 MeV 963.54903 eV  9.0668497 mm   2.880189 m       World      muIoni
+   35   2.265757 m   37.894764 cm -3.5115307 m   88.189834 MeV 16.783475 keV 12.087231 cm  3.0010613 m       World      muIoni
+   36  2.2834622 m   38.017075 cm -3.5238319 m   88.184248 MeV 3.2520058 keV 2.1593733 cm   3.022655 m       World      muIoni
+   37  2.3284754 m   38.328026 cm -3.5550951 m   88.175025 MeV 7.5496906 keV 5.4893002 cm   3.077548 m       World      muIoni
+   38  2.4904587 m   39.446964 cm -3.6678096 m   88.140481 MeV 33.282974 keV 19.765738 cm  3.2752054 m       World      muIoni
+   39  2.5431005 m   39.815391 cm -3.7041016 m   88.125778 MeV 11.689506 keV 6.4045727 cm  3.3392511 m       World      muIoni
+   40  2.5891186 m    40.13842 cm -3.7357477 m     88.1137 MeV 7.4769923 keV 5.5942585 cm  3.3951937 m       World      muIoni
+   41  2.5968983 m   40.193462 cm -3.7411022 m   88.111708 MeV 972.51026 eV  9.4603923 mm  3.4046541 m       World      muIoni
+   42  2.7579582 m   41.333298 cm -3.8519745 m   88.082844 MeV  27.72755 keV 19.586467 cm  3.6005188 m       World      muIoni
+   43  2.7651571 m   41.383338 cm -3.8568997 m   88.080868 MeV 916.51632 eV  8.7368551 mm  3.6092556 m       World      muIoni
+   44  2.8886501 m   42.241597 cm -3.9413286 m    88.06018 MeV 19.397912 keV 14.984139 cm   3.759097 m       World      muIoni
+   45  2.9914092 m   42.954205 cm -4.0116307 m   88.038035 MeV 20.542351 keV 12.471022 cm  3.8838072 m       World      muIoni
+   46  3.0493117 m   43.345417 cm -4.0513305 m   88.025436 MeV 11.001377 keV  7.031414 cm  3.9541214 m       World      muIoni
+   47  3.0525864 m   43.367507 cm -4.0535679 m   88.021321 MeV 386.44658 eV  3.9721971 mm  3.9580936 m       World      muIoni
+   48   3.132162 m   43.902239 cm -4.1079787 m   88.006013 MeV 15.307586 keV  9.654748 cm   4.054641 m       World      muIoni
+   49  3.1398377 m   43.953105 cm   -4.11321 m   88.001648 MeV 1.2351263 keV 9.3027751 mm  4.0639438 m       World      muIoni
+   50  3.1718382 m   44.163129 cm -4.1350232 m   87.990939 MeV 6.7370451 keV 3.8784781 cm  4.1027286 m       World      muIoni
+   51   3.248465 m   44.660501 cm -4.1873031 m   87.975169 MeV 14.720197 keV 9.2895634 cm  4.1956242 m       World      muIoni
+   52    3.25886 m   44.726853 cm  -4.194391 m   87.970791 MeV 3.0854773 keV 1.2599003 cm  4.2082232 m       World      muIoni
+   53  3.3096161 m   45.047595 cm -4.2290073 m   87.961203 MeV 7.6217935 keV 6.1520447 cm  4.2697437 m       World      muIoni
+   54  3.3169477 m   45.092738 cm  -4.234014 m    87.95749 MeV 958.09255 eV  8.8895144 mm  4.2786332 m       World      muIoni
+   55  3.3410569 m   45.241495 cm -4.2504665 m   87.950889 MeV 3.8876536 keV 2.9225851 cm   4.307859 m       World      muIoni
+   56  3.3568175 m   45.341667 cm -4.2611904 m   87.943957 MeV 4.6553358 keV 1.9089303 cm  4.3269484 m       World      muIoni
+   57  3.4163079 m   45.721235 cm  -4.301636 m   87.929914 MeV  12.95496 keV 7.2037258 cm  4.3989856 m       World      muIoni
+   58  3.5995919 m   46.883116 cm -4.4263129 m   87.894005 MeV 33.653823 keV 22.197405 cm  4.6209597 m       World      muIoni
+   59  3.7225191 m   47.664267 cm -4.5101047 m   87.866184 MeV 26.094952 keV 14.897394 cm  4.7699336 m       World      muIoni
+   60  3.7693498 m    47.96413 cm -4.5420032 m   87.857305 MeV 7.3659305 keV  5.674168 cm  4.8266753 m       World      muIoni
+   61  3.8294494 m   48.350574 cm -4.5829081 m   87.845918 MeV 9.5009966 keV 7.2801887 cm  4.8994772 m       World      muIoni
+   62  3.8545277 m    48.51127 cm -4.5999661 m   87.841932 MeV 3.9852832 keV 3.0372343 cm  4.9298495 m       World      muIoni
+   63  3.9201989 m   48.927412 cm -4.6446941 m   87.826516 MeV 13.728526 keV 7.9565274 cm  5.0094148 m       World      muIoni
+   64  4.0010451 m    49.46047 cm -4.6996765 m   87.807294 MeV 15.630676 keV 9.7916275 cm  5.1073311 m       World      muIoni
+   65  4.0576559 m   49.838385 cm -4.7381669 m   87.793315 MeV  9.804814 keV 6.8560764 cm  5.1758918 m       World      muIoni
+   66  4.1005029 m   50.126602 cm -4.7672547 m   87.788202 MeV 5.1132778 keV 5.1867778 cm  5.2277596 m       World      muIoni
+   67  4.1122814 m   50.207087 cm -4.7752651 m   87.784736 MeV 2.3008648 keV 1.4267112 cm  5.2420267 m       World      muIoni
+   68  4.1138497 m   50.218088 cm -4.7763378 m   87.783154 MeV 145.76326 eV   1.903212 mm  5.2439299 m       World      muIoni
+   69  4.1182746 m   50.249154 cm -4.7793633 m   87.761084 MeV 627.66125 eV  5.3692844 mm  5.2492992 m       World      muIoni
+   70  4.1794041 m   50.691713 cm  -4.821016 m   87.747218 MeV 12.407986 keV 7.4103794 cm   5.323403 m       World      muIoni
+   71   4.216547 m   50.963976 cm -4.8463355 m   87.738893 MeV  7.146304 keV 4.5034239 cm  5.3684372 m       World      muIoni
+   72  4.2695872 m   51.359889 cm -4.8824932 m   87.728353 MeV 9.4977858 keV 6.4314248 cm  5.4327515 m       World      muIoni
+   73  4.2925109 m   51.531435 cm -4.8981642 m   87.722488 MeV 4.5174564 keV 2.7821243 cm  5.4605727 m       World      muIoni
+   74  4.2940646 m   51.542842 cm  -4.899228 m   87.720729 MeV 422.58285 eV  1.8864069 mm  5.4624591 m       World      muIoni
+   75  4.2941143 m   51.543208 cm -4.8992621 m   87.720719 MeV 9.5444207 eV  60.421508 um  5.4625196 m       World      muIoni
+   76  4.3400053 m   51.881094 cm -4.9307112 m   87.710304 MeV 8.8598763 keV 5.5735491 cm   5.518255 m       World      muIoni
+   77  4.3984983 m   52.300636 cm -4.9708179 m    87.69809 MeV 10.833985 keV 7.1046395 cm  5.5893014 m       World      muIoni
+   78  4.4119933 m   52.399658 cm -4.9800721 m   87.587409 MeV 4.4119399 keV 1.6393147 cm  5.6056946 m       World      muIoni
+   79  4.5260958 m   53.214027 cm -5.0584198 m   87.563504 MeV 22.691786 keV 13.865094 cm  5.7443455 m       World      muIoni
+   80  4.6791199 m   54.361332 cm -5.1635552 m   87.526668 MeV 34.208648 keV  18.60149 cm  5.9303604 m       World      muIoni
+   81  4.7301476 m    54.74126 cm -5.1984073 m   87.513484 MeV 11.352836 keV 6.1910773 cm  5.9922712 m       World      muIoni
+   82  4.9679534 m   56.518958 cm -5.3603727 m   87.462056 MeV 51.428616 keV 28.827192 cm  6.2805431 m  OutOfWorld  Transportation
 Track (trackID 19, parentID 2) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
@@ -10514,156 +10515,154 @@ Track (trackID 3, parentID 1) is processed with stopping code 2
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   7.41 cm  -26.3 cm   30.4 cm   38.7 MeV     0 eV      0 fm      0 fm CaptureMgnt    initStep
     1 -5.3518292 cm -7.6969733 cm          2 m   38.663396 MeV1.674033e-13 meV 3.6474375 m   3.6474375 m  CaptureMgnt  Transportation
-    2 -5.2126733 cm -7.5438681 cm  2.0010868 m   38.662501 MeV  922.0981 eV  2.3370382 mm  3.6497745 m       World      muIoni
-    3 -3.1831022 mm -2.1574738 cm  2.0393202 m   38.638646 MeV 22.616249 keV 8.2210852 cm  3.7319854 m       World      muIoni
-    4   7.849356 mm -9.4100851 mm  2.0478894 m   38.633087 MeV 4.0819362 keV 1.8523645 cm   3.750509 m       World      muIoni
-    5  2.5468714 cm  9.9820899 mm  2.0614861 m   38.624641 MeV 7.3931501 keV 2.9518963 cm   3.780028 m       World      muIoni
-    6  2.8336288 cm  1.3132152 cm  2.0636934 m   38.617295 MeV 1.4754508 keV 4.7976926 mm  3.7848257 m       World      muIoni
-    7  4.6742024 cm  3.3343476 cm  2.0778402 m   38.609301 MeV 6.9999978 keV 3.0779925 cm  3.8156056 m       World      muIoni
-    8  4.8349737 cm  3.5099893 cm  2.0790728 m   38.604363 MeV 705.16977 eV  2.6812061 mm  3.8182868 m       World      muIoni
-    9  5.5477501 cm  4.2893903 cm  2.0845337 m   38.600397 MeV 2.6966392 keV 1.1890055 cm  3.8301768 m       World      muIoni
-   10  7.9140978 cm   6.874106 cm  2.1026778 m   38.579469 MeV 9.5370289 keV 3.9461984 cm  3.8696388 m       World      muIoni
-   11  10.192123 cm   9.366851 cm  2.1200874 m   38.567747 MeV 8.5076152 keV 3.7992274 cm  3.9076311 m       World      muIoni
-   12  10.761992 cm  9.9923911 cm  2.1244232 m   38.564166 MeV 2.3986912 keV 9.5081457 mm  3.9171393 m       World      muIoni
-   13  12.132777 cm   11.49767 cm  2.1348619 m   38.557759 MeV 6.4065572 keV 2.2879192 cm  3.9400184 m       World      muIoni
-   14  16.790842 cm  16.609722 cm  2.1703642 m   38.542979 MeV 14.780183 keV  7.773999 cm  4.0177584 m       World      muIoni
-   15  20.392189 cm  20.564082 cm  2.1976592 m   38.531025 MeV 10.179382 keV 6.0047391 cm  4.0778058 m       World      muIoni
-   16  23.857203 cm  24.377897 cm  2.2240868 m   38.521487 MeV 9.5379109 keV  5.791009 cm  4.1357159 m       World      muIoni
-   17  27.707484 cm  28.619714 cm  2.2535959 m   38.437846 MeV 10.260756 keV 6.4440456 cm  4.2001564 m       World      muIoni
-   18   28.39221 cm  29.378692 cm  2.2588176 m   38.435502 MeV 2.3443641 keV 1.1478475 cm  4.2116348 m       World      muIoni
-   19  28.975632 cm  30.025636 cm  2.2632694 m   38.431933 MeV  2.005856 keV 9.7831468 mm   4.221418 m       World      muIoni
-   20   29.01404 cm  30.068188 cm  2.2635627 m   38.429795 MeV 144.97445 eV  643.92427 um  4.2220619 m       World      muIoni
-   21  30.491019 cm  31.703538 cm  2.2748504 m   38.420708 MeV 4.2534843 keV 2.4758753 cm  4.2468207 m       World      muIoni
-   22  31.580523 cm  32.915406 cm  2.2831919 m   38.399416 MeV 4.0005959 keV 1.8306988 cm  4.2651277 m       World      muIoni
-   23  32.342284 cm  33.761039 cm  2.2890036 m   38.394826 MeV 2.2406078 keV 1.2779435 cm  4.2779071 m       World      muIoni
-   24  36.158239 cm  38.005133 cm  2.3181722 m   38.383024 MeV 10.442793 keV 6.4095247 cm  4.3420023 m       World      muIoni
-   25  36.502256 cm  38.388569 cm  2.3207971 m   38.379877 MeV 2.0419186 keV 5.7816248 mm   4.347784 m       World      muIoni
-   26  42.433935 cm  44.995391 cm   2.365996 m    38.35043 MeV 25.891402 keV 9.9631735 cm  4.4474157 m       World      muIoni
-   27  46.009239 cm  48.997439 cm  2.3931177 m   38.324959 MeV 16.948423 keV 6.0129197 cm  4.5075449 m       World      muIoni
-   28  46.296107 cm  49.318959 cm  2.3952892 m   38.322253 MeV 1.1192839 keV 4.8251553 mm  4.5123701 m       World      muIoni
-   29  47.611678 cm  50.792437 cm  2.4052426 m    38.31561 MeV 5.1393189 keV 2.2119139 cm  4.5344892 m       World      muIoni
-   30  59.043664 cm  63.626579 cm  2.4918612 m   38.265615 MeV  47.71288 keV 19.246754 cm  4.7269567 m       World      muIoni
-   31  61.169519 cm  66.045356 cm  2.5080162 m    38.25417 MeV 10.397204 keV 3.6027211 cm  4.7629839 m       World      muIoni
-   32  61.279666 cm  66.171009 cm  2.5088546 m   38.252859 MeV 98.367312 eV  1.8695083 mm  4.7648534 m       World      muIoni
-   33  61.530217 cm  66.457021 cm  2.5107581 m   38.247824 MeV 1.2050963 keV 4.2522065 mm  4.7691057 m       World      muIoni
-   34  72.916189 cm  79.459724 cm  2.5971183 m   38.195056 MeV 47.205432 keV 19.320863 cm  4.9623143 m       World      muIoni
-   35  76.015494 cm  83.021539 cm   2.621048 m   38.179729 MeV   13.9576 keV 5.2932563 cm  5.0152468 m       World      muIoni
-   36  76.320294 cm  83.372572 cm  2.6234248 m   38.177695 MeV 686.33299 eV  5.2213117 mm  5.0204682 m       World      muIoni
-   37  77.427398 cm  84.646237 cm  2.6320584 m   38.172372 MeV 4.1816437 keV 1.8955997 cm  5.0394242 m       World      muIoni
-   38  82.532619 cm  90.521051 cm  2.6718349 m   38.148587 MeV 22.628827 keV 8.7406391 cm  5.1268305 m       World      muIoni
-   39  83.112817 cm  91.193803 cm   2.676359 m   38.147262 MeV 1.3246163 keV  9.969433 mm     5.1368 m       World      muIoni
-   40  83.544647 cm  91.695196 cm  2.6797213 m    38.14354 MeV 2.5643898 keV   7.42244 mm  5.1442224 m       World      muIoni
-   41  84.317083 cm  92.592332 cm  2.6857331 m   38.141657 MeV 1.8830518 keV 1.3277526 cm  5.1574999 m       World      muIoni
-   42  85.384607 cm   93.83105 cm  2.6940361 m   38.135982 MeV 2.6805778 keV  1.833967 cm  5.1758396 m       World      muIoni
-   43  87.562537 cm     96.365 cm  2.7109531 m   38.121761 MeV 8.0177597 keV 3.7451501 cm  5.2132911 m       World      muIoni
-   44  88.334744 cm  97.259294 cm  2.7169429 m   38.117194 MeV 2.6393841 keV 1.3247053 cm  5.2265382 m       World      muIoni
-   45  92.902583 cm  1.0254884 m   2.7522886 m    38.09722 MeV 18.937168 keV 7.8318506 cm  5.3048567 m       World      muIoni
-   46  93.116285 cm  1.0279627 m   2.7539356 m   38.085445 MeV 3.4389732 keV 3.6608228 mm  5.3085175 m       World      muIoni
-   47  93.189923 cm  1.0288138 m   2.7545024 m   38.085314 MeV 130.80765 eV  1.2600492 mm  5.3097775 m       World      muIoni
-   48  93.530475 cm  1.0327493 m   2.7571251 m   38.079379 MeV 3.3152223 keV 5.8279223 mm  5.3156055 m       World      muIoni
-   49   96.42564 cm  1.0662386 m   2.7794519 m   38.066456 MeV 9.9501957 keV 4.9580496 cm   5.365186 m       World      muIoni
-   50  97.514981 cm  1.0788348 m   2.7879007 m   38.057685 MeV 2.9445956 keV 1.8673834 cm  5.3838598 m       World      muIoni
-   51  1.0211042 m   1.1319117 m   2.8235631 m   38.041102 MeV  14.56646 keV 7.8745111 cm  5.4626049 m       World      muIoni
-   52  1.0487788 m   1.1640083 m   2.8451474 m   38.032065 MeV 7.9829319 keV 4.7560093 cm   5.510165 m       World      muIoni
-   53  1.0541163 m   1.1701959 m   2.8493019 m   38.024702 MeV 3.9150479 keV 9.1671319 mm  5.5193321 m       World      muIoni
-   54  1.0551889 m   1.1714387 m   2.8501362 m   38.022912 MeV 95.477556 eV  1.8414315 mm  5.5211736 m       World      muIoni
-   55  1.0844708 m   1.2053459 m   2.8730692 m   38.007241 MeV 13.789602 keV 5.0329658 cm  5.5715032 m       World      muIoni
-   56  1.1427249 m   1.2728715 m   2.9188488 m    37.98329 MeV 21.861078 keV 10.024509 cm  5.6717483 m       World      muIoni
-   57  1.2037209 m   1.3432307 m   2.9664339 m   37.946277 MeV 19.756236 keV 10.457216 cm  5.7763205 m       World      muIoni
-   58  1.2412545 m   1.3864137 m   2.9956501 m   37.925923 MeV 15.354089 keV 6.4242836 cm  5.8405633 m       World      muIoni
-   59  1.2762154 m   1.4266857 m    3.022762 m   37.910474 MeV 11.930272 keV 5.9826152 cm  5.9003895 m       World      muIoni
-   60  1.2926399 m   1.4457335 m   3.0355546 m   37.902541 MeV 6.1455551 keV 2.8217657 cm  5.9286071 m       World      muIoni
-   61  1.3001525 m   1.4544174 m   3.0413619 m   37.896567 MeV 4.6937116 keV 1.2867447 cm  5.9414746 m       World      muIoni
-   62  1.3050709 m   1.4601075 m   3.0451703 m   37.894685 MeV 588.01903 eV  8.4305194 mm  5.9499051 m       World      muIoni
-   63  1.3244263 m   1.4824968 m   3.0601907 m   37.885225 MeV 9.4600018 keV  3.318916 cm  5.9830942 m       World      muIoni
-   64   1.356574 m    1.519529 m   3.0850332 m   37.870666 MeV 13.214619 keV 5.4972917 cm  6.0380672 m       World      muIoni
-   65  1.3893349 m   1.5575403 m   3.1106034 m   37.854888 MeV 13.369925 keV 5.6320312 cm  6.0943875 m       World      muIoni
-   66  1.4640054 m   1.6446369 m   3.1693778 m   37.819103 MeV 28.208148 keV 12.890332 cm  6.2232908 m       World      muIoni
-   67  1.5529659 m   1.7473632 m   3.2392345 m   37.781224 MeV 36.872064 keV 15.279662 cm  6.3760874 m       World      muIoni
-   68  1.5881545 m    1.788083 m   3.2674478 m   37.766726 MeV 13.449312 keV 6.0764643 cm   6.436852 m       World      muIoni
-   69  1.5887193 m   1.7887397 m   3.2679034 m   37.766705 MeV  20.78411 eV  978.73375 um  6.4378308 m       World      muIoni
-   70  1.6096491 m   1.8130795 m   3.2847862 m   37.755462 MeV  5.248656 keV 3.6269945 cm  6.4741007 m       World      muIoni
-   71   1.616931 m   1.8215629 m   3.2906968 m    37.75249 MeV 1.9155643 keV 1.2646355 cm  6.4867471 m       World      muIoni
-   72  1.6570323 m   1.8682172 m    3.323283 m   37.730204 MeV 19.885643 keV  6.961763 cm  6.5563647 m       World      muIoni
-   73  1.6647094 m   1.8772315 m    3.329517 m   37.720676 MeV 3.1675193 keV 1.3381291 cm   6.569746 m       World      muIoni
-   74  1.6717817 m   1.8855023 m   3.3352432 m   37.714489 MeV 1.5771976 keV 1.2296881 cm  6.5820429 m       World      muIoni
-   75  1.6763613 m   1.8908501 m   3.3389349 m   37.712166 MeV 1.3108795 keV 7.9498053 mm  6.5899927 m       World      muIoni
-   76  1.6798569 m   1.8949373 m   3.3417519 m   37.710022 MeV 2.1449021 keV 6.0712933 mm   6.596064 m       World      muIoni
-   77  1.7042516 m   1.9234714 m   3.3614316 m   37.702694 MeV 7.3275744 keV  4.238617 cm  6.6384502 m       World      muIoni
-   78  1.7616655 m   1.9903785 m   3.4077168 m   37.675328 MeV 18.111089 keV 9.9575557 cm  6.7380257 m       World      muIoni
-   79  1.7630314 m   1.9919679 m   3.4088248 m   37.674838 MeV 490.52523 eV  2.3705503 mm  6.7403963 m       World      muIoni
-   80  1.7876992 m   2.0206642 m   3.4288321 m   37.664718 MeV 7.8886406 keV  4.280507 cm  6.7832013 m       World      muIoni
-   81  1.8043269 m   2.0401547 m   3.4422846 m   37.654904 MeV 4.7049152 keV  2.893671 cm   6.812138 m       World      muIoni
-   82  1.8075396 m   2.0439061 m   3.4448817 m   37.553154 MeV 1.4678932 keV  5.580281 mm  6.8177183 m       World      muIoni
-   83   1.832427 m   2.0728393 m   3.4650417 m    37.53988 MeV 9.6552681 keV 4.3161757 cm  6.8608801 m       World      muIoni
-   84  1.8430805 m   2.0851733 m   3.4736842 m   37.533519 MeV  4.137822 keV 1.8447748 cm  6.8793278 m       World      muIoni
-   85  1.8490883 m   2.0921368 m   3.4785729 m   37.522639 MeV 2.1844697 keV 1.0415498 cm  6.8897433 m       World      muIoni
-   86  1.8727394 m   2.1194633 m   3.4978147 m   37.507544 MeV 13.654828 keV 4.0943425 cm  6.9306867 m       World      muIoni
-   87  1.9302497 m   2.1858309 m   3.5445937 m   37.471175 MeV 23.730317 keV 9.9500859 cm  7.0301876 m       World      muIoni
-   88  1.9620477 m   2.2222843 m   3.5704233 m   37.457083 MeV 12.614267 keV 5.4837409 cm   7.085025 m       World      muIoni
-   89  1.9900525 m   2.2544921 m   3.5931016 m   37.449749 MeV 7.3344415 keV 4.8331381 cm  7.1333564 m       World      muIoni
-   90  2.0227105 m   2.2918705 m   3.6195467 m   37.436904 MeV 10.825375 keV 5.6240929 cm  7.1895973 m       World      muIoni
-   91  2.0236517 m   2.2929464 m   3.6203088 m   37.436529 MeV 375.65354 eV  1.6199305 mm  7.1912173 m       World      muIoni
-   92  2.0329377 m   2.3035619 m   3.6278281 m    37.43205 MeV 2.6510706 keV  1.598311 cm  7.2072004 m       World      muIoni
-   93  2.0485663 m   2.3214588 m   3.6404961 m   37.425265 MeV 5.5579071 keV 2.6926439 cm  7.2341268 m       World      muIoni
-   94  2.0777883 m   2.3548744 m   3.6641274 m   37.410795 MeV 12.832543 keV 5.0288814 cm  7.2844156 m       World      muIoni
-   95  2.0915396 m   2.3705899 m   3.6751841 m   37.403155 MeV 6.3822499 keV  2.362891 cm  7.3080445 m       World      muIoni
-   96  2.1138165 m    2.396028 m   3.6930342 m   37.391225 MeV 10.537698 keV 3.8236007 cm  7.3462805 m       World      muIoni
-   97  2.1402557 m   2.4261275 m   3.7142931 m   37.377949 MeV  11.46451 keV 4.5353659 cm  7.3916342 m       World      muIoni
-   98  2.1405694 m   2.4264834 m   3.7145446 m   37.366454 MeV         0 eV  536.91063 um  7.3921711 m       World      muIoni
-   99  2.1771653 m   2.4681103 m   3.7439237 m   37.354455 MeV 9.9246968 keV 6.2731275 cm  7.4549024 m       World      muIoni
-  100  2.1899995 m   2.4827587 m   3.7542608 m   37.346367 MeV   4.96864 keV 2.2048739 cm  7.4769511 m       World      muIoni
-  101  2.2104367 m   2.5060505 m   3.7706252 m   37.335292 MeV 8.0314175 keV 3.5042603 cm  7.5119937 m       World      muIoni
-  102   2.261555 m   2.5647397 m   3.8118046 m   37.309736 MeV 21.764556 keV 8.8054934 cm  7.6000487 m       World      muIoni
-  103   2.281007 m   2.5881561 m   3.8279235 m   37.303161 MeV 5.3917283 keV 3.4446008 cm  7.6344947 m       World      muIoni
-  104  2.2833873 m   2.5910152 m   3.8298949 m   37.274002 MeV 225.09281 eV  4.2102998 mm   7.638705 m       World      muIoni
-  105  2.2860907 m    2.594276 m   3.8321388 m   37.271098 MeV 1.9028223 keV 4.7933686 mm  7.6434983 m       World      muIoni
-  106    2.29094 m   2.6001326 m   3.8361638 m   37.257901 MeV 2.2196808 keV 8.6032878 mm  7.6521016 m       World      muIoni
-  107  2.3996559 m   2.7313241 m   3.9261937 m   37.214432 MeV 43.468855 keV 19.270744 cm  7.8448091 m       World      muIoni
-  108  2.4217687 m   2.7579069 m   3.9445696 m   37.205911 MeV 7.4690645 keV 3.9157395 cm  7.8839665 m       World      muIoni
-  109  2.4386615 m   2.7782062 m   3.9586296 m   37.198367 MeV 5.6617694 keV 2.9918462 cm  7.9138849 m       World      muIoni
-  110  2.4463401 m   2.7874496 m   3.9650455 m   37.194049 MeV 2.9924858 keV 1.3622217 cm  7.9275071 m       World      muIoni
-  111  2.4470428 m   2.7882961 m   3.9656345 m   37.188878 MeV  221.1798 eV  1.2479097 mm   7.928755 m       World      muIoni
-  112  2.4898455 m   2.8398385 m   4.0015688 m   37.155188 MeV 27.267884 keV  7.602627 cm  8.0047813 m       World      muIoni
-  113  2.5481402 m    2.910251 m   4.0505298 m   37.129772 MeV 25.416259 keV 10.369872 cm    8.10848 m       World      muIoni
-  114  2.5593816 m   2.9238589 m   4.0599191 m     37.1229 MeV 3.2922862 keV 1.9992544 cm  8.1284726 m       World      muIoni
-  115  2.5761024 m   2.9441002 m   4.0738686 m   37.111904 MeV 7.2340675 keV 2.9730248 cm  8.1582028 m       World      muIoni
-  116  2.5772551 m   2.9455009 m   4.0748323 m   37.108553 MeV 665.54539 eV  2.0541018 mm  8.1602569 m       World      muIoni
-  117  2.5842238 m    2.953981 m   4.0806648 m   37.104249 MeV 2.6641272 keV 1.2429532 cm  8.1726865 m       World      muIoni
-  118  2.6139443 m    2.990246 m   4.1055814 m   37.087927 MeV 15.176601 keV 5.3097106 cm  8.2257836 m       World      muIoni
-  119  2.6254185 m   3.0042747 m   4.1152366 m   37.082891 MeV 3.5076261 keV 2.0534943 cm  8.2463185 m       World      muIoni
-  120  2.6265915 m   3.0057143 m   4.1162286 m    37.08277 MeV 120.53684 eV  2.1053407 mm  8.2484239 m       World      muIoni
-  121  2.6305498 m    3.010572 m   4.1195709 m   37.074535 MeV     1.578 keV 7.1018735 mm  8.2555257 m       World      muIoni
-  122  2.6655961 m    3.053623 m   4.1492065 m   37.051948 MeV 12.456482 keV 6.2927827 cm  8.3184536 m       World      muIoni
-  123  2.6715126 m   3.0608866 m   4.1542007 m   37.044463 MeV 3.5930698 keV 1.0616345 cm  8.3290699 m       World      muIoni
-  124  2.6896543 m   3.0831839 m   4.1694948 m   37.037857 MeV 5.3209431 keV   3.25608 cm  8.3616307 m       World      muIoni
-  125  2.7137747 m   3.1128703 m   4.1897828 m   37.027738 MeV 8.8758343 keV 4.3297663 cm  8.4049284 m       World      muIoni
-  126  2.7707145 m   3.1830617 m   4.2374664 m   36.999386 MeV 26.010735 keV 10.218976 cm  8.5071181 m       World      muIoni
-  127  2.7963846 m   3.2146031 m   4.2588131 m    36.98883 MeV 9.1289447 keV 4.5929282 cm  8.5530474 m       World      muIoni
-  128   2.796575 m    3.214838 m    4.258972 m   36.988784 MeV 45.992259 eV  341.62227 um   8.553389 m       World      muIoni
-  129  2.7967438 m   3.2150464 m    4.259113 m   36.987188 MeV 51.403551 eV  302.99985 um   8.553692 m       World      muIoni
-  130  2.8079976 m   3.2289472 m   4.2685129 m   36.981441 MeV 4.5682166 keV 2.0204925 cm   8.573897 m       World      muIoni
-  131  2.8164421 m   3.2394405 m   4.2755856 m   36.977779 MeV  2.182663 keV 1.5213246 cm  8.5891102 m       World      muIoni
-  132   2.818621 m   3.2421429 m   4.2774093 m   36.975959 MeV 816.71851 eV  3.9212272 mm  8.5930314 m       World      muIoni
-  133  2.8190543 m   3.2426806 m   4.2777717 m   36.974021 MeV 838.74985 eV  779.93909 um  8.5938114 m       World      muIoni
-  134  2.9091812 m   3.3545176 m   4.3530854 m   36.937236 MeV 35.604912 keV 16.218135 cm  8.7559927 m       World      muIoni
-  135  2.9298425 m   3.3799595 m   4.3702122 m   36.927764 MeV 8.4720193 keV 3.6979853 cm  8.7929726 m       World      muIoni
-  136  2.9520174 m   3.4072232 m   4.3885957 m   36.918408 MeV 8.0925411 keV 3.9660878 cm  8.8326334 m       World      muIoni
-  137   2.988517 m   3.4522042 m   4.4188773 m   36.868594 MeV 18.310252 keV 6.5364366 cm  8.8979978 m       World      muIoni
-  138  3.0040896 m   3.4714492 m   4.4318341 m   36.859027 MeV 7.9991375 keV 2.7942025 cm  8.9259398 m       World      muIoni
-  139  3.0093568 m    3.477969 m   4.4362213 m   36.848625 MeV  2.838594 keV 9.4603881 mm  8.9354002 m       World      muIoni
-  140  3.1118359 m   3.6045152 m   4.5215694 m   36.807971 MeV 37.246163 keV 18.384937 cm  9.1192496 m       World      muIoni
-  141  3.1332641 m   3.6308261 m   4.5392833 m   36.794566 MeV 9.1449545 keV 3.8278169 cm  9.1575278 m       World      muIoni
-  142  3.2115241 m   3.7272586 m    4.603875 m   36.757203 MeV 35.794226 keV 13.998606 cm  9.2975138 m       World      muIoni
-  143  3.2205933 m   3.7384444 m    4.611264 m   36.752455 MeV 4.7479686 keV 1.6185496 cm  9.3136993 m       World      muIoni
-  144  3.2619163 m   3.7894461 m   4.6449389 m   36.737312 MeV 15.143841 keV 7.3775266 cm  9.3874746 m  OutOfWorld  Transportation
+    2 -5.2126725 cm -7.5438672 cm  2.0010868 m   38.662501 MeV 922.09874 eV  2.3370524 mm  3.6497745 m       World      muIoni
+    3  -3.182796 mm -2.1574402 cm  2.0393205 m   38.638646 MeV 22.616357 keV 8.2211352 cm  3.7319859 m       World      muIoni
+    4  7.8497293 mm -9.4096746 mm  2.0478897 m   38.633087 MeV 4.0819532 keV 1.8523757 cm  3.7505096 m       World      muIoni
+    5  2.5469194 cm  9.9826184 mm  2.0614865 m   38.624641 MeV   7.39319 keV 2.9519142 cm  3.7800288 m       World      muIoni
+    6  2.8336786 cm    1.31327 cm  2.0636938 m   38.617295 MeV 1.4754554 keV 4.7977217 mm  3.7848265 m       World      muIoni
+    7  4.6742634 cm  3.3344147 cm  2.0778407 m   38.609301 MeV 7.0000357 keV 3.0780112 cm  3.8156066 m       World      muIoni
+    8  4.8350357 cm  3.5100574 cm  2.0790732 m   38.604363 MeV 705.17021 eV  2.6812223 mm  3.8182878 m       World      muIoni
+    9  5.5478164 cm  4.2894631 cm  2.0845342 m   38.600397 MeV 2.6966501 keV 1.1890127 cm   3.830178 m       World      muIoni
+   10  7.9141785 cm  6.8741945 cm  2.1026784 m   38.579469 MeV 9.5370805 keV 3.9462224 cm  3.8696402 m       World      muIoni
+   11  10.192218 cm  9.3669546 cm  2.1200881 m   38.567746 MeV 8.5076609 keV 3.7992505 cm  3.9076327 m       World      muIoni
+   12   10.76209 cm  9.9924985 cm   2.124424 m   38.564166 MeV 2.3986979 keV 9.5082034 mm  3.9171409 m       World      muIoni
+   13  12.132884 cm  11.497786 cm  2.1348627 m   38.557759 MeV 6.4065925 keV 2.2879331 cm  3.9400202 m       World      muIoni
+   14  16.790977 cm   16.60987 cm  2.1703653 m   38.542979 MeV 14.780275 keV 7.7740462 cm  4.0177607 m       World      muIoni
+   15  20.392346 cm  20.564254 cm  2.1976604 m   38.531025 MeV  10.17945 keV 6.0047755 cm  4.0778084 m       World      muIoni
+   16   23.85738 cm  24.378092 cm  2.2240881 m   38.521487 MeV 9.5379734 keV 5.7910441 cm  4.1357189 m       World      muIoni
+   17  27.707685 cm  28.619935 cm  2.2535975 m   38.437846 MeV 10.260828 keV 6.4440846 cm  4.2001597 m       World      muIoni
+   18  28.392415 cm  29.378917 cm  2.2588192 m   38.435501 MeV 2.3443735 keV 1.1478544 cm  4.2116383 m       World      muIoni
+   19  28.975841 cm  30.025865 cm  2.2632709 m   38.431933 MeV 2.0058637 keV  9.783206 mm  4.2214215 m       World      muIoni
+   20   29.01425 cm  30.068417 cm  2.2635643 m   38.429794 MeV  144.9746 eV  643.92817 um  4.2220654 m       World      muIoni
+   21  30.491237 cm  31.703777 cm   2.274852 m   38.420707 MeV  4.253507 keV 2.4758902 cm  4.2468243 m       World      muIoni
+   22  31.580747 cm  32.915652 cm  2.2831936 m   38.399415 MeV 4.0006128 keV 1.8307099 cm  4.2651314 m       World      muIoni
+   23  32.342513 cm  33.761291 cm  2.2890054 m   38.394826 MeV 2.2406177 keV 1.2779513 cm  4.2779109 m       World      muIoni
+   24  36.158491 cm  38.005411 cm  2.3181741 m   38.383023 MeV 10.442863 keV 6.4095634 cm  4.3420066 m       World      muIoni
+   25  36.502511 cm  38.388849 cm   2.320799 m   38.379876 MeV 2.0419248 keV 5.7816597 mm  4.3477882 m       World      muIoni
+   26  42.434225 cm  44.995711 cm  2.3659982 m   38.350429 MeV 25.891542 keV 9.9632337 cm  4.4474205 m       World      muIoni
+   27  46.009551 cm  48.997783 cm  2.3931201 m   38.324958 MeV 16.948501 keV  6.012956 cm  4.5075501 m       World      muIoni
+   28  46.296421 cm  49.319305 cm  2.3952916 m   38.322252 MeV 1.1192874 keV 4.8251844 mm  4.5123753 m       World      muIoni
+   29  47.611999 cm  50.792792 cm   2.405245 m   38.315609 MeV 5.1393473 keV 2.2119273 cm  4.5344946 m       World      muIoni
+   30  59.044054 cm  63.627012 cm  2.4918642 m   38.265614 MeV 47.713133 keV  19.24687 cm  4.7269633 m       World      muIoni
+   31  61.169921 cm  66.045804 cm  2.5080192 m   38.254169 MeV 10.397252 keV 3.6027427 cm  4.7629907 m       World      muIoni
+   32  61.280069 cm  66.171457 cm  2.5088577 m   38.252857 MeV 98.367418 eV  1.8695195 mm  4.7648602 m       World      muIoni
+   33  61.530622 cm  66.457471 cm  2.5107612 m   38.247823 MeV 1.2050969 keV 4.2522321 mm  4.7691124 m       World      muIoni
+   34  72.916662 cm  79.460253 cm  2.5971219 m   38.195055 MeV 47.205675 keV 19.320979 cm  4.9623222 m       World      muIoni
+   35  76.015985 cm   83.02209 cm  2.6210517 m   38.179728 MeV 13.957662 keV 5.2932881 cm  5.0152551 m       World      muIoni
+   36  76.320787 cm  83.373125 cm  2.6234285 m   38.177694 MeV 686.33548 eV  5.2213431 mm  5.0204765 m       World      muIoni
+   37  77.427897 cm  84.646798 cm  2.6320622 m    38.17237 MeV 4.1816608 keV 1.8956111 cm  5.0394326 m       World      muIoni
+   38  82.533148 cm  90.521648 cm   2.671839 m   38.148585 MeV 22.628936 keV 8.7406915 cm  5.1268395 m       World      muIoni
+   39   83.11335 cm  91.194404 cm   2.676363 m   38.147261 MeV 1.3246222 keV 9.9694928 mm   5.136809 m       World      muIoni
+   40  83.545183 cm    91.6958 cm  2.6797254 m   38.143538 MeV 2.5643958 keV 7.4224845 mm  5.1442315 m       World      muIoni
+   41  84.317623 cm  92.592941 cm  2.6857372 m   38.141655 MeV 1.8830604 keV 1.3277605 cm  5.1575091 m       World      muIoni
+   42  85.385154 cm  93.831667 cm  2.6940403 m    38.13598 MeV 2.6805916 keV  1.833978 cm  5.1758488 m       World      muIoni
+   43  87.563097 cm  96.365632 cm  2.7109574 m   38.121759 MeV 8.0178023 keV 3.7451726 cm  5.2133006 m       World      muIoni
+   44  88.335308 cm  97.259931 cm  2.7169472 m   38.117192 MeV 2.6393945 keV 1.3247132 cm  5.2265477 m       World      muIoni
+   45  92.903174 cm  1.0254951 m   2.7522931 m   38.097218 MeV 18.937265 keV 7.8318976 cm  5.3048667 m       World      muIoni
+   46  93.116877 cm  1.0279694 m   2.7539401 m   38.085443 MeV 3.4389745 keV 3.6608448 mm  5.3085275 m       World      muIoni
+   47  93.190516 cm  1.0288205 m   2.7545069 m   38.085312 MeV 130.80779 eV  1.2600567 mm  5.3097876 m       World      muIoni
+   48   93.53107 cm   1.032756 m   2.7571296 m   38.079377 MeV 3.3152293 keV 5.8279572 mm  5.3156155 m       World      muIoni
+   49  96.426252 cm  1.0662455 m   2.7794566 m   38.066454 MeV 9.9502522 keV 4.9580793 cm  5.3651963 m       World      muIoni
+   50    97.5156 cm  1.0788418 m   2.7879054 m   38.057683 MeV 2.9446087 keV 1.8673946 cm  5.3838703 m       World      muIoni
+   51  1.0211106 m    1.131919 m   2.8235681 m     38.0411 MeV 14.566551 keV 7.8745582 cm  5.4626159 m       World      muIoni
+   52  1.0487854 m   1.1640158 m   2.8451524 m   38.032063 MeV 7.9829849 keV 4.7560378 cm  5.5101762 m       World      muIoni
+   53   1.054123 m   1.1702035 m   2.8493069 m     38.0247 MeV 3.9150571 keV 9.1671868 mm  5.5193434 m       World      muIoni
+   54  1.0551955 m   1.1714463 m   2.8501413 m    38.02291 MeV 95.477668 eV  1.8414425 mm  5.5211849 m       World      muIoni
+   55  1.0844776 m   1.2053536 m   2.8730744 m   38.007239 MeV 13.789669 keV 5.0329959 cm  5.5715148 m       World      muIoni
+   56   1.142732 m   1.2728797 m   2.9188543 m   37.983288 MeV 21.861198 keV 10.024568 cm  5.6717605 m       World      muIoni
+   57  1.2037285 m   1.3432393 m   2.9664397 m   37.946275 MeV 19.756359 keV 10.457278 cm  5.7763333 m       World      muIoni
+   58  1.2412623 m   1.3864226 m    2.995656 m   37.925921 MeV 15.354168 keV  6.424322 cm  5.8405765 m       World      muIoni
+   59  1.2762233 m   1.4266949 m   3.0227681 m   37.910471 MeV 11.930342 keV 5.9826509 cm   5.900403 m       World      muIoni
+   60   1.292648 m   1.4457428 m   3.0355608 m   37.902538 MeV 6.1455894 keV 2.8217826 cm  5.9286208 m       World      muIoni
+   61  1.3001605 m   1.4544267 m   3.0413681 m   37.896564 MeV 4.6937239 keV 1.2867524 cm  5.9414884 m       World      muIoni
+   62   1.305079 m   1.4601169 m   3.0451766 m   37.894682 MeV 588.02233 eV  8.4305697 mm  5.9499189 m       World      muIoni
+   63  1.3244346 m   1.4825062 m    3.060197 m   37.885222 MeV 9.4600438 keV 3.3189358 cm  5.9831083 m       World      muIoni
+   64  1.3565824 m   1.5195387 m   3.0850396 m   37.870664 MeV 13.214694 keV 5.4973245 cm  6.0380815 m       World      muIoni
+   65  1.3893435 m   1.5575502 m     3.11061 m   37.854885 MeV 13.369994 keV 5.6320647 cm  6.0944022 m       World      muIoni
+   66  1.4640144 m   1.6446474 m   3.1693848 m     37.8191 MeV 28.208305 keV 12.890408 cm  6.2233063 m       World      muIoni
+   67  1.5529755 m   1.7473743 m   3.2392419 m   37.781221 MeV 36.872252 keV 15.279753 cm  6.3761038 m       World      muIoni
+   68  1.5881643 m   1.7880943 m   3.2674554 m   37.766722 MeV 13.449379 keV 6.0765003 cm  6.4368688 m       World      muIoni
+   69  1.5887291 m   1.7887511 m    3.267911 m   37.766702 MeV  20.78411 eV  978.73956 um  6.4378475 m       World      muIoni
+   70   1.609659 m   1.8130909 m   3.2847939 m   37.755458 MeV 5.2486892 keV 3.6270161 cm  6.4741177 m       World      muIoni
+   71  1.6169409 m   1.8215744 m   3.2907045 m   37.752486 MeV 1.9155725 keV  1.264643 cm  6.4867641 m       World      muIoni
+   72  1.6570425 m    1.868229 m   3.3232909 m     37.7302 MeV 19.885739 keV 6.9618043 cm  6.5563822 m       World      muIoni
+   73  1.6647196 m   1.8772433 m    3.329525 m   37.720672 MeV 3.1675283 keV  1.338137 cm  6.5697635 m       World      muIoni
+   74  1.6717919 m   1.8855142 m   3.3352512 m   37.714485 MeV 1.5772055 keV 1.2296954 cm  6.5820605 m       World      muIoni
+   75  1.6763715 m    1.890862 m   3.3389429 m   37.712163 MeV 1.3108851 keV 7.9498524 mm  6.5900104 m       World      muIoni
+   76  1.6798672 m   1.8949493 m   3.3417599 m   37.710018 MeV 2.1449078 keV 6.0713293 mm  6.5960817 m       World      muIoni
+   77   1.704262 m   1.9234835 m   3.3614398 m    37.70269 MeV 7.3276222 keV 4.2386422 cm  6.6384681 m       World      muIoni
+   78  1.7616763 m    1.990391 m   3.4077252 m   37.675324 MeV 18.111199 keV 9.9576147 cm  6.7380443 m       World      muIoni
+   79  1.7630422 m   1.9919804 m   3.4088332 m   37.674834 MeV 490.52564 eV  2.3705643 mm  6.7404148 m       World      muIoni
+   80  1.7877101 m   2.0206769 m   3.4288407 m   37.664714 MeV 7.8886843 keV 4.2805323 cm  6.7832201 m       World      muIoni
+   81  1.8043379 m   2.0401675 m   3.4422933 m     37.6549 MeV 4.7049451 keV 2.8936882 cm   6.812157 m       World      muIoni
+   82  1.8075507 m    2.043919 m   3.4448903 m    37.55315 MeV 1.4678983 keV  5.580314 mm  6.8177373 m       World      muIoni
+   83  1.8324382 m   2.0728523 m   3.4650505 m   37.539876 MeV 9.6553155 keV 4.3162012 cm  6.8608993 m       World      muIoni
+   84  1.8430917 m   2.0851864 m    3.473693 m   37.533515 MeV 4.1378356 keV 1.8447857 cm  6.8793472 m       World      muIoni
+   85  1.8490996 m   2.0921499 m   3.4785818 m   37.522636 MeV 2.1844777 keV 1.0415559 cm  6.8897628 m       World      muIoni
+   86  1.8727508 m   2.1194766 m   3.4978236 m    37.50754 MeV 13.654882 keV 4.0943667 cm  6.9307064 m       World      muIoni
+   87  1.9302614 m   2.1858446 m   3.5446029 m   37.471171 MeV 23.730441 keV 9.9501446 cm  7.0302079 m       World      muIoni
+   88  1.9620596 m   2.2222982 m   3.5704327 m   37.457088 MeV 12.614337 keV 5.4837733 cm  7.0850456 m       World      muIoni
+   89  1.9746327 m    2.236762 m   3.5806191 m   37.449433 MeV 4.9569153 keV 2.1703658 cm  7.1067493 m       World      muIoni
+   90  1.9921353 m   2.2569412 m   3.5947673 m   37.429023 MeV 8.3345208 keV 3.0227622 cm  7.1369769 m       World      muIoni
+   91  2.1107127 m    2.392623 m   3.6901428 m   37.380388 MeV  43.36861 keV 20.388023 cm  7.3408571 m       World      muIoni
+   92  2.1200606 m    2.403183 m   3.6976288 m   37.375909 MeV 2.6506705 keV 1.5966809 cm  7.3568239 m       World      muIoni
+   93  2.1357936 m   2.4209865 m   3.7102407 m   37.369125 MeV 5.5568748 keV 2.6898972 cm  7.3837229 m       World      muIoni
+   94  2.1652105 m   2.4542274 m   3.7337671 m   37.354657 MeV 12.830692 keV 5.0237504 cm  7.4339604 m       World      muIoni
+   95  2.1790535 m   2.4698606 m   3.7447745 m   37.347018 MeV 6.3812554 keV 2.3604789 cm  7.4575652 m       World      muIoni
+   96  2.2014786 m   2.4951653 m   3.7625449 m    37.33509 MeV    10.536 keV 3.8196965 cm  7.4957622 m       World      muIoni
+   97  2.2280933 m   2.5251067 m   3.7837091 m   37.321816 MeV 11.462609 keV  4.530733 cm  7.5410695 m       World      muIoni
+   98   2.228409 m   2.5254607 m   3.7839595 m   37.310321 MeV         0 eV  536.36193 um  7.5416058 m       World      muIoni
+   99  2.2652476 m   2.5668686 m   3.8132077 m   37.298324 MeV 9.9225198 keV 6.2667139 cm   7.604273 m       World      muIoni
+  100  2.2781672 m   2.5814402 m   3.8234987 m   37.290237 MeV 4.9677769 keV 2.2026188 cm  7.6262992 m       World      muIoni
+  101  2.2987401 m   2.6046096 m   3.8397901 m   37.279163 MeV 8.0299691 keV 3.5006752 cm  7.6613059 m       World      muIoni
+  102  2.3502003 m   2.6629927 m   3.8807856 m   37.253611 MeV 21.761225 keV 8.7964812 cm  7.7492707 m       World      muIoni
+  103   2.369789 m   2.6862924 m   3.8968325 m   37.247037 MeV 5.3905593 keV 3.4410722 cm  7.7836815 m       World      muIoni
+  104  2.3721859 m   2.6891372 m   3.8987952 m    37.21788 MeV 225.09281 eV  4.2059859 mm  7.7878874 m       World      muIoni
+  105  2.3749083 m   2.6923818 m   3.9010291 m   37.214976 MeV 1.9027214 keV 4.7884522 mm  7.7926759 m       World      muIoni
+  106  2.3797918 m   2.6982093 m   3.9050361 m   37.201779 MeV 2.2194458 keV 8.5944628 mm  7.8012704 m       World      muIoni
+  107  2.4892727 m   2.8287483 m   3.9946634 m   37.158318 MeV 43.461362 keV 19.250967 cm    7.99378 m       World      muIoni
+  108  2.5115405 m   2.8551986 m   4.0129575 m   37.149798 MeV 7.4676511 keV 3.9117151 cm  8.0328972 m       World      muIoni
+  109  2.5285517 m   2.8753966 m   4.0269551 m   37.142255 MeV 5.6607016 keV 2.9887704 cm  8.0627849 m       World      muIoni
+  110  2.5362843 m   2.8845939 m   4.0333426 m   37.137938 MeV 2.9920873 keV 1.3608209 cm  8.0763931 m       World      muIoni
+  111  2.5369919 m   2.8854362 m    4.033929 m   37.132767 MeV 221.16961 eV  1.2466263 mm  8.0776397 m       World      muIoni
+  112  2.5800956 m   2.9367223 m   4.0697047 m   37.099081 MeV 27.263641 keV 7.5948064 cm  8.1535878 m       World      muIoni
+  113  2.6388012 m   3.0067854 m   4.1184492 m   37.073669 MeV 25.411898 keV 10.359193 cm  8.2571797 m       World      muIoni
+  114   2.650122 m   3.0203258 m   4.1277968 m   37.066798 MeV 3.2917852 keV 1.9971937 cm  8.2771516 m       World      muIoni
+  115  2.6669608 m   3.0404667 m   4.1416842 m   37.055804 MeV 7.2326516 keV 2.9699597 cm  8.3068512 m       World      muIoni
+  116  2.6681217 m   3.0418605 m   4.1426436 m   37.052452 MeV 665.53951 eV  2.0519832 mm  8.3089032 m       World      muIoni
+  117  2.6751398 m   3.0502988 m     4.14845 m   37.048149 MeV 2.6637976 keV 1.2416711 cm  8.3213199 m       World      muIoni
+  118  2.7050718 m   3.0863853 m   4.1732558 m   37.031829 MeV 15.174249 keV 5.3042328 cm  8.3743623 m       World      muIoni
+  119  2.7166278 m   3.1003452 m    4.182868 m   37.026794 MeV 3.5070726 keV 2.0513747 cm   8.394876 m       World      muIoni
+  120  2.7178092 m   3.1017777 m   4.1838556 m   37.026673 MeV 120.53684 eV  2.1031671 mm  8.3969792 m       World      muIoni
+  121  2.7217958 m   3.1066117 m   4.1871831 m   37.018438 MeV 1.5778294 keV 7.0945414 mm  8.4040737 m       World      muIoni
+  122  2.7570933 m   3.1494523 m   4.2166872 m   36.995853 MeV 12.454175 keV  6.286284 cm  8.4669366 m       World      muIoni
+  123  2.7630522 m   3.1566803 m   4.2216592 m   36.988368 MeV 3.5928197 keV 1.0605373 cm  8.4775419 m       World      muIoni
+  124  2.7813239 m   3.1788686 m   4.2368852 m   36.981764 MeV 5.3198859 keV 3.2527139 cm  8.5100691 m       World      muIoni
+  125  2.8056174 m   3.2084101 m   4.2570826 m   36.971647 MeV 8.8741605 keV 4.3252892 cm   8.553322 m       World      muIoni
+  126  2.8629661 m   3.2782589 m   4.3045523 m   36.943299 MeV 26.006341 keV 10.208406 cm   8.655406 m       World      muIoni
+  127  2.8888199 m   3.3096457 m   4.3258028 m   36.932745 MeV  9.127085 keV 4.5881728 cm  8.7012878 m       World      muIoni
+  128  2.8890116 m   3.3098795 m    4.325961 m   36.932699 MeV 45.990456 eV  341.26844 um   8.701629 m       World      muIoni
+  129  2.8891817 m   3.3100868 m   4.3261014 m   36.931103 MeV 51.403551 eV  302.68602 um  8.7019317 m       World      muIoni
+  130  2.9005164 m   3.3239199 m   4.3354589 m   36.925356 MeV 4.5675754 keV 2.0183997 cm  8.7221157 m       World      muIoni
+  131   2.909022 m   3.3343623 m   4.3424998 m   36.921695 MeV 2.1823236 keV 1.5197485 cm  8.7373132 m       World      muIoni
+  132  2.9112166 m   3.3370516 m   4.3443152 m   36.919875 MeV 816.70508 eV  3.9171643 mm  8.7412304 m       World      muIoni
+  133  2.9116531 m   3.3375867 m    4.344676 m   36.917936 MeV 838.74578 eV  779.13091 um  8.7420095 m       World      muIoni
+  134  3.0024311 m   3.4488806 m   4.4196498 m   36.881158 MeV 35.598179 keV 16.201328 cm  8.9040228 m       World      muIoni
+  135  3.0232404 m   3.4741979 m    4.436699 m   36.871687 MeV 8.4704719 keV 3.6941485 cm  8.9409643 m       World      muIoni
+  136  3.0455738 m   3.5013279 m   4.4549993 m   36.862333 MeV 8.0910043 keV 3.9619715 cm   8.980584 m       World      muIoni
+  137  3.0823351 m   3.5460888 m   4.4851438 m   36.812524 MeV   18.3072 keV 6.5296505 cm  9.0458805 m       World      muIoni
+  138  3.0980196 m   3.5652399 m    4.498042 m   36.802958 MeV 7.9979828 keV 2.7912965 cm  9.0737934 m       World      muIoni
+  139  3.1033247 m    3.571728 m   4.5024093 m   36.792558 MeV 2.8383799 keV 9.4505462 mm   9.083244 m       World      muIoni
+  140    3.20654 m   3.6976561 m   4.5873717 m    36.75191 MeV 37.238966 keV 18.365803 cm   9.266902 m       World      muIoni
+  141  3.2281211 m   3.7238378 m   4.6050052 m   36.738507 MeV 9.1433929 keV 3.8238278 cm  9.3051403 m       World      muIoni
+  142  3.2736727 m   3.7792945 m   4.6421639 m     36.7169 MeV 21.606609 keV 8.0815839 cm  9.3859561 m  OutOfWorld  Transportation
 Track (trackID 18, parentID 3) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-13.960582779397(mm),-1.0178572926105(mm),78.772501540438(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-12.243830531153(mm),-1.8022040151929(mm),79.075211280995(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10672,79 +10671,7 @@ Terminate current event processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-14.684482(mm),0.51581332(mm),78.644859(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-12.47547(mm),0.27617877(mm),79.034367(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-12.829201(mm),2.4595574(mm),78.971995(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-14.827043(mm),1.5813565(mm),78.619721(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-17.330603(mm),-0.29639154(mm),78.178276(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-13.271362(mm),-0.12101314(mm),78.89403(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-15.873847(mm),0.14452737(mm),78.435141(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-11.827088(mm),2.2563026(mm),79.148694(mm),0(nsec))
-1 primaries are passed from G4EventTransformer.
-!!!!!!! Now start processing an event !!!!!!!
-Track (trackID 1, parentID 0) is processed with stopping code 2
-NULL returned from G4StackManager.
-Terminate current event processing.
-=====================================
-  G4EventManager::ProcessOneEvent()  
-=====================================
-G4PrimaryTransformer::PrimaryVertex (-15.025506(mm),0.82151884(mm),78.584727(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-15.77514(mm),2.8680917(mm),78.452546(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -10966,32 +10893,6 @@ G4PrimaryTransformer::PrimaryVertex (-13.349047(mm),0.053682181(mm),78.880332(mm
 Track (trackID 1, parentID 0) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
-#
-#/event/setverbose 1
-#/run/printProgress 1
-#
-#/gun/xvertex 0. cm
-#/gun/yvertex 0. cm
-#/gun/zvertex 0. cm
-#
-/field/SetCaptureB1 2. tesla
-/run/reinitializeGeometry
-/field/SetCaptureB2 4.0 tesla
-/run/reinitializeGeometry
-/field/SetTransferB 4.0 tesla
-/run/reinitializeGeometry
-#
-/run/beamOn 10
-G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
-G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
-G4NistMaterialBuilder::FindOrBuildMaterial G4_Pb
-G4NistMaterialBuilder::FindOrBuildMaterial G4_W
-### Run 1 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 159
- Current couple of seeds = 493580339, 718449546
-----------------------------------------
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
@@ -11064,6 +10965,32 @@ G4PrimaryTransformer::PrimaryVertex (-12.568775(mm),-2.6880364(mm),79.017915(mm)
 Track (trackID 1, parentID 0) is processed with stopping code 2
 NULL returned from G4StackManager.
 Terminate current event processing.
+#
+#/event/setverbose 1
+#/run/printProgress 1
+#
+#/gun/xvertex 0. cm
+#/gun/yvertex 0. cm
+#/gun/zvertex 0. cm
+#
+/field/SetCaptureB1 2. tesla
+/run/reinitializeGeometry
+/field/SetCaptureB2 4.0 tesla
+/run/reinitializeGeometry
+/field/SetTransferB 4.0 tesla
+/run/reinitializeGeometry
+#
+/run/beamOn 10
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
+G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
+G4NistMaterialBuilder::FindOrBuildMaterial G4_Pb
+G4NistMaterialBuilder::FindOrBuildMaterial G4_W
+### Run 1 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 159
+ Current couple of seeds = 410479912, 913535478
+----------------------------------------
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
@@ -11077,6 +11004,78 @@ Terminate current event processing.
   G4EventManager::ProcessOneEvent()  
 =====================================
 G4PrimaryTransformer::PrimaryVertex (-10.372883(mm),-0.18229139(mm),79.40511(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-12.543495(mm),2.3542306(mm),79.022372(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-13.359532(mm),0.1128721(mm),78.878483(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-14.552909(mm),-2.3949384(mm),78.668058(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-14.840369(mm),2.453485(mm),78.617371(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-11.715979(mm),-0.32560442(mm),79.168286(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-15.16392(mm),3.387398(mm),78.560321(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-12.964465(mm),-0.26390496(mm),78.948144(mm),0(nsec))
+1 primaries are passed from G4EventTransformer.
+!!!!!!! Now start processing an event !!!!!!!
+Track (trackID 1, parentID 0) is processed with stopping code 2
+NULL returned from G4StackManager.
+Terminate current event processing.
+=====================================
+  G4EventManager::ProcessOneEvent()  
+=====================================
+G4PrimaryTransformer::PrimaryVertex (-10.390675(mm),1.6415892(mm),79.401973(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11099,12 +11098,12 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_W
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 159
- Current couple of seeds = 1861344974, 1494188903
+ Current couple of seeds = 1843193648, 944827155
 ----------------------------------------
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-12.543495(mm),2.3542306(mm),79.022372(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-10.673839(mm),-2.0755643(mm),79.352043(mm),0(nsec))
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2
@@ -11113,5 +11112,5 @@ Terminate current event processing.
 Graphics systems deleted.
 Visualization Manager deleting...
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Maximum number of tracks in the urgent stack : 576460752303423487
+ Maximum number of tracks in the urgent stack : 1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

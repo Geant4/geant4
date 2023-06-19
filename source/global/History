@@ -6,7 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2022-12-20 Vladimir Ivanchenko (global-V11-00-34)
+## 2023-06-15 Gabriele Cosmo (global-V11-00-35)
+- Updated tag IDs for geant4-11-01-patch-02.
+
+## 2023-04-06 Gabriele Cosmo
+- Fixed typo in G4Backtrace class description.
+  Reported in [GitHub PR#57](https://github.com/Geant4/geant4/pull/57).
+
+## 2023-02-10 Gabriele Cosmo (global-V11-00-34)
+- Updated tag IDs for geant4-11-01-patch-01.
+
+## 2022-12-20 Vladimir Ivanchenko
 - G4DataVector: simplified inline methods in order to remove compilation
   warnings at some CMSSW platforms
 

@@ -126,6 +126,7 @@ private:
   G4ParticleChangeForLoss*    fParticleChange = nullptr;
   G4EmCorrections*            corr = nullptr;
 
+  G4double limitRadCorrection;
   G4double limitKinEnergy;
   G4double logLimitKinEnergy;
   G4double mass = 1.0;

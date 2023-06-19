@@ -720,7 +720,14 @@ void G4GDMLWriteSolids::TessellatedWrite(
       }
       else  // Vertex not found
       {
-        vertexMap.insert(std::make_pair(vertex, ref));  // Cache vertex and ...
+        if ( ! vertexMap.insert(std::make_pair(vertex, ref)).second )
+        {
+          G4ExceptionDescription description;
+          description << "Failed to insert [vertex, ref] " << vertex << ", "
+                      << ref << " in map.";
+          G4Exception("G4GDMLWriteSolids::TessellatedWrite", "WriteError",
+                       JustWarning, description);
+        }
         AddPosition(ref, vertex);  // ... add it to define section!
         ++NumVertex;
       }

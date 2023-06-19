@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -539,34 +539,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ... create file : SolidTargetCyclotron.root - done
 ... open analysis file : SolidTargetCyclotron.root - done
 ... open analysis file : SolidTargetCyclotron.root - done
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: protonInelastic / ParticleHPInelastic
- Primary: proton (2212),  E= 952.47, target nucleus (78, 195)
- E(initial - final) = -359393 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: protonInelastic / ParticleHPInelastic
- Primary: proton (2212),  E= 952.47, target nucleus (78, 195)
- E(initial - final) = -360335 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=21.540000s Real=21.679623s Sys=0.000000s
+  User=21.280000s Real=21.426749s Sys=0.000000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.
@@ -582,10 +558,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 12
+Total navigation history collections cleaned: 11
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0163 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.396 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00192 MB
@@ -594,7 +570,7 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.258 MB
 Pool ID '7G4Track', size : 0.792 MB
-Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Pool ID '10G4Fragment', size : 0.000961 MB

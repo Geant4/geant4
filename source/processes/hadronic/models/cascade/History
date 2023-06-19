@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-04-17 Alberto Ribon (hadr-casc-V11-00-06)
+- G4BigBanger : added protection in the method  G4BigBanger::generateBangInSCM
+  to avoid very rare cases of unphysical negative energy of one of the
+  secondaries produced by the Bertini model.
+  (Note: this problem was never reproduced in our tests, but was reported by
+         ATLAS with Geant4 10.6; the secondaries with negative - both total
+         and kinetic - energy were always neutrons, produced by the internal
+         Bertini nuclear de-excitation, after the intra-nuclear cascade.
+         Many thanks to Mihaly Novak for providing detailed debugging
+         information!)
+
 ## 2022-11-26 Gabriele Cosmo (hadr-casc-V11-00-05)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

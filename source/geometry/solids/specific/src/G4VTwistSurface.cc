@@ -715,7 +715,7 @@ G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
 
    G4ThreeVector d;
    G4ThreeVector x0;
-   G4int         boundarytype;
+   G4int         boundarytype = 0;
    G4bool        found = false;
    
    for (G4int i=0; i<4; ++i)

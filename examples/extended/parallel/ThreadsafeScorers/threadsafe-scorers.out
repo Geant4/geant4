@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -296,13 +296,13 @@ hIoni:  for proton  XStype:3  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -382,13 +382,13 @@ hIoni:  for anti_proton  XStype:3  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -414,13 +414,13 @@ hIoni:  for kaon+  XStype:3  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -446,13 +446,13 @@ hIoni:  for kaon-  XStype:3  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -474,17 +474,17 @@ muIoni:  for mu+  XStype:3  SubType=2
       StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
-        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV  deltaVI
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -506,17 +506,17 @@ muIoni:  for mu-  XStype:3  SubType=2
       StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
-        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV  deltaVI
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -556,13 +556,13 @@ hIoni:  for pi+  XStype:3  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -588,13 +588,13 @@ hIoni:  for pi-  XStype:3  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
@@ -1031,7 +1031,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=21.500000s Real=22.763042s Sys=1.020000s
+  User=21.670000s Real=23.101044s Sys=1.140000s
  ###### EndOfTSRunAction ###### 
 ============================================================
  opened file mfd_tl_EnergyDeposit.out for output
@@ -1264,13 +1264,13 @@ Run Summary
            100    330841 [sigma: 453.426 | error: 0.0335709 | coeff: 0.0335709 | eff: 1 | fom: 40.3322 | r2int: 0.00112512 | r2eff: 0 | hits: 600 ] keV
            101    363258 [sigma: 466.015 | error: 0.0341351 | coeff: 0.0341351 | eff: 1 | fom: 39.0099 | r2int: 0.00116356 | r2eff: 0 | hits: 708 ] keV
            102    368196 [sigma: 522.586 | error: 0.0380312 | coeff: 0.0380312 | eff: 1 | fom: 31.4265 | r2int: 0.00144436 | r2eff: 0 | hits: 718 ] keV
-           103    344546 [sigma: 489.12 | error: 0.037046 | coeff: 0.037046 | eff: 1 | fom: 33.1203 | r2int: 0.00137039 | r2eff: 0 | hits: 681 ] keV
-           104    322247 [sigma: 480.52 | error: 0.0362813 | coeff: 0.0362813 | eff: 1 | fom: 34.5311 | r2int: 0.00131411 | r2eff: 0 | hits: 592 ] keV
-           105    390380 [sigma: 486.365 | error: 0.0336156 | coeff: 0.0336156 | eff: 1 | fom: 40.225 | r2int: 0.00112846 | r2eff: 0 | hits: 728 ] keV
-           106    358804 [sigma: 464.494 | error: 0.0372511 | coeff: 0.0372511 | eff: 1 | fom: 32.7566 | r2int: 0.00138597 | r2eff: 0 | hits: 828 ] keV
-           107    388819 [sigma: 482.872 | error: 0.0365674 | coeff: 0.0365674 | eff: 1 | fom: 33.993 | r2int: 0.00133563 | r2eff: 0 | hits: 867 ] keV
-           108    423485 [sigma: 515.66 | error: 0.035957 | coeff: 0.035957 | eff: 1 | fom: 35.1568 | r2int: 0.00129143 | r2eff: 0 | hits: 872 ] keV
-           109    348715 [sigma: 493.448 | error: 0.0367913 | coeff: 0.0367913 | eff: 1 | fom: 33.5806 | r2int: 0.00135159 | r2eff: 0 | hits: 676 ] keV
+           103    344546 [sigma: 489.12 | error: 0.037046 | coeff: 0.037046 | eff: 1 | fom: 31.6803 | r2int: 0.00137039 | r2eff: 0 | hits: 681 ] keV
+           104    322247 [sigma: 480.52 | error: 0.0362813 | coeff: 0.0362813 | eff: 1 | fom: 33.0298 | r2int: 0.00131411 | r2eff: 0 | hits: 592 ] keV
+           105    390380 [sigma: 486.365 | error: 0.0336156 | coeff: 0.0336156 | eff: 1 | fom: 38.4761 | r2int: 0.00112846 | r2eff: 0 | hits: 728 ] keV
+           106    358804 [sigma: 464.494 | error: 0.0372511 | coeff: 0.0372511 | eff: 1 | fom: 31.3324 | r2int: 0.00138597 | r2eff: 0 | hits: 828 ] keV
+           107    388819 [sigma: 482.872 | error: 0.0365674 | coeff: 0.0365674 | eff: 1 | fom: 32.5151 | r2int: 0.00133563 | r2eff: 0 | hits: 867 ] keV
+           108    423485 [sigma: 515.66 | error: 0.035957 | coeff: 0.035957 | eff: 1 | fom: 33.6283 | r2int: 0.00129143 | r2eff: 0 | hits: 872 ] keV
+           109    348715 [sigma: 493.448 | error: 0.0367913 | coeff: 0.0367913 | eff: 1 | fom: 32.1205 | r2int: 0.00135159 | r2eff: 0 | hits: 676 ] keV
            110    347577 [sigma: 484.543 | error: 0.0369096 | coeff: 0.0369096 | eff: 1 | fom: 31.9148 | r2int: 0.00136038 | r2eff: 0 | hits: 701 ] keV
            111    401610 [sigma: 504.7 | error: 0.0364657 | coeff: 0.0364657 | eff: 1 | fom: 32.6966 | r2int: 0.00132817 | r2eff: 0 | hits: 842 ] keV
            112    396433 [sigma: 482.746 | error: 0.0366533 | coeff: 0.0366533 | eff: 1 | fom: 32.3629 | r2int: 0.00134198 | r2eff: 0 | hits: 906 ] keV
@@ -1648,17 +1648,17 @@ Run Summary
             99    3187 [sigma: 26.0412 | error: 0.101729 | coeff: 0.101729 | eff: 1 | fom: 4.20129 | r2int: 0.010282 | r2eff: 0 | hits: 155 ] steps
            100    14516 [sigma: 27.3208 | error: 0.0480953 | coeff: 0.0480953 | eff: 1 | fom: 18.796 | r2int: 0.00230962 | r2eff: 0 | hits: 653 ] steps
            101    18071 [sigma: 28.3232 | error: 0.0436888 | coeff: 0.0436888 | eff: 1 | fom: 22.7789 | r2int: 0.00190625 | r2eff: 0 | hits: 777 ] steps
-           102    19715 [sigma: 31.6306 | error: 0.045066 | coeff: 0.045066 | eff: 1 | fom: 21.4079 | r2int: 0.00202837 | r2eff: 0 | hits: 789 ] steps
+           102    19715 [sigma: 31.6306 | error: 0.045066 | coeff: 0.045066 | eff: 1 | fom: 20.5159 | r2int: 0.00202837 | r2eff: 0 | hits: 789 ] steps
            103    19248 [sigma: 30.9783 | error: 0.0441641 | coeff: 0.0441641 | eff: 1 | fom: 21.3624 | r2int: 0.00194787 | r2eff: 0 | hits: 753 ] steps
            104    14509 [sigma: 27.161 | error: 0.0474326 | coeff: 0.0474326 | eff: 1 | fom: 18.5198 | r2int: 0.00224634 | r2eff: 0 | hits: 642 ] steps
            105    19554 [sigma: 30.3887 | error: 0.0441209 | coeff: 0.0441209 | eff: 1 | fom: 21.4043 | r2int: 0.00194423 | r2eff: 0 | hits: 806 ] steps
            106    22913 [sigma: 32.7438 | error: 0.0432745 | coeff: 0.0432745 | eff: 1 | fom: 22.2497 | r2int: 0.00187064 | r2eff: 0 | hits: 917 ] steps
-           107    25372 [sigma: 35.7507 | error: 0.0443351 | coeff: 0.0443351 | eff: 1 | fom: 21.1979 | r2int: 0.00196362 | r2eff: 0 | hits: 990 ] steps
-           108    25207 [sigma: 31.708 | error: 0.0392378 | coeff: 0.0392378 | eff: 1 | fom: 27.0632 | r2int: 0.00153802 | r2eff: 0 | hits: 973 ] steps
-           109    18199 [sigma: 31.3526 | error: 0.0479907 | coeff: 0.0479907 | eff: 1 | fom: 18.0915 | r2int: 0.00230014 | r2eff: 0 | hits: 776 ] steps
-           110    19639 [sigma: 33.2694 | error: 0.0473425 | coeff: 0.0473425 | eff: 1 | fom: 18.5903 | r2int: 0.00223844 | r2eff: 0 | hits: 781 ] steps
-           111    23658 [sigma: 31.4029 | error: 0.0409983 | coeff: 0.0409983 | eff: 1 | fom: 24.7889 | r2int: 0.0016791 | r2eff: 0 | hits: 954 ] steps
-           112    24077 [sigma: 28.8991 | error: 0.0384088 | coeff: 0.0384088 | eff: 1 | fom: 28.244 | r2int: 0.0014738 | r2eff: 0 | hits: 1024 ] steps
+           107    25372 [sigma: 35.7507 | error: 0.0443351 | coeff: 0.0443351 | eff: 1 | fom: 20.35 | r2int: 0.00196362 | r2eff: 0 | hits: 990 ] steps
+           108    25207 [sigma: 31.708 | error: 0.0392378 | coeff: 0.0392378 | eff: 1 | fom: 25.9807 | r2int: 0.00153802 | r2eff: 0 | hits: 973 ] steps
+           109    18199 [sigma: 31.3526 | error: 0.0479907 | coeff: 0.0479907 | eff: 1 | fom: 17.3678 | r2int: 0.00230014 | r2eff: 0 | hits: 776 ] steps
+           110    19639 [sigma: 33.2694 | error: 0.0473425 | coeff: 0.0473425 | eff: 1 | fom: 17.8467 | r2int: 0.00223844 | r2eff: 0 | hits: 781 ] steps
+           111    23658 [sigma: 31.4029 | error: 0.0409983 | coeff: 0.0409983 | eff: 1 | fom: 23.7973 | r2int: 0.0016791 | r2eff: 0 | hits: 954 ] steps
+           112    24077 [sigma: 28.8991 | error: 0.0384088 | coeff: 0.0384088 | eff: 1 | fom: 27.1142 | r2int: 0.0014738 | r2eff: 0 | hits: 1024 ] steps
            113    25233 [sigma: 30.7123 | error: 0.0380833 | coeff: 0.0380833 | eff: 1 | fom: 27.5797 | r2int: 0.00144886 | r2eff: 0 | hits: 979 ] steps
            114    18017 [sigma: 30.0311 | error: 0.045373 | coeff: 0.045373 | eff: 1 | fom: 19.4296 | r2int: 0.00205593 | r2eff: 0 | hits: 741 ] steps
            115    18352 [sigma: 27.8754 | error: 0.0423398 | coeff: 0.0423398 | eff: 1 | fom: 22.3132 | r2int: 0.00179035 | r2eff: 0 | hits: 777 ] steps
@@ -1668,9 +1668,9 @@ Run Summary
            119    18472 [sigma: 30.529 | error: 0.0455323 | coeff: 0.0455323 | eff: 1 | fom: 19.294 | r2int: 0.00207045 | r2eff: 0 | hits: 759 ] steps
            120    14245 [sigma: 26.2139 | error: 0.0468081 | coeff: 0.0468081 | eff: 1 | fom: 18.2565 | r2int: 0.00218761 | r2eff: 0 | hits: 647 ] steps
            121    19034 [sigma: 30.8833 | error: 0.0457198 | coeff: 0.0457198 | eff: 1 | fom: 19.136 | r2int: 0.00208767 | r2eff: 0 | hits: 794 ] steps
-           122    20690 [sigma: 32.654 | error: 0.0453317 | coeff: 0.0453317 | eff: 1 | fom: 19.465 | r2int: 0.00205248 | r2eff: 0 | hits: 825 ] steps
-           123    17916 [sigma: 29.08 | error: 0.0447466 | coeff: 0.0447466 | eff: 1 | fom: 19.9774 | r2int: 0.00199963 | r2eff: 0 | hits: 760 ] steps
-           124    14756 [sigma: 28.3773 | error: 0.0476915 | coeff: 0.0476915 | eff: 1 | fom: 17.5865 | r2int: 0.00227078 | r2eff: 0 | hits: 615 ] steps
+           122    20690 [sigma: 32.654 | error: 0.0453317 | coeff: 0.0453317 | eff: 1 | fom: 18.7164 | r2int: 0.00205248 | r2eff: 0 | hits: 825 ] steps
+           123    17916 [sigma: 29.08 | error: 0.0447466 | coeff: 0.0447466 | eff: 1 | fom: 19.2091 | r2int: 0.00199963 | r2eff: 0 | hits: 760 ] steps
+           124    14756 [sigma: 28.3773 | error: 0.0476915 | coeff: 0.0476915 | eff: 1 | fom: 16.9101 | r2int: 0.00227078 | r2eff: 0 | hits: 615 ] steps
 ============================================================
  closed file mfd_tl_NumberOfSteps.out for output
 ============================================================

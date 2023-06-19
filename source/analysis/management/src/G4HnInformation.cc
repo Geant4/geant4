@@ -121,7 +121,9 @@ void Update(
   }
 
   if (binScheme == G4BinScheme::kUser) {
-    G4Analysis::ComputeEdges(bins.fEdges, unit, fcn, bins.fEdges);
+    std::vector<G4double> edges = bins.fEdges;
+    bins.fEdges.clear();
+    G4Analysis::ComputeEdges(edges, unit, fcn, bins.fEdges);
   }
 }
 
@@ -163,18 +165,30 @@ G4bool CheckDimension(unsigned int idim,
     result = false;
   }
 
-  // Check edges
-  if ( dimension.fEdges.empty() && (info.fBinScheme == G4BinScheme::kUser) ) {
-    Warn("Illegal value of number of " + xyz.substr(idim,1) + " edges vector size",
+  // Check min/max
+  if ( (dimension.fMaxValue <= dimension.fMinValue) &&
+       (info.fBinScheme != G4BinScheme::kUser) ) {
+    Warn("Illegal value of " + xyz.substr(idim,1) + " (min >= max)",
       kNamespaceName, "CheckDimension");
     result = false;
   }
 
-  // Check min/max
-  if ( dimension.fMaxValue <= dimension.fMinValue ) {
-    Warn("Illegal value of " + xyz.substr(idim,1) + " (min >= max)",
-      kNamespaceName, "CheckDimension");
-    result = false;
+  // Check edges
+  if (info.fBinScheme == G4BinScheme::kUser) {
+    if ( dimension.fEdges.empty() ) {
+      Warn(xyz.substr(idim,1) + " edges vector is empty.",
+        kNamespaceName, "CheckDimension");
+      result = false;
+    }
+    // the edges values must be defined in increasing order
+    for (size_t i = 1; i < dimension.fEdges.size(); ++i){
+      if (dimension.fEdges[i-1] >= dimension.fEdges[i]) {
+        Warn(xyz.substr(idim,1) +
+          " edges vector values must be defined in increasing order.",
+          kNamespaceName, "CheckDimension");
+        result = false;
+      }
+    }
   }
 
   // Check function

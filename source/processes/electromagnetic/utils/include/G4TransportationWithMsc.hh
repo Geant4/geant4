@@ -41,6 +41,7 @@
 
 class G4EmModelManager;
 class G4LossTableManager;
+class G4ParticleChangeForMSC;
 class G4ParticleDefinition;
 class G4Region;
 class G4VMscModel;
@@ -83,6 +84,9 @@ class G4TransportationWithMsc : public G4Transportation
   G4LossTableManager* fEmManager;
   G4EmModelManager* fModelManager;
   const G4ParticleDefinition* fFirstParticle = nullptr;
+
+  // For ScatteringType::MultipleScattering
+  G4ParticleChangeForMSC* fParticleChangeForMSC = nullptr;
 
   G4DynamicParticle* fSubStepDynamicParticle;
   G4Track* fSubStepTrack;

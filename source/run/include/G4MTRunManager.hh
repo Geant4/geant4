@@ -192,7 +192,6 @@ class G4MTRunManager : public G4RunManager
 
     static G4int SeedOncePerCommunication();
     static void SetSeedOncePerCommunication(G4int val);
-    static G4ThreadId GetMasterTheadId();
 
   protected:
 

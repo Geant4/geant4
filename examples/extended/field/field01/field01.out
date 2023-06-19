@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-01    (10-February-2023)
+ Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -76,7 +76,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000545s Sys=0.000000s
+  User=0.000000s Real=0.000710s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -101,7 +101,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000102s Sys=0.000000s
+  User=0.000000s Real=0.000117s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -126,7 +126,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000078s Sys=0.000000s
+  User=0.000000s Real=0.000085s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -151,7 +151,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000103s Sys=0.000000s
+  User=0.000000s Real=0.000096s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -176,7 +176,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000080s Sys=0.000000s
+  User=0.000000s Real=0.000097s Sys=0.000000s
  F01FieldSetup::CreateStepperAndChordFinder() called. 
    1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
@@ -210,7 +210,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000191s Sys=0.000000s
+  User=0.000000s Real=0.000223s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -237,7 +237,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.007965s Sys=0.000000s
+  User=0.010000s Real=0.007917s Sys=0.000000s
 #
 /calor/setAbsMat Xe20CO2
 /calor/setWorldMat Kr20CO2
@@ -306,7 +306,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.030000s Real=0.031859s Sys=0.000000s
+  User=0.030000s Real=0.029411s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.52 MB

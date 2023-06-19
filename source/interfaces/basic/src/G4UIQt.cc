@@ -335,7 +335,7 @@ void G4UIQt::SetDefaultIconsToolbar(
 #if QT_VERSION < 0x050600
     QSignalMapper *signalMapperViewerProperties = new QSignalMapper(this);
     QAction *actionViewerProperties = fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", signalMapperViewerProperties, SLOT(map()));
-    connect(signalMapperViewerProperties, SIGNAL(mapped(G4int)),this, SLOT(ViewerPropertiesIconCallback(G4int)));
+    connect(signalMapperViewerProperties, SIGNAL(mapped(int)),this, SLOT(ViewerPropertiesIconCallback(int)));
     G4int intVP = 0;
     signalMapperViewerProperties->setMapping(actionViewerProperties, intVP);
 #else
@@ -1598,7 +1598,7 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   // add all candidates to widget
   fThreadsFilterComboBox = new QComboBox();
   fThreadsFilterComboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
-  connect(fThreadsFilterComboBox, SIGNAL(activated(G4int)), this, SLOT(ThreadComboBoxCallback(G4int)));
+  connect(fThreadsFilterComboBox, SIGNAL(activated(int)), this, SLOT(ThreadComboBoxCallback(int)));
 
   UpdateCoutThreadFilter();
 
@@ -1689,7 +1689,7 @@ G4UIDockWidget* G4UIQt::CreateUITabWidget(
   fUITabWidget->setTabToolTip (0,"Scene component tree. Only available in Stored mode");
   fUITabWidget->setTabToolTip (1,"Help widget");
   fUITabWidget->setTabToolTip (2,"All commands history");
-  connect(fUITabWidget, SIGNAL(currentChanged(G4int)), SLOT(ToolBoxActivated(G4int)));
+  connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
   fUIDockWidget = new G4UIDockWidget ("Scene tree, Help, History");
   fUIDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -1761,9 +1761,9 @@ void G4UIQt::CreateViewerWidget(){
 
 #if QT_VERSION < 0x040500
 #else
-    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(G4int)), this, SLOT(TabCloseCallback(int)));
+    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
 #endif
-    connect(fViewerTabWidget, SIGNAL(currentChanged(G4int)), SLOT(UpdateTabWidget(G4int)));
+    connect(fViewerTabWidget, SIGNAL(currentChanged(int)), SLOT(UpdateTabWidget(int)));
   }
 
 // set the QGLWidget size policy
@@ -1930,7 +1930,7 @@ const std::string& text)
 }
 
 
-void G4UIQt::UpdateTabWidget(G4int tabNumber) {
+void G4UIQt::UpdateTabWidget(int tabNumber) {
   if ( fViewerTabWidget == NULL) {
     fViewerTabWidget = new G4QTabWidget;
   }
@@ -4169,7 +4169,7 @@ void G4UIQt::CommandHistoryCallback(
 }
 
 
-void G4UIQt::ThreadComboBoxCallback(G4int) {
+void G4UIQt::ThreadComboBoxCallback(int) {
   CoutFilterCallback("");
 }
 
@@ -4776,7 +4776,7 @@ void G4UIQt::CreateEmptyPickInfosWidget() {
 }
 
 
-void G4UIQt::ViewerPropertiesIconCallback(G4int) {
+void G4UIQt::ViewerPropertiesIconCallback(int) {
 
   CreateViewerPropertiesDialog();
 
@@ -5142,9 +5142,9 @@ G4String outputStream
 
 
 #if QT_VERSION < 0x040500
-void G4UIQt::TabCloseCallback(G4int){
+void G4UIQt::TabCloseCallback(int){
 #else
-void G4UIQt::TabCloseCallback(G4int a){
+void G4UIQt::TabCloseCallback(int a){
 #endif
 #if QT_VERSION < 0x040500
 #else
@@ -5172,7 +5172,7 @@ void G4UIQt::TabCloseCallback(G4int a){
 }
 
 
-void G4UIQt::ToolBoxActivated(G4int a){
+void G4UIQt::ToolBoxActivated(int a){
 
   if (fUITabWidget->widget(a) == fHelpTBWidget) {
     // Rebuild the help tree

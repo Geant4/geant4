@@ -95,10 +95,10 @@ G4HelixMixedStepper::~G4HelixMixedStepper()
 }
 
 // ---------------------------------------------------------------------------
-void G4HelixMixedStepper::Stepper(  const G4double yInput[7],
-                                    const G4double dydx[7],
+void G4HelixMixedStepper::Stepper(  const G4double yInput[],  // [7]
+                                    const G4double dydx[],    // [7]
                                           G4double Step,
-                                          G4double yOut[7],
+                                          G4double yOut[],    // [7]
                                           G4double yErr[])
 {
   // Estimation of the Stepping Angle

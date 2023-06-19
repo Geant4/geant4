@@ -121,7 +121,8 @@ G4LindhardSorensenIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                                  const G4Material* mat,
                                                  G4double kinEnergy)
 {
-  return corr->EffectiveChargeSquareRatio(p,mat,kinEnergy);
+  chargeSquare = corr->EffectiveChargeSquareRatio(p,mat,kinEnergy);
+  return chargeSquare;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -258,15 +259,17 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
   const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
   const G4int Z = p->GetAtomicNumber();
 
-  G4double res;
+  G4double res = 0.0;
   if(escaled <= fElimit) {
     // data from ICRU73 or ICRU90
-    res = fIonData->GetDEDX(mat, Z, escaled, G4Log(escaled));
-    /*
-    G4cout << "GetDEDX for Z=" << Z << " in " << mat->GetName()
-	   << " Escaled=" << escaled << " E=" 
-	   << e << " dEdx=" << res << G4endl;
-    */
+    if(Z > 2 && Z <= 80) {
+      res = fIonData->GetDEDX(mat, Z, escaled, G4Log(escaled));
+      /*
+	G4cout << "GetDEDX for Z=" << Z << " in " << mat->GetName()
+	<< " Escaled=" << escaled << " E=" 
+	<< e << " dEdx=" << res << G4endl;
+      */
+    }
     if(res > 0.0) {
       auto pcuts = couple->GetProductionCuts();
       G4double cut = (nullptr == pcuts) ? tmax : pcuts->GetProductionCut(1);
@@ -310,16 +313,16 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4LindhardSorensenIonModel::SampleSecondaries(
-                                          vector<G4DynamicParticle*>* vdp,
+					  std::vector<G4DynamicParticle*>* vdp,
                                           const G4MaterialCutsCouple* couple,
                                           const G4DynamicParticle* dp,
-                                          G4double minKinEnergy,
+                                          G4double cut,
                                           G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   // take into account formfactor
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
-
+  G4double minKinEnergy = std::min(cut, tmax);
   G4double maxKinEnergy = std::min(maxEnergy,tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
 

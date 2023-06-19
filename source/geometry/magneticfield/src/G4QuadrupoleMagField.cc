@@ -69,8 +69,8 @@ G4QuadrupoleMagField::~G4QuadrupoleMagField()
 
 // -------------------------------------------------------------------
 
-void G4QuadrupoleMagField::GetFieldValue( const G4double y[7],
-                                                G4double B[3]  ) const
+void G4QuadrupoleMagField::GetFieldValue( const G4double y[],         // [7]
+                                                G4double B[]  ) const // [3]
 {
   //  with displaced origin and rotation
 

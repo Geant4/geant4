@@ -40,7 +40,7 @@
 
 #include "G4Fragment.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronicException.hh"
+#include "G4Exception.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
@@ -167,9 +167,10 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
 {
   if(aParticleDefinition->GetPDGEncoding() != 22 && 
      aParticleDefinition->GetPDGEncoding() != 11) {
-    G4String text = "G4Fragment::G4Fragment constructor for gamma used for "
-      + aParticleDefinition->GetParticleName();  
-    throw G4HadronicException(__FILE__, __LINE__, text);
+    G4ExceptionDescription ed;
+    ed << "Particle: " << aParticleDefinition->GetParticleName() << G4endl;
+    G4Exception( "G4Fragment::G4Fragment: constructor for gamma used for another type of particle ! ",
+                 "HAD_FRAGMENT_01", FatalException, ed );
   }
   theGroundStateMass = aParticleDefinition->GetPDGMass();
 }
@@ -178,11 +179,10 @@ void G4Fragment::CalculateMassAndExcitationEnergy()
 {
   // check input
   if(theZ > theA || theZ + theL > theA) {
-    G4String text = "G4Fragment::CalculateMassAndExcitationEnergy: inconsistent number of nucleons is ignored";
-    G4cout << text << G4endl; 
-    G4cout << "       Z=" << theZ << " A=" << theA 
-	   << " nLambdas=" << theL << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, text);
+    G4ExceptionDescription ed;
+    ed << "Fragment: Z=" << theZ << "  A=" << theA << "  nLambdas=" << theL << G4endl;
+    G4Exception( "G4Fragment::CalculateMassAndExcitationEnergy: inconsistent number of nucleons ! ",
+                 "HAD_FRAGMENT_02", EventMustBeAborted, ed );
   }
   // compute mass
   theGroundStateMass = ( theL == 0 )
@@ -315,11 +315,10 @@ void G4Fragment::ExcitationEnergyWarning()
 
 void G4Fragment::NumberOfExitationWarning(const G4String& value)
 {
-  G4cout << "G4Fragment::"<< value << " ERROR "
-	 << G4endl;
-  G4cout << this << G4endl; 
-  G4String text = "G4Fragment::G4Fragment wrong exciton number ";
-  throw G4HadronicException(__FILE__, __LINE__, text);
+  G4ExceptionDescription ed;
+  ed << "Value=" << value << G4endl;
+  G4Exception( "G4Fragment::NumberOfExitationWarning : wrong exciton number ! ",
+	       "HAD_FRAGMENT_03", FatalException, ed );
 }
 
 void G4Fragment::SetAngularMomentum(const G4ThreeVector& v)

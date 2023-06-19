@@ -23,67 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// neutron_hp -- source file
-// J.P. Wellisch, Nov-1996
-// A prototype of the low energy neutron transport model.
+// V. Ivanchenko, 21 April 2023 Data structure class for gamma levels
 //
-// P. Arce, June-2014 Conversion neutron_hp to particle_hp
-//
-#include "G4ParticleHPLevel.hh"
-#include "G4ParticleHPGamma.hh"
 
-  G4ParticleHPLevel::~G4ParticleHPLevel() 
-  {
-    if(theGammas != 0)
-    {
-      for(G4int i=0; i<nGammas; i++) delete theGammas[i];
-    }
-    delete [] theGammas;
+#include "G4ParticleHPNucLevel.hh"
+
+#include "G4Gamma.hh"
+#include "G4RandomDirection.hh"
+#include "Randomize.hh"
+
+G4ParticleHPNucLevel::G4ParticleHPNucLevel(G4double e) : levelEnergy(e) {}
+
+void G4ParticleHPNucLevel::AddGamma(G4double e, G4double w, G4int idx)
+{
+  gammaData x;
+  x.gammaEnergy = e;
+  x.cumProbability = w;
+  x.next = idx;
+  gammas.push_back(x);
+  ++nGammas;
+}
+
+void G4ParticleHPNucLevel::Normalize()
+{
+  if (gammas.empty()) {
+    return;
+  }
+  G4double sum = 0.0;
+  for (auto& gam : gammas) {
+    sum += gam.cumProbability;
+  }
+  if (sum <= 0.0) {
+    return;
   }
 
-  void G4ParticleHPLevel::SetNumberOfGammas(G4int aGammas)
-  {
-    nGammas = aGammas;
-    if(theGammas != 0)
-    {
-      for(G4int i=0; i<nGammas; i++) delete theGammas[i];
-    }
-    delete [] theGammas; 
-    theGammas = new G4ParticleHPGamma * [nGammas];
+  G4double norm = 1.0 / sum;
+  sum = 0;
+  for (auto& gam : gammas) {
+    sum += norm * gam.cumProbability;
+    gam.cumProbability = sum;
   }
+  gammas[nGammas - 1].cumProbability = 1.0;
+}
 
-  void G4ParticleHPLevel::SetGamma(G4int i, G4ParticleHPGamma * aGamma)
-  {
-    theGammas[i] = aGamma;
-    SetLevelEnergy(aGamma->GetLevelEnergy());
+G4ReactionProduct* G4ParticleHPNucLevel::GetDecayGamma(G4int& idx) const
+{
+  if (gammas.empty()) {
+    return nullptr;
   }
-
-  G4double G4ParticleHPLevel::GetGammaEnergy(G4int i)
-  {
-    return theGammas[i]->GetGammaEnergy();
-  }
-  
-  G4DynamicParticleVector * G4ParticleHPLevel::GetDecayGammas()
-  {
-    G4DynamicParticleVector * theResult;
-    G4double sum = 0;
-    G4double * running = new G4double[nGammas];
-    running[0] = 0;
-    G4int i;
-    for(i=0; i<nGammas; i++)
-    {
-      if(i!=0) running[i]=running[i-1];
-      running[i]+=theGammas[i]->GetWeight();
+  G4double q = G4UniformRand();
+  G4double e = 0.0;
+  for (auto& gam : gammas) {
+    if (q <= gam.cumProbability) {
+      e = gam.gammaEnergy;
+      idx = gam.next;
+      break;
     }
-    sum = running[nGammas-1];
-    G4int it(0);
-    G4double random = G4UniformRand();
-    for(i=0; i<nGammas; i++)
-    {
-      it = i;
-      if(random*sum < running[i]) break;
-    }
-    delete [] running;
-    theResult = theGammas[it]->GetDecayGammas();
-    return theResult;
   }
+  if (e <= 0.0) {
+    return nullptr;
+  }
+  G4ThreeVector p = G4RandomDirection();
+  p *= e;
+  auto res = new G4ReactionProduct(G4Gamma::Gamma());
+  res->SetMomentum(p);
+  res->SetKineticEnergy(e);
+  return res;
+}

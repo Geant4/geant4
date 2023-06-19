@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-06 Gabriele Cosmo (VecGeomNavigation-V11-00-05)
+- Stick to VecGeom v1 compatible version 0.2.1 of G4VecGeomNav package.
+
 ## 2023-01-09 Ben Morgan (VecGeomNavigation-V11-00-04)
 - Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
   scope version to ease use of Geant4 as a CMake subproject. 

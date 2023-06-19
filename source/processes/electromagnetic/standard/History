@@ -6,6 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-13 V.Ivanchenko (emstand-V11-00-24)
+- G4LindhardSorensenIonModel - do not try to use ICRU73 data for projectile Z>80
+
+## 2023-04-20 V.Ivanchenko (emstand-V11-00-23)
+- G4LindhardSorensenIonModel - updated effective charge of an ion at each
+    step of simulation or at each call to G4EmCalculator
+
+## 2023-04-17 V.Ivanchenko
+- G4LinhardSorensenModel - added extra protection and improved debug printout
+
+## 2023-02-24 V.Ivanchenko
+- G4WentzelOKandVIxSection - fix numeric instability for the extreme case of 
+    very small kinetic energy (< 1 eV)
+
+## 2023-02-21 V.Ivanchenko
+- G4WentzelOKandVIxSection - fix #2530, improved comments
+
 ## 2022-12-21 V.Ivanchenko (emstand-V11-00-22)
 - G4GoudsmithSoundersonMscModel - fixed warning when build CMSSW
 

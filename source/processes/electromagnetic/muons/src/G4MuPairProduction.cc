@@ -85,7 +85,6 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
   SetProcessSubType(fPairProdByCharged);
   SetSecondaryParticle(G4Positron::Positron());
   SetIonisation(false);
-  SetSpline(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

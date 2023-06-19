@@ -229,7 +229,7 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p ) const
   G4double best = kInfinity;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    G4double distance;
+    G4double distance = kInfinity;
     G4ThreeVector normal = (*face)->Normal( p, &distance );
     if (distance < best)
     {

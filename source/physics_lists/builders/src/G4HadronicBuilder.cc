@@ -244,7 +244,7 @@ void G4HadronicBuilder::BuildKaonsFTFP_BERT() {
 }
 
 void G4HadronicBuilder::BuildKaonsFTFQGSP_BERT() {
-  BuildFTFP_BERT(G4HadParticles::GetKaons(), true, "Glauber-Gribov");
+  BuildFTFQGSP_BERT(G4HadParticles::GetKaons(), true, "Glauber-Gribov");
 }
 
 void G4HadronicBuilder::BuildKaonsQGSP_FTFP_BERT(G4bool qElastic) {

@@ -551,13 +551,10 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
     if(nullptr != baseParticle) {
       massRatio = baseParticle->GetPDGMass()/newmass;
       logMassRatio = G4Log(massRatio);
-    } else if(isIon) {
+    } else {
       massRatio = CLHEP::proton_mass_c2/newmass;
       logMassRatio = G4Log(massRatio);
-    } else {
-      massRatio = 1.0;
-      logMassRatio = 0.0;
-    }
+    } 
   }  
   // forced biasing only for primary particles
   if(nullptr != biasManager) {
