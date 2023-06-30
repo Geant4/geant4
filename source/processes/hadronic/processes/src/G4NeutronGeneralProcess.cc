@@ -49,6 +49,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicProcess.hh"
+#include "G4HadronicProcessType.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
@@ -114,7 +115,7 @@ G4bool G4NeutronGeneralProcess::IsApplicable(const G4ParticleDefinition&)
 
 void G4NeutronGeneralProcess::SetInelasticProcess(G4HadronicProcess* ptr)
 {
-  fInelastic = ptr;
+  fInelasticP = ptr;
   fXSSInelastic = ptr->GetCrossSectionDataStore();
   fInelasticXS = InitialisationXS(ptr);
   if(nullptr == fInelasticXS) {
@@ -127,7 +128,7 @@ void G4NeutronGeneralProcess::SetInelasticProcess(G4HadronicProcess* ptr)
 
 void G4NeutronGeneralProcess::SetElasticProcess(G4HadronicProcess* ptr)
 {
-  fElastic = ptr;
+  fElasticP = ptr;
   fXSSElastic = ptr->GetCrossSectionDataStore();
   fElasticXS = InitialisationXS(ptr);
   if(nullptr == fElasticXS) {
@@ -140,7 +141,7 @@ void G4NeutronGeneralProcess::SetElasticProcess(G4HadronicProcess* ptr)
 
 void G4NeutronGeneralProcess::SetCaptureProcess(G4HadronicProcess* ptr)
 {
-  fCapture = ptr;
+  fCaptureP = ptr;
   fXSSCapture = ptr->GetCrossSectionDataStore();
   fCaptureXS = InitialisationXS(ptr);
   if(nullptr == fCaptureXS) {
@@ -164,6 +165,30 @@ G4NeutronGeneralProcess::InitialisationXS(G4HadronicProcess* proc)
 
 //....Ooooo0ooooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4VCrossSectionDataSet* G4NeutronGeneralProcess::GetXSection(G4int subtype)
+{
+  G4VCrossSectionDataSet* xs = nullptr;
+  G4HadronicProcessType type = (G4HadronicProcessType)subtype;
+  if(type == fHadronElastic) { xs = fElasticXS; }
+  else if(type == fHadronInelastic) { xs = fInelasticXS; }
+  else if(type == fCapture) { xs = fCaptureXS; }
+  return xs;
+}
+
+//....Ooooo0ooooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4HadronicProcess* G4NeutronGeneralProcess::GetHadronicProcess(G4int subtype)
+{
+  G4HadronicProcess* ptr = nullptr;
+  G4HadronicProcessType type = (G4HadronicProcessType)subtype;
+  if(type == fHadronElastic) { ptr = fElasticP; }
+  else if(type == fHadronInelastic) { ptr = fInelasticP; }
+  else if(type == fCapture) { ptr = fCaptureP; }
+  return ptr;
+}  
+
+//....Ooooo0ooooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4NeutronGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(1 < verboseLevel) {
@@ -172,9 +197,9 @@ void G4NeutronGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& pa
            << " and particle " << part.GetParticleName()
  	   << " isMaster: " << isMaster << G4endl;
   }
-  G4bool noEl = (nullptr == fElastic);
-  G4bool noInel = (nullptr == fInelastic);
-  G4bool noCap = (nullptr == fCapture);
+  G4bool noEl = (nullptr == fElasticP);
+  G4bool noInel = (nullptr == fInelasticP);
+  G4bool noCap = (nullptr == fCaptureP);
   if(noEl || noInel || noCap) {
     G4ExceptionDescription ed;
     ed << "Incomplete configuration of the neutron general process." << G4endl;
@@ -195,9 +220,9 @@ void G4NeutronGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& pa
     fXSFactorInel = param->XSFactorNucleonInelastic();
   }
 
-  fElastic->PreparePhysicsTable(part);
-  fInelastic->PreparePhysicsTable(part);
-  fCapture->PreparePhysicsTable(part);
+  fElasticP->PreparePhysicsTable(part);
+  fInelasticP->PreparePhysicsTable(part);
+  fCaptureP->PreparePhysicsTable(part);
 
   std::size_t nmat = G4Material::GetNumberOfMaterials();
   G4MaterialTable* matTable = G4Material::GetMaterialTable();
@@ -251,9 +276,9 @@ void G4NeutronGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
-  fElastic->BuildPhysicsTable(part);
-  fInelastic->BuildPhysicsTable(part);
-  fCapture->BuildPhysicsTable(part);
+  fElasticP->BuildPhysicsTable(part);
+  fInelasticP->BuildPhysicsTable(part);
+  fCaptureP->BuildPhysicsTable(part);
 
   if(isMaster) {
     std::size_t nmat = G4Material::GetNumberOfMaterials();
@@ -407,17 +432,17 @@ G4VParticleChange* G4NeutronGeneralProcess::PostStepDoIt(const G4Track& track,
   */
   if (0 == idxEnergy) {
     if(q <= GetProbability(1)) {
-      SelectedProcess(step, fElastic, fXSSElastic);
+      SelectedProcess(step, fElasticP, fXSSElastic);
     } else if(q <= GetProbability(2)) {
-      SelectedProcess(step, fInelastic, fXSSInelastic);
+      SelectedProcess(step, fInelasticP, fXSSInelastic);
     } else {
-      SelectedProcess(step, fCapture, fXSSCapture);
+      SelectedProcess(step, fCaptureP, fXSSCapture);
     }
   } else {
     if(q <= GetProbability(4)) {
-      SelectedProcess(step, fInelastic, fXSSInelastic);
+      SelectedProcess(step, fInelasticP, fXSSInelastic);
     } else {
-      SelectedProcess(step, fElastic, fXSSElastic);
+      SelectedProcess(step, fElasticP, fXSSElastic);
     }
   }
   // total cross section is needed for selection of an element
@@ -470,9 +495,9 @@ G4double G4NeutronGeneralProcess::GetMeanFreePath(const G4Track& track,
 
 void G4NeutronGeneralProcess::ProcessDescription(std::ostream& out) const
 {
-  fElastic->ProcessDescription(out);
-  fInelastic->ProcessDescription(out);
-  fCapture->ProcessDescription(out);
+  fElasticP->ProcessDescription(out);
+  fInelasticP->ProcessDescription(out);
+  fCaptureP->ProcessDescription(out);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

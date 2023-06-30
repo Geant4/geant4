@@ -43,16 +43,16 @@
 // ######################################################################
 // ###                     TAU NEUTRINO                               ###
 // ######################################################################
-G4NeutrinoTau* G4NeutrinoTau::theInstance = 0;
+G4NeutrinoTau* G4NeutrinoTau::theInstance = nullptr;
 
 G4NeutrinoTau* G4NeutrinoTau::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "nu_tau";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -68,7 +68,7 @@ G4NeutrinoTau* G4NeutrinoTau::Definition()
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,           16,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
              false,           "tau"
               );
   }

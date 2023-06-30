@@ -51,7 +51,7 @@ class G4AntiSigmaMinus : public G4ParticleDefinition
  private:
    static G4AntiSigmaMinus* theInstance;
    G4AntiSigmaMinus(){}
-   ~G4AntiSigmaMinus(){}
+   ~G4AntiSigmaMinus() override= default;
 
  public:
    static G4AntiSigmaMinus* Definition();

@@ -48,9 +48,7 @@ G4VFacet::G4VFacet()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4VFacet::~G4VFacet()
-{
-}
+G4VFacet::~G4VFacet() = default;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -82,7 +80,7 @@ G4bool G4VFacet::operator== (const G4VFacet& right) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-void G4VFacet::ApplyTranslation(const G4ThreeVector v)
+void G4VFacet::ApplyTranslation(const G4ThreeVector& v)
 {
   G4int n = GetNumberOfVertices();
   for (G4int i = 0; i < n; ++i)

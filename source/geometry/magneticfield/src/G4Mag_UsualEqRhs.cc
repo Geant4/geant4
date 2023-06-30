@@ -38,9 +38,7 @@ G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
 {
 }
 
-G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs()
-{
-}
+G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() = default;
 
 void
 G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],

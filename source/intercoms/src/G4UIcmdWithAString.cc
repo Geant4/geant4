@@ -31,8 +31,7 @@
 #include "G4UIcmdWithAString.hh"
 
 // --------------------------------------------------------------------
-G4UIcmdWithAString::G4UIcmdWithAString(const char* theCommandPath,
-                                       G4UImessenger* theMessenger)
+G4UIcmdWithAString::G4UIcmdWithAString(const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
   auto* strParam = new G4UIparameter('s');
@@ -54,7 +53,7 @@ void G4UIcmdWithAString::SetParameterName(const char* theName, G4bool omittable,
 void G4UIcmdWithAString::SetCandidates(const char* candidateList)
 {
   G4UIparameter* theParam = GetParameter(0);
-  G4String canList        = candidateList;
+  G4String canList = candidateList;
   theParam->SetParameterCandidates(canList);
 }
 

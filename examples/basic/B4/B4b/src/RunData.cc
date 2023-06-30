@@ -44,7 +44,7 @@ void RunData::FillPerEvent()
   auto analysisManager = G4AnalysisManager::Instance();
 
   // accumulate statistic
-  // in the order od the histograms, ntuple columns declarations
+  // in the order of the histograms, ntuple columns declarations
   G4int counter = 0;
   for ( auto edep : fEdep ) {
     analysisManager->FillH1(counter, edep);
@@ -54,6 +54,7 @@ void RunData::FillPerEvent()
     analysisManager->FillH1(counter, trackLength);
     analysisManager->FillNtupleDColumn(counter++, trackLength);
   }
+  
   analysisManager->AddNtupleRow();
 }
 

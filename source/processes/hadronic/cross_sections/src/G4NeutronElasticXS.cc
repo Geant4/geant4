@@ -44,6 +44,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4HadronicParameters.hh"
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4IsotopeList.hh"
@@ -227,19 +228,11 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 const G4String& G4NeutronElasticXS::FindDirectoryPath()
 {
-  // check environment variable
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
-    const char* path = G4FindDataDir("G4PARTICLEXSDATA");
-    if (nullptr != path) {
-      std::ostringstream ost;
-      ost << path << "/neutron/el";
-      gDataDirectory = ost.str();
-    } else {
-      G4Exception("G4NeutronElasticXS::Initialise(..)","had013",
-		  FatalException,
-		  "Environment variable G4PARTICLEXSDATA is not defined");
-    }
+    std::ostringstream ost;
+    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/el";
+    gDataDirectory = ost.str();
   }
   return gDataDirectory;
 }

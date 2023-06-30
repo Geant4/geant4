@@ -31,7 +31,7 @@
  */
 
 #ifndef G4FPYTREESTRUCTURES_HH
-#define	G4FPYTREESTRUCTURES_HH
+#define G4FPYTREESTRUCTURES_HH
 
 #include "G4Ions.hh"
 #include "globals.hh"
@@ -88,5 +88,4 @@ struct ProbabilityTree
     G4bool IsEnd;
 };
 
-#endif	/* G4FPYTREESTRUCTURES_HH */
-
+#endif /* G4FPYTREESTRUCTURES_HH */

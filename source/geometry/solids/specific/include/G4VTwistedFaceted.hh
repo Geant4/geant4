@@ -47,259 +47,254 @@ class G4ClippablePolygon;
 
 class G4VTwistedFaceted: public G4VSolid
 {
- public:  // with description
+  public:
 
-  G4VTwistedFaceted(const G4String& pname,    // Name of instance
-                          G4double PhiTwist,  // twist angle
-                          G4double pDz,       // half z lenght
-                          G4double pTheta,  // direction between end planes
-                          G4double pPhi,    // defined by polar & azim. angles
-                          G4double pDy1,    // half y length at -pDz
-                          G4double pDx1,    // half x length at -pDz,-pDy
-                          G4double pDx2,    // half x length at -pDz,+pDy
-                          G4double pDy2,    // half y length at +pDz
-                          G4double pDx3,    // half x length at +pDz,-pDy
-                          G4double pDx4,    // half x length at +pDz,+pDy
-                          G4double pAlph    // tilt angle at +pDz
-                   );
+    G4VTwistedFaceted(const G4String& pname,    // Name of instance
+                            G4double PhiTwist,  // twist angle
+                            G4double pDz,       // half z lenght
+                            G4double pTheta,  // direction between end planes
+                            G4double pPhi,    // defined by polar & azim. angles
+                            G4double pDy1,    // half y length at -pDz
+                            G4double pDx1,    // half x length at -pDz,-pDy
+                            G4double pDx2,    // half x length at -pDz,+pDy
+                            G4double pDy2,    // half y length at +pDz
+                            G4double pDx3,    // half x length at +pDz,-pDy
+                            G4double pDx4,    // half x length at +pDz,+pDy
+                            G4double pAlph    // tilt angle at +pDz
+                     );
 
-  virtual ~G4VTwistedFaceted();
+    virtual ~G4VTwistedFaceted();
 
-  virtual void ComputeDimensions(G4VPVParameterisation*,
-                                 const G4int,
-                                 const G4VPhysicalVolume*  );
+    void ComputeDimensions(      G4VPVParameterisation*,
+                           const G4int,
+                           const G4VPhysicalVolume*  ) override;
 
-  virtual void BoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const;
+    void BoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const override;
 
-  virtual G4bool CalculateExtent(const EAxis              pAxis,
-                                 const G4VoxelLimits&     pVoxelLimit,
-                                 const G4AffineTransform& pTransform,
-                                       G4double&          pMin,
-                                       G4double&          pMax ) const;
+    G4bool CalculateExtent(const EAxis              pAxis,
+                           const G4VoxelLimits&     pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double&          pMin,
+                                 G4double&          pMax ) const override;
 
-  virtual G4double DistanceToIn (const G4ThreeVector& p,
-                                 const G4ThreeVector& v ) const;
+    G4double DistanceToIn (const G4ThreeVector& p,
+                           const G4ThreeVector& v ) const override;
 
-  virtual G4double DistanceToIn (const G4ThreeVector& p ) const;
+    G4double DistanceToIn (const G4ThreeVector& p ) const override;
 
-  virtual G4double DistanceToOut(const G4ThreeVector& p,
-                                 const G4ThreeVector& v,
-                                 const G4bool         calcnorm  = false,
-                                       G4bool* validnorm = nullptr,
-                                       G4ThreeVector*  n = nullptr ) const;
+    G4double DistanceToOut(const G4ThreeVector& p,
+                           const G4ThreeVector& v,
+                           const G4bool         calcnorm  = false,
+                                 G4bool* validnorm = nullptr,
+                                 G4ThreeVector*  n = nullptr ) const override;
 
-  virtual G4double DistanceToOut(const G4ThreeVector& p) const;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-  virtual EInside Inside (const G4ThreeVector& p) const;
+    EInside Inside (const G4ThreeVector& p) const override;
 
-  virtual G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
 
-  G4ThreeVector GetPointOnSurface() const;
-  G4ThreeVector GetPointInSolid(G4double z) const;
+    G4ThreeVector GetPointOnSurface() const override;
+    G4ThreeVector GetPointInSolid(G4double z) const;
 
-  virtual G4double GetCubicVolume();
-  virtual G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene& scene) const;
-  virtual G4Polyhedron* CreatePolyhedron   () const;
-  virtual G4Polyhedron* GetPolyhedron      () const;
+    void DescribeYourselfTo (G4VGraphicsScene& scene) const override;
+    G4Polyhedron* CreatePolyhedron   () const override;
+    G4Polyhedron* GetPolyhedron      () const override;
 
-  virtual std::ostream &StreamInfo(std::ostream& os) const;
+    std::ostream &StreamInfo(std::ostream& os) const override;
 
-  // accessors
+    // accessors
 
-  inline G4double GetTwistAngle() const { return fPhiTwist; }
+    inline G4double GetTwistAngle() const { return fPhiTwist; }
 
-  inline G4double GetDx1   () const { return fDx1   ; }
-  inline G4double GetDx2   () const { return fDx2   ; }
-  inline G4double GetDx3   () const { return fDx3   ; }
-  inline G4double GetDx4   () const { return fDx4   ; }
-  inline G4double GetDy1   () const { return fDy1   ; }
-  inline G4double GetDy2   () const { return fDy2   ; }
-  inline G4double GetDz    () const { return fDz    ; }
-  inline G4double GetPhi   () const { return fPhi   ; }
-  inline G4double GetTheta () const { return fTheta ; }
-  inline G4double GetAlpha () const { return fAlph  ; }
+    inline G4double GetDx1   () const { return fDx1   ; }
+    inline G4double GetDx2   () const { return fDx2   ; }
+    inline G4double GetDx3   () const { return fDx3   ; }
+    inline G4double GetDx4   () const { return fDx4   ; }
+    inline G4double GetDy1   () const { return fDy1   ; }
+    inline G4double GetDy2   () const { return fDy2   ; }
+    inline G4double GetDz    () const { return fDz    ; }
+    inline G4double GetPhi   () const { return fPhi   ; }
+    inline G4double GetTheta () const { return fTheta ; }
+    inline G4double GetAlpha () const { return fAlph  ; }
 
-  inline G4double Xcoef(G4double u, G4double phi, G4double ftg) const;
-    // For calculating the w(u) function
+    inline G4double Xcoef(G4double u, G4double phi, G4double ftg) const;
+      // For calculating the w(u) function
 
-  inline G4double GetValueA(G4double phi) const;
-  inline G4double GetValueB(G4double phi) const;
-  inline G4double GetValueD(G4double phi) const;
+    inline G4double GetValueA(G4double phi) const;
+    inline G4double GetValueB(G4double phi) const;
+    inline G4double GetValueD(G4double phi) const;
 
-  virtual G4VisExtent     GetExtent    () const;
-  virtual G4GeometryType  GetEntityType() const;
+    G4VisExtent     GetExtent    () const override;
+    G4GeometryType  GetEntityType() const override;
 
- public:  // without description
+    G4VTwistedFaceted(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
-  G4VTwistedFaceted(__void__&);
-    // Fake default constructor for usage restricted to direct object
-    // persistency for clients requiring preallocation of memory for
-    // persistifiable objects.
+    G4VTwistedFaceted(const G4VTwistedFaceted& rhs);
+    G4VTwistedFaceted& operator=(const G4VTwistedFaceted& rhs);
+      // Copy constructor and assignment operator.
 
-  G4VTwistedFaceted(const G4VTwistedFaceted& rhs);
-  G4VTwistedFaceted& operator=(const G4VTwistedFaceted& rhs);
-    // Copy constructor and assignment operator.
+  protected:
 
- protected:  // with description
+    mutable G4bool fRebuildPolyhedron = false;
+    mutable G4Polyhedron* fpPolyhedron = nullptr;  // polyhedron for vis
 
-  mutable G4bool fRebuildPolyhedron = false;
-  mutable G4Polyhedron* fpPolyhedron = nullptr;  // polyhedron for vis
+    G4double fCubicVolume = 0.0; // volume of the solid
+    G4double fSurfaceArea = 0.0; // area of the solid
 
- private:
+  private:
 
-  double GetLateralFaceArea(const G4TwoVector& p1,
-                            const G4TwoVector& p2,
-                            const G4TwoVector& p3,
-                            const G4TwoVector& p4) const;
-  void CreateSurfaces();
+    double GetLateralFaceArea(const G4TwoVector& p1,
+                              const G4TwoVector& p2,
+                              const G4TwoVector& p3,
+                              const G4TwoVector& p4) const;
+    void CreateSurfaces();
 
- private:
+  private:
 
-  G4double fTheta;
-  G4double fPhi ;
+    G4double fTheta;
+    G4double fPhi ;
 
-  G4double fDy1;
-  G4double fDx1;
-  G4double fDx2;
+    G4double fDy1;
+    G4double fDx1;
+    G4double fDx2;
 
-  G4double fDy2;
-  G4double fDx3;
-  G4double fDx4;
+    G4double fDy2;
+    G4double fDx3;
+    G4double fDx4;
 
-  G4double fDz;        // Half-length along the z axis
+    G4double fDz;        // Half-length along the z axis
 
-  G4double fDx ;       // maximum side in x
-  G4double fDy ;       // maximum side in y
+    G4double fDx ;       // maximum side in x
+    G4double fDy ;       // maximum side in y
 
-  G4double fAlph ;
-  G4double fTAlph ;    // std::tan(fAlph)
+    G4double fAlph ;
+    G4double fTAlph ;    // std::tan(fAlph)
 
-  G4double fdeltaX ;
-  G4double fdeltaY ;
+    G4double fdeltaX ;
+    G4double fdeltaY ;
 
-  G4double fPhiTwist;  // twist angle ( dphi in surface equation)
+    G4double fPhiTwist;  // twist angle ( dphi in surface equation)
 
-  G4VTwistSurface* fLowerEndcap ;  // surface of -ve z
-  G4VTwistSurface* fUpperEndcap ;  // surface of +ve z
+    G4VTwistSurface* fLowerEndcap ;  // surface of -ve z
+    G4VTwistSurface* fUpperEndcap ;  // surface of +ve z
 
-  G4VTwistSurface* fSide0 ;    // Twisted Side at phi = 0 deg
-  G4VTwistSurface* fSide90 ;   // Twisted Side at phi = 90 deg
-  G4VTwistSurface* fSide180 ;  // Twisted Side at phi = 180 deg
-  G4VTwistSurface* fSide270 ;  // Twisted Side at phi = 270 deg
+    G4VTwistSurface* fSide0 ;    // Twisted Side at phi = 0 deg
+    G4VTwistSurface* fSide90 ;   // Twisted Side at phi = 90 deg
+    G4VTwistSurface* fSide180 ;  // Twisted Side at phi = 180 deg
+    G4VTwistSurface* fSide270 ;  // Twisted Side at phi = 270 deg
 
- protected:
+  private:
 
-  G4double fCubicVolume = 0.0; // volume of the solid
-  G4double fSurfaceArea = 0.0; // area of the solid
+    class LastState              // last Inside result
+    {
+      public:
+        LastState()
+        {
+          p.set(kInfinity,kInfinity,kInfinity); inside = kOutside;
+        }
+        ~LastState()= default;
+        LastState(const LastState& r)  = default;
+        LastState& operator=(const LastState& r)
+        {
+          if (this == &r)  { return *this; }
+          p = r.p; inside = r.inside;
+          return *this;
+        }
+      public:
+        G4ThreeVector p;
+        EInside       inside;
+    };
 
- private:
+    class LastVector             // last SurfaceNormal result
+    {
+      public:
+        LastVector()
+        {
+          p.set(kInfinity,kInfinity,kInfinity);
+          vec.set(kInfinity,kInfinity,kInfinity);
+          surface = new G4VTwistSurface*[1];
+        }
+        ~LastVector()
+        {
+          delete [] surface;
+        }
+        LastVector(const LastVector& r) : p(r.p), vec(r.vec)
+        {
+          surface = new G4VTwistSurface*[1];
+          surface[0] = r.surface[0];
+        }
+        LastVector& operator=(const LastVector& r)
+        {
+          if (&r == this)  { return *this; }
+          p = r.p; vec = r.vec;
+          delete [] surface; surface = new G4VTwistSurface*[1];
+          surface[0] = r.surface[0];
+          return *this;
+        }
+      public:
+        G4ThreeVector   p;
+        G4ThreeVector   vec;
+        G4VTwistSurface **surface;
+    };
 
-  class LastState              // last Inside result
-  {
-    public:
-      LastState()
-      {
-        p.set(kInfinity,kInfinity,kInfinity); inside = kOutside;
-      }
-      ~LastState(){}
-      LastState(const LastState& r) : p(r.p), inside(r.inside){}
-      LastState& operator=(const LastState& r)
-      {
-        if (this == &r)  { return *this; }
-        p = r.p; inside = r.inside;
-        return *this;
-      }
-    public:
-      G4ThreeVector p;
-      EInside       inside;
-  };
+    class LastValue              // last G4double value
+    {
+      public:
+        LastValue()
+        {
+          p.set(kInfinity,kInfinity,kInfinity);
+          value = DBL_MAX;
+        }
+        ~LastValue()= default;
+        LastValue(const LastValue& r)  = default;
+        LastValue& operator=(const LastValue& r)
+        {
+          if (this == &r)  { return *this; }
+          p = r.p; value = r.value;
+          return *this;
+        }
+      public:
+        G4ThreeVector p;
+        G4double      value;
+    };
 
-  class LastVector             // last SurfaceNormal result
-  {
-    public:
-      LastVector()
-      {
-        p.set(kInfinity,kInfinity,kInfinity);
-        vec.set(kInfinity,kInfinity,kInfinity);
-        surface = new G4VTwistSurface*[1];
-      }
-      ~LastVector()
-      {
-        delete [] surface;
-      }
-      LastVector(const LastVector& r) : p(r.p), vec(r.vec)
-      {
-        surface = new G4VTwistSurface*[1];
-        surface[0] = r.surface[0];
-      }
-      LastVector& operator=(const LastVector& r)
-      {
-        if (&r == this)  { return *this; }
-        p = r.p; vec = r.vec;
-        delete [] surface; surface = new G4VTwistSurface*[1];
-        surface[0] = r.surface[0];
-        return *this;
-      }
-    public:
-      G4ThreeVector   p;
-      G4ThreeVector   vec;
-      G4VTwistSurface **surface;
-  };
+    class LastValueWithDoubleVector   // last G4double value
+    {
+      public:
+        LastValueWithDoubleVector()
+        {
+          p.set(kInfinity,kInfinity,kInfinity);
+          vec.set(kInfinity,kInfinity,kInfinity);
+          value = DBL_MAX;
+        }
+        ~LastValueWithDoubleVector()= default;
+        LastValueWithDoubleVector(const LastValueWithDoubleVector& r) = default;
+        LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
+        {
+          if (this == &r)  { return *this; }
+          p = r.p; vec = r.vec; value = r.value;
+          return *this;
+        }
+      public:
+        G4ThreeVector p;
+        G4ThreeVector vec;
+        G4double      value;
+    };
 
-  class LastValue              // last G4double value
-  {
-    public:
-      LastValue()
-      {
-        p.set(kInfinity,kInfinity,kInfinity);
-        value = DBL_MAX;
-      }
-      ~LastValue(){}
-      LastValue(const LastValue& r) : p(r.p), value(r.value){}
-      LastValue& operator=(const LastValue& r)
-      {
-        if (this == &r)  { return *this; }
-        p = r.p; value = r.value;
-        return *this;
-      }
-    public:
-      G4ThreeVector p;
-      G4double      value;
-  };
-
-  class LastValueWithDoubleVector   // last G4double value
-  {
-    public:
-      LastValueWithDoubleVector()
-      {
-        p.set(kInfinity,kInfinity,kInfinity);
-        vec.set(kInfinity,kInfinity,kInfinity);
-        value = DBL_MAX;
-      }
-      ~LastValueWithDoubleVector(){}
-      LastValueWithDoubleVector(const LastValueWithDoubleVector& r)
-        : p(r.p), vec(r.vec), value(r.value){}
-      LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
-      {
-        if (this == &r)  { return *this; }
-        p = r.p; vec = r.vec; value = r.value;
-        return *this;
-      }
-    public:
-      G4ThreeVector p;
-      G4ThreeVector vec;
-      G4double      value;
-  };
-
-  LastState    fLastInside;
-  LastVector   fLastNormal;
-  LastValue    fLastDistanceToIn;
-  LastValue    fLastDistanceToOut;
-  LastValueWithDoubleVector   fLastDistanceToInWithV;
-  LastValueWithDoubleVector   fLastDistanceToOutWithV;
- };
+    LastState    fLastInside;
+    LastVector   fLastNormal;
+    LastValue    fLastDistanceToIn;
+    LastValue    fLastDistanceToOut;
+    LastValueWithDoubleVector   fLastDistanceToInWithV;
+    LastValueWithDoubleVector   fLastDistanceToOutWithV;
+};
 
 //=====================================================================
 

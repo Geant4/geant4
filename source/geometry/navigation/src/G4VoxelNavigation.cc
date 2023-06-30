@@ -41,8 +41,7 @@
 // ********************************************************************
 //
 G4VoxelNavigation::G4VoxelNavigation()
-  : fBList(),
-    fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
+  : fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
     fVoxelNoSlicesStack(kNavigatorVoxelStackMax,0),
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax,0.),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax,0),
@@ -340,15 +339,17 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
             if ( validExitNormal )
             {
               const G4RotationMatrix *rot = motherPhysical->GetRotation();
-              if (rot)
+              if (rot != nullptr)
               {
                 exitNormal *= rot->inverse();
 #ifdef G4VERBOSE
                 if( fCheck )
-                   fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
-                                                    motherExitNormal,  // original 
-                                                    *rot,
-                                                    "From RotationMatrix" );
+                {
+                  fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
+                                                   motherExitNormal,  // original 
+                                                   *rot,
+                                                   "From RotationMatrix" );
+                }
 #endif
               }
             }
@@ -588,8 +589,8 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
       voxelPoint = localPoint+localDirection*newDistance;
       fVoxelNodeNoStack[newDepth] = newNodeNo;
       fVoxelDepth = newDepth;
-      newVoxelNode = 0;
-      while ( !newVoxelNode )
+      newVoxelNode = nullptr;
+      while ( newVoxelNode == nullptr )
       {
         newProxy = newHeader->GetSlice(newNodeNo);
         if (newProxy->IsNode())
@@ -718,7 +719,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
   if( fCheck )
   {
-    fLogger->ComputeSafetyLog (motherSolid,localPoint,motherSafety,true,true);
+    fLogger->ComputeSafetyLog (motherSolid,localPoint,motherSafety,true,1);
   }
 #endif
   //
@@ -748,7 +749,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     if( fCheck )
     {
       fLogger->ComputeSafetyLog(sampleSolid, samplePoint,
-                                sampleSafety, false, false);
+                                sampleSafety, false, 0);
     }
 #endif
   }
@@ -766,6 +767,6 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 //
 void  G4VoxelNavigation::SetVerboseLevel(G4int level)
 {
-  if( fLogger )      fLogger->SetVerboseLevel(level);
-  if( fpVoxelSafety) fpVoxelSafety->SetVerboseLevel(level); 
+  if( fLogger != nullptr ) { fLogger->SetVerboseLevel(level); }
+  if( fpVoxelSafety != nullptr) { fpVoxelSafety->SetVerboseLevel(level); }
 }

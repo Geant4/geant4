@@ -6,6 +6,43 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-05-23 Gabriele Cosmo (visVtk-V11-01-09)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode>=14.1.
+
+## 2023-04-07 Stewart Boogert (visVtk-v11-01-08)
+- Add vtkUnstructuredGridPipeline for special mesh rendering
+
+## 2023-03-27 Ben Morgan (visVtk-V11-01-07)
+- Apply clang-tidy and clang-format fixes.
+- Remove dead code and no-ops.
+
+## 2023-03-23 Ben Morgan (visVtk-V11-01-06)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-03-22 Stewart Boogert (visVtk-V11-01-05)
+- Separate pipelines into source and include files
+- Class inheritance for pipelines G4VVtkPipeline and ability to chain pipelines
+- Separate interactive cutters, clippers.
+- 2D transparent image overlay
+- Improved geant4 commands (/vis/vtk/..)
+
+## 2023-02-14 Stewart Boogert (visVtk-V11-01-04)
+- Removed unused variables in preparation for special rendering pipeline
+
+## 2023-02-13 Stewart Boogert (visVtk-V11-01-03)
+- Refactor of VTK viewer with pipelines, geometry stores, improved 2D rendering,
+  streamlined VTK cmake components.
+
+## 2023-02-06 Ben Morgan (visVtk-V11-01-02)
+- Isolate private headers and update dependencies
+
+## 2023-02-03 Igor Semeniouk (visVtk-V11-01-01)
+- G4VtkSceneHandler.cc : text justification to given coordinate
+
+## 2023-01-30 Ben Morgan (visVtk-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
 ## 2022-11-25 Gabriele Cosmo (visVtk-V11-00-07)
 - Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
 

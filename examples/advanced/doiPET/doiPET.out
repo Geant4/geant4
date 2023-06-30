@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -817,14 +817,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00           69k world_logicalV
-       0.00         0.00         0.00          406k airBox_logicalV
+     100.00         0.01         0.00          406k airBox_logicalV
+       0.00         0.00         0.00           69k world_logicalV
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      85.51        406k       931     5788       8898         0.00    airBox_logicalV
-      14.49         68k       182      683       3080         0.01    world_logicalV
+      85.51        406k       931     5788       8898         0.01    airBox_logicalV
+      14.49         68k       182      683       3080         0.00    world_logicalV
 ### Run 0 starts.
 ### Begin of Run 0 start.
 
@@ -866,7 +866,7 @@ N=17 V[N]={87900885656017340, 2136126672992718976, 110623987125446578, 176001763
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=123.620000s Real=126.554271s Sys=1.860000s
+  User=106.510000s Real=109.183284s Sys=1.390000s
 
 ### End of Run (1000000 events)
 G4 kernel has come to Quit state.
@@ -882,19 +882,19 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 14
+Total navigation history collections cleaned: 13
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0202 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0183 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0125 MB
+Pool ID '17G4DynamicParticle', size : 0.0115 MB
 Pool ID '16G4SmartVoxelNode', size : 0.201 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.116 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '19G4ElectronOccupancy', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.024 MB
+Pool ID '7G4Track', size : 0.0221 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 12 of which, static: 0

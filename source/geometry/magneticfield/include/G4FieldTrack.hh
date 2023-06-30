@@ -79,8 +79,8 @@ class G4FieldTrack
      inline G4FieldTrack& operator= ( const G4FieldTrack& rStVec );
        // Copy constructor & Assignment operator
 
-     inline G4FieldTrack(G4FieldTrack&& from);
-     inline G4FieldTrack& operator=(G4FieldTrack&& from);
+     inline G4FieldTrack(G4FieldTrack&& from) noexcept ;
+     inline G4FieldTrack& operator=(G4FieldTrack&& from) noexcept ;
        // Move constructor & operator
 
      inline void UpdateState( const G4ThreeVector& pPosition, 
@@ -121,11 +121,11 @@ class G4FieldTrack
      inline G4double      GetRestMass() const;
        // Accessors.
 
-     inline void SetPosition(G4ThreeVector nPos); 
-     inline void SetMomentum(G4ThreeVector nMomDir);
+     inline void SetPosition(const G4ThreeVector& nPos); 
+     inline void SetMomentum(const G4ThreeVector& nMomDir);
        // Does change mom-dir too.
 
-     inline void SetMomentumDir(G4ThreeVector nMomDir);
+     inline void SetMomentumDir(const G4ThreeVector& nMomDir);
        // Does NOT change Momentum or Velocity Vector.
 
      inline void SetRestMass(G4double Mass_c2);
@@ -154,7 +154,7 @@ class G4FieldTrack
 
      inline void InitialiseSpin( const G4ThreeVector& vecPolarization );
      inline G4ThreeVector GetSpin() const;
-     inline void SetSpin(G4ThreeVector vSpin);
+     inline void SetSpin(const G4ThreeVector& vSpin);
 
    private: // Implementation method -- Obsolete
 

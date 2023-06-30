@@ -70,7 +70,7 @@ class G4IntegrationDriver<G4BulirschStoer>:
       ChordFinderDelegate::ResetStepEstimate();
     }
 
-    virtual void OnComputeStep() override {};
+    virtual void OnComputeStep(const G4FieldTrack* /*track*/ = nullptr) override {};
 
     virtual G4bool DoesReIntegrate() const override { return false; }  /// ????
    

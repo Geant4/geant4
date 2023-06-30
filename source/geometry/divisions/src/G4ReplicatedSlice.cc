@@ -93,7 +93,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double half_gap,
                                      const G4double offset )
   : G4PVReplica(pName, nDivs, pAxis, pLogical,
-                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
+                pMotherPhysical != nullptr ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
   if (pMotherPhysical == nullptr)
   {
@@ -117,7 +117,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double half_gap,
                                      const G4double offset )
   : G4PVReplica(pName, nDivs, pAxis, pLogical,
-                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
+                pMotherPhysical != nullptr ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
   if (pMotherPhysical == nullptr)
   {
@@ -141,7 +141,7 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
                                      const G4double half_gap,
                                      const G4double offset )
   : G4PVReplica(pName, 0, pAxis, pLogical,
-                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
+                pMotherPhysical != nullptr ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
   if (pMotherPhysical == nullptr)
   {
@@ -271,7 +271,7 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   // in G4VPVParameterisation::ComputeTransformation, for others
   // it will stay the unity
   //
-  G4RotationMatrix* pRMat = new G4RotationMatrix();
+  auto  pRMat = new G4RotationMatrix();
   SetRotation(pRMat);
 }
 

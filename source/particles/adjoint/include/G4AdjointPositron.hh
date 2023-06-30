@@ -55,7 +55,7 @@ class G4AdjointPositron : public G4ParticleDefinition
  private:
    static G4AdjointPositron* theInstance;
    G4AdjointPositron(){}
-   ~G4AdjointPositron(){}
+   ~G4AdjointPositron() override= default;
 
  public:
    static G4AdjointPositron* Definition();

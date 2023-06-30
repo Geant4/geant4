@@ -54,7 +54,7 @@ const G4int kDim = 2;
 /// - fEdep[], fTrackLength[].
 ///
 /// The data are collected step by step in SteppingAction, and
-/// the accumulated values are filled in histograms and entuple
+/// the accumulated values are filled in histograms and a Ntuple
 /// event by event in EventAction.
 
 class RunData : public G4Run

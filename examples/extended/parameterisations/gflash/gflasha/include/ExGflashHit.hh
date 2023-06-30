@@ -40,48 +40,33 @@ class G4LogicalVolume;
 
 class ExGflashHit : public G4VHit
 {
- public:
-  ExGflashHit();
-  ~ExGflashHit() override;
-  ExGflashHit(const ExGflashHit& right);
-  ExGflashHit& operator=(const ExGflashHit& right);
-  G4bool operator==(const ExGflashHit& right) const;
+  public:
+    ExGflashHit();
+    ~ExGflashHit() override;
+    ExGflashHit(const ExGflashHit& right);
+    ExGflashHit& operator=(const ExGflashHit& right);
+    G4bool operator==(const ExGflashHit& right) const;
 
-  inline void* operator new(size_t);
-  inline void operator delete(void* aHit);
-  void* operator new(size_t, void* p) { return p; }
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
+    void* operator new(size_t, void* p) { return p; }
 #ifndef G4NOT_ISO_DELETES
-  void operator delete(void*, void*) {}
+    void operator delete(void*, void*) {}
 #endif
 
-  void Draw() override;
-  void Print() override;
+    void Draw() override;
+    void Print() override;
 
- private:
-  G4double fEdep;
-  G4ThreeVector fPos;
+  private:
+    G4double fEdep;
+    G4ThreeVector fPos;
 
- public:
-  void SetEdep(G4double de)
-  {
-    fEdep = de;
-  };
-  void AddEdep(G4double de)
-  {
-    fEdep += de;
-  };
-  G4double GetEdep()
-  {
-    return fEdep;
-  };
-  void SetPos(G4ThreeVector xyz)
-  {
-    fPos = xyz;
-  };
-  G4ThreeVector GetPos()
-  {
-    return fPos;
-  };
+  public:
+    void SetEdep(G4double de) { fEdep = de; };
+    void AddEdep(G4double de) { fEdep += de; };
+    G4double GetEdep() { return fEdep; };
+    void SetPos(G4ThreeVector xyz) { fPos = xyz; };
+    G4ThreeVector GetPos() { return fPos; };
 };
 
 using ExGflashHitsCollection = G4THitsCollection<ExGflashHit>;
@@ -90,8 +75,7 @@ extern G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator;
 
 inline void* ExGflashHit::operator new(size_t)
 {
-  if ( ExGflashHitAllocator == nullptr )
-    ExGflashHitAllocator = new G4Allocator<ExGflashHit>;
+  if (ExGflashHitAllocator == nullptr) ExGflashHitAllocator = new G4Allocator<ExGflashHit>;
   return (void*)ExGflashHitAllocator->MallocSingle();
 }
 

@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-12 Ben Morgan (vis-V11-01-00)
+- Remove obsolete GNUmakefile scripts
+
 ## 2022-11-28 John Allison (vis-V11-00-04)
   - Numerous tags for 11.1 in vis sub-categories - see History files therein.
 

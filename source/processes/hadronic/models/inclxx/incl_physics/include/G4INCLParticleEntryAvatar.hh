@@ -44,9 +44,12 @@
 #include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
+
+  enum EntryType{Default, APAR}; //D
+
   class ParticleEntryAvatar: public G4INCL::IAvatar {
   public:
-    ParticleEntryAvatar(G4double, G4INCL::Nucleus*, G4INCL::Particle*);
+    ParticleEntryAvatar(G4double, G4INCL::Nucleus*, G4INCL::Particle*, EntryType = Default); //D
     virtual ~ParticleEntryAvatar();
     virtual G4INCL::IChannel* getChannel();
     ParticleList getParticles() const {
@@ -59,9 +62,13 @@ namespace G4INCL {
     virtual void postInteraction(FinalState *);
 
     std::string dump() const;
+   
+  EntryType getEntryType() const { return theEType; }; //D
+  
   private:
     Nucleus *theNucleus;
     Particle *theParticle;
+    EntryType theEType; //D
 
     INCL_DECLARE_ALLOCATION_POOL(ParticleEntryAvatar)
   };

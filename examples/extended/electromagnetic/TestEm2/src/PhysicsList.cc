@@ -77,8 +77,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fHadPhysicsList(nullptr)
+PhysicsList::PhysicsList()
 {  
   fMessenger = new PhysicsListMessenger(this); 
   SetVerboseLevel(1);

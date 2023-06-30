@@ -46,6 +46,7 @@
 #include "G4ESTARStopping.hh" 
 #include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -101,14 +102,7 @@ G4double G4ESTARStopping::GetElectronicDEDX(G4int i, G4double energy)
 }
  
 void G4ESTARStopping::Initialise()
-{
-  dirPath = G4FindDataDir("G4LEDATA");
-  if(!dirPath) {
-    G4Exception("G4ESTARStopping()","em0006",FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
- 
+{ 
 static const G4double T0[25]={1.0E-03,3.0E-03,5.0E-03,9.0E-03,2.5E-02,4.5E-02,8.0E-02,.2,.4,.7,1.5,3.5,6.0,10.,30.,50.,90.,250.,450.,800.,2000.,4.0E+03,6.0E+03,8.0E+03,1.0E+04};
 
 name[1]="G4_1,2-DICHLOROBENZENE";
@@ -959,6 +953,8 @@ void G4ESTARStopping::AddData(const G4double* ekin, const G4double* stop,
 
   static const G4double fac = MeV*cm2/g;
   if(nullptr != sdata[idx]) { delete sdata[idx]; }
+
+  const G4String& dirPath = G4EmParameters::Instance()->GetDirLEDATA();
 
   // hardtyped data
   if(0 == type) {

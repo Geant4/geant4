@@ -77,13 +77,13 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
   {
     G4double z = zPlane[i];
     G4double r = rOuter[i]*convertRad;
-    rzcorners.push_back(G4TwoVector(r,z));
+    rzcorners.emplace_back(r,z);
   }
   for (G4int i=numZPlanes-1; i>=0; --i)
   {
     G4double z = zPlane[i];
     G4double r = rInner[i]*convertRad;
-    rzcorners.push_back(G4TwoVector(r,z));
+    rzcorners.emplace_back(r,z);
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -119,7 +119,7 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
   rzcorners.resize(0);
   for (G4int i=0; i<numRZ; ++i)
   {
-    rzcorners.push_back(G4TwoVector(r[i],z[i]));
+    rzcorners.emplace_back(r[i],z[i]);
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -141,9 +141,7 @@ G4UPolyhedra::G4UPolyhedra( __void__& a )
 //
 // Destructor
 //
-G4UPolyhedra::~G4UPolyhedra()
-{
-}
+G4UPolyhedra::~G4UPolyhedra() = default;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -307,13 +305,13 @@ G4bool G4UPolyhedra::Reset()
   {
     G4double z = fOriginalParameters.Z_values[i];
     G4double r = fOriginalParameters.Rmax[i];
-    rzcorners.push_back(G4TwoVector(r,z));
+    rzcorners.emplace_back(r,z);
   }
   for (G4int i=fOriginalParameters.Num_z_planes-1; i>=0; --i)
   {
     G4double z = fOriginalParameters.Z_values[i];
     G4double r = fOriginalParameters.Rmin[i];
-    rzcorners.push_back(G4TwoVector(r,z));
+    rzcorners.emplace_back(r,z);
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -491,7 +489,7 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, RZ contour of the polycone is subdivided
@@ -508,7 +506,7 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyhedraSideRZ corner = GetCorner(i);
-    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+    contourRZ.emplace_back(corner.r,corner.z);
   }
   G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
   G4double area = G4GeomTools::PolygonArea(contourRZ);
@@ -556,8 +554,8 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
     G4int i3 = i*3;
     for (G4int k=0; k<ksteps+1; ++k) // rotate triangle
     {
-      G4ThreeVectorList* ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
-      G4ThreeVectorList::iterator iter = ptr->begin();
+      auto ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
+      auto iter = ptr->begin();
       iter->set(triangles[i3+0].x()*cosCur,
                 triangles[i3+0].x()*sinCur,
                 triangles[i3+0].y());
@@ -584,7 +582,7 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
     if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
   }
   // free memory
-  for (G4int k=0; k<ksteps+1; ++k) { delete polygons[k]; polygons[k]=0;}
+  for (G4int k=0; k<ksteps+1; ++k) { delete polygons[k]; polygons[k]=nullptr;}
   return (pMin < pMax);
 }
 

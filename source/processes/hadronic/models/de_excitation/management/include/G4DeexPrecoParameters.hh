@@ -36,7 +36,6 @@
 #define G4DeexPrecoParameters_h 1
 
 #include "globals.hh"
-#include "G4Threading.hh"
 
 enum G4DeexChannelType
 {
@@ -62,7 +61,7 @@ public:
 
   // printing
   std::ostream& StreamInfo(std::ostream& os) const;
-  void Dump() const;
+  void Dump();
   friend std::ostream& operator<< (std::ostream& os, 
 				   const G4DeexPrecoParameters&);
 
@@ -208,6 +207,8 @@ public:
 
 private:
 
+  void Initialise();
+
   G4bool IsLocked() const;
 
   G4DeexParametersMessenger* theMessenger;
@@ -233,7 +234,7 @@ private:
   G4double fPrecoHighEnergy;
 
   // Preco phenomenological factor
-  G4double fPhenoFactor;
+  G4double fPhenoFactor = 1.0;
 
   // Excitation handler
   G4double fMinExcitation;
@@ -243,40 +244,37 @@ private:
   G4double fMinExPerNucleounForMF;
 
   // Cross section type
-  G4int fPrecoType;
-  G4int fDeexType;
+  G4int fPrecoType = 3;
+  G4int fDeexType = 3;
 
-  G4int fTwoJMAX;
+  G4int fTwoJMAX = 10;
 
   // Preco model
-  G4int fMinZForPreco;
-  G4int fMinAForPreco;
+  G4int fMinZForPreco = 3;
+  G4int fMinAForPreco = 5;
 
-  G4int fVerbose;
+  G4int fVerbose = 1;
 
   // Preco flags
-  G4bool fNeverGoBack;
-  G4bool fUseSoftCutoff;
-  G4bool fUseCEM;
-  G4bool fUseGNASH;
-  G4bool fUseHETC;
-  G4bool fUseAngularGen;
-  G4bool fPrecoDummy;
+  G4bool fNeverGoBack = false;
+  G4bool fUseSoftCutoff = false;
+  G4bool fUseCEM = true;
+  G4bool fUseGNASH = false;
+  G4bool fUseHETC = false;
+  G4bool fUseAngularGen = true;
+  G4bool fPrecoDummy = false;
 
   // Deex flags
-  G4bool fCorrelatedGamma;
-  G4bool fStoreAllLevels;
-  G4bool fInternalConversion;
-  G4bool fLD;  // use simple level density model 
-  G4bool fFD;  // use transition to discrete level 
-  G4bool fIsomerFlag;  // enable isomere production 
+  G4bool fCorrelatedGamma = false;
+  G4bool fStoreAllLevels = false;
+  G4bool fInternalConversion = true;
+  G4bool fLD = true;  // use simple level density model 
+  G4bool fFD = true;  // use transition to discrete level 
+  G4bool fIsomerFlag = true;  // enable isomere production
+  G4bool fIsPrinted = false;
 
   // type of a set of e-exitation channels
-  G4DeexChannelType fDeexChannelType;   
-
-#ifdef G4MULTITHREADED
-  static G4Mutex deexPrecoMutex;
-#endif
+  G4DeexChannelType fDeexChannelType = fCombined;
 };
 
 inline G4double G4DeexPrecoParameters::GetLevelDensity() const

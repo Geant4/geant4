@@ -50,7 +50,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-    virtual ~DetectorConstruction();
+   ~DetectorConstruction() override;
 
   public:
        
@@ -58,7 +58,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetMaterial   (G4String);
      void SetNbOfLayers (G4int nb);                    
           
-     virtual G4VPhysicalVolume* Construct();
+     G4VPhysicalVolume* Construct() override;
      
   public:  
                     
@@ -71,13 +71,13 @@ class DetectorConstruction : public G4VUserDetectorConstruction
                        
   private:
 
-     G4double            fAbsorRadius;     
-     G4Material*         fAbsorMaterial;
-     G4int               fNbOfLayers;
-     G4double            fLayerThickness;
-     G4VPhysicalVolume*  fAbsor;
+     G4double            fAbsorRadius = 0.;
+     G4Material*         fAbsorMaterial = nullptr;
+     G4int               fNbOfLayers = 0;
+     G4double            fLayerThickness = 0.;
+     G4VPhysicalVolume*  fAbsor = nullptr;
 
-     DetectorMessenger*  fDetectorMessenger;
+     DetectorMessenger*  fDetectorMessenger = nullptr;
 
      std::vector<G4LogicalVolume*> fLVolumes;
      std::vector<G4Sphere*> fSpheres;

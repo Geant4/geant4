@@ -74,11 +74,19 @@ foreach(_sourcesfile ${GEANT4_SOURCESCMAKE_FILES})
 
   # - Find on disk files...
   file(GLOB
-    _ondisk_hh
+    _ondisk_public_hh
     RELATIVE ${_sourcesfile_location}/include
     ${_sourcesfile_location}/include/*.hh
     ${_sourcesfile_location}/include/*.icc
     )
+  file(GLOB
+    _ondisk_private_hh
+    RELATIVE ${_sourcesfile_location}/include/private
+    ${_sourcesfile_location}/include/private/*.hh
+    ${_sourcesfile_location}/include/private/*.icc
+    )
+  set(_ondisk_hh ${_ondisk_public_hh} ${_ondisk_private_hh})
+
   file(GLOB
     _ondisk_cc
     RELATIVE ${_sourcesfile_location}/src

@@ -4,6 +4,45 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-05-15 Alberto Ribon (phys-lists-V11-01-03)
+- Use the new class G4StoppingPhysicsWithINCLXX (instead of G4StoppingPhysics)
+  in INCLXXPhysicsListHelper : all the INCLXX-based physics lists use INCLXX
+  for the antiproton annihilation at rest.
+
+## 2023-05-10 Alberto Ribon (phys-lists-V11-01-02)
+- G4PhysListFactory : introduced the new physics list names `Shielding_HP` and
+  `ShieldingM_HP` as alias of, respectively, `Shielding` and `ShieldingM`;
+  replaced `Shielding_T` and `ShieldingM_T` with, respectively, `Shielding_HPT`
+  and `ShieldingM_HPT`.
+  These new aliases allow to have a consistent notation `_HPT` for all the
+  HP-based physics lists when the special elastic scattering treatment of
+  thermal neutrons is enabled.
+- Shielding : inform the user that the new physics list names (to be used
+  with the physics list factory) `Shielding_HP` and `ShieldingM_HP` are
+  equivalent to, respectively, `Shielding` and `ShieldingM`.
+
+## 2023-04-19 Alberto Ribon (phys-lists-V11-01-01)
+- Created the new class QBBC_ABLA, which is similar to QBBC, except that for
+  hadron inelastic the constructor G4HadronInelasticQBBC_ABLA is used
+  (instead of G4HadronInelasticQBBC): this means that the physics list
+  QBBC_ABLA behaves as QBBC, with the only difference that for the final-state
+  of nuclear inelastic interactions of charged pions and nucleons projectiles,
+  the ABLA model (instead of the usual Precompound/de-excitation) is utilized
+  for nuclear de-excitation.
+
+## 2023-04-13 Alberto Ribon (phys-lists-V11-01-00)
+- Created the new class QGSP_BIC_HPT, which is similar to QGSP_BIC_HP, but with
+  special treatment of elastic scattering of thermal neutrons activated.
+- G4PhysListFactory : added 6 new physics lists, corresponding to "HPT" variants
+  (i.e. with special treatment of elastic scattering of thermal neutrons) of
+  physics lists with "HP" already present (FTFP_BERT_HPT, QGSP_BERT_HPT,
+  FTFP_INCLXX_HPT, QGSP_INCLXX_HPT, QGSP_BIC_HPT, QGSP_BIC_AllHPT,
+  Shielding_T, ShieldingM_T). Of these, only one (QGSP_BIC_HPT) corresponds
+  to a concrete new physics list, whereas the others are obtained from the
+  "HP" physics lists by adding the physics constructor G4ThermalNeutrons.
+- G4PhysListFactoryMessenger : added the new UI command
+  "/physics_lists/factory/addThermal" to enable the special treatment of
+  elastic scattering of thermal neutrons for HP-based physics lists.
 
 ## 2021-12-10 Ben Morgan (phys-lists-V11-00-00)
 - Change to new Markdown History format

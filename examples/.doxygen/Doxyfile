@@ -855,6 +855,10 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr09/.README.txt \
                          ../extended/hadronic/Hadr10/.README.txt \
                          ../extended/hadronic/FissionFragment \
+                         ../extended/hadronic/FlukaCern/.README.txt \
+                         ../extended/hadronic/FlukaCern/ProcessLevel/CrossSection/.README.txt \
+                         ../extended/hadronic/FlukaCern/ProcessLevel/FinalState/.README.txt \
+                         ../extended/hadronic/FlukaCern/PhysicsListLevel/.README.txt \
                          ../extended/hadronic/NeutronSource/.README.txt \
                          ../extended/hadronic/ParticleFluence/.README.txt \
                          ../extended/hadronic/ParticleFluence/Calo/.README.txt \

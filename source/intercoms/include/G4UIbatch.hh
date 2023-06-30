@@ -39,16 +39,15 @@
 #ifndef G4UI_BATCH_HH
 #define G4UI_BATCH_HH 1
 
-#include <fstream>
-
 #include "G4UIsession.hh"
+
+#include <fstream>
 
 class G4UIbatch : public G4UIsession
 {
   public:
-
+    // "prevSession" must be null if this class is constructed from main().
     G4UIbatch(const char* fileName, G4UIsession* prevSession = nullptr);
-      // "prevSession" must be null if this class is constructed from main().
 
     ~G4UIbatch() override;
 
@@ -57,13 +56,13 @@ class G4UIbatch : public G4UIsession
     G4UIsession* SessionStart() override;
     void PauseSessionStart(const G4String& Prompt) override;
 
-   private:
-
+  private:
+    // Get command from a batch script file
     G4String ReadCommand();
-      // Get command from a batch script file
 
     G4int ExecCommand(const G4String& command);
 
+  private:
     G4UIsession* previousSession = nullptr;
 
     std::ifstream macroStream;

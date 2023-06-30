@@ -61,6 +61,7 @@
 #include "G4FermiPhaseSpaceDecay.hh"
 
 #include "G4PreCompoundModel.hh"
+#include "G4HadronicParameters.hh"
 
 #include <algorithm>
 #include "G4ShortLivedConstructor.hh"
@@ -165,6 +166,7 @@ G4VIntraNuclearTransportModel("Binary Cascade", ptr)
     massInNucleus=0.;
     theOuterRadius=0.;
     theBIC_ID = G4PhysicsModelCatalog::GetModelID("model_G4BinaryCascade");
+    fBCDEBUG = G4HadronicParameters::Instance()->GetBinaryDebug();
 }
 
 G4BinaryCascade::~G4BinaryCascade()
@@ -252,7 +254,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
         G4Nucleus & aNucleus)
 //----------------------------------------------------------------------------
 {
-    if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction starts ######### "<< G4endl;
+    if(fBCDEBUG) G4cerr << " ######### Binary Cascade Reaction starts ######### "<< G4endl;
 
     G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
     const G4ParticleDefinition * definition = aTrack.GetDefinition();
@@ -271,7 +273,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     G4KineticTrackVector * secondaries;// = new G4KineticTrackVector;
     G4ThreeVector initialPosition(0., 0., 0.); // will be set later
 
-    if(!std::getenv("I_Am_G4BinaryCascade_Developer") )
+    if(!fBCDEBUG)
     {
         if(definition!=G4Neutron::NeutronDefinition() &&
                 definition!=G4Proton::ProtonDefinition() &&
@@ -363,7 +365,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
 
     } else {  // no interaction, return primary
-        if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return initial state ######### "<< G4endl;
+        if(fBCDEBUG) G4cerr << " ######### Binary Cascade Reaction void, return initial state ######### "<< G4endl;
         theParticleChange.SetStatusChange(isAlive);
         theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
         theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
@@ -376,9 +378,9 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
     }
 	 
     delete the3DNucleus;
-    the3DNucleus = NULL;
+    the3DNucleus = nullptr;
 
-    if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction ends ######### "<< G4endl;
+    if(fBCDEBUG) G4cerr << " ######### Binary Cascade Reaction ends ######### "<< G4endl;
 
     return &theParticleChange;
 }
@@ -795,7 +797,7 @@ void G4BinaryCascade::BuildTargetList()
     theInitial4Mom = G4LorentzVector(0,0,0,initial_nuclear_mass);
     currentA=0;
     currentZ=0;
-    while((nucleon = the3DNucleus->GetNextNucleon()) != NULL)       /* Loop checking, 31.08.2015, G.Folger */
+    while((nucleon = the3DNucleus->GetNextNucleon()) != nullptr)       /* Loop checking, 31.08.2015, G.Folger */
     {
         // check if nucleon is hit by higher energy model.
         if ( ! nucleon->AreYouHit() )
@@ -1591,7 +1593,7 @@ G4bool G4BinaryCascade::Capture(G4bool verbose)
                 }
             }
         }
-        UpdateTracksAndCollisions(&captured, NULL, NULL);
+        UpdateTracksAndCollisions(&captured, nullptr, nullptr);
     }
 
     return capture;
@@ -2238,7 +2240,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
             (*i_captured)->Hit();
         }
         //     PrintKTVector(kt_captured," kt_captured be4 updatetrack...");
-        UpdateTracksAndCollisions(kt_captured, NULL, NULL);
+        UpdateTracksAndCollisions(kt_captured, nullptr, nullptr);
     }
 
 #ifdef debug_G4BinaryCascade
@@ -2536,7 +2538,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
      * 	 << G4endl;
      */
     //
-    //  if(getenv("BCDEBUG") ) G4cerr << "Fragment A, Z "<< a <<" "<< z<<G4endl;
+    //  if(fBCDEBUG) G4cerr << "Fragment A, Z "<< a <<" "<< z<<G4endl;
     if ( z < 1 ) return 0;
 
     G4int holes = G4int(the3DNucleus->GetMassNumber() - theTargetList.size());

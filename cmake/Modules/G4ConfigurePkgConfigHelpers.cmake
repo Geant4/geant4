@@ -242,7 +242,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
-    set(_qtcomps Core Gui Widgets OpenGL PrintSupport)
+    set(_qtcomps Core Gui Widgets OpenGL)
     if(QT_VERSION_MAJOR VERSION_GREATER_EQUAL 5.15)
       list(APPEND _qtcomp 3DCore 3DExtras 3DRender)
     endif()

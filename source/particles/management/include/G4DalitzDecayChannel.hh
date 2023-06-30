@@ -49,19 +49,19 @@ class G4DalitzDecayChannel : public G4VDecayChannel
                          const G4String& theLeptonName,
                          const G4String& theAntiLeptonName);
 
-    virtual ~G4DalitzDecayChannel();
+    ~G4DalitzDecayChannel() override = default;
 
-    virtual G4DecayProducts* DecayIt(G4double);     
+    G4DecayProducts* DecayIt(G4double) override;     
 
   protected:
 
-    G4DalitzDecayChannel(const G4DalitzDecayChannel&);
+    G4DalitzDecayChannel(const G4DalitzDecayChannel&) = default;
     G4DalitzDecayChannel& operator=(const G4DalitzDecayChannel&);
       // Copy constructor and assignment operator
 
   private:
 
-    G4DalitzDecayChannel();
+    G4DalitzDecayChannel() = default;
 
     enum{idGamma=0, idLepton=1, idAntiLepton=2};
 };

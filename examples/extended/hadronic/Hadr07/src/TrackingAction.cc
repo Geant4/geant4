@@ -33,6 +33,7 @@
 #include "TrackingAction.hh"
 
 #include "Run.hh"
+#include "EventAction.hh"
 #include "HistoManager.hh"
 #include "TrackingMessenger.hh"
 
@@ -42,8 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction()
-:G4UserTrackingAction(), fTrackMessenger(nullptr),
+TrackingAction::TrackingAction(EventAction* evt)
+:G4UserTrackingAction(), fTrackMessenger(nullptr),fEventAct(evt),
  fParticleCount(true)
 {
   fTrackMessenger = new TrackingMessenger(this); 
@@ -105,6 +106,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   G4double meanLife = particle->GetPDGLifeTime();  
   G4double energy   = track->GetKineticEnergy();
   run->ParticleCount(0,name,energy,meanLife);
+  fEventAct->AddEleak(energy);
 
  ////G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
 }

@@ -103,11 +103,6 @@ PhysListEmPenelope::PhysListEmPenelope(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmPenelope::~PhysListEmPenelope()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysListEmPenelope::ConstructProcess()
 {
     G4PhysicsListHelper* list = G4PhysicsListHelper::GetPhysicsListHelper();

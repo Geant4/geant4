@@ -29,34 +29,38 @@
 
 #ifndef G4DNAPTBIonisationStructure_HH
 #define G4DNAPTBIonisationStructure_HH 1
- 
 #include "globals.hh"
-#include <vector>
 #include <map>
-
- 
+#include <vector>
+class G4Material;
 class G4DNAPTBIonisationStructure
 {
-public:
-  
+ public:
   G4DNAPTBIonisationStructure();
-  
-  virtual ~G4DNAPTBIonisationStructure();
-  
-  G4double IonisationEnergy(G4int level, const G4String &materialName);
+  ~G4DNAPTBIonisationStructure() = default;
+  G4double IonisationEnergy(G4int level, const size_t& materialName);
+  G4int NumberOfLevels(const size_t& materialName);
+  G4DNAPTBIonisationStructure(const G4DNAPTBIonisationStructure&) = delete;  // prevent copy-construction
+  G4DNAPTBIonisationStructure& operator=(
+    const G4DNAPTBIonisationStructure& right) = delete;  // prevent assignement
 
-  G4int NumberOfLevels(const G4String& materialName);
-  
-  // Copy constructor and assignment operator to be added here
-    
-private:
-   
+ private:
   // Number of Ionisation levels of the water molecule
-  std::map<G4String, G4int> nLevels;
-
-  std::map<G4String, std::vector<G4double> > energyConstant;
-  
-  G4String ReplaceMaterial(const G4String &materialName);
+  std::map<size_t, G4int> nLevels;
+  std::map<size_t, std::vector<G4double>> energyConstant;
+  size_t ReplaceMaterial(const size_t& materialID);
+  G4Material* fpGuanine_PU = nullptr;
+  G4Material* fpTHF = nullptr;
+  G4Material* fpPY = nullptr;
+  G4Material* fpPU = nullptr;
+  G4Material* fpTMP = nullptr;
+  G4Material* fpG4_WATER = nullptr;
+  G4Material* fpBackbone_THF = nullptr;
+  G4Material* fpCytosine_PY = nullptr;
+  G4Material* fpThymine_PY = nullptr;
+  G4Material* fpAdenine_PU = nullptr;
+  G4Material* fpBackbone_TMP = nullptr;
+  G4Material* fpN2 = nullptr;
 };
 
 #endif

@@ -39,6 +39,8 @@
 #include "G4VMarker.hh"
 #include "G4ModelingParameters.hh"
 #include "G4PhysicalVolumesSearchScene.hh"
+#include "G4SceneTreeItem.hh"
+
 #include <vector>
 
 class G4UIcommand;
@@ -165,6 +167,7 @@ protected:
   // handler.
   static G4bool fThereWasAViewer;  // True if there was a viewer
   static G4ViewParameters fExistingVP;  // Its view parameters
+  static G4SceneTreeItem fExistingSceneTree;  // Its scene tree
 };
 
 #endif

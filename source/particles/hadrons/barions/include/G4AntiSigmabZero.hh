@@ -52,7 +52,7 @@ class G4AntiSigmabZero : public G4ParticleDefinition
  private:
    static G4AntiSigmabZero* theInstance;
    G4AntiSigmabZero(){}
-   ~G4AntiSigmabZero(){}
+   ~G4AntiSigmabZero() override= default;
 
  public:
    static G4AntiSigmabZero* Definition();

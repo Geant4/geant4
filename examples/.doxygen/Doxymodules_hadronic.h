@@ -121,6 +121,24 @@
 
 /** @} */
 
+/** @defgroup extended_hadronic_FlukaCern_exFlukaCernCrossSection exFlukaCernCrossSection
+*  Hadronic FlukaCern exFlukaCernCrossSection example has its 
+ *  <a href="../html_CrossSection/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_FlukaCern_exFlukaCernFinalState exFlukaCernFinalState
+*  Hadronic FlukaCern exFlukaCernFinalState example has its 
+ *  <a href="../html_FinalState/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_hadronic_NeutronSource NeutronSource
  *  The NeutronSource hadronic classes have their
  *  <a href="../html_NeutronSource/html/index.html">standalone documentation </a>

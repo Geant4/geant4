@@ -10,6 +10,7 @@
 #include <tools/img>
 
 #include <ostream>
+#include <sstream>
 
 namespace toolx {
 namespace sg {
@@ -42,7 +43,9 @@ inline bool gl_dump_if_errors(std::ostream& a_out,const std::string& a_head) {
 
     //#define GL_INVALID_FRAMEBUFFER_OPERATION  0x0506
 
-    a_out << "0x" << std::hex << glerror << std::endl;
+    std::ostringstream oss;
+    oss << "0x" << std::hex << glerror;
+    a_out << oss.str() << std::endl;
 
     glerror = ::glGetError();
   }
@@ -87,7 +90,7 @@ inline bool gl_tex_img(std::ostream& a_out,const tools::img_byte& a_img) {
 #if defined(ANDROID) || TARGET_OS_IPHONE
       tools::img_byte res;
       if(!a_img.bw2x(3,res)) {
-        a_out << "toolx::sg::gl::tex_img : toolx::img.bw2x() failed." << std::endl;
+        a_out << "toolx::sg::gl::tex_img : tools::img.bw2x() failed." << std::endl;
         return false;
       }
       ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,res.width(),res.height(),0,GL_RGB,GL_UNSIGNED_BYTE,res.buffer());
@@ -106,5 +109,6 @@ inline bool gl_tex_img(std::ostream& a_out,const tools::img_byte& a_img) {
 }
 
 }}
+
 
 #endif

@@ -177,8 +177,6 @@ class G4Voxelizer
       }
     };
 
-  private:
-
     void BuildEmpty ();
 
     G4String GetCandidatesAsString(const G4SurfBits& bits) const;

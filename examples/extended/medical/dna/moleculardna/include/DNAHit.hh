@@ -48,26 +48,26 @@ class DNAHit : public G4VHit
 {
  public:
   // Main constructors
-  DNAHit();
+  DNAHit() = default;
 
-  DNAHit(const molecule&, const G4int&, const G4int&, const G4int&,
-         const int64_t&,
-         G4ThreeVector,                                              // dousatsu
-         G4ThreeVector, const G4double&, const G4double&, G4String,  // dousatsu
+  DNAHit(const molecule&, G4int, G4int, G4int,
+         int64_t,
+         const G4ThreeVector&,                                              // dousatsu
+         const G4ThreeVector&, const G4double&, const G4double&, const G4String&,  // dousatsu
          const G4MolecularConfiguration*);                           // dousatsu
 
   // Constructor delegation
   // Physical Hit
-  DNAHit(const molecule& mol, const G4int& placement_idx, const G4int& chain,
-         const G4int& strand, const int64_t& bp, const G4ThreeVector& pos,
+  DNAHit(const molecule& mol, G4int placement_idx, G4int chain,
+         G4int strand, int64_t bp, const G4ThreeVector& pos,
          const G4ThreeVector& localpos, G4double energy, G4double d,
          G4String chromo)
     : DNAHit(mol, placement_idx, chain, strand, bp, pos, localpos, energy, d,
              std::move(chromo), nullptr){};
 
   // Chemical hit
-  DNAHit(const molecule& mol, const G4int& placement_idx, const G4int& chain,
-         const G4int& strand, const int64_t& bp, const G4ThreeVector& pos,
+  DNAHit(const molecule& mol, G4int placement_idx, G4int chain,
+         G4int strand, int64_t bp, const G4ThreeVector& pos,
          const G4ThreeVector& localpos, G4String chromo,
          const G4MolecularConfiguration* radical)
     : DNAHit(mol, placement_idx, chain, strand, bp, pos, localpos, 0, 0,
@@ -75,7 +75,7 @@ class DNAHit : public G4VHit
 
   DNAHit(const DNAHit&);
 
-  ~DNAHit() override;
+  ~DNAHit() override = default;
 
   // Add Method, not as an operator to prevent people making mistakes
   void AddHit(const DNAHit&);
@@ -94,13 +94,13 @@ class DNAHit : public G4VHit
   // the computed quantites
   void SetMolecule(const molecule& mol) { fMoleculeEnum = mol; };
 
-  void SetPlacementIdx(const G4int& place_idx) { fPlacementIdx = place_idx; };
+  void SetPlacementIdx(G4int place_idx) { fPlacementIdx = place_idx; };
 
-  void SetChainIdx(const G4int& chainidx) { fChainIdx = chainidx; };
+  void SetChainIdx(G4int chainidx) { fChainIdx = chainidx; };
 
-  void SetStrandIdx(const G4int& strandidx) { fStrandIdx = strandidx; };
+  void SetStrandIdx(G4int strandidx) { fStrandIdx = strandidx; };
 
-  void SetBasePairIdx(const int64_t& bpidx)
+  void SetBasePairIdx(int64_t bpidx)
   {
     fBasePairIdx = bpidx;
   };  // dousatsu

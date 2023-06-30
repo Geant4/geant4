@@ -33,33 +33,35 @@
 #include "G4ParticleHPFieldPoint.hh"
 
 G4ParticleHPFieldPoint::G4ParticleHPFieldPoint(G4int n)
-  {
-    nP = n;
-    X = 0;
-    Y = new G4double[nP];
-    for (G4int i=0; i<nP; i++) Y[i]=0.;
+{
+  nP = n;
+  X = 0;
+  Y = new G4double[nP];
+  for (G4int i = 0; i < nP; i++)
+    Y[i] = 0.;
+}
+
+void G4ParticleHPFieldPoint::operator=(const G4ParticleHPFieldPoint& aSet)
+{
+  if (&aSet != this) {
+    X = aSet.GetX();
+    delete[] Y;
+    Y = new G4double[aSet.GetDepth()];
+    for (G4int i = 0; i < aSet.GetDepth(); i++)
+      Y[i] = aSet.GetY(i);
   }
-  
-void G4ParticleHPFieldPoint::operator= (const G4ParticleHPFieldPoint & aSet)
-  {
-    if(&aSet!=this)
-    {
-      X = aSet.GetX();
-      delete [] Y;
-      Y = new G4double[aSet.GetDepth()];
-      for(G4int i=0; i<aSet.GetDepth(); i++) Y[i] = aSet.GetY(i);
-    }
-  }
+}
 
 G4ParticleHPFieldPoint::~G4ParticleHPFieldPoint()
-  {
-    delete [] Y;
-  }
-    
+{
+  delete[] Y;
+}
+
 void G4ParticleHPFieldPoint::InitY(G4int n)
-  {
-    nP = n;
-    X=0;
-    Y = new G4double[nP];
-    for (G4int i=0; i<nP; i++) Y[i]=0.;
-  }
+{
+  nP = n;
+  X = 0;
+  Y = new G4double[nP];
+  for (G4int i = 0; i < nP; i++)
+    Y[i] = 0.;
+}

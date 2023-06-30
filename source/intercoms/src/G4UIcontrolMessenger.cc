@@ -28,22 +28,23 @@
 // Author: Makoto Asai, SLAC - 2001
 // --------------------------------------------------------------------
 
-#include <stdlib.h>
 #include "G4UIcontrolMessenger.hh"
-#include "G4UImanager.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
-#include "G4UIcmdWithAString.hh"
+
+#include "G4StateManager.hh"
+#include "G4Tokenizer.hh"
+#include "G4UIaliasList.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "G4UIaliasList.hh"
-#include "G4StateManager.hh"
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImanager.hh"
+#include "G4UIparameter.hh"
 #include "G4UIsession.hh"
-#include "G4Tokenizer.hh"
-
 #include "G4ios.hh"
+
+#include <cstdlib>
 
 // --------------------------------------------------------------------
 G4UIcontrolMessenger::G4UIcontrolMessenger()
@@ -52,8 +53,9 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   controlDirectory->SetGuidance("UI control commands.");
 
   macroPathCommand = new G4UIcmdWithAString("/control/macroPath", this);
-  macroPathCommand->SetGuidance("Set macro search path"
-                                " with colon-separated list.");
+  macroPathCommand->SetGuidance(
+    "Set macro search path"
+    " with colon-separated list.");
   macroPathCommand->SetParameterName("path", false);
 
   ExecuteCommand = new G4UIcmdWithAString("/control/execute", this);
@@ -79,8 +81,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
 
   foreachCommand = new G4UIcommand("/control/foreach", this);
   foreachCommand->SetGuidance("Execute a macro file more than once.");
-  foreachCommand->SetGuidance(
-    "Loop counter can be used as an aliased variable.");
+  foreachCommand->SetGuidance("Loop counter can be used as an aliased variable.");
   foreachCommand->SetGuidance("Values must be separated by a space.");
   auto* param6 = new G4UIparameter("macroFile", 's', false);
   foreachCommand->SetParameter(param6);
@@ -90,14 +91,10 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   foreachCommand->SetParameter(param8);
   foreachCommand->SetToBeBroadcasted(false);
 
-  suppressAbortionCommand =
-    new G4UIcmdWithAnInteger("/control/suppressAbortion", this);
-  suppressAbortionCommand->SetGuidance(
-    "Suppress the program abortion caused by G4Exception.");
-  suppressAbortionCommand->SetGuidance(
-    "Suppression level = 0 : no suppression");
-  suppressAbortionCommand->SetGuidance(
-    "                  = 1 : suppress during EventProc state");
+  suppressAbortionCommand = new G4UIcmdWithAnInteger("/control/suppressAbortion", this);
+  suppressAbortionCommand->SetGuidance("Suppress the program abortion caused by G4Exception.");
+  suppressAbortionCommand->SetGuidance("Suppression level = 0 : no suppression");
+  suppressAbortionCommand->SetGuidance("                  = 1 : suppress during EventProc state");
   suppressAbortionCommand->SetGuidance(
     "                  = 2 : full suppression, i.e. no abortion by "
     "G4Exception");
@@ -134,8 +131,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   historyCommand->SetDefaultValue("G4History.macro");
   historyCommand->SetToBeBroadcasted(false);
 
-  stopStoreHistoryCommand =
-    new G4UIcmdWithoutParameter("/control/stopSavingHistory", this);
+  stopStoreHistoryCommand = new G4UIcmdWithoutParameter("/control/stopSavingHistory", this);
   stopStoreHistoryCommand->SetGuidance("Stop saving history file.");
   stopStoreHistoryCommand->SetToBeBroadcasted(false);
 
@@ -143,8 +139,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   aliasCommand->SetGuidance("Set an alias.");
   aliasCommand->SetGuidance("String can be aliased by this command.");
   aliasCommand->SetGuidance("The string may contain one or more spaces,");
-  aliasCommand->SetGuidance(
-    "the string must be enclosed by double quotes (\").");
+  aliasCommand->SetGuidance("the string must be enclosed by double quotes (\").");
   aliasCommand->SetGuidance("To use an alias, enclose the alias name with");
   aliasCommand->SetGuidance("parenthesis \"{\" and \"}\".");
   auto* aliasNameParam = new G4UIparameter("aliasName", 's', false);
@@ -160,13 +155,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   listAliasCommand->SetGuidance("List aliases.");
 
   getEnvCmd = new G4UIcmdWithAString("/control/getEnv", this);
-  getEnvCmd->SetGuidance(
-    "Get a shell environment variable and define it as an alias.");
+  getEnvCmd->SetGuidance("Get a shell environment variable and define it as an alias.");
   getEnvCmd->SetToBeBroadcasted(false);
 
   getValCmd = new G4UIcommand("/control/getVal", this);
-  getValCmd->SetGuidance(
-    "Get the current value of the UI command and define it as an alias.");
+  getValCmd->SetGuidance("Get the current value of the UI command and define it as an alias.");
   getValCmd->SetGuidance(
     "Command is ignored if the UI command does not support GetCurrentValue().");
   getValCmd->SetGuidance(" Syntax : <alias_name> <UI_command> <iIdx>");
@@ -195,17 +188,14 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ManualCommand->SetToBeBroadcasted(false);
 
   HTMLCommand = new G4UIcmdWithAString("/control/createHTML", this);
-  HTMLCommand->SetGuidance(
-    "Generate HTML files for all of sub-directories and commands.");
+  HTMLCommand->SetGuidance("Generate HTML files for all of sub-directories and commands.");
   HTMLCommand->SetGuidance("Directory path should be given by FULL-PATH.");
   HTMLCommand->SetParameterName("dirPath", true);
   HTMLCommand->SetDefaultValue("/");
   HTMLCommand->SetToBeBroadcasted(false);
 
-  maxStoredHistCommand =
-    new G4UIcmdWithAnInteger("/control/maximumStoredHistory", this);
-  maxStoredHistCommand->SetGuidance(
-    "Set maximum number of stored UI commands.");
+  maxStoredHistCommand = new G4UIcmdWithAnInteger("/control/maximumStoredHistory", this);
+  maxStoredHistCommand->SetGuidance("Set maximum number of stored UI commands.");
   maxStoredHistCommand->SetParameterName("max", true);
   maxStoredHistCommand->SetDefaultValue(20);
 
@@ -240,8 +230,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   addCommand = new G4UIcommand("/control/add", this);
   addCommand->SetGuidance("Define a new alias as the sum of two values.");
   addCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
-  addCommand->SetGuidance(
-    " <new_alias> may be an already existing alias. If it is the case,");
+  addCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
   addCommand->SetGuidance(" aliased value is alternated.");
   auto* newAlias1 = new G4UIparameter("new_alias", 's', false);
   addCommand->SetParameter(newAlias1);
@@ -252,11 +241,9 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   addCommand->SetToBeBroadcasted(false);
 
   subtractCommand = new G4UIcommand("/control/subtract", this);
-  subtractCommand->SetGuidance(
-    "Define a new alias as the subtraction of two values.");
+  subtractCommand->SetGuidance("Define a new alias as the subtraction of two values.");
   subtractCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
-  subtractCommand->SetGuidance(
-    " <new_alias> may be an already existing alias. If it is the case,");
+  subtractCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
   subtractCommand->SetGuidance(" aliased value is alternated.");
   auto* newAlias2 = new G4UIparameter("new_alias", 's', false);
   subtractCommand->SetParameter(newAlias2);
@@ -267,11 +254,9 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   subtractCommand->SetToBeBroadcasted(false);
 
   multiplyCommand = new G4UIcommand("/control/multiply", this);
-  multiplyCommand->SetGuidance(
-    "Define a new alias as the multiplication of two values.");
+  multiplyCommand->SetGuidance("Define a new alias as the multiplication of two values.");
   multiplyCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
-  multiplyCommand->SetGuidance(
-    " <new_alias> may be an already existing alias. If it is the case,");
+  multiplyCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
   multiplyCommand->SetGuidance(" aliased value is alternated.");
   auto* newAlias3 = new G4UIparameter("new_alias", 's', false);
   multiplyCommand->SetParameter(newAlias3);
@@ -282,11 +267,9 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   multiplyCommand->SetToBeBroadcasted(false);
 
   divideCommand = new G4UIcommand("/control/divide", this);
-  divideCommand->SetGuidance(
-    "Define a new alias as the division of two values.");
+  divideCommand->SetGuidance("Define a new alias as the division of two values.");
   divideCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
-  divideCommand->SetGuidance(
-    " <new_alias> may be an already existing alias. If it is the case,");
+  divideCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
   divideCommand->SetGuidance(" aliased value is alternated.");
   auto* newAlias4 = new G4UIparameter("new_alias", 's', false);
   divideCommand->SetParameter(newAlias4);
@@ -298,8 +281,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   divideCommand->SetToBeBroadcasted(false);
 
   remainderCommand = new G4UIcommand("/control/remainder", this);
-  remainderCommand->SetGuidance(
-    "Define a new alias as the remainder of two values.");
+  remainderCommand->SetGuidance("Define a new alias as the remainder of two values.");
   remainderCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
   remainderCommand->SetGuidance(
     " <new_alias> may be an already existing alias. If it is the case,");
@@ -328,10 +310,8 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   strifCommand->SetToBeBroadcasted(false);
 
   strdoifCommand = new G4UIcommand("/control/strdoif", this);
-  strdoifCommand->SetGuidance(
-    "Execute a UI command if the expression is true.");
-  strdoifCommand->SetGuidance(
-    " Syntax : <string> <comp> <string> <UI_command>");
+  strdoifCommand->SetGuidance("Execute a UI command if the expression is true.");
+  strdoifCommand->SetGuidance(" Syntax : <string> <comp> <string> <UI_command>");
   auto* strdoleftParam = new G4UIparameter("left", 's', false);
   strdoifCommand->SetParameter(strdoleftParam);
   auto* strdocompParam = new G4UIparameter("comp", 's', false);
@@ -344,8 +324,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   strdoifCommand->SetToBeBroadcasted(false);
 
   ifBatchCommand = new G4UIcmdWithAString("/control/ifBatch", this);
-  ifBatchCommand->SetGuidance(
-    "Execute a macro file if program is running in batch mode.");
+  ifBatchCommand->SetGuidance("Execute a macro file if program is running in batch mode.");
   ifBatchCommand->SetParameterName("macroFile", false);
   ifBatchCommand->SetToBeBroadcasted(false);
 
@@ -356,13 +335,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   ifInteractiveCommand->SetToBeBroadcasted(false);
 
   doifBatchCommand = new G4UIcmdWithAString("/control/doifBatch", this);
-  doifBatchCommand->SetGuidance(
-    "Execute a UI command if program is running in batch mode.");
+  doifBatchCommand->SetGuidance("Execute a UI command if program is running in batch mode.");
   doifBatchCommand->SetParameterName("UIcommand", false);
   doifBatchCommand->SetToBeBroadcasted(false);
 
-  doifInteractiveCommand =
-    new G4UIcmdWithAString("/control/doifInteractive", this);
+  doifInteractiveCommand = new G4UIcmdWithAString("/control/doifInteractive", this);
   doifInteractiveCommand->SetGuidance(
     "Execute a UI command if program is running in interactive mode.");
   doifInteractiveCommand->SetParameterName("UIcommand", false);
@@ -412,94 +389,73 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   G4UImanager* UI = G4UImanager::GetUIpointer();
 
-  if(command == macroPathCommand)
-  {
+  if (command == macroPathCommand) {
     UI->SetMacroSearchPath(newValue);
     UI->ParseMacroSearchPath();
   }
-  if(command == ExecuteCommand)
-  {
+  if (command == ExecuteCommand) {
     command->ResetFailure();
     UI->ExecuteMacroFile(UI->FindMacroPath(newValue));
-    if(UI->GetLastReturnCode() != 0)
-    {
+    if (UI->GetLastReturnCode() != 0) {
       G4ExceptionDescription ed;
       ed << "Command aborted (" << UI->GetLastReturnCode() << ")";
       command->CommandFailed(UI->GetLastReturnCode(), ed);
     }
   }
-  if(command == suppressAbortionCommand)
-  {
+  if (command == suppressAbortionCommand) {
     G4StateManager::GetStateManager()->SetSuppressAbortion(
       suppressAbortionCommand->GetNewIntValue(newValue));
   }
-  if(command == verboseCommand)
-  {
+  if (command == verboseCommand) {
     UI->SetVerboseLevel(verboseCommand->GetNewIntValue(newValue));
   }
-  if(command == doublePrecCommand)
-  {
-    G4UImanager::UseDoublePrecisionStr(
-      doublePrecCommand->GetNewBoolValue(newValue));
+  if (command == doublePrecCommand) {
+    G4UImanager::UseDoublePrecisionStr(doublePrecCommand->GetNewBoolValue(newValue));
   }
-  if(command == historyCommand)
-  {
+  if (command == historyCommand) {
     UI->StoreHistory(newValue);
   }
-  if(command == stopStoreHistoryCommand)
-  {
+  if (command == stopStoreHistoryCommand) {
     UI->StoreHistory(false);
   }
-  if(command == ManualCommand)
-  {
+  if (command == ManualCommand) {
     UI->ListCommands(newValue);
   }
-  if(command == aliasCommand)
-  {
+  if (command == aliasCommand) {
     UI->SetAlias(newValue);
   }
-  if(command == unaliasCommand)
-  {
+  if (command == unaliasCommand) {
     UI->RemoveAlias(newValue);
   }
-  if(command == listAliasCommand)
-  {
+  if (command == listAliasCommand) {
     UI->ListAlias();
   }
-  if(command == getEnvCmd)
-  {
+  if (command == getEnvCmd) {
     command->ResetFailure();
-    if(std::getenv(newValue) != nullptr)
-    {
+    if (std::getenv(newValue) != nullptr) {
       G4String st = newValue;
       st += " ";
       st += std::getenv(newValue);
       UI->SetAlias(st.c_str());
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
-      ed << "<" << newValue
-         << "> is not defined as a shell variable. Command ignored.";
+      ed << "<" << newValue << "> is not defined as a shell variable. Command ignored.";
       command->CommandFailed(ed);
     }
   }
-  if(command == getValCmd)
-  {
+  if (command == getValCmd) {
     G4Tokenizer next(newValue);
     G4String aliName = next();
-    G4String com     = next();
-    G4String curVal  = UI->GetCurrentValues(com);
-    if(!(curVal.empty()))
-    {
+    G4String com = next();
+    G4String curVal = UI->GetCurrentValues(com);
+    if (!(curVal.empty())) {
       G4String theValue = curVal;
-      G4String iIdx     = next();
-      if(!(iIdx.empty()))
-      {
+      G4String iIdx = next();
+      if (!(iIdx.empty())) {
         G4int idx = StoI(iIdx);
         G4Tokenizer nextVal(curVal);
-        for(G4int i = 0; i <= idx; i++)
-        {
+        for (G4int i = 0; i <= idx; i++) {
           theValue = nextVal();
         }
       }
@@ -508,295 +464,240 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       UI->ApplyCommand(st);
     }
   }
-  if(command == echoCmd)
-  {
+  if (command == echoCmd) {
     G4cout << UI->SolveAlias(newValue) << G4endl;
   }
-  if(command == shellCommand)
-  {
+  if (command == shellCommand) {
     command->ResetFailure();
     int rc = system(newValue);
-    if(rc < 0)
-    {
+    if (rc < 0) {
       G4ExceptionDescription ed;
-      ed << "<" << newValue
-         << "> is not a valid shell command. Command ignored.";
+      ed << "<" << newValue << "> is not a valid shell command. Command ignored.";
       command->CommandFailed(ed);
     }
   }
-  if(command == loopCommand)
-  {
+  if (command == loopCommand) {
     command->ResetFailure();
     UI->LoopS(newValue);
-    if(UI->GetLastReturnCode() != 0)
-    {
+    if (UI->GetLastReturnCode() != 0) {
       G4ExceptionDescription ed;
       ed << "Command aborted (" << UI->GetLastReturnCode() << ")";
       command->CommandFailed(UI->GetLastReturnCode(), ed);
     }
   }
-  if(command == foreachCommand)
-  {
+  if (command == foreachCommand) {
     command->ResetFailure();
     UI->ForeachS(newValue);
-    if(UI->GetLastReturnCode() != 0)
-    {
+    if (UI->GetLastReturnCode() != 0) {
       G4ExceptionDescription ed;
       ed << "Command aborted (" << UI->GetLastReturnCode() << ")";
       command->CommandFailed(UI->GetLastReturnCode(), ed);
     }
   }
-  if(command == HTMLCommand)
-  {
+  if (command == HTMLCommand) {
     UI->CreateHTML(newValue);
   }
-  if(command == maxStoredHistCommand)
-  {
+  if (command == maxStoredHistCommand) {
     UI->SetMaxHistSize(maxStoredHistCommand->GetNewIntValue(newValue));
   }
-  if(command == ifCommand)
-  {
+  if (command == ifCommand) {
     G4Tokenizer next(newValue);
-    G4double l    = StoD(next());
+    G4double l = StoD(next());
     G4String comp = next();
-    G4double r    = StoD(next());
-    G4String mac  = next();
-    G4bool x      = false;
-    if(comp == ">")
-    {
+    G4double r = StoD(next());
+    G4String mac = next();
+    G4bool x = false;
+    if (comp == ">") {
       x = (l > r);
     }
-    else if(comp == ">=")
-    {
+    else if (comp == ">=") {
       x = (l >= r);
     }
-    else if(comp == "<")
-    {
+    else if (comp == "<") {
       x = (l < r);
     }
-    else if(comp == "<=")
-    {
+    else if (comp == "<=") {
       x = (l <= r);
     }
-    else if(comp == "==")
-    {
+    else if (comp == "==") {
       x = (l == r);
     }
-    else if(comp == "!=")
-    {
+    else if (comp == "!=") {
       x = (l != r);
     }
-    if(x)
-    {
+    if (x) {
       UI->ExecuteMacroFile(UI->FindMacroPath(mac));
     }
   }
-  if(command == doifCommand)
-  {
+  if (command == doifCommand) {
     G4Tokenizer next(newValue);
-    G4double l    = StoD(next());
+    G4double l = StoD(next());
     G4String comp = next();
-    G4double r    = StoD(next());
+    G4double r = StoD(next());
 
     G4String c1 = next();
     G4String ca;
-    while(!((ca = next()).empty()))
-    {
+    while (!((ca = next()).empty())) {
       c1 += " ";
       c1 += ca;
     }
-    if(c1[0] == '"')
-    {
+    if (c1[0] == '"') {
       G4String strippedValue;
-      if(c1.back() == '"')
-      {
+      if (c1.back() == '"') {
         strippedValue = c1.substr(1, c1.length() - 2);
       }
-      else
-      {
+      else {
         strippedValue = c1.substr(1, c1.length() - 1);
       }
       c1 = strippedValue;
     }
 
     G4bool x = false;
-    if(comp == ">")
-    {
+    if (comp == ">") {
       x = (l > r);
     }
-    else if(comp == ">=")
-    {
+    else if (comp == ">=") {
       x = (l >= r);
     }
-    else if(comp == "<")
-    {
+    else if (comp == "<") {
       x = (l < r);
     }
-    else if(comp == "<=")
-    {
+    else if (comp == "<=") {
       x = (l <= r);
     }
-    else if(comp == "==")
-    {
+    else if (comp == "==") {
       x = (l == r);
     }
-    else if(comp == "!=")
-    {
+    else if (comp == "!=") {
       x = (l != r);
     }
-    if(x)
-    {
+    if (x) {
       UI->ApplyCommand(c1);
     }
   }
-  if(command == addCommand)
-  {
+  if (command == addCommand) {
     G4Tokenizer next(newValue);
     G4String newA = next();
-    G4double l    = StoD(next());
-    G4double r    = StoD(next());
-    G4String st   = "/control/alias ";
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
     st += newA;
     st += " ";
     st += DtoS(l + r);
     UI->ApplyCommand(st);
   }
-  if(command == subtractCommand)
-  {
+  if (command == subtractCommand) {
     G4Tokenizer next(newValue);
     G4String newA = next();
-    G4double l    = StoD(next());
-    G4double r    = StoD(next());
-    G4String st   = "/control/alias ";
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
     st += newA;
     st += " ";
     st += DtoS(l - r);
     UI->ApplyCommand(st);
   }
-  if(command == multiplyCommand)
-  {
+  if (command == multiplyCommand) {
     G4Tokenizer next(newValue);
     G4String newA = next();
-    G4double l    = StoD(next());
-    G4double r    = StoD(next());
-    G4String st   = "/control/alias ";
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
     st += newA;
     st += " ";
     st += DtoS(l * r);
     UI->ApplyCommand(st);
   }
-  if(command == divideCommand)
-  {
+  if (command == divideCommand) {
     G4Tokenizer next(newValue);
     G4String newA = next();
-    G4double l    = StoD(next());
-    G4double r    = StoD(next());
-    G4String st   = "/control/alias ";
+    G4double l = StoD(next());
+    G4double r = StoD(next());
+    G4String st = "/control/alias ";
     st += newA;
     st += " ";
     st += DtoS(l / r);
     UI->ApplyCommand(st);
   }
-  if(command == remainderCommand)
-  {
+  if (command == remainderCommand) {
     G4Tokenizer next(newValue);
     G4String newA = next();
-    G4int l       = StoI(next());
-    G4int r       = StoI(next());
-    G4String st   = "/control/alias ";
+    G4int l = StoI(next());
+    G4int r = StoI(next());
+    G4String st = "/control/alias ";
     st += newA;
     st += " ";
     st += DtoS(l % r);
     UI->ApplyCommand(st);
   }
-  if(command == strifCommand)
-  {
+  if (command == strifCommand) {
     G4Tokenizer next(newValue);
-    G4String l    = next();
+    G4String l = next();
     G4String comp = next();
-    G4String r    = next();
-    G4String mac  = next();
-    G4bool x      = false;
-    if(comp == "==")
-    {
+    G4String r = next();
+    G4String mac = next();
+    G4bool x = false;
+    if (comp == "==") {
       x = (l == r);
     }
-    else if(comp == "!=")
-    {
+    else if (comp == "!=") {
       x = (l != r);
     }
-    if(x)
-    {
+    if (x) {
       UI->ExecuteMacroFile(UI->FindMacroPath(mac));
     }
   }
-  if(command == strdoifCommand)
-  {
+  if (command == strdoifCommand) {
     G4Tokenizer next(newValue);
-    G4String l    = next();
+    G4String l = next();
     G4String comp = next();
-    G4String r    = next();
+    G4String r = next();
 
     G4String c1 = next();
     G4String ca;
-    while(!((ca = next()).empty()))
-    {
+    while (!((ca = next()).empty())) {
       c1 += " ";
       c1 += ca;
     }
-    if(c1[0] == '"')
-    {
+    if (c1[0] == '"') {
       G4String strippedValue;
-      if(c1.back() == '"')
-      {
+      if (c1.back() == '"') {
         strippedValue = c1.substr(1, c1.length() - 2);
       }
-      else
-      {
+      else {
         strippedValue = c1.substr(1, c1.length() - 1);
       }
       c1 = strippedValue;
     }
 
     G4bool x = false;
-    if(comp == "==")
-    {
+    if (comp == "==") {
       x = (l == r);
     }
-    else if(comp == "!=")
-    {
+    else if (comp == "!=") {
       x = (l != r);
     }
-    if(x)
-    {
+    if (x) {
       UI->ApplyCommand(c1);
     }
   }
-  if(command == ifBatchCommand)
-  {
-    if(G4UIsession::InSession() == 0)
-    {
+  if (command == ifBatchCommand) {
+    if (G4UIsession::InSession() == 0) {
       UI->ExecuteMacroFile(UI->FindMacroPath(newValue));
     }
   }
-  if(command == ifInteractiveCommand)
-  {
-    if(G4UIsession::InSession() > 0)
-    {
+  if (command == ifInteractiveCommand) {
+    if (G4UIsession::InSession() > 0) {
       UI->ExecuteMacroFile(UI->FindMacroPath(newValue));
     }
   }
-  if(command == doifBatchCommand)
-  {
-    if(G4UIsession::InSession() == 0)
-    {
+  if (command == doifBatchCommand) {
+    if (G4UIsession::InSession() == 0) {
       UI->ApplyCommand(newValue);
     }
   }
-  if(command == doifInteractiveCommand)
-  {
-    if(G4UIsession::InSession() > 0)
-    {
+  if (command == doifInteractiveCommand) {
+    if (G4UIsession::InSession() > 0) {
       UI->ApplyCommand(newValue);
     }
   }
@@ -808,26 +709,20 @@ G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand* command)
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String currentValue;
 
-  if(command == macroPathCommand)
-  {
+  if (command == macroPathCommand) {
     currentValue = UI->GetMacroSearchPath();
   }
-  if(command == verboseCommand)
-  {
+  if (command == verboseCommand) {
     currentValue = verboseCommand->ConvertToString(UI->GetVerboseLevel());
   }
-  if(command == doublePrecCommand)
-  {
-    currentValue =
-      doublePrecCommand->ConvertToString(G4UImanager::DoublePrecisionStr());
+  if (command == doublePrecCommand) {
+    currentValue = doublePrecCommand->ConvertToString(G4UImanager::DoublePrecisionStr());
   }
-  if(command == suppressAbortionCommand)
-  {
+  if (command == suppressAbortionCommand) {
     currentValue = suppressAbortionCommand->ConvertToString(
       G4StateManager::GetStateManager()->GetSuppressAbortion());
   }
-  if(command == maxStoredHistCommand)
-  {
+  if (command == maxStoredHistCommand) {
     currentValue = maxStoredHistCommand->ConvertToString(UI->GetMaxHistSize());
   }
 

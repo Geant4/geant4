@@ -43,16 +43,16 @@
 // ###                   ANTI NEUTRINO E                              ###
 // ######################################################################
 
-G4AntiNeutrinoE* G4AntiNeutrinoE::theInstance = 0;
+G4AntiNeutrinoE* G4AntiNeutrinoE::theInstance = nullptr;
 
 G4AntiNeutrinoE* G4AntiNeutrinoE::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_nu_e";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -68,7 +68,7 @@ G4AntiNeutrinoE* G4AntiNeutrinoE::Definition()
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,          -12,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
                 false,           "e"
               );
   }

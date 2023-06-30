@@ -43,7 +43,7 @@ class G4LocatorChangeLogger : public std::vector<G4LocatorChangeRecord>
 {
   public:
 
-    G4LocatorChangeLogger( const std::string name ) : fName(name) {}
+    G4LocatorChangeLogger( const std::string& name ) : fName(name) {}
 
     void AddRecord(       G4LocatorChangeRecord && chngRecord );
     void AddRecord( const G4LocatorChangeRecord &  chngRecord );

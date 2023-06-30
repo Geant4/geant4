@@ -25,10 +25,8 @@
 //
 
 #include "G4TaskRunManagerKernel.hh"
-#include "G4AutoLock.hh"
-#include "G4RegionStore.hh"
-#include "G4StateManager.hh"
 
+#include "G4AutoLock.hh"
 #include "G4DecayTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
@@ -43,7 +41,9 @@
 #include "G4PolyconeSide.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4Region.hh"
+#include "G4RegionStore.hh"
 #include "G4Run.hh"
+#include "G4StateManager.hh"
 #include "G4TaskManager.hh"
 #include "G4TiMemory.hh"
 #include "G4UImanager.hh"
@@ -67,8 +67,7 @@ std::vector<G4String> G4TaskRunManagerKernel::initCmdStack = {};
 
 //============================================================================//
 
-G4TaskRunManagerKernel::G4TaskRunManagerKernel()
-  : G4RunManagerKernel(masterRMK)
+G4TaskRunManagerKernel::G4TaskRunManagerKernel() : G4RunManagerKernel(masterRMK)
 {
   // This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -78,16 +77,11 @@ G4TaskRunManagerKernel::G4TaskRunManagerKernel()
          "is set to off).";
   msg << " This type of RunManager can only be used in mult-threaded "
          "applications.";
-  G4Exception("G4RunManagerKernel::G4RunManagerKernel()", "Run0109",
-              FatalException, msg);
+  G4Exception("G4RunManagerKernel::G4RunManagerKernel()", "Run0109", FatalException, msg);
 #endif
   // Set flag that a MT-type kernel has been instantiated
   G4Threading::SetMultithreadedApplication(true);
 }
-
-//============================================================================//
-
-G4TaskRunManagerKernel::~G4TaskRunManagerKernel() {}
 
 //============================================================================//
 
@@ -102,20 +96,20 @@ void G4TaskRunManagerKernel::SetupShadowProcess() const
 
 namespace
 {
-  using WorkerRunManPtr_t = std::unique_ptr<G4WorkerTaskRunManager>;
-  using WorkerThreadPtr_t = std::unique_ptr<G4WorkerThread>;
+using WorkerRunManPtr_t = std::unique_ptr<G4WorkerTaskRunManager>;
+using WorkerThreadPtr_t = std::unique_ptr<G4WorkerThread>;
 
-  WorkerRunManPtr_t& workerRM()
-  {
-    G4ThreadLocalStatic WorkerRunManPtr_t _instance{ nullptr };
-    return _instance;
-  }
+WorkerRunManPtr_t& workerRM()
+{
+  G4ThreadLocalStatic WorkerRunManPtr_t _instance{nullptr};
+  return _instance;
+}
 
-  WorkerThreadPtr_t& context()
-  {
-    G4ThreadLocalStatic WorkerThreadPtr_t _instance{ nullptr };
-    return _instance;
-  }
+WorkerThreadPtr_t& context()
+{
+  G4ThreadLocalStatic WorkerThreadPtr_t _instance{nullptr};
+  return _instance;
+}
 
 }  // namespace
 
@@ -130,14 +124,12 @@ G4WorkerThread* G4TaskRunManagerKernel::GetWorkerThread()
 
 void G4TaskRunManagerKernel::InitializeWorker()
 {
-  if(context() && workerRM())
-    return;
+  if (context() && workerRM()) return;
 
   G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
-  if(G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id())
-  {
+  if (G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id()) {
     G4TaskManager* taskManager = mrm->GetTaskManager();
-    auto _fut                  = taskManager->async(InitializeWorker);
+    auto _fut = taskManager->async(InitializeWorker);
     _fut->wait();
     return;
   }
@@ -154,7 +146,7 @@ void G4TaskRunManagerKernel::InitializeWorker()
   //!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   G4Threading::WorkerThreadJoinsPool();
-  context().reset(new G4WorkerThread);
+  context() = std::make_unique<G4WorkerThread>();
 
   //============================
   // Step-0: Thread ID
@@ -184,15 +176,12 @@ void G4TaskRunManagerKernel::InitializeWorker()
   //============================
   // Step-2: Initialize worker thread
   //============================
-  if(mrm->GetUserWorkerInitialization())
+  if (mrm->GetUserWorkerInitialization() != nullptr)
     mrm->GetUserWorkerInitialization()->WorkerInitialize();
 
-  if(mrm->GetUserActionInitialization())
-  {
-    G4VSteppingVerbose* sv =
-      mrm->GetUserActionInitialization()->InitializeSteppingVerbose();
-    if(sv)
-      G4VSteppingVerbose::SetInstance(sv);
+  if (mrm->GetUserActionInitialization() != nullptr) {
+    G4VSteppingVerbose* sv = mrm->GetUserActionInitialization()->InitializeSteppingVerbose();
+    if (sv != nullptr) G4VSteppingVerbose::SetInstance(sv);
   }
   // Now initialize worker part of shared objects (geometry/physics)
   context()->BuildGeometryAndPhysicsVector();
@@ -205,24 +194,22 @@ void G4TaskRunManagerKernel::InitializeWorker()
   // Step-3: Setup worker run manager
   //================================
   // Set the detector and physics list to the worker thread. Share with master
-  const G4VUserDetectorConstruction* detector =
-    mrm->GetUserDetectorConstruction();
-  wrm->G4RunManager::SetUserInitialization(
-    const_cast<G4VUserDetectorConstruction*>(detector));
+  const G4VUserDetectorConstruction* detector = mrm->GetUserDetectorConstruction();
+  wrm->G4RunManager::SetUserInitialization(const_cast<G4VUserDetectorConstruction*>(detector));
   const G4VUserPhysicsList* physicslist = mrm->GetUserPhysicsList();
   wrm->SetUserInitialization(const_cast<G4VUserPhysicsList*>(physicslist));
 
   //================================
   // Step-4: Initialize worker run manager
   //================================
-  if(mrm->GetUserActionInitialization())
+  if (mrm->GetUserActionInitialization() != nullptr)
     mrm->GetNonConstUserActionInitialization()->Build();
-  if(mrm->GetUserWorkerInitialization())
+  if (mrm->GetUserWorkerInitialization() != nullptr)
     mrm->GetUserWorkerInitialization()->WorkerStart();
 
   workerRM()->Initialize();
 
-  for(auto& itr : initCmdStack)
+  for (auto& itr : initCmdStack)
     G4UImanager::GetUIpointer()->ApplyCommand(itr);
 
   wrm->ProcessUI();
@@ -233,18 +220,15 @@ void G4TaskRunManagerKernel::InitializeWorker()
 void G4TaskRunManagerKernel::ExecuteWorkerInit()
 {
   // because of TBB
-  if(G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id())
-  {
-    G4TaskManager* taskManager =
-      G4TaskRunManager::GetMasterRunManager()->GetTaskManager();
+  if (G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id()) {
+    G4TaskManager* taskManager = G4TaskRunManager::GetMasterRunManager()->GetTaskManager();
     auto _fut = taskManager->async(ExecuteWorkerInit);
     return _fut->get();
   }
 
   // this check is for TBB as there is not a way to run an initialization
   // routine on each thread
-  if(!workerRM())
-    InitializeWorker();
+  if (!workerRM()) InitializeWorker();
 
   auto& wrm = workerRM();
   assert(wrm.get() != nullptr);
@@ -256,18 +240,15 @@ void G4TaskRunManagerKernel::ExecuteWorkerInit()
 void G4TaskRunManagerKernel::ExecuteWorkerTask()
 {
   // because of TBB
-  if(G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id())
-  {
-    G4TaskManager* taskManager =
-      G4TaskRunManager::GetMasterRunManager()->GetTaskManager();
+  if (G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id()) {
+    G4TaskManager* taskManager = G4TaskRunManager::GetMasterRunManager()->GetTaskManager();
     auto _fut = taskManager->async(ExecuteWorkerTask);
     return _fut->get();
   }
 
   // this check is for TBB as there is not a way to run an initialization
   // routine on each thread
-  if(!workerRM())
-    InitializeWorker();
+  if (!workerRM()) InitializeWorker();
 
   auto& wrm = workerRM();
   assert(wrm.get() != nullptr);
@@ -278,27 +259,23 @@ void G4TaskRunManagerKernel::ExecuteWorkerTask()
 
 void G4TaskRunManagerKernel::TerminateWorkerRunEventLoop()
 {
-  if(workerRM())
-    TerminateWorkerRunEventLoop(workerRM().get());
+  if (workerRM()) TerminateWorkerRunEventLoop(workerRM().get());
 }
 
 //============================================================================//
 
 void G4TaskRunManagerKernel::TerminateWorker()
 {
-  if(workerRM())
-    TerminateWorker(workerRM().get());
+  if (workerRM()) TerminateWorker(workerRM().get());
   workerRM().reset();
   context().reset();
 }
 
 //============================================================================//
 
-void G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(
-  G4WorkerTaskRunManager* wrm)
+void G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(G4WorkerTaskRunManager* wrm)
 {
-  if(!wrm)
-    return;
+  if (wrm == nullptr) return;
 
   wrm->TerminateEventLoop();
   wrm->RunTermination();
@@ -308,14 +285,13 @@ void G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(
 
 void G4TaskRunManagerKernel::TerminateWorker(G4WorkerTaskRunManager* wrm)
 {
-  if(!wrm)
-    return;
+  if (wrm == nullptr) return;
 
   //===============================
   // Step-6: Terminate worker thread
   //===============================
   G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
-  if(mrm && mrm->GetUserWorkerInitialization())
+  if ((mrm != nullptr) && (mrm->GetUserWorkerInitialization() != nullptr))
     mrm->GetUserWorkerInitialization()->WorkerStop();
 
   G4WorkerThread* _context = wrm->GetWorkerThread();
@@ -335,17 +311,13 @@ std::vector<G4String>& G4TaskRunManagerKernel::InitCommandStack()
 
 void G4TaskRunManagerKernel::SetUpDecayChannels()
 {
-  G4ParticleTable::G4PTblDicIterator* pItr =
-    G4ParticleTable::GetParticleTable()->GetIterator();
+  G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
   pItr->reset();
-  while((*pItr)())
-  {
+  while ((*pItr)()) {
     G4DecayTable* dt = pItr->value()->GetDecayTable();
-    if(dt)
-    {
+    if (dt != nullptr) {
       G4int nCh = dt->entries();
-      for(G4int i = 0; i < nCh; i++)
-      {
+      for (G4int i = 0; i < nCh; i++) {
         dt->GetDecayChannel(i)->GetDaughter(0);
       }
     }

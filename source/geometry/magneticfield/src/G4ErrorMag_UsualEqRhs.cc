@@ -38,9 +38,7 @@ G4ErrorMag_UsualEqRhs::G4ErrorMag_UsualEqRhs( G4MagneticField* MagField )
 {
 }
 
-G4ErrorMag_UsualEqRhs::~G4ErrorMag_UsualEqRhs()
-{
-}
+G4ErrorMag_UsualEqRhs::~G4ErrorMag_UsualEqRhs() = default;
 
 //---------------------------------------------------------------------
 

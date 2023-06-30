@@ -1,0 +1,121 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_X11_pixwin
+#define toolx_X11_pixwin
+
+#include "colors"
+#include <tools/sg/zb_viewer>
+//#include <tools/sys/atime>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h> //XPutPixel
+
+namespace toolx {
+namespace X11 {
+
+class pixwin {
+public:
+  pixwin(std::ostream& a_out,unsigned int a_monitor,Display* a_display)
+  :m_out(a_out)
+  ,m_monitor(a_monitor)
+  ,m_display(a_display)
+  ,m_GC(0)
+  ,m_image(0)
+  {
+    if(!m_display) return;
+    m_GC = ::XCreateGC(m_display,XRootWindow(m_display,m_monitor),0,0);
+  }
+  virtual ~pixwin() {
+    free_pixels();
+    m_colors.clear();
+    if(m_GC) ::XFreeGC(m_display,m_GC);
+    free_XImage();
+  }
+protected:
+  pixwin(const pixwin& a_from)
+  :m_out(a_from.m_out)
+  ,m_monitor(0)
+  ,m_display(0)
+  ,m_GC(0)
+  ,m_image(0)
+  {}
+  pixwin& operator=(const pixwin&){
+    m_monitor = 0;
+    m_display = 0;
+    m_GC = 0;
+    m_image = 0;
+    return *this;
+  }
+public:
+  void put_buffer(Window a_win,unsigned int a_ww,unsigned int a_wh,const unsigned char* a_rgbas) {
+    if(!m_display) return;
+    if(!m_GC) return;
+    if(!m_image) alloc_XImage(a_ww,a_wh);
+    if(!m_image) return;
+  //tools::atime start = tools::atime::now();
+    const unsigned int* pos = (const unsigned int*)a_rgbas;
+    unsigned int row,col;
+    toolx::X11::Pixel pixel;
+    for(row=0;row<a_wh;row++) {
+    for(col=0;col<a_ww;col++) {
+      if(!get_pixel(m_display,m_monitor,m_pixels,m_colors,*pos,pixel)) {}
+      pos++;
+      XPutPixel(m_image,col,row,pixel);
+    }}
+  //::printf("debug : map::colors %lu, pixels %lu\n",m_colors.size(),m_pixels.size());
+    ::XPutImage(m_display,a_win,m_GC,m_image,0,0,0,0,a_ww,a_wh);
+  //m_out << "pu_buffer : XImage " << tools::atime::elapsed(start) << std::endl;
+  }
+  void set_size(unsigned int a_ww,unsigned int a_wh) {
+    free_XImage();
+    alloc_XImage(a_ww,a_wh);
+  }
+protected:
+  void alloc_XImage(unsigned int a_ww,unsigned int a_wh) {
+    if(m_image) return; //done.
+    if(!m_display) return;
+    Screen* screen = ::XScreenOfDisplay(m_display,m_monitor);
+    m_image = ::XCreateImage(m_display,::XDefaultVisualOfScreen(screen),::XDefaultDepthOfScreen(screen),ZPixmap,0,NULL,a_ww,a_wh,8,0);
+    if(!m_image) {
+      m_out << "toolx::X11::pixwin::alloc_XImage : can't create an XImage." << std::endl;
+      return;
+    }
+    //warning : a priori, a_ww*3 != m_image->bytes_per_line.
+    m_image->data = new char[a_wh*m_image->bytes_per_line];
+    if(!m_image->data) {
+      m_out << "toolx::X11::pixwin::alloc_XImage : can't alloc buffer." << std::endl;
+      ::XFree((char*)m_image);
+      m_image = 0;
+      return;
+    }
+  }
+  void free_XImage() {
+    if(!m_image) return;
+    delete [] m_image->data;
+    ::XFree((char*)m_image);
+    m_image = 0;
+  }
+  void free_pixels() {
+    if(!m_display) return;
+    Screen* screen = ::XScreenOfDisplay(m_display,m_monitor);
+    tools_vforit(toolx::X11::Pixel,m_pixels,it) {
+      ::XFreeColors(m_display,XDefaultColormapOfScreen(screen),&(*it),1,0);
+    }
+    m_pixels.clear();
+  }
+protected:
+  std::ostream& m_out;
+  unsigned int m_monitor;
+  Display* m_display;
+  GC m_GC;
+  std::vector<toolx::X11::Pixel> m_pixels;
+  colors_t m_colors;
+  XImage* m_image;
+};
+
+}}
+
+
+#endif
+

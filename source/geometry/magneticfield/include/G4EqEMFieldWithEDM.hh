@@ -43,19 +43,19 @@ class G4ElectroMagneticField;
 
 class G4EqEMFieldWithEDM : public G4EquationOfMotion
 {
-  public:  // with description
+  public:
 
     G4EqEMFieldWithEDM(G4ElectroMagneticField* emField );
 
-    ~G4EqEMFieldWithEDM();
+   ~G4EqEMFieldWithEDM() override;
   
     void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                 G4double MomentumXc,
-                                G4double mass);
+                                G4double mass) override;
 
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
-                                 G4double dydx[] ) const;
+                                 G4double dydx[] ) const override;
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 
@@ -69,14 +69,13 @@ class G4EqEMFieldWithEDM : public G4EquationOfMotion
 
   private:
 
-    G4double charge, mass, magMoment, spin;
+    G4double charge{0.}, mass{0.}, magMoment{0.}, spin{0.};
 
-    G4double fElectroMagCof ;
-    G4double fMassCof;
+    G4double fElectroMagCof{0.} ;
+    G4double fMassCof{0.};
 
-    G4double omegac, anomaly, eta;
-    G4double beta, gamma;
-
+    G4double omegac{0.}, anomaly{0.0011659208}, eta{0.};
+    G4double beta{0.}, gamma{0.};
 };
 
 #endif

@@ -40,6 +40,7 @@ e-mail inquiries to: haeginh@hanyang.ac.kr, susanna@uow.edu.au, MRCP.ICRP@gmail.
         % cd example_build
         % cmake ..
         % make
+   This should make two executables - ICRP145phantoms and ICRP145standalone.
   
 2) How to run
   
@@ -78,14 +79,25 @@ e-mail inquiries to: haeginh@hanyang.ac.kr, susanna@uow.edu.au, MRCP.ICRP@gmail.
           *** source organ can be defined by using -i option.
           *** source particle and the particle energy can be specified
               in source.mac file by using macro commands for G4ParticlGun (/gun/)
-    c) Notes
+
+    c) To see the phantom alone:
+
+ 	      % ./ICRP145standalone
+
+       This allows you to visualise the phantom without the overhead of
+       the run manager and physics tables and geometry initialisation.
+       Of course, you cannot run or visualise trajectories.
+
+    d) Notes
     
       - Regarding the interactive mode with visualisation:
          
          * you can run the codes in interactive mode with visualisation by 
            omitting -m option.
-         * the memory required for the visualisation is ~35 GB when the code is
-           run on a single thread. (it is less than 10 GB in batch mode)
+         * with "special mesh rendering" (see vis.mac) the memory required
+           for the visualisation about 1.5 GB (without, it's ~35 GB!).
+         * original data takes about 3 GB, physics tables and geometry
+           voxelisation consume about 5 GB, so a typical app is about 10 GB.
          * in interactive mode, user should start a run by using 
            /run/beamOn command. (Idle> /run/beamOn [number of events])
           

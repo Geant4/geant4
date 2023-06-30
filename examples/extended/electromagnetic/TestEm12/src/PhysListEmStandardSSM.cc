@@ -61,12 +61,7 @@
 
 PhysListEmStandardSSM::PhysListEmStandardSSM(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysListEmStandardSSM::~PhysListEmStandardSSM()
-{}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

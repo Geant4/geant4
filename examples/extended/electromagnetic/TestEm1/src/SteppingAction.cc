@@ -45,15 +45,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(EventAction* event)
-  :G4UserSteppingAction(), fEventAction(event)
+  :fEventAction(event)
 {
   fNIELCalculator = new G4NIELCalculator(new G4ICRU49NuclearStoppingModel(),1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{}
+///SteppingAction::~SteppingAction()
+///{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

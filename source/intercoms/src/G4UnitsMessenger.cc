@@ -30,9 +30,9 @@
 
 #include "G4UnitsMessenger.hh"
 
-#include "G4UnitsTable.hh"
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
+#include "G4UnitsTable.hh"
 
 // --------------------------------------------------------------------
 G4UnitsMessenger::G4UnitsMessenger()
@@ -54,8 +54,7 @@ G4UnitsMessenger::~G4UnitsMessenger()
 // --------------------------------------------------------------------
 void G4UnitsMessenger::SetNewValue(G4UIcommand* command, G4String)
 {
-  if(command == ListCmd)
-  {
+  if (command == ListCmd) {
     G4UnitDefinition::PrintUnitsTable();
   }
 }

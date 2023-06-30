@@ -444,7 +444,6 @@ G4NuclearLevelData::G4NuclearLevelData()
   fShellCorrection = new G4ShellCorrection();
   fPairingCorrection = new G4PairingCorrection();
   fG4calc = G4Pow::GetInstance();
-  fInitialized = false;
 }
 
 G4NuclearLevelData::~G4NuclearLevelData()
@@ -477,19 +476,21 @@ G4NuclearLevelData::GetLevelManager(G4int Z, G4int A)
   return (fLevelManagers[Z])[idx];
 }
 
-G4bool 
-G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& filename)
+G4bool
+G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& fname)
 {
   G4bool res = false; 
   if(Z > 0 && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) { 
     G4AutoLock l(&nuclearLevelDataMutex);
-    const G4LevelManager* newman = 
-      fLevelReader->MakeLevelManager(Z, A, filename);
-    if(newman) { 
+    const G4LevelManager* newman = fLevelReader->MakeLevelManager(Z, A, fname);
+    // if file is corrupted G4LevelReader should make the exception
+    if(newman != nullptr) {
       res = true;
-      G4cout << "G4NuclearLevelData::AddPrivateData for Z= " << Z
-             << " A= " << A << " from <" << filename 
-             << "> is done" << G4endl;
+      if(0 < fDeexPrecoParameters->GetVerbose()) {
+	G4cout << "G4NuclearLevelData::AddPrivateData for Z= " << Z
+	       << " A= " << A << " from <" << fname 
+	       << "> is done" << G4endl;
+      }
       const G4int idx = A - AMIN[Z];
       delete (fLevelManagers[Z])[idx]; 
       (fLevelManagers[Z])[idx] = newman;
@@ -516,13 +517,13 @@ G4int G4NuclearLevelData::GetMaxA(G4int Z) const
   return (Z >= 0 && Z < ZMAX) ? AMAX[Z] : 0; 
 }
 
-void G4NuclearLevelData::UploadNuclearLevelData(G4int ZZ)
+void G4NuclearLevelData::UploadNuclearLevelData(G4int Zlim)
 {
   if(fInitialized) return;
   G4AutoLock l(&nuclearLevelDataMutex);
   if(!fInitialized) {
     fInitialized = true;
-    G4int mZ = ZZ;
+    G4int mZ = Zlim + 1;
     if(mZ > ZMAX) { mZ = ZMAX; }
     for(G4int Z=1; Z<mZ; ++Z) {
       for(G4int A=AMIN[Z]; A<=AMAX[Z]; ++A) {

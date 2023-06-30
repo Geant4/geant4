@@ -117,7 +117,7 @@ class G4RegularNavigation
 
   private:
 
-    G4int fverbose = false;
+    G4int fverbose = 0;
     G4bool fcheck = false;
   
     G4NormalNavigation* fnormalNav = nullptr;

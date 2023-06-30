@@ -6,19 +6,54 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-15 Gabriele Cosmo (global-V11-00-35)
-- Updated tag IDs for geant4-11-01-patch-02.
+## 2023-06-30 Gabriele Cosmo (global-V11-01-13)
+- Updated tag IDs for geant4-11-01-ref-06.
 
-## 2023-04-06 Gabriele Cosmo
+## 2023-06-14 Ben Morgan (global-V11-01-12)
+- Add `G4VERSION_REFERENCE_TAG` macro to distinguish release/development versions
+  and cycle of the latter.
+
+## 2023-05-31 Alberto Ribon (global-V11-01-11)
+- G4PhysicsModelCatalog.cc: added the new INCLXX model of antiproton 
+  annihilation at rest.
+
+## 2023-05-31 Gabriele Cosmo (global-V11-01-10)
+- Updated tag IDs for geant4-11-01-ref-05.
+
+## 2023-04-30 Gabriele Cosmo (global-V11-01-09)
+- Updated tag IDs for geant4-11-01-ref-04.
+
+## 2023-04-06 Gabriele Cosmo (global-V11-01-08)
 - Fixed typo in G4Backtrace class description.
   Reported in [GitHub PR#57](https://github.com/Geant4/geant4/pull/57).
 
-## 2023-02-10 Gabriele Cosmo (global-V11-00-34)
-- Updated tag IDs for geant4-11-01-patch-01.
+## 2023-03-31 Gabriele Cosmo (global-V11-01-07)
+- Updated tag IDs for geant4-11-01-ref-03.
 
-## 2022-12-20 Vladimir Ivanchenko
-- G4DataVector: simplified inline methods in order to remove compilation
-  warnings at some CMSSW platforms
+## 2023-02-28 Gabriele Cosmo (global-V11-01-06)
+- Updated tag IDs for geant4-11-01-ref-02.
+
+## 2023-01-31 Gabriele Cosmo (global-V11-01-05)
+- Removed obsolete and no longer used G4SIunits.hh header.
+
+## 2023-01-30 Gabriele Cosmo (global-V11-01-04)
+- Updated tag IDs for geant4-11-01-ref-01.
+
+## 2023-01-09 Ben Morgan (global-V11-01-03)
+- Add G4debug output stream for logging messages at lower priority than
+  G4cout.
+
+## 2022-12-20 Vladimir Ivanchenko (global-V11-01-02)
+- G4DataVector - simplified inline methods in order to remove compilation
+    warnings at some CMSSW platforms
+
+## 2022-12-14 Ben Morgan (global-V11-01-01)
+- Remove public interface to G4strstreambuf
+  - G4strstreambuf becomes a private implementation detail of G4ios
+  - Minimized G4cout/G4strstreambuf/G4coutDestination coupling
+ 
+## 2022-12-12 Ben Morgan (global-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
 ## 2022-11-29 Gabriele Cosmo (global-V11-00-33)
 - Updated tag IDs for geant4-11-01-ref-00.
@@ -40,7 +75,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - Updated tag IDs for geant4-11-00-ref-08.
 
 ## 2022-09-22 Ben Morgan (global-V11-00-27)
-- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+- Apply patch for MinGW from [GitHub PR#51](https://github.com/Geant4/geant4/pull/51)
 
 ## 2022-08-29 Gabriele Cosmo (global-V11-00-26)
 - Updated tag IDs for geant4-11-00-ref-07.

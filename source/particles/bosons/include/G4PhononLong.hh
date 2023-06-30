@@ -41,7 +41,7 @@ private:
   G4PhononLong() {;}
 
 public:
-  virtual ~G4PhononLong() {;}
+  ~G4PhononLong() override {;}
 
   static G4PhononLong* Definition();
   static G4PhononLong* PhononDefinition();

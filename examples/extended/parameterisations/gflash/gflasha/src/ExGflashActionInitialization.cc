@@ -28,15 +28,15 @@
 /// \brief Implementation of the ExGflashActionInitialization class
 
 #include "ExGflashActionInitialization.hh"
+
 #include "ExGflashEventAction.hh"
 #include "ExGflashPrimaryGeneratorAction.hh"
 #include "ExGflashRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashActionInitialization::ExGflashActionInitialization(
-  ExGflashDetectorConstruction* det)
-  : G4VUserActionInitialization(), fDetector(det)
+ExGflashActionInitialization::ExGflashActionInitialization(ExGflashDetectorConstruction* det)
+  : fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

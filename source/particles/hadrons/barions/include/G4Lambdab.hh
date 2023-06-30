@@ -53,7 +53,7 @@ class G4Lambdab : public G4ParticleDefinition
  private:
    static G4Lambdab* theInstance;
    G4Lambdab(){}
-   ~G4Lambdab(){}
+   ~G4Lambdab() override= default;
 
  public:
    static G4Lambdab* Definition();

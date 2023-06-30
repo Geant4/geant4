@@ -31,13 +31,12 @@
  */
 
 #ifndef G4FPYBIASEDLIGHTFRAGMENTDIST_HH
-#define	G4FPYBIASEDLIGHTFRAGMENTDIST_HH
-
-#include "G4Ions.hh"
-#include "globals.hh"
+#define G4FPYBIASEDLIGHTFRAGMENTDIST_HH
 
 #include "G4FFGEnumerations.hh"
 #include "G4FissionProductYieldDist.hh"
+#include "G4Ions.hh"
+#include "globals.hh"
 
 /** G4FPYBiasedLightFragmentDist is an inherited class of G4FissionProductYield
  *  that only samples the 'light' fission fragments, defined by A \< 115
@@ -55,11 +54,10 @@
  *      and allowing the heavy fission fragment, which has a lot more
  *      flexibility for varying neutron populations, to make up the slack.
  */
-class G4FPYBiasedLightFragmentDist
-    : public G4FissionProductYieldDist
+class G4FPYBiasedLightFragmentDist : public G4FissionProductYieldDist
 {
-public:
-// Constructor definition
+  public:
+    // Constructor definition
     /** Default constructor
      *  - Usage:
      *      - \p WhichIsotope: Isotope number of the element in ZZZAAA form
@@ -69,11 +67,10 @@ public:
      *
      *  - Notes:
      */
-    G4FPYBiasedLightFragmentDist( G4int WhichIsotope,
-                                  G4FFGEnumerations::MetaState WhichMetaState,
-                                  G4FFGEnumerations::FissionCause WhichCause,
-                                  G4FFGEnumerations::YieldType WhichYieldType,
-                                  std::istringstream& dataStream);
+    G4FPYBiasedLightFragmentDist(G4int WhichIsotope, G4FFGEnumerations::MetaState WhichMetaState,
+                                 G4FFGEnumerations::FissionCause WhichCause,
+                                 G4FFGEnumerations::YieldType WhichYieldType,
+                                 std::istringstream& dataStream);
     /** Overloaded constructor
      *  - Usage:
      *      - \p WhichIsotope: Isotope number of the element in ZZZAAA form
@@ -84,33 +81,31 @@ public:
      *
      *  - Notes:
      */
-    G4FPYBiasedLightFragmentDist( G4int WhichIsotope,
-                                  G4FFGEnumerations::MetaState WhichMetaState,
-                                  G4FFGEnumerations::FissionCause WhichCause,
-                                  G4FFGEnumerations::YieldType WhichYieldType,
-                                  G4int Verbosity,
-                                  std::istringstream& dataStream);
-protected:
-    /** Initialize is a common function called by all constructors. */
-    void Initialize( void );
+    G4FPYBiasedLightFragmentDist(G4int WhichIsotope, G4FFGEnumerations::MetaState WhichMetaState,
+                                 G4FFGEnumerations::FissionCause WhichCause,
+                                 G4FFGEnumerations::YieldType WhichYieldType, G4int Verbosity,
+                                 std::istringstream& dataStream);
 
-protected:
-// Variables
+  protected:
+    /** Initialize is a common function called by all constructors. */
+    void Initialize();
+
+  protected:
+    // Variables
     /** Defines the half-weight of the fission isotope */
     G4int HalfWeight_;
-// Functions
+    // Functions
     /** Selects a fission product from the probability tree, limited by the
      *  number of nucleons available to the system
      */
-    virtual G4Ions* GetFissionProduct( void );
+    G4Ions* GetFissionProduct() override;
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default deconstructor. It is a virtual function since
      *  G4FPYBiasedLightFragmentDist inherits from G4FissionProductYieldDist
      */
-    virtual ~G4FPYBiasedLightFragmentDist( void );
+    ~G4FPYBiasedLightFragmentDist() override;
 };
 
-#endif	/* G4FPYBIASEDLIGHTFRAGMENTDIST_HH */
-
+#endif /* G4FPYBIASEDLIGHTFRAGMENTDIST_HH */

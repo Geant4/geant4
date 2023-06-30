@@ -73,9 +73,7 @@ G4IntersectingCone::G4IntersectingCone( __void__& )
 
 // Destructor
 //
-G4IntersectingCone::~G4IntersectingCone()
-{
-}
+G4IntersectingCone::~G4IntersectingCone() = default;
 
 // HitOn
 //

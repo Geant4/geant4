@@ -29,30 +29,29 @@
 #ifndef G4ParticleHPNHe3InelasticFS_h
 #define G4ParticleHPNHe3InelasticFS_h 1
 
-#include "globals.hh"
-#include "G4HadProjectile.hh"
 #include "G4HadFinalState.hh"
-#include "G4ParticleHPInelasticBaseFS.hh"
+#include "G4HadProjectile.hh"
 #include "G4ParticleHPAngular.hh"
-#include "G4ParticleHPEnergyDistribution.hh"
 #include "G4ParticleHPEnAngCorrelation.hh"
+#include "G4ParticleHPEnergyDistribution.hh"
+#include "G4ParticleHPInelasticBaseFS.hh"
 #include "G4ParticleHPPhotonDist.hh"
+#include "globals.hh"
 
 class G4ParticleHPNHe3InelasticFS : public G4ParticleHPInelasticBaseFS
 {
   public:
-  
-  G4ParticleHPNHe3InelasticFS();
-  ~G4ParticleHPNHe3InelasticFS(){}
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
-  G4ParticleHPFinalState * New() 
-  {
-   G4ParticleHPNHe3InelasticFS * theNew = new G4ParticleHPNHe3InelasticFS;
-   return theNew;
-  }
-  
+    G4ParticleHPNHe3InelasticFS();
+    ~G4ParticleHPNHe3InelasticFS() override = default;
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
+              G4ParticleDefinition*) override;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override;
+    G4ParticleHPFinalState* New() override
+    {
+      auto theNew = new G4ParticleHPNHe3InelasticFS;
+      return theNew;
+    }
+
   private:
-  
 };
 #endif

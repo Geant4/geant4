@@ -6,7 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-02-23 Alberto Ribon (particles-V11-00-18)
+## 2023-06-13 Ben Morgan (particles-V11-01-06)
+- Apply core/recommended clang-tidy fixes
+
+## 2023-06-10 Vladimir Ivanchenko (particles-V11-01-05)
+- G4IonTable - attempt to fix non-reproducibility for HP physics and isometers 
+    with floating levels
+
+## 2023-05-25 Vladimir Ivanchenko (particles-V11-01-04)
+- G4IonTable - fix GetIon(..) method for the case if the ground state level
+    of an isomere is floating (Geant4 Forum thread 10448); removed some
+    duplications in FindIon and GetIon methods - only two methods of each kind
+    have full implementation, others redirect calls
+- G4NuclideTable - take into account floating ground state levels
+- G4Ion - added protection against unphysical index of floating level
+
+## 2023-02-23 Alberto Ribon (particles-V11-01-03)
 - G4XicZero, G4AntiXicZero : updated mean lifetime values according to the
   PDG-2022.
 - Note: the particles' properties in Geant4 are currently consistent with
@@ -15,14 +30,17 @@ It must **not** be used as a substitute for writing good git commit messages!
   Xi_c0 and Omega_c0. For this reason, only the latter two have been
   updated, while the rest will be updated in the near future.
 
-## 2023-02-07 Sandro Wenzel (particles-V11-00-17)
+## 2023-02-07 Sandro Wenzel (particles-V11-01-02)
 - G4OmegacZero, G4AntiOmegacZero : fixed mean lifetime according to the PDG.
   Thanks to Francesco Mazzaschi of ALICE for reporting it.
 
-## 2023-01-11 Alberto Ribon (particles-V11-00-16)
+## 2023-01-11 Alberto Ribon (particles-V11-01-01)
 - G4AntiNeutron : set the "PDG stable" flag to "false", as for G4Neutron 
   (this has no practical consequences, i.e. anti_neutron decays regardless
   of this flag, but it is confusing).
+
+## 2022-12-12 Ben Morgan (particles-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
 ## 2022-11-18 Gabriele Cosmo (particles-V11-00-15)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1

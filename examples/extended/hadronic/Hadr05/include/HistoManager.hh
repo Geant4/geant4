@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
-  const G4int kMaxHisto = 2*kMaxAbsor + 2;
+  const G4int kMaxHisto = 2*kMaxAbsor + 5;
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

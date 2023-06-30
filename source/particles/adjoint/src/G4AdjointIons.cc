@@ -62,13 +62,6 @@ G4AdjointIons::G4AdjointIons(
 }
 
 
-G4AdjointIons::~G4AdjointIons()
-{
-
-  //G4cout << "G4AdjointIons::" << GetParticleName() << G4endl; 
-}
-
-
 G4AdjointIons* G4AdjointIons::IonsDefinition()
 {
   return this;

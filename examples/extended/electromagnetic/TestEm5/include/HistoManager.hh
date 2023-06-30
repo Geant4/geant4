@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm5/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +34,6 @@
 #define HistoManager_h 1
 
 #include "globals.hh"
-
 #include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,11 +42,11 @@ class HistoManager
 {
   public:
     HistoManager();
-   ~HistoManager();
+   ~HistoManager() = default;
 
   private:
     void Book();
-    G4String fFileName;
+    G4String fFileName = "testem5";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

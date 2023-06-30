@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-04-26 Ben Morgan (visQt3D-V11-01-03)
+- Support compilation against Qt5 and Qt6.
+
+## 2023-03-22 Ben Morgan (visQt3D-V11-01-02)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-02-06 Ben Morgan (visQt3D-V11-01-01)
+- Isolate private headers and update dependencies
+
+## 2023-01-30 Ben Morgan (visQt3D-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
 ## 2022-11-25 Gabriele Cosmo (visQt3D-V11-00-12)
 - Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
 

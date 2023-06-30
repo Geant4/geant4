@@ -39,10 +39,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TimeStepAction::TimeStepAction(EventAction* event)
-  : G4UserTimeStepAction()
-  , fEventAction(event)
-  , fRadicalKillDistance(4.5 * nm)
-  , fpChemistryTrackHolder(G4ITTrackHolder::Instance())
+  : G4UserTimeStepAction(),
+  fEventAction(event),
+  fRadicalKillDistance(4.5 * nm),
+  fpChemistryTrackHolder(G4ITTrackHolder::Instance())
 {
   AddTimeStep(1 * picosecond, 0.5 * nanosecond);
   // ctor
@@ -55,8 +55,7 @@ TimeStepAction::~TimeStepAction() = default;
 
 void TimeStepAction::StartProcessing()
 {
-  auto det = dynamic_cast<const DetectorConstruction*>(
-    G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  auto det = dynamic_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   fDNAGeometry = det->GetDNAGeometry();
   if(fDNAGeometry == nullptr)
   {
@@ -98,10 +97,8 @@ void TimeStepAction::RadicalKillDistance()
                 exceptionDescription);
   }
   G4Track* trackToKill;
-  G4TrackManyList::iterator it_begin =
-    fpChemistryTrackHolder->GetMainList()->begin();
-  G4TrackManyList::iterator it_end =
-    fpChemistryTrackHolder->GetMainList()->end();
+  G4TrackManyList::iterator it_begin = fpChemistryTrackHolder->GetMainList()->begin();
+  G4TrackManyList::iterator it_end = fpChemistryTrackHolder->GetMainList()->end();
   while(it_begin != it_end)
   {
     trackToKill = nullptr;

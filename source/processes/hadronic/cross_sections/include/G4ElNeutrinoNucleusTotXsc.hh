@@ -46,13 +46,13 @@ public:
   G4ElNeutrinoNucleusTotXsc();
   ~G4ElNeutrinoNucleusTotXsc();
 
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int , G4int , const G4Element*, const G4Material*) override { return true; };
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int , G4int , const G4Element*, const G4Material*) override;
   
-  G4bool IsElementApplicable(const G4DynamicParticle*, G4int , const G4Material*) override { return false; };
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int , const G4Material*) override { return true; };
 
 
-  // virtual G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z, const G4Material*);
-  // G4double GetElementCrossSection(const G4DynamicParticle* dynPart,   G4int Z,  const G4Material* mat) override;
+
+  G4double GetElementCrossSection(const G4DynamicParticle* dynPart,   G4int Z,  const G4Material* mat) override;
 
   G4double GetIsoCrossSection(const G4DynamicParticle* aPart, G4int Z, G4int A,  
 			      const G4Isotope*,

@@ -29,4 +29,4 @@
 #include "G4ParticleHPLabAngularEnergy.hh"
 using G4NeutronHPLabAngularEnergy = G4ParticleHPLabAngularEnergy;
 
-#endif 
+#endif

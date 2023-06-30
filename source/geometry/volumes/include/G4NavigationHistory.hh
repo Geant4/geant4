@@ -144,7 +144,7 @@ class G4NavigationHistory
   std::vector<G4NavigationLevel>* fNavHistory;
     // Pointer to the vector of navigation levels.
 
-  std::size_t fStackDepth;
+  std::size_t fStackDepth{0};
     // Depth of stack: effectively depth in geometrical tree.
 };
 

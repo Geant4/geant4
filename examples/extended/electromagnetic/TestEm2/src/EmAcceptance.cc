@@ -34,17 +34,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EmAcceptance::EmAcceptance()
- : fIsAccepted(false)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmAcceptance::~EmAcceptance()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
 {
   G4cout << G4endl;

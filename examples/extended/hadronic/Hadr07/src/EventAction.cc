@@ -56,6 +56,23 @@ void EventAction::BeginOfEventAction(const G4Event*)
 {
   //energy deposited per event
   for (G4int k=0; k<kMaxAbsor; k++) { fEdepAbsor[k] = 0.0; }
+  
+  //energy leakage per event
+  fEnergyLeak = 0.0;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::AddEdep(G4int k, G4double edep)
+{       
+  fEdepAbsor[k] += edep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::AddEleak(G4double eleak)
+{       
+  fEnergyLeak += eleak;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,18 +85,24 @@ void EventAction::EndOfEventAction(const G4Event*)
   
   //plot energy deposited per event
   //
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   G4double TotalEdep(0.);
   for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
     if (fEdepAbsor[k] > 0.) {
       run->AddEdep(k,fEdepAbsor[k]);
-      G4AnalysisManager::Instance()->FillH1(k, fEdepAbsor[k]);
+      analysis->FillH1(k, fEdepAbsor[k]);
       TotalEdep += fEdepAbsor[k];
     }
   }
   
-  if (TotalEdep > 0.) {
-    run->AddTotEdep(TotalEdep);
-  }
+  if (TotalEdep > 0.) run->AddTotEdep(TotalEdep);
+  if (fEnergyLeak > 0.) run->AddEleak(fEnergyLeak);
+  G4double Etotal = TotalEdep + fEnergyLeak;
+  if (Etotal > 0.) run->AddEtotal(Etotal);
+   
+  analysis->FillH1(11,TotalEdep);
+  analysis->FillH1(12,fEnergyLeak);
+  analysis->FillH1(13,Etotal);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

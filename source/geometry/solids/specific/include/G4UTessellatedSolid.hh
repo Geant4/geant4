@@ -48,18 +48,18 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
   using Shape_t = vecgeom::UnplacedTessellated;
   using Base_t  = G4UAdapter<vecgeom::UnplacedTessellated>;
 
-  public:  // with description
+  public:
 
     G4UTessellatedSolid();
     G4UTessellatedSolid(const G4String& pName);
-   ~G4UTessellatedSolid();
+   ~G4UTessellatedSolid() override;
 
     G4bool AddFacet(G4VFacet* aFacet);
     G4VFacet* GetFacet(G4int i) const;
 
     G4int GetNumberOfFacets() const;
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
     void SetSolidClosed(const G4bool t);
     G4bool GetSolidClosed() const;
@@ -76,8 +76,6 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
     G4int AllocatedMemory();
     void DisplayAllocatedMemory();
 
-  public:  // without description
-
     G4UTessellatedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -87,13 +85,13 @@ class G4UTessellatedSolid : public G4UAdapter<vecgeom::UnplacedTessellated>
     G4UTessellatedSolid& operator=(const G4UTessellatedSolid& source);
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;  
+                                 G4double& pMin, G4double& pMax) const override;  
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   private:
 

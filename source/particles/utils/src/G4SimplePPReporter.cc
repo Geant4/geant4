@@ -36,21 +36,10 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
-//////////////////////////////
-G4SimplePPReporter::G4SimplePPReporter():G4VParticlePropertyReporter()
-{ 
-}
-
-////////////////////////////
-G4SimplePPReporter::~G4SimplePPReporter()
-{
-}    
-
 /////////////////////
 void G4SimplePPReporter::Print(const G4String& )
 {
-  for (size_t i=0; i<pList.size(); i++){
-    G4ParticlePropertyData*    ptr = (pList)[i];
+  for (const auto ptr : pList){
     ptr->Print();  
     G4cout << G4endl;
   }

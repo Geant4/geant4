@@ -55,7 +55,7 @@ class G4OpticalPhoton : public G4ParticleDefinition
   G4OpticalPhoton () {}
 
  public:
-   ~G4OpticalPhoton (){}
+   ~G4OpticalPhoton () override= default;
 
    static G4OpticalPhoton* Definition();
    static G4OpticalPhoton* OpticalPhotonDefinition();

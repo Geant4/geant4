@@ -79,7 +79,7 @@ G4int G4LENDGammaCrossSection::SelectChannel(const G4DynamicParticle* dp,
                                              const G4Element*,
                                              const G4Material* material)
 {
-  G4int ichannel = -1;
+  G4int ichannel = 1;
   G4double XSs[2];
   XSs[0] = inelasticXS->GetIsoCrossSection(dp, iZ, iA, isotope, nullptr, material);
   XSs[1] = XSs[0] + fissionXS->GetIsoCrossSection(dp, iZ, iA, isotope, nullptr, material);
@@ -88,7 +88,7 @@ G4int G4LENDGammaCrossSection::SelectChannel(const G4DynamicParticle* dp,
 
   G4double random = G4UniformRand();
   for (G4int i = 0; i < 2; i++) {
-    if (random*total <= XSs[i]) { 
+    if (random*total < XSs[i]) { 
       ichannel = i;
       break; 
     }

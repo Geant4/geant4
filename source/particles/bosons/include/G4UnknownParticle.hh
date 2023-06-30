@@ -55,7 +55,7 @@ class G4UnknownParticle : public G4ParticleDefinition
   G4UnknownParticle(){}
 
  public:
-   ~G4UnknownParticle(){}
+   ~G4UnknownParticle() override= default;
  
    static G4UnknownParticle* Definition();
    static G4UnknownParticle* UnknownParticleDefinition();

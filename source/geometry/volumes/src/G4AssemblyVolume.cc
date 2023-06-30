@@ -48,7 +48,7 @@ G4AssemblyVolume::G4AssemblyVolume()
   SetAssemblyID( GetInstanceCount() );
   SetImprintsCount( 0 );
   G4AssemblyStore* aStore = G4AssemblyStore::GetInstance();
-  if (aStore->GetAssembly(fAssemblyID,false))
+  if (aStore->GetAssembly(fAssemblyID,false) != nullptr)
   {
     std::ostringstream message;
     message << "The assembly has NOT been registered !" << G4endl
@@ -74,7 +74,7 @@ G4AssemblyVolume::G4AssemblyVolume( G4LogicalVolume* volume,
   SetImprintsCount( 0 );
   AddPlacedVolume(volume, translation, rotation);
   G4AssemblyStore* aStore = G4AssemblyStore::GetInstance();
-  if (aStore->GetAssembly(fAssemblyID,false))
+  if (aStore->GetAssembly(fAssemblyID,false) != nullptr)
   {
     std::ostringstream message;
     message << "The assembly has NOT been registered !" << G4endl
@@ -99,10 +99,7 @@ G4AssemblyVolume::~G4AssemblyVolume()
     for( std::size_t i = 0; i < howmany; ++i )
     {
       G4RotationMatrix* pRotToClean = fTriplets[i].GetRotation();
-      if( pRotToClean != 0 )
-      {
-        delete pRotToClean;
-      }
+      delete pRotToClean;
     }
   }
   fTriplets.clear();
@@ -129,7 +126,7 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
                                         G4ThreeVector&    translation,
                                         G4RotationMatrix* pRotation )
 {
-  G4RotationMatrix*  toStore  = new G4RotationMatrix;
+  auto toStore = new G4RotationMatrix;
   
   if( pRotation != nullptr )  { *toStore = *pRotation; }
   
@@ -148,9 +145,9 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
   G4Translate3D translation;
   transformation.getDecomposition(scale, rotation, translation);
 
-  G4ThreeVector      v = translation.getTranslation();
-  G4RotationMatrix*  r = new G4RotationMatrix;
-                    *r = rotation.getRotation();
+  G4ThreeVector v = translation.getTranslation();
+  auto r = new G4RotationMatrix;
+      *r = rotation.getRotation();
   
   G4bool isReflection = false;
   if (scale(0,0)*scale(1,1)*scale(2,2) < 0.)  { isReflection = true; }
@@ -166,7 +163,7 @@ void G4AssemblyVolume::AddPlacedAssembly( G4AssemblyVolume* pAssembly,
                                           G4ThreeVector&    translation,
                                           G4RotationMatrix* pRotation )
 {
-  G4RotationMatrix*  toStore  = new G4RotationMatrix;
+  auto toStore = new G4RotationMatrix;
   
   if( pRotation != nullptr )  { *toStore = *pRotation; }
   
@@ -188,8 +185,8 @@ void G4AssemblyVolume::AddPlacedAssembly( G4AssemblyVolume* pAssembly,
   transformation.getDecomposition(scale, rotation, translation);
 
   G4ThreeVector      v = translation.getTranslation();
-  G4RotationMatrix*  r = new G4RotationMatrix;
-                    *r = rotation.getRotation();
+  auto r = new G4RotationMatrix;
+      *r = rotation.getRotation();
   
   G4bool isReflection = false;
   if (scale(0,0)*scale(1,1)*scale(2,2) < 0.)  { isReflection = true; }
@@ -272,7 +269,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
 
     G4Transform3D Tfinal = transformation * Ta;
     
-    if ( triplets[i].GetVolume() )
+    if ( triplets[i].GetVolume() != nullptr )
     {
       // Generate the unique name for the next PV instance
       // The name has format:
@@ -311,13 +308,13 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
       // Register the physical volume created by us so we can delete it later
       //
       fPVStore.push_back( pvPlaced.first );
-      if ( pvPlaced.second )  { fPVStore.push_back( pvPlaced.second ); }
+      if ( pvPlaced.second != nullptr )  { fPVStore.push_back( pvPlaced.second ); }
 
       // Here I want to save the imprint transformation to some container, so I can retrieve the original values later
       // imprintTrans[GetImprintsCount()] = transformation;
       
     }
-    else if ( triplets[i].GetAssembly() )
+    else if ( triplets[i].GetAssembly() != nullptr )
     {
       // Place volumes in this assembly with composed transformation
       //

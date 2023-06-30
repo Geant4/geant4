@@ -33,16 +33,16 @@
 #include "G4Types.hh"
 
 #ifdef WIN32
-  //
-  // Unique identifier for global module
-  //
-  #if defined G4TRACKING_ALLOC_EXPORT
-    #define G4TRACKING_DLL G4DLLEXPORT
-  #else
-    #define G4TRACKING_DLL G4DLLIMPORT
-  #endif
+//
+// Unique identifier for global module
+//
+#  if defined G4TRACKING_ALLOC_EXPORT
+#    define G4TRACKING_DLL G4DLLEXPORT
+#  else
+#    define G4TRACKING_DLL G4DLLIMPORT
+#  endif
 #else
-  #define G4TRACKING_DLL
+#  define G4TRACKING_DLL
 #endif
 
 #endif /* G4TRKGDEFS_HH */

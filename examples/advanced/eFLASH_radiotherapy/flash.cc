@@ -46,10 +46,7 @@
 
 int main(int argc, char **argv) {
 
-  G4UIExecutive *ui = 0;
-  if (argc == 1) {
-    ui = new G4UIExecutive(argc, argv);
-  }
+  
 
   //  G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
@@ -72,18 +69,20 @@ int main(int argc, char **argv) {
   G4UImanager *UImanager = G4UImanager::GetUIpointer();
   G4ScoringManager::GetScoringManager();
   
-
-  if (!ui) {
-
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command + fileName);
-  } else {
-
+G4UIExecutive *ui = 0;
+  if (argc == 1) {
+    ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
     delete ui;
   }
+  else
+     {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
+
+       }
 
   delete visManager;
   delete runManager;

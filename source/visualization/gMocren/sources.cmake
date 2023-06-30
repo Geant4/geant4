@@ -4,6 +4,7 @@
 geant4_add_module(G4GMocren
   PUBLIC_HEADERS
     G4GMocrenFile.hh
+  PRIVATE_HEADERS
     G4GMocrenFileCTtoDensityMap.hh
     G4GMocrenFileSceneHandler.hh
     G4GMocrenFileViewer.hh
@@ -20,14 +21,14 @@ geant4_add_module(G4GMocren
 
 geant4_module_link_libraries(G4GMocren
   PUBLIC
-    G4hits
-    G4intercoms
     G4vis_management
+  PRIVATE
+    G4csg
     G4geometrymng
     G4globman
-  PRIVATE
     G4graphics_reps
-    G4csg
+    G4hits
+    G4intercoms
     G4modeling
     G4materials
     G4navigation

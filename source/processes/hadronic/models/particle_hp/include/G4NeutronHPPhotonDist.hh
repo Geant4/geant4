@@ -29,4 +29,4 @@
 #include "G4ParticleHPPhotonDist.hh"
 using G4NeutronHPPhotonDist = G4ParticleHPPhotonDist;
 
-#endif 
+#endif

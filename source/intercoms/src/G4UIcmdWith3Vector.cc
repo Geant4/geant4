@@ -31,8 +31,7 @@
 #include "G4UIcmdWith3Vector.hh"
 
 // --------------------------------------------------------------------
-G4UIcmdWith3Vector::G4UIcmdWith3Vector(const char* theCommandPath,
-                                       G4UImessenger* theMessenger)
+G4UIcmdWith3Vector::G4UIcmdWith3Vector(const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
   auto* dblParamX = new G4UIparameter('d');
@@ -51,10 +50,8 @@ G4ThreeVector G4UIcmdWith3Vector::GetNew3VectorValue(const char* paramString)
 }
 
 // --------------------------------------------------------------------
-void G4UIcmdWith3Vector::SetParameterName(const char* theNameX,
-                                          const char* theNameY,
-                                          const char* theNameZ,
-                                          G4bool omittable,
+void G4UIcmdWith3Vector::SetParameterName(const char* theNameX, const char* theNameY,
+                                          const char* theNameZ, G4bool omittable,
                                           G4bool currentAsDefault)
 {
   G4UIparameter* theParamX = GetParameter(0);

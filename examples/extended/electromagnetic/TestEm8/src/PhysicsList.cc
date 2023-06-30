@@ -81,16 +81,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction* ptr) 
-  : G4VModularPhysicsList(), fDetectorConstruction(ptr)
-{
-  // set verbosity for zero to avoid double printout 
+PhysicsList::PhysicsList(DetectorConstruction *ptr)
+  : fDetectorConstruction(ptr) {
+  // set verbosity for zero to avoid double printout
   // on physics verbosity should be restored to 1 when cuts
   // are set
   G4EmParameters::Instance()->SetVerbose(0);
 
-  SetDefaultCutValue(1*mm);
- 
+  SetDefaultCutValue(1 * mm);
+
   fMessenger = new PhysicsListMessenger(this);
 
   // Decay Physics is always defined
@@ -105,8 +104,7 @@ PhysicsList::PhysicsList(DetectorConstruction* ptr)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()
-{
+PhysicsList::~PhysicsList() {
   delete fMessenger;
   delete fDecayPhysicsList;
   delete fEmPhysicsList;
@@ -114,15 +112,13 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructParticle()
-{
+void PhysicsList::ConstructParticle() {
   fDecayPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructProcess()
-{
+void PhysicsList::ConstructProcess() {
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
@@ -131,9 +127,8 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::AddPhysicsList(const G4String& name)
-{
-  if (verboseLevel>1) {
+void PhysicsList::AddPhysicsList(const G4String &name) {
+  if (verboseLevel > 1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -189,10 +184,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmPhysicsList = new G4EmStandardPhysicsGS(0);
 
   } else if (name == "pai") {
-    G4EmParameters::Instance()->AddPAIModel("all","world","pai");
+    G4EmParameters::Instance()->AddPAIModel("all", "world", "pai");
 
   } else if (name == "pai_photon") {
-    G4EmParameters::Instance()->AddPAIModel("all","world","pai_photon");
+    G4EmParameters::Instance()->AddPAIModel("all", "world", "pai_photon");
 
   } else if (name == "emlivermore") {
 
@@ -215,27 +210,23 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
+           << " is not defined" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::AddStepMax()
-{
+void PhysicsList::AddStepMax() {
   // Step limitation seen as a process
-  StepMax* stepMaxProcess = new StepMax(fDetectorConstruction);
+  StepMax *stepMaxProcess = new StepMax(fDetectorConstruction);
 
-  auto particleIterator=GetParticleIterator();
+  auto particleIterator = GetParticleIterator();
   particleIterator->reset();
-  while ((*particleIterator)())
-  {
-    G4ParticleDefinition* particle = particleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
+  while ((*particleIterator)()) {
+    G4ParticleDefinition *particle = particleIterator->value();
+    G4ProcessManager *pmanager = particle->GetProcessManager();
 
-    if (stepMaxProcess->IsApplicable(*particle))
-    {
+    if (stepMaxProcess->IsApplicable(*particle)) {
       pmanager->AddDiscreteProcess(stepMaxProcess);
     }
   }
@@ -243,11 +234,12 @@ void PhysicsList::AddStepMax()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::SetCuts()
-{
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(25.*eV,1e5);
-  if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
+void PhysicsList::SetCuts() {
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(25. * eV,
+                                                                  1e5);
+  if (verboseLevel > 0) {
+    DumpCutValuesTable();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

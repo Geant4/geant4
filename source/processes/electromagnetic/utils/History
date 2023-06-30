@@ -6,26 +6,64 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-02 J.Hahnfeld (emutils-V11-00-40)
+## 2023-06-16 V.Ivanchenko (emutils-V11-01-13)
+- G4LossTableManager - fixed trivial Coverity report
+
+## 2023-06-04 V.Ivanchenko (emutils-V11-01-12)
+- G4VEmModel - use LPM flag from G4EmParameters
+
+## 2023-06-02 J.Hahnfeld (emutils-V11-01-11)
 - Fixes to `G4TransportationWithMsc`:
  * Protect code for MultipleScattering
  * Fix type of particle change
 
-## 2023-04-08 V.Ivanchenko
-- G4LossTableManager - improved debug printout and removed unused lines of code
+## 2023-06-01 V.Ivanchenko (emutils-V11-01-10)
+- G4LossTableManager - reserve memory for internal vectors; simplified
+    destructor; move a part of initialisation of class members to header
+- G4ionEffectiveCharge - minor optimisation
 
-## 2023-03-20 V.Ivanchenko
+## 2023-05-23 V.Ivanchenko (emutils-V11-01-09)
+- G4VEnergyLossProcess - added extra protection excluding negative range;
+    rename class member; change condition to stop low-energy ion - use kinetic
+    energy and not scaled energy; is proposed to address git issue #168
+- G4VMscModel - removed empty lines
+
+## 2023-05-04 V.Ivanchenko (emutils-V11-01-08)
+- G4VEnergyLossProcess - added extra protection for the case of negative
+    range of low-energy particle (problem #2542)
+
+## 2023-04-20 V.Ivanchenko (emutils-V11-01-07)
+- G4VEnergyLossProcess - make more straightforward computation of ion
+    effective charge
+- G4VEmModel - trigger computation of ion effective charge for G4EmCalculator
+- G4EmCalculator - improved printout
+
+## 2023-04-08 V.Ivanchenko (emutils-V11-01-06)
+- G4LossTableManager - improved debug printout and removed unused lines of code
+- G4LossTableBuilder, G4VEnergyLossProcess - improved debug printout
+
+## 2023-04-03 V.Ivanchenko (emutils-V11-01-05)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - use flag of
+    master thread from G4LossTableManager
+- G4EmCorrections - class format, removed lock of threads instead use
+    flag from G4LossTableManager
+
+## 2023-03-20 V.Ivanchenko (emutils-V11-01-04)
 - G4VEnergyLossProcess - fixed static analyzer warning
 - G4EmTableUtil - fixed verbose output and class comments
 
-## 2023-03-06 J.Allison
+## 2023-03-06 J.Allison (emutils-V11-01-03)
 - Allow /process/em/QuantumEntanglement in G4State_Idle.
 
-## 2023-02-21 V.Ivanchenko
+## 2023-02-21 V.Ivanchenko (emutils-V11-01-02)
 - G4EmExtraParameters - fixed AddPAIModel(...) method and improved comments
-- G4EmExtraParametersMessenger - fixed broadcasting 
+- G4EmExtraParametersMessenger - fixed broadcasting  
 
-## 2022-12-11 V.Ivanchenko (emutils-V11-00-39)
+## 2023-01-10 V.Ivanchenko (emutils-V11-01-01)
+- G4EmParameters - added extra member and access method to G4LEDATA path
+    allowing check environment variable for the EM data only once
+
+## 2022-12-11 V.Ivanchenko (emutils-V11-01-00)
 - G4EmParameters, G4EmParametersMessenger, added parameter, UI command, 
     GetSet methods - MscPositronCorrection
 

@@ -31,49 +31,47 @@
 #ifndef G4ParticleHPThermalBoost_h
 #define G4ParticleHPThermalBoost_h
 
-#include "G4HadProjectile.hh"
-#include "G4Element.hh"
-#include "G4ReactionProduct.hh"
-#include "G4Nucleus.hh"
-#include "G4NucleiProperties.hh"
 #include "G4Electron.hh"
+#include "G4Element.hh"
+#include "G4HadProjectile.hh"
 #include "G4Neutron.hh"
+#include "G4NucleiProperties.hh"
+#include "G4Nucleus.hh"
+#include "G4ReactionProduct.hh"
 
 class G4ParticleHPThermalBoost
 {
-public: 
-  G4double GetThermalEnergy(const G4HadProjectile & aP, 
-                            const G4Element * anE, 
-			    G4double aT)
-  {
-    G4double theA = anE->GetN();
-    G4double theZ = anE->GetZ();
-    return GetThermalEnergy(aP, theA ,theZ, aT);
-  }
-  			    
-  G4double GetThermalEnergy(const G4HadProjectile & aP, 
-                            G4double theA, G4double theZ,
-			    G4double aT)
-  {
-    // prepare neutron
-    G4double eKinetic = aP.GetKineticEnergy();
-    G4ReactionProduct theNeutronRP( const_cast<G4ParticleDefinition *>(aP.GetDefinition()) );
-    theNeutronRP.SetMomentum( aP.Get4Momentum().vect() );
-    theNeutronRP.SetKineticEnergy( eKinetic );
-    G4ThreeVector neuVelo = (1./aP.GetDefinition()->GetPDGMass())*theNeutronRP.GetMomentum();
+  public:
+    G4double GetThermalEnergy(const G4HadProjectile& aP, const G4Element* anE, G4double aT)
+    {
+      G4double theA = anE->GetN();
+      G4double theZ = anE->GetZ();
+      return GetThermalEnergy(aP, theA, theZ, aT);
+    }
 
-    // prepare properly biased thermal nucleus
-    G4Nucleus aNuc;
-    G4double eps = 0.0001;
-    G4double eleMass; 
-    eleMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theA+eps) , static_cast<G4int>(theZ+eps) ) ) / G4Neutron::Neutron()->GetPDGMass();
-  
-    G4ReactionProduct aThermalNuc = aNuc.GetBiasedThermalNucleus(eleMass, neuVelo, aT);
-    
-    // boost to rest system and return
-    G4ReactionProduct boosted;
-    boosted.Lorentz(theNeutronRP, aThermalNuc);
-    return boosted.GetKineticEnergy();
-  }
+    G4double GetThermalEnergy(const G4HadProjectile& aP, G4double theA, G4double theZ, G4double aT)
+    {
+      // prepare neutron
+      G4double eKinetic = aP.GetKineticEnergy();
+      G4ReactionProduct theNeutronRP(const_cast<G4ParticleDefinition*>(aP.GetDefinition()));
+      theNeutronRP.SetMomentum(aP.Get4Momentum().vect());
+      theNeutronRP.SetKineticEnergy(eKinetic);
+      G4ThreeVector neuVelo = (1. / aP.GetDefinition()->GetPDGMass()) * theNeutronRP.GetMomentum();
+
+      // prepare properly biased thermal nucleus
+      G4Nucleus aNuc;
+      G4double eps = 0.0001;
+      G4double eleMass;
+      eleMass = (G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theA + eps),
+                                                    static_cast<G4int>(theZ + eps)))
+                / G4Neutron::Neutron()->GetPDGMass();
+
+      G4ReactionProduct aThermalNuc = aNuc.GetBiasedThermalNucleus(eleMass, neuVelo, aT);
+
+      // boost to rest system and return
+      G4ReactionProduct boosted;
+      boosted.Lorentz(theNeutronRP, aThermalNuc);
+      return boosted.GetKineticEnergy();
+    }
 };
 #endif

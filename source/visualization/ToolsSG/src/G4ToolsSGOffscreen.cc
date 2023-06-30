@@ -83,10 +83,3 @@ G4VViewer* G4ToolsSGOffscreen::CreateViewer(G4VSceneHandler& a_scene,const G4Str
   }
   return pView;
 }
-
-G4bool G4ToolsSGOffscreen::IsUISessionCompatible () const
-{
-  //G4bool isCompatible = true;
-  //return isCompatible;
-  return true;
-}

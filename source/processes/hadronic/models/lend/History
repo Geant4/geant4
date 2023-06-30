@@ -5,8 +5,12 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
-
-## 2023-02-06 Gabriele Cosmo (hadr-lend-V11-00-08)
+## 2023-04-06 Dennis Wright (hadr-lend-V11-01-01)
+- Fix coverity bug 104071: G4LENDGammaCrossSection::SelectChannel may return 
+  negative atrray index.  Same for G4LENDGammaCombinedCrossSection::SelectChannel.
+  Initialize iChannel to positive number.
+  
+## 2023-02-06 Gabriele Cosmo (hadr-lend-V11-01-00)
 - Fixed potential uninitialised variables in MCGIDI_energy_parseMadlandNixFromTOM().
 
 ## 2022-11-26 Gabriele Cosmo (hadr-lend-V11-00-07)

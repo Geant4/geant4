@@ -77,6 +77,7 @@ geant4_add_module(G4emdna-man
     G4VScavengerMaterial.hh
     G4VUserBrownianAction.hh
     G4VDNAMesh.hh
+    G4VUserPulseInfo.hh
   SOURCES
     G4AllITFinder.cc
     G4ITBox.cc
@@ -125,7 +126,8 @@ geant4_add_module(G4emdna-man
     G4VITTimeStepComputer.cc
     G4VITTrackHolder.cc
     G4VScheduler.cc
-    G4DNABoundingBox.cc)
+    G4DNABoundingBox.cc
+    G4VUserPulseInfo.cc)
 
 geant4_module_link_libraries(G4emdna-man
   PUBLIC

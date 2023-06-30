@@ -64,7 +64,6 @@
 
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
-#include "G4CoulombScattering.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
@@ -150,19 +149,19 @@ void G4EmBuilder::ConstructIonEmPhysicsSS()
 
   G4ParticleDefinition* part = G4Deuteron::Deuteron();
   ph->RegisterProcess(new G4hIonisation(), part);
-  ph->RegisterProcess(new G4CoulombScattering(), part);
+  ph->RegisterProcess(new G4CoulombScattering(false), part);
 
   part = G4Triton::Triton();
   ph->RegisterProcess(new G4hIonisation(), part);
-  ph->RegisterProcess(new G4CoulombScattering(), part);
+  ph->RegisterProcess(new G4CoulombScattering(false), part);
 
   part = G4Alpha::Alpha();
   ph->RegisterProcess(new G4ionIonisation(), part);
-  ph->RegisterProcess(new G4CoulombScattering(), part);
+  ph->RegisterProcess(new G4CoulombScattering(false), part);
 
   part = G4He3::He3();
   ph->RegisterProcess(new G4ionIonisation(), part);
-  ph->RegisterProcess(new G4CoulombScattering(), part);
+  ph->RegisterProcess(new G4CoulombScattering(false), part);
 }
 
 void G4EmBuilder::ConstructLightHadrons(G4ParticleDefinition* part1,
@@ -219,14 +218,15 @@ void G4EmBuilder::ConstructLightHadronsSS(G4ParticleDefinition* part1,
     ph->RegisterProcess(brem, part1);
     ph->RegisterProcess(pair, part1);
   }
-  ph->RegisterProcess(new G4CoulombScattering(), part1);
+  auto ss = new G4CoulombScattering(false);
+  ph->RegisterProcess(ss, part1);
 
   ph->RegisterProcess(new G4hIonisation(), part2);
   if( isHEP ) {
     ph->RegisterProcess(brem, part2);
     ph->RegisterProcess(pair, part2);
   }
-  ph->RegisterProcess(new G4CoulombScattering(), part2);
+  ph->RegisterProcess(new G4CoulombScattering(false), part2);
 }
 
 void G4EmBuilder::ConstructCharged(G4hMultipleScattering* hmsc,
@@ -306,7 +306,7 @@ void G4EmBuilder::ConstructChargedSS(G4hMultipleScattering* hmsc)
   G4bool isHEP = ( param->MaxKinEnergy() > hpar->EnergyThresholdForHeavyHadrons() );
 
   // muon multiple and single scattering
-  G4CoulombScattering* muss = new G4CoulombScattering();
+  G4CoulombScattering* muss = new G4CoulombScattering(false);
 
   // Add standard EM Processes
   // mu+-

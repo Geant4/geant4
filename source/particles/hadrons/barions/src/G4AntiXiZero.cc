@@ -47,16 +47,16 @@
 // ###                           AntiXiZero                           ###
 // ######################################################################
 
-G4AntiXiZero* G4AntiXiZero::theInstance = 0;
+G4AntiXiZero* G4AntiXiZero::theInstance = nullptr;
 
 G4AntiXiZero* G4AntiXiZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_xi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4AntiXiZero* G4AntiXiZero::Definition()
                     1,              +1,             0,
                     1,              -1,             0,
              "baryon",               0,            -1,       -3322,
-                false,        0.290*ns,          NULL,
+                false,        0.290*ns,          nullptr,
                 false,       "xi");
 
     // Magnetic Moment
@@ -81,10 +81,10 @@ G4AntiXiZero* G4AntiXiZero::Definition()
     anInstance->SetPDGMagneticMoment( 1.250 * mN);
  
     //create Decay Table 
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels
-    G4VDecayChannel** mode = new G4VDecayChannel*[1];
+    auto  mode = new G4VDecayChannel*[1];
     // anti_xi0 -> anti_lambda + pi0
     mode[0] = new G4PhaseSpaceDecayChannel("anti_xi0",1.000,2,"anti_lambda","pi0");
     

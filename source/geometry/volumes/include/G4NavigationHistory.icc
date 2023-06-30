@@ -62,7 +62,7 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
     fNavHistory->resize( h.GetMaxDepth() );
   }
 
-  for ( G4int ilev=G4int(h.fStackDepth); ilev>=0; --ilev )
+  for ( auto  ilev=G4int(h.fStackDepth); ilev>=0; --ilev )
   { 
     (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
   }
@@ -81,10 +81,10 @@ inline
 void G4NavigationHistory::Clear()
 {
   G4AffineTransform origin(G4ThreeVector(0.,0.,0.));
-  G4NavigationLevel tmpNavLevel = G4NavigationLevel(0, origin, kNormal, -1) ;
+  G4NavigationLevel tmpNavLevel = G4NavigationLevel(nullptr, origin, kNormal, -1) ;
 
   Reset();
-  for (G4long ilev=G4long(fNavHistory->size()-1); ilev>=0; --ilev)
+  for (auto  ilev=G4long(fNavHistory->size()-1); ilev>=0; --ilev)
   {
      (*fNavHistory)[ilev] = tmpNavLevel;
   }

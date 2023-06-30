@@ -41,11 +41,9 @@
 class G4UIcmdWithoutParameter : public G4UIcommand
 {
   public:
-
-    G4UIcmdWithoutParameter(const char* theCommandPath,
-                            G4UImessenger* theMessenger);
-      // Constructor. The command string with full path directory
-      // and the pointer to the messenger must be given
+    // Constructor. The command string with full path directory
+    // and the pointer to the messenger must be given
+    G4UIcmdWithoutParameter(const char* theCommandPath, G4UImessenger* theMessenger);
 };
 
 #endif

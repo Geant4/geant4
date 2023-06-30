@@ -5,8 +5,22 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2023-06-13 Gabriele Cosmo (geomnav-V11-01-01)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
+
+## 2023-01-31 John Apostolakis (geomnav-V11-01-00)
+- G4PropagatorInField: Added parameters for big steps.
+   New parameter 'MaxStepSizeMultiplier' - enables changing
+     (eg needed to reduce costly unnecessary integration in QSS)
+   New parameter 'MinBigDistance' used as minimum distance in 
+     case of long steps.  Could be adapted to size of world.
+   Default values also changed: 
+           'LargestAcceptableDistance' = 100 * meter ( from 1000* meter )
+           'MaxStepSizeMultiplier'     = 0.1         ( from 100 ).
+
 ## 2022-11-23 John Apostolakis (geomnav-V11-00-09)
-- G4MultiLevelLocator: refresh candidate intersection point when needed
+- G4MultiLevelLocator: refresh candidate intersection point when needed.
 
 ## 2022-11-10 John Apostolakis (geomnav-V11-00-08)
 - Improved diagnostic message in G4MultiLevelLocator - they missed to print

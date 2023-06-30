@@ -47,7 +47,7 @@ G4VParameterisationTubs( EAxis axis, G4int nDiv, G4double width,
                          DivisionType divType )
   : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
-  G4Tubs* msol = (G4Tubs*)(msolid);
+  auto msol = (G4Tubs*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     //----- get constituent solid  
@@ -60,9 +60,7 @@ G4VParameterisationTubs( EAxis axis, G4int nDiv, G4double width,
 }
 
 //------------------------------------------------------------------------
-G4VParameterisationTubs::~G4VParameterisationTubs()
-{
-}
+G4VParameterisationTubs::~G4VParameterisationTubs() = default;
 
 //--------------------------------------------------------------------------
 G4ParameterisationTubsRho::
@@ -74,7 +72,7 @@ G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionTubsRho" );
 
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( msol->GetOuterRadius() - msol->GetInnerRadius(),
@@ -99,14 +97,12 @@ G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
 }
 
 //--------------------------------------------------------------------------
-G4ParameterisationTubsRho::~G4ParameterisationTubsRho()
-{
-}
+G4ParameterisationTubsRho::~G4ParameterisationTubsRho() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationTubsRho::GetMaxParameter() const
 {
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
   return msol->GetOuterRadius() - msol->GetInnerRadius();
 }
 
@@ -150,7 +146,7 @@ G4ParameterisationTubsRho::
 ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
                    const G4VPhysicalVolume* ) const
 {
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
 
   G4double pRMin = msol->GetInnerRadius() + foffset + fwidth*copyNo + fhgap;
   G4double pRMax = msol->GetInnerRadius() + foffset + fwidth*(copyNo+1) - fhgap;
@@ -185,7 +181,7 @@ G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionTubsPhi" );
 
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( msol->GetDeltaPhiAngle(), width, offset );
@@ -207,14 +203,12 @@ G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
 }
 
 //--------------------------------------------------------------------------
-G4ParameterisationTubsPhi::~G4ParameterisationTubsPhi()
-{
-}
+G4ParameterisationTubsPhi::~G4ParameterisationTubsPhi() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationTubsPhi::GetMaxParameter() const
 {
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
   return msol->GetDeltaPhiAngle();
 }
 
@@ -259,7 +253,7 @@ G4ParameterisationTubsPhi::
 ComputeDimensions( G4Tubs& tubs, const G4int,
                    const G4VPhysicalVolume* ) const
 {
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
 
   G4double pRMin = msol->GetInnerRadius();
   G4double pRMax = msol->GetOuterRadius();
@@ -294,7 +288,7 @@ G4ParameterisationTubsZ( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionTubsZ" );
 
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*msol->GetZHalfLength(), width, offset );
@@ -316,14 +310,12 @@ G4ParameterisationTubsZ( EAxis axis, G4int nDiv,
 }
 
 //--------------------------------------------------------------------------
-G4ParameterisationTubsZ::~G4ParameterisationTubsZ()
-{
-}
+G4ParameterisationTubsZ::~G4ParameterisationTubsZ() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationTubsZ::GetMaxParameter() const
 {
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
   return 2*msol->GetZHalfLength();
 }
 
@@ -333,7 +325,7 @@ G4ParameterisationTubsZ::
 ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 {
   //----- set translation: along Z axis
-  G4Tubs* motherTubs = (G4Tubs*)(fmotherSolid);
+  auto motherTubs = (G4Tubs*)(fmotherSolid);
   G4double posi = - motherTubs->GetZHalfLength() + OffsetZ() 
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
@@ -370,7 +362,7 @@ G4ParameterisationTubsZ::
 ComputeDimensions( G4Tubs& tubs, const G4int,
                    const G4VPhysicalVolume* ) const
 {
-  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
+  auto msol = (G4Tubs*)(fmotherSolid);
 
   G4double pRMin = msol->GetInnerRadius();
   G4double pRMax = msol->GetOuterRadius();

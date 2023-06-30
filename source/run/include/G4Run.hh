@@ -36,10 +36,10 @@
 #ifndef G4Run_hh
 #define G4Run_hh 1
 
-#include <vector>
-
-#include "globals.hh"
 #include "G4Profiler.hh"
+#include "globals.hh"
+
+#include <vector>
 
 class G4Event;
 class G4HCtable;
@@ -48,68 +48,61 @@ class G4DCtable;
 class G4Run
 {
   public:
-
     using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
 
+  public:
     G4Run();
     virtual ~G4Run();
-
     G4Run(const G4Run&) = delete;
     G4Run& operator=(const G4Run&) = delete;
-      // Forbidden copy constructor and assignment operator.
 
+    // Method to be overwritten by the user for recording events in this run.
+    // In such a case, it is the user's responsibility to increment
+    // numberOfEvent. Also, user's run class object must be instantiated in
+    // user's runAction.
     virtual void RecordEvent(const G4Event*);
-      // Method to be overwritten by the user for recording events in this run.
-      // In such a case, it is the user's responsibility to increment
-      // numberOfEvent. Also, user's run class object must be instantiated in
-      // user's runAction.
-    virtual void Merge(const G4Run*);
-      // Method to be overwritten by the user for merging local G4Run object
-      // to the global G4Run object.
-    void StoreEvent(G4Event* evt);
-      // Store a G4Event object until this run object is deleted.
-      // Given the potential large memory size of G4Event and its data-member
-      // objects stored in G4Event, the user must be careful and responsible
-      // for not storing too many G4Event objects. This method is invoked by
-      // G4RunManager if the user invokes G4EventManager::KeepTheCurrentEvent()
-      // or "/event/keepCurrentEvent" UI command while the particular event is
-      // in being processed (typically in EndOfEventAction).
 
+    // Method to be overwritten by the user for merging local G4Run object
+    // to the global G4Run object.
+    virtual void Merge(const G4Run*);
+
+    // Store a G4Event object until this run object is deleted.
+    // Given the potential large memory size of G4Event and its data-member
+    // objects stored in G4Event, the user must be careful and responsible
+    // for not storing too many G4Event objects. This method is invoked by
+    // G4RunManager if the user invokes G4EventManager::KeepTheCurrentEvent()
+    // or "/event/keepCurrentEvent" UI command while the particular event is
+    // in being processed (typically in EndOfEventAction).
+    void StoreEvent(G4Event* evt);
+
+    // Returns the run ID. Run ID is set by G4RunManager.
     inline G4int GetRunID() const { return runID; }
-      // Returns the run ID. Run ID is set by G4RunManager.
+
+    // Returns number of events processed in this run. The number is
+    // incremented at the end of each event processing.
     inline G4int GetNumberOfEvent() const { return numberOfEvent; }
-      // Returns number of events processed in this run. The number is
-      // incremented at the end of each event processing.
-    inline G4int GetNumberOfEventToBeProcessed() const
-    {
-      return numberOfEventToBeProcessed;
-    }
+
+    inline G4int GetNumberOfEventToBeProcessed() const { return numberOfEventToBeProcessed; }
+
+    // List of names of hits collection.
     inline const G4HCtable* GetHCtable() const { return HCtable; }
-      // List of names of hits collection.
+
+    // List of names of digi collection.
     inline const G4DCtable* GetDCtable() const { return DCtable; }
-      // List of names of digi collection.
-    inline const G4String& GetRandomNumberStatus() const
-    {
-      return randomNumberStatus;
-    }
-      // Returns random number status at the beginning of this run.
-    inline const std::vector<const G4Event*>* GetEventVector() const
-    {
-      return eventVector;
-    }
-      // Returns the event vector.
+
+    // Returns random number status at the beginning of this run.
+    inline const G4String& GetRandomNumberStatus() const { return randomNumberStatus; }
+
+    // Returns the event vector.
+    inline const std::vector<const G4Event*>* GetEventVector() const { return eventVector; }
 
     inline void SetRunID(G4int id) { runID = id; }
-    inline void SetNumberOfEventToBeProcessed(G4int n_ev)
-    {
-      numberOfEventToBeProcessed = n_ev;
-    }
+    inline void SetNumberOfEventToBeProcessed(G4int n_ev) { numberOfEventToBeProcessed = n_ev; }
     inline void SetHCtable(G4HCtable* HCtbl) { HCtable = HCtbl; }
     inline void SetDCtable(G4DCtable* DCtbl) { DCtable = DCtbl; }
     inline void SetRandomNumberStatus(G4String& st) { randomNumberStatus = st; }
 
   protected:
-
     G4int runID = 0;
     G4int numberOfEvent = 0;
     G4int numberOfEventToBeProcessed = 0;

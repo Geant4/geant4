@@ -36,9 +36,10 @@
 #ifndef G4PartialPhantomParameterisation_HH
 #define G4PartialPhantomParameterisation_HH
 
-#include <vector>
-#include <set>
 #include <map>
+#include <set>
+#include <utility>
+#include <vector>
 
 #include "G4Types.hh"
 #include "G4PhantomParameterisation.hh"
@@ -54,16 +55,16 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
   public:  // with description
 
     G4PartialPhantomParameterisation();
-   ~G4PartialPhantomParameterisation();
+   ~G4PartialPhantomParameterisation() override;
 
-    void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
+    void ComputeTransformation(const G4int, G4VPhysicalVolume *) const override;
   
     G4Material* ComputeMaterial(const G4int repNo, 
                                       G4VPhysicalVolume *currentVol,
-                                const G4VTouchable *parentTouch = nullptr);
+                                const G4VTouchable *parentTouch = nullptr) override;
 
     G4int GetReplicaNo( const G4ThreeVector& localPoint,
-                        const G4ThreeVector& localDir );
+                        const G4ThreeVector& localDir ) override;
       // Get the voxel number corresponding to the point in the container
       // frame. Use 'localDir' to avoid precision problems at the surfaces.
 
@@ -77,12 +78,12 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
 
     void SetFilledIDs( std::multimap<G4int,G4int> fid )
     {
-      fFilledIDs = fid; 
+      fFilledIDs = std::move(fid); 
     }
 
     void SetFilledMins( std::map< G4int, std::map<G4int,G4int> > fmins )
     {
-      fFilledMins = fmins;
+      fFilledMins = std::move(fmins);
     }
 
     void BuildContainerWalls();

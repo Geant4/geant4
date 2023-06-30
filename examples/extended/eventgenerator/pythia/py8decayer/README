@@ -30,26 +30,26 @@
 
   Installation of Pythia8: 
 
-  NOTE: As of October 2022, pythia8.3.0.7 is the most current version, 
+  NOTE: As of April 2023, pythia8.3.0.9 is the most current version, 
   thus it is used in this example.
   In the future, please check updates at Pythi8 site: https://pythia.org
   
   1. cd path/to/your/pythia8/area
 
   2. Download desired version of Pythia8 and un-tar it, e.g. 
-     wget https://pythia.org/download/pythia83/pythia8307.tgz
-     tar xzf pythia8307.tgz
+     wget https://pythia.org/download/pythia83/pythia8309.tgz
+     tar xzf pythia8309.tgz
 
   3. Build/install Pythia8
-     cd pythia8307
+     cd pythia8309
      export CXX=\`which g++\`
      ./configure --prefix=$PWD --cxx=$CXX
      make
-     NOTE: By default, Pythia8 (as of 8.3.0.7) builds with C++11 standards. 
+     NOTE: By default, Pythia8 (as of 8.3.0.9) builds with C++11 standards. 
      If one wants to turn to e.g. C++17 standard, one needs to override flags 
      via --cxx-common argument to configure script. 
      Alternatively, one can setup CXX_COMMON environment variable.
-     As of pythia8307, the default flags are the following:
+     As of pythia8309, the default flags are the following:
      -O2 -std=c++11 -pedantic -W -Wall -Wshadow -pthread
      Please note use of -pthread which was not among default flags in earlier
      relesaes of Pythia8.
@@ -180,7 +180,7 @@
   It appears that Geant4 sets (at least) masses of quarks as listed in PDG.
   For details on default settings for the quark masses in Pythia8 please refer 
   to the Pythia8 manual: 
-  https://pythia.org/manuals/pythia8307/Welcome.html
+  https://pythia.org/manuals/pythia8309/Welcome.html
   See Particles and Decays section, Particle Data subsection.
 
   Beyond quarks/diquarks some differences in mass central values or width have also

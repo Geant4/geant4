@@ -42,7 +42,7 @@ private:
   G4PhononTransFast() {;}
   
 public:
-  virtual ~G4PhononTransFast() {;}
+  ~G4PhononTransFast() override {;}
   
   static G4PhononTransFast* Definition();
   static G4PhononTransFast* PhononDefinition();

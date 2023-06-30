@@ -302,15 +302,17 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector& localPoint,
         if ( motherValidExitNormal )
         {
           const G4RotationMatrix *rot = motherPhysical->GetRotation();
-          if (rot)
+          if (rot != nullptr)
           {
             exitNormal *= rot->inverse();
 #ifdef G4VERBOSE
             if( fCheck )
+            {
                fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
                                                 motherExitNormal,  // original 
                                                 *rot,
                                                 "From RotationMatrix" );
+            }
 #endif            
           }
         }
@@ -351,7 +353,7 @@ G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
   if( fCheck )
   {
-    fLogger->ComputeSafetyLog(motherSolid,localPoint,motherSafety,true,true);
+    fLogger->ComputeSafetyLog(motherSolid,localPoint,motherSafety,true,1);
   }
 #endif
 
@@ -378,7 +380,7 @@ G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     if(fCheck)
     {
       fLogger->ComputeSafetyLog(sampleSolid, samplePoint,
-                                sampleSafety, false, false);
+                                sampleSafety, false, 0);
         // Not mother, no banner
     }
 #endif

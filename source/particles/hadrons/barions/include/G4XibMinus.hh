@@ -52,7 +52,7 @@ class G4XibMinus : public G4ParticleDefinition
  private:
    static G4XibMinus* theInstance;
    G4XibMinus(){}
-   ~G4XibMinus(){}
+   ~G4XibMinus() override= default;
 
  public:
    static G4XibMinus* Definition();

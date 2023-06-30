@@ -38,7 +38,7 @@ class G4PDGCodeChecker
   public:
 
     G4PDGCodeChecker();
-   ~G4PDGCodeChecker();
+   ~G4PDGCodeChecker() = default;
 
     G4int CheckPDGCode(G4int code, const G4String& type);
 

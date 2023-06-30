@@ -54,19 +54,19 @@ class G4MuonDecayChannelWithSpin : public G4MuonDecayChannel
 
     G4MuonDecayChannelWithSpin(const G4String& theParentName,
                                      G4double  theBR);
-    virtual ~G4MuonDecayChannelWithSpin();
+    ~G4MuonDecayChannelWithSpin() override = default;
 
-    virtual G4DecayProducts* DecayIt(G4double);
+    G4DecayProducts* DecayIt(G4double) override;
 
   protected:
 
-    G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin&);
+    G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin&) = default;
     G4MuonDecayChannelWithSpin& operator=(const G4MuonDecayChannelWithSpin&);
       // Copy constructor and assignment operator
   
   private:
 
-    G4MuonDecayChannelWithSpin();
+    G4MuonDecayChannelWithSpin() = default;
 
     // Radiative Correction Factors
 

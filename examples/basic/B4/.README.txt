@@ -7,7 +7,7 @@
  This example simulates a simple Sampling Calorimeter setup.
  To demonstrate several possible ways of data scoring, the example
  is provided in four variants: %B4a, %B4b, %B4c, %B4d.
- (See also examples/extended/electromagnetic/TestEm3)
+ (See also examples/extended/electromagnetic/TestEm3 or hadronic/Hadr05)
 
 \section B4_s1 GEOMETRY DEFINITION
 
@@ -52,7 +52,7 @@
 </pre>
 
    A more general version of this geometry can be found in:
-   examples/extended/electromagnetic/TestEm3
+   examples/extended/electromagnetic/TestEm3 or hadronic/Hadr05
    where all the geometry parameters, the absorber and gap materials
    can be modified interactively via the commands defined in the DetectorMessenger
    class.

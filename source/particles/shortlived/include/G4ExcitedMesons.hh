@@ -59,7 +59,7 @@ class G4ExcitedMesons : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-   virtual ~G4ExcitedMesons();
+   ~G4ExcitedMesons() override = default;
    void                SetMultipletName(const G4String& );
 };
 

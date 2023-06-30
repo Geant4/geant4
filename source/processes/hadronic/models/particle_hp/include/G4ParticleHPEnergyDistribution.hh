@@ -29,109 +29,103 @@
 #ifndef G4ParticleHPEnergyDistribution_h
 #define G4ParticleHPEnergyDistribution_h 1
 
-#include <fstream>
-
-#include "globals.hh"
-#include "G4ios.hh"
-#include "Randomize.hh"
 #include "G4ParticleHPArbitaryTab.hh"
 #include "G4ParticleHPEvapSpectrum.hh"
-#include "G4ParticleHPSimpleEvapSpectrum.hh"
 #include "G4ParticleHPFissionSpectrum.hh"
-#include "G4ParticleHPWattSpectrum.hh"
 #include "G4ParticleHPMadlandNixSpectrum.hh"
+#include "G4ParticleHPSimpleEvapSpectrum.hh"
+#include "G4ParticleHPWattSpectrum.hh"
 #include "G4VParticleHPEDis.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "globals.hh"
+
+#include <fstream>
 
 // we will need a List of these .... one per term.
 
 class G4ParticleHPEnergyDistribution
 {
   public:
-  G4ParticleHPEnergyDistribution()
-  {
-    theEnergyDistribution = 0;
-    theNumberOfPartials = 0;
-    theRepresentationType = 0;
-  }
-  ~G4ParticleHPEnergyDistribution()
-  {
-    if(theEnergyDistribution != 0)
+    G4ParticleHPEnergyDistribution()
     {
-      for(G4int i=0; i<theNumberOfPartials; i++) 
-      {
-        delete theEnergyDistribution[i];
-      }
-      delete [] theEnergyDistribution;
+      theEnergyDistribution = nullptr;
+      theNumberOfPartials = 0;
+      theRepresentationType = 0;
     }
-  }
-  
-  inline void Init(std::istream & theData)
-  {
-    G4double dummy;
-    theData >> dummy >> theNumberOfPartials;
-    theEnergyDistribution = new G4VParticleHPEDis * [theNumberOfPartials];
-    for(G4int i=0; i<theNumberOfPartials; i++) 
+    ~G4ParticleHPEnergyDistribution()
     {
-      theData >> theRepresentationType;
-      switch(theRepresentationType)
-      {
-	case 1:
-          theEnergyDistribution[i] = new G4ParticleHPArbitaryTab;
-          break;
-	case 5:        
-          theEnergyDistribution[i] = new G4ParticleHPEvapSpectrum;
-          break;
-	case 7:
-          theEnergyDistribution[i] = new G4ParticleHPFissionSpectrum;
-          break;
-	case 9:
-          theEnergyDistribution[i] = new G4ParticleHPSimpleEvapSpectrum;
-          break;
-	case 11:
-          theEnergyDistribution[i] = new G4ParticleHPWattSpectrum;
-          break;
-	case 12:
-          theEnergyDistribution[i] = new G4ParticleHPMadlandNixSpectrum;
-          break;
+      if (theEnergyDistribution != nullptr) {
+        for (G4int i = 0; i < theNumberOfPartials; i++) {
+          delete theEnergyDistribution[i];
+        }
+        delete[] theEnergyDistribution;
       }
-      theEnergyDistribution[i]->Init(theData);
     }
-  }
-  
-  inline G4double Sample(G4double anEnergy, G4int & it) 
-  {
-    G4double result = 0;
-    it = 0;
-    if (theNumberOfPartials != 0)
+
+    inline void Init(std::istream& theData)
     {
-      G4double sum=0;
-      G4double * running = new G4double[theNumberOfPartials];
-      running[0] = 0;
-      G4int i;
-      for (i=0; i<theNumberOfPartials; i++)
-      {	
-	if (i!=0) running[i]=running[i-1];
-	running[i]+=theEnergyDistribution[i]->GetFractionalProbability(anEnergy);
+      G4double dummy;
+      theData >> dummy >> theNumberOfPartials;
+      theEnergyDistribution = new G4VParticleHPEDis*[theNumberOfPartials];
+      for (G4int i = 0; i < theNumberOfPartials; i++) {
+        theData >> theRepresentationType;
+        switch (theRepresentationType) {
+          case 1:
+            theEnergyDistribution[i] = new G4ParticleHPArbitaryTab;
+            break;
+          case 5:
+            theEnergyDistribution[i] = new G4ParticleHPEvapSpectrum;
+            break;
+          case 7:
+            theEnergyDistribution[i] = new G4ParticleHPFissionSpectrum;
+            break;
+          case 9:
+            theEnergyDistribution[i] = new G4ParticleHPSimpleEvapSpectrum;
+            break;
+          case 11:
+            theEnergyDistribution[i] = new G4ParticleHPWattSpectrum;
+            break;
+          case 12:
+            theEnergyDistribution[i] = new G4ParticleHPMadlandNixSpectrum;
+            break;
+	default:
+            theEnergyDistribution[i] = new G4ParticleHPArbitaryTab;
+        }
+        theEnergyDistribution[i]->Init(theData);
       }
-      sum = running[theNumberOfPartials-1];
-      G4double random = G4UniformRand();
-      for(i=0; i<theNumberOfPartials; i++)
-      {
-	it = i;
-	if(running[i]/sum>random) break;
-      }
-      delete [] running;
-      if(it==theNumberOfPartials) it--;
-      result = theEnergyDistribution[it]->Sample(anEnergy);
     }
-    return result;
-  }
-  
+
+    inline G4double Sample(G4double anEnergy, G4int& it)
+    {
+      G4double result = 0;
+      it = 0;
+      if (theNumberOfPartials != 0) {
+        G4double sum = 0;
+        auto running = new G4double[theNumberOfPartials];
+        running[0] = 0;
+        G4int i;
+        for (i = 0; i < theNumberOfPartials; i++) {
+          if (i != 0) running[i] = running[i - 1];
+          running[i] += theEnergyDistribution[i]->GetFractionalProbability(anEnergy);
+        }
+        sum = running[theNumberOfPartials - 1];
+        G4double random = G4UniformRand();
+        for (i = 0; i < theNumberOfPartials; i++) {
+          it = i;
+          if (running[i] / sum > random) break;
+        }
+        delete[] running;
+        if (it == theNumberOfPartials) it--;
+        result = theEnergyDistribution[it]->Sample(anEnergy);
+      }
+      return result;
+    }
+
   private:
-  
-  G4int theNumberOfPartials;
-  G4int theRepresentationType;
-  G4VParticleHPEDis ** theEnergyDistribution;
+    G4int theNumberOfPartials;
+    G4int theRepresentationType;
+    G4VParticleHPEDis** theEnergyDistribution;
 };
 
 #endif

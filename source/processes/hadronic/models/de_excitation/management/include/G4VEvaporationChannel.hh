@@ -114,10 +114,15 @@ G4VEvaporationChannel::BreakUpFragment(G4Fragment* theNucleus)
   return results;
 }
 
-inline void G4VEvaporationChannel::SetOPTxs(G4int) 
-{}
 
-inline void G4VEvaporationChannel::UseSICB(G4bool) 
-{}
+inline void G4VEvaporationChannel::SetOPTxs(G4int val) 
+{
+  if(val >= 0) { OPTxs = val; } 
+}
+
+inline void G4VEvaporationChannel::UseSICB(G4bool val)
+{
+  useSICB = val;
+}
 
 #endif

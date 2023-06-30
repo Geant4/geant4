@@ -52,7 +52,7 @@ class G4Deuteron : public G4Ions
  private:
    static G4Deuteron* theInstance;
    G4Deuteron(){}
-   ~G4Deuteron(){}
+   ~G4Deuteron() override= default;
 
  public:
    static G4Deuteron* Definition();

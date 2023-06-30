@@ -56,8 +56,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fPBox(nullptr), fLBox(nullptr), 
-  fBox(nullptr), fMaterial(nullptr)
 {
   fBoxSize = 10*m;
   DefineMaterials();

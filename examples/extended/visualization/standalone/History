@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-12-30 John Allison (exam-ext-vis-standalone-V11-01-00)
+- Include an example of DrawGeometry.
+   - DrawGeometryVisAction:
+     - Shows how to visualise your geometry alone, i.e., without the
+       run manager and the physics stuff.
+
 ## 2022-11-04 John Allison (exam-ext-vis-standalone-V11-00-01)
 - Fix typo in README files
 

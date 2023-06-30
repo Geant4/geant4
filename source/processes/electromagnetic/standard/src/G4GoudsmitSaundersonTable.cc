@@ -87,6 +87,7 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4EmParameters.hh"
 
 #include "G4String.hh"
 
@@ -435,16 +436,8 @@ G4GoudsmitSaundersonTable::GSMSCAngularDtr* G4GoudsmitSaundersonTable::GetGSAngu
 
 
 void G4GoudsmitSaundersonTable::LoadMSCData() {
-  const char* path = G4FindDataDir("G4LEDATA");
-  if (!path) {
-    G4Exception("G4GoudsmitSaundersonTable::LoadMSCData()","em0006",
-		FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
-  //
   gGSMSCAngularDistributions1.resize(gLAMBNUM*gQNUM1,nullptr);
-  const G4String str1 = G4String(path) + "/msc_GS/GSGrid_1/gsDistr_";
+  const G4String str1 = G4EmParameters::Instance()->GetDirLEDATA() + "/msc_GS/GSGrid_1/gsDistr_";
   for (G4int il=0; il<gLAMBNUM; ++il) {
     G4String fname = str1 + std::to_string(il);
     std::ifstream infile(fname,std::ios::in);
@@ -474,7 +467,7 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
   //
   // second grid
   gGSMSCAngularDistributions2.resize(gLAMBNUM*gQNUM2,nullptr);
-  const G4String str2 = G4String(path) + "/msc_GS/GSGrid_2/gsDistr_";
+  const G4String str2 = G4EmParameters::Instance()->GetDirLEDATA() + "/msc_GS/GSGrid_2/gsDistr_";
   for (G4int il=0; il<gLAMBNUM; ++il) {
     G4String fname = str2 + std::to_string(il);
     std::ifstream infile(fname,std::ios::in);

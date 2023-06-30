@@ -101,8 +101,6 @@ private:
 
   void ReadData(G4int Z);
 
-  const G4String& FindDirectoryPath();
-
   G4double SampleEnergyTransfer(const G4double kineticEnergy, 
                                 const G4double logKineticEnergy, 
                                 const G4double cut,
@@ -113,7 +111,6 @@ private:
   static G4double           gYLimitData[gMaxZet];
   static G4Physics2DVector* gSBDCSData[gMaxZet];
   static G4SBBremTable*     gSBSamplingTable;
-  static G4String           gDataDirectory;
 
   G4bool                    fIsUseBicubicInterpolation;
   G4bool                    fIsUseSamplingTables;
@@ -122,6 +119,7 @@ private:
 
   size_t                    fIndx;
   size_t                    fIndy;
+  G4bool isFirstInstance{false};
 };
 
 #endif

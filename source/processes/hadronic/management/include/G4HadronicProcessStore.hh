@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -192,7 +191,7 @@ public:
 
   G4bool GetBuildXSTable() const;
 
-  void PrintInfo(const G4ParticleDefinition*); 
+  void PrintInfo(const G4ParticleDefinition*);
 
   void Dump(G4int level);
   void DumpHtml();
@@ -246,18 +245,18 @@ private:
   G4HadronicParameters* param;
 
   // counters and options
-  G4int n_proc;
-  G4int n_model;
-  G4int n_part;
-  G4int n_extra;
+  G4int n_proc = 0;
+  G4int n_model = 0;
+  G4int n_part = 0;
+  G4int n_extra = 0;
 
-  G4bool buildTableStart;
-  G4bool buildXSTable;
+  G4bool buildTableStart = true;
+  G4bool buildXSTable = false;
 
   // cache
-  HP   currentProcess;
-  PD   currentParticle;
-  PD   theGenericIon;
+  HP currentProcess = nullptr;
+  PD currentParticle = nullptr;
+  PD theGenericIon;
 
   G4DynamicParticle localDP;
 
@@ -265,4 +264,3 @@ private:
 };
 
 #endif
-

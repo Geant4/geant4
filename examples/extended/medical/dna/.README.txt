@@ -45,7 +45,9 @@ This directory contains a set of Geant4-DNA examples.
    - \link ExampleChem5  chem5 \endlink   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1.
    - \link ExampleChem6  chem6 \endlink   Based on chem4 example, this example provides to score the radiochemical yield G.
    - \link Examplescavenger scavenger \endlink Activation of the scavenging process in chemistry.
+   - \link ExampleUHDR UHDR \endlink Ultra High Dose Rate.
 
+Ultra High Dose Rate
 \section dna_s2 Geometry and other
    - \link ExamplePdb4dna pdb4dna \endlink  Usage of the Protein Data Bank (PDB) file format to build geometries.
    - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink  Geometrical description of a full simplified cell nucleus.

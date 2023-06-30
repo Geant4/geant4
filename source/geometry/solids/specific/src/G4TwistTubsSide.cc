@@ -95,7 +95,7 @@ G4TwistTubsSide::G4TwistTubsSide(const G4String& name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTubsSide::G4TwistTubsSide( __void__& a )
-  : G4VTwistSurface(a), fKappa(0.)
+  : G4VTwistSurface(a)
 {
 }
 
@@ -103,9 +103,7 @@ G4TwistTubsSide::G4TwistTubsSide( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistTubsSide::~G4TwistTubsSide()
-{
-}
+G4TwistTubsSide::~G4TwistTubsSide() = default;
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
@@ -862,7 +860,7 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector& xx,
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin)); 
 
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner
             else                        areacode |= sBoundary;
             if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
 
@@ -871,7 +869,7 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector& xx,
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax));
 
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner
             else                        areacode |= sBoundary; 
             if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
          }
@@ -907,14 +905,14 @@ G4int G4TwistTubsSide::GetAreaCode(const G4ThreeVector& xx,
          if (xx.z() < fAxisMin[zaxis])
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin));
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is oncorner
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is oncorner
             else                        areacode |= sBoundary; 
            
          }
          else if (xx.z() > fAxisMax[zaxis])
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax)) ;
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner
             else                        areacode |= sBoundary; 
          }
 

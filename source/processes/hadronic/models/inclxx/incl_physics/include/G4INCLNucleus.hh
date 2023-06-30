@@ -62,9 +62,11 @@
 
 namespace G4INCL {
 
+  enum AnnihilationType {Def=0, PType, NType}; //D
+
   class Nucleus : public Cluster {
   public:
-    Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius=-1.);
+    Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius=-1., AnnihilationType AType=Def);
     virtual ~Nucleus();
 
     /// \brief Dummy copy constructor to silence Coverity warning
@@ -149,6 +151,7 @@ namespace G4INCL {
           case SigmaPlus:
           case SigmaZero:
           case SigmaMinus:
+          case antiProton: 
             S += thePotential->getSeparationEnergy(*i);
             break;
           case Composite:
@@ -338,6 +341,7 @@ namespace G4INCL {
               if((*i)->isOmega()) return true;
           return false;
       }
+
       
     /**
      * Print the nucleus info
@@ -472,6 +476,14 @@ namespace G4INCL {
     /// \brief Getter for thePotential
     NuclearPotential::INuclearPotential const *getPotential() const { return thePotential; };
 
+    /// \brief Getter for theAnnihilationType
+    AnnihilationType getAnnihilationType() const { return theAType; }; //D
+
+    /// \brief Setter for theAnnihilationType
+    void setAnnihilationType(const AnnihilationType at){
+      theAType = at;
+    }; //D
+
   private:
     /** \brief Compute the recoil kinematics for a 1-nucleon remnant.
      *
@@ -481,6 +493,7 @@ namespace G4INCL {
     void computeOneNucleonRecoilKinematics();
 
   private:
+
     G4int theInitialZ, theInitialA, theInitialS;
     /// \brief The number of entering protons
     G4int theNpInitial;
@@ -529,6 +542,8 @@ namespace G4INCL {
 
     /// \brief Pointer to the NuclearPotential object
     NuclearPotential::INuclearPotential const *thePotential;
+
+    AnnihilationType theAType; //D same order as in the cc
 
     INCL_DECLARE_ALLOCATION_POOL(Nucleus)
   };

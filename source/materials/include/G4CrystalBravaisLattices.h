@@ -22,10 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-//
+
 //---------------------------------------------------------------
 //
 // G4CrystalBravaisLattices
@@ -33,20 +30,19 @@
 // Class Description:
 //
 
-
 #ifndef G4CrystalBravaisLattices_H
 #define G4CrystalBravaisLattices_H 1
 
 // Bravais Lattices
-enum theBravaisLatticeType {
-    Primitive = 0,
-    BodyCentered = 1,
-    FaceCentered = 2,
-    aBaseCentered = 3, //bc faces
-    bBaseCentered = 4, //ca faces
-    cBaseCentered = 5, //ab faces
-    Rombohedral = 6
+enum theBravaisLatticeType
+{
+  Primitive = 0,
+  BodyCentered = 1,
+  FaceCentered = 2,
+  aBaseCentered = 3,  // bc faces
+  bBaseCentered = 4,  // ca faces
+  cBaseCentered = 5,  // ab faces
+  Rombohedral = 6
 };
 
 #endif
-

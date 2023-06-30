@@ -47,17 +47,17 @@
 
 class G4QuadrupoleMagField : public G4MagneticField
 {
-  public: // with description
+  public:
 
-    G4QuadrupoleMagField(G4double          pGradient);
-    G4QuadrupoleMagField(G4double          pGradient, 
-                         G4ThreeVector     pOrigin, 
-                         G4RotationMatrix* pMatrix);
-   ~G4QuadrupoleMagField();
+    G4QuadrupoleMagField(G4double pGradient);
+    G4QuadrupoleMagField(      G4double pGradient, 
+                         const G4ThreeVector& pOrigin, 
+                               G4RotationMatrix* pMatrix);
+   ~G4QuadrupoleMagField() override;
 
     void GetFieldValue(const G4double yTrack[],
-                             G4double B[]     ) const;
-    G4Field* Clone() const;
+                             G4double B[]     ) const override;
+    G4Field* Clone() const override;
 
   private:
 
@@ -67,4 +67,3 @@ class G4QuadrupoleMagField : public G4MagneticField
 };
 
 #endif
-

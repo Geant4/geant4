@@ -6,6 +6,26 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-04-21 Vladimir Ivanchenko (hadr-deex-V11-01-03)
+- G4LevelManager - added extra public access method allowing users to check 
+    level energies and other parameters
+- G4DeexPrecoParameters - moved part of initialisation to header; do not use
+    autolock, instead use internal flag allowing only one dump of paramenters;
+    print all pre-compound parameters, separate pre-compound and de-excitation
+    printouts
+
+## 2023-03-29 Vladimir Ivanchenko (hadr-deex-V11-01-02)
+- G4NuclearLevelData - fixed uploading of data before the run
+
+## 2023-03-27 Vladimir Ivanchenko (hadr-deex-V11-01-01)
+- class clean-up in management and handler sub-directories: improved debug
+  and exceptions printouts, improve comments; removed unused methods 
+  and class members
+
+## 2023-03-25 Vladimir Ivanchenko (hadr-deex-V11-01-00)
+- G4LevelReader - allow to add more levels of a given isotope than hardcoded
+    limit=635 (max number of levels in G4LEVELGAMMADATA) - fix problem #2534
+
 ## 2022-11-26 Gabriele Cosmo (hadr-deex-V11-00-21)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

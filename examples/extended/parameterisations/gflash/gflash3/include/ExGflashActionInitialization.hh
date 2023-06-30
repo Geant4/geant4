@@ -39,12 +39,10 @@ class ExGflashActionInitialization : public G4VUserActionInitialization
 {
   public:
     ExGflashActionInitialization();
-    virtual ~ExGflashActionInitialization();
+    ~ExGflashActionInitialization() override;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 };
 
 #endif
-
-    

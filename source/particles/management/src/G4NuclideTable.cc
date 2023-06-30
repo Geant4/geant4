@@ -68,23 +68,23 @@ G4NuclideTable::G4NuclideTable()
 // --------------------------------------------------------------------
 G4NuclideTable::~G4NuclideTable()
 {
-  for (auto it=map_pre_load_list.begin(); it!=map_pre_load_list.end(); ++it)
+  for (auto & it : map_pre_load_list)
   {
-    it->second.clear();
+    it.second.clear();
   }
   map_pre_load_list.clear();
 
-  for (auto it=map_full_list.begin(); it!=map_full_list.end(); ++it)
+  for (auto & it : map_full_list)
   {
-    it->second.clear();
+    it.second.clear();
   }
   map_full_list.clear();
 
   if (fIsotopeList != nullptr)
   {
-    for (std::size_t i = 0 ; i<fIsotopeList->size(); ++i)
+    for (const auto & i : *fIsotopeList)
     {
-      delete (*fIsotopeList)[i];
+      delete i;
     }
     fIsotopeList->clear();
     delete fIsotopeList;
@@ -100,20 +100,20 @@ G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E,
   G4IsotopeProperty* fProperty = nullptr;
 
   // At first searching UserDefined
-  if ( fUserDefinedList )
+  if ( fUserDefinedList != nullptr )
   {
-    for (auto it=fUserDefinedList->cbegin(); it!=fUserDefinedList->cend(); ++it)
+    for (const auto it : *fUserDefinedList)
     {
-      if ( Z == (*it)->GetAtomicNumber() && A == (*it)->GetAtomicMass() )
+      if ( Z == it->GetAtomicNumber() && A == it->GetAtomicMass() )
       {
-        G4double levelE = (*it)->GetEnergy();         
+        G4double levelE = it->GetEnergy();         
         if ( levelE - flevelTolerance/2 <= E && E < levelE + flevelTolerance/2 )
         {
-          if( flb == (*it)->GetFloatLevelBase() ) { return *it; } //found 
+          if( flb == it->GetFloatLevelBase() ) { return it; } //found 
         }
       }
     }
-  } 
+  }
 
   // Searching pre-load
   // Note: isomer level is properly set only for pre_load_list
@@ -131,7 +131,7 @@ G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E,
       levelE = lower_bound_itr->first;
       if ( levelE - flevelTolerance/2 <= E && E < levelE + flevelTolerance/2 )
       {
-        if ( flb == (lower_bound_itr->second)->GetFloatLevelBase() )
+        if ( flb == (lower_bound_itr->second)->GetFloatLevelBase() || E == 0.0)
         {
           return lower_bound_itr->second; // found
         }
@@ -237,7 +237,7 @@ void G4NuclideTable::GenerateNuclide()
         if (ionE > 0) ++iLevel;
         if (iLevel > 9) iLevel = 9;
 
-        G4IsotopeProperty* fProperty = new G4IsotopeProperty();
+        auto  fProperty = new G4IsotopeProperty();
 
         // Set Isotope Property
         fProperty->SetAtomicNumber(ionZ);
@@ -270,14 +270,14 @@ void G4NuclideTable::GenerateNuclide()
   }
 
   // Clear current map
-  for (auto it = map_pre_load_list.begin(); it != map_pre_load_list.end(); ++it) {
-    it->second.clear();
+  for (auto & it : map_pre_load_list) {
+    it.second.clear();
   }
   map_pre_load_list.clear();
 
   // Build map based on current threshold value
-  for (auto it = map_full_list.cbegin(); it != map_full_list.cend(); ++it) {
-    G4int ionCode = it->first;
+  for (const auto & it : map_full_list) {
+    G4int ionCode = it.first;
     auto itf = map_pre_load_list.find(ionCode);
     if (itf == map_pre_load_list.cend() ) {
       std::multimap<G4double, G4IsotopeProperty*> aMultiMap;
@@ -287,15 +287,15 @@ void G4NuclideTable::GenerateNuclide()
     }
 
     G4int iLevel = 0;
-    for (auto itt = it->second.cbegin(); itt != it->second.cend(); ++itt) {
-      G4double exEnergy = itt->first;
-      G4double meanLife = itt->second->GetLifeTime();
+    for (const auto& itt : it.second) {
+      G4double exEnergy = itt.first;
+      G4double meanLife = itt.second->GetLifeTime();
       if (exEnergy == 0.0 || meanLife > mean_life_threshold) {
-        if (itt->first != 0.0) ++iLevel;
+        if (itt.first != 0.0) ++iLevel;
         if (iLevel > 9) iLevel = 9;
-        itt->second->SetIsomerLevel(iLevel);
+        itt.second->SetIsomerLevel(iLevel);
         itf->second.insert(
-             std::pair<G4double, G4IsotopeProperty*>(exEnergy, itt->second) );
+             std::pair<G4double, G4IsotopeProperty*>(exEnergy, itt.second) );
       }
     }
   }
@@ -322,7 +322,7 @@ void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE,
   {
     if ( fUserDefinedList == nullptr ) fUserDefinedList = new G4IsotopeList();
 
-    G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
+    auto  fProperty = new G4IsotopeProperty(); 
 
     // Set Isotope Property
     fProperty->SetAtomicNumber(ionZ);
@@ -349,7 +349,7 @@ void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE,
   {
     if ( fUserDefinedList == nullptr ) fUserDefinedList = new G4IsotopeList();
 
-    G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
+    auto  fProperty = new G4IsotopeProperty(); 
 
     // Set Isotope Property
     fProperty->SetAtomicNumber(ionZ);
@@ -358,7 +358,7 @@ void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE,
     fProperty->SetEnergy(ionE);
     fProperty->SetiSpin(ionJ);
     fProperty->SetLifeTime(ionLife);
-    fProperty->SetDecayTable(0);
+    fProperty->SetDecayTable(nullptr);
     fProperty->SetMagneticMoment(ionMu);
     fProperty->SetFloatLevelBase(flb);
 
@@ -399,7 +399,7 @@ G4double G4NuclideTable::StripFloatLevelBase(G4double E, G4int& flbIndex)
 G4Ions::G4FloatLevelBase
 G4NuclideTable::StripFloatLevelBase( const G4String& sFLB )
 {
-   if ( sFLB.size() < 1 || 2 < sFLB.size() )
+   if ( sFLB.empty() || 2 < sFLB.size() )
    {
      G4String text;
      text += sFLB; 

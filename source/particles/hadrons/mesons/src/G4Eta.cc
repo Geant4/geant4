@@ -49,16 +49,16 @@
 // ###                         ETA                                    ###
 // ######################################################################
 
-G4Eta* G4Eta::theInstance = 0;
+G4Eta* G4Eta::theInstance = nullptr;
 
 G4Eta* G4Eta::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "eta";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -75,13 +75,13 @@ G4Eta* G4Eta::Definition()
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         221,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,           "eta",           221);
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[4];
+  auto  mode = new G4VDecayChannel*[4];
   // eta -> gamma + gamma
   mode[0] = new G4PhaseSpaceDecayChannel("eta",0.3942,2,"gamma","gamma");
   // eta -> pi0 + pi0 + pi0

@@ -48,12 +48,12 @@ G4Triton* G4Triton::theInstance = nullptr;
 
 G4Triton* G4Triton::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //

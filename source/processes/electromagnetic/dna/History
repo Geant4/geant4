@@ -6,6 +6,69 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-10 Hoang Tran (emdna-V11-01-15)
+- minor correction for DNA material in option6
+
+## 2023-06-09 Hoang Tran (emdna-V11-01-14)
+- use analytical method for DNA material in option6, water is unchanged
+
+## 2023-06-03 Vladimir Ivanchenko (emdna-V11-01-13)
+- G4DNARuddIonisationExtendedModel - model re-written: shared date between
+  threads, applicable for scaled energy interval 100 eV to 100 MeV, if for
+  an ion data is not available proton x-section and effective charge are
+  used, sampling of delta-electron is done using two regions regression method
+
+## 2023-05-25 Hoang Tran (emdna-V11-01-12)
+- Modified DNA cross section file name to new G4EMLOW8.4
+
+## 2023-05-19 Hoang Tran (emdna-V11-01-11)
+- Add DNA cross section to dna_option6
+
+## 2023-05-17 Hoang Tran (emdna-V11-01-10)
+- Fix Compilation warnings on XCode
+
+## 2023-05-04 Hoang Tran (emdna-V11-01-09)
+- correct the initial values of G4DNAEventScheduler
+
+## 2023-04-28 Hoang Tran (emdna-V11-01-08)
+- add time structure (pulsed beam) to water radiolysis (G4VUserPulseInfo)
+
+## 2023-04-26 Hoang Tran (emdna-V11-01-07)
+- correct KDTree bug
+
+## 2023-03-24 Hoang Tran (emdna-V11-01-06)
+- icsd physicslist: deleted unused model,
+- Apdated RegisterModel function with new structure
+- added model data to G4DNAMaterialManager singleton
+
+## 2023-03-08 Gabriele Cosmo (emdna-V11-01-05)
+- Fixed compilation warning on macOS/XCode for implicit type conversion
+  in G4DNAVacuumModel::Initialise().
+
+## 2023-02-09 Hoang Tran (emdna-V11-01-04)
+- Introduced G4DNAMaterialManager to manage available DNA material
+and keeps DNA cross section data in one thread.
+- minor change in G4VDNAModel
+
+## 2023-01-27 Hoang Tran (emdna-V11-01-03)
+- reorganize multiple material model of PTB model.
+G4VDNAModel plays like a data layer for multiple material model.
+The concrete models are independent of G4DNAModelInterface.
+
+## 2023-01-17 Hoang Tran (emdna-V11-01-02)
+- replaced string to material index and clean the files(G4DNAPTBExcitationModel,
+G4DNAPTBIonisationModel, G4DNAPTBElasticModel,G4DNAPTBIonisationStructure,
+G4DNAPTBExcitationStructure) - PTB models
+- added material pointer members for each concrete models(PTB models)
+- removed unused objects (G4DataVector())
+
+## 2023-01-06 Hoang Tran (emdna-V11-01-01)
+- clean G4DNAModelInterface file for the model combination of different materials
+
+## 2022-12-12 Hoang Tran (emdna-V11-01-00)
+- fix coverity of G4DNARuddIonisationExtendedModel, G4DNADingfelderChargeIncreaseModel
+(Uninitialized scalar variable) from cand1 analysis
+
 ## 2022-11-24 Vladimir Ivanchenko (emdna-V11-00-39)
 - G4DNARuddIonisationExtendedModel - fixed common work between DNA physics and
     radioactive decay module - before this update test2.in macro crash, because 

@@ -37,14 +37,13 @@
 #include "G4PhysicsModelCatalog.hh"
 #include "G4DeexParametersMessenger.hh"
 #include "G4HadronicParameters.hh"
-
-#ifdef G4MULTITHREADED
-G4Mutex G4DeexPrecoParameters::deexPrecoMutex = G4MUTEX_INITIALIZER;
-#endif
+#include "G4Threading.hh"
 
 G4DeexPrecoParameters::G4DeexPrecoParameters() 
 {
-  SetDefaults();
+  fStateManager = G4StateManager::GetStateManager();
+  theMessenger = new G4DeexParametersMessenger(this);
+  Initialise();
 }
 
 G4DeexPrecoParameters::~G4DeexPrecoParameters() 
@@ -54,12 +53,11 @@ G4DeexPrecoParameters::~G4DeexPrecoParameters()
 
 void G4DeexPrecoParameters::SetDefaults()
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
-#endif
-  fStateManager = G4StateManager::GetStateManager();
-  theMessenger = new G4DeexParametersMessenger(this);
+  if(!IsLocked()) { Initialise(); }
+}
 
+void G4DeexPrecoParameters::Initialise()
+{
   fLevelDensity = 0.075/CLHEP::MeV;
   fR0 = 1.5*CLHEP::fermi;
   fTransitionsR0 = 0.6*CLHEP::fermi;
@@ -67,33 +65,9 @@ void G4DeexPrecoParameters::SetDefaults()
   fFermiEnergy = 35.0*CLHEP::MeV; 
   fPrecoLowEnergy = 0.1*CLHEP::MeV;
   fPrecoHighEnergy = 30*CLHEP::MeV;
-  fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
   fMaxLifeTime = 1*CLHEP::nanosecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
-  fMinZForPreco = 3;
-  fMinAForPreco = 5;
-  fPrecoType = 3;
-  fDeexType = 3;
-  fTwoJMAX = 10;
-  fVerbose = 1;
-  fNeverGoBack = false;
-  fUseSoftCutoff = false;
-  fUseCEM = true;
-  fUseGNASH = false;
-  fUseHETC = false;
-  fUseAngularGen = false;
-  fPrecoDummy = false;
-  fCorrelatedGamma = false;
-  fStoreAllLevels = false;
-  fInternalConversion = true;
-  fLD = true;
-  fFD = true;
-  fIsomerFlag = true;
-  fDeexChannelType = fCombined;
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
-#endif
 }
 
 void G4DeexPrecoParameters::SetLevelDensity(G4double val)
@@ -296,7 +270,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 
   G4long prec = os.precision(5);
   os << "=======================================================================" << "\n";
-  os << "======       Pre-compound/De-excitation Physics Parameters     ========" << "\n";
+  os << "======       Geant4 Native Pre-compound Model Parameters       ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "Type of pre-compound inverse x-section              " << fPrecoType << "\n";
   os << "Pre-compound model active                           " << (!fPrecoDummy) << "\n";
@@ -304,6 +278,15 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << G4BestUnit(fPrecoLowEnergy, "Energy") << "\n";
   os << "Pre-compound excitation high energy                 " 
      << G4BestUnit(fPrecoHighEnergy, "Energy") << "\n";
+  os << "Angular generator for pre-compound model            " << fUseAngularGen << "\n";
+  os << "Use NeverGoBack option for pre-compound model       " << fNeverGoBack << "\n";
+  os << "Use SoftCutOff option for pre-compound model        " << fUseSoftCutoff << "\n";
+  os << "Use CEM transitions for pre-compound model          " << fUseCEM << "\n";
+  os << "Use GNASH transitions for pre-compound model        " << fUseGNASH << "\n";
+  os << "Use HETC submodel for pre-compound model            " << fUseHETC << "\n";
+  os << "=======================================================================" << "\n";
+  os << "======       Nuclear De-excitation Module Parameters           ========" << "\n";
+  os << "=======================================================================" << "\n";
   os << "Type of de-excitation inverse x-section             " << fDeexType << "\n";
   os << "Type of de-excitation factory                       " << namm[idx] << "\n";
   os << "Number of de-excitation channels                    " << nmm[idx] << "\n";
@@ -336,9 +319,12 @@ G4int G4DeexPrecoParameters::GetVerbose() const
   return (verb > 0) ? std::max(fVerbose, verb) : verb;
 }
 
-void G4DeexPrecoParameters::Dump() const
+void G4DeexPrecoParameters::Dump()
 {
-  if ( G4Threading::IsMasterThread() && GetVerbose() > 0 ) { StreamInfo(G4cout); }
+  if(!fIsPrinted && GetVerbose() > 0 && G4Threading::IsMasterThread()) {
+    StreamInfo(G4cout);
+    fIsPrinted = true;
+  }
 }
 
 std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)

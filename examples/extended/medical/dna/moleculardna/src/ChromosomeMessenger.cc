@@ -33,8 +33,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ChromosomeMessenger::ChromosomeMessenger(ChromosomeMapper* mapper)
-  : G4UImessenger()
-  , fpChromosomeMapper(mapper)
+  : fpChromosomeMapper(mapper)
   , fpChromosomeDirectory(new G4UIdirectory("/chromosome/"))
   , fpAddChromosome(new G4UIcmdWithAString("/chromosome/add", this))
   , fpSavePlotData(new G4UIcmdWithAString("/chromosome/plotData", this))

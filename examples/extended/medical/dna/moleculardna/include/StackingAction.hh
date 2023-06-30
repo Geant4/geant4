@@ -39,9 +39,9 @@
 class StackingAction : public G4UserStackingAction
 {
  public:
-  StackingAction();
+  StackingAction() = default;
 
-  ~StackingAction() override;
+  ~StackingAction() override = default;
 
   void NewStage() override;
 };

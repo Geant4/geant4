@@ -31,18 +31,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OctreeNode::OctreeNode(G4ThreeVector position, G4ThreeVector halfLengths,
+OctreeNode::OctreeNode(const G4ThreeVector& position, const G4ThreeVector& halfLengths,
                        G4int maxContents, OctreeNode* parent)
-  : fPosition(std::move(position))
-  , fHalfLengths(std::move(halfLengths))
+  : fPosition(position)
+  , fHalfLengths(halfLengths)
   , fMaxContents(maxContents)
   , fParent(parent)
   , fChildren(std::array<OctreeNode*, 8>())
 {
   fHalfLengthsMag = fHalfLengths.mag();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OctreeNode::~OctreeNode()
 {

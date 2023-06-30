@@ -100,6 +100,10 @@ public:
 
   G4double ComputeTheta0(G4double truePathLength, G4double KineticEnergy);
 
+  inline void SetDisplacementAlgorithm96(const G4bool val);
+
+  inline void SetPositronCorrection(const G4bool val);
+
   //  hide assignment operator
   G4UrbanMscModel & operator=(const  G4UrbanMscModel &right) = delete;
   G4UrbanMscModel(const  G4UrbanMscModel&) = delete;
@@ -124,12 +128,12 @@ private:
 
   inline G4double ComputeTlimitmin();
 
-  CLHEP::HepRandomEngine*     rndmEngineMod;
+  CLHEP::HepRandomEngine* rndmEngineMod;
 
-  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* particle = nullptr;
   const G4ParticleDefinition* positron;
-  G4ParticleChangeForMSC*     fParticleChange;
-  const G4MaterialCutsCouple* couple;
+  G4ParticleChangeForMSC* fParticleChange = nullptr;
+  const G4MaterialCutsCouple* couple = nullptr;
 
   G4double mass;
   G4double charge,chargeSquare;
@@ -185,13 +189,13 @@ private:
   static std::vector<mscData*> msc;
 
   // index of G4MaterialCutsCouple
-  G4int idx;
+  G4int idx = 0;
 
-  G4bool firstStep;
-  G4bool insideskin;
+  G4bool firstStep = true;
+  G4bool insideskin = false;
 
-  G4bool latDisplasmentbackup;
-  G4bool dispAlg96;
+  G4bool latDisplasmentbackup = false;
+  G4bool dispAlg96 = true;
   G4bool fPosiCorrection = true;
   G4bool isFirstInstance = false;
 };
@@ -238,6 +242,8 @@ inline G4double G4UrbanMscModel::SimpleScattering()
     -1.+2.*G4Exp(G4Log(rndmarray[0])/(a+1.)) : -1.+2.*rndmarray[0];
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4UrbanMscModel::ComputeStepmin()
 {
   // define stepmin using estimation of the ratio 
@@ -246,12 +252,28 @@ inline G4double G4UrbanMscModel::ComputeStepmin()
   return lambda0*1.e-3/(2.e-3+rat*(msc[idx]->stepmina+msc[idx]->stepminb*rat));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4UrbanMscModel::ComputeTlimitmin()
 {
   G4double x = (particle == positron) ? 
     0.7*msc[idx]->sqrtZ*stepmin : 0.87*msc[idx]->Z23*stepmin;
   if(currentKinEnergy < tlow) { x *= 0.5*(1.+currentKinEnergy/tlow); }
   return std::max(x, tlimitminfix);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4UrbanMscModel::SetDisplacementAlgorithm96(const G4bool val)
+{
+  dispAlg96 = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4UrbanMscModel::SetPositronCorrection(const G4bool val)
+{
+  fPosiCorrection = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

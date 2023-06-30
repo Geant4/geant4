@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,7 +78,7 @@ New sensitive detector <TrackerChamberSD> is registered at /eRosita/
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
-LPM effect enabled                                 1
+LPM effect enabled                                 0
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
 Use combined TransportationWithMsc                 Disabled
@@ -183,7 +183,7 @@ eIoni:  for e-  XStype:3  SubType=2
 eBrem:  for e-  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      LPM flag: 0 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
@@ -203,7 +203,7 @@ eIoni:  for e+  XStype:3  SubType=2
 eBrem:  for e+  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      LPM flag: 0 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem : Emin=    0 eV  Emax=    1 GeV  AngularGen2BS
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
@@ -524,9 +524,9 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.830000s Real=3.855846s Sys=0.000000s
+  User=3.710000s Real=3.725513s Sys=0.010000s
 --- Run 0 (master) end. Total number of events: 1000.
-  User=3.840000s Real=3.856168s Sys=0.000000s
+  User=3.710000s Real=3.725783s Sys=0.010000s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

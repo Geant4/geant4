@@ -51,7 +51,7 @@ class EventAction : public G4UserEventAction
  public:
   explicit EventAction(AnalysisManager*);
 
-  ~EventAction() override;
+  ~EventAction() override = default;
 
   void BeginOfEventAction(const G4Event*) override;
 

@@ -181,46 +181,40 @@ void PhysicsList::ConstructEM()
             new G4DNAEmfietzoglouIonisationModel();
             G4DNAEmfietzoglouExcitationModel* e_modelDNAEmfietzoglouExcitation =
             new G4DNAEmfietzoglouExcitationModel();
-            //            G4DNAMeltonAttachmentModel* e_modelDNAAttachement= 
-            new G4DNAMeltonAttachmentModel();
-            //            G4DNASancheExcitationModel* e_modelDNAVibra= 
-            new G4DNASancheExcitationModel();
 
             G4DNAPTBElasticModel* modelDNAPTBElastic = 
-            new G4DNAPTBElasticModel("THF/TMP/PY/N2", particle);
+            new G4DNAPTBElasticModel();
             G4DNAPTBIonisationModel* modelDNAPTBIonisation = 
-            new G4DNAPTBIonisationModel("THF/TMP/PY/N2",particle);
+            new G4DNAPTBIonisationModel();
             G4DNAPTBExcitationModel* modelDNAPTBExcitation = 
-            new G4DNAPTBExcitationModel("THF/TMP/PY/N2",particle);
+            new G4DNAPTBExcitationModel();
 
 
             // Register models in the model interface
 
             //for elastics in three types of materials
             G4DNAModelInterface* e_elasticInteraction = 
-            new G4DNAModelInterface("e-_elastic_interaction");
-            e_elasticInteraction->
-            RegisterModel(e_modelDNARutherfordElastic, particle);
+            new G4DNAModelInterface("DNA_e-_elastic");
+
             e_elasticInteraction->RegisterModel(modelDNAPTBElastic);
-            e_elasticInteraction->RegisterModel(new G4DNAVacuumModel());
+          e_elasticInteraction->
+              RegisterModel(e_modelDNARutherfordElastic);
 
 
             //for ionization in three types of material
 
             G4DNAModelInterface* e_ionisationInteraction= 
-            new G4DNAModelInterface("e-_ionisation_interaction");
-            e_ionisationInteraction->
-            RegisterModel(e_modelDNAEmfietzoglouIonisation,particle);
-            e_ionisationInteraction->RegisterModel(modelDNAPTBIonisation);
-            e_ionisationInteraction->RegisterModel(new G4DNAVacuumModel());
+            new G4DNAModelInterface("DNA_e-_ionisation");
 
+            e_ionisationInteraction->RegisterModel(modelDNAPTBIonisation);
+          e_ionisationInteraction->
+              RegisterModel(e_modelDNAEmfietzoglouIonisation);
             //for excitation in three types of material
             G4DNAModelInterface* e_excitationInteraction= 
-            new G4DNAModelInterface("e-_excitation_interaction");
+            new G4DNAModelInterface("DNA_e-_excitation");
             e_excitationInteraction->
-            RegisterModel(e_modelDNAEmfietzoglouExcitation,particle);
+            RegisterModel(e_modelDNAEmfietzoglouExcitation);
             e_excitationInteraction->RegisterModel(modelDNAPTBExcitation);
-            e_excitationInteraction->RegisterModel(new G4DNAVacuumModel());
 
             //Instanciate Processes
             // Elastic
@@ -235,13 +229,6 @@ void PhysicsList::ConstructEM()
             G4DNAExcitation* e_DNAExcitationProcess = 
             new G4DNAExcitation("e-_G4DNAExcitation");
             e_DNAExcitationProcess->SetEmModel(e_excitationInteraction);
-        /* G4DNAAttachment* e_DNAAttachementProcess= 
-        new G4DNAAttachment("e-_G4DNAAttachement");
-            e_DNAAttachementProcess->SetEmModel(e_attachementInteraction);
-            G4DNAVibExcitation* e_DNAVibraProcess= 
-            new G4DNAVibExcitation("e-_G4DNAVibraExci");
-            e_DNAVibraProcess->SetEmModel(e_VibInteraction);*/
-
 
             // **********************************************************
             // Add previous process

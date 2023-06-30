@@ -361,7 +361,7 @@ double RandLandau::transform (double r) {
 } // transform()
 
 std::ostream & RandLandau::put ( std::ostream & os ) const {
-  int pr=os.precision(20);
+  long pr=os.precision(20);
   os << " " << name() << "\n";
   os.precision(pr);
   return os;

@@ -11,6 +11,7 @@ find_package(ROOT QUIET)
 add_subdirectory(air_shower)
 add_subdirectory(amsEcal)
 add_subdirectory(brachytherapy)
+add_subdirectory(stim_pixe_tomography)
 
 if(Geant4_gdml_FOUND)
   add_subdirectory(ChargeExchangeMC)

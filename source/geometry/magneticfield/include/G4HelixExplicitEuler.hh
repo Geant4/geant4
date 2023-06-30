@@ -41,27 +41,25 @@
 
 class G4HelixExplicitEuler : public G4MagHelicalStepper
 {
-  public:  // with description
+  public:
 
     G4HelixExplicitEuler(G4Mag_EqRhs* EqRhs);
-    ~G4HelixExplicitEuler();
+   ~G4HelixExplicitEuler() override;
 
     void Stepper( const G4double y[],
                   const G4double*,
                         G4double h,
                         G4double yout[],
-                        G4double yerr[]  ); 
+                        G4double yerr[]  ) override; 
 
     void DumbStepper( const G4double y[],
                             G4ThreeVector  Bfld,
                             G4double       h,
-                            G4double       yout[]);
+                            G4double       yout[]) override;
    
-    G4double DistChord() const;
+    G4double DistChord() const override;
 
-  public:  // without description
-
-    inline G4int IntegratorOrder() const { return 1; }
+    inline G4int IntegratorOrder() const override { return 1; }
 };
 
 #endif

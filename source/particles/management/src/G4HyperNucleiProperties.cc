@@ -56,7 +56,7 @@ G4double G4HyperNucleiProperties::GetNuclearMass(G4int A, G4int Z, G4int LL)
 #endif
     return 0.0;
   }
-  else if ( A == 2 )
+  if ( A == 2 )
   {
 #ifdef G4VERBOSE
     if ( G4ParticleTable::GetParticleTable()->GetVerboseLevel() > 0 )

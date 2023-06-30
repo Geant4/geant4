@@ -135,7 +135,7 @@ G4Hype::G4Hype( __void__& a  )
 //
 G4Hype::~G4Hype()
 {
-  delete fpPolyhedron; fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 // Copy constructor
@@ -302,7 +302,7 @@ G4ThreeVector G4Hype::SurfaceNormal( const G4ThreeVector& p ) const
   // Do the "endcaps" win?
   //
   if (dist2Z < dist2Outer) 
-    return G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
+    return { 0.0, 0.0, (G4double)(p.z() < 0 ? -1.0 : 1.0) };
     
     
   //
@@ -1064,7 +1064,7 @@ G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
 //
 G4GeometryType G4Hype::GetEntityType() const
 {
-  return G4String("G4Hype");
+  return {"G4Hype"};
 }
 
 // Clone
@@ -1187,12 +1187,12 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
       zRand = outerRadius*sinhu/tanOuterStereo;
       xRand = std::sqrt(sqr(sinhu)+1)*outerRadius*cosphi;
       yRand = std::sqrt(sqr(sinhu)+1)*outerRadius*sinphi;
-      return G4ThreeVector (xRand, yRand, zRand);
+      return { xRand, yRand, zRand };
     }
     else
     {
-      return G4ThreeVector(outerRadius*cosphi,outerRadius*sinphi,
-                           G4RandFlat::shoot(-halfLenZ,halfLenZ));
+      return { outerRadius*cosphi, outerRadius*sinphi,
+               G4RandFlat::shoot(-halfLenZ,halfLenZ) };
     }
   }
   else if(chose>=aOne && chose<aOne+aTwo)
@@ -1204,12 +1204,12 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
       zRand = innerRadius*sinhu/tanInnerStereo;
       xRand = std::sqrt(sqr(sinhu)+1)*innerRadius*cosphi;
       yRand = std::sqrt(sqr(sinhu)+1)*innerRadius*sinphi;
-      return G4ThreeVector (xRand, yRand, zRand);
+      return { xRand, yRand, zRand };
     }
     else 
     {
-      return G4ThreeVector(innerRadius*cosphi,innerRadius*sinphi,
-                           G4RandFlat::shoot(-1.*halfLenZ,halfLenZ));
+      return { innerRadius*cosphi, innerRadius*sinphi,
+               G4RandFlat::shoot(-1.*halfLenZ,halfLenZ) };
     }
   }
   else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
@@ -1223,10 +1223,10 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
       xRand = G4RandFlat::shoot(-rOut,rOut) ;
       yRand = G4RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
-    } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
+    } while ( r2 < rIn2 || r2 > rOut2 ) ;
 
     zRand = halfLenZ;
-    return G4ThreeVector (xRand, yRand, zRand);
+    return { xRand, yRand, zRand };
   }
   else
   {
@@ -1239,10 +1239,10 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
       xRand = G4RandFlat::shoot(-rOut,rOut) ;
       yRand = G4RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
-    } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
+    } while ( r2 < rIn2 || r2 > rOut2 ) ;
 
     zRand = -1.*halfLenZ;
-    return G4ThreeVector (xRand, yRand, zRand);
+    return { xRand, yRand, zRand };
   }
 }
 
@@ -1259,9 +1259,9 @@ G4VisExtent G4Hype::GetExtent() const
 {
   // Define the sides of the box into which the G4Tubs instance would fit.
   //
-  return G4VisExtent( -endOuterRadius, endOuterRadius, 
-                      -endOuterRadius, endOuterRadius, 
-                      -halfLenZ, halfLenZ );
+  return { -endOuterRadius, endOuterRadius, 
+           -endOuterRadius, endOuterRadius, 
+           -halfLenZ, halfLenZ };
 }
 
 // CreatePolyhedron

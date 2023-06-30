@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -53,7 +53,7 @@ PhysicsList::AddPhysicsList: <dna_stat_opt2>
 /tracking/verbose 0
 /gun/particle e-
 /gun/energy 50 eV
-/run/beamOn 10000
+/run/beamOn 1000
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -464,16 +464,16 @@ Index : 0     used in the geometry : Yes
 ### Run 0 starts.
  Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=25.710000s Real=25.864045s Sys=0.000000s
+  Number of events processed : 1000
+  User=2.240000s Real=2.247607s Sys=0.000000s
 
  ======================== run summary =====================
 
- The run is 10000 e- of 50.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 50.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 14.26 +- 0.86
+ total Stopping Power (keV/um)   = 14.26 +- 0.83
 /gun/energy 100 eV
-/run/beamOn 10000
+/run/beamOn 1000
 
 ========= Table of registered couples ============================
 
@@ -489,16 +489,16 @@ Index : 0     used in the geometry : Yes
 ### Run 1 starts.
  Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=29.670000s Real=29.860430s Sys=0.000000s
+  Number of events processed : 1000
+  User=2.490000s Real=2.504235s Sys=0.000000s
 
  ======================== run summary =====================
 
- The run is 10000 e- of 100.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 100.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 21.95 +- 1.15
+ total Stopping Power (keV/um)   = 21.98 +- 1.12
 /gun/energy 200 eV
-/run/beamOn 10000
+/run/beamOn 1000
 
 ========= Table of registered couples ============================
 
@@ -514,16 +514,16 @@ Index : 0     used in the geometry : Yes
 ### Run 2 starts.
  Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=32.760000s Real=32.945791s Sys=0.000000s
+  Number of events processed : 1000
+  User=2.810000s Real=2.824085s Sys=0.000000s
 
  ======================== run summary =====================
 
- The run is 10000 e- of 200.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 200.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 21.68 +- 1.07
+ total Stopping Power (keV/um)   = 21.69 +- 1.05
 /gun/energy 500 eV
-/run/beamOn 10000
+/run/beamOn 1000
 
 ========= Table of registered couples ============================
 
@@ -539,16 +539,16 @@ Index : 0     used in the geometry : Yes
 ### Run 3 starts.
  Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=33.380000s Real=33.599619s Sys=0.010000s
+  Number of events processed : 1000
+  User=2.850000s Real=2.853656s Sys=0.000000s
 
  ======================== run summary =====================
 
- The run is 10000 e- of 500.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 500.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 15.39 +- 0.84
+ total Stopping Power (keV/um)   = 15.39 +- 0.83
 /gun/energy 1000 eV
-/run/beamOn 10000
+/run/beamOn 1000
 
 ========= Table of registered couples ============================
 
@@ -564,15 +564,15 @@ Index : 0     used in the geometry : Yes
 ### Run 4 starts.
  Run terminated.
 Run Summary
-  Number of events processed : 10000
-  User=32.450000s Real=32.652198s Sys=0.000000s
+  Number of events processed : 1000
+  User=2.800000s Real=2.824640s Sys=0.000000s
 
  ======================== run summary =====================
 
- The run is 10000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 10.50 +- 0.68
+ total Stopping Power (keV/um)   = 10.53 +- 0.70
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.33 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.32 MB
 ============================================================

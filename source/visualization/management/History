@@ -6,6 +6,194 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-16 John Allison (visman-V11-01-15)
+- G4VisExecutive.icc:
+  - Temporary fix to divert OGL to TSG for Qt6.
+
+## 2023-06-06 John Allison (visman-V11-01-14)
+- G4VisCommandsTouchable; Introduce /vis/touchable/twinkle.
+
+## 2023-06-01 John Allison (visman-V11-01-13)
+- Rework issue of implicit type conversion.
+- Improve layout in G4VViewer::SceneTreeScene::FindOrInsertModel.
+  - (No code changes.)
+
+## 2023-05-29 Guy Barrand (visman-v11-01-12)
+- G4VisExecutive.icc: declare TOOLSSG_[X11,XT,WINDOWS,QT]_ZB drivers.
+
+## 2023-05-23 Gabriele Cosmo (visman-V11-01-11)
+- Fixed compilation warning for implicit type conversion on macOS/XCode>=14.1.
+
+## 2023-05-09 John Allison (visman-V11-01-10)
+- Coworks: greps-V11-01-04 and interfaces-V11-01-15.
+- New scene tree: Implement expand and collapse of touchables.
+  - Expand only to depth 2 - thereafter sub-trees are collapsed.
+  - When the scene tree is expanded or collapsed it is remembered in
+    the viewer-side scene tree and may be propagated to other viewers.
+- G4VViewer.hh/cc:
+  - Augment SceneTreeScene::FindOrInsertTouchable to handle depth of descent.
+
+## 2023-05-02 John Allison (visman-V11-01-09)
+- Coworks: modeling-V11-01-04.
+- These two tags implement "generic cutaways"...finally...after 20 years!!!
+  - It relies on the Boolean Processor (graphics_reps/src/BooleanProcessor.src),
+    which handles the Boolean operations on polyhedral (G4Polyhedron)
+    representations of solids. It is well known that this has its
+    limitations, and the mistake, in the past, has been to ask too much of it.
+    The most demanding task is cutaways, which attempts to mimic the effect
+    of OpenGL clipping planes by using Boolean intersections and/or
+    subtraction of a "cutaway solid". This cutaway solid can itself be the
+    Boolean combination of up to 3 simple solids (boxes) to deal with up to
+    3 "cutaway planes". It then goes forward in the G4PhysicalVolumeModel to a
+    further Boolean operation on the volumes (touchables) of the detector
+    geometry, which themselves might also be Boolean solids.
+  - The most demanding case is the union of the result of 3 cutaway planes.
+    The key breakthrough in this tag is to make a subtractor of the
+    intersection of the *inverted* cutaways instead of an intersector of the
+    union of normal cutaways. ("Inverted cutaway" means
+    cutting away a*x+b*y+c*z+d>0, "normal" means a*x+b*y+c*z+d<0.) Although
+    logically equivalent, the former is much less demanding because the
+    shape of an intersection is invariably much simpler that the shape of
+    a union - at least that's how it seems to be for the case of 3 boxes.
+  - This work was triggered by an initial attempt by a Geant4 user,
+    Pooria Heidary. Demanding tests showed that there needed to be careful
+    checking of the validity of the results of the Boolean operations -
+    Evgueni Tcherniaev has made a big contribution there. Pooria will
+    hardly recognise the code compared to that submitted in the GitHub pull
+    request after these tests and other checks have been added. Hopefully
+    this update is now well tested and robust.
+  - It means that clips, sections and cutaways will now be available to *all*
+    viewers.   
+- G4VSceneHandler.cc:
+  - RequestPrimitives: Improve test for invalid Boolean solid.
+    - Algorithm by Evgueni Tcherniaev.
+  - CreateSectionSolid and CreateCutawaySolid: Improve algorithms.
+    - Algorithms suggested by Evgueni Tcherniaev.
+
+## 2023-04-30 John Allison (visman-V11-01-08)
+- G4VSceneHandler:
+  - Bug fix: Protect material pointer used to name G4Mesh item.
+    - If null, use name of container.
+  - In particular, avoids crash for a G4Mesh is a parallel world.
+
+## 2023-04-28 John Allison (visman-V11-01-07)
+- G4VViewer::SceneTreeScene::FindOrInsertTouchable:
+  - Coverity fix - protect pPVModel pointer.
+
+## 2023-04-25 John Allison (visman-V11-01-06)
+- G4VisCommandsTouchableSet.cc:
+  - /vis/touchable/set/visibility:
+    - Add one-time warning about circumstances in which the command may
+      appear not to work.
+
+## 2023-04-23 John Allison (visman-V11-01-05)
+- Correct Special Mesh Rendering Option default.
+- G4ViewParameters.cc:
+  - Initialise fSpecialMeshRenderingOption(meshAsDefault).
+- G4VisCommandsViewerSet.cc:
+  - /vis/viewer/set/specialMeshRenderingOption:
+    - SetDefaultValue("default");
+
+## 2023-04-14 John Allison (visman-V11-01-04)
+- Co-working: greps-V11-01-03, interfaces-V11-01-11, opengl-V11-01-06,
+  openinventor-V11-01-04, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  interactive scene tree.
+  - Works with touchables - a touchable is a physical volume as rolled out
+    by the geometry hierarchy.
+  - You can change the visibility of a touchable.
+    - Colour, transparency, etc., will be implemented in a future MR.
+  - Providing you are using a scene-tree-enabled interactive session (only
+    the Qt GUI at present), it works with any graphics driver...except OpenGL.
+    - OpenGL for the time being uses its existing interactive scene tree.
+  - You can prepare a view with a graphical driver, such as
+    TSG, OI or Vtk, and transfer it to Ray Tracer, TOOLSSG_OFFSCREEN, etc.,
+    simply with `/vis/open RayTracer`, etc.
+- G4VVisCommand:
+  - Add static G4SceneTreeItem fExistingSceneTree.
+    - Used for "remembering" scene tree of previous viewer.
+- G4VisCommandsSceneHandler:
+  - If there is an existing viewer, store scene tree.
+- G4VisCommandsViewer:
+  - If there is an existing viewer, store scene tree.
+  - Copy existing scene tree to the new viewer.
+  - /vis/viewer/select: Call UpdateGUISceneTree to ensure the scene tree
+    of the newly selected viewer is in sync.
+- G4VViewer:
+  - Improve G4VViewer::SceneTreeScene::FindOrInsertTouchable.
+    - Simplify ghost-touchable transition.
+    - Protect vis attributes pointer.
+  - Add "utility" function UpdateGUISceneTree.
+    - Calls GUI->UpdateSceneTree if session is interactive:
+```
+void G4VViewer::UpdateGUISceneTree()
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  auto uiWindow = dynamic_cast<G4VInteractiveSession*>(UI->GetG4UIWindow());
+  if (uiWindow) uiWindow->UpdateSceneTree(fSceneTree);
+}
+```
+- sources.cmake:
+  - Add G4interfaces to geant4_module_link_libraries.
+
+## 2023-04-07 Stewart Boogert (visman-v11-01-03)
+- Default special mesh rendering for viewers which can render all objects
+
+## 2023-04-07 John Allison (visman-V11-01-02)
+- Co-works with: greps-V11-01-02.
+- Improve vis-side scene tree creation and maintenance.
+- G4VViewer::SceneTreeScene:
+  - Simplify - remove unnecessary overrides.
+  - Fix bugs in scene tree building and add some features.
+    - Add "tags" that will become the identifier in the GUI tree.
+- G4VSceneHandler::ProcessScene:
+  - Simplify scene tree processing.
+- G4VVisCommand::RefreshIfRequired:
+  - Call viewer->UpdateGUISceneTree() after refreshing.
+    - This ensures the GUI-side scene tree and vis-side scene tree
+      are in sync.
+
+## 2023-03-28 John Allison (visman-V11-01-01)
+- Co-works with: greps-V11-01-01, interfaces-V11-01-10, modeling-V11-01-02.
+- Introduce scene tree in G4VViewer.
+  - The scene tree is a tree of G4SceneTreeItem objects (see graphics-reps).
+  - Its root is a data member fSceneTree of all viewers by virtue of
+    G4VViewer inheritance, 
+  - G4SceneTreeItem is an aggregate of data members that represent
+    properties of objects in the scene (G4Scene). Its data members are
+    low-level types - G4String, G4VisAttributes and G4AttDef/Value - so
+    that it can be used across categories, avoiding coupling.
+  - The root item has children that represent the models (G4VModel
+    sub-classes) in the scene.
+  - For a G4PhysicalVolumeModel (detector components), its children and
+    children's children, etc., imitate the geometry hierarchy of that
+    model. These descendants are called "touchables".
+  - There may be more than one G4PhysicalVolumeModel, depending how
+    the user creates his/her scene.
+  - The scene tree is reviewed, and updated if necessary, at every pass
+    of G4VSceneHandler::ProcessScene.  This is called a "kernel visit".
+  - A kernel visit is triggered by some vis commands (e.g.,
+    /vis/viewer/rebuild) and by a viewer if it deems necessary. For
+    example, a kernel visit may not be required for a rotation, zoom, etc.,
+    but required for a change from surface to wireframe.
+  - The idea is that the scene tree can be passed to a GUI, the GUI can
+    create a tree widget, and interactions with it raise UI commands such as
+    /vis/scene/activateModel, /vis/set/touchable and /vis/touchable/set/...
+    The viewer decides if this requires a kernel visit, otherwise it
+    must update fSceneTree itself (utilities are provided -
+    G4VViewer::TouchableSetVisibility/Colour).
+- G4VViewer:
+  - Add scene tree and related functionality.
+- G4VSceneHandler::ProcessScene:
+  - Add code to build scene tree.
+
+## 2022-12-31 John Allison (visman-V11-01-00)
+- Clean up G4VUserVisAction:
+  - The central pure virtual Draw() method is not intended to be called
+    directly - see longer explanation in G4VUserVisAction.hh - so make
+    it protected (more hygienic).
+  - Improve comments in G4VUserVisAction.hh.
+
 ## 2022-11-25 Gabriele Cosmo (visman-V11-00-31)
 - Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
 

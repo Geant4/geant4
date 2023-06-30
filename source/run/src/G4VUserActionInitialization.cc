@@ -29,26 +29,11 @@
 // --------------------------------------------------------------------
 
 #include "G4VUserActionInitialization.hh"
+
 #include "G4RunManager.hh"
 
 // --------------------------------------------------------------------
-G4VUserActionInitialization::G4VUserActionInitialization()
-{
-}
-
-// --------------------------------------------------------------------
-G4VUserActionInitialization::~G4VUserActionInitialization()
-{
-}
-
-// --------------------------------------------------------------------
-void G4VUserActionInitialization::BuildForMaster() const
-{
-}
-
-// --------------------------------------------------------------------
-void G4VUserActionInitialization::
-SetUserAction(G4VUserPrimaryGeneratorAction* action) const
+void G4VUserActionInitialization::SetUserAction(G4VUserPrimaryGeneratorAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
@@ -66,29 +51,19 @@ void G4VUserActionInitialization::SetUserAction(G4UserEventAction* action) const
 }
 
 // --------------------------------------------------------------------
-void G4VUserActionInitialization::
-SetUserAction(G4UserStackingAction* action) const
+void G4VUserActionInitialization::SetUserAction(G4UserStackingAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
 // --------------------------------------------------------------------
-void G4VUserActionInitialization::
-SetUserAction(G4UserTrackingAction* action) const
+void G4VUserActionInitialization::SetUserAction(G4UserTrackingAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
 // --------------------------------------------------------------------
-void G4VUserActionInitialization::
-SetUserAction(G4UserSteppingAction* action) const
+void G4VUserActionInitialization::SetUserAction(G4UserSteppingAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
-}
-
-// --------------------------------------------------------------------
-G4VSteppingVerbose* G4VUserActionInitialization::
-InitializeSteppingVerbose() const
-{
-  return nullptr;
 }

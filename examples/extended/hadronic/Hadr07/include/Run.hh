@@ -55,9 +55,11 @@ class Run : public G4Run
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void CountProcesses(const G4VProcess* process);
     void ParticleCount(G4int, G4String, G4double, G4double);
-    void AddEdep (G4int i, G4double e);
-    void AddTotEdep     (G4double e);
-    void AddTrackStatus (G4int i);
+    void AddEdep (G4int, G4double);
+    void AddTotEdep     (G4double);
+    void AddEleak       (G4double);
+    void AddEtotal      (G4double);    
+    void AddTrackStatus (G4int);
 
     void Merge(const G4Run*) override;
     void EndOfRun();
@@ -84,8 +86,8 @@ private:
     G4int      fStatus[3];
     
     G4double   fEdeposit[kMaxAbsor], fEmin[kMaxAbsor], fEmax[kMaxAbsor];
-    G4double   fTotEdep[3];
-
+    G4double   fTotEdep[3], fEleak[3], fEtotal[3];
+   
     std::map<G4String,G4int>        fProcCounter;
     std::map<G4String,ParticleData> fParticleDataMap[kMaxAbsor];
 };

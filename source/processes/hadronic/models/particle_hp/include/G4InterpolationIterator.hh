@@ -28,52 +28,49 @@
 #ifndef G4InterpolationIterator_h
 #define G4InterpolationIterator_h 1
 
-#include "G4InterpolationManager.hh"
 #include "G4HadronicException.hh"
-
+#include "G4InterpolationManager.hh"
 
 class G4InterpolationIterator
 {
-   private:   
-   G4InterpolationIterator() {}
-   
-   public:
-   G4InterpolationIterator(G4InterpolationManager * aManager)
-   {
-     started = false;
-     theManager = aManager;
-   }
-   
-   ~G4InterpolationIterator(){}
-   
-   inline G4bool Fetch() 
-   {
-     if(!started) 
-     {
-       started = true;
-       counter=-1;
-       current = 0;
-     }
-     G4bool result = true;
-     if(++counter==nEntries)
-       started = false;
-       result = false;
-     else if(current != nRanges-1&&counter==theManager->start[current+1])
-       current++;
-     return result;
-   }
-   
-   inline G4InterpolationScheme Current() 
-   {
-     if(!started) throw G4HadronicException(__FILE__, __LINE__, "G4InterpolationIterator not started yet");
-     return aManager->scheme[current];
-   }
-   
-   private:
-   G4InterpolationManager * theManager;
-   G4int current;
-   G4int counter;
-   G4bool started;
+  private:
+    G4InterpolationIterator() {}
+
+  public:
+    G4InterpolationIterator(G4InterpolationManager* aManager)
+    {
+      started = false;
+      theManager = aManager;
+    }
+
+    ~G4InterpolationIterator() {}
+
+    inline G4bool Fetch()
+    {
+      if (!started) {
+        started = true;
+        counter = -1;
+        current = 0;
+      }
+      G4bool result = true;
+      if (++counter == nEntries) started = false;
+      result = false;
+      else if (current != nRanges - 1 && counter == theManager->start[current + 1]) current++;
+      return result;
+    }
+
+    inline G4InterpolationScheme Current()
+    {
+      if (!started)
+        throw G4HadronicException(__FILE__, __LINE__, "G4InterpolationIterator not started yet");
+      return aManager->scheme[current];
+    }
+
+  private:
+    G4InterpolationManager* theManager;
+    G4int current;
+    G4int counter;
+    G4bool started;
 };
 
 #endif

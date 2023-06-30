@@ -139,7 +139,7 @@ List of fixes included in this public patch since the public release 11.1.0:
         Based on GitHub PR#52 (https://github.com/Geant4/geant4/pull/52).
     + extended/medical/dna/moleculardna
       o Fixed materials definition and corrected mistake in PhysicsList.
-      o Updated imput macros.
+      o Updated input macros.
     + extended/parallel/MPI
       o Use PROJECT_ or Geant4_ scoped _SOURCE/BINARY_DIR variables in place of
         CMAKE_  scope version to ease use of Geant4 as a CMake subproject. 

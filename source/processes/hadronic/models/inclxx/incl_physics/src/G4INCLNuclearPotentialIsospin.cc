@@ -106,11 +106,16 @@ namespace G4INCL {
       vSigmaPlus = -16.;
 
       vLambda = 30.;
+
+//D
+      //insert new particles here
+//D
+
       const G4double asy = (theA - 2.*theZ)/theA;
       // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC 98, 021602 (2018)
       if      (asy > 0.236) vLambda = 40.91;
       else if (asy > 0.133) vLambda = 56.549 - 678.73*asy + 4905.35*asy*asy - 9789.1*asy*asy*asy;
-
+        
       const G4double theLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(Lambda,theA,theZ);
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
@@ -243,7 +248,11 @@ namespace G4INCL {
         case Photon:
           return 0.0;
           break;
-
+//D
+        case antiProton:
+          return 0.0;
+          break;
+//D
         case DeltaPlusPlus:
           return vDeltaPlusPlus;
           break;

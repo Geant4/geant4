@@ -6,9 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-01-17 Vladimir Ivanchenko (hadr-man-V11-00-09)
+
+## 2023-03-29 Vladimir Ivanchenko (hadr-man-V11-01-03)
+- G4HadronicProcess - added extra G4Exception for the case if worker cannot 
+  share initialisation with master thread (problem #2528), diagnostic is
+  improved
+- G4HadronicProcessStore - avoid checks of environment variables, instead call 
+  to G4HadronicParameters
+
+## 2023-01-21 Vladimir Ivanchenko (hadr-man-V11-01-02)
+- G4HadronicProcess - removed usage of DebugFlag and RandomFile
+
+## 2023-01-17 Vladimir Ivanchenko (hadr-man-V11-01-01)
 - G4HadronicProcess - moved several class members to be protected, which 
     is needed for hadron elastic process (and may be other processes)
+
+## 2023-01-09 Vladimir Ivanchenko (hadr-man-V11-01-00)
+- G4HadronicProcess - substitute access to environment variables by call to
+  G4HadronicParameters
 
 ## 2022-11-26 Gabriele Cosmo (hadr-man-V11-00-08)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.

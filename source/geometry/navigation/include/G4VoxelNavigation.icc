@@ -118,7 +118,7 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
   targetVoxelNode = VoxelLocate(targetVoxelHeader,localPoint);
 
   targetNoDaughters = G4int(targetVoxelNode->GetNoContained());
-  if ( targetNoDaughters==0 ) return false;
+  if ( targetNoDaughters==0 ) { return false; }
 
   //
   // Search daughters in volume
@@ -147,10 +147,7 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
         localPoint = samplePoint;
         return true;
       }
-      else
-      {
-        history.BackLevel();
-      }
+      history.BackLevel();
     }
   }
   return false;

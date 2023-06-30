@@ -49,7 +49,7 @@
 
 class G4TwistedTrd : public G4VTwistedFaceted
 {
-  public:  // with description
+  public:
 
     G4TwistedTrd( const G4String& pName,
                         G4double  pDx1,
@@ -59,7 +59,7 @@ class G4TwistedTrd : public G4VTwistedFaceted
                         G4double  pDz,
                         G4double  pPhiTwist );
 
-    virtual ~G4TwistedTrd();
+    ~G4TwistedTrd() override;
 
     // accessors
 
@@ -70,16 +70,14 @@ class G4TwistedTrd : public G4VTwistedFaceted
     inline G4double GetZHalfLength()  const { return GetDz()  ; }
     inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream&  StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream&  StreamInfo(std::ostream& os) const override;
 
     G4TwistedTrd(__void__&);
       // Fake default constructor for usage restricted to direct object

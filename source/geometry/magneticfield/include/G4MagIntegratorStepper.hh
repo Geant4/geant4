@@ -43,6 +43,10 @@
 
 #include "G4Types.hh"
 #include "G4EquationOfMotion.hh"
+#include "G4VIntegrationDriver.hh"
+#include "G4IntegrationDriver.hh"
+
+class G4VIntegrationDriver;
 
 class G4MagIntegratorStepper
 {
@@ -113,8 +117,12 @@ class G4MagIntegratorStepper
        // Count number of calls to RHS method(s)
 
      inline G4bool IsFSAL() const;
-   
-  protected:
+
+     // TODO - QSS
+     inline G4bool isQSS() const { return fIsQSS; }
+     void   SetIsQSS(G4bool val){ fIsQSS= val;}
+
+protected:
 
      inline void SetIntegrationOrder(G4int order);
      inline void SetFSAL(G4bool flag = true);
@@ -135,6 +143,8 @@ class G4MagIntegratorStepper
       // All ClassicalRK4 steppers are 4th order
      G4bool fIsFSAL = false;
       // Depends on RK method & implementation
+     G4bool fIsQSS = false;
+
 };
 
 #include  "G4MagIntegratorStepper.icc"

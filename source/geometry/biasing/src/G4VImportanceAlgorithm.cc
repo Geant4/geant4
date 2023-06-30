@@ -30,10 +30,6 @@
 
 #include "G4VImportanceAlgorithm.hh"
 
-G4VImportanceAlgorithm::G4VImportanceAlgorithm()
-{
-}
+G4VImportanceAlgorithm::G4VImportanceAlgorithm() = default;
 
-G4VImportanceAlgorithm::~G4VImportanceAlgorithm()
-{
-}
+G4VImportanceAlgorithm::~G4VImportanceAlgorithm() = default;

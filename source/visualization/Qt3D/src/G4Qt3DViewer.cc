@@ -338,9 +338,13 @@ void G4Qt3DViewer::mouseMoveEvent(QMouseEvent* ev)
    unless mouse tracking has been enabled with QWidget::setMouseTracking().*/
   // But this is a window not a widget.
   // As a workaround we maintain a flag changed by mousePress/ReleaseEvent.
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   G4double x = ev->x();
   G4double y = ev->y();
+#else
+  G4double x = ev->position().x();
+  G4double y = ev->position().y();
+#endif
   G4double dx = x-fMousePressedX;
   G4double dy = y-fMousePressedY;
   fMousePressedX = x;
@@ -383,8 +387,13 @@ void G4Qt3DViewer::mouseMoveEvent(QMouseEvent* ev)
 void G4Qt3DViewer::mousePressEvent(QMouseEvent* ev)
 {
   fMousePressed = true;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   fMousePressedX = ev->x();
   fMousePressedY = ev->y();
+#else
+  fMousePressedX = ev->position().x();
+  fMousePressedY = ev->position().y();
+#endif
 }
 
 void G4Qt3DViewer::mouseReleaseEvent(QMouseEvent* /*ev*/)

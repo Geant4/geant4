@@ -34,16 +34,15 @@
 
 #include "DetectorConstruction.hh"
 #include "Run.hh"
+#include "EventAction.hh"
 
 #include "G4RunManager.hh"
 #include "G4StepStatus.hh"
-///#include "G4Positron.hh"
-///#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det)
-:G4UserTrackingAction(),fDetector(det)
+TrackingAction::TrackingAction(DetectorConstruction* det, EventAction* evt)
+:G4UserTrackingAction(),fDetector(det),fEventAct(evt)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,18 +78,14 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track )
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{
-  //get Run
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-             
+{             
  // energy leakage
  G4StepStatus status = aTrack->GetStep()->GetPostStepPoint()->GetStepStatus();
  if (status == fWorldBoundary) { 
     G4int parentID = aTrack->GetParentID();
     G4int index = 0; if (parentID > 0) index = 1;    //primary=0, secondaries=1
     G4double eleak = aTrack->GetKineticEnergy();
-    run->AddEnergyLeak(eleak,index); 
+    fEventAct->SumEnergyLeak(eleak,index); 
  }               
 }
 

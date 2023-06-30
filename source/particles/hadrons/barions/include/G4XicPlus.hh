@@ -51,7 +51,7 @@ class G4XicPlus : public G4ParticleDefinition
  private:
    static G4XicPlus* theInstance;
    G4XicPlus(){}
-   ~G4XicPlus(){}
+   ~G4XicPlus() override= default;
 
  public:
    static G4XicPlus* Definition();

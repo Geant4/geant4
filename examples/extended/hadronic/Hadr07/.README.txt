@@ -91,6 +91,9 @@
             ...........................................
             9     "total energy deposited in absorber 9
             10    "Edep (MeV/mm) profile along absorbers"
+            11    "total Energy deposited in all absorbers"
+	    12    "total Energy leakage"
+            13    "total Energy released"	    
    
   One can control the name of the histograms file with the command:
 \verbatim

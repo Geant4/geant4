@@ -21,7 +21,7 @@ The distribution of the  recoil momentum is described by
 Jost, Phys. Rev. 80 (1950) 189 (no form factor).
 See also Fig. 2 of Astroparticle Physics 88 (2017) 60.
 
-  12    # Phi recoil 
+  12    # Phi recoil
   13    # Phi positron
   For linearly polarized incident photons, the distributions should show
   a sinusoidal shape with period 180°, for non polarized incident photons,
@@ -32,11 +32,11 @@ See also Fig. 2 of Astroparticle Physics 88 (2017) 60.
 For a photon propagating along x, polarized along y,
 the average value of ( 2.0 * cos(phi_+ + phi_-) ),
 provides a measurement of the polarization asymmetry, A.
-Eq. (12) of Nucl. Instrum. Meth. A 729 (2013) 765 
+Eq. (12) of Nucl. Instrum. Meth. A 729 (2013) 765
 The azimuthal angle of the event defined as the bisector angle
 of the azimuthal angles of the positron and of the electron,
 (phi_+ + phi_-)/2,
-provides the optimal measurement of the asymmetry 
+provides the optimal measurement of the asymmetry
 Astroparticle Physics 88 (2017) 30.
 
 For high-energy photons (E >> 20 MeV), the asymptotic expression for A
@@ -87,4 +87,3 @@ To enable gamma to mu+ mu- conversion use command:
 The conversion disabled by default, emax5D set to 0.0
 
 The model tested for the energies about the threshold up to PeV range.
-

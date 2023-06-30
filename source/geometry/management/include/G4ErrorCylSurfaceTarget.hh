@@ -54,25 +54,25 @@ class G4ErrorCylSurfaceTarget : public G4ErrorSurfaceTarget
                              const G4AffineTransform& trans );
       // Constructs cylindrical surface by radius and affine transformation
 
-    ~G4ErrorCylSurfaceTarget() = default;
+    ~G4ErrorCylSurfaceTarget() override = default;
 
     virtual G4ThreeVector IntersectLocal( const G4ThreeVector& point,
                                           const G4ThreeVector& direc ) const;
       // Intersects the cylindrical surface with the line in local (cylinder)
       // coordinates, given by point and direction
 
-    virtual G4double GetDistanceFromPoint( const G4ThreeVector& point,
-                                           const G4ThreeVector& direc ) const;
+    G4double GetDistanceFromPoint( const G4ThreeVector& point,
+                                   const G4ThreeVector& direc ) const override;
       // Distance from a point to the cylindrical surface in a given direction
 
-    virtual G4double GetDistanceFromPoint( const G4ThreeVector& point ) const;
+    G4double GetDistanceFromPoint( const G4ThreeVector& point ) const override;
       // Minimal distance from a point to the cylindrical surface in any
       // direction
 
-    virtual G4Plane3D GetTangentPlane( const G4ThreeVector& point ) const;
+    G4Plane3D GetTangentPlane( const G4ThreeVector& point ) const override;
       // Get plane tangent to cylindrical surface at a given point
 
-    virtual void Dump( const G4String& msg ) const;
+    void Dump( const G4String& msg ) const override;
       // Dump cylindrical surface parameter
 
   private:

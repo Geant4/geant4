@@ -34,10 +34,14 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(ICRP145phantoms ICRP145phantoms.cc ${sources} ${headers})
+add_executable(ICRP145standalone ICRP145standalone.cc ${sources} ${headers})
+
 target_link_libraries(ICRP145phantoms ${Geant4_LIBRARIES})
+target_link_libraries(ICRP145standalone ${Geant4_LIBRARIES} )
 
 # Depend on data for runtime
 add_dependencies(ICRP145phantoms ICRP145data)
+add_dependencies(ICRP145standalone ICRP145data)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory. This is so that we can run the 
@@ -49,6 +53,7 @@ set(EXTERNAL_SCRIPTS
   init_vis.mac
   source.mac
   vis.mac
+  standalone.mac
   )
 
 foreach(_script ${EXTERNAL_SCRIPTS})
@@ -73,3 +78,4 @@ ExternalProject_Add(ICRP145data
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS ICRP145phantoms DESTINATION bin)
+install(TARGETS ICRP145standalone DESTINATION bin)

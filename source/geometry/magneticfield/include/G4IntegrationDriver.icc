@@ -31,18 +31,15 @@
 
 #include "G4FieldUtils.hh"
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 template <class T>
 G4IntegrationDriver<T>::
 G4IntegrationDriver ( G4double hminimum, T* pStepper,
                       G4int numComponents, G4int statisticsVerbose )
     : G4RKIntegrationDriver<T>(pStepper),
       fMinimumStep(hminimum),
-      fSmallestFraction(1e-12),
-      fVerboseLevel(statisticsVerbose),
-      fNoQuickAvanceCalls(0),
-      fNoAccurateAdvanceCalls(0),
-      fNoAccurateAdvanceBadSteps(0),
-      fNoAccurateAdvanceGoodSteps(0)
+      fVerboseLevel(statisticsVerbose)
 {
     if (numComponents != Base::GetStepper()->GetNumberOfVariables())
     {

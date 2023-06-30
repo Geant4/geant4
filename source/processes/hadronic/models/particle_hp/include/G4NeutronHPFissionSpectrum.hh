@@ -29,4 +29,4 @@
 #include "G4ParticleHPFissionSpectrum.hh"
 using G4NeutronHPFissionSpectrum = G4ParticleHPFissionSpectrum;
 
-#endif 
+#endif

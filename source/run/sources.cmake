@@ -5,10 +5,8 @@ geant4_add_module(G4run
   PUBLIC_HEADERS
     G4AdjointPrimaryGeneratorAction.hh
     G4AdjointSimManager.hh
-    G4AdjointSimMessenger.hh
     G4ExceptionHandler.hh
     G4MaterialScanner.hh
-    G4MatScanMessenger.hh
     G4MSSteppingAction.hh
     G4MTRunManager.hh
     G4MTRunManagerKernel.hh
@@ -22,10 +20,8 @@ geant4_add_module(G4run
     G4RunManagerFactory.hh
     G4RunManager.hh
     G4RunManagerKernel.hh
-    G4RunMessenger.hh
     G4TaskRunManager.hh
     G4TaskRunManagerKernel.hh
-    G4UserPhysicsListMessenger.hh
     G4UserRunAction.hh
     G4UserTaskInitialization.hh
     G4UserTaskThreadInitialization.hh
@@ -46,6 +42,12 @@ geant4_add_module(G4run
     G4WorkerTaskRunManagerKernel.hh
     G4WorkerThread.hh
     rundefs.hh
+  PRIVATE_HEADERS
+    G4AdjointSimMessenger.hh
+    G4CopyRandomState.hh
+    G4MatScanMessenger.hh
+    G4RunMessenger.hh
+    G4UserPhysicsListMessenger.hh
   SOURCES
     G4AdjointPrimaryGeneratorAction.cc
     G4AdjointSimManager.cc
@@ -58,7 +60,6 @@ geant4_add_module(G4run
     G4MTRunManagerKernel.cc
     G4MultiRunAction.cc
     G4PhysicsListHelper.cc
-    G4PhysicsListOrderingParamater.cc
     G4PhysicsListWorkspace.cc
     G4RNGHelper.cc
     G4Run.cc
@@ -70,9 +71,7 @@ geant4_add_module(G4run
     G4TaskRunManagerKernel.cc
     G4UserPhysicsListMessenger.cc
     G4UserRunAction.cc
-    G4UserTaskInitialization.cc
     G4UserTaskThreadInitialization.cc
-    G4UserWorkerInitialization.cc
     G4UserWorkerThreadInitialization.cc
     G4VModularPhysicsList.cc
     G4VPersistencyManager.cc
@@ -96,7 +95,6 @@ geant4_module_link_libraries(G4run
     G4event
     G4globman
     G4heprandom
-    G4intercoms
     G4partman
     G4tracking
   PRIVATE
@@ -110,6 +108,7 @@ geant4_module_link_libraries(G4run
     G4hadronic_mgt
     G4hepnumerics
     G4hits
+    G4intercoms
     G4ions
     G4magneticfield
     G4materials

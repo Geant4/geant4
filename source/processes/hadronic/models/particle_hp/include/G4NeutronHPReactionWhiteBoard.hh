@@ -29,4 +29,4 @@
 #include "G4ParticleHPReactionWhiteBoard.hh"
 using G4NeutronHPReactionWhiteBoard = G4ParticleHPReactionWhiteBoard;
 
-#endif 
+#endif

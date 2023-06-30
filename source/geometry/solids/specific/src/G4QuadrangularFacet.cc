@@ -53,7 +53,6 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
                                           const G4ThreeVector& vt2,
                                           const G4ThreeVector& vt3,
                                                 G4FacetVertexType vertexType)
-  : G4VFacet()
 {
   G4double delta   =  1.0 * kCarTolerance; // dimension tolerance
   G4double epsilon = 0.01 * kCarTolerance; // planarity tolerance
@@ -207,9 +206,7 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4QuadrangularFacet::~G4QuadrangularFacet ()
-{
-}
+G4QuadrangularFacet::~G4QuadrangularFacet () = default;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -239,9 +236,8 @@ G4QuadrangularFacet::operator=(const G4QuadrangularFacet& rhs)
 //
 G4VFacet* G4QuadrangularFacet::GetClone ()
 {
-  G4QuadrangularFacet *c = new G4QuadrangularFacet (GetVertex(0), GetVertex(1),
-                                                    GetVertex(2), GetVertex(3),
-                                                    ABSOLUTE);
+  auto c = new G4QuadrangularFacet (GetVertex(0), GetVertex(1),
+                                    GetVertex(2), GetVertex(3), ABSOLUTE);
   return c;
 }
 

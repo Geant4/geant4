@@ -71,7 +71,7 @@ G4Region::G4Region(const G4String& pName)
   G4MT_rsaction = nullptr;
 
   G4RegionStore* rStore = G4RegionStore::GetInstance();
-  if (rStore->GetRegion(pName, false))
+  if (rStore->GetRegion(pName, false) != nullptr)
   {
     std::ostringstream message;
     message << "The region has NOT been registered !" << G4endl
@@ -111,7 +111,7 @@ G4Region::G4Region( __void__& )
 G4Region::~G4Region()
 {
   G4RegionStore::GetInstance()->DeRegister(this);
-  if(fUserInfo != nullptr)  { delete fUserInfo; }
+  delete fUserInfo; 
 }
 
 // ********************************************************************
@@ -193,7 +193,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     if (volMat != nullptr)
     { 
       AddMaterial(volMat); 
-      G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
+      auto  baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
       if (baseMat != nullptr) { AddMaterial(baseMat); }
     }
   }
@@ -221,7 +221,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
       for (std::size_t mat=0; mat<matNo; ++mat)
       {
         volMat = pParam->GetMaterialScanner()->GetMaterial((G4int)mat);
-        if(!volMat && fInMassGeometry)
+        if((volMat == nullptr) && fInMassGeometry)
         {
           std::ostringstream message;
           message << "The parameterisation for the physical volume <"
@@ -235,7 +235,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
         if (volMat != nullptr)
         { 
           AddMaterial(volMat); 
-          G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
+          auto  baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
           if (baseMat != nullptr) { AddMaterial(baseMat); }
         }
       }
@@ -260,7 +260,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
         if(volMat != nullptr)
         { 
           AddMaterial(volMat);
-          G4Material* baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
+          auto  baseMat = const_cast<G4Material*>(volMat->GetBaseMaterial());
           if (baseMat != nullptr) { AddMaterial(baseMat); }
         }
       }
@@ -411,7 +411,7 @@ void G4Region::UpdateMaterialList()
 //
 void G4Region::SetWorld(G4VPhysicalVolume* wp)
 {
-  if(!wp)
+  if(wp == nullptr)
   { fWorldPhys = nullptr; }
   else
   { if(BelongsTo(wp)) fWorldPhys = wp; }
@@ -431,7 +431,7 @@ G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
   if (currLog->GetRegion()==this) {return true;}
 
   std::size_t nDaughters = currLog->GetNoDaughters();
-  while (nDaughters--)  // Loop checking, 06.08.2015, G.Cosmo
+  while ((nDaughters--) != 0)  // Loop checking, 06.08.2015, G.Cosmo
   {
     if (BelongsTo(currLog->GetDaughter(nDaughters))) {return true;}
   }
@@ -498,7 +498,7 @@ G4Region* G4Region::GetParentRegion(G4bool& unique) const
     {
       if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
       { 
-        if(parent)
+        if(parent != nullptr)
         {
           if(parent!=aR) { unique = false; }
         }

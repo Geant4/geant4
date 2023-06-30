@@ -68,6 +68,7 @@
 #include "G4DisplacedSolid.hh"
 #include "G4UnionSolid.hh"
 #include "G4IntersectionSolid.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
@@ -88,6 +89,7 @@
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttDef.hh"
+#include "G4SceneTreeItem.hh"
 #include "G4VVisCommand.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -526,29 +528,58 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
 {
   // Sometimes solids that have no substance get requested. They may
   // be part of the geometry tree but have been "spirited away", for
-  // example by a Boolean subtraction in wich the original volume
-  // is entirely inside the subtractor.
+  // example by a Boolean subtraction in which the original volume
+  // is entirely inside the subtractor or an intersection in which
+  // the original volume is entirely outside the intersector.
   // The problem is that the Boolean Processor still returns a
   // polyhedron in these cases (IMHO it should not), so the
   // workaround is to return before the damage is done.
+  // Algorithm by Evgueni Tcherniaev
   auto pSolid = &solid;
   auto pBooleanSolid = dynamic_cast<const G4BooleanSolid*>(pSolid);
   if (pBooleanSolid) {
     G4ThreeVector bmin, bmax;
     pBooleanSolid->BoundingLimits(bmin, bmax);
     G4bool isGood = false;
-    for (G4int i=0; i<100000; ++i) {
-      G4double x = bmin.x() + (bmax.x() - bmin.x())*G4QuickRand();
-      G4double y = bmin.y() + (bmax.y() - bmin.y())*G4QuickRand();
-      G4double z = bmin.z() + (bmax.z() - bmin.z())*G4QuickRand();
-      if (pBooleanSolid->Inside(G4ThreeVector(x,y,z)) == kInside) {
-        isGood = true;
-        break;
+    if (dynamic_cast<const G4SubtractionSolid*>(pBooleanSolid)) {
+      auto ptrB = pBooleanSolid->GetConstituentSolid(1);
+      for (G4int i=0; i<10; ++i) {
+        G4double x = bmin.x() + (bmax.x() - bmin.x())*G4QuickRand();
+        G4double y = bmin.y() + (bmax.y() - bmin.y())*G4QuickRand();
+        G4double z = bmin.z() + (bmax.z() - bmin.z())*G4QuickRand();
+        if (ptrB->Inside(G4ThreeVector(x,y,bmin.z())) != kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(x,y,bmax.z())) != kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(x,bmin.y(),z)) != kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(x,bmax.y(),z)) != kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(bmin.x(),y,z)) != kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(bmax.x(),y,z)) != kInside) { isGood = true; break; }
+      }
+    } else if (dynamic_cast<const G4IntersectionSolid*>(pBooleanSolid)) {
+      auto ptrB = pBooleanSolid->GetConstituentSolid(1);
+      for (G4int i=0; i<10; ++i) {
+        G4double x = bmin.x() + (bmax.x() - bmin.x())*G4QuickRand();
+        G4double y = bmin.y() + (bmax.y() - bmin.y())*G4QuickRand();
+        G4double z = bmin.z() + (bmax.z() - bmin.z())*G4QuickRand();
+        if (ptrB->Inside(G4ThreeVector(x,y,bmin.z())) == kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(x,y,bmax.z())) == kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(x,bmin.y(),z)) == kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(x,bmax.y(),z)) == kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(bmin.x(),y,z)) == kInside) { isGood = true; break; }
+        if (ptrB->Inside(G4ThreeVector(bmax.x(),y,z)) == kInside) { isGood = true; break; }
+      }
+    }
+    if (!isGood)
+    {
+      for (G4int i=0; i<10000; ++i) {
+        G4double x = bmin.x() + (bmax.x() - bmin.x())*G4QuickRand();
+        G4double y = bmin.y() + (bmax.y() - bmin.y())*G4QuickRand();
+        G4double z = bmin.z() + (bmax.z() - bmin.z())*G4QuickRand();
+        if (pBooleanSolid->Inside(G4ThreeVector(x,y,z)) == kInside) { isGood = true; break; }
       }
     }
     if (!isGood) return;
   }
-  
+
   const G4ViewParameters::DrawingStyle style = GetDrawingStyle(fpVisAttribs);
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
 
@@ -684,6 +715,9 @@ void G4VSceneHandler::ProcessScene()
       G4cout << "Traversing scene data..." << G4endl;
     }
 
+    // Reset visibility of all objects to false - visible objects will then set to true
+    fpViewer->AccessSceneTree().ResetVisibility();
+    
     BeginModeling();
 
     // Create modeling parameters from view parameters...
@@ -695,10 +729,24 @@ void G4VSceneHandler::ProcessScene()
       {
 	fpModel = runDurationModelList[i].fpModel;
 	fpModel->SetModelingParameters(pMP);
-	fpModel->DescribeYourselfTo(*this);
-	// To see the extents of each model represented as wireframe boxes,
-	// uncomment the next line and DrawExtent in namespace above
-	// DrawExtent(fpModel);
+
+        // Describe to the current scene handler
+        fpModel->DescribeYourselfTo(*this);
+
+        // To see the extents of each model represented as wireframe boxes,
+        // uncomment the next line and DrawExtent in namespace above.
+        // DrawExtent(fpModel);
+
+        // Enter models in the scene tree, and for PV models, describe
+        // the model to the scene tree, i.e., enter all the touchables.
+        auto& sceneTreeScene = fpViewer->AccessSceneTreeScene();
+        sceneTreeScene.SetViewer(fpViewer);
+        sceneTreeScene.SetModel(fpModel);
+        if (dynamic_cast<G4PhysicalVolumeModel*>(fpModel)) {
+          fpModel->DescribeYourselfTo(sceneTreeScene);
+        }
+
+        // Reset modeling parameters pointer
 	fpModel->SetModelingParameters(0);
       }
     }
@@ -729,6 +777,8 @@ void G4VSceneHandler::ProcessScene()
       if(runManager)
       {
         const G4Run* run = runManager->GetCurrentRun();
+        // Draw a null event in order to pick up models for the scene tree even before a run
+        if (run == nullptr) DrawEvent(0);
         const std::vector<const G4Event*>* events =
           run ? run->GetEventVector() : 0;
         std::size_t nKeptEvents = 0;
@@ -797,9 +847,18 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
     pMP->SetEvent(event);
     for (std::size_t i = 0; i < nModels; ++i) {
       if (EOEModelList[i].fActive) {
-	fpModel = EOEModelList[i].fpModel;
-	fpModel -> SetModelingParameters(pMP);
-	fpModel -> DescribeYourselfTo (*this);
+        fpModel = EOEModelList[i].fpModel;
+        fpModel -> SetModelingParameters(pMP);
+
+        // Describe to the current scene handler
+        fpModel -> DescribeYourselfTo (*this);
+
+        // Enter models in the scene tree
+        auto& sceneTreeScene = fpViewer->AccessSceneTreeScene();
+        sceneTreeScene.SetViewer(fpViewer);
+        sceneTreeScene.SetModel(fpModel);
+
+        // Reset modeling parameters pointer
 	fpModel -> SetModelingParameters(0);
       }
     }
@@ -819,9 +878,18 @@ void G4VSceneHandler::DrawEndOfRunModels()
     for (std::size_t i = 0; i < nModels; ++i) {
       if (EORModelList[i].fActive) {
         fpModel = EORModelList[i].fpModel;
-	fpModel -> SetModelingParameters(pMP);
+        fpModel -> SetModelingParameters(pMP);
+
+        // Describe to the current scene handler
 	fpModel -> DescribeYourselfTo (*this);
-	fpModel -> SetModelingParameters(0);
+
+        // Enter models in the scene tree
+        auto& sceneTreeScene = fpViewer->AccessSceneTreeScene();
+        sceneTreeScene.SetViewer(fpViewer);
+        sceneTreeScene.SetModel(fpModel);
+
+        // Reset modeling parameters pointer
+        fpModel -> SetModelingParameters(0);
       }
     }
     fpModel = 0;
@@ -887,6 +955,13 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
   pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());
 
   pModelingParams->SetSectionSolid(CreateSectionSolid());
+
+  if (vp.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+    pModelingParams->SetCutawayMode(G4ModelingParameters::cutawayUnion);
+  } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection) {
+    pModelingParams->SetCutawayMode(G4ModelingParameters::cutawayIntersection);
+  }
+
   pModelingParams->SetCutawaySolid(CreateCutawaySolid());
   // The polyhedron objects are deleted in the modeling parameters destructor.
   
@@ -909,27 +984,14 @@ G4DisplacedSolid* G4VSceneHandler::CreateSectionSolid()
     G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
     G4VSolid* sectionBox =
       new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane...
-    const G4Normal3D originalNormal(0,0,1);  // ...so this is original normal.
 
     const G4Plane3D& sp = vp.GetSectionPlane ();
-    const G4double& a = sp.a();
-    const G4double& b = sp.b();
-    const G4double& c = sp.c();
-    const G4double& d = sp.d();
-    const G4Normal3D newNormal(a,b,c);
-
-    G4Transform3D requiredTransform;
-    // Rotate
-    if (newNormal != originalNormal) {
-      const G4double& angle = std::acos(newNormal.dot(originalNormal));
-      const G4Vector3D& axis = originalNormal.cross(newNormal);
-      requiredTransform = G4Rotate3D(angle, axis);
-    }
-    // Translate
-    requiredTransform = requiredTransform * G4TranslateZ3D(-d);
+    G4ThreeVector normal = sp.normal();
+    G4Transform3D requiredTransform = G4Translate3D(normal*(-sp.d())) *
+    G4Rotate3D(G4ThreeVector(0,0,1), G4ThreeVector(0,1,0), normal, normal.orthogonal());
 
     sectioner = new G4DisplacedSolid
-      ("_displaced_sectioning_box", sectionBox, requiredTransform);
+    ("_displaced_sectioning_box", sectionBox, requiredTransform);
   }
   
   return sectioner;
@@ -937,69 +999,82 @@ G4DisplacedSolid* G4VSceneHandler::CreateSectionSolid()
 
 G4DisplacedSolid* G4VSceneHandler::CreateCutawaySolid()
 {
-  const G4ViewParameters& vp = fpViewer->GetViewParameters();
-  if (vp.IsCutaway()) {
+  const auto& vp = fpViewer->GetViewParameters();
+  const auto& nPlanes = vp.GetCutawayPlanes().size();
 
-    std::vector<G4DisplacedSolid*> cutaway_solids;
+  if (nPlanes == 0) return nullptr;
 
-    G4double radius = fpScene->GetExtent().GetExtentRadius();
-    G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
-    G4VSolid* cutawayBox =
-    new G4Box("_cutaway_box", safe, safe, safe);  // world box...
+  std::vector<G4DisplacedSolid*> cutaway_solids;
 
-    for (int plane_no = 0; plane_no < int(vp.GetCutawayPlanes().size()); plane_no++){
+  G4double radius = fpScene->GetExtent().GetExtentRadius();
+  G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
+  auto cutawayBox = new G4Box("_cutaway_box", safe, safe, safe);
 
-      const G4Normal3D originalNormal(0,0,1);  // ...so this is original normal.
+  // if (vp.GetCutawayMode() == G4ViewParameters::cutawayUnion) we need a subtractor that is
+  // the intersection of displaced cutaway boxes, displaced so that a subtraction keeps the
+  // positive values a*x+b*y+c*z+d>0, so we have to invert the normal. This may appear
+  // "back to front". The parameter "cutawayUnion" means "the union of volumes
+  // that remain *after* cutaway", because we base the concept on OpenGL cutaway planes and make
+  // a "union" of what remains by superimposing up to 3 passes - see G4OpenGLViewer::SetView
+  // and G4OpenGLImmediate/StoredViewer::ProcessView. So we have to create a subtractor
+  // that is the intersection of inverted cutaway planes.
 
-      const G4Plane3D& sp = vp.GetCutawayPlanes()[plane_no]; //];
-      const G4double& a = sp.a();
-      const G4double& b = sp.b();
-      const G4double& c = sp.c();
-      const G4double& d = sp.d();
-      const G4Normal3D newNormal(-a,-b,-c);  // Convention: keep a*x+b*y+c*z+d>=0
-      // Not easy to see why the above gives the right convention, but it has been
-      // arrived at by trial and error to agree with the OpenGL implementation
-      // of clipping planes.
+  // Conversely, if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection) we have to
+  // create an intersector that is the intersector of intersected non-inverted cutaway planes.
 
-      G4Transform3D requiredTransform;  // Null transform
-      // Calculate the rotation
-      // If newNormal is (0,0,1), no need to do anything
-      // Treat (0,0,-1) as a special case, since cannot define axis in this case
-      if (newNormal == G4Normal3D(0,0,-1)) {
-        requiredTransform = G4Rotate3D(pi,G4Vector3D(1,0,0));
-      } else if (newNormal != originalNormal) {
-        const G4double& angle = std::acos(newNormal.dot(originalNormal));
-        const G4Vector3D& axis = originalNormal.cross(newNormal);
-        requiredTransform = G4Rotate3D(angle, axis);
-      }
-      // Translation
-      requiredTransform = requiredTransform * G4TranslateZ3D(d + safe);
-      cutaway_solids.push_back
-      (new G4DisplacedSolid("_displaced_cutaway_box", cutawayBox, requiredTransform));
+  for (size_t plane_no = 0; plane_no < nPlanes; plane_no++)
+  {
+    const G4Plane3D& sp = vp.GetCutawayPlanes()[plane_no];
+    G4Transform3D requiredTransform;
+    G4ThreeVector normal;
+    switch (vp.GetCutawayMode()) {
+      case G4ViewParameters::cutawayUnion:
+        normal = -sp.normal();  // Invert normal - we want a subtractor
+        requiredTransform = G4Translate3D(normal*(safe + sp.d())) *
+        G4Rotate3D(G4ThreeVector(0,0,1), G4ThreeVector(0,1,0), normal, normal.orthogonal());
+        break;
+      case G4ViewParameters::cutawayIntersection:
+        normal = sp.normal();
+        requiredTransform = G4Translate3D(normal*(safe - sp.d())) *
+        G4Rotate3D(G4ThreeVector(0,0,1), G4ThreeVector(0,1,0), normal, normal.orthogonal());
+        break;
     }
-
-    if (cutaway_solids.size() == 1){
-      return (G4DisplacedSolid*) cutaway_solids[0];
-    } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
-      G4UnionSolid* union2 =
-      new G4UnionSolid("_union_2", cutaway_solids[0], cutaway_solids[1]);
-      if (cutaway_solids.size() == 2)
-        return (G4DisplacedSolid*)union2;
-      else
-        return (G4DisplacedSolid*)
-        new G4UnionSolid("_union_3", union2, cutaway_solids[2]);
-    } else if (vp.GetCutawayMode() == G4ViewParameters::cutawayIntersection){
-      G4IntersectionSolid* intersection2 =
-      new G4IntersectionSolid("_intersection_2", cutaway_solids[0], cutaway_solids[1]);
-      if (cutaway_solids.size() == 2)
-        return (G4DisplacedSolid*)intersection2;
-      else
-        return (G4DisplacedSolid*)
-        new G4IntersectionSolid("_intersection_3", intersection2, cutaway_solids[2]);
-    }
+    cutaway_solids.push_back
+    (new G4DisplacedSolid("_displaced_cutaway_box", cutawayBox, requiredTransform));
   }
 
-  return 0;
+  if (nPlanes == 1) return (G4DisplacedSolid*) cutaway_solids[0];
+
+  G4IntersectionSolid *union2 = nullptr, *union3 = nullptr;
+  G4IntersectionSolid *intersection2 = nullptr, *intersection3 = nullptr;
+  switch (vp.GetCutawayMode()) {
+
+    case G4ViewParameters::cutawayUnion:
+      // Here we make a subtractor of intersections of inverted cutaway planes.
+      union2 = new G4IntersectionSolid("_union_2", cutaway_solids[0], cutaway_solids[1]);
+      if (nPlanes == 2) return (G4DisplacedSolid*)union2;
+      else if (nPlanes == 3) {
+        union3 = new G4IntersectionSolid("_union_3", union2, cutaway_solids[2]);
+        return (G4DisplacedSolid*)union3;
+      }
+      break;
+
+    case G4ViewParameters::cutawayIntersection:
+      // And here we make an intersector of intersections of non-inverted cutaway planes.
+      intersection2
+      = new G4IntersectionSolid("_intersection_2", cutaway_solids[0], cutaway_solids[1]);
+      if (nPlanes == 2) return (G4DisplacedSolid*)intersection2;
+      else if (nPlanes == 3) {
+        intersection3
+        = new G4IntersectionSolid("_intersection_3", intersection2, cutaway_solids[2]);
+        return (G4DisplacedSolid*)intersection3;
+      }
+      break;
+  }
+
+  G4Exception("G4VSceneHandler::CreateCutawaySolid", "visman107", JustWarning,
+              "Not programmed for more than 3 cutaway planes");
+  return nullptr;
 }
 
 void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
@@ -1220,10 +1295,10 @@ std::ostream& operator << (std::ostream& os, const G4VSceneHandler& sh) {
 }
 
 void G4VSceneHandler::PseudoSceneFor3DRectMeshPositions::AddSolid(const G4Box&) {
-  if (fpPVModel->GetCurrentDepth() == fDepth) {  // Leaf-level cells only
+  if (fpPVModel->GetCurrentDepth() == fpMesh->GetMeshDepth()) {  // Leaf-level cells only
     const auto& material = fpPVModel->GetCurrentLV()->GetMaterial();
-    const auto& name = material->GetName();
-    const auto* pVisAtts = fpPVModel->GetCurrentLV()->GetVisAttributes();
+    const auto& name = material? material->GetName(): fpMesh->GetContainerVolume()->GetName();
+    const auto& pVisAtts = fpPVModel->GetCurrentLV()->GetVisAttributes();
     // Get position in world coordinates
     // As a parameterisation the box is transformed by the current transformation
     // and its centre, originally by definition at (0,0,0), is now translated.
@@ -1236,13 +1311,13 @@ void G4VSceneHandler::PseudoSceneFor3DRectMeshPositions::AddSolid(const G4Box&) 
 }
 
 void G4VSceneHandler::PseudoSceneForTetVertices::AddSolid(const G4VSolid& solid) {
-  if (fpPVModel->GetCurrentDepth() == fDepth) {  // Leaf-level cells only
+  if (fpPVModel->GetCurrentDepth() == fpMesh->GetMeshDepth()) {  // Leaf-level cells only
     // Need to know it's a tet !!!! or implement G4VSceneHandler::AddSolid (const G4Tet&) !!!!
     try {
-      const G4Tet& tet = dynamic_cast<const G4Tet&>(solid);
+      const auto& tet = dynamic_cast<const G4Tet&>(solid);
       const auto& material = fpPVModel->GetCurrentLV()->GetMaterial();
-      const auto& name = material->GetName();
-      const auto* pVisAtts = fpPVModel->GetCurrentLV()->GetVisAttributes();
+      const auto& name = material? material->GetName(): fpMesh->GetContainerVolume()->GetName();
+      const auto& pVisAtts = fpPVModel->GetCurrentLV()->GetVisAttributes();
       // Transform into world coordinates if necessary
       if (fpCurrentObjectTransformation->xx() == 1. &&
           fpCurrentObjectTransformation->yy() == 1. &&
@@ -1278,6 +1353,8 @@ void G4VSceneHandler::StandardSpecialMeshRendering(const G4Mesh& mesh)
     case G4Mesh::rectangle: [[fallthrough]];
     case G4Mesh::nested3DRectangular:
       switch (fpViewer->GetViewParameters().GetSpecialMeshRenderingOption()) {
+        case G4ViewParameters::meshAsDefault:
+          [[fallthrough]];
         case G4ViewParameters::meshAsDots:
           Draw3DRectMeshAsDots(mesh);  // Rectangular 3-deep mesh as dots
           implemented = true;
@@ -1290,6 +1367,8 @@ void G4VSceneHandler::StandardSpecialMeshRendering(const G4Mesh& mesh)
       break;
     case G4Mesh::tetrahedron:
       switch (fpViewer->GetViewParameters().GetSpecialMeshRenderingOption()) {
+        case G4ViewParameters::meshAsDefault:
+          [[fallthrough]];
         case G4ViewParameters::meshAsDots:
           DrawTetMeshAsDots(mesh);  // Tetrahedron mesh as dots
           implemented = true;
@@ -1378,7 +1457,7 @@ void G4VSceneHandler::Draw3DRectMeshAsDots(const G4Mesh& mesh)
     std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
     // Instantiate the pseudo scene
     PseudoSceneFor3DRectMeshPositions pseudoScene
-    (&tmpPVModel,mesh.GetMeshDepth(),positionByMaterial,nameAndVisAttsByMaterial);
+    (&tmpPVModel,&mesh,positionByMaterial,nameAndVisAttsByMaterial);
     // Make private descent into the parameterisation
     tmpPVModel.DescribeYourselfTo(pseudoScene);
     // Now we have a map of positions by material.
@@ -1522,7 +1601,7 @@ void G4VSceneHandler::Draw3DRectMeshAsSurfaces(const G4Mesh& mesh)
     std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
     // Instantiate the pseudo scene
     PseudoSceneFor3DRectMeshPositions pseudoScene
-    (&tmpPVModel,mesh.GetMeshDepth(),positionByMaterial,nameAndVisAttsByMaterial);
+    (&tmpPVModel,&mesh,positionByMaterial,nameAndVisAttsByMaterial);
     // Make private descent into the parameterisation
     tmpPVModel.DescribeYourselfTo(pseudoScene);
     // Now we have a map of positions by material.
@@ -1666,7 +1745,7 @@ void G4VSceneHandler::DrawTetMeshAsDots(const G4Mesh& mesh)
     std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
     // Instantiate a pseudo scene
     PseudoSceneForTetVertices pseudoScene
-    (&tmpPVModel,mesh.GetMeshDepth(),verticesByMaterial,nameAndVisAttsByMaterial);
+    (&tmpPVModel,&mesh,verticesByMaterial,nameAndVisAttsByMaterial);
     // Make private descent into the parameterisation
     tmpPVModel.DescribeYourselfTo(pseudoScene);
     // Now we have a map of vertices by material.
@@ -1804,7 +1883,7 @@ void G4VSceneHandler::DrawTetMeshAsSurfaces(const G4Mesh& mesh)
     std::map<const G4Material*,G4VSceneHandler::NameAndVisAtts> nameAndVisAttsByMaterial;
     // Instantiate a pseudo scene
     PseudoSceneForTetVertices pseudoScene
-    (&tmpPVModel,mesh.GetMeshDepth(),verticesByMaterial,nameAndVisAttsByMaterial);
+    (&tmpPVModel,&mesh,verticesByMaterial,nameAndVisAttsByMaterial);
     // Make private descent into the parameterisation
     tmpPVModel.DescribeYourselfTo(pseudoScene);
     // Now we have a map of vertices by material.

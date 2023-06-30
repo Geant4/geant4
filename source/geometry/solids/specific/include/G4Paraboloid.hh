@@ -66,14 +66,14 @@
 
 class G4Paraboloid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4Paraboloid(const G4String& pName,
                        G4double  pDz,
                        G4double  pR1,
                        G4double  pR2);
 
-    virtual ~G4Paraboloid();
+    ~G4Paraboloid() override;
 
     // Access functions
 
@@ -81,8 +81,8 @@ class G4Paraboloid : public G4VSolid
     inline G4double GetRadiusMinusZ() const;
     inline G4double GetRadiusPlusZ() const;
 
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    inline G4double GetCubicVolume() override;
+    inline G4double GetSurfaceArea() override;
     inline G4double CalculateSurfaceArea() const;
 
     // Modifiers functions
@@ -93,38 +93,36 @@ class G4Paraboloid : public G4VSolid
 
     // Solid standard methods
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
-    EInside Inside(const G4ThreeVector& p) const;
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+                                 G4double& pmin, G4double& pmax) const override;
+    EInside Inside(const G4ThreeVector& p) const override;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const override;
     G4double DistanceToIn(const G4ThreeVector& p,
-                          const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p) const;
+                          const G4ThreeVector& v) const override;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+                                 G4ThreeVector* n = nullptr) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
     // Visualisation functions
 
-    void DescribeYourselfTo(G4VGraphicsScene& scene) const;
-    G4Polyhedron* CreatePolyhedron() const;
-    G4Polyhedron* GetPolyhedron () const;
-
-  public:  // without description
+    void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
+    G4Polyhedron* CreatePolyhedron() const override;
+    G4Polyhedron* GetPolyhedron () const override;
 
     G4Paraboloid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -135,7 +133,7 @@ class G4Paraboloid : public G4VSolid
     G4Paraboloid& operator=(const G4Paraboloid& rhs);
       // Copy constructor and assignment operator.
 
-  protected:  // without description
+  protected:
 
     mutable G4bool fRebuildPolyhedron = false;
     mutable G4Polyhedron* fpPolyhedron = nullptr;

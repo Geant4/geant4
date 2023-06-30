@@ -210,9 +210,6 @@ private:
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
-  // Set E/p conservation check levels from environment variables
-  void GetEnergyMomentumCheckEnvvars();
-
 protected:
 
   G4HadProjectile thePro;
@@ -224,7 +221,7 @@ protected:
   G4double aScaleFactor = 1.0;
   G4double theLastCrossSection = 0.0;
   G4double mfpKinEnergy = DBL_MAX;
-  G4long epReportLevel = 0;
+  G4int epReportLevel = 0;
 
   G4HadXSType fXSType = fHadNoIntegral;
 
@@ -243,7 +240,7 @@ private:
 
   std::vector<G4double>* theEnergyOfCrossSectionMax = nullptr;
   std::vector<G4TwoPeaksHadXS*>* fXSpeaks = nullptr;
-     
+
   G4double theMFP = DBL_MAX;
   G4double minKinEnergy;
 
@@ -255,7 +252,6 @@ private:
 
   // flags
   G4bool levelsSetByProcess = false;
-  G4bool G4HadronicProcess_debug_flag = false;
   G4bool useIntegralXS = true;
   G4bool isMaster = true;
 
@@ -348,7 +344,7 @@ G4HadronicProcess::TwoPeaksXS() const
 inline std::vector<G4double>*
 G4HadronicProcess::EnergyOfCrossSectionMax() const
 {
-  return  theEnergyOfCrossSectionMax;
+  return theEnergyOfCrossSectionMax;
 }
 
 inline G4HadronicInteraction* G4HadronicProcess::

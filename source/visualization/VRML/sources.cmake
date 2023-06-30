@@ -4,6 +4,7 @@
 geant4_add_module(G4VRML
   PUBLIC_HEADERS
     G4VRML2File.hh
+  PRIVATE_HEADERS
     G4VRML2FileSceneHandler.hh
     G4VRML2FileViewer.hh
   SOURCES
@@ -14,10 +15,10 @@ geant4_add_module(G4VRML
 
 geant4_module_link_libraries(G4VRML
   PUBLIC
-    G4geometrymng
     G4vis_management
-    G4globman
   PRIVATE
     G4csg
+    G4geometrymng
+    G4globman
     G4graphics_reps
     G4modeling)

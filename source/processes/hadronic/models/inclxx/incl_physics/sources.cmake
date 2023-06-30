@@ -109,6 +109,7 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLPauliStandard.hh
     G4INCLPauliStrict.hh
     G4INCLPauliStrictStandard.hh
+    G4INCLPbarAtrestEntryChannel.hh
     G4INCLPhaseSpaceGenerator.hh
     G4INCLPhaseSpaceKopylov.hh
     G4INCLPhaseSpaceRauboldLynch.hh
@@ -221,6 +222,7 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLPauliStandard.cc
     G4INCLPauliStrict.cc
     G4INCLPauliStrictStandard.cc
+    G4INCLPbarAtrestEntryChannel.cc
     G4INCLPhaseSpaceGenerator.cc
     G4INCLPhaseSpaceKopylov.cc
     G4INCLPhaseSpaceRauboldLynch.cc

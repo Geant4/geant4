@@ -1,0 +1,38 @@
+#/run/numberOfThreads 10
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+# Set the simulation volume (half Side Length)
+#/UHDR/env/volume 0.8 um # for UHDR
+/UHDR/env/volume 1.6 um # for CONV
+
+/run/initialize
+
+# time structure (not available)
+#/UHDR/pulse/activate true
+
+# pH and Scavenger
+/UHDR/env/pH 5.5
+
+# Oxygen concentration
+/UHDR/env/scavenger O2 19 %
+
+/chem/reaction/print
+
+#/run/verbose 1
+/tracking/verbose 0
+/scheduler/verbose 0
+/scheduler/endTime 1 ms
+
+# set false if many beamOn in medium
+/scheduler/ResetScavengerForEachBeamOn true
+
+/scorer/Gvalues/nOfTimeBins 80
+
+/run/printProgress 10
+
+/scorer/Dose/cutoff 0.01 Gy
+/UHDR/source/particle e-
+/UHDR/source/energy 0.999 MeV
+/run/beamOn 2

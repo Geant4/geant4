@@ -47,22 +47,21 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+   ~PrimaryGeneratorAction() override;
 
   public:
     void SetDefaultKinematic();
     void SetRndmBeam(G4double val) { fRndmBeam = val;}
-    virtual 
-    void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
     
     G4ParticleGun* GetParticleGun() {return fParticleGun;};
     
   private:
-    G4ParticleGun*         fParticleGun;
-    DetectorConstruction*  fDetector;   
-    G4double fRndmBeam;   //lateral random beam extension in fraction sizeYZ/2
+    G4ParticleGun*         fParticleGun = nullptr;
+    DetectorConstruction*  fDetector = nullptr;
+    G4double fRndmBeam = 0.;   //lateral beam extension in fraction of sizeYZ
 
-    PrimaryGeneratorMessenger* fGunMessenger; 
+    PrimaryGeneratorMessenger* fGunMessenger = nullptr; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

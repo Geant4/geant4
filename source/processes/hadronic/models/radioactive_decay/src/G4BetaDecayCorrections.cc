@@ -28,6 +28,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4BetaDecayType.hh"
 #include "G4BetaDecayCorrections.hh"
+#include "G4Pow.hh"
 
 G4BetaDecayCorrections::G4BetaDecayCorrections(const G4int theZ, const G4int theA)
  : Z(theZ), A(theA)
@@ -36,13 +37,19 @@ G4BetaDecayCorrections::G4BetaDecayCorrections(const G4int theZ, const G4int the
   alphaZ = fine_structure_const*Z;
 
   // Nuclear radius in units of hbar/m_e/c
-  Rnuc = 0.5*fine_structure_const*std::pow(A, 0.33333);
+  G4double a13 = G4Pow::GetInstance()->Z13(A);
+  Rnuc = 0.5*fine_structure_const*a13;
 
   // Electron screening potential in units of electron mass
   V0 = 1.13*fine_structure_const*fine_structure_const
-           *std::pow(std::abs(Z), 1.33333);
+           *std::pow(std::abs(Z), 4./3.);
 
   gamma0 = std::sqrt(1. - alphaZ*alphaZ);
+
+  // Largest allowed value of im argument in ModSquared
+//  imMax = std::log(DBL_MAX)/pi;
+  imMax = 200.;   // actual value = 225.931, but use 200 to be safe
+//  G4cout << " imMax = " << imMax << G4endl; 
 
   // Coefficients for gamma function with real argument
   gc[0] = -0.1010678;
@@ -86,13 +93,14 @@ G4double G4BetaDecayCorrections::FermiFunction(const G4double& W)
 
 
 G4double
-G4BetaDecayCorrections::ModSquared(const G4double& re, const G4double& im)
+G4BetaDecayCorrections::ModSquared(const G4double& re, G4double im)
 {
   // Calculate the squared modulus of the Gamma function 
   // with complex argument (re, im) using approximation B 
   // of Wilkinson, Nucl. Instr. & Meth. 82, 122 (1970).
   // Here, choose N = 1 in Wilkinson's notation for approximation B
 
+  im = std::max(std::min(im, imMax), -imMax);
   G4double factor1 = std::pow( (1+re)*(1+re) + im*im, re+0.5);
   G4double factor2 = std::exp(2*im * std::atan(im/(1+re)));
   G4double factor3 = std::exp(2*(1+re));
@@ -238,6 +246,7 @@ G4BetaDecayCorrections::ShapeFactor(const G4BetaDecayType& bdt,
                   "Transition not yet implemented - using allowed shape");
       break;
   }
+
   return factor;
 }
 

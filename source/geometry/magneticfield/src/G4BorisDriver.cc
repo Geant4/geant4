@@ -51,7 +51,7 @@ const G4double G4BorisDriver::fErrorConstraintGrow = std::pow(
 
 G4BorisDriver::
 G4BorisDriver( G4double hminimum, G4BorisScheme* Boris,
-               G4int numberOfComponents, bool verbosity )
+               G4int numberOfComponents, G4bool verbosity )
   : fMinimumStep(hminimum),
     fVerbosity(verbosity),
     boris(Boris)

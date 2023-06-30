@@ -55,7 +55,7 @@ class G4AdjointElectronFI : public G4ParticleDefinition
  private:
    static G4AdjointElectronFI* theInstance;
    G4AdjointElectronFI(){}
-   ~G4AdjointElectronFI(){}
+   ~G4AdjointElectronFI() override= default;
 
  public:
    static G4AdjointElectronFI* Definition();

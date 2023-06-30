@@ -45,13 +45,13 @@ class G4NeutronBetaDecayChannel : public G4VDecayChannel
 
     G4NeutronBetaDecayChannel(const G4String& theParentName,
                                     G4double  theBR);
-    virtual ~G4NeutronBetaDecayChannel();
+    ~G4NeutronBetaDecayChannel() override = default;
 
-    virtual G4DecayProducts* DecayIt(G4double);     
+    G4DecayProducts* DecayIt(G4double) override;     
   
   protected:
 
-    G4NeutronBetaDecayChannel();
+    G4NeutronBetaDecayChannel() = default;
 
     G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel&);
     G4NeutronBetaDecayChannel& operator=(const G4NeutronBetaDecayChannel&);

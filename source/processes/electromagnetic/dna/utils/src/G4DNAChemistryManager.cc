@@ -59,7 +59,7 @@
 #include "G4MoleculeFinder.hh"
 #include "G4MoleculeTable.hh"
 #include "G4PhysChemIO.hh"
-
+#include "G4VUserPulseInfo.hh"
 
 G4DNAChemistryManager* G4DNAChemistryManager::fgInstance = nullptr;
 
@@ -648,7 +648,18 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
             break;
         }
 
-        G4Track* pH2OTrack = pH2OMolecule->BuildTrack(picosecond,
+        G4double delayedTime = 0.;
+        if(pIncomingTrack->GetUserInformation() != nullptr)
+        {
+            auto pPulseInfo = dynamic_cast<G4VUserPulseInfo*>
+              (pIncomingTrack->GetUserInformation());
+            if(pPulseInfo != nullptr)
+            {
+                delayedTime = pPulseInfo->GetDelayedTime();
+            }
+        }
+
+        G4Track* pH2OTrack = pH2OMolecule->BuildTrack(picosecond + delayedTime,
                                                       pIncomingTrack->GetPosition());
 
         pH2OTrack->SetParentID(pIncomingTrack->GetTrackID());
@@ -671,8 +682,19 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* pIncomingTrack
 
     if (fActiveChemistry)
     {
+        G4double delayedTime = 0.;
+        if(pIncomingTrack->GetUserInformation() != nullptr)
+        {
+            auto pPulseInfo = dynamic_cast<G4VUserPulseInfo*>
+              (pIncomingTrack->GetUserInformation());
+            if(pPulseInfo != nullptr)
+            {
+                delayedTime = pPulseInfo->GetDelayedTime();
+            }
+        }
+
         PushMolecule(std::unique_ptr<G4Molecule>(new G4Molecule(G4Electron_aq::Definition())),
-                     picosecond,
+                     picosecond + delayedTime,
                      pFinalPosition ? *pFinalPosition : pIncomingTrack->GetPosition(),
                      pIncomingTrack->GetTrackID());
     }

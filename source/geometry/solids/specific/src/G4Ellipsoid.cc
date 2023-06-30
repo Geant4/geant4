@@ -374,7 +374,7 @@ G4ThreeVector G4Ellipsoid::ApproxSurfaceNormal(const G4ThreeVector& p) const
   if  (distR > distZ && rr > 0.) // distR > distZ is correct!
     return G4ThreeVector(x*fSx, y*fSy, z*fSz).unit();
   else
-    return G4ThreeVector(0., 0., std::copysign(1., z - fZMidCut));
+    return { 0., 0., std::copysign(1., z - fZMidCut) };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -641,7 +641,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
 
 G4GeometryType G4Ellipsoid::GetEntityType() const
 {
-  return G4String("G4Ellipsoid");
+  return {"G4Ellipsoid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -902,7 +902,7 @@ void G4Ellipsoid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 G4VisExtent G4Ellipsoid::GetExtent() const
 {
-  return G4VisExtent(-fXmax, fXmax, -fYmax, fYmax, fZBottomCut, fZTopCut);
+  return { -fXmax, fXmax, -fYmax, fYmax, fZBottomCut, fZTopCut };
 }
 
 //////////////////////////////////////////////////////////////////////////

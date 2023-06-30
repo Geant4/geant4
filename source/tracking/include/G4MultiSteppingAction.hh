@@ -48,21 +48,20 @@
 #define G4MULTISTEPPINGACTION_HH
 
 #include "G4UserSteppingAction.hh"
-#include <vector>
+
 #include <memory>
+#include <vector>
 
 using G4UserSteppingActionUPtr = std::unique_ptr<G4UserSteppingAction>;
 using G4UserSteppingActionVector = std::vector<G4UserSteppingActionUPtr>;
 
-class G4MultiSteppingAction : public G4UserSteppingAction,
-                              public G4UserSteppingActionVector
+class G4MultiSteppingAction : public G4UserSteppingAction, public G4UserSteppingActionVector
 {
-  public:
-
-    G4MultiSteppingAction() = default;
-    virtual ~G4MultiSteppingAction() override = default;
-    virtual void UserSteppingAction(const G4Step*) override;
-    virtual void SetSteppingManagerPointer(G4SteppingManager* pVal) override;
+ public:
+  G4MultiSteppingAction() = default;
+  ~G4MultiSteppingAction() override = default;
+  void UserSteppingAction(const G4Step*) override;
+  void SetSteppingManagerPointer(G4SteppingManager* pVal) override;
 };
 
 #endif

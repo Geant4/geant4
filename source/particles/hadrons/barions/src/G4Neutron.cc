@@ -48,16 +48,16 @@
 // ######################################################################
 // ###                           NEUTRON                              ###
 // ######################################################################
-G4Neutron* G4Neutron::theInstance = 0;
+G4Neutron* G4Neutron::theInstance = nullptr;
 
 G4Neutron* G4Neutron::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -76,7 +76,7 @@ G4Neutron* G4Neutron::Definition()
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
-		false,    880.2*second,          NULL,
+		false,    880.2*second,          nullptr,
 		false,       "nucleon",         -2112,
 		 0.0,                0 
               );
@@ -84,7 +84,7 @@ G4Neutron* G4Neutron::Definition()
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
     anInstance->SetPDGMagneticMoment( -1.9130427 * mN);
     //create Decay Table 
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     // create a decay channel
     G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
     table->Insert(mode);

@@ -1,0 +1,33 @@
+#/control/cout/ignoreThreadsExcept 0
+#/run/numberOfThreads 1
+#/control/verbose 2
+/run/verbose 1
+#/tracking/verbose 1
+
+# Read the detector
+/xrayopt/det/readGDML pores.gdml
+
+# Define the physics list
+/testem/phys/addPhysics SpacePhysics
+/process/em/AddEmRegion InnerRegion G4EmStandardSS
+
+#
+/run/initialize
+
+# Define the particle gun
+/gps/particle proton
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/centre 25.8491 0.0585 10.1514 cm
+/gps/pos/halfx 0.0303 cm
+/gps/pos/halfy 0.0415 cm
+/gps/ang/type cos
+/gps/ang/mintheta 0 deg
+/gps/ang/maxtheta 1 deg
+/gps/energy 100.0 keV
+
+# Define the analys file name
+/analysis/setFileName output.root
+
+/run/printProgress 100
+/run/beamOn 5000

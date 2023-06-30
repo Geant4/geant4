@@ -88,7 +88,7 @@ public:
 
   explicit G4hIonisation(const G4String& name = "hIoni");
 
-  ~G4hIonisation() override;
+  ~G4hIonisation() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
@@ -96,7 +96,7 @@ public:
 			    const G4Material*, G4double cut) final;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4hIonisation & operator=(const G4hIonisation &right) = delete;
@@ -109,11 +109,10 @@ protected:
 
 private:
 
-  G4bool     isInitialised;
-
-  G4double   mass;
-  G4double   ratio;
-  G4double   eth;
+  G4bool isInitialised = false;
+  G4double mass = 0.0;
+  G4double ratio = 0.0;
+  G4double eth;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

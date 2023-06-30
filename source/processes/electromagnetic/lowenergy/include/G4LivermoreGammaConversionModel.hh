@@ -50,7 +50,7 @@ public:
   explicit G4LivermoreGammaConversionModel(
 					   const G4ParticleDefinition* p = nullptr, 
 					   const G4String& nam = "LivermoreConversion");
-  virtual ~G4LivermoreGammaConversionModel();
+  ~G4LivermoreGammaConversionModel() override;
   
   void Initialise(const G4ParticleDefinition*, 
                   const G4DataVector&) override;	
@@ -68,13 +68,19 @@ public:
   G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&) = delete;
 
 private:
-  void ReadData(size_t Z, const char* path = nullptr);
-  static G4PhysicsFreeVector* data[101]; // 101 because Z range is 1-100
-  static G4double lowEnergyLimit;
+  void ReadData(const G4int ZZ);
+  const G4String& FindDirectoryPath();
 
-  G4int verboseLevel;
   G4ParticleChangeForGamma* fParticleChange;
-  G4int maxZ;
+
+  static G4PhysicsFreeVector* data[101]; // 101 because Z range is 1-100
+  static G4String gDataDirectory;
+
+  G4double lowEnergyLimit;
+  G4int verboseLevel;
+  G4int maxZ = 100;
+  G4bool useSpline = false;
+  G4bool isInitialised = false;
 };
 
 

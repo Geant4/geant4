@@ -47,47 +47,39 @@ class G4WorkerTaskRunManagerKernel;
 
 class G4WorkerTaskRunManager : public G4WorkerRunManager
 {
- public:
-  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+  public:
+    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+    using G4StrVector = std::vector<G4String>;
 
- public:
-  typedef std::vector<G4String> G4StrVector;
+  public:
+    static G4WorkerTaskRunManager* GetWorkerRunManager();
+    static G4WorkerTaskRunManagerKernel* GetWorkerRunManagerKernel();
+    G4WorkerTaskRunManager() = default;
 
- public:
-  static G4WorkerTaskRunManager* GetWorkerRunManager();
-  static G4WorkerTaskRunManagerKernel* GetWorkerRunManagerKernel();
-  G4WorkerTaskRunManager();
+    // Modified for worker behavior
+    void RunInitialization() override;
+    void DoEventLoop(G4int n_event, const char* macroFile = nullptr, G4int n_select = -1) override;
+    void ProcessOneEvent(G4int i_event) override;
+    G4Event* GenerateEvent(G4int i_event) override;
+    void RunTermination() override;
+    void TerminateEventLoop() override;
+    void DoWork() override;
+    void RestoreRndmEachEvent(G4bool flag) override { readStatusFromFile = flag; }
 
-  // Modified for worker behavior
-  virtual void RunInitialization() override;
-  virtual void DoEventLoop(G4int n_event, const char* macroFile = nullptr,
-                           G4int n_select = -1) override;
-  virtual void ProcessOneEvent(G4int i_event) override;
-  virtual G4Event* GenerateEvent(G4int i_event) override;
-  virtual void RunTermination() override;
-  virtual void TerminateEventLoop() override;
-  virtual void DoWork() override;
-  virtual void RestoreRndmEachEvent(G4bool flag) override
-  {
-    readStatusFromFile = flag;
-  }
+    virtual void DoCleanup();
+    virtual void ProcessUI();
+    G4WorkerThread* GetWorkerThread() const { return workerContext; }
+    G4StrVector GetCommandStack() const { return processedCommandStack; }
 
-  virtual void DoCleanup();
-  virtual void ProcessUI();
-  G4WorkerThread* GetWorkerThread() const { return workerContext; }
-  G4StrVector GetCommandStack() const { return processedCommandStack; }
+  protected:
+    void StoreRNGStatus(const G4String& filenamePrefix) override;
 
- protected:
-  virtual void StoreRNGStatus(const G4String& filenamePrefix) override;
+  private:
+    void SetupDefaultRNGEngine();
 
- private:
-  void SetupDefaultRNGEngine();
-
- private:
-  G4StrVector processedCommandStack;
-
- private:
-  std::unique_ptr<ProfilerConfig> workerRunProfiler;
+  private:
+    G4StrVector processedCommandStack;
+    std::unique_ptr<ProfilerConfig> workerRunProfiler;
 };
 
 #endif  // G4WorkerTaskRunManager_h

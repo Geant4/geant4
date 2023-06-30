@@ -53,17 +53,13 @@
 // Constructor
 // ********************************************************************
 //
-G4ParameterisedNavigation::G4ParameterisedNavigation()
-{
-}
+G4ParameterisedNavigation::G4ParameterisedNavigation() = default;
 
 // ***************************************************************************
 // Destructor
 // ***************************************************************************
 //
-G4ParameterisedNavigation::~G4ParameterisedNavigation()
-{
-}
+G4ParameterisedNavigation::~G4ParameterisedNavigation() = default;
 
 // ***************************************************************************
 // ComputeStep
@@ -279,20 +275,30 @@ G4double G4ParameterisedNavigation::
                           << "          Solid gave DistanceToIn = "
                           << sampleStep << " yet returns " ;
                   if( insideIntPt == kInside )
+                  {
                     message << "-kInside-"; 
+                  }
                   else if( insideIntPt == kOutside )
+                  {
                     message << "-kOutside-";
+                  }
                   else
+                  {
                     message << "-kSurface-"; 
+                  }
                   message << " for this point !" << G4endl
                           << "          Point = " << intersectionPoint
                           << G4endl;
                   if ( insideIntPt != kInside )
+                  {
                     message << "        DistanceToIn(p) = " 
                             << sampleSolid->DistanceToIn(intersectionPoint);
-                  if ( insideIntPt != kOutside ) 
+                  }
+                  if ( insideIntPt != kOutside )
+                  { 
                     message << "        DistanceToOut(p) = " 
                             << sampleSolid->DistanceToOut(intersectionPoint);
+                  }
                   G4Exception("G4ParameterisedNavigation::ComputeStep()", 
                               "GeomNav1002", JustWarning, message);
                   G4cout.precision(oldcoutPrec);
@@ -365,7 +371,7 @@ G4double G4ParameterisedNavigation::
             if ( validExitNormal )
             {
               const G4RotationMatrix* rot = motherPhysical->GetRotation();
-              if (rot)
+              if (rot != nullptr)
               {
                 exitNormal *= rot->inverse();
               }

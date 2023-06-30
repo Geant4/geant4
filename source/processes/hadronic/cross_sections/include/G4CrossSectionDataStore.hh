@@ -91,7 +91,8 @@ public:
 
   // Dump store as html
   void DumpHtml(const G4ParticleDefinition&, std::ofstream&) const;
-  void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const;
+  void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs,
+                             const G4String&, const G4String&) const;
   
   void AddDataSet(G4VCrossSectionDataSet*);
   void AddDataSet(G4VCrossSectionDataSet*, std::size_t);

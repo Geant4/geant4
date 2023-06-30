@@ -5,9 +5,6 @@ geant4_add_module(G4intercoms
     G4AnyMethod.hh
     G4AnyType.hh
     G4GenericMessenger.hh
-    G4LocalThreadCoutMessenger.hh
-    G4ProfilerMessenger.hh
-    G4UIaliasList.hh
     G4UIbatch.hh
     G4UIbridge.hh
     G4UIcmdWith3Vector.hh
@@ -22,17 +19,22 @@ geant4_add_module(G4intercoms
     G4UIcommand.hh
     G4UIcommandStatus.hh
     G4UIcommandTree.hh
-    G4UIcontrolMessenger.hh
     G4UIdirectory.hh
     G4UImanager.hh
     G4UImessenger.hh
     G4UIparameter.hh
     G4UIsession.hh
     G4UItokenNum.hh
-    G4UnitsMessenger.hh
     G4VFlavoredParallelWorld.hh
     G4VGlobalFastSimulationManager.hh
     icomsdefs.hh
+  PRIVATE_HEADERS
+    G4LocalThreadCoutMessenger.hh
+    G4ProfilerMessenger.hh
+    G4UIaliasList.hh
+    G4UIcontrolMessenger.hh
+    G4UIparsing.hh
+    G4UnitsMessenger.hh
   SOURCES
     G4LocalThreadCoutMessenger.cc
     G4GenericMessenger.cc

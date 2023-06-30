@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2022-12-15 Igor Semeniouk (electromagnetic-V11-01-00)
+ - README, .README.txt
+   - Update TestEm15 short description add GC entry to table
 
 ## 2021-12-10 Ben Morgan (electromagnetic-V11-00-00)
 - Change to new Markdown History format

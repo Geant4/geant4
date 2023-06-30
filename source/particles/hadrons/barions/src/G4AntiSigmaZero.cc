@@ -47,16 +47,16 @@
 // ###                       AntiSigmaZero                            ###
 // ######################################################################
 
-G4AntiSigmaZero* G4AntiSigmaZero::theInstance = 0;
+G4AntiSigmaZero* G4AntiSigmaZero::theInstance = nullptr;
 
 G4AntiSigmaZero* G4AntiSigmaZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_sigma0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -73,14 +73,14 @@ G4AntiSigmaZero* G4AntiSigmaZero::Definition()
                     1,              +1,             0,
                     2,               0,             0,
              "baryon",               0,            -1,        -3212,
-                false,      7.4e-11*ns,          NULL,
+                false,      7.4e-11*ns,          nullptr,
                 false,       "sigma");
  
     // Life time is given from width
     anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
    
     //create Decay Table 
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels
     // anti_sigma0 -> anti_lambda + gamma

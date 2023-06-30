@@ -58,7 +58,7 @@ class G4LowEWentzelVIModel : public G4WentzelVIModel
 {
 public:
   explicit G4LowEWentzelVIModel();
-  virtual ~G4LowEWentzelVIModel();
+  ~G4LowEWentzelVIModel() override = default;
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
 				      G4double& currentMinimalStep) override;

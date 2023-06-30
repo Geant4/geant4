@@ -48,21 +48,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4int Z[17] = {
-  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26};
+//const G4int Z[17] = {
+//  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 26};
 const G4double A[17] = {
   7, 9, 11, 12, 14, 16, 19, 20, 23, 24, 27, 28, 31, 32, 35, 40, 56};
 
-G4WaterStopping::G4WaterStopping(G4EmCorrections* corr, G4bool splineFlag)
+G4WaterStopping::G4WaterStopping()
 {
-  spline = splineFlag;
   dedx.reserve(17);
-  Initialise(corr);
+  Initialise();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4WaterStopping::~G4WaterStopping() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,7 +95,7 @@ void G4WaterStopping::AddData(const G4double* energy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4WaterStopping::Initialise(G4EmCorrections* corr)
+void G4WaterStopping::Initialise()
 {
   //..Reduced energies
   static const G4double E[53] = {0.025,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100,150,200,250,300,400,500,600,700,800,900,1000};
@@ -142,10 +137,4 @@ void G4WaterStopping::Initialise(G4EmCorrections* corr)
 
   static const G4double G4_WATER_Fe [53]={6.5394, 7.3060, 8.7367, 10.0690, 11.3310, 12.5470, 13.7280, 14.8780, 15.9980, 21.1160, 25.4850, 29.1260, 32.0640, 36.1770, 38.6920, 40.2760, 41.2950, 41.9530, 42.3710, 42.6210, 42.5910, 41.6900, 40.5190, 39.2690, 36.8000, 34.5040, 32.4190, 30.5410, 28.8480, 27.3170, 25.9310, 20.6170, 17.0680, 14.5540, 12.6930, 10.1410, 8.4892, 7.3402, 6.4976, 5.8545, 5.3479, 4.9387, 3.6892, 3.0503, 2.6620, 2.4014, 2.0756, 1.8825, 1.7569, 1.6702, 1.6079, 1.5619, 1.5267};
   AddData(E,G4_WATER_Fe,factor);
-
-  if(nullptr != corr) {
-    for(G4int i=0; i<17; ++i) {
-      corr->AddStoppingData(Z[i], A[i], "G4_WATER", dedx[i]);
-    }
-  }
 }

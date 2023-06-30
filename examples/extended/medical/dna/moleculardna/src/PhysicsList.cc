@@ -43,8 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(const G4int& phylist)
-  : G4VModularPhysicsList()
+PhysicsList::PhysicsList(G4int phylist)
 {
   SetDefaultCutValue(1.0 * micrometer);
   SetVerboseLevel(1);
@@ -86,9 +85,5 @@ PhysicsList::PhysicsList(const G4int& phylist)
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV,
                                                                   1 * GeV);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

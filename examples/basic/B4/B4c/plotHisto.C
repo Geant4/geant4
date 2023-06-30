@@ -28,16 +28,17 @@
   hist2->Draw("HIST");
 
   // Draw Egap histogram in the pad 3
-  // with logaritmic scale for y
+
   TH1D* hist3 = (TH1D*)f.Get("Egap");
   c1->cd(3);
-  gPad->SetLogy(1);
+  // set logarithmic scale for y  
+  //gPad->SetLogy(1);
   hist3->Draw("HIST");
 
   // Draw Lgap histogram in the pad 4
-  // with logaritmic scale for y
   c1->cd(4);
-  gPad->SetLogy(1);
+  // set logarithmic scale for y  
+  //gPad->SetLogy(1);  
   TH1D* hist4 = (TH1D*)f.Get("Lgap");
   hist4->Draw("HIST");
 }

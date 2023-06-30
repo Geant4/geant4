@@ -48,7 +48,7 @@ G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
                         DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
-  G4Trd* msol = (G4Trd*)(msolid);
+  auto msol = (G4Trd*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     // Get constituent solid  
@@ -57,7 +57,7 @@ G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
     msol = (G4Trd*)(mConstituentSolid);
   
     // Create a new solid with inversed parameters
-    G4Trd* newSolid
+    auto newSolid
       = new G4Trd(msol->GetName(),
                   msol->GetXHalfLength2(), msol->GetXHalfLength1(),
                   msol->GetYHalfLength2(), msol->GetYHalfLength1(),
@@ -70,9 +70,7 @@ G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
 }
 
 //------------------------------------------------------------------------
-G4VParameterisationTrd::~G4VParameterisationTrd()
-{
-}
+G4VParameterisationTrd::~G4VParameterisationTrd() = default;
 
 //------------------------------------------------------------------------
 G4ParameterisationTrdX::
@@ -84,7 +82,7 @@ G4ParameterisationTrdX( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionTrdX" );
 
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( msol->GetXHalfLength1()+msol->GetXHalfLength2(),
@@ -116,13 +114,12 @@ G4ParameterisationTrdX( EAxis axis, G4int nDiv,
 
 //------------------------------------------------------------------------
 G4ParameterisationTrdX::~G4ParameterisationTrdX()
-{
-}
+= default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationTrdX::GetMaxParameter() const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   return (msol->GetXHalfLength1()+msol->GetXHalfLength2());
 }
 
@@ -132,7 +129,7 @@ G4ParameterisationTrdX::
 ComputeTransformation( const G4int copyNo,
                        G4VPhysicalVolume *physVol ) const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid );
+  auto msol = (G4Trd*)(fmotherSolid );
   G4double mdx = ( msol->GetXHalfLength1() + msol->GetXHalfLength2() ) / 2.;
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
@@ -169,7 +166,7 @@ void
 G4ParameterisationTrdX::
 ComputeDimensions( G4Trd& trd, [[maybe_unused]] const G4int copyNo, const G4VPhysicalVolume* ) const
 {  
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   G4double pDy1 = msol->GetYHalfLength1();
   G4double pDy2 = msol->GetYHalfLength2();
   G4double pDz = msol->GetZHalfLength();
@@ -192,7 +189,7 @@ void
 G4ParameterisationTrdX::ComputeDimensions( G4Trap& trap, const G4int copyNo,
                                            const G4VPhysicalVolume* ) const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid); 
+  auto msol = (G4Trd*)(fmotherSolid); 
   G4double pDy1 = msol->GetYHalfLength1();
   G4double pDy2 = msol->GetYHalfLength2();
   G4double pDz = msol->GetZHalfLength();
@@ -248,7 +245,7 @@ G4ParameterisationTrdY( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionTrdY" );
 
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*msol->GetYHalfLength1(),
@@ -272,14 +269,12 @@ G4ParameterisationTrdY( EAxis axis, G4int nDiv,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationTrdY::~G4ParameterisationTrdY()
-{
-}
+G4ParameterisationTrdY::~G4ParameterisationTrdY() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationTrdY::GetMaxParameter() const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   return (msol->GetYHalfLength1()+msol->GetYHalfLength2());
 }
 
@@ -288,7 +283,7 @@ void
 G4ParameterisationTrdY::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid );
+  auto msol = (G4Trd*)(fmotherSolid );
   G4double mdy =  ( msol->GetYHalfLength1() + msol->GetYHalfLength2() ) / 2.;
 
   //----- translation 
@@ -327,7 +322,7 @@ ComputeDimensions(G4Trd& trd, const G4int, const G4VPhysicalVolume*) const
 {
   //---- The division along Y of a Trd will result a Trd, only 
   //--- if Y at -Z and +Z are equal, else use the G4Trap version
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   
   G4double pDx1 = msol->GetXHalfLength1();
   G4double pDx2 = msol->GetXHalfLength2();
@@ -350,7 +345,7 @@ void
 G4ParameterisationTrdY::ComputeDimensions( G4Trap& trap, const G4int copyNo,
                                            const G4VPhysicalVolume* ) const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid); 
+  auto msol = (G4Trd*)(fmotherSolid); 
   G4double pDx1 = msol->GetXHalfLength1();
   G4double pDx2 = msol->GetXHalfLength2();
   G4double pDz = msol->GetZHalfLength();
@@ -405,7 +400,7 @@ G4ParameterisationTrdZ( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivTrdZ" );
 
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*msol->GetZHalfLength(),
@@ -429,14 +424,12 @@ G4ParameterisationTrdZ( EAxis axis, G4int nDiv,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationTrdZ::~G4ParameterisationTrdZ()
-{
-}
+G4ParameterisationTrdZ::~G4ParameterisationTrdZ() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationTrdZ::GetMaxParameter() const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
   return 2*msol->GetZHalfLength();
 }
 
@@ -445,7 +438,7 @@ void
 G4ParameterisationTrdZ::
 ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 {
-  G4Trd* msol = (G4Trd*)(fmotherSolid );
+  auto msol = (G4Trd*)(fmotherSolid );
   G4double mdz = msol->GetZHalfLength();
 
   //----- translation 
@@ -484,7 +477,7 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along Z of a Trd will result a Trd
-  G4Trd* msol = (G4Trd*)(fmotherSolid);
+  auto msol = (G4Trd*)(fmotherSolid);
 
   G4double pDx1 = msol->GetXHalfLength1();
   G4double DDx = (msol->GetXHalfLength2() - msol->GetXHalfLength1() );

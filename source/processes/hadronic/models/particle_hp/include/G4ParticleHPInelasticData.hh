@@ -35,76 +35,71 @@
 
 // Class Description
 // Cross-section data set for a high precision (based on evaluated data
-// libraries) description of neutron inelastic scattering below 20 MeV; 
+// libraries) description of neutron inelastic scattering below 20 MeV;
 // To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
+// In this case you want to register an object of this class with
 // the corresponding process.
 // Class Description - End
 
-#include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
+#include "G4Neutron.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsTable.hh"
-#include "G4Neutron.hh"
+#include "G4VCrossSectionDataSet.hh"
 
 class G4ParticleHPData;
 
 class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
 {
-   public:
-   
-      G4ParticleHPInelasticData(G4ParticleDefinition* projectile = G4Neutron::Neutron());
-   
-      ~G4ParticleHPInelasticData();
+  public:
+    G4ParticleHPInelasticData(G4ParticleDefinition* projectile = G4Neutron::Neutron());
 
-      G4bool IsIsoApplicable( const G4DynamicParticle* , 
-                              G4int /*Z*/ , G4int /*A*/ ,
-                              const G4Element* /*elm*/ ,
-                              const G4Material* /*mat*/ );
+    ~G4ParticleHPInelasticData() override;
 
-      G4double GetIsoCrossSection( const G4DynamicParticle*  , 
-                                   G4int /*Z*/ , G4int /*A*/ ,
-                                   const G4Isotope* /*iso*/  ,
-                                   const G4Element* /*elm*/  ,
-                                   const G4Material* /*mat*/ );
-   
-       //G4bool IsApplicable(const G4DynamicParticle*, const G4Element*); ??
+    G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/,
+                           const G4Element* /*elm*/, const G4Material* /*mat*/) override;
 
-   public:
-      //G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
-      //{ return false;} 
+    G4double GetIsoCrossSection(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/,
+                                const G4Isotope* /*iso*/, const G4Element* /*elm*/,
+                                const G4Material* /*mat*/) override;
 
-      G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
+    // G4bool IsApplicable(const G4DynamicParticle*, const G4Element*); ??
 
-  //void BuildPhysicsTableHP(G4ParticleDefinition* projectile, const char* dataDirVariable); // name it 'HP' to avoid compilation warning because of G4VCrossSectionDataSet's method
-      void BuildPhysicsTable( const G4ParticleDefinition& ); 
+  public:
+    // G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+    //{ return false;}
 
-      void DumpPhysicsTable(const G4ParticleDefinition&);
+    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
-      G4ParticleDefinition* GetProjectile(){return theProjectile;}
- 
-   public:
-      G4int GetVerboseLevel() const;
-      void SetVerboseLevel( G4int );
-      virtual void CrossSectionDescription(std::ostream&) const;
- 
-   private:
-   
-      G4PhysicsTable * theCrossSections;
+    // void BuildPhysicsTableHP(G4ParticleDefinition* projectile, const char* dataDirVariable); //
+    // name it 'HP' to avoid compilation warning because of G4VCrossSectionDataSet's method
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-      G4ParticleDefinition* theProjectile;
+    void DumpPhysicsTable(const G4ParticleDefinition&) override;
 
-      G4ParticleHPData* theHPData;
+    G4ParticleDefinition* GetProjectile() { return theProjectile; }
 
-      G4bool instanceOfWorker;
+  public:
+    G4int GetVerboseLevel() const;
+    void SetVerboseLevel(G4int) override;
+    void CrossSectionDescription(std::ostream&) const override;
 
-      G4double ke_cache;
-      G4double xs_cache;
-      const G4Element* element_cache;
-      const G4Material* material_cache;
+  private:
+    G4PhysicsTable* theCrossSections;
 
-      //char envVariable[500];
+    G4ParticleDefinition* theProjectile;
+
+    G4ParticleHPData* theHPData;
+
+    G4bool instanceOfWorker;
+
+    G4double ke_cache;
+    G4double xs_cache;
+    const G4Element* element_cache;
+    const G4Material* material_cache;
+
+    // char envVariable[500];
 };
 
 #endif

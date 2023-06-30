@@ -44,16 +44,16 @@
 // ###                    ANTI DEUTERON                               ###
 // ######################################################################
 
-G4AntiDeuteron* G4AntiDeuteron::theInstance = 0;
+G4AntiDeuteron* G4AntiDeuteron::theInstance = nullptr;
 
 G4AntiDeuteron* G4AntiDeuteron::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_deuteron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -70,7 +70,7 @@ G4AntiDeuteron* G4AntiDeuteron::Definition()
                     2,              +1,             0,
                     0,               0,             0,
        "anti_nucleus",               0,            -2, -1000010020,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 		false,        "static",    1000010020,
 		 0.0,                0
               );

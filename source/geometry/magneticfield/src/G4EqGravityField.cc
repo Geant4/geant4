@@ -41,9 +41,7 @@ G4EqGravityField::G4EqGravityField(G4UniformGravityField* gField)
 {
 }
 
-G4EqGravityField::~G4EqGravityField()
-{
-}
+G4EqGravityField::~G4EqGravityField() = default;
 
 void
 G4EqGravityField::SetChargeMomentumMass(G4ChargeState,

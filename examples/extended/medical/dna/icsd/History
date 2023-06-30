@@ -4,6 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-03-24 H. Tran (exicsd-V11-01-01)
+- Physics list: delete G4DNAVacuumModel
+
+## 2023-01-27 H. Tran (exicsd-V11-01-00)
+- Physics list: deleted unused models,
+apdated RegisterModel function with new structure
+
 ## 2022-11-02 Y. Perrot (exicsd-V11-00-01)
 - Physics list: use of nitrogen material
 - Geometry: propose two geometries, nanodosimeter (N2)

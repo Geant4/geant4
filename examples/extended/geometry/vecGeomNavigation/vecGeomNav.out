@@ -18,7 +18,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -43,28 +43,41 @@ G4GDML: Reading userinfo...
 G4GDML: Reading setup...
 G4GDML: Reading 'TestNTST.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
-Enabled Check mode in G4Navigator
+Enabled Check mode in G4Navigator G4ChordFinder: stepperDriverId: 2
+
  *** SETTING MAGNETIC FIELD in Z direction : fieldValue = 2 tesla *** 
 
-*** Conversion of G4 -> VecGeom finished (0.00168722 s) ***
-*** Closing VecGeom geometry finished (0.000493848 s) ***
-*** Setup of syncing lookup structure finished (2.5367e-05 s) ***
+*** Conversion of G4 -> VecGeom finished (0.00759464 s) ***
+*** Closing VecGeom geometry finished (0.00174486 s) ***
+*** Setup of syncing lookup structure finished (3.1382e-05 s) ***
 TG4VecGeomNavigator created and registered to G4TransportationManager
  Setting up safety voxels for Svt_log with 340 daughters 
 Uncontained capacity for Svt_log: 8.83002e+07 units
+Uncontained capacity for Svt_log: 8.83002e+07 units
 
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+Uncontained capacity for Svt_log: 8.83002e+07 units
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
-VolUtil: FillUncontPts: Volume <
-VolUtil: FillUncontPts: Volume <Svt_logSvt_log  capacities: total =    capacities: total =  8.86155e+07 uncontained = 8.86155e+07 uncontained = 8.83002e+07
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+Uncontained capacity for Svt_log: 8.83002e+07 units
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.86155e+07 uncontained = 8.83002e+07
 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
@@ -72,42 +85,33 @@ VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncont
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
- FillUncontained:  trials 3815734 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764204
- FillUncontained:  trials 3813828 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764586
- FillUncontained:  trials 3816619 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764027
- FillUncontained:  trials 3813403 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764671
  FillUncontained:  trials 3812920 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764768
- FillUncontained:  trials 3814909 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764369
- FillUncontained:  trials 3814646 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764422
+ FillUncontained:  trials 3813403 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764671
+ FillUncontained:  trials 3815710 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764209
+ FillUncontained:  trials 3816105 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76413
+ FillUncontained:  trials 3812878 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764777
+ FillUncontained:  trials 3815698 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764211
+ FillUncontained:  trials 3815734 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764204
+ FillUncontained:  trials 3816009 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764149
+ FillUncontained:  trials 3816619 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764027
+ FillUncontained:  trials 3813828 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764586
  FillUncontained:  trials 3815805 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76419
+ FillUncontained:  trials 3814646 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764422
  FillUncontained:  trials 3813880 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764576
  FillUncontained:  trials 3815201 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764311
- FillUncontained:  trials 3816009 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764149
- FillUncontained:  trials 3815698 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764211
- FillUncontained:  trials 3812878 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764777
- FillUncontained:  trials 3815710 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764209
  FillUncontained:  trials 3812862 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76478
- FillUncontained:  trials 3816105 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76413
-Sampling points and keys took 17.9817s 
-Generating unique keys took 5.33827 s 
+ FillUncontained:  trials 3814909 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764369
+Sampling points and keys took 22.8374s 
+Generating unique keys took 4.92178 s 
  We have 38052 sorted unique keys fraction 0.815586 estimated volume 9.56369e+07
-Generating safeties took 7.24285s 
+Generating safeties took 7.42806s 
  done 
 Setting up locate voxels for Svt_log with 340 daughters 
-Generating unique keys took 1.7507e-05s 
- Calculating locate candidates ... in parallel Generating locate voxels took 0.00137432s 
+Generating unique keys took 1.1982e-05s 
+ Calculating locate candidates ... in parallel Generating locate voxels took 0.0100539s 
  Setting up safety voxels for Dch_log with 40 daughters 
 Uncontained capacity for Dch_log: 8.26239e+08 units
 
@@ -123,16 +127,15 @@ VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncont
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
 
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <
+VolUtil: FillUncontPts: Volume <
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  Dch_log  capacities: total =  9.40122e+09 uncontained = 9.40122e+099.40122e+098.26239e+08 uncontained =  uncontained = 
+8.26239e+08
+8.26239e+08
+9.40122e+09 uncontained = 8.26239e+08
 9.40122e+09 uncontained = 8.26239e+08
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
@@ -140,33 +143,34 @@ VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncont
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-
+Dch_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
+9.40122e+09 uncontained = 8.26239e+08
  FillUncontained:  trials 1717129 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628957
- FillUncontained:  trials 1705957 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0633076
- FillUncontained:  trials 1707491 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0632507
  FillUncontained:  trials 1715903 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629406
- FillUncontained:  trials 1722816 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626881
- FillUncontained:  trials 1713400 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630326
- FillUncontained:  trials 1714682 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629854
- FillUncontained:  trials 1721713 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0627282
- FillUncontained:  trials 1713048 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630455
- FillUncontained:  trials 1711116 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0631167
- FillUncontained:  trials 1721362 for num points = 108000 ( out of 108000 requested -  success ratio = 0.062741
- FillUncontained:  trials 1717826 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628702
- FillUncontained:  trials 1717021 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628996
- FillUncontained:  trials 1713741 for num points = 108000 ( out of 108000 requested -  success ratio = 0.06302
  FillUncontained:  trials 1723139 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626763
  FillUncontained:  trials 1716959 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629019
-Sampling points and keys took 0.681561s 
-Generating unique keys took 0.118031 s 
+ FillUncontained:  trials 1721362 for num points = 108000 ( out of 108000 requested -  success ratio = 0.062741
+ FillUncontained:  trials 1714682 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629854
+ FillUncontained:  trials 1713048 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630455
+ FillUncontained:  trials 1713741 for num points = 108000 ( out of 108000 requested -  success ratio = 0.06302
+ FillUncontained:  trials 1711116 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0631167
+ FillUncontained:  trials 1705957 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0633076
+ FillUncontained:  trials 1707491 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0632507
+ FillUncontained:  trials 1717021 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628996
+ FillUncontained:  trials 1717826 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628702
+ FillUncontained:  trials 1722816 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626881
+ FillUncontained:  trials 1713400 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630326
+ FillUncontained:  trials 1721713 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0627282
+Sampling points and keys took 0.832318s 
+Generating unique keys took 0.120416 s 
  We have 768 sorted unique keys fraction 0.444444 estimated volume 5.91992e+09
-Generating safeties took 0.0123587s 
+Generating safeties took 0.0271052s 
  done 
 Setting up locate voxels for Dch_log with 40 daughters 
-Generating unique keys took 1.3604e-05s 
- Calculating locate candidates ... in parallel Generating locate voxels took 0.00110626s 
-*** Setup of VecGeom navigators finished (31.4196 s) ***
+Generating unique keys took 6.829e-06s 
+ Calculating locate candidates ... in parallel Generating locate voxels took 0.00547864s 
+*** Setup of VecGeom navigators finished (36.2183 s) ***
 3
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
@@ -297,7 +301,7 @@ eBrem:  for e-  XStype:4  SubType=3
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -329,7 +333,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -361,7 +365,7 @@ hPairProd:  for proton  XStype:1  SubType=4
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -374,7 +378,6 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -420,7 +423,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -452,7 +455,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -484,7 +487,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -516,7 +519,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -548,7 +551,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -580,7 +583,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -612,7 +615,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -997,12 +1000,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 ================================================================
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
@@ -2990,7 +3002,7 @@ Step#    X (mm)    Y (mm)    Z (mm)    Ek (MeV) dE (MeV) Step(mm)    Track(mm) S
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.018261s Sys=0.000000s
+  User=0.010000s Real=0.014481s Sys=0.010000s
 /tracking/verbose 0
 /run/beamOn 10
 
@@ -3040,7 +3052,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.070000s Real=0.065309s Sys=0.000000s
+  User=0.050000s Real=0.056886s Sys=0.000000s
 
  ================================================================= 
  Final random number = 0.56769521327478

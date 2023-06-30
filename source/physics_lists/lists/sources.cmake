@@ -16,11 +16,13 @@ geant4_add_module(G4phys_lists
     LBE.hh
     NuBeam.hh
     QBBC.hh
+    QBBC_ABLA.hh
     QGS_BIC.hh
     QGSP_BERT.hh
     QGSP_BERT_HP.hh
     QGSP_BIC.hh
     QGSP_BIC_HP.hh
+    QGSP_BIC_HPT.hh
     QGSP_BIC_AllHP.hh
     QGSP_FTFP_BERT.hh
     INCLXXPhysicsListHelper.hh
@@ -49,12 +51,14 @@ geant4_add_module(G4phys_lists
     LBE.cc
     NuBeam.cc
     QBBC.cc
+    QBBC_ABLA.cc
     QGS_BIC.cc
     QGSP_BERT.cc
     QGSP_BERT_HP.cc
     QGSP_BIC_AllHP.cc
     QGSP_BIC.cc
     QGSP_BIC_HP.cc
+    QGSP_BIC_HPT.cc
     QGSP_FTFP_BERT.cc
     Shielding.cc)
 

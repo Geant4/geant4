@@ -38,23 +38,13 @@
 #include "G4DNAScavengerMaterial.hh"
 #include "G4Molecule.hh"
 
-G4DNAEventScheduler::G4DNAEventScheduler(const G4DNABoundingBox& boundingBox,
-                                         G4int pixel)
+G4DNAEventScheduler::G4DNAEventScheduler()
   : IEventScheduler()
-  , fPixel(pixel)
-  , fInitialPixels(fPixel)
-  , fpMesh(new G4DNAMesh(boundingBox, fPixel))
   , fpGillespieReaction(new G4DNAGillespieDirectMethod())
   , fpEventSet(new G4DNAEventSet())
   , fpUpdateSystem(new G4DNAUpdateSystemModel())
 {
-  if(!CheckingReactionRadius(fpMesh->GetResolution()))
-  {
-    G4String WarMessage = "resolution is not good : " +
-                          std::to_string(fpMesh->GetResolution() / nm);
-    G4Exception("G4DNAEventScheduler::InitializeInMesh()", "WrongResolution",
-                JustWarning, WarMessage);
-  }
+
 }
 
 void G4DNAEventScheduler::ClearAndReChargeCounter()
@@ -230,12 +220,21 @@ void G4DNAEventScheduler::Reset()
   fpMesh->Reset();
 }
 
-void G4DNAEventScheduler::Initialize()
+void G4DNAEventScheduler::Initialize(const G4DNABoundingBox& boundingBox,
+                                     G4int pixel)
 {
   if(!fInitialized)
   {
-    fPixel = fInitialPixels;
-    fpMesh = std::make_unique<G4DNAMesh>(fpMesh->GetBoundingBox(), fPixel);
+    fPixel = pixel;
+    fpMesh = std::make_unique<G4DNAMesh>(boundingBox, pixel);
+
+    if(!CheckingReactionRadius(fpMesh->GetResolution()))
+    {
+      G4String WarMessage = "resolution is not good : " +
+                            std::to_string(fpMesh->GetResolution() / nm);
+      G4Exception("G4DNAEventScheduler::InitializeInMesh()", "WrongResolution",
+                  JustWarning, WarMessage);
+    }
 
     // Scavenger();
 

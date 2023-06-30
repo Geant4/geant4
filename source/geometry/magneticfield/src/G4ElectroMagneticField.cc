@@ -35,19 +35,15 @@ G4ElectroMagneticField::G4ElectroMagneticField()
 {
 }
 
-G4ElectroMagneticField::~G4ElectroMagneticField()
-{
-}
+G4ElectroMagneticField::~G4ElectroMagneticField() = default;
 
-G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField& r)
-  : G4Field( r )    // To allow extension to joint EM & g field
-{
-}
+G4ElectroMagneticField::
+G4ElectroMagneticField(const G4ElectroMagneticField& r) = default;
 
 G4ElectroMagneticField& 
 G4ElectroMagneticField::operator = (const G4ElectroMagneticField& p)
 {
-  if (&p == this) return *this;
+  if (&p == this) { return *this; }
   G4Field::operator=(p);
   return *this;
 }

@@ -102,19 +102,19 @@ G4double G4VoxelLimits::GetMinExtent(const EAxis pAxis) const
 inline
 G4bool G4VoxelLimits::IsXLimited() const
 {
-  return (fxAxisMin==-kInfinity&&fxAxisMax==kInfinity) ? false : true;
+  return !(fxAxisMin==-kInfinity&&fxAxisMax==kInfinity);
 }
 
 inline
 G4bool G4VoxelLimits::IsYLimited() const
 {
-  return (fyAxisMin==-kInfinity&&fyAxisMax==kInfinity) ? false : true;
+  return !(fyAxisMin==-kInfinity&&fyAxisMax==kInfinity);
 }
 
 inline
 G4bool G4VoxelLimits::IsZLimited() const
 {
-  return (fzAxisMin==-kInfinity&&fzAxisMax==kInfinity) ? false : true;
+  return !(fzAxisMin==-kInfinity&&fzAxisMax==kInfinity);
 }
 
 inline
@@ -144,10 +144,10 @@ G4bool G4VoxelLimits::IsLimited(const EAxis pAxis) const
 inline
 G4bool G4VoxelLimits::Inside(const G4ThreeVector& pVec) const
 {
-  return ((GetMinXExtent()<=pVec.x()) &&
+  return (GetMinXExtent()<=pVec.x()) &&
 	  (GetMaxXExtent()>=pVec.x()) &&
 	  (GetMinYExtent()<=pVec.y()) &&
 	  (GetMaxYExtent()>=pVec.y()) &&
 	  (GetMinZExtent()<=pVec.z()) &&
-	  (GetMaxZExtent()>=pVec.z()) ) ? true : false;
+	  (GetMaxZExtent()>=pVec.z());
 }

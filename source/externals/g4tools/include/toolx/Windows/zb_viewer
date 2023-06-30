@@ -1,0 +1,91 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Windows_zb_viewer
+#define toolx_Windows_zb_viewer
+
+#include "session"
+#include "window"
+
+#include "pixwin"
+#include <tools/sg/zb_viewer>
+
+// disable the warning about the usage of "this" in the constructor.
+#pragma warning(disable:4355)
+
+namespace toolx {
+namespace Windows {
+
+class zb_viewer : public window, protected pixwin, public tools::sg::zb_viewer {
+  typedef window parent_window;
+  typedef pixwin parent_render_area;
+  typedef tools::sg::zb_viewer parent_viewer;
+protected:
+  virtual void paint() {
+    //parent_viewer::m_out << "toolx::Windows::zb_viewer::paint " << parent_viewer::m_ww << " " << parent_viewer::m_wh << std::endl;
+    if(!render(get_bgras,false)) return;
+    HDC hDC = ::GetDC(parent_render_area::m_hwnd);
+    HDC bitmap_DC = ::CreateCompatibleDC(hDC);
+    HBITMAP bitmap = ::CreateBitmap(parent_viewer::m_ww,parent_viewer::m_wh, 1, 32, tools::vec_data(m_out_buffer));
+    HBITMAP old_bitmap = (HBITMAP)::SelectObject(bitmap_DC, bitmap);
+    ::BitBlt(hDC,0,0,parent_viewer::m_ww,parent_viewer::m_wh,bitmap_DC,0,0,SRCCOPY);
+    ::SelectObject(bitmap_DC, old_bitmap);
+    ::DeleteObject(bitmap);
+    ::DeleteDC(bitmap_DC);
+    ::ReleaseDC(parent_render_area::m_hwnd,hDC);
+    ::ValidateRect(parent_render_area::m_hwnd,NULL);
+    m_out_buffer.clear();
+  }
+  virtual void resize(unsigned int a_w,unsigned int a_h){  //NOTE: it is not called at startup.
+    //parent_viewer::m_out << "toolx::Windows::zb_viewer::resize " << a_w << " " << a_h << std::endl;
+    set_size(a_w,a_h);
+  }
+public:  
+  virtual void close() {}
+public:
+  zb_viewer(session& a_session,
+            int a_x = 0,int a_y = 0,
+            unsigned int a_width = 500,unsigned int a_height = 500,
+            const std::string& a_title = "")
+  :parent_window(a_title.c_str(),a_x,a_y,a_width,a_height)
+  ,parent_render_area(parent_window::m_hwnd,a_width,a_height)
+  ,parent_viewer(a_session.out(),a_width,a_height)
+  ,m_session(a_session)
+  {
+    parent_window::set_focus_hwnd(parent_render_area::m_hwnd);
+  }
+  virtual ~zb_viewer() {}
+protected:
+  zb_viewer(const zb_viewer& a_from)
+  :parent_window(a_from)
+  ,parent_render_area(a_from)
+  ,parent_viewer(a_from)
+  ,m_session(a_from.m_session)
+  {}
+  zb_viewer& operator=(const zb_viewer& a_from){
+    parent_window::operator=(a_from);
+    return *this;
+  }
+public:
+  bool has_window() const {return parent_window::m_hwnd?true:false;} //for SWIG
+
+  HWND window() const {return parent_window::m_hwnd;}
+
+  bool show() {
+    if(!parent_window::m_hwnd) return false;
+    m_session.show_window(parent_window::m_hwnd);
+    return true;
+  }
+
+  void win_render() {parent_render_area::wm_paint();}
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {  //we do not have ownership.
+    parent_render_area::set_device_interactor(a_interactor);
+  }
+protected:
+  session& m_session;
+};
+
+}}
+
+
+#endif

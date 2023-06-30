@@ -46,12 +46,7 @@
 
 G4ExcitedBaryonConstructor::G4ExcitedBaryonConstructor(G4int nStates,
 						       G4int isoSpin)
-    :    NumberOfStates(nStates), iIsoSpin(isoSpin), type("baryon"),
-         iConjugation(0), iGParity(0), leptonNumber(0), baryonNumber(1)
-{
-}
-
-G4ExcitedBaryonConstructor::~G4ExcitedBaryonConstructor()
+    :    NumberOfStates(nStates), iIsoSpin(isoSpin), type("baryon") 
 {
 }
 
@@ -102,7 +97,7 @@ void G4ExcitedBaryonConstructor::ConstructParticle(G4int idx)
 	GetiSpin(idx), GetiParity(idx),  iConjugation,       
 	     iIsoSpin,           iIso3,      iGParity,
                  type,    leptonNumber,  baryonNumber, GetEncoding( iIso3,idx),
-                false,             0.0,   NULL
+                false,             0.0,   nullptr
 				    );
     ((G4ExcitedBaryons*)(particle))->SetMultipletName(GetMultipletName(idx));
     particle->SetDecayTable(CreateDecayTable( name, iIso3, idx, false));
@@ -136,7 +131,7 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
                  type,    leptonNumber, 
 				       -1*baryonNumber, 
 				                   -1*GetEncoding( iIso3,idx),
-                false,         0.0,   NULL
+                false,         0.0,   nullptr
 				    );
 
     ((G4ExcitedBaryons*)(particle))->SetMultipletName(GetMultipletName(idx));

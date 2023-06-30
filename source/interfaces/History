@@ -6,8 +6,126 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-02-20 Igor Semeniouk (interfaces-V11-00-11)
+## 2023-06-07 John Allison (interfaces-V11-01-20)
+- Rework double-click using QTreeWidget::itemDoubleClicked.
+  - Was using QWidget::mouseDoubleClickEvent (I had not noticed the above - much better).
+
+## 2023-05-31 Ben Morgan (interfaces-V11-01-19)
+- Remove support for Qt < 5.9
+  - Clarify remaining version checks using QT_VERSION_CHECK instead of raw hex
+
+## 2023-05-30 John Allison (interfaces-V11-01-18)
+- G4UIQt: Fix implicit size to int precision loss warnings.
+
+## 2023-05-18 John Allison (interfaces-V11-01-17)
+- G4UIQt: Improve command - allow for leading space in pvpath.
+
+## 2023-05-18 John Allison (interfaces-V11-01-16)
+- G4UIQt: New scene tree: Add colour choice.
+  - Introduce G4UIQt::NewSceneTreeItemTreeWidget::mouseDoubleClickEvent.
+  - Some tidying.
+
+## 2023-05-09 John Allison (interfaces-V11-01-15)
+- Coworks: visman-V11-01-10 and greps-V11-01-04.
+- G4UIQt:
+  - Implement callbacks SceneTreeItemExpanded and SceneTreeItemCollapsed.
+
+## 2023-04-26 Ben Morgan (interfaces-V11-01-14)
+- Remove header no longer used in Qt5, which is also not present in Qt6
+
+## 2023-04-24 Guy Barrand (interfaces-V11-01-13)
+- G4UIQt: Fix QSplitter issue - necessary for Qt6.
+
+## 2023-04-23 John Allison (interfaces-V11-01-12)
+- G4UIQt.cc: Fix compilation warning - "set but not used".
+
+## 2023-04-14 John Allison (interfaces-V11-01-11)
+- Co-working: visman-V11-01-04, greps-V11-01-03, opengl-V11-01-06,
+  openinventor-V11-01-04, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- G4VInteractiveSession:
+  - Add virtual void UpdateSceneTree(const G4SceneTreeItem&).
+- G4UIQt:
+  - Instrument UpdateSceneTree.
+    - Hitherto it was empty - now it actually does something.
+  - Add further functions for the "new" scene tree:
+```
+  // Create the "mother" widget
+  QWidget* CreateSceneTreeWidget();
+  // Create and connect the actual tree widget
+  void CreateSceneTreeComponent();
+  // What to do if a scene tree item is clicked
+  void SceneTreeItemClicked(QTreeWidgetItem* item);
+  // Build Physical Volume tree of touchables
+  void BuildPVQTree(const G4SceneTreeItem& g4stItem, QTreeWidgetItem* qtwItem);
+```
+  - Add new data members:
+```
+  QWidget* fNewSceneTreeWidget;
+  QTreeWidget* fSceneTreeItemTreeWidget;
+```
+
+## 2023-03-28 John Allison (interfaces-V11-01-10)
+- G4UIQt: Introduce UpdateSceneTree(const G4SceneTreeItem&).
+  - Empty except for some commented out debug statements.
+- sources.cmake:
+  - Add G4graphics_reps to the PUBLIC section of geant4_module_link_libraries.
+
+## 2023-03-22 Ben Morgan (interfaces-V11-01-09)
+- Export public compile definitions to indicate availablity of specific UIs. Moves to
+  "use on link" model.
+
+## 2023-02-21 John Allison (interfaces-V11-01-08)
+- G4UIQt: Move "smart warning" code outside mutex lock to avoid double locking.
+
+## 2023-02-20 Igor Semeniouk (interfaces-V11-01-07)
 - G4UIQt : Replace G4int by int in QT signal/slots
+
+## 2023-02-16 John Allison (interfaces-V11-01-06)
+- G4UIQt (again!): Use the same mutex for all 3 output streams.
+  - I had an app that hammered all 3 output streams from 8 worker threads
+    and the vis sub-thread simultaneously and occasionally the output to
+    Qt UI output window was very strange. This MR fixed it for me.
+  
+## 2023-02-15 John Allison (interfaces-V11-01-05)
+- G4UIQt.cc: Fix mutex bug in implementation of G4UIQt::ReceiveG4debug.
+  - Move "workaround output" (std::cout) under control of mutex.
+  - Limit "workaround output" to master thread.
+    - This "workaround" is to make sure all flushed output appears on
+      the terminal after a crash, because even flushed output can
+      get lost in the Qt UI system.
+      But...it seems workers write to std::cout/cerr anyway (is that a bug?),
+      so limit this to the master thread
+    - See also interfaces-V10-06-08 and interfaces-V10-06-10.
+
+## 2023-02-07 Ben Morgan (interfaces-V11-01-04)
+- Apply clang-tidy, clang-format fixes together with public/protected/private ordering
+
+## 2023-01-30 Ben Morgan (interfaces-V11-01-03)
+- Refactor modules into G4UIcore and G4UIimplementation to isolate core/always on
+  functionality from concrete UIs requiring external libraries.
+  - Both modules are still built into a G4interfaces library, with no change to
+    user interface for applications. 
+
+## 2023-01-15 John Allison (interfaces-V11-01-02)
+- Tentative implementation of user-specified output styles - /gui/outputStyle.
+  - Output streams: cout cerr warn error debug.
+    - This extendible - see G4VInteractiveSession.hh.
+  - Only used by G4UIQt at present.
+  - Based on existing design in G4UIQt.
+    - Some is a little specific, such as highlight in cout, which, in G4UIQt,
+      highlights only echoed commands, i.e., commands echoed by
+      "/control/verbose 2".
+  - A general implementation of user specified styles - including, for
+    example, colour, font size, italics - would be a big job. Here
+    we implement just a few features that have proved to be useful.
+
+## 2023-01-09 Ben Morgan (interfaces-V11-01-01)
+- Implement ReceiveG4debug for concrete sessions.
+
+## 2022-12-12 Ben Morgan (interfaces-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
 ## 2022-11-24 Gabriele Cosmo (interfaces-V11-00-10)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.

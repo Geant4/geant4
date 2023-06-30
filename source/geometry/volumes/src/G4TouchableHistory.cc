@@ -37,9 +37,8 @@ G4Allocator<G4TouchableHistory>*& aTouchableHistoryAllocator()
 }
 
 G4TouchableHistory::G4TouchableHistory()
-  : frot(G4RotationMatrix()),
-    ftlate(G4ThreeVector(0.,0.,0.)),
-    fhistory()
+  : ftlate(G4ThreeVector(0.,0.,0.))
+    
 { 
   fhistory.SetFirstEntry(nullptr);
 }
@@ -52,9 +51,7 @@ G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory& history )
   frot = tf.InverseNetRotation();
 }
 
-G4TouchableHistory::~G4TouchableHistory()
-{ 
-}
+G4TouchableHistory::~G4TouchableHistory() = default;
 
 const G4ThreeVector&
 G4TouchableHistory::GetTranslation(G4int depth) const

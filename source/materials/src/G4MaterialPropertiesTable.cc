@@ -22,10 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-//
+
 ////////////////////////////////////////////////////////////////////////
 // G4MaterialPropertiesTable Implementation
 ////////////////////////////////////////////////////////////////////////
@@ -46,10 +43,10 @@
 
 #include "G4MaterialPropertiesTable.hh"
 
-#include "globals.hh"
 #include "G4Log.hh"
 #include "G4OpticalMaterialProperties.hh"
 #include "G4PhysicalConstants.hh"
+#include "globals.hh"
 
 #include <algorithm>
 #include <cassert>
@@ -58,7 +55,7 @@
 #  include "G4AutoLock.hh"
 namespace
 {
-  G4Mutex materialPropertyTableMutex = G4MUTEX_INITIALIZER;
+G4Mutex materialPropertyTableMutex = G4MUTEX_INITIALIZER;
 }
 #endif
 
@@ -160,51 +157,43 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
 
   assert(fMatConstPropNames.size() == kNumberOfConstPropertyIndex);
 
-  fMCP.assign(kNumberOfConstPropertyIndex, { 0., false });
+  fMCP.assign(kNumberOfConstPropertyIndex, {0., false});
 }
 
 G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
 {
-  for(auto prop : fMP)
-  {
-    delete(prop);
+  for (auto prop : fMP) {
+    delete (prop);
   }
 }
 
-G4int G4MaterialPropertiesTable::GetConstPropertyIndex(
-  const G4String& key) const
+G4int G4MaterialPropertiesTable::GetConstPropertyIndex(const G4String& key) const
 {
   // Returns the constant material property index corresponding to a key
 
-  std::size_t index = std::distance(
-    fMatConstPropNames.cbegin(),
+  std::size_t index = std::distance(fMatConstPropNames.cbegin(),
     std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key));
-  if(index < fMatConstPropNames.size())
-  {
+  if (index < fMatConstPropNames.size()) {
     return (G4int)index;
   }
 
   G4ExceptionDescription ed;
   ed << "Constant Material Property Index for key " << key << " not found.";
-  G4Exception("G4MaterialPropertiesTable::GetConstPropertyIndex()", "mat200",
-              FatalException, ed);
+  G4Exception("G4MaterialPropertiesTable::GetConstPropertyIndex()", "mat200", FatalException, ed);
   return 0;
 }
 
 G4int G4MaterialPropertiesTable::GetPropertyIndex(const G4String& key) const
 {
   // Returns the material property index corresponding to a key
-  std::size_t index =
-    std::distance(fMatPropNames.cbegin(),
-                  std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key));
-  if(index < fMatPropNames.size())
-  {
+  std::size_t index = std::distance(
+    fMatPropNames.cbegin(), std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key));
+  if (index < fMatPropNames.size()) {
     return (G4int)index;
   }
   G4ExceptionDescription ed;
   ed << "Material Property Index for key " << key << " not found.";
-  G4Exception("G4MaterialPropertiesTable::GetPropertyIndex()", "mat201",
-              FatalException, ed);
+  G4Exception("G4MaterialPropertiesTable::GetPropertyIndex()", "mat201", FatalException, ed);
   return 0;
 }
 
@@ -213,14 +202,12 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const G4int index) const
   // Returns the constant material property corresponding to an index
   // fatal exception if property not found
 
-  if(index < (G4int) fMCP.size() && fMCP[index].second)
-  {
+  if (index < (G4int)fMCP.size() && fMCP[index].second) {
     return fMCP[index].first;
   }
   G4ExceptionDescription ed;
   ed << "Constant Material Property Index " << index << " not found.";
-  G4Exception("G4MaterialPropertiesTable::GetConstProperty()", "mat202",
-              FatalException, ed);
+  G4Exception("G4MaterialPropertiesTable::GetConstProperty()", "mat202", FatalException, ed);
   return 0.;
 }
 
@@ -241,17 +228,15 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4int index) const
 {
   // Returns true if a const property corresponding to 'index' exists
 
-  return index >= 0 && index < (G4int) fMCP.size() && fMCP[index].second;
+  return index >= 0 && index < (G4int)fMCP.size() && fMCP[index].second;
 }
 
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4String& key) const
 {
   // Returns true if a const property 'key' exists
-  std::size_t index = std::distance(
-    fMatConstPropNames.cbegin(),
+  std::size_t index = std::distance(fMatConstPropNames.cbegin(),
     std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key));
-  if(index < fMatConstPropNames.size())
-  {  // index is type std::size_t so >= 0
+  if (index < fMatConstPropNames.size()) {  // index is type std::size_t so >= 0
     return ConstPropertyExists((G4int)index);
   }
   return false;
@@ -259,124 +244,98 @@ G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4String& key) const
 
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char* key) const
 {
-  std::size_t index = std::distance(
-    fMatConstPropNames.cbegin(),
+  std::size_t index = std::distance(fMatConstPropNames.cbegin(),
     std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key));
-  if(index < fMatConstPropNames.size())
-  {  // index is type std::size_t so >= 0
+  if (index < fMatConstPropNames.size()) {  // index is type std::size_t so >= 0
     return ConstPropertyExists((G4int)index);
   }
   return false;
 }
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
-  const G4String& key) const
+G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const G4String& key) const
 {
   // Returns a Material Property Vector corresponding to a key
-  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) !=
-     fMatPropNames.cend())
-  {
+  if (std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) != fMatPropNames.cend()) {
     const G4int index = GetPropertyIndex(G4String(key));
     return GetProperty(index);
   }
   return nullptr;
 }
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
-  const char* key) const
+G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const char* key) const
 {
-  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) !=
-     fMatPropNames.cend())
-  {
+  if (std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) != fMatPropNames.cend()) {
     const G4int index = GetPropertyIndex(G4String(key));
     return GetProperty(index);
   }
   return nullptr;
 }
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(
-  const G4int index) const
+G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const G4int index) const
 {
   // Returns a Material Property Vector corresponding to an index
   // returns nullptr if the property has not been defined by user
-  if(index >= 0 && index < (G4int) fMP.size())
-  {
+  if (index >= 0 && index < (G4int)fMP.size()) {
     return fMP[index];
   }
   return nullptr;
 }
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
-  const G4String& key, const std::vector<G4double>& photonEnergies,
-  const std::vector<G4double>& propertyValues, G4bool createNewKey,
-  G4bool spline)
+G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(const G4String& key,
+  const std::vector<G4double>& photonEnergies, const std::vector<G4double>& propertyValues,
+  G4bool createNewKey, G4bool spline)
 {
-  if(photonEnergies.size() != propertyValues.size())
-  {
+  if (photonEnergies.size() != propertyValues.size()) {
     G4ExceptionDescription ed;
     ed << "AddProperty error!";
-    G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat204",
-                FatalException, ed);
+    G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat204", FatalException, ed);
   }
 
   // G4PhysicsVector assumes energies are in increasing order
-  for (std::size_t i = 0; i < photonEnergies.size() - 1; ++i)
-  {
-    if(photonEnergies.at(i+1) < photonEnergies.at(i))
-    {
+  for (std::size_t i = 0; i < photonEnergies.size() - 1; ++i) {
+    if (photonEnergies.at(i + 1) < photonEnergies.at(i)) {
       G4ExceptionDescription ed;
       ed << "Energies in material property table must be in increasing "
-         << "order. Key: " << key << " Energy: " << photonEnergies.at(i+1);
-      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat215",
-                  FatalException, ed);
+         << "order. Key: " << key << " Energy: " << photonEnergies.at(i + 1);
+      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat215", FatalException, ed);
     }
   }
 
   // if the key doesn't exist, add it if requested
-  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) ==
-     fMatPropNames.cend())
-  {
-    if(createNewKey)
-    {
+  if (std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) == fMatPropNames.cend()) {
+    if (createNewKey) {
       fMatPropNames.push_back(key);
       fMP.push_back(nullptr);
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
-      ed << "Attempting to create a new material property key " << key
-         << " without setting\n"
+      ed << "Attempting to create a new material property key " << key << " without setting\n"
          << "createNewKey parameter of AddProperty to true.";
-      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat205",
-                  FatalException, ed);
+      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat205", FatalException, ed);
     }
   }
 
-  auto* mpv =
-    new G4MaterialPropertyVector(photonEnergies, propertyValues, spline);
+  auto* mpv = new G4MaterialPropertyVector(photonEnergies, propertyValues, spline);
   mpv->SetVerboseLevel(1);
-  if(spline)
-  {
+  if (spline) {
     mpv->FillSecondDerivatives();
   }
   G4int index = GetPropertyIndex(key);
-  fMP[index]  = mpv;
+  fMP[index] = mpv;
 
   // if key is RINDEX, we calculate GROUPVEL -
   // contribution from Tao Lin (IHEP, the JUNO experiment)
-  if(key == "RINDEX")
-  {
+  if (key == "RINDEX") {
     CalculateGROUPVEL();
   }
 
   return mpv;
 }
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
-  const char* key, G4double* photonEnergies, G4double* propertyValues,
-  G4int numEntries, G4bool createNewKey, G4bool spline)
+G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(const char* key,
+  G4double* photonEnergies, G4double* propertyValues, G4int numEntries, G4bool createNewKey,
+  G4bool spline)
 {
-
   // Provides a way of adding a property to the Material Properties
   // Table given a pair of arrays and a key
   G4String k(key);
@@ -386,9 +345,8 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
   return AddProperty(k, energies, values, createNewKey, spline);
 }
 
-void G4MaterialPropertiesTable::AddProperty(const G4String& key,
-                                            G4MaterialPropertyVector* mpv,
-                                            G4bool createNewKey)
+void G4MaterialPropertiesTable::AddProperty(
+  const G4String& key, G4MaterialPropertyVector* mpv, G4bool createNewKey)
 {
   //  Provides a way of adding a property to the Material Properties
   //  Table given an G4MaterialPropertyVector Reference and a key
@@ -396,97 +354,79 @@ void G4MaterialPropertiesTable::AddProperty(const G4String& key,
   // G4PhysicsVector assumes energies are in increasing order
   // An MPV with size==0 or 1 is also ok
   if (mpv->GetVectorLength() > 1) {
-    for (std::size_t i = 0; i < mpv->GetVectorLength() - 1; ++i)
-    {
-      if(mpv->Energy(i+1) < mpv->Energy(i))
-      {
+    for (std::size_t i = 0; i < mpv->GetVectorLength() - 1; ++i) {
+      if (mpv->Energy(i + 1) < mpv->Energy(i)) {
         G4ExceptionDescription ed;
         ed << "Energies in material property vector must be in increasing "
-           << "order. Key: " << key << " Energy: " << mpv->Energy(i+1);
-        G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat216",
-                    FatalException, ed);
+           << "order. Key: " << key << " Energy: " << mpv->Energy(i + 1);
+        G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat216", FatalException, ed);
       }
     }
   }
 
   // if the key doesn't exist, add it
-  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) ==
-     fMatPropNames.cend())
-  {
-    if(createNewKey)
-    {
+  if (std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) == fMatPropNames.cend()) {
+    if (createNewKey) {
       fMatPropNames.push_back(key);
       fMP.push_back(nullptr);
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
-      ed << "Attempting to create a new material property key " << key
-         << " without setting\n"
+      ed << "Attempting to create a new material property key " << key << " without setting\n"
          << "createNewKey parameter of AddProperty to true.";
-      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat206",
-                  FatalException, ed);
+      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat206", FatalException, ed);
     }
   }
   G4int index = GetPropertyIndex(key);
-  fMP[index]  = mpv;
+  fMP[index] = mpv;
 
   // if key is RINDEX, we calculate GROUPVEL -
   // contribution from Tao Lin (IHEP, the JUNO experiment)
-  if(key == "RINDEX")
-  {
+  if (key == "RINDEX") {
     CalculateGROUPVEL();
   }
 }
 
-void G4MaterialPropertiesTable::AddProperty(const char* key,
-                                            G4MaterialPropertyVector* mpv,
-                                            G4bool createNewKey)
+void G4MaterialPropertiesTable::AddProperty(
+  const char* key, G4MaterialPropertyVector* mpv, G4bool createNewKey)
 {
   AddProperty(G4String(key), mpv, createNewKey);
 }
 
-void G4MaterialPropertiesTable::AddProperty(const G4String& key,
-                                            const G4String& mat)
+void G4MaterialPropertiesTable::AddProperty(const G4String& key, const G4String& mat)
 {
   // load a material property vector defined in Geant4 source
-  G4MaterialPropertyVector* v =
-    G4OpticalMaterialProperties::GetProperty(key, mat);
+  G4MaterialPropertyVector* v = G4OpticalMaterialProperties::GetProperty(key, mat);
   AddProperty(key, v);
 }
 
-void G4MaterialPropertiesTable::AddConstProperty(const G4String& key,
-                                                 G4double propertyValue,
-                                                 G4bool createNewKey)
+void G4MaterialPropertiesTable::AddConstProperty(
+  const G4String& key, G4double propertyValue, G4bool createNewKey)
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
-  if(std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key) ==
-     fMatConstPropNames.cend())
+  if (std::find(fMatConstPropNames.cbegin(), fMatConstPropNames.cend(), key) ==
+      fMatConstPropNames.cend())
   {
-    if(createNewKey)
-    {
+    if (createNewKey) {
       fMatConstPropNames.push_back(key);
       fMCP.emplace_back(0., true);
     }
-    else
-    {
+    else {
       G4ExceptionDescription ed;
       ed << "Attempting to create a new material constant property key " << key
          << " without setting"
          << " createNewKey parameter of AddProperty to true.";
-      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat207",
-                  FatalException, ed);
+      G4Exception("G4MaterialPropertiesTable::AddProperty()", "mat207", FatalException, ed);
     }
   }
   G4int index = GetConstPropertyIndex(key);
 
-  fMCP[index] = std::pair<G4double, G4bool>{ propertyValue, true };
+  fMCP[index] = std::pair<G4double, G4bool>{propertyValue, true};
 }
 
-void G4MaterialPropertiesTable::AddConstProperty(const char* key,
-                                                 G4double propertyValue,
-                                                 G4bool createNewKey)
+void G4MaterialPropertiesTable::AddConstProperty(
+  const char* key, G4double propertyValue, G4bool createNewKey)
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
@@ -496,9 +436,8 @@ void G4MaterialPropertiesTable::AddConstProperty(const char* key,
 void G4MaterialPropertiesTable::RemoveConstProperty(const G4String& key)
 {
   G4int index = GetConstPropertyIndex(key);
-  if(index < (G4int) fMCP.size())
-  {
-    fMCP[index] = std::pair<G4double, G4bool>{ 0., false };
+  if (index < (G4int)fMCP.size()) {
+    fMCP[index] = std::pair<G4double, G4bool>{0., false};
   }
 }
 
@@ -514,57 +453,44 @@ void G4MaterialPropertiesTable::RemoveProperty(const G4String& key)
   fMP[index] = nullptr;
 }
 
-void G4MaterialPropertiesTable::RemoveProperty(const char* key)
-{
-  RemoveProperty(G4String(key));
-}
+void G4MaterialPropertiesTable::RemoveProperty(const char* key) { RemoveProperty(G4String(key)); }
 
-void G4MaterialPropertiesTable::AddEntry(const G4String& key,
-                                         G4double aPhotonEnergy,
-                                         G4double aPropertyValue)
+void G4MaterialPropertiesTable::AddEntry(
+  const G4String& key, G4double aPhotonEnergy, G4double aPropertyValue)
 {
   // Allows to add an entry pair directly to the Material Property Vector
   // given a key.
-  if(std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) ==
-     fMatPropNames.cend())
-  {
-    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat214",
-                FatalException, "Material Property Vector not found.");
+  if (std::find(fMatPropNames.cbegin(), fMatPropNames.cend(), key) == fMatPropNames.cend()) {
+    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat214", FatalException,
+      "Material Property Vector not found.");
   }
   G4int index = GetPropertyIndex(key);
 
   G4MaterialPropertyVector* targetVector = fMP[index];
-  if(targetVector != nullptr)
-  {
+  if (targetVector != nullptr) {
     // do not allow duplicate energies
-    for (std::size_t i = 0; i < targetVector->GetVectorLength(); ++i)
-    {
-      if(aPhotonEnergy == targetVector->Energy(i))
-      {
+    for (std::size_t i = 0; i < targetVector->GetVectorLength(); ++i) {
+      if (aPhotonEnergy == targetVector->Energy(i)) {
         G4ExceptionDescription ed;
         ed << "Energy values in material property vector must be unique. "
            << "Key: " << key;
-        G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat217",
-                    FatalException, ed);
+        G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat217", FatalException, ed);
       }
     }
 
     targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
   }
-  else
-  {
-    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat208",
-                FatalException, "Material Property Vector not found.");
+  else {
+    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat208", FatalException,
+      "Material Property Vector not found.");
   }
-  if(key == "RINDEX")
-  {
+  if (key == "RINDEX") {
     CalculateGROUPVEL();
   }
 }
 
-void G4MaterialPropertiesTable::AddEntry(const char* key,
-                                         G4double aPhotonEnergy,
-                                         G4double aPropertyValue)
+void G4MaterialPropertiesTable::AddEntry(
+  const char* key, G4double aPhotonEnergy, G4double aPropertyValue)
 {
   AddEntry(G4String(key), aPhotonEnergy, aPropertyValue);
 }
@@ -573,10 +499,8 @@ void G4MaterialPropertiesTable::DumpTable() const
 {
   // material properties
   G4int j = 0;
-  for(const auto& prop : fMP)
-  {
-    if(prop != nullptr)
-    {
+  for (const auto& prop : fMP) {
+    if (prop != nullptr) {
       G4cout << j << ": " << fMatPropNames[j] << G4endl;
       prop->DumpValues();
     }
@@ -584,12 +508,9 @@ void G4MaterialPropertiesTable::DumpTable() const
   }
   // material constant properties
   j = 0;
-  for(const auto& cprop : fMCP)
-  {
-    if(cprop.second)
-    {
-      G4cout << j << ": " << fMatConstPropNames[j] << " " << cprop.first
-             << G4endl;
+  for (const auto& cprop : fMCP) {
+    if (cprop.second) {
+      G4cout << j << ": " << fMatConstPropNames[j] << " " << cprop.first << G4endl;
     }
     ++j;
   }
@@ -602,21 +523,18 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
 #endif
 
   // check if "GROUPVEL" already exists. If so, remove it.
-  if(fMP[kGROUPVEL] != nullptr)
-  {
+  if (fMP[kGROUPVEL] != nullptr) {
     this->RemoveProperty("GROUPVEL");
   }
 
   // fetch RINDEX data, give up if unavailable
   G4MaterialPropertyVector* rindex = this->GetProperty(kRINDEX);
-  if(rindex == nullptr)
-  {
+  if (rindex == nullptr) {
     return nullptr;
   }
 
   // RINDEX exists but has no entries, give up
-  if(rindex->GetVectorLength() == 0)
-  {
+  if (rindex->GetVectorLength() == 0) {
     return nullptr;
   }
 
@@ -629,24 +547,21 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
   G4double E0 = rindex->Energy(0);
   G4double n0 = (*rindex)[0];
 
-  if(E0 <= 0.)
-  {
-    G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat211",
-                FatalException, "Optical Photon Energy <= 0");
+  if (E0 <= 0.) {
+    G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat211", FatalException,
+      "Optical Photon Energy <= 0");
   }
 
-  if(rindex->GetVectorLength() >= 2)
-  {
+  if (rindex->GetVectorLength() >= 2) {
     // good, we have at least two entries in RINDEX
     // get next energy/value pair
 
     G4double E1 = rindex->Energy(1);
     G4double n1 = (*rindex)[1];
 
-    if(E1 <= 0.)
-    {
-      G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat212",
-                  FatalException, "Optical Photon Energy <= 0");
+    if (E1 <= 0.) {
+      G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat212", FatalException,
+        "Optical Photon Energy <= 0");
     }
 
     G4double vg;
@@ -655,21 +570,18 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
     vg = c_light / (n0 + (n1 - n0) / G4Log(E1 / E0));
 
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
-    if((vg < 0) || (vg > c_light / n0))
-    {
+    if ((vg < 0) || (vg > c_light / n0)) {
       vg = c_light / n0;
     }
 
     groupvel->InsertValues(E0, vg);
 
     // add entries at midpoints between remaining photon energies
-    for(std::size_t i = 2; i < rindex->GetVectorLength(); ++i)
-    {
+    for (std::size_t i = 2; i < rindex->GetVectorLength(); ++i) {
       vg = c_light / (0.5 * (n0 + n1) + (n1 - n0) / G4Log(E1 / E0));
 
       // allow only for 'normal dispersion' -> dn/d(logE) > 0
-      if((vg < 0) || (vg > c_light / (0.5 * (n0 + n1))))
-      {
+      if ((vg < 0) || (vg > c_light / (0.5 * (n0 + n1)))) {
         vg = c_light / (0.5 * (n0 + n1));
       }
       groupvel->InsertValues(0.5 * (E0 + E1), vg);
@@ -680,10 +592,9 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
       E1 = rindex->Energy(i);
       n1 = (*rindex)[i];
 
-      if(E1 <= 0.)
-      {
-        G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat213",
-                    FatalException, "Optical Photon Energy <= 0");
+      if (E1 <= 0.) {
+        G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat213", FatalException,
+          "Optical Photon Energy <= 0");
       }
     }
 
@@ -691,8 +602,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
     vg = c_light / (n1 + (n1 - n0) / G4Log(E1 / E0));
 
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
-    if((vg < 0) || (vg > c_light / n1))
-    {
+    if ((vg < 0) || (vg > c_light / n1)) {
       vg = c_light / n1;
     }
     groupvel->InsertValues(E1, vg);

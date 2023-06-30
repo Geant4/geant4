@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-23 Gabriele Cosmo (hadr-qmd-V11-01-01)
+- G4QMDMeanField: attempt to fix compilation warning on alma9/gcc-13.1
+  and minor code cleanup.
+
+## 2023-04-04 Dennis Wright (hadr-qmd-V11-01-00)
+- Fix coverity bug 20339: uninitialized variable ebini in
+  G4QMDGroundStateNucleus.cc
+
 ## 2022-10-07 Gabriele Cosmo (hadr-qmd-V11-00-01)
 - Fixed compilation warning on Intel/icx compiler for variable set
   but not used in G4QMDMeanField.

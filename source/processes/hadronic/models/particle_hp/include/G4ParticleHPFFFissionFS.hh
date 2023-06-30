@@ -29,37 +29,36 @@
 #ifndef G4ParticleHPFFFissionFS_h
 #define G4ParticleHPFFFissionFS_h 1
 
-#include "globals.hh"
-#include "G4HadProjectile.hh"
 #include "G4DynamicParticleVector.hh"
+#include "G4HadProjectile.hh"
 #include "G4ParticleHPFissionBaseFS.hh"
+#include "globals.hh"
 
 class G4ParticleHPFFFissionFS : public G4ParticleHPFissionBaseFS
 {
- 
-   public:
-      G4ParticleHPFFFissionFS(){ hasXsec = false; }
-      ~G4ParticleHPFFFissionFS();
+  public:
+    G4ParticleHPFFFissionFS() { hasXsec = false; }
+    ~G4ParticleHPFFFissionFS() override;
 
-      void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
+              G4ParticleDefinition*) override;
 
-      G4DynamicParticleVector * ApplyYourself( G4int nNeutrons );
+    G4DynamicParticleVector* ApplyYourself(G4int nNeutrons);
 
-      G4ParticleHPFinalState * New() 
-      {
-         G4ParticleHPFFFissionFS * theNew = new G4ParticleHPFFFissionFS;
-         return theNew;
-      }
+    G4ParticleHPFinalState* New() override
+    {
+      auto theNew = new G4ParticleHPFFFissionFS;
+      return theNew;
+    }
 
-                              //energy   fragZ fragA   fragM
-      void GetAFissionFragment( G4double , G4int& , G4int& , G4int& );
-  
-   private:
-      G4HadFinalState * ApplyYourself( const G4HadProjectile & ) { return NULL; }
+    // energy   fragZ fragA   fragM
+    void GetAFissionFragment(G4double, G4int&, G4int&, G4int&);
 
-      //        MT              Energy            FPS    Yield
-      std::map< G4int , std::map< G4double , std::map< G4int , G4double >* >* > FissionProductYieldData; 
-      std::map< G4int , std::map< G4double , G4int >* > mMTInterpolation; 
+  private:
+    G4HadFinalState* ApplyYourself(const G4HadProjectile&) override { return nullptr; }
 
+    //        MT              Energy            FPS    Yield
+    std::map<G4int, std::map<G4double, std::map<G4int, G4double>*>*> FissionProductYieldData;
+    std::map<G4int, std::map<G4double, G4int>*> mMTInterpolation;
 };
 #endif

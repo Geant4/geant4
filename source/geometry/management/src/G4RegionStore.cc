@@ -56,7 +56,7 @@ G4ThreadLocal G4bool G4RegionStore::locked = false;
 // ***************************************************************************
 //
 G4RegionStore::G4RegionStore()
-  : std::vector<G4Region*>()
+   
 {
   reserve(20);
 }
@@ -160,7 +160,7 @@ void G4RegionStore::Register(G4Region* pRegion)
     std::vector<G4Region*> reg_vec { pRegion };
     store->bmap.insert(std::make_pair(reg_name, reg_vec));
   }
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
   store->mvalid = true;
 }
 

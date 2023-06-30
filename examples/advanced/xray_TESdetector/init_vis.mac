@@ -1,0 +1,13 @@
+# Macro file for the initialization of example Xray_TESdetector
+# in interactive session
+#
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 1
+
+# Initialize kernel
+/run/initialize
+
+# Visualization setting
+/control/execute vis.mac

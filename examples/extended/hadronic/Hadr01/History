@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-05-22 V. Ivanchenko (exhadr01-V11-01-01)
+- HistoManager - added protection agains secondary zero-energy particles
+
+## 2022-12-30 V. Ivanchenko (exhadr01-V11-01-00)
+- Added UI commands to enable neutron general process and extra macro file
 
 ## 2022-12-18 V. Ivanchenko (exhadr01-V11-00-01)
 - Added UI commands to enable b- and c- particle physics and

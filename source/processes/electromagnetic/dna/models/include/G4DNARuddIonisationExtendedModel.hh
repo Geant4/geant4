@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Created by Z. Francis, S. Incerti 2010 
+//
+// Modified for inverse rudd function sampling 26.10.2010
+// Rewitten by V.Ivanchenko 21.05.2023
 //
 
 #ifndef G4DNARuddIonisationExtendedModel_h
@@ -32,6 +36,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
 
+#include "G4EmCorrections.hh"
 #include "G4DNAGenericIonsManager.hh"
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4Electron.hh"
@@ -41,150 +46,128 @@
 #include "G4DNAWaterIonisationStructure.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
+#include <vector>
 
 class G4DNARuddIonisationExtendedModel : public G4VEmModel
 {
-
 public:
 
-  G4DNARuddIonisationExtendedModel(const G4ParticleDefinition* p = 0, 
+  explicit G4DNARuddIonisationExtendedModel(const G4ParticleDefinition* p = nullptr,
 		           const G4String& nam = "DNARuddIonisationExtendedModel");
 
-  virtual ~G4DNARuddIonisationExtendedModel();
+  ~G4DNARuddIonisationExtendedModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double CrossSectionPerVolume(  const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
+  G4double CrossSectionPerVolume(const G4Material* material,
+                                 const G4ParticleDefinition* p,
+				 G4double ekin,
+				 G4double emin,
+				 G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
-  inline void SelectStationary(G4bool input); 
+  void SelectStationary(G4bool val) { statCode = val; }; 
 
-protected:
+  // method for unit tests
+  G4double ComputeProbabilityFunction(const G4ParticleDefinition*, G4double kine,
+                                      G4double deltae, G4int shell);
 
-  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
+  G4DNARuddIonisationExtendedModel & operator=
+  (const  G4DNARuddIonisationExtendedModel &right) = delete;
+  G4DNARuddIonisationExtendedModel(const G4DNARuddIonisationExtendedModel&) = delete;
 
 private:
 
-  G4bool statCode;
+  void SetParticle(const G4ParticleDefinition*);
+
+  G4int SelectShell(G4double energy);
+
+  G4double SampleElectronEnergy(G4double kine, G4double bindingEnergy, G4int shell);
+
+  G4double ProbabilityFunction(G4double kine, G4double deltae,
+                               G4double bindingEnergy, G4int shell);
+
+  G4double S_1s(G4double t,
+		G4double energyTransferred,
+		G4double slaterEffectiveChg,
+		G4double shellNumber);
+
+  G4double S_2s(G4double t,
+		G4double energyTransferred,
+		G4double slaterEffectiveChg,
+		G4double shellNumber);
+
+
+  G4double S_2p(G4double t,
+		G4double energyTransferred,
+		G4double slaterEffectiveChg,
+		G4double shellNumber);
+
+  G4double Rh(G4double t, 
+	      G4double energyTransferred,
+	      G4double slaterEffectiveChg,
+	      G4double shellNumber);
+
+  G4double CorrectionFactor(G4double kine, G4int shell);
+
+protected:
+
+  G4ParticleChangeForGamma* fParticleChangeForGamma{nullptr};
+
+private:
+
+  // idx = 0 - hydrogen
+  // idx = 1 - proton
+  // idx = 2%26 - ions idx=Z
+  // idx = -1 - alpha+
+  // idx = -1 - helium
+  static const G4int RUDDZMAX = 27;
+  static G4DNACrossSectionDataSet* xsdata[RUDDZMAX];
+  static G4DNACrossSectionDataSet* xsalphaplus;
+  static G4DNACrossSectionDataSet* xshelium;
 
   // Water density table
-  const std::vector<G4double>* fpWaterDensity = nullptr;
+  static const std::vector<G4double>* fpWaterDensity;
 
-  //deexcitation manager to produce fluo photns and e-
-  G4VAtomDeexcitation*      fAtomDeexcitation;
+  G4DNACrossSectionDataSet* xscurrent{nullptr};
+  const G4ParticleDefinition* fParticle{nullptr};
+  G4EmCorrections* fEmCorrections;
+  G4Pow* fGpow;
+ 
+  //deexcitation manager to produce fluo photons and e-
+  G4VAtomDeexcitation* fAtomDeexcitation{nullptr};
 
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-  
-  // ZF: 26-10-2010
-  std::map<G4double,G4double> lowEnergyLimitForA, lowEnergyLimitOfModelForA, killBelowEnergyForA;
+  // tracking cut and low-energy limit of proton x-section table
+  G4double fLowestEnergy;
+  // scaled low-energy limit of ion x-section table
+  G4double fLimitEnergy;
 
-  G4bool isInitialised;
-  G4bool isIon = false;
-  G4int verboseLevel;
-  
-  // Cross section
-  G4DNACrossSectionDataSet* mainTable = nullptr;
-  G4DNACrossSectionDataSet* currentTable = nullptr;
-  const G4ParticleDefinition* currParticle = nullptr;
+  G4double fMass{0.0};
+  G4double fAmass{0.0};
+  G4double fMassRate{1.0};
+  G4double fElow{0.0};
 
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
+  G4double slaterEffectiveCharge[3] = {0.0};
+  G4double sCoefficient[3] = {0.0};
+  G4double fTemp[5] = {0.0};
 
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-  
-  // Final state
-  
+  G4int idx{-1};
+  G4int verbose{0};
+
+  G4bool isIon{false};
+  G4bool isFirst{false};
+  G4bool isHelium{false};
+  G4bool statCode{false};
+  G4bool useDNAWaterStructure{true};
+
+  // energy levels of water molecule  
   G4DNAWaterIonisationStructure waterStructure;
-
-  G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
-					  G4double incomingParticleEnergy, 
-					  G4int shell);
-
-  G4double RejectionFunction(G4ParticleDefinition* particle, 
-							      G4double k, 
-							      G4double proposed_ws, 
-							      G4int ionizationLevelIndex);
-
-  G4double ProposedSampledEnergy(G4ParticleDefinition* particle, 
-							      G4double k,  
-							      G4int ionizationLevelIndex);
-   
-  G4double CorrectionFactor(G4ParticleDefinition* particleDefinition, G4double k, G4int shell);
-
-  G4double S_1s(G4double t, 
-		G4double energyTransferred, 
-		G4double slaterEffectiveChg, 
-		G4double shellNumber);
-
-  G4double S_2s(G4double t, 
-		G4double energyTransferred, 
-		G4double slaterEffectiveChg, 
-		G4double shellNumber);
-
-
-  G4double S_2p(G4double t, 
-		G4double energyTransferred, 
-		G4double slaterEffectiveChg, 
-		G4double shellNumber);
-
-  G4double R(G4double t, 
-	     G4double energyTransferred, 
-	     G4double slaterEffectiveChg, 
-	     G4double shellNumber) ;
-
-  G4double slaterEffectiveCharge[3];
-  G4double sCoefficient[3];
-  G4double localMinEnergy = 0.0;
-  G4double currentScaledEnergy = 0.0;
-  G4double massC12 = 0.0;
-  
-  // Partial cross section
-  
-  G4double PartialCrossSection(const G4Track& track);
-			
-  G4double Sum(G4double energy, const G4String& particle);
-
-  G4int RandomSelect(G4double energy);
-
-  G4ParticleDefinition* GetDNAIonParticleDefinition(const G4ParticleDefinition* particleDefinition);
-   
-  //
-   
-  G4DNARuddIonisationExtendedModel & operator=(const  G4DNARuddIonisationExtendedModel &right);
-  G4DNARuddIonisationExtendedModel(const  G4DNARuddIonisationExtendedModel&);
-
-  // Reusable particle definitions
-  G4ParticleDefinition* protonDef = nullptr;
-  G4ParticleDefinition* hydrogenDef = nullptr;
-  G4ParticleDefinition* alphaPlusPlusDef = nullptr;
-  G4ParticleDefinition* alphaPlusDef = nullptr;
-  G4ParticleDefinition* heliumDef = nullptr;
-
-  G4ParticleDefinition* carbonDef = nullptr;
-  G4ParticleDefinition* nitrogenDef = nullptr;
-  G4ParticleDefinition* oxygenDef = nullptr;
-  G4ParticleDefinition* siliconDef = nullptr;
-  G4ParticleDefinition* ironDef = nullptr;
-
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4DNARuddIonisationExtendedModel::SelectStationary (G4bool input)
-{ 
-    statCode = input; 
-}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

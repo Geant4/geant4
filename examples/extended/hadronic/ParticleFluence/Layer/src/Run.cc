@@ -159,7 +159,7 @@ void Run::SetSteppingArray( const std::array< G4double,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetTrackingArray1( const std::array< G4int,
+void Run::SetTrackingArray1( const std::array< G4long,
                              TrackingAction::fkNumberCombinations >& inputArray ) {
   for ( G4int i = 0; i < TrackingAction::fkNumberCombinations; ++i ) {
     fTrackingArray1[i] = inputArray[i];

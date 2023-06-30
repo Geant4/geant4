@@ -159,10 +159,13 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
   this->SetVerboseLevel(G4CascadeParameters::verbose());
 
-  if (G4CascadeParameters::usePreCompound())
+  if ( G4CascadeParameters::usePreCompound() ) {
     usePreCompoundDeexcitation();
-  else
+  } else if ( G4CascadeParameters::useAbla() ) {
+    useAblaDeexcitation();
+  } else {
     useCascadeDeexcitation();
+  }
 
   secID = G4PhysicsModelCatalog::GetModelID( "model_BertiniCascade" );
 }
@@ -219,6 +222,10 @@ void G4CascadeInterface::useCascadeDeexcitation() {
 
 void G4CascadeInterface::usePreCompoundDeexcitation() {
   collider->usePreCompoundDeexcitation();
+}
+
+void G4CascadeInterface::useAblaDeexcitation() {
+  collider->useAblaDeexcitation();
 }
 
 

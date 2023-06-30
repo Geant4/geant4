@@ -3,6 +3,7 @@
 #
 /run/verbose 1
 /event/verbose 0 
+#=======================  LAYER ===========================
 #
 #--- "Beam pipe" : 2-mm-thick layer of Beryllium
 ###/mydet/targetMaterial G4_Be

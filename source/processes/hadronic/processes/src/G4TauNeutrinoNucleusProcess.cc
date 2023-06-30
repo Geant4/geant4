@@ -45,8 +45,6 @@
 #include "G4VDiscreteProcess.hh"
 
 #include "G4TauNeutrinoNucleusTotXsc.hh"
-//#include "G4NuMuNucleusCcModel.hh"
-//#include "G4NuMuNucleusNcModel.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -61,23 +59,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-G4TauNeutrinoNucleusProcess::G4TauNeutrinoNucleusProcess( G4String anEnvelopeName, const G4String& pName)
-  : G4HadronicProcess( pName, fHadronInelastic ), isInitialised(false), fBiased(true)  // fHadronElastic???
+G4TauNeutrinoNucleusProcess::G4TauNeutrinoNucleusProcess(const G4String& anEnvelopeName, const G4String& pName)
+  : G4HadronicProcess( pName, fHadronInelastic )
 {
   lowestEnergy = 1.*keV;
-  fEnvelope  = nullptr;
   fEnvelopeName = anEnvelopeName;
-  fTotXsc = nullptr; // new G4TauNeutrinoNucleusTotXsc();
-  fNuNuclCcBias=1.;
-  fNuNuclNcBias=1.;
-  fNuNuclTotXscBias=1.;
+  fTotXsc = new G4TauNeutrinoNucleusTotXsc();
   safetyHelper = G4TransportationManager::GetTransportationManager()->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
-}
-
-G4TauNeutrinoNucleusProcess::~G4TauNeutrinoNucleusProcess()
-{
-  if( fTotXsc ) delete fTotXsc;
 }
 
 ///////////////////////////////////////////////////////
@@ -85,9 +74,6 @@ G4TauNeutrinoNucleusProcess::~G4TauNeutrinoNucleusProcess()
 void G4TauNeutrinoNucleusProcess::SetBiasingFactor(G4double bf)
 {
   fNuNuclTotXscBias = bf;
-
-  fTotXsc = new G4TauNeutrinoNucleusTotXsc();
-  fTotXsc->SetBiasingFactor(bf);
 }
 
 ///////////////////////////////////////////////////////
@@ -96,9 +82,17 @@ void G4TauNeutrinoNucleusProcess::SetBiasingFactors(G4double bfCc, G4double bfNc
 {
   fNuNuclCcBias = bfCc;
   fNuNuclNcBias = bfNc;
+  fNuNuclTotXscBias = std::max(fNuNuclCcBias, fNuNuclNcBias);
+}
 
-  fTotXsc = new G4TauNeutrinoNucleusTotXsc();
-  // fTotXsc->SetBiasingFactors(bfCc, bfNc);
+///////////////////////////////////////////////
+
+G4double G4TauNeutrinoNucleusProcess::PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                      G4double previousStepSize,
+                                      G4ForceCondition* condition )
+{
+  return G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(  track,
+                                       previousStepSize,  condition );
 }
 
 //////////////////////////////////////////////////
@@ -239,7 +233,10 @@ G4TauNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& st
   G4HadProjectile theProj( track );
   G4HadronicInteraction* hadi = nullptr;
   G4HadFinalState* result = nullptr;
-
+  const G4Element* elm =  GetCrossSectionDataStore()->SampleZandA(dynParticle, material,
+                                                    *targNucleus);
+  G4int ZZ = elm->GetZasInt();
+  fXsc = fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
   G4double ccTotRatio = fTotXsc->GetCcTotRatio();
 
   if( G4UniformRand() < ccTotRatio )  // Cc-model

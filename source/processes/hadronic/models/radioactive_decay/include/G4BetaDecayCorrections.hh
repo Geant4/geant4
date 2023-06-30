@@ -46,7 +46,7 @@ class G4BetaDecayCorrections
                          const G4double& p_e, const G4double& e_nu);
 
   private:
-    G4double ModSquared(const G4double& x, const G4double& y);
+    G4double ModSquared(const G4double& x, G4double y);
     G4double Gamma(const G4double& arg);
 
     const G4int Z;
@@ -55,6 +55,7 @@ class G4BetaDecayCorrections
     G4double Rnuc;    // Nuclear radius  
     G4double V0;      // Electron screening potential  
     G4double gamma0;
+    G4double imMax;   // largest allowed im argument of ModSquared
 
     G4double gc[6];   // Real gamma function polynomial coefficients 
 };

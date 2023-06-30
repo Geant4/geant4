@@ -46,14 +46,14 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
                                             G4VPVParameterisation* pParam,
                                             G4bool pSurfChk )
 : G4PVReplica(pName, nReplicas, pAxis, pLogical,
-              pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr ),
+              pMotherPhysical != nullptr ? pMotherPhysical->GetLogicalVolume() : nullptr ),
     fparam(pParam)
 {
-  G4LogicalVolume* motherLogical= pMotherPhysical ?
+  G4LogicalVolume* motherLogical= pMotherPhysical != nullptr ?
       pMotherPhysical->GetLogicalVolume() : nullptr;
 
   SetMotherLogical( motherLogical );
-  if( motherLogical )
+  if( motherLogical != nullptr )
   {
     // Registration moved here to ensure that the volume is recognised as Parameterised     
     motherLogical->AddDaughter(this);
@@ -92,7 +92,7 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
     fparam(pParam)
 {
   SetMotherLogical( pMotherLogical );
-  if( pMotherLogical )
+  if( pMotherLogical != nullptr )
   {
     // Registration moved here to ensure that the volume is recognised as Parameterised
     pMotherLogical->AddDaughter(this);
@@ -112,9 +112,7 @@ G4PVParameterised::G4PVParameterised( __void__& a )
 // ----------------------------------------------------------------------
 // Destructor
 //
-G4PVParameterised::~G4PVParameterised()
-{
-}
+G4PVParameterised::~G4PVParameterised() = default;
 
 // ----------------------------------------------------------------------
 // GetParameterisation
@@ -251,11 +249,11 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
       //
       G4AffineTransform Td( GetRotation(), GetTranslation() );
 
-      for (auto pos=points.cbegin(); pos!=points.cend(); ++pos)
+      for (const auto & point : points)
       {
         // Transform each point according to daughter's frame
         //
-        G4ThreeVector md = Td.InverseTransformPoint(*pos);
+        G4ThreeVector md = Td.InverseTransformPoint(point);
 
         if (solidB->Inside(md)==kInside)
         {

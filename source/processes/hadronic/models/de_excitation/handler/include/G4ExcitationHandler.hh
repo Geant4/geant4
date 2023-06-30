@@ -98,22 +98,22 @@ public:
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt);
-  // for superimposed Coulomb Barrir for inverse cross sections
+  // for superimposed Coulomb Barrier for inverse cross sections
   inline void UseSICB();
 
   //==============================================
+
+  G4ExcitationHandler(const G4ExcitationHandler &right) = delete;
+  const G4ExcitationHandler & operator
+  =(const G4ExcitationHandler &right) = delete;
+  G4bool operator==(const G4ExcitationHandler &right) const = delete;
+  G4bool operator!=(const G4ExcitationHandler &right) const = delete;
 
 private:
 
   void SetParameters();
 
   inline void SortSecondaryFragment(G4Fragment*);
-
-  G4ExcitationHandler(const G4ExcitationHandler &right);
-  const G4ExcitationHandler & operator
-  =(const G4ExcitationHandler &right);
-  G4bool operator==(const G4ExcitationHandler &right) const;
-  G4bool operator!=(const G4ExcitationHandler &right) const;
   
   G4VEvaporation* theEvaporation;  
   G4VMultiFragmentation* theMultiFragmentation;
@@ -179,12 +179,6 @@ inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
 {
   minEForMultiFrag = anE;
 }
-
-inline void G4ExcitationHandler::SetOPTxs(G4int) 
-{}
-
-inline void G4ExcitationHandler::UseSICB()
-{}
 
 inline void G4ExcitationHandler::SortSecondaryFragment(G4Fragment* frag)
 { 

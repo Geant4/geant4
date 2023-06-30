@@ -39,48 +39,39 @@
 #ifndef G4UImessenger_hh
 #define G4UImessenger_hh 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4UIdirectory.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 class G4UImessenger
 {
   public:
-
+    // Constructor. In the implementation of the concrete messenger,
+    // all commands related to the messenger must be constructed
     G4UImessenger() = default;
-    G4UImessenger(const G4String& path, const G4String& dsc,
-                  G4bool commandsToBeBroadcasted = true);
-      // Constructor. In the implementation of the concrete messenger,
-      // all commands related to the messenger must be constructed
+    G4UImessenger(const G4String& path, const G4String& dsc, G4bool commandsToBeBroadcasted = true);
 
+    // Destructor. In the implementation of the concrete messenger,
+    // all commands defined in the constructor must be deleted
     virtual ~G4UImessenger();
-      // Destructor. In the implementation of the concrete messenger,
-      // all commands defined in the constructor must be deleted
 
+    // The concrete implementation of this method gets the current value(s)
+    // of the parameter(s) of the given command from the destination class,
+    // converts the value(s) to a string, and returns the string.
+    // Conversion could be done by the ConvertToString() method of
+    // corresponding G4UIcmdXXX classes if the command is an object of
+    // these G4UIcmdXXX classes
     virtual G4String GetCurrentValue(G4UIcommand* command);
-      // The concrete implementation of this method gets the current value(s)
-      // of the parameter(s) of the given command from the destination class,
-      // converts the value(s) to a string, and returns the string.
-      // Conversion could be done by the ConvertToString() method of
-      // corresponding G4UIcmdXXX classes if the command is an object of
-      // these G4UIcmdXXX classes
 
+    // The concrete implementation of this method converts the string
+    // "newValue" to value(s) of type(s) of the parameter(s).
+    // Converted methods corresponding to the type of the command can be
+    // used if the command is an object of G4UIcmdXXX classes
     virtual void SetNewValue(G4UIcommand* command, G4String newValue);
-      // The concrete implementation of this method converts the string
-      // "newValue" to value(s) of type(s) of the parameter(s).
-      // Converted methods corresponding to the type of the command can be
-      // used if the command is an object of G4UIcmdXXX classes
 
-    G4bool operator==(const G4UImessenger& messenger) const;
-    G4bool operator!=(const G4UImessenger& messenger) const;
-
-    inline G4bool CommandsShouldBeInMaster() const
-    {
-      return commandsShouldBeInMaster;
-    }
+    inline G4bool CommandsShouldBeInMaster() const { return commandsShouldBeInMaster; }
 
   protected:
-
     G4String ItoS(G4int i);
     G4String DtoS(G4double a);
     G4String BtoS(G4bool b);
@@ -91,30 +82,27 @@ class G4UImessenger
 
     void AddUIcommand(G4UIcommand* newCommand);
 
+    // Shortcut way for creating directory and commands
     void CreateDirectory(const G4String& path, const G4String& dsc,
                          G4bool commandsToBeBroadcasted = true);
-    template <typename T>
+    template<typename T>
     T* CreateCommand(const G4String& cname, const G4String& dsc);
-      // Shortcut way for creating directory and commands
 
   protected:
-
     G4UIdirectory* baseDir = nullptr;  // used if new object is created
-    G4String baseDirName = "";    // used if dir already exists
+    G4String baseDirName = "";  // used if dir already exists
     G4bool commandsShouldBeInMaster = false;
 };
 
 // Inline template implementations
 
-template <typename T>
+template<typename T>
 T* G4UImessenger::CreateCommand(const G4String& cname, const G4String& dsc)
 {
   G4String path;
-  if(cname[0] != '/')
-  {
+  if (cname[0] != '/') {
     path = baseDirName + cname;
-    if(path[0] != '/')
-    {
+    if (path[0] != '/') {
       path = "/" + path;
     }
   }

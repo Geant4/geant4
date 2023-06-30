@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-05-10 Ben Morgan (persistency-V11-01-01) 
+- Split build of G4persistency into G4mctruth, G4geomtext and (optional) G4gdml
+  libraries.
+
+## 2022-12-12 Ben Morgan (persistency-V11-01-00)
+- Remove obsolete GNUmakefile scripts
+
 ## 2022-11-11 Gabriele Cosmo (persistency-V11-00-03)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

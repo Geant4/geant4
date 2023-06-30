@@ -4,6 +4,7 @@
 geant4_add_module(G4FR
   PUBLIC_HEADERS
     G4DAWNFILE.hh
+  PRIVATE_HEADERS
     G4DAWNFILESceneHandler.hh
     G4DAWNFILEViewer.hh
     G4FRConst.hh
@@ -18,12 +19,12 @@ geant4_add_module(G4FR
 
 geant4_module_link_libraries(G4FR
   PUBLIC
-    G4geometrymng
-    G4modeling
     G4vis_management
-    G4globman
   PRIVATE
     G4csg
+    G4geometrymng
+    G4globman
     G4graphics_reps
-    G4hepgeometry)
+    G4hepgeometry
+    G4modeling)
 

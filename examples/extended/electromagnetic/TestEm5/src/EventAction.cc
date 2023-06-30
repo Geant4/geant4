@@ -41,18 +41,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:G4UserEventAction(),
- fEnergyDeposit(0.),
- fTrakLenCharged(0.), fTrakLenNeutral(0.),
- fNbStepsCharged(0), fNbStepsNeutral(0),
- fTransmitFlag(0), fReflectFlag(0)
-{
-  fTypes[0] = fTypes[1] = fTypes[2] = fTypes[3] = 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void EventAction::BeginOfEventAction(const G4Event* )
 {
   // initialisation per event

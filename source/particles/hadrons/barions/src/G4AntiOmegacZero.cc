@@ -46,16 +46,16 @@
 // ###                       AntiOmegacZero                           ###
 // ######################################################################
 
-G4AntiOmegacZero* G4AntiOmegacZero::theInstance = 0;
+G4AntiOmegacZero* G4AntiOmegacZero::theInstance = nullptr;
 
 G4AntiOmegacZero* G4AntiOmegacZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_omega_c0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -72,7 +72,7 @@ G4AntiOmegacZero* G4AntiOmegacZero::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -4332,
-                false,      2.68e-4*ns,          NULL,
+                false,      2.68e-4*ns,          nullptr,
                 false,       "omega_c");
 
  //Decay Table is not defined here, wth expectation of pre-assigned

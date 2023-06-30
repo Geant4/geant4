@@ -51,6 +51,7 @@
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "G4Element.hh"
+#include "G4EmParameters.hh"
 
 
 const std::string G4GSPWACorrections::gElemSymbols[] = {"H","He","Li","Be","B" ,
@@ -180,14 +181,7 @@ void G4GSPWACorrections::LoadDataElement(const G4Element *elem) {
     izet = gMaxZet;
   }
   // load data from file
-  const char* tmppath = G4FindDataDir("G4LEDATA");
-  if (!tmppath) {
-    G4Exception("G4GSPWACorrection::LoadDataElement()","em0006",
-		FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
-  std::string path(tmppath);
+  std::string path = G4EmParameters::Instance()->GetDirLEDATA();
   if (fIsElectron) {
     path += "/msc_GS/PWACor/el/";
   } else {

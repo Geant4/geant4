@@ -43,23 +43,14 @@
 #include "G4Tokenizer.hh"
 #include <iomanip>
 
- G4HtmlPPReporter::G4HtmlPPReporter():G4VParticlePropertyReporter()
-{
- 
-}
-
- G4HtmlPPReporter::~G4HtmlPPReporter()
-{
-}    
-
  void G4HtmlPPReporter::Print(const G4String& option)
 {
   SparseOption( option );
 
   GenerateIndex();
 
-  for (size_t i=0; i< pList.size(); i++){
-    G4ParticleDefinition* particle  = G4ParticleTable::GetParticleTable()->FindParticle( pList[i]->GetParticleName() ); 
+  for (const auto & i : pList){
+    G4ParticleDefinition* particle  = G4ParticleTable::GetParticleTable()->FindParticle( i->GetParticleName() ); 
     GeneratePropertyTable(particle);
   }
 }    
@@ -116,14 +107,14 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << sTD << " " << eTD; 
   outFile << eTR << G4endl;;
 
-  for (size_t i=0; i< pList.size(); i++){
-    if (pList[i]->GetPDGEncoding()<0) continue;
+  for (const auto & i : pList){
+    if (i->GetPDGEncoding()<0) continue;
 
     outFile << sTR << G4endl;;
     // column 1  : endcoding
-    outFile << sTD << pList[i]->GetPDGEncoding() << eTD << G4endl;; 
+    outFile << sTD << i->GetPDGEncoding() << eTD << G4endl;; 
     // column 2  : name 
-    G4String name = pList[i]->GetParticleName();
+    G4String name = i->GetParticleName();
     
     G4String fname = name +".html";
     // exception
@@ -134,18 +125,18 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
     outFile << name << "</A>" << eTD << G4endl;
    
     // column 3 mass
-    outFile << sTD <<  pList[i]->GetPDGMass()/GeV << eTD << G4endl;
+    outFile << sTD <<  i->GetPDGMass()/GeV << eTD << G4endl;
 
     // column 4 charge
-    outFile << sTD <<  pList[i]->GetPDGCharge()/eplus << eTD << G4endl;
+    outFile << sTD <<  i->GetPDGCharge()/eplus << eTD << G4endl;
 
     // column 5 life time
-    outFile << sTD <<  pList[i]->GetPDGLifeTime()/ns << eTD << G4endl;
+    outFile << sTD <<  i->GetPDGLifeTime()/ns << eTD << G4endl;
     
     // column 6 AntiParticle
-    if  ( (pList[i]->GetAntiPDGEncoding()!= 0) &&
-          (pList[i]->GetAntiPDGEncoding() != pList[i]->GetPDGEncoding() ) ) {
-      G4ParticleDefinition* anti_particle  = G4ParticleTable::GetParticleTable()->FindParticle( pList[i]->GetAntiPDGEncoding() ); 
+    if  ( (i->GetAntiPDGEncoding()!= 0) &&
+          (i->GetAntiPDGEncoding() != i->GetPDGEncoding() ) ) {
+      G4ParticleDefinition* anti_particle  = G4ParticleTable::GetParticleTable()->FindParticle( i->GetAntiPDGEncoding() ); 
       
       outFile << sTD <<  anti_particle->GetParticleName() << eTD << G4endl;;
     }
@@ -300,7 +291,7 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
 
  // Decay Table  
   G4DecayTable* dcyTable = particle->GetDecayTable(); 
-  if (dcyTable != 0) { 
+  if (dcyTable != nullptr) { 
     outFile << "<H2>" << " Decay Table " << "</H2>" << G4endl;
 
     outFile << sTABLE << '"' << "80%" << '"' << " > " << G4endl;

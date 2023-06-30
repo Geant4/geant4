@@ -46,7 +46,7 @@ class G4LineSection
      G4LineSection( const G4ThreeVector& PntA,
                     const G4ThreeVector& PntB );
 
-     G4double Dist( G4ThreeVector OtherPnt ) const;
+     G4double Dist( const G4ThreeVector& OtherPnt ) const;
 
      inline G4double GetABdistanceSq() const;
 

@@ -38,14 +38,14 @@
 // screen or remake a graphical database whenever required.  The
 // function class must contain:
 //
-//   void operator()(G4VGraphicsScene&, const G4Transform3D&)
+//   void operator()(G4VGraphicsScene&,const G4ModelingParameters*)
 //
 // A base class G4VUserVisAction is provided in the visualisation
 // category.  A G4CallbackModel is made by instantiating this template
 // with a pointer to the function object.  The G4VisManager does this
-// for the user if he/she registers it (SetUserAction) and issues the
+// for the user if he/she registers it (Register*UserVisAction) and issues the
 // command /vis/scene/add/userAction.  See the User Guide for
-// Application Developers, Section 8.8.7 and 8.8.8.
+// Application Developers.
 
 #ifndef G4CALLBACKMODEL_HH
 #define G4CALLBACKMODEL_HH

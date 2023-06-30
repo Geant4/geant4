@@ -6,7 +6,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-04-10 V.Ivanchenko (emmuons-V11-00-08)
+## 2023-04-10 V.Ivanchenko (emmuons-V11-01-00)
 - G4MuBremsstrahlung, G4MuPairProduction - fix problem #2531, spline flag
     was lost for mu-, pi-, K-, and pbar dedx and range tables, the max observed 
     problem was for mu- with momentum ~50 MeV/c, ~5 % biased range

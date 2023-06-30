@@ -77,13 +77,13 @@ class G4ParticleMessenger : public G4UImessenger
   public: 
 
     G4ParticleMessenger(G4ParticleTable* pTable = nullptr);
-    virtual ~G4ParticleMessenger();
+    ~G4ParticleMessenger() override;
 
     G4ParticleMessenger(const G4ParticleMessenger&) = delete;
     G4ParticleMessenger& operator=(const G4ParticleMessenger&) = delete;
 
-    void SetNewValue(G4UIcommand* command, G4String newValues);
-    G4String GetCurrentValue(G4UIcommand* command);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
 

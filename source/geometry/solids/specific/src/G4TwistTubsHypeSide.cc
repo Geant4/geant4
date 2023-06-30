@@ -121,17 +121,14 @@ G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String& name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTubsHypeSide::G4TwistTubsHypeSide( __void__& a )
-  : G4VTwistSurface(a), fKappa(0.), fTanStereo(0.), fTan2Stereo(0.),
-    fR0(0.), fR02(0.), fDPhi(0.)
+  : G4VTwistSurface(a)
 {
 }
 
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistTubsHypeSide::~G4TwistTubsHypeSide()
-{
-}
+G4TwistTubsHypeSide::~G4TwistTubsHypeSide() = default;
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
@@ -351,7 +348,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
          return 0;
       }
        
-      if (vz)
+      if (vz != 0.0)
       { 
          G4double xxz  = std::sqrt(fR02 / (vslope2 - fTan2Stereo)) 
                         * (vz / std::fabs(vz)) ;
@@ -736,7 +733,7 @@ G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector& xx,
          if (xx.z() < fAxisMin[zaxis] + ctol)
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin));
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
             else                        areacode |= sBoundary;
 
             if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
@@ -745,7 +742,7 @@ G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector& xx,
          else if (xx.z() > fAxisMax[zaxis] - ctol)
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax));
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
             else                        areacode |= sBoundary;
 
             if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
@@ -787,14 +784,14 @@ G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector& xx,
          if (phiareacode == sAxisMin)
          {
             areacode |= (sAxis0 & (sAxisPhi | sAxisMin));
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
             else                        areacode |= sBoundary; 
              
          }
          else if (phiareacode == sAxisMax)
          {
             areacode |= (sAxis0 & (sAxisPhi | sAxisMax));
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
             else                        areacode |= sBoundary;
          }
 

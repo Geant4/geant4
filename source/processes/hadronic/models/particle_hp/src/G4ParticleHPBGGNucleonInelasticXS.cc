@@ -43,43 +43,38 @@
 //
 
 #include "G4ParticleHPBGGNucleonInelasticXS.hh"
-#include "G4SystemOfUnits.hh"
 
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ParticleHPBGGNucleonInelasticXS::G4ParticleHPBGGNucleonInelasticXS(const G4ParticleDefinition* p)
- : G4BGGNucleonInelasticXS( p ) 
+  : G4BGGNucleonInelasticXS(p)
 {
-   fLowEnergyLimitForHPN = 20*MeV;
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ParticleHPBGGNucleonInelasticXS::~G4ParticleHPBGGNucleonInelasticXS()
-{
+  fLowEnergyLimitForHPN = 20 * MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4ParticleHPBGGNucleonInelasticXS::IsElementApplicable(const G4DynamicParticle* dp, 
-						    G4int Z, 
-						    const G4Material*)
+G4ParticleHPBGGNucleonInelasticXS::~G4ParticleHPBGGNucleonInelasticXS() = default;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4ParticleHPBGGNucleonInelasticXS::IsElementApplicable(const G4DynamicParticle* dp, G4int Z,
+                                                              const G4Material*)
 {
-   if ( dp->GetKineticEnergy() < fLowEnergyLimitForHPN ) return false;
-   return (1 < Z);
+  if (dp->GetKineticEnergy() < fLowEnergyLimitForHPN) return false;
+  return (1 < Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4ParticleHPBGGNucleonInelasticXS::IsIsoApplicable(const G4DynamicParticle* dp, 
-						G4int Z, G4int A,  
-						const G4Element*,
-						const G4Material*)
+G4bool G4ParticleHPBGGNucleonInelasticXS::IsIsoApplicable(const G4DynamicParticle* dp, G4int Z,
+                                                          G4int A, const G4Element*,
+                                                          const G4Material*)
 {
-   if ( dp->GetKineticEnergy() < fLowEnergyLimitForHPN ) return false;
-   return (1 == Z && 2 >= A);
+  if (dp->GetKineticEnergy() < fLowEnergyLimitForHPN) return false;
+  return (1 == Z && 2 >= A);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

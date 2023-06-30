@@ -47,7 +47,7 @@ G4DoubleHyperH4* G4DoubleHyperH4::Definition() {
   const G4String name = "doublehyperH4";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
+  auto  anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -71,11 +71,11 @@ G4DoubleHyperH4* G4DoubleHyperH4::Definition() {
     anInstance->SetPDGMagneticMoment( 2.97896248 * mN );
 
     // create Decay Table 
-    G4DecayTable* table = new G4DecayTable;
+    auto  table = new G4DecayTable;
     // create decay channels
     const G4double half_br_lambda_to_p_pim = 0.5*0.639;
     const G4double half_br_lambda_to_n_piz = 0.5*0.358;
-    G4VDecayChannel** mode = new G4VDecayChannel*[4];
+    auto  mode = new G4VDecayChannel*[4];
     // lambda -> proton + pi- , with 50% probability of capturing the proton
     mode[0] = new G4PhaseSpaceDecayChannel( "doublehyperH4", half_br_lambda_to_p_pim, 3,
 					    "hypertriton", "proton", "pi-" );

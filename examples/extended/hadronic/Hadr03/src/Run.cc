@@ -45,21 +45,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-: G4Run(),
-  fDetector(det), fParticle(0), fEkin(0.),
-  fTotalCount(0), fGammaCount(0),
-  fSumTrack(0.), fSumTrack2(0.),
-  fTargetXXX(false)
+: fDetector(det)
 {
   for (G4int i=0; i<3; i++) { fPbalance[i] = 0. ; }
   for (G4int i=0; i<3; i++) { fNbGamma[i] = 0 ; }
   fPbalance[1] = DBL_MAX;
   fNbGamma[1]  = 10000;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -331,7 +323,7 @@ void Run::EndOfRun(G4bool print)
     PrintXS(process, material, element, store, density, sumc1, sumc2);
   }             
   if(sumc1 > 0.0) {
-    G4cout << std::setw(20) << "total" << " = "
+    G4cout << "\n" << std::setw(20) << "total" << " = "
 	   << G4BestUnit(sumc1, "Surface/Mass") << "\t"; 
     if(sumc2 > 0.0) { G4cout << G4BestUnit(sumc2, "Surface"); } 
     G4cout << G4endl;

@@ -31,12 +31,12 @@
 
 void G4BorisDriver::SetVerboseLevel(G4int level)
 {
-    fVerbosity = level;
+    fVerbosity = (level != 0);
 }
 
 G4int G4BorisDriver::GetVerboseLevel() const
 {
-    return fVerbosity;
+    return static_cast<G4int>(fVerbosity);
 }
 
 G4double G4BorisDriver::ComputeNewStepSize( G4double /* errMaxNorm*/, G4double  hstepCurrent)

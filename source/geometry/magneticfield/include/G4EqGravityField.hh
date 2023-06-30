@@ -41,26 +41,24 @@
 
 class G4EqGravityField : public G4EquationOfMotion
 {
-  public:  // with description
+  public:
 
     G4EqGravityField(G4UniformGravityField* gField);
-
-    ~G4EqGravityField();
+   ~G4EqGravityField() override;
 
     void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                G4double MomentumXc,
-                               G4double mass);
+                               G4double mass) override;
 
     void EvaluateRhsGivenB( const G4double y[],
                             const G4double Field[],
-                            G4double dydx[] ) const;
+                                  G4double dydx[] ) const override;
       // Given the value of the gravitational field, this function
       // calculates the value of the derivative dydx.
 
   private:
 
     G4double fMass = 0.0;
-
 };
 
 #endif

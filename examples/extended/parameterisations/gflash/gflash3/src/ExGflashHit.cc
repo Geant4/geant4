@@ -30,42 +30,36 @@
 
 #include "ExGflashHit.hh"
 
-#include "G4VVisManager.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Transform3D.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator=0;
+G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::ExGflashHit()
-: G4VHit(), fLogV(0)
-{}
+ExGflashHit::ExGflashHit() : fLogV(nullptr) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::ExGflashHit(G4LogicalVolume* logVol)
-: G4VHit(), fLogV(logVol)
-{}
+ExGflashHit::ExGflashHit(G4LogicalVolume* logVol) : fLogV(logVol) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::~ExGflashHit()
-{}
+ExGflashHit::~ExGflashHit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::ExGflashHit(const ExGflashHit &right)
-: G4VHit(right)
+ExGflashHit::ExGflashHit(const ExGflashHit& right) : G4VHit(right)
 //@@@ ExGflashHit:Is it right with the init?
 {
   fEdep = right.fEdep;
-  fPos = right.fPos; 
-  fStart =right.fStart; 
+  fPos = right.fPos;
+  fStart = right.fStart;
   fRot = right.fRot;
   fLogV = right.fLogV;
   fCrystalNumber = right.fCrystalNumber;
@@ -73,11 +67,11 @@ ExGflashHit::ExGflashHit(const ExGflashHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
+const ExGflashHit& ExGflashHit::operator=(const ExGflashHit& right)
 {
   G4VHit::operator=(right);
   fEdep = right.fEdep;
-  fStart =right.fStart; 
+  fStart = right.fStart;
   fPos = right.fPos;
   fRot = right.fRot;
   fLogV = right.fLogV;
@@ -88,12 +82,13 @@ const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExGflashHit::operator==(const ExGflashHit &right) const
+G4bool ExGflashHit::operator==(const ExGflashHit& right) const
 {
-// @@@@ return false;
-  if ((fPos==right.fPos) &&  (fEdep == right.fEdep)) return true;
-  else return false;
-  
+  // @@@@ return false;
+  if ((fPos == right.fPos) && (fEdep == right.fEdep))
+    return true;
+  else
+    return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,31 +96,21 @@ G4bool ExGflashHit::operator==(const ExGflashHit &right) const
 void ExGflashHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Transform3D trans(fRot,fPos);
+  if (pVVisManager) {
+    G4Transform3D trans(fRot, fPos);
     G4VisAttributes attribs;
     const G4VisAttributes* pVA = fLogV->GetVisAttributes();
-    if(pVA) attribs = *pVA;
-    G4Colour colour(1.,0.,0.);
+    if (pVA) attribs = *pVA;
+    G4Colour colour(1., 0., 0.);
     attribs.SetColour(colour);
     attribs.SetForceWireframe(false);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*fLogV,attribs,trans);
+    pVVisManager->Draw(*fLogV, attribs, trans);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExGflashHit::Print()
-{}
+void ExGflashHit::Print() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-
-
-
-
-

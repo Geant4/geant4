@@ -48,8 +48,7 @@ geant4_add_module(G4materials
 		G4VIonDEDXTable.hh
 		G4VMaterialExtension.hh
   SOURCES
-		G4AtomicBond.cc
-		G4AtomicFormFactor.cc
+	  G4AtomicFormFactor.cc
 		G4AtomicShells.cc
 		G4AtomicShells_XDB_EADL.cc
 		G4CrystalExtension.cc

@@ -100,9 +100,9 @@ class Run : public G4Run {
     // Accessor methods useful to transfer information collected by the stepping-action
     // into this Run class
 
-    void SetTrackingArray1( const std::array< G4int,
+    void SetTrackingArray1( const std::array< G4long,
                             TrackingAction::fkNumberCombinations >& inputArray );
-    std::array< G4int, TrackingAction::fkNumberCombinations > GetTrackingArray1() const
+    std::array< G4long, TrackingAction::fkNumberCombinations > GetTrackingArray1() const
     { return fTrackingArray1; }
     void SetTrackingArray2( const std::array< G4double,
                             TrackingAction::fkNumberCombinations >& inputArray );
@@ -121,7 +121,7 @@ class Run : public G4Run {
     G4double fCubicVolumeScoringUpDown;
     G4double fCubicVolumeScoringSide;
     std::array< G4double, SteppingAction::fkNumberCombinations > fSteppingArray;
-    std::array< G4int,    TrackingAction::fkNumberCombinations > fTrackingArray1;
+    std::array< G4long,   TrackingAction::fkNumberCombinations > fTrackingArray1;
     std::array< G4double, TrackingAction::fkNumberCombinations > fTrackingArray2;
 };
 

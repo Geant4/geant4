@@ -54,7 +54,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 public:
   
    DetectorConstruction();
-  ~DetectorConstruction();
+  ~DetectorConstruction() override;
 
 public:
   
@@ -66,8 +66,8 @@ public:
   void SetCalorSizeYZ   (G4double);          
   void SetNbOfLayers    (G4int);   
   
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
      
 public:
   
@@ -94,38 +94,38 @@ private:
   void DefineMaterials();
   void ComputeCalorParameters();
 
-  G4int              fNbOfAbsor;
+  G4int              fNbOfAbsor = 0;
   G4Material*        fAbsorMaterial[kMaxAbsor];
   G4double           fAbsorThickness[kMaxAbsor];
 
-  G4int              fNbOfLayers;
-  G4double           fLayerThickness;
+  G4int              fNbOfLayers = 0;
+  G4double           fLayerThickness = 0.;
 
-  G4double           fCalorSizeYZ;
-  G4double           fCalorThickness;
+  G4double           fCalorSizeYZ = 0.;
+  G4double           fCalorThickness = 0.;
 
-  G4Material*        fWorldMaterial;
-  G4double           fWorldSizeYZ;
-  G4double           fWorldSizeX;
+  G4Material*        fWorldMaterial = nullptr;
+  G4double           fWorldSizeYZ = 0.;
+  G4double           fWorldSizeX  = 0.;
 
-  G4Box*             fSolidWorld;
-  G4LogicalVolume*   fLogicWorld;
-  G4VPhysicalVolume* fPhysiWorld;
+  G4Box*             fSolidWorld = nullptr;
+  G4LogicalVolume*   fLogicWorld = nullptr;
+  G4VPhysicalVolume* fPhysiWorld = nullptr;
 
-  G4Box*             fSolidCalor;
-  G4LogicalVolume*   fLogicCalor;
-  G4VPhysicalVolume* fPhysiCalor;
+  G4Box*             fSolidCalor = nullptr;
+  G4LogicalVolume*   fLogicCalor = nullptr;
+  G4VPhysicalVolume* fPhysiCalor = nullptr;
 
-  G4Box*             fSolidLayer;
-  G4LogicalVolume*   fLogicLayer;
-  G4VPhysicalVolume* fPhysiLayer;
+  G4Box*             fSolidLayer = nullptr;
+  G4LogicalVolume*   fLogicLayer = nullptr;
+  G4VPhysicalVolume* fPhysiLayer = nullptr;
 
   G4Box*             fSolidAbsor[kMaxAbsor];
   G4LogicalVolume*   fLogicAbsor[kMaxAbsor];
   G4VPhysicalVolume* fPhysiAbsor[kMaxAbsor];
 
-  DetectorMessenger* fDetectorMessenger;
-  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;  
+  DetectorMessenger* fDetectorMessenger = nullptr;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

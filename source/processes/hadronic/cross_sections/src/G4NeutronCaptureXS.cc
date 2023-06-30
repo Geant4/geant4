@@ -46,6 +46,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ElementTable.hh"
 #include "G4IsotopeList.hh"
+#include "G4HadronicParameters.hh"
 #include "Randomize.hh"
 #include "G4Log.hh"
 #include "G4AutoLock.hh"
@@ -304,19 +305,11 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 const G4String& G4NeutronCaptureXS::FindDirectoryPath()
 {
-  // check environment variable
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
-    const char* path = G4FindDataDir("G4PARTICLEXSDATA");
-    if (nullptr != path) {
-      std::ostringstream ost;
-      ost << path << "/neutron/cap";
-      gDataDirectory = ost.str();
-    } else {
-      G4Exception("G4NeutronCaptureXS::Initialise(..)","had013",
-		  FatalException,
-		  "Environment variable G4PARTICLEXSDATA is not defined");
-    }
+    std::ostringstream ost;
+    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/cap";
+    gDataDirectory = ost.str();
   }
   return gDataDirectory;
 }

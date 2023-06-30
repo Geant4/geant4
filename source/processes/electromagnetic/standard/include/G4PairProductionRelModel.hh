@@ -166,6 +166,7 @@ protected:
   static std::vector<ElementData*>  gElementData;  
   static LPMFuncs                   gLPMFuncs;
   // 
+  G4bool isFirstInstance{false};
   G4bool                            fIsUseLPMCorrection;
   G4bool                            fIsUseCompleteScreening;
   //

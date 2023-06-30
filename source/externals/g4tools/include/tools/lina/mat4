@@ -172,14 +172,30 @@ public:
     //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
     //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
     //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
-    T x= pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12]*a_p;
-    T y= pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13]*a_p;
-    T z= pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14]*a_p;
-    T p= pr::m_vec[3]*a_x+pr::m_vec[7]*a_y+pr::m_vec[11]*a_z+pr::m_vec[15]*a_p;
+    T x = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12]*a_p;
+    T y = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13]*a_p;
+    T z = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14]*a_p;
+    T p = pr::m_vec[3]*a_x+pr::m_vec[7]*a_y+pr::m_vec[11]*a_z+pr::m_vec[15]*a_p;
     a_x = x;
     a_y = y;
     a_z = z;
     a_p = p;
+  }
+  void mul_4_opt(T& a_x,T& a_y,T& a_z,T& a_p,T a_tmp[4]) const {
+    // a_[x,y,z,p] = this * a_[x,y,z,p]
+    //pr::m_vec[R + C * 4];
+    //pr::m_vec[0]= 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    a_tmp[0] = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12]*a_p;
+    a_tmp[1] = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13]*a_p;
+    a_tmp[2] = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14]*a_p;
+    a_tmp[3] = pr::m_vec[3]*a_x+pr::m_vec[7]*a_y+pr::m_vec[11]*a_z+pr::m_vec[15]*a_p;
+    a_x = a_tmp[0];
+    a_y = a_tmp[1];
+    a_z = a_tmp[2];
+    a_p = a_tmp[3];
   }
   void mul_3(T& a_x,T& a_y,T& a_z) const {
     // a_[x,y,z] = this * a_[x,y,z]
@@ -194,6 +210,20 @@ public:
     a_x = x;
     a_y = y;
     a_z = z;
+  }
+  void mul_3_opt(T& a_x,T& a_y,T& a_z,T a_tmp[3]) const {
+    // a_[x,y,z] = this * a_[x,y,z]
+    //pr::m_vec[R + C * 4];
+    //pr::m_vec[0]= 00;pr::m_vec[4] = 01;pr::m_vec[ 8] = 02;pr::m_vec[12] = 03;
+    //pr::m_vec[1]= 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
+    //pr::m_vec[2]= 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
+    //pr::m_vec[3]= 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
+    a_tmp[0] = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z+pr::m_vec[12];
+    a_tmp[1] = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z+pr::m_vec[13];
+    a_tmp[2] = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z+pr::m_vec[14];
+    a_x = a_tmp[0];
+    a_y = a_tmp[1];
+    a_z = a_tmp[2];
   }
   void mul_2(T& a_x,T& a_y) const {
     // a_[x,y] = this * a_[x,y]
@@ -218,6 +248,17 @@ public:
     a_x = x;
     a_y = y;
     a_z = z;
+  }
+  void mul_dir_3_opt(T& a_x,T& a_y,T& a_z,T a_tmp[3]) const {
+    // used to multiply normals.
+    // a_[x,y,z] = rot_part(this) * a_[x,y,z]
+
+    a_tmp[0] = pr::m_vec[0]*a_x+pr::m_vec[4]*a_y+pr::m_vec[ 8]*a_z;
+    a_tmp[1] = pr::m_vec[1]*a_x+pr::m_vec[5]*a_y+pr::m_vec[ 9]*a_z;
+    a_tmp[2] = pr::m_vec[2]*a_x+pr::m_vec[6]*a_y+pr::m_vec[10]*a_z;
+    a_x = a_tmp[0];
+    a_y = a_tmp[1];
+    a_z = a_tmp[2];
   }
 
   void mul_trans_3(T& a_x,T& a_y,T& a_z) const {
@@ -465,7 +506,6 @@ public:
                     pr::m_vec[1],pr::m_vec[5],pr::m_vec[ 9],   //2 row
                     pr::m_vec[2],pr::m_vec[6],pr::m_vec[10]);  //3 row
   }
-  
 private:static void check_instantiation() {mat4<float> dummy;}
 };
 

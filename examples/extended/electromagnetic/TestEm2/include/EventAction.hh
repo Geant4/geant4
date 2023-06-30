@@ -44,11 +44,11 @@ class EventAction : public G4UserEventAction
 {
 public:
   
-  EventAction();
-  virtual ~EventAction();
+  EventAction() = default;
+ ~EventAction() override = default;
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*) override;
+  void   EndOfEventAction(const G4Event*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

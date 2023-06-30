@@ -210,8 +210,9 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     if(!isIon) { lManager->RegisterExtraParticle(&part, this); }
     if(1 < verboseLevel) {
       G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable()"
-             << " interrupted for "
-             << part.GetParticleName() << "  isIon=" << isIon << G4endl;
+             << " interrupted for " << GetProcessName() << " and "
+             << part.GetParticleName() << " isIon=" << isIon 
+             << " spline=" << spline << G4endl;
     }
     return;
   }
@@ -219,14 +220,14 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   tablesAreBuilt = false;
 
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
-  lManager->PreparePhysicsTable(&part, this, isMaster);
+  lManager->PreparePhysicsTable(&part, this);
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
 
   // parameters of the process
   if(!actLossFluc) { lossFluctuationFlag = theParameters->LossFluctuation(); }
-  rndmStepFlag = theParameters->UseCutAsFinalRange();
+  useCutAsFinalRange = theParameters->UseCutAsFinalRange();
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
   if(!actMaxKinEnergy) { maxKinEnergy = theParameters->MaxKinEnergy(); }
   if(!actBinning) { nBins = theParameters->NumberOfBins(); }
@@ -318,11 +319,12 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::PrepearPhysicsTable() is done "
-           << " for local " << particle->GetParticleName()
-           << " isIon= " << isIon;
+           << " for " << GetProcessName() << " and " << particle->GetParticleName()
+           << " isIon= " << isIon << " spline=" << spline;
     if(baseParticle) { 
       G4cout << "; base: " << baseParticle->GetParticleName(); 
     }
+    G4cout << G4endl;
     G4cout << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
            << " reduceFactor= " << reduceFactor << G4endl;
@@ -346,16 +348,16 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
-           << "; local: " << particle->GetParticleName();
+           << "; the first particle " << particle->GetParticleName();
     if(baseParticle) { 
       G4cout << "; base: " << baseParticle->GetParticleName(); 
     }
-    G4cout << " TablesAreBuilt= " << tablesAreBuilt
-           << " isIon= " << isIon << "  " << this << G4endl;
+    G4cout << G4endl;
+    G4cout << "    TablesAreBuilt= " << tablesAreBuilt << " isIon= " << isIon
+           << " spline=" << spline << " ptr: " << this << G4endl;
   }
 
   if(&part == particle) {
-
     if(isMaster) {
       lManager->BuildPhysicsTable(particle, this);
 
@@ -428,7 +430,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable() of type " << tType
            << " for " << GetProcessName()
-           << " and " << particle->GetParticleName() << G4endl;
+           << " and " << particle->GetParticleName() 
+	   << "spline=" << spline << G4endl;
   }
   if(nullptr == table) { return table; }
 
@@ -548,13 +551,9 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
   // reset ion
   if(isIon) {
     const G4double newmass = track->GetDefinition()->GetPDGMass();
-    if(nullptr != baseParticle) {
-      massRatio = baseParticle->GetPDGMass()/newmass;
-      logMassRatio = G4Log(massRatio);
-    } else {
-      massRatio = CLHEP::proton_mass_c2/newmass;
-      logMassRatio = G4Log(massRatio);
-    } 
+    massRatio = (nullptr == baseParticle) ? CLHEP::proton_mass_c2/newmass
+      : baseParticle->GetPDGMass()/newmass;
+    logMassRatio = G4Log(massRatio);
   }  
   // forced biasing only for primary particles
   if(nullptr != biasManager) {
@@ -575,13 +574,15 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
   *selection = aGPILSelection;
   if(isIonisation && currentModel->IsActive(preStepScaledEnergy)) {
     GetScaledRangeForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
-    const G4double finR = (rndmStepFlag) ? std::min(finalRange,
+    x = (useCutAsFinalRange) ? std::min(finalRange,
       currentCouple->GetProductionCuts()->GetProductionCut(1)) : finalRange;
-    x = (fRange > finR) ? 
-      fRange*dRoverRange + finR*(1.0-dRoverRange)*(2.0-finR/fRange) : fRange; 
+    x = (fRange > x) ? fRange*dRoverRange + x*(1.0 - dRoverRange)*(2.0 - x/fRange)
+      : fRange;
+    /*    
+      G4cout<<"AlongStepGPIL: " << GetProcessName()<<": e="<<preStepKinEnergy
+	<< " fRange=" << fRange << " finR=" << finR <<" stepLimit="<<x<<G4endl;
+    */
   }
-  //G4cout<<"AlongStepGPIL: " << GetProcessName()<<": e= "<<preStepKinEnergy 
-  //<<" stepLimit= "<<x<<G4endl;
   return x;
 }
 
@@ -614,11 +615,9 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // change effective charge of a charged particle on fly
   if(isIon) {
     const G4double q2 = currentModel->ChargeSquareRatio(track);
-    if(q2 != chargeSqRatio) { 
-      fFactor *= q2/chargeSqRatio;
-      reduceFactor = 1.0/(fFactor*massRatio);
-      chargeSqRatio = q2;
-    }
+    fFactor = q2*biasFactor;
+    if(baseMat) { fFactor *= (*theDensityFactor)[currentCoupleIndex]; }
+    reduceFactor = 1.0/(fFactor*massRatio);
     if (lossFluctuationFlag) {
       auto fluc = currentModel->GetModelOfFluctuations();
       fluc->SetParticleAndCharge(track.GetDefinition(), q2);
@@ -779,12 +778,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     return &fParticleChange;
   }
 
-  // Get the actual (true) Step length
   G4double length = step.GetStepLength();
-  if(length <= 0.0) { return &fParticleChange; }
   G4double eloss  = 0.0;
  
-  /*
+  /*  
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetParticleDefinition();
     G4cout << "AlongStepDoIt for "
@@ -805,7 +802,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     fParticleChange.ProposeWeight(weight);
   }
 
-  // stopping
+  // stopping, check actual range and kinetic energy
   if (length >= fRange || preStepKinEnergy <= lowestKinEnergy) {
     eloss = preStepKinEnergy;
     if (useDeexcitation) {
@@ -818,27 +815,34 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     fParticleChange.ProposeLocalEnergyDeposit(eloss);
     return &fParticleChange;
   }
+  // zero step length with non-zero range
+  if(length <= 0.0) { return &fParticleChange; }
+
   // Short step
   eloss = length*GetDEDXForScaledEnergy(preStepScaledEnergy,
                                         preStepLogScaledEnergy);
-  //G4cout << "Short STEP: eloss= " << eloss << G4endl;
-
+  /*
+  G4cout << "##### Short STEP: eloss= " << eloss 
+	 << " Escaled=" << preStepScaledEnergy
+	 << " R=" << fRange
+	 << " L=" << length 
+	 << " fFactor=" << fFactor << " minE=" << minKinEnergy 
+	 << " idxBase=" << basedCoupleIndex << G4endl;
+  */
   // Long step
   if(eloss > preStepKinEnergy*linLossLimit) {
 
-    G4double x = (fRange - length)/reduceFactor;
-    //G4cout << "x= " << x << "  " << theInverseRangeTable << G4endl;
-    eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
-   
+    const G4double x = (fRange - length)/reduceFactor;
+    const G4double de = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
+    if(de > 0.0) { eloss = de; }    
     /*
     if(-1 < verboseLevel) 
-      G4cout << "Long STEP: rPre(mm)= " 
+      G4cout << "  Long STEP: rPre(mm)=" 
              << GetScaledRangeForScaledEnergy(preStepScaledEnergy)/mm
-             << " rPost(mm)= " << x/mm
-             << " ePre(MeV)= " << preStepScaledEnergy/MeV
-             << " eloss(MeV)= " << eloss/MeV << " eloss0(MeV)= "
-             << GetDEDXForScaledEnergy(preStepScaledEnergy)*length/MeV
-             << " lim(MeV)= " << preStepKinEnergy*linLossLimit/MeV
+             << " x(mm)=" << x/mm
+             << " eloss(MeV)=" << eloss/MeV
+	     << " rFactor=" << reduceFactor
+	     << " massRatio=" << massRatio
              << G4endl;
     */
   }

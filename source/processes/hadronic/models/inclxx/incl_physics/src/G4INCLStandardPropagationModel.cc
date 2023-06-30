@@ -43,6 +43,7 @@
  */
 
 #include "G4INCLStandardPropagationModel.hh"
+#include "G4INCLPbarAtrestEntryChannel.hh"
 #include "G4INCLSurfaceAvatar.hh"
 #include "G4INCLBinaryCollisionAvatar.hh"
 #include "G4INCLDecayAvatar.hh"
@@ -59,6 +60,7 @@
 #include "G4INCLPionResonanceDecayChannel.hh"
 #include "G4INCLParticleEntryAvatar.hh"
 #include "G4INCLIntersection.hh"
+#include <vector>
 
 namespace G4INCL {
 
@@ -81,13 +83,101 @@ namespace G4INCL {
       return theNucleus;
     }
 
+//D
+
     G4double StandardPropagationModel::shoot(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) {
-      if(projectileSpecies.theType==Composite)
+      if(projectileSpecies.theType==Composite){
         return shootComposite(projectileSpecies, kineticEnergy, impactParameter, phi);
-      else
+      }
+      else if(projectileSpecies.theType==antiProton && theNucleus->getAnnihilationType()!=Def){
+        return shootAtrest(projectileSpecies.theType, kineticEnergy);
+      }
+      else{
         return shootParticle(projectileSpecies.theType, kineticEnergy, impactParameter, phi);
+      }
     }
 
+//D
+
+    G4double StandardPropagationModel::shootAtrest(ParticleType const t, const G4double kineticEnergy) {
+      theNucleus->setParticleNucleusCollision(); 
+      currentTime = 0.0;
+
+      // Create final state particles
+      const G4double projectileMass = ParticleTable::getTableParticleMass(t);
+      G4double energy = kineticEnergy + projectileMass;
+      G4double momentumZ = std::sqrt(energy*energy - projectileMass*projectileMass);
+      ThreeVector momentum(0.0, 0.0, momentumZ);
+      Particle *pb = new G4INCL::Particle(t, energy, momentum, ThreeVector());
+      PbarAtrestEntryChannel *obj = new PbarAtrestEntryChannel(theNucleus, pb); 
+      ParticleList fslist = obj->makeMesonStar();
+      const G4bool isProton = obj->ProtonIsTheVictim();
+      delete pb;
+
+      //set Stopping time according to highest meson energy of the star
+      G4double temfin;
+      G4double TLab;
+      std::vector<G4double> energies;
+      std::vector<G4double> projections;
+      ThreeVector ab, cd;
+
+      for(ParticleIter pit = fslist.begin(), e = fslist.end(); pit!=e; ++pit){
+        energies.push_back((*pit)->getKineticEnergy());
+        ab = (*pit)->boostVector();
+        cd = (*pit)->getPosition();
+        projections.push_back(ab.dot(cd)); //projection length
+      }// make vector of energies
+      
+      temfin = 30.18 * std::pow(theNucleus->getA(), 0.17);
+      TLab = *max_element(energies.begin(), energies.end()); //choose max energy
+
+      // energy-dependent stopping time above 2 AGeV
+      if(TLab>2000.)
+        temfin *= (5.8E4-TLab)/5.6E4;
+
+      maximumTime = temfin;  
+
+      // If the incoming particle is slow, use a larger stopping time
+      const G4double rMax = theNucleus->getUniverseRadius();
+      const G4double distance = 2.*rMax;
+      const G4double maxMesonVelocityProjection = *max_element(energies.begin(), energies.end());
+      const G4double traversalTime = distance / maxMesonVelocityProjection;
+      if(maximumTime < traversalTime)
+        maximumTime = traversalTime;
+      INCL_DEBUG("Cascade stopping time is " << maximumTime << '\n');
+
+
+      // Fill in the relevant kinematic variables
+      theNucleus->setIncomingAngularMomentum(G4INCL::ThreeVector(0., 0., 0.));
+      theNucleus->setIncomingMomentum(G4INCL::ThreeVector(0., 0., 0.));
+      if(isProton){
+        theNucleus->setInitialEnergy(pb->getMass()
+          + ParticleTable::getTableMass(theNucleus->getA() + 1,theNucleus->getZ() + 1,theNucleus->getS()));
+      }
+      else{
+        theNucleus->setInitialEnergy(pb->getMass()
+          + ParticleTable::getTableMass(theNucleus->getA() + 1,theNucleus->getZ(),theNucleus->getS()));
+      }
+      //kinetic energy excluded from the balance
+
+      for(ParticleIter p = fslist.begin(), e = fslist.end(); p!=e; ++p){
+        (*p)->makeProjectileSpectator();                                        
+      }
+      
+      generateAllAvatars();
+      firstAvatar = false;
+
+      // Get the entry avatars for mesons
+      IAvatarList theAvatarList = obj->bringMesonStar(fslist, theNucleus);
+      delete obj;
+      theNucleus->getStore()->addParticleEntryAvatars(theAvatarList);
+      INCL_DEBUG("Avatars added" << '\n');
+      
+      return 99.;
+    } 
+       
+//D
+      
     G4double StandardPropagationModel::shootParticle(ParticleType const type, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) {
       theNucleus->setParticleNucleusCollision();
       currentTime = 0.0;
@@ -268,6 +358,10 @@ namespace G4INCL {
 
       // Is it a pi-resonance collision (we don't treat them)?
       if((p1->isResonance() && p2->isPion()) || (p1->isPion() && p2->isResonance()))
+        return NULL;
+
+      // Is it a photon collision (we don't treat them)?
+      if(p1->isPhoton() || p2->isPhoton())
         return NULL;
 
       // Will the avatar take place between now and the end of the cascade?

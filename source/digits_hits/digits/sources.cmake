@@ -10,7 +10,6 @@ geant4_add_module(G4digits
   SOURCES
     G4DCofThisEvent.cc
     G4TDigiCollection.cc
-    G4VDigi.cc
     G4VDigiCollection.cc)
 
 geant4_module_link_libraries(G4digits PUBLIC G4globman)

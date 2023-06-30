@@ -52,7 +52,7 @@ class G4AntiHe3 : public G4Ions
  private:
    static G4AntiHe3* theInstance;
    G4AntiHe3(){}
-   ~G4AntiHe3(){}
+   ~G4AntiHe3() override= default;
 
  public:
    static G4AntiHe3* Definition();

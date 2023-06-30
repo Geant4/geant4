@@ -29,6 +29,8 @@
 // Adaptations: J.Apostolakis, November 2009
 // -------------------------------------------------------------------
 
+#include <memory>
+
 #include "G4NystromRK4.hh"
 
 #include "G4Exception.hh"
@@ -193,10 +195,9 @@ void G4NystromRK4::SetDistanceForConstantField(G4double length)
                 "Nystrom 001", JustWarning,
         "Provided field is not G4CachedMagneticField. Changing field type.");
 
-    fCachedField = std::unique_ptr<G4CachedMagneticField>(
-       new G4CachedMagneticField(
+    fCachedField = std::make_unique<G4CachedMagneticField>(
            dynamic_cast<G4MagneticField*>(GetEquationOfMotion()->GetFieldObj()),
-           length));
+           length);
 
     GetEquationOfMotion()->SetFieldObj(fCachedField.get());
   }

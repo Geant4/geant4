@@ -43,8 +43,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(const DetectorConstruction* det, 
-                     PrimaryGeneratorAction* kin)
-  : G4UserRunAction(),fDetector(det),fPrimary(kin),fRun(nullptr)
+                                 PrimaryGeneratorAction* kin)
+  :fDetector(det),fPrimary(kin)
 { 
   fHistoManager = new HistoManager();
 }

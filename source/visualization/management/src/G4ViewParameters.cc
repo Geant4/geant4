@@ -104,7 +104,7 @@ G4ViewParameters::G4ViewParameters ():
   fDisplayLightFrontGreen(1.),
   fDisplayLightFrontBlue(0.),
   fSpecialMeshRendering(false),
-  fSpecialMeshRenderingOption(meshAsDots)
+  fSpecialMeshRenderingOption(meshAsDefault)
 {
   // Pick up default no of sides from G4Polyhedron.
   // Note that this parameter is variously called:
@@ -896,6 +896,8 @@ std::ostream& operator <<
 (std::ostream& os, G4ViewParameters::SMROption option)
 {
   switch (option) {
+    case G4ViewParameters::meshAsDefault:
+      os << "default"; break;
     case G4ViewParameters::meshAsDots:
       os << "dots"; break;
     case G4ViewParameters::meshAsSurfaces:

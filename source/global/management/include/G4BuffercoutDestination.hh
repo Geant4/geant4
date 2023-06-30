@@ -38,6 +38,7 @@
 #ifndef G4BUFFERCOUTDESTINATION_HH
 #define G4BUFFERCOUTDESTINATION_HH
 
+#include <memory>
 #include <sstream>
 
 #include "G4coutDestination.hh"
@@ -48,32 +49,32 @@ class G4BuffercoutDestination : public G4coutDestination
   explicit G4BuffercoutDestination(std::size_t maxSize = 0);
   ~G4BuffercoutDestination() override;
 
+  G4int ReceiveG4debug(const G4String& msg) override;
   G4int ReceiveG4cout(const G4String& msg) override;
   G4int ReceiveG4cerr(const G4String& msg) override;
+
   // Flush buffer to std output
+  virtual G4int FlushG4debug();
+   // Flush buffer to std output
   virtual G4int FlushG4cout();
   // Flush buffer to std error
   virtual G4int FlushG4cerr();
-  // Flsuh both buffers
-
+  
+  // Flush all buffers
   virtual void Finalize();
 
   // Set maximum size of buffer, when buffer grows to specified size,
   // it will trigger flush. Dimension in char
-  void SetMaxSize(std::size_t max) { m_maxSize = max; }
+  void SetMaxSize(std::size_t max);
   std::size_t GetMaxSize() const { return m_maxSize; }
-  std::size_t GetCurrentSizeOut() const { return m_currentSize_out; }
-  std::size_t GetCurrentSizeErr() const { return m_currentSize_err; }
 
  protected:
-  void ResetCout();
-  void ResetCerr();
+  std::size_t m_maxSize = 0;
 
-  std::ostringstream m_buffer_out;
-  std::ostringstream m_buffer_err;
-  std::size_t m_currentSize_out = 0;
-  std::size_t m_currentSize_err = 0;
-  std::size_t m_maxSize         = 0;
+  class BufferImpl;
+  std::unique_ptr<BufferImpl> m_buffer_dbg;
+  std::unique_ptr<BufferImpl> m_buffer_out;
+  std::unique_ptr<BufferImpl> m_buffer_err;
 };
 
 #endif

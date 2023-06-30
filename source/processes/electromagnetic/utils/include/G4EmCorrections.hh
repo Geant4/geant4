@@ -59,7 +59,6 @@
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Threading.hh"
 
 class G4VEmModel;
 class G4PhysicsVector;
@@ -73,7 +72,7 @@ class G4EmCorrections
 
 public:
 
-  explicit G4EmCorrections(G4int verb);
+  explicit G4EmCorrections(G4int verb, G4bool master);
 
   ~G4EmCorrections();
 
@@ -194,63 +193,60 @@ private:
 
   const G4ParticleDefinition* particle = nullptr;
   const G4ParticleDefinition* curParticle = nullptr;
-  const G4Material*           material = nullptr;
-  const G4Material*           curMaterial = nullptr;
-  const G4ElementVector*      theElementVector = nullptr;
-  const G4double*             atomDensity = nullptr;
+  const G4Material* material = nullptr;
+  const G4Material* curMaterial = nullptr;
+  const G4ElementVector* theElementVector = nullptr;
+  const G4double* atomDensity = nullptr;
 
-  G4PhysicsVector*            curVector = nullptr;
+  G4PhysicsVector* curVector = nullptr;
 
-  G4VEmModel*  ionLEModel = nullptr;
-  G4VEmModel*  ionHEModel = nullptr;
+  G4VEmModel* ionLEModel = nullptr;
+  G4VEmModel* ionHEModel = nullptr;
 
-  G4double  kinEnergy = 0.0;
-  G4double  mass = 0.0;
-  G4double  massFactor = 1.0;
-  G4double  eth;
-  G4double  tau = 0.0;
-  G4double  gamma = 1.0;
-  G4double  bg2 = 0.0;
-  G4double  beta2 = 0.0;
-  G4double  beta = 0.0;
-  G4double  ba2 = 0.0;
-  G4double  tmax = 0.0;
-  G4double  charge = 0.0;
-  G4double  q2 = 0.0;
-  G4double  eCorrMin;
-  G4double  eCorrMax;
+  G4double kinEnergy = 0.0;
+  G4double mass = 0.0;
+  G4double massFactor = 1.0;
+  G4double tau = 0.0;
+  G4double gamma = 1.0;
+  G4double bg2 = 0.0;
+  G4double beta2 = 0.0;
+  G4double beta = 0.0;
+  G4double ba2 = 0.0;
+  G4double tmax = 0.0;
+  G4double charge = 0.0;
+  G4double q2 = 0.0;
+  G4double eth;
+  G4double eCorrMin;
+  G4double eCorrMax;
 
-  G4bool    isMaster = false;
-
-  size_t    ncouples = 0;
-  G4int     verbose;
-
-  G4int     nK;
-  G4int     nL;
-  G4int     nEtaK;
-  G4int     nEtaL;
-
-  G4int     nbinCorr = 52;
-  G4int     numberOfElements = 0;
+  std::size_t ncouples = 0;
+  G4int nK = 20;
+  G4int nL = 26;
+  G4int nEtaK = 29;
+  G4int nEtaL = 28;
+  G4int nbinCorr = 52;
+  G4int numberOfElements = 0;
 
   // Ion stopping data
-  G4int     nIons = 0;
-  G4int     idx = 0;
-  G4int     currentZ = 0;
+  G4int nIons = 0;
+  G4int idx = 0;
+  G4int currentZ = 0;
 
-  std::vector<G4int>          Zion;
-  std::vector<G4int>          Aion;
-  std::vector<G4String>       materialName;
+  G4int verbose;
+  G4bool isMaster;
 
+  std::vector<G4int> Zion;
+  std::vector<G4int> Aion;
+  std::vector<G4String> materialName;
   std::vector<const G4ParticleDefinition*> ionList;
 
   std::map< G4int, std::vector<G4double> > thcorr;
 
   std::vector<const G4Material*> currmat;
   std::vector<const G4Material*> materialList;
-  std::vector<G4PhysicsVector*>  stopData;
+  std::vector<G4PhysicsVector*> stopData;
 
-  G4ionEffectiveCharge  effCharge;
+  G4ionEffectiveCharge effCharge;
 
   static const G4double ZD[11];
   static const G4double UK[20];
@@ -265,10 +261,6 @@ private:
   static G4PhysicsFreeVector* sBarkasCorr;
   static G4PhysicsFreeVector* sThetaK;
   static G4PhysicsFreeVector* sThetaL;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex theCorrMutex;
-#endif
 };
 
 inline G4int 

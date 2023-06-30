@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-03-24 Michel Maire (testem11-V11-01-01)
+- PhysicsList::RadioactiveDecay(): setARM = false
+- continue revision of header files
+
+## 2023-01-25 Michel Maire (testem11-V11-01-00)
+- compute and plot energy leakage and total energy
+- revision of all header files
+
 ## 2022-10-11 Michel Maire (testem11-V11-00-01)
 - PhysicsList::AddRadioactiveDecay(): update lifeTime threshold
  

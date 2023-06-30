@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Split barion (antibarion) into quark and diquark (antidiquark and antiqaurk ) 
+// Split baryon (antibaryon) into quark and diquark (antidiquark and antiquark)
 // based on prototype, needs clean up of interfaces HPW Feb 1999  
 // Numbers verified and errors corrected, HPW Dec 1999
 
@@ -90,16 +90,16 @@ G4BaryonSplitter()
 }
 
 G4bool G4BaryonSplitter::
-SplitBarion(G4int PDGCode, G4int* q_or_qqbar, G4int* qbar_or_qq)
+SplitBarion(G4int PDGCode, G4int& q_or_qqbar, G4int& qbar_or_qq)
 {
   const G4SPBaryon * aBaryon = theBaryons.GetBaryon(G4ParticleTable::GetParticleTable()->FindParticle(PDGCode));
 
-  if(aBaryon==NULL)
+  if(aBaryon == nullptr)
   {
-    return FALSE;
-   } else {
-    aBaryon->SampleQuarkAndDiquark(*q_or_qqbar, *qbar_or_qq);
-    return TRUE;
+    return false;
+  } else {
+    aBaryon->SampleQuarkAndDiquark(q_or_qqbar, qbar_or_qq);
+    return true;
   }
 }
 
@@ -113,13 +113,12 @@ GetSPBaryon(G4int PDGCode)
 
 
 // Find rest diquark in given barion after quark - antiquark annihilation  
-G4bool G4BaryonSplitter::
-FindDiquark(G4int PDGCode, G4int Quark, G4int* Diquark)
+G4bool G4BaryonSplitter::FindDiquark(G4int PDGCode, G4int Quark, G4int& Diquark)
 {
   const G4SPBaryon * aBaryon = theBaryons.GetBaryon(G4ParticleTable::GetParticleTable()->FindParticle(PDGCode));
   if(aBaryon)
   {
-    aBaryon->FindDiquark(Quark, *Diquark);
+    aBaryon->FindDiquark(Quark, Diquark);
     return true;
   }
   return false;

@@ -67,6 +67,7 @@
 #include "G4ModifiedTsai.hh"
 #include "G4Exp.hh"
 #include "G4Pow.hh"
+#include "G4AutoLock.hh"
 
 const G4int G4PairProductionRelModel::gMaxZet = 120; 
 
@@ -110,6 +111,11 @@ std::vector<G4PairProductionRelModel::ElementData*> G4PairProductionRelModel::gE
 // LPM supression functions evaluated at initialisation time
 G4PairProductionRelModel::LPMFuncs G4PairProductionRelModel::gLPMFuncs;
 
+namespace
+{
+  G4Mutex thePairProdRelMutex = G4MUTEX_INITIALIZER;
+}
+
 // CTR
 G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
                                                    const G4String& nam)
@@ -129,12 +135,10 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
 // DTR
 G4PairProductionRelModel::~G4PairProductionRelModel()
 {
-  if (IsMaster()) {
+  if (isFirstInstance) {
     // clear ElementData container
-    for (std::size_t iz = 0; iz < gElementData.size(); ++iz) {
-      if (gElementData[iz]) delete gElementData[iz];
-    }
-    gElementData.clear(); 
+    for (auto const & ptr : gElementData) { delete ptr; }
+    gElementData.clear();
     // clear LPMFunctions (if any)
     if (fIsUseLPMCorrection) {
       gLPMFuncs.fLPMFuncG.clear();
@@ -147,17 +151,26 @@ G4PairProductionRelModel::~G4PairProductionRelModel()
 void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
                                           const G4DataVector& cuts)
 {
-  if (IsMaster()) {
+  if(nullptr == fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+
+  if (gElementData.empty()) {
     // init element data and LPM funcs
-    if (IsMaster()) {
-      InitialiseElementData();
-      if (fIsUseLPMCorrection) {
-        InitLPMFunctions();
-      }
+    G4AutoLock l(&thePairProdRelMutex);
+    if (gElementData.empty()) {
+      isFirstInstance = true;
+      gElementData.resize(gMaxZet+1, nullptr);
+    }
+    l.unlock();
+  }
+  // static data should be initialised only in the one instance
+  if(isFirstInstance) {
+    InitialiseElementData();
+    if (fIsUseLPMCorrection) {
+      InitLPMFunctions();
     }
   }
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  if(IsMaster() && LowEnergyLimit() < HighEnergyLimit()) {
+  // element selectors should be initialised in the master thread
+  if (IsMaster()) {
     InitialiseElementSelectors(p, cuts);
   }
 }
@@ -165,9 +178,7 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
 void G4PairProductionRelModel::InitialiseLocal(const G4ParticleDefinition*,
                                                G4VEmModel* masterModel)
 {
-  if(LowEnergyLimit() < HighEnergyLimit()) {
-    SetElementSelectors(masterModel->GetElementSelectors());
-  }
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 G4double G4PairProductionRelModel::ComputeXSectionPerAtom(G4double gammaEnergy, 
@@ -497,17 +508,11 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 // should be called only by the master and at initialisation
 void G4PairProductionRelModel::InitialiseElementData() 
 {
-  G4int size = (G4int)gElementData.size();
-  if (size < gMaxZet+1) {
-    gElementData.resize(gMaxZet+1, nullptr);
-  }
   // create for all elements that are in the detector
-  const G4ElementTable* elemTable = G4Element::GetElementTable();
-  std::size_t numElems = (*elemTable).size();
-  for (std::size_t ie = 0; ie < numElems; ++ie) {
-    const G4Element* elem = (*elemTable)[ie];
-    const G4int        iz = std::min(gMaxZet, elem->GetZasInt());
-    if (!gElementData[iz]) { // create it if doesn't exist yet
+  auto elemTable = G4Element::GetElementTable();
+  for (auto const & elem : *elemTable) {
+    const G4int iz = std::min(gMaxZet, elem->GetZasInt());
+    if (nullptr == gElementData[iz]) { // create it if doesn't exist yet
       const G4double logZ13 = elem->GetIonisation()->GetlogZ3();
       const G4double Z13    = elem->GetIonisation()->GetZ3();
       const G4double fc     = elem->GetfCoulomb(); 

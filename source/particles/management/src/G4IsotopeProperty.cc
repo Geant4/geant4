@@ -40,14 +40,9 @@
 // ###                           IsotopeProperty                      ###
 // ######################################################################
 
-G4IsotopeProperty::G4IsotopeProperty()
-  : fFloatLevelBase(G4Ions::G4FloatLevelBase::no_Float)
-{
-}
-
 G4IsotopeProperty::~G4IsotopeProperty()
 {
-  if (fDecayTable != nullptr) delete fDecayTable; 
+  delete fDecayTable; 
   fDecayTable = nullptr;
 }
 
@@ -57,7 +52,7 @@ G4IsotopeProperty::G4IsotopeProperty(const G4IsotopeProperty& right)
     fISpin(right.fISpin),
     fEnergy(right.fEnergy),
     fLifeTime(right.fLifeTime),
-    fDecayTable(nullptr),
+    
     fMagneticMoment(right.fMagneticMoment),
     fIsomerLevel(right.fIsomerLevel),
     fFloatLevelBase(right.fFloatLevelBase)
@@ -107,7 +102,7 @@ void G4IsotopeProperty::DumpInfo() const
 #ifdef G4VERBOSE
   G4cout << "AtomicNumber: " << fAtomicNumber << ",  "
          << "AtomicMass: " << fAtomicMass << G4endl;
-  if (fISpin %2)
+  if ((fISpin %2) != 0)
   {
     G4cout << "Spin: " << fISpin << "/2";
   }

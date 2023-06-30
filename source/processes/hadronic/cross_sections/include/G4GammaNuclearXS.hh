@@ -34,31 +34,27 @@
 // Authors  V.Ivantchenko, Geant4, 20 October 2020
 //          B.Kutsenko, BINP/NSU, 10 August 2021
 //
-// Modification 
-
-
+//
 // Class Description:
 // This is a base class for gamma-nuclear cross section based on
 // data files from IAEA Evaluated Photonuclear Data Library (IAEA/PD-2019) 
 // https://www-nds.iaea.org/photonuclear/
-// Database review - https://www.sciencedirect.com/science/article/pii/S0090375219300699?via%3Dihub
-// Class Description - End
+// Database review:
+// https://www.sciencedirect.com/science/article/pii/S0090375219300699?via%3Dihub
+//
 
 #ifndef G4GammaNuclearXS_h
 #define G4GammaNuclearXS_h 1
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
-#include "G4ElementData.hh"
-#include "G4PhysicsVector.hh"
-#include "G4Threading.hh"
-#include "G4IsotopeList.hh"
 #include <vector>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
-class G4VComponentCrossSection;
+class G4ElementData;
+class G4PhysicsVector;
 
 class G4GammaNuclearXS final : public G4VCrossSectionDataSet
 {
@@ -94,6 +90,8 @@ public:
 
   G4double ElementCrossSection(G4double ekin, G4int Z);
 
+  G4double LowEnergyCrossSection(G4double ekin, G4int Z);
+
   void CrossSectionDescription(std::ostream&) const final;
       
   G4GammaNuclearXS & operator=(const G4GammaNuclearXS &right) = delete;
@@ -107,44 +105,32 @@ private:
 
   const G4String& FindDirectoryPath();
 
-  inline G4PhysicsVector* GetPhysicsVector(G4int Z);
-
-  G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool isElement, G4int Z);
+  G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn, G4int Z);
   
   G4VCrossSectionDataSet* ggXsection = nullptr;
-
-  std::vector<G4double> temp;
   const G4ParticleDefinition* gamma;
-  
-  G4bool isMaster = false;
+
+  // Cache
+  G4double fXS = 0.0;  
+  G4double fEkin = 0.0;  
+  G4int fZ = 0;  
+  G4bool isFirst = false;
 
   static const G4int MAXZGAMMAXS = 95;
+  static const G4int MAXNFREE = 11;
   static G4ElementData* data;
   // Upper limit of the linear transition between IAEA database and CHIPS model
-  static const G4int rTransitionBound = 150.*CLHEP::MeV; 
+  static const G4double eTransitionBound; 
   // The list of elements with non-linear parametrisation for better precision 
-  const G4int freeVectorException[11] = {4, 6, 7, 8, 27, 39, 45, 65, 67, 69, 73}; 
+  static const G4int freeVectorException[MAXNFREE];
   // CHIPS photonuclear model had a problem with high energy parametrisation 
   // for isotopes of H and He, coefficient is needed to connect isotope cross 
   // section with element cross-section on high energies.
   static G4double coeff[3][3]; 
   static G4double xs150[MAXZGAMMAXS];
   static G4String gDataDirectory;
-  
-#ifdef G4MULTITHREADED
-  static G4Mutex gNuclearXSMutex;
-#endif
-};
 
-inline
-G4PhysicsVector* G4GammaNuclearXS::GetPhysicsVector(G4int Z)
-{
-  G4PhysicsVector* pv = data->GetElementData(Z);
-  if(pv == nullptr) { 
-    InitialiseOnFly(Z);
-    pv = data->GetElementData(Z);
-  }
-  return pv;
-}
+  std::vector<G4double> temp;
+};
 
 #endif

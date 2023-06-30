@@ -163,7 +163,7 @@ double RandGaussQ::transformSmall (double r) {
 } // transformSmall()
 
 std::ostream & RandGaussQ::put ( std::ostream & os ) const {
-  int pr=os.precision(20);
+  long pr=os.precision(20);
   os << " " << name() << "\n";
   RandGauss::put(os);
   os.precision(pr);

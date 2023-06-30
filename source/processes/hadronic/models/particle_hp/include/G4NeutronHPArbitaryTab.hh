@@ -29,4 +29,4 @@
 #include "G4ParticleHPArbitaryTab.hh"
 using G4NeutronHPArbitaryTab = G4ParticleHPArbitaryTab;
 
-#endif 
+#endif

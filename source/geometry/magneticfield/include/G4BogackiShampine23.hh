@@ -54,33 +54,33 @@ class G4BogackiShampine23 : public G4MagIntegratorStepper
     G4BogackiShampine23(G4EquationOfMotion* EqRhs,
                         G4int numberOfVariables = 6);
 
-    virtual void Stepper(const G4double yInput[],
-                         const G4double dydx[],
-                         G4double hstep,
-                         G4double yOutput[],
-                         G4double yError[]) override;
+    void Stepper(const G4double yInput[],
+                 const G4double dydx[],
+                       G4double hstep,
+                       G4double yOutput[],
+                       G4double yError[]) override;
 
     void Stepper(const G4double yInput[],
                  const G4double dydx[],
-                 G4double hstep,
-                 G4double yOutput[],
-                 G4double yError[],
-                 G4double dydxOutput[]);
+                       G4double hstep,
+                       G4double yOutput[],
+                       G4double yError[],
+                       G4double dydxOutput[]);
 
     G4BogackiShampine23(const G4BogackiShampine23&) = delete;
     G4BogackiShampine23& operator = (const G4BogackiShampine23&) = delete;
 
-    virtual G4double DistChord() const override;
-    virtual G4int IntegratorOrder() const  override { return 3; }
+    G4double DistChord() const override;
+    G4int IntegratorOrder() const  override { return 3; }
 
   private:
 
     void makeStep(const G4double yInput[],
                   const G4double dydx[],
                   const G4double hstep,
-                  G4double yOutput[],
-                  G4double* dydxOutput = nullptr,
-                  G4double* yError = nullptr) const;
+                        G4double yOutput[],
+                        G4double* dydxOutput = nullptr,
+                        G4double* yError = nullptr) const;
 
     G4double fyIn[G4FieldTrack::ncompSVEC],
              fdydx[G4FieldTrack::ncompSVEC],

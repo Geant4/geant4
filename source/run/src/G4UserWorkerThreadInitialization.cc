@@ -28,9 +28,8 @@
 // Authors: M.Asai, A.Dotti (SLAC), 16 September 2013
 // --------------------------------------------------------------------
 
-#include <sstream>
-
 #include "G4UserWorkerThreadInitialization.hh"
+
 #include "G4AutoLock.hh"
 #include "G4MTRunManagerKernel.hh"
 #include "G4UImanager.hh"
@@ -39,27 +38,21 @@
 #include "G4WorkerRunManager.hh"
 #include "G4WorkerThread.hh"
 
-// Will need this for TPMalloc
-//#ifdef G4MULTITHREADED
-//#define TPMALLOCDEFINESTUB
-//#include "tpmalloc/tpmallocstub.h"
-//#endif
+#include <sstream>
 
 // --------------------------------------------------------------------
 #ifdef G4MULTITHREADED
-G4Thread* G4UserWorkerThreadInitialization::
-CreateAndStartWorker(G4WorkerThread* wTC)
+G4Thread* G4UserWorkerThreadInitialization::CreateAndStartWorker(G4WorkerThread* wTC)
 {
   // Note: this method is called by G4MTRunManager,
   // here we are still sequential.
   // Create a new thread/worker structure
-  G4Thread* worker = new G4Thread;
+  auto worker = new G4Thread;
   G4THREADCREATE(worker, &G4MTRunManagerKernel::StartThread, wTC);
   return worker;
 }
 #else
-G4Thread* G4UserWorkerThreadInitialization::
-CreateAndStartWorker(G4WorkerThread*)
+G4Thread* G4UserWorkerThreadInitialization::CreateAndStartWorker(G4WorkerThread*)
 {
   return new G4Thread;
 }
@@ -72,30 +65,17 @@ void G4UserWorkerThreadInitialization::JoinWorker(G4Thread* aThread)
   G4THREADJOIN(*aThread);
 }
 #else  // Avoid compilation warning in sequential
-void G4UserWorkerThreadInitialization::JoinWorker(G4Thread*)
-{
-}
+void G4UserWorkerThreadInitialization::JoinWorker(G4Thread*) {}
 #endif
-
-// --------------------------------------------------------------------
-G4UserWorkerThreadInitialization::G4UserWorkerThreadInitialization()
-{
-}
-
-// --------------------------------------------------------------------
-G4UserWorkerThreadInitialization::~G4UserWorkerThreadInitialization()
-{
-}
 
 // --------------------------------------------------------------------
 namespace
 {
-  G4Mutex rngCreateMutex = G4MUTEX_INITIALIZER;
+G4Mutex rngCreateMutex = G4MUTEX_INITIALIZER;
 }
 
 // --------------------------------------------------------------------
-void G4UserWorkerThreadInitialization::
-SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
+void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
   G4AutoLock l(&rngCreateMutex);
   // No default available, let's create the instance of random stuff
@@ -105,68 +85,54 @@ SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
   CLHEP::HepRandomEngine* retRNG = nullptr;
 
   // Need to make these calls thread safe
-  if(dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::HepJamesRandom;
   }
-  if(dynamic_cast<const CLHEP::MixMaxRng*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::MixMaxRng*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::MixMaxRng;
   }
-  if(dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::RanecuEngine;
   }
-  if(dynamic_cast<const CLHEP::RanluxppEngine*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::RanluxppEngine*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::RanluxppEngine;
   }
-  if(dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG))
-  {
-    const CLHEP::Ranlux64Engine* theRNG =
-      dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG);
+  if (dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG) != nullptr) {
+    const auto theRNG = dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG);
     retRNG = new CLHEP::Ranlux64Engine(123, theRNG->getLuxury());
   }
-  if(dynamic_cast<const CLHEP::MTwistEngine*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::MTwistEngine*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::MTwistEngine;
   }
-  if(dynamic_cast<const CLHEP::DualRand*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::DualRand*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::DualRand;
   }
-  if(dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG))
-  {
-    const CLHEP::RanluxEngine* theRNG =
-      dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG);
+  if (dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG) != nullptr) {
+    const auto theRNG = dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG);
     retRNG = new CLHEP::RanluxEngine(123, theRNG->getLuxury());
   }
-  if(dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG))
-  {
+  if (dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG) != nullptr) {
     retRNG = new CLHEP::RanshiEngine;
   }
 
-  if(retRNG != nullptr)
-  {
+  if (retRNG != nullptr) {
     G4Random::setTheEngine(retRNG);
   }
-  else
-  {
+  else {
     // Does a new method, such as aNewRng->newEngine() exist to clone it ?
     G4ExceptionDescription msg;
     msg << " Unknown type of RNG Engine - " << G4endl
         << " Can cope only with HepJamesRandom, MixMaxRng, Ranecu, Ranlux64,"
         << " Ranlux++, MTwistEngine, DualRand, Ranlux or Ranshi." << G4endl
-        << " Cannot clone this type of RNG engine, as required for this thread"
-        << G4endl << " Aborting " << G4endl;
-    G4Exception("G4UserWorkerThreadInitialization::SetupRNGEngine()",
-                "Run0122", FatalException, msg);
+        << " Cannot clone this type of RNG engine, as required for this thread" << G4endl
+        << " Aborting " << G4endl;
+    G4Exception("G4UserWorkerThreadInitialization::SetupRNGEngine()", "Run0122", FatalException,
+                msg);
   }
 }
 
 // --------------------------------------------------------------------
-G4WorkerRunManager*
-G4UserWorkerThreadInitialization::CreateWorkerRunManager() const
+G4WorkerRunManager* G4UserWorkerThreadInitialization::CreateWorkerRunManager() const
 {
   return new G4WorkerRunManager();
 }

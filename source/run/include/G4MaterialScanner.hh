@@ -52,13 +52,12 @@ class G4Region;
 class G4MaterialScanner
 {
   public:
-
     G4MaterialScanner();
-   ~G4MaterialScanner();
+    ~G4MaterialScanner();
 
+    // The main entry point which triggers ray tracing.
+    // This method is available only if Geant4 is in Idle state.
     void Scan();
-      // The main entry point which triggers ray tracing.
-      // This method is available only if Geant4 is in Idle state.
 
     inline void SetEyePosition(const G4ThreeVector& val) { eyePosition = val; }
     inline G4ThreeVector GetEyePosition() const { return eyePosition; }
@@ -80,19 +79,17 @@ class G4MaterialScanner
     inline const G4String& GetRegionName() const { return regionName; }
 
   private:
-
     void DoScan();
-      // Event loop
+    // Event loop
 
     void StoreUserActions();
     void RestoreUserActions();
-      // Store and restore user action classes if defined.
+    // Store and restore user action classes if defined.
 
   private:
-
     G4RayShooter* theRayShooter = nullptr;
     G4MatScanMessenger* theMessenger = nullptr;
- 
+
     G4EventManager* theEventManager = nullptr;
 
     G4UserEventAction* theUserEventAction = nullptr;

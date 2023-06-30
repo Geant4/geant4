@@ -65,26 +65,26 @@ G4UTrap::G4UTrap( const G4String& pName,
 {
   // Start with check of centering - the center of gravity trap line
   // should cross the origin of frame
-  if (!(   pt[0].z() < 0
-        && pt[0].z() == pt[1].z()
-        && pt[0].z() == pt[2].z()
-        && pt[0].z() == pt[3].z()
+  if (  pt[0].z() >= 0
+        || pt[0].z() != pt[1].z()
+        || pt[0].z() != pt[2].z()
+        || pt[0].z() != pt[3].z()
 
-        && pt[4].z() > 0
-        && pt[4].z() == pt[5].z()
-        && pt[4].z() == pt[6].z()
-        && pt[4].z() == pt[7].z()
+        || pt[4].z() <= 0
+        || pt[4].z() != pt[5].z()
+        || pt[4].z() != pt[6].z()
+        || pt[4].z() != pt[7].z()
 
-        && std::abs( pt[0].z() + pt[4].z() ) < kCarTolerance
+        || std::abs( pt[0].z() + pt[4].z() ) >= kCarTolerance
 
-        && pt[0].y() == pt[1].y()
-        && pt[2].y() == pt[3].y()
-        && pt[4].y() == pt[5].y()
-        && pt[6].y() == pt[7].y()
+        || pt[0].y() != pt[1].y()
+        || pt[2].y() != pt[3].y()
+        || pt[4].y() != pt[5].y()
+        || pt[6].y() != pt[7].y()
 
-        && std::abs(pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y()) < kCarTolerance
-        && std::abs(pt[0].x()+pt[1].x()+pt[4].x()+pt[5].x() +
-                    pt[2].x()+pt[3].x()+pt[6].x()+pt[7].x()) < kCarTolerance ))
+        || std::abs(pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y()) >= kCarTolerance
+        || std::abs(pt[0].x()+pt[1].x()+pt[4].x()+pt[5].x() +
+                    pt[2].x()+pt[3].x()+pt[6].x()+pt[7].x()) >= kCarTolerance )
   {
     std::ostringstream message;
     message << "Invalid vertice coordinates for Solid: " << GetName();
@@ -148,9 +148,7 @@ G4UTrap::G4UTrap( __void__& a )
 //
 // Destructor
 //
-G4UTrap::~G4UTrap()
-{
-}
+G4UTrap::~G4UTrap() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -249,7 +247,7 @@ G4ThreeVector G4UTrap::GetSymAxis() const
   G4double tanThetaCphi = GetTanThetaCosPhi();
   G4double tan2Theta = tanThetaSphi*tanThetaSphi + tanThetaCphi*tanThetaCphi;
   G4double cosTheta = 1.0 / std::sqrt(1 + tan2Theta);
-  return G4ThreeVector(tanThetaCphi*cosTheta, tanThetaSphi*cosTheta, cosTheta);
+  return {tanThetaCphi*cosTheta, tanThetaSphi*cosTheta, cosTheta};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -502,7 +500,7 @@ G4UTrap::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent

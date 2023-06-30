@@ -40,7 +40,7 @@ class ParallelWorldPhysics : public G4VPhysicsConstructor
   explicit ParallelWorldPhysics(const G4String& name = "ParallelWP",
                                 G4bool layerdMass    = false);
 
-  ~ParallelWorldPhysics() override;
+  ~ParallelWorldPhysics() override = default;
 
   void ConstructProcess() override;
 

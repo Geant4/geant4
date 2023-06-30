@@ -39,21 +39,21 @@
 
 class G4ElectricField : public G4ElectroMagneticField
 {
-  public:  // with description
+  public:
 
-     G4ElectricField();
-     virtual ~G4ElectricField();
-       // Constructor and destructor. No actions.
+    G4ElectricField();
+   ~G4ElectricField() override;
+      // Constructor and destructor. No actions.
 
-     G4ElectricField(const G4ElectricField& r);
-     G4ElectricField& operator = (const G4ElectricField& p);
-       // Copy constructor & assignment operator.
+    G4ElectricField(const G4ElectricField& r);
+    G4ElectricField& operator = (const G4ElectricField& p);
+      // Copy constructor & assignment operator.
 
-     G4bool   DoesFieldChangeEnergy() const { return true; }
-       // Since an electric field can change track energy
+    G4bool   DoesFieldChangeEnergy() const override { return true; }
+      // Since an electric field can change track energy
 
-     virtual void  GetFieldValue( const G4double Point[4],
-					G4double* Bfield ) const = 0;
+    void  GetFieldValue( const G4double Point[4],
+                               G4double* Bfield ) const override = 0;
 };
 
 #endif /* G4ELECTRIC_FIELD_DEF */

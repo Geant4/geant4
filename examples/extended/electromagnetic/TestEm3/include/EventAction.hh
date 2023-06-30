@@ -43,19 +43,20 @@ class EventAction : public G4UserEventAction
 {
   public:  
     EventAction(DetectorConstruction*);
-   ~EventAction();
+   ~EventAction() override = default;
 
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
     
-    void SumEnergy(G4int k, G4double de, G4double dl)
-        {fEnergyDeposit[k] += de; fTrackLengthCh[k] += dl;};          
+    void SumEnergy(G4int k, G4double de, G4double dl);
+    void SumEnergyLeak (G4double eleak);	          
         
   private:  
-    DetectorConstruction* fDetector;
+    DetectorConstruction* fDetector = nullptr;
     
-    G4double              fEnergyDeposit[kMaxAbsor];
-    G4double              fTrackLengthCh[kMaxAbsor];
+    G4double  fEnergyDeposit[kMaxAbsor];
+    G4double  fTrackLengthCh[kMaxAbsor];
+    G4double  fEnergyLeak;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

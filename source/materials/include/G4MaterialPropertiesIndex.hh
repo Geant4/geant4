@@ -22,20 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 // File:        G4MaterialPropertiesIndex.hh
 // Description: Indices and Names for G4MaterialProperties
 // Created:     29-06-2017
 // Author:      Soon Yung Jun
-////////////////////////////////////////////////////////////////////////
 
 #ifndef G4MaterialPropertiesIndex_h
 #define G4MaterialPropertiesIndex_h 1
 
-#include <vector>
 #include "G4String.hh"
 
+#include <vector>
+
+// clang-format off
 enum G4MaterialPropertyIndex   {
   kNullPropertyIndex = -1,     // the number of G4MaterialPropertyIndex
   kRINDEX,                     // index of refraction                  
@@ -68,8 +68,8 @@ enum G4MaterialPropertyIndex   {
   kNumberOfPropertyIndex       // the number of G4MaterialPropertyIndex
 } ;
 
-enum G4MaterialConstPropertyIndex 
-{ 
+enum G4MaterialConstPropertyIndex
+{
   kNullConstPropertyIndex = -1, // the number of G4MaterialPropertyIndex
   kSURFACEROUGHNESS,            // surface microroughness      
   kISOTHERMAL_COMPRESSIBILITY,  // isothermal compressibility
@@ -134,5 +134,6 @@ enum G4MaterialConstPropertyIndex
 
   kNumberOfConstPropertyIndex   // the number of G4MaterialConstPropertyIndex
 };
+// clang-format on
 
 #endif /* G4MaterialPropertiesIndex_h */

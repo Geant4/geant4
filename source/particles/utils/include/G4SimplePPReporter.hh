@@ -42,15 +42,8 @@
 
 class G4SimplePPReporter: public G4VParticlePropertyReporter
 {
- public:
-  //constructors
-  G4SimplePPReporter();
-  
-  //destructor
-  virtual ~G4SimplePPReporter();
-  
 public:
-  virtual void Print(const G4String& option="");
+  void Print(const G4String& option="") override;
 };
 
 

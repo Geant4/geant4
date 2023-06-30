@@ -42,30 +42,28 @@ class G4Track;
 class G4VTrackingManager
 ////////////////////////
 {
+ public:
+  virtual ~G4VTrackingManager() = default;
 
-  public:
-    virtual ~G4VTrackingManager() {}
+  // Messaged by the Particle definition whenever cross-section tables have
+  // to be rebuilt (i.e. if new materials have been defined).
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) {}
 
-    virtual void BuildPhysicsTable(const G4ParticleDefinition&) {}
-      // Messaged by the Particle definition whenever cross-section tables have
-      // to be rebuilt (i.e. if new materials have been defined).
+  // Messaged by the Particle definition whenever cross-section tables have
+  // to be prepared for rebuild (i.e. if new materials have been defined).
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) {}
 
-    virtual void PreparePhysicsTable(const G4ParticleDefinition&) {}
-      // Messaged by the Particle definition whenever cross-section tables have
-      // to be prepared for rebuild (i.e. if new materials have been defined).
+  // Invoking this function, a G4Track given by the argument will be
+  // handed over to this tracking manager. It may be tracked immediately
+  // or processing may be deferred to a later time, at the latest when
+  // calling FlushEvent().
+  virtual void HandOverOneTrack(G4Track* aTrack) = 0;
 
-    virtual void HandOverOneTrack(G4Track* aTrack) = 0;
-      // Invoking this function, a G4Track given by the argument will be
-      // handed over to this tracking manager. It may be tracked immediately
-      // or processing may be deferred to a later time, at the latest when
-      // calling FlushEvent().
-
-    virtual void FlushEvent() {}
-      // Signal that all tracks in the current event have been finished and
-      // this manager should process all tracks that may have been deferred.
-      // When called via this method, the tracking manager may stack new
-      // secondaries which will be tracked afterwards.
-
+  // Signal that all tracks in the current event have been finished and
+  // this manager should process all tracks that may have been deferred.
+  // When called via this method, the tracking manager may stack new
+  // secondaries which will be tracked afterwards.
+  virtual void FlushEvent() {}
 };
 
 #endif

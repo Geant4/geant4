@@ -50,7 +50,7 @@ class Run : public G4Run
 {
 public:
   Run(DetectorConstruction*);
-  ~Run() = default;
+ ~Run() override = default;
 
   void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
@@ -100,23 +100,24 @@ public:
   void EndOfRun();
 
 private:
-  DetectorConstruction*  fDetector;
-  G4ParticleDefinition*  fParticle;
-  G4double fEkin;
+  DetectorConstruction*  fDetector = nullptr;
+  G4ParticleDefinition*  fParticle = nullptr;
+  G4double fEkin = 0.;
                            
-  G4double fEnergyDeposit,  fEnergyDeposit2;
-  G4double fTrakLenCharged, fTrakLenCharged2;
-  G4double fTrakLenNeutral, fTrakLenNeutral2;
-  G4double fNbStepsCharged, fNbStepsCharged2;
-  G4double fNbStepsNeutral, fNbStepsNeutral2;
-  G4double fMscProjecTheta, fMscProjecTheta2;
-  G4double fMscThetaCentral;
+  G4double fEnergyDeposit  = 0.,  fEnergyDeposit2 = 0.;
+  G4double fTrakLenCharged = 0., fTrakLenCharged2 = 0.;
+  G4double fTrakLenNeutral = 0., fTrakLenNeutral2 = 0.;
+  G4double fNbStepsCharged = 0., fNbStepsCharged2 = 0.;
+  G4double fNbStepsNeutral = 0., fNbStepsNeutral2 = 0.;
+  G4double fMscProjecTheta = 0., fMscProjecTheta2 = 0.;
+  G4double fMscThetaCentral = 0.;
     
-  G4int fNbGamma, fNbElect, fNbPosit;
-  G4int fTransmit[2], fReflect[2];
-  G4int fMscEntryCentral, fTypes[4];
-    
-  G4double fEnergyLeak[2],  fEnergyLeak2[2];
+  G4int fNbGamma = 0, fNbElect = 0, fNbPosit = 0;
+  G4int fTransmit[2] = {0,0}, fReflect[2] = {0,0};
+  G4int fMscEntryCentral = 0;
+  G4int fTypes[4] = {0,0,0,0};
+      
+  G4double fEnergyLeak[2] = {0,0},  fEnergyLeak2[2] = {0,0};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

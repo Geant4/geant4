@@ -109,28 +109,28 @@ class G4PVDivision : public G4PVReplica
                  const G4double offset);
       // Constructor in mother physical volume (same as first constructor)
 
-    virtual ~G4PVDivision();
+    ~G4PVDivision() override;
 
     G4PVDivision(const G4PVDivision&) = delete;
     G4PVDivision& operator=(const G4PVDivision&) = delete;
 
-    virtual G4bool IsMany() const;
-    virtual G4bool IsReplicated() const;
-    virtual G4int GetMultiplicity() const;
-    virtual G4VPVParameterisation* GetParameterisation() const;
-    virtual void GetReplicationData( EAxis& axis,
+    G4bool IsMany() const override;
+    G4bool IsReplicated() const override;
+    G4int GetMultiplicity() const override;
+    G4VPVParameterisation* GetParameterisation() const override;
+    void GetReplicationData( EAxis& axis,
                                      G4int& nReplicas,
                                      G4double& width,
                                      G4double& offset,
-                                     G4bool& consuming ) const;
+                                     G4bool& consuming ) const override;
     EAxis  GetDivisionAxis() const;
-    G4bool IsParameterised() const;
+    G4bool IsParameterised() const override;
    
-    virtual EVolume VolumeType() const;
+    EVolume VolumeType() const override;
       // Characterise the type of volume - normal/replicated/parameterised.
 
-    G4bool IsRegularStructure() const; 
-    G4int  GetRegularStructureId() const; 
+    G4bool IsRegularStructure() const override; 
+    G4int  GetRegularStructureId() const override; 
       // Methods to identify volume that can have revised 'regular' navigation.
       // Currently divisions do not qualify for this.
 

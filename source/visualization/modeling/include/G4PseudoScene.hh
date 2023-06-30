@@ -51,11 +51,13 @@ class G4PseudoScene: public G4VGraphicsScene {
 
 public:
 
-  G4PseudoScene(): fpCurrentObjectTransformation(0) {}
-  virtual ~G4PseudoScene () {}
+  G4PseudoScene()          = default;
+  virtual ~G4PseudoScene() = default;
   void PreAddSolid (const G4Transform3D& objectTransformation,
-		    const G4VisAttributes&)
-  {fpCurrentObjectTransformation = &objectTransformation;}
+                    const G4VisAttributes& visAttributes) {
+    fpCurrentObjectTransformation = &objectTransformation;
+    fpVisAttributes = &visAttributes;
+  }
   void PostAddSolid () {}
   // From geometry/solids/CSG
   void AddSolid (const G4Box&    solid) {ProcessVolume (solid);}
@@ -98,7 +100,8 @@ public:
 protected:
 
   virtual void ProcessVolume (const G4VSolid&);
-  const G4Transform3D* fpCurrentObjectTransformation;
+  const G4Transform3D* fpCurrentObjectTransformation = nullptr;
+  const G4VisAttributes* fpVisAttributes = nullptr;
 };
 
 #endif

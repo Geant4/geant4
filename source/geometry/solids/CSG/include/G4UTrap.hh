@@ -90,13 +90,13 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
       // Constructor for "nominal" G4Trap whose parameters are to be set
       // by a G4VPVParamaterisation later
 
-   ~G4UTrap();
+   ~G4UTrap() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     using Base_t::GetTanAlpha1;
     using Base_t::GetTanAlpha2;
@@ -130,16 +130,16 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
                           G4double pDy2, G4double pDx3, G4double pDx4,
                           G4double pAlp2);
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;
+                           G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   public:  // without description
 

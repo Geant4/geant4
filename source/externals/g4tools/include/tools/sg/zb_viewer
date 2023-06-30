@@ -1,0 +1,103 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_zb_viewer
+#define tools_sg_zb_viewer
+
+#include "zb_action"
+#include "viewer"
+
+namespace tools {
+namespace sg {
+
+class zb_viewer : public viewer {
+  TOOLS_HEADER(zb_viewer,tools::sg::zb_viewer,viewer)
+public:
+  zb_viewer(std::ostream& a_out,unsigned int a_width,unsigned int a_height)
+  :parent(a_out,a_width,a_height)
+  ,m_mgr_gra()
+  ,m_out_buffer_what(get_rgbs)
+  {}
+  virtual ~zb_viewer(){
+    //WARNING : nodes may refer m_mgr_gra (to handle gstos/texs), then
+    //          we have to delete them first.
+    m_sg.clear();
+  }
+public:
+  zb_viewer(const zb_viewer& a_from)
+  :parent(a_from)
+  ,m_mgr_gra(a_from.m_mgr_gra)
+  ,m_out_buffer_what(get_rgbs)
+  {}
+  zb_viewer& operator=(const zb_viewer& a_from){
+    parent::operator=(a_from);
+    m_mgr_gra = a_from.m_mgr_gra;
+    m_out_buffer_what = get_rgbs;
+    m_out_buffer.clear();
+    return *this;
+  }
+public:
+  enum get_what {
+    get_rgbs = 0,
+    get_rgbas,
+    get_bgras
+  };
+  bool render(get_what a_what,bool a_top_to_bottom) {
+    m_out_buffer.clear();
+    if(!m_ww) return false;
+    if(!m_wh) return false;
+
+    zb_action action(m_mgr_gra,m_out,m_ww,m_wh);
+    action.clear_color_buffer(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
+    action.clear_depth_buffer();
+    action.set_do_transparency(false);
+    action.set_have_to_do_transparency(false);
+    m_sg.render(action);
+    if(!action.end()) { //check that matrices stack are ok.
+      m_out << "tools::sg::zb_viewer: bad zb_action end." << std::endl;
+      return false;
+    } else {
+      if(action.have_to_do_transparency()) {
+        action.set_do_transparency(true);
+        m_sg.render(action);
+        if(!action.end()) { //check that matrices stack are ok.
+          m_out << "tools::sg::zb_viewer: bad zb_action end." << std::endl;
+          return false;
+        }
+      }
+    }
+
+    m_out_buffer_what = a_what;
+    bool status = false;
+    switch(a_what) {
+    case get_rgbs:
+      status = action.get_rgbs(a_top_to_bottom,m_out_buffer);
+      break;
+    case get_rgbas:
+      status = action.get_rgbas(a_top_to_bottom,m_out_buffer);
+      break;
+    case get_bgras:
+      status = action.get_bgras(a_top_to_bottom,m_out_buffer);
+      break;
+    }\
+    if(!status) {
+      m_out << "tools::sg::zb_viewer::render() : can't get rgb image." << std::endl;
+      m_out_buffer.clear();
+      return false;
+    }
+    /*m_out << "size " << m_out_buffer.size() << std::endl;*/
+    return true;
+  }
+  
+  const std::vector<unsigned char>& out_buffer() const {return m_out_buffer;}
+  void out_buffer_clear() {m_out_buffer.clear();}
+  
+protected:
+  zb_manager m_mgr_gra;
+  get_what m_out_buffer_what;
+  std::vector<unsigned char> m_out_buffer;
+};
+
+}}
+
+#endif

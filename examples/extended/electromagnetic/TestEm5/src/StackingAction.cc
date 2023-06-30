@@ -43,8 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(EventAction* EA)
- : G4UserStackingAction(), fEventAction(EA)
+StackingAction::StackingAction(EventAction* event)
+ : fEventAction(event)
 {
   fStackMessenger = new StackingMessenger(this);
 }

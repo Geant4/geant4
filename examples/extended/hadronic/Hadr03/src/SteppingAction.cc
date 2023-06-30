@@ -40,19 +40,20 @@
                            
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()
-: G4UserSteppingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
-{ }
+//SteppingAction::SteppingAction()
+//: G4UserSteppingAction()
+//{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+ //check trackID and stepNumber
+ G4int trackID = aStep->GetTrack()->GetTrackID();
+ G4int stepNb  = aStep->GetTrack()->GetCurrentStepNumber();
+ if (trackID*stepNb != 1) return;
+ //ok, we are at first interaction of the primary particle
+  
  Run* run 
    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
          

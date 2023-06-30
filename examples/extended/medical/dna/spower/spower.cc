@@ -55,13 +55,18 @@ int main(int argc,char** argv) {
   }
 
   //construct the default run manager
-  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+
+  if (argc==3) { 
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+  }
 
   //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction;
+  auto det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
 
-  PhysicsList* phys = new PhysicsList;
+  auto phys = new PhysicsList();
   runManager->SetUserInitialization(phys);
 
   runManager->SetUserInitialization(new ActionInitialization());
@@ -71,7 +76,7 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //

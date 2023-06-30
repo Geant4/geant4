@@ -51,31 +51,29 @@ class G4VPhysicalVolume;
 class G4VPersistencyManager
 {
   public:
-
+    // Static method to return the pointer to the singleton object.
+    // Note that this method does NOT create the singleton itself.
     static G4VPersistencyManager* GetPersistencyManager();
-      // Static method to return the pointer to the singleton object.
-      // Note that this method does NOT create the singleton itself.
 
     virtual ~G4VPersistencyManager();
 
-    virtual G4bool Store(const G4Event* anEvent)          = 0;
-    virtual G4bool Store(const G4Run* aRun)               = 0;
-    virtual G4bool Store(const G4VPhysicalVolume* world)  = 0;
-      // Stores G4Event, G4Run, and geometry tree characterised
-      // by the world volume.
+    // Stores G4Event, G4Run, and geometry tree characterised
+    // by the world volume.
 
-    virtual G4bool Retrieve(G4Event*& anEvent)            = 0;
-    virtual G4bool Retrieve(G4Run*& aRun)                 = 0;
+    virtual G4bool Store(const G4Event* anEvent) = 0;
+    virtual G4bool Store(const G4Run* aRun) = 0;
+    virtual G4bool Store(const G4VPhysicalVolume* world) = 0;
+
+    // Restores G4Event, G4Run, and geometry tree characterised
+    // by the world volume.
+    virtual G4bool Retrieve(G4Event*& anEvent) = 0;
+    virtual G4bool Retrieve(G4Run*& aRun) = 0;
     virtual G4bool Retrieve(G4VPhysicalVolume*& theWorld) = 0;
-      // Restores G4Event, G4Run, and geometry tree characterised
-      // by the world volume.
 
   protected:
-
     G4VPersistencyManager();
 
   private:
-
     static G4ThreadLocal G4VPersistencyManager* fPersistencyManager;
 };
 

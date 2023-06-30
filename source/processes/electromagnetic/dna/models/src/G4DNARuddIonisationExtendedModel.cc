@@ -26,12 +26,17 @@
 //
 // Modified by Z. Francis, S. Incerti to handle HZE 
 // && inverse rudd function sampling 26-10-2010
+//
+// Rewitten by V.Ivanchenko 21.05.2023
+//
 
+#include "G4EmCorrections.hh"
 #include "G4DNARuddIonisationExtendedModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
+#include "G4NistManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
 
@@ -42,919 +47,621 @@
 #include "G4Log.hh"
 #include "G4Pow.hh"
 #include "G4Alpha.hh"
-
-static G4Pow * gpow = G4Pow::GetInstance();
-
+#include "G4Proton.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
+G4DNACrossSectionDataSet* G4DNARuddIonisationExtendedModel::xsdata[] = {nullptr};
+G4DNACrossSectionDataSet* G4DNARuddIonisationExtendedModel::xshelium = nullptr;
+G4DNACrossSectionDataSet* G4DNARuddIonisationExtendedModel::xsalphaplus = nullptr;
+const std::vector<G4double>* G4DNARuddIonisationExtendedModel::fpWaterDensity = nullptr;
+
+namespace
+{
+  G4Mutex ionDNAMutex = G4MUTEX_INITIALIZER;
+  const G4double scaleFactor = CLHEP::m*CLHEP::m;
+  const G4double tolerance = 1*CLHEP::eV;
+  const G4double Ry = 13.6*CLHEP::eV;
+  const G4double Gj[5] = {0.99, 1.11, 1.11, 0.52, 1.};
+
+  // Following values provided by M. Dingfelder (priv. comm)
+  const G4double Bj[5] = {12.60*CLHEP::eV, 14.70*CLHEP::eV, 18.40*CLHEP::eV,
+                          32.20*CLHEP::eV, 539*CLHEP::eV};
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4ParticleDefinition*,
                                                                    const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+  : G4VEmModel(nam)
 {
-    slaterEffectiveCharge[0]=0.;
-    slaterEffectiveCharge[1]=0.;
-    slaterEffectiveCharge[2]=0.;
-    sCoefficient[0]=0.;
-    sCoefficient[1]=0.;
-    sCoefficient[2]=0.;
+  fEmCorrections = G4LossTableManager::Instance()->EmCorrections();
+  fGpow = G4Pow::GetInstance();
+  fLowestEnergy = 100*CLHEP::eV;
+  fLimitEnergy = 1*CLHEP::keV;
 
-    lowEnergyLimitForA[1] = 0 * eV;
-    lowEnergyLimitForA[2] = 0 * eV;
-    lowEnergyLimitForA[3] = 0 * eV;
-    lowEnergyLimitOfModelForA[1] = 100 * eV;
-    lowEnergyLimitOfModelForA[4] = 1 * keV;
-    lowEnergyLimitOfModelForA[5] = 0.5 * MeV; // For A = 3 or above, limit is MeV/uma
-    killBelowEnergyForA[1] = lowEnergyLimitOfModelForA[1];
-    killBelowEnergyForA[4] = lowEnergyLimitOfModelForA[4];
-    killBelowEnergyForA[5] = lowEnergyLimitOfModelForA[5];
+  // Mark this model as "applicable" for atomic deexcitation
+  SetDeexcitationFlag(true);
 
-    verboseLevel= 0;
-    // Verbosity scale:
-    // 0 = nothing
-    // 1 = warning for energy non-conservation
-    // 2 = details of energy budget
-    // 3 = calculation of cross sections, file openings, sampling of atoms
-    // 4 = entering in methods
-
-    if( verboseLevel>0 )
-    {
-        G4cout << "Rudd ionisation model is constructed " << G4endl;
-    }
-
-    // Define default angular generator
-    SetAngularDistribution(new G4DNARuddAngle());
-
-    // Mark this model as "applicable" for atomic deexcitation
-    SetDeexcitationFlag(true);
-
-    // Selection of stationary mode
-
-    statCode = false;
+  // Define default angular generator
+  SetAngularDistribution(new G4DNARuddAngle());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNARuddIonisationExtendedModel::~G4DNARuddIonisationExtendedModel()
 {  
-  if(isIon) {
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    for (pos = tableData.begin(); pos != tableData.end(); ++pos)
-    {
-        G4DNACrossSectionDataSet* table = pos->second;
-        delete table;
-    }
-  } else {
-    delete mainTable;
+  if(isFirst) {
+    for(G4int i=0; i<RUDDZMAX; ++i) { delete xsdata[i]; }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* particle,
-                                                  const G4DataVector& /*cuts*/)
+void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* p,
+                                                  const G4DataVector&)
 {
-    if (isInitialised) { return; }
-    if (verboseLevel > 3)
-        G4cout << "Calling G4DNARuddIonisationExtendedModel::Initialise()" << G4endl;
+  if(p != fParticle) { SetParticle(p); }
 
-    // Energy limits
-    G4String fileProton("dna/sigma_ionisation_p_rudd");
-    G4String fileHydrogen("dna/sigma_ionisation_h_rudd");
-    G4String fileAlphaPlusPlus("dna/sigma_ionisation_alphaplusplus_rudd");
-    G4String fileAlphaPlus("dna/sigma_ionisation_alphaplus_rudd");
-    G4String fileHelium("dna/sigma_ionisation_he_rudd");
-    G4String fileCarbon("dna/sigma_ionisation_c_rudd");
-    G4String fileNitrogen("dna/sigma_ionisation_n_rudd");
-    G4String fileOxygen("dna/sigma_ionisation_o_rudd");
-    G4String fileSilicon("dna/sigma_ionisation_si_rudd");
-    G4String fileIron("dna/sigma_ionisation_fe_rudd");
+  // initialisation of static data once
+  if(nullptr == xsdata[0]) {
+    G4AutoLock l(&ionDNAMutex);
+    if(nullptr == xsdata[0]) {
+      isFirst = true;
+      G4String filename("dna/sigma_ionisation_h_rudd");
+      xsdata[0] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[0]->LoadData(filename);
 
-    G4String pname = particle->GetParticleName();
+      filename = "dna/sigma_ionisation_p_rudd";
+      xsdata[1] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[1]->LoadData(filename);
 
-    G4DNAGenericIonsManager *instance;
-    instance = G4DNAGenericIonsManager::Instance();
-    protonDef = G4Proton::ProtonDefinition();
-    hydrogenDef = instance->GetIon("hydrogen");
-    alphaPlusPlusDef = G4Alpha::Alpha();
-    alphaPlusDef = instance->GetIon("alpha+");
-    heliumDef = instance->GetIon("helium");
+      filename = "dna/sigma_ionisation_alphaplusplus_rudd";
+      xsdata[2] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[2]->LoadData(filename);
 
-    carbonDef = instance->GetIon("carbon");
-    nitrogenDef = instance->GetIon("nitrogen");
-    oxygenDef = instance->GetIon("oxygen");
-    siliconDef = instance->GetIon("silicon");
-    ironDef = instance->GetIon("iron");
+      filename = "dna/sigma_ionisation_li_rudd";
+      xsdata[3] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[3]->LoadData(filename);
 
-    G4String carbon;
-    G4String nitrogen;
-    G4String oxygen;
-    G4String silicon;
-    G4String iron;
+      filename = "dna/sigma_ionisation_be_rudd";
+      xsdata[4] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[4]->LoadData(filename);
 
-    G4double scaleFactor = 1 * m*m;
-    massC12 = carbonDef->GetPDGMass();
+      filename = "dna/sigma_ionisation_b_rudd";
+      xsdata[5] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[5]->LoadData(filename);
 
-    // LIMITS AND DATA
+      filename = "dna/sigma_ionisation_c_rudd";
+      xsdata[6] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[6]->LoadData(filename);
 
-    // **********************************************************************************************
+      filename = "dna/sigma_ionisation_n_rudd";
+      xsdata[7] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[7]->LoadData(filename);
 
-    if(pname == "proton") {
-      localMinEnergy = lowEnergyLimitForA[1];
+      filename = "dna/sigma_ionisation_o_rudd";
+      xsdata[8] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[8]->LoadData(filename);
 
-      // Cross section
-      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-      mainTable->LoadData(fileProton);
+      filename = "dna/sigma_ionisation_si_rudd";
+      xsdata[14] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[14]->LoadData(filename);
 
-    // **********************************************************************************************
-    
-    } else if(pname == "hydrogen") {
+      filename = "dna/sigma_ionisation_fe_rudd";
+      xsdata[26] = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsdata[26]->LoadData(filename);
+      filename = "dna/sigma_ionisation_alphaplus_rudd";
+      xsalphaplus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xsalphaplus->LoadData(filename);
 
-      localMinEnergy = lowEnergyLimitForA[1];
-
-      // Cross section
-      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-      mainTable->LoadData(fileHydrogen);
-
-    // **********************************************************************************************
-    
-    } else if(pname == "alpha") {
-
-      localMinEnergy = lowEnergyLimitForA[4];
-
-      // Cross section
-      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-      mainTable->LoadData(fileAlphaPlusPlus);
-
-    // **********************************************************************************************
-    
-    } else if(pname == "alpha+") {
-
-      localMinEnergy = lowEnergyLimitForA[4];
-
-      // Cross section
-      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-      mainTable->LoadData(fileAlphaPlus);
-
-    // **********************************************************************************************
-
-    } else if(pname == "helium") {
-
-      localMinEnergy = lowEnergyLimitForA[4];
-
-      // Cross section
-      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-      mainTable->LoadData(fileHelium);
-
-    // **********************************************************************************************
-
-    } else if(pname == "GenericIon") {
-    
-      isIon = true;
-      carbon = carbonDef->GetParticleName();
-      localMinEnergy = lowEnergyLimitForA[5]*massC12/proton_mass_c2;
-
-      // Cross section
-      mainTable = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-      mainTable->LoadData(fileCarbon);
-
-      tableData[carbon] = mainTable;
-
-    // **********************************************************************************************
-    
-      oxygen = oxygenDef->GetParticleName();
-      tableFile[oxygen] = fileOxygen;
-
-      // Cross section
-      G4DNACrossSectionDataSet* tableOxygen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                           eV, scaleFactor );
-      tableOxygen->LoadData(fileOxygen);
-      tableData[oxygen] = tableOxygen;
-
-    // **********************************************************************************************
-    
-      nitrogen = nitrogenDef->GetParticleName();
-      tableFile[nitrogen] = fileNitrogen;
-
-      // Cross section
-      G4DNACrossSectionDataSet* tableNitrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                             eV, scaleFactor );
-      tableNitrogen->LoadData(fileNitrogen);
-      tableData[nitrogen] = tableNitrogen;
-
-    // **********************************************************************************************
-
-      silicon = siliconDef->GetParticleName();
-      tableFile[silicon] = fileSilicon;
-    
-      // Cross section
-      G4DNACrossSectionDataSet* tableSilicon = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                            eV, scaleFactor );
-      tableSilicon->LoadData(fileSilicon);
-      tableData[silicon] = tableSilicon;
-     
-    // **********************************************************************************************
-    
-      iron = ironDef->GetParticleName();
-      tableFile[iron] = fileIron;
-
-      // Cross section
-
-      G4DNACrossSectionDataSet* tableIron = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
-                                                                         eV, scaleFactor );
-      tableIron->LoadData(fileIron);
-      tableData[iron] = tableIron;
+      filename = "dna/sigma_ionisation_he_rudd";
+      xshelium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
+      xshelium->LoadData(filename);
     }
-    // **********************************************************************************************
+    // to avoid possible threading problem fill this vector only once
+    auto water = G4NistManager::Instance()->FindMaterial("G4_WATER");
+    fpWaterDensity =
+      G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(water);
 
-    if( verboseLevel>0 )
-    {
-      G4cout << "Rudd ionisation model is initialized " << G4endl
-	     << "Energy range for model: "
-	     << LowEnergyLimit() / keV << " keV - "
-	     << HighEnergyLimit() / keV << " keV for "
-	     << pname
-	     << " internal low energy limit E(keV)=" << localMinEnergy / keV
-	     << G4endl;
-    }
+    l.unlock();
+  }
 
-    // Initialize water density pointer
-    fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
-
-    //
-    fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
-
+  // initialisation once in each thread
+  if(nullptr == fParticleChangeForGamma) {
     fParticleChangeForGamma = GetParticleChangeForGamma();
-    isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Material* material,
-                                                                 const G4ParticleDefinition* partDef,
-                                                                 G4double k,
-                                                                 G4double,
-                                                                 G4double)
-{
-    if (verboseLevel > 3)
-        G4cout << "Calling CrossSectionPerVolume() of G4DNARuddIonisationExtendedModel" << G4endl;
-
-    currParticle = GetDNAIonParticleDefinition(partDef);
-    currentScaledEnergy = k;
-    G4double e = k;
-    G4double q2 = 1.0;
-    currentTable = mainTable;
-
-    if (isIon){
-      if (currParticle == nullptr) {//not DNA particle
-        currentScaledEnergy *= massC12/partDef->GetPDGMass();
-        G4double q = partDef->GetPDGCharge()/(eplus*6);
-        q2 *= q*q;
-        e = currentScaledEnergy;
-        currParticle = carbonDef;
-      }
-      G4String pname = currParticle->GetParticleName();
-      auto goodTable = tableData.find(pname);
-      currentTable = goodTable->second;
-    }
-    // below low the ion should be stopped
-    if (currentScaledEnergy < localMinEnergy) { return DBL_MAX; }
-
-    G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
-    G4double sigma = 0.0;
-    if (nullptr != currentTable) {
-      sigma = currentTable->FindValue(e)*q2;
+    const G4String& pname = fParticle->GetParticleName();
+    if(pname == "proton") {
+      idx = 1;
+      xscurrent = xsdata[1];
+      fElow = fLowestEnergy;
+    } else if(pname == "hydrogen") {
+      idx = 0; 
+      xscurrent = xsdata[0];
+      fElow = fLowestEnergy;
+    } else if(pname == "alpha") {
+      idx = 1;
+      xscurrent = xsdata[2];
+      isHelium = true;
+      fElow = fLimitEnergy;
+    } else if(pname == "alpha+") {
+      idx = 1;
+      isHelium = true;
+      xscurrent = xsalphaplus;
+      fElow = fLimitEnergy;
+      // The following values are provided by M. Dingfelder (priv. comm)
+      slaterEffectiveCharge[0]=2.0;
+      slaterEffectiveCharge[1]=2.0;
+      slaterEffectiveCharge[2]=2.0;
+      sCoefficient[0]=0.7;
+      sCoefficient[1]=0.15;
+      sCoefficient[2]=0.15;
+    } else if(pname == "helium") {
+      idx = 0; 
+      isHelium = true;
+      fElow = fLimitEnergy;
+      xscurrent = xshelium;
+      slaterEffectiveCharge[0]=1.7;
+      slaterEffectiveCharge[1]=1.15;
+      slaterEffectiveCharge[2]=1.15;
+      sCoefficient[0]=0.5;
+      sCoefficient[1]=0.25;
+      sCoefficient[2]=0.25;
     } else {
-      G4cout << "G4DNARuddIonisationExtendedModel - no data table for " 
-	     << partDef->GetParticleName() << G4endl;
-      G4Exception("G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(...)","em0002",
-		  FatalException,"Data table is not available for the model.");
+      isIon = true;
     }
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNARuddIonisationExtendedModel - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << k/eV << " particle : " << partDef->GetParticleName() << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "G4DNARuddIonisationExtendedModel - XS INFO END" << G4endl;
+    // defined stationary mode
+    statCode = G4EmParameters::Instance()->DNAStationary();
+
+    // initialise atomic de-excitation
+    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+
+    if (verbose > 0) {
+      G4cout << "### G4DNARuddIonisationExtendedModel::Initialise(..) " << pname 
+	     << "/n    idx=" << idx << " Amass=" << fAmass 
+	     << " isIon=" << isIon << " isHelium=" << isHelium << G4endl;
     }
-    return sigma*waterDensity;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-                                                         const G4MaterialCutsCouple* couple,
-                                                         const G4DynamicParticle* particle,
-                                                         G4double,
-                                                         G4double)
+void G4DNARuddIonisationExtendedModel::SetParticle(const G4ParticleDefinition* p)
 {
-    if (verboseLevel > 3)
-        G4cout << "Calling SampleSecondaries() of G4DNARuddIonisationExtendedModel" << G4endl;
+  fParticle = p;
+  fMass = p->GetPDGMass();
+  fAmass = p->GetAtomicMass();
 
-    // stop ion with energy below low energy limit
-    G4double k = particle->GetKineticEnergy();
-    if (currentScaledEnergy < localMinEnergy) {
-      fParticleChangeForGamma->SetProposedKineticEnergy(0.);
-      fParticleChangeForGamma->ProposeTrackStatus(fStopButAlive);
-      fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
-      return;
+  // for generic ions idx is dynamic, -1 means that data for the ion does not exist
+  if(isIon) { 
+    G4int i = p->GetAtomicNumber();
+    idx = -1;
+    if (i < RUDDZMAX && nullptr != xsdata[i]) {
+      idx = i;
+      fElow = fAmass*fLowestEnergy;
     }
+  }
+}
 
-    // sampling of final state
-    G4ParticleDefinition* definition = particle->GetDefinition();
-    const G4ThreeVector& primaryDirection = particle->GetMomentumDirection();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-    G4int ionizationShell = RandomSelect(currentScaledEnergy);
+G4double 
+G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Material* material,
+                                                        const G4ParticleDefinition* part,
+                                                        G4double kinE,
+                                                        G4double, G4double)
+{
+  // check if model is applicable for given material
+  G4double density = (material->GetIndex() < fpWaterDensity->size())
+    ? (*fpWaterDensity)[material->GetIndex()] : 0.0;
+  if (0.0 == density) { return 0.0; }
 
-    // sample deexcitation
-    // here we assume that H_{2}O electronic levels are the same as Oxygen.
-    // this can be considered true with a rough 10% error in energy on K-shell,
+  // ion may be different
+  if (fParticle != part) { SetParticle(part); }
 
-    G4double bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
+  // initilise mass rate
+  fMassRate = 1.0;
 
-    //SI: additional protection if tcs interpolation method is modified
-    if (k < bindingEnergy) return;
-    //
+  // ion shoud be stopped - check on kinetic energy and not scaled energy
+  if (kinE < fLowestEnergy) { return DBL_MAX; }
 
-    G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
+  G4double sigma = 0.;
+  
+  // use ion table if available for given energy
+  // for proton, hydrogen, alpha, alpha+, and helium no scaling to proton x-section
+  if (idx == 0 || idx == 1) {
+    sigma = (kinE > fElow) ? xscurrent->FindValue(kinE)
+      : xscurrent->FindValue(fElow)*kinE/fElow;
 
-    // is ionisation possible?
-    G4double scatteredEnergy = k - bindingEnergy - secondaryKinetic;
-    if(scatteredEnergy < 0.0) { return; }
+    // for ions with data above limit energy
+  } else if (idx > 1) {
+    sigma = (kinE > fElow) ? xsdata[idx]->FindValue(kinE)
+      : xsdata[idx]->FindValue(fElow)*kinE/fElow;
 
-        G4int Z = 8;
-	
-	G4ThreeVector deltaDirection = 
-	  GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic, 
-							    Z, ionizationShell,
-							    couple->GetMaterial());
+    // scaling from proton
+  } else {
+    fMassRate = CLHEP::proton_mass_c2/fMass;
+    G4double e = kinE*fMassRate;
+    sigma = (e > fLowestEnergy) ? xsdata[1]->FindValue(e)
+      : xsdata[1]->FindValue(fLowestEnergy)*e/fLowestEnergy;
+    sigma *= fEmCorrections->EffectiveChargeSquareRatio(part, material, kinE);
+  }
+  sigma *= density;
 
-        G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
-        fvect->push_back(dp);
+  if (verbose > 1) {
+    G4cout << "G4DNARuddIonisationExtendedModel for " << part->GetParticleName() 
+           << " Ekin(keV)=" << kinE/CLHEP::keV 
+           << " sigma(cm^2)=" << sigma/CLHEP::cm2 << G4endl;
+  }
+  return sigma;
+}
 
-        fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
-		
-        size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
-        size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-        // SI: only atomic deexcitation from K shell is considered
-        if(fAtomDeexcitation != nullptr && ionizationShell == 4)
-        {
-          const G4AtomicShell* shell 
-            = fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
-          secNumberInit = fvect->size();
-          fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
-          secNumberFinal = fvect->size();
+void
+G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+                                                    const G4MaterialCutsCouple* couple,
+                                                    const G4DynamicParticle* dpart,
+                                                    G4double, G4double)
+{
+  const G4ParticleDefinition* pd = dpart->GetDefinition();
+  if (fParticle != pd) { SetParticle(pd); }
 
-          if(secNumberFinal > secNumberInit) 
-          {
-	    for (size_t i=secNumberInit; i<secNumberFinal; ++i) 
-            {
-              //Check if there is enough residual energy 
-              if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
-              {
-                //Ok, this is a valid secondary: keep it
-	        bindingEnergy -= ((*fvect)[i])->GetKineticEnergy();
-              }
-              else
-              {
- 	        //Invalid secondary: not enough energy to create it!
- 	        //Keep its energy in the local deposit
-                delete (*fvect)[i]; 
-                (*fvect)[i]=0;
-              }
-	    } 
-          }
-        }
+  // stop ion with energy below low energy limit
+  G4double kinE = dpart->GetKineticEnergy();
+  // ion shoud be stopped - check on kinetic energy and not scaled energy
+  if (kinE <= fLowestEnergy) {
+    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
+    fParticleChangeForGamma->ProposeTrackStatus(fStopButAlive);
+    fParticleChangeForGamma->ProposeLocalEnergyDeposit(kinE);
+    return;
+  }
 
-        //bindingEnergy has been decreased 
-        //by the amount of energy taken away by deexc. products
-        if (!statCode)
-        {
-          fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
-          fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
-        }
-        else
-        {
-          fParticleChangeForGamma->SetProposedKineticEnergy(k);
-          fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
-        }
+  G4int shell = SelectShell(kinE);
+  G4double bindingEnergy = (useDNAWaterStructure)
+    ? waterStructure.IonisationEnergy(shell) : Bj[shell];
 
-        // TEST //////////////////////////
-        // if (secondaryKinetic<0) abort();
-        // if (scatteredEnergy<0) abort();
-        // if (k-scatteredEnergy-secondaryKinetic-deexSecEnergy<0) abort();
-        // if (k-scatteredEnergy<0) abort();     
-        /////////////////////////////////
+  //Si: additional protection if tcs interpolation method is modified
+  if (kinE < bindingEnergy) return;
 
-        const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-        G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
-                                                               ionizationShell,
-                                                               theIncomingTrack);
-    // SI - not useful since low energy of model is 0 eV
+  G4double esec = SampleElectronEnergy(kinE, bindingEnergy, shell);
+  G4double esum = 0.0;
+
+  // sample deexcitation
+  // here we assume that H2O electronic levels are the same as Oxygen.
+  // this can be considered true with a rough 10% error in energy on K-shell,
+  G4int Z = 8;	
+  G4ThreeVector deltaDir = 
+    GetAngularDistribution()->SampleDirectionForShell(dpart, esec, Z, shell, couple->GetMaterial());
+
+  // SI: only atomic deexcitation from K shell is considered
+  if(fAtomDeexcitation != nullptr && shell == 4) {
+    auto as = G4AtomicShellEnumerator(shell);
+    auto ashell = fAtomDeexcitation->GetAtomicShell(Z, as);
+    fAtomDeexcitation->GenerateParticles(fvect, ashell, Z, 0, 0);
+
+    // compute energy sum from de-excitation
+    std::size_t nn = fvect->size();
+    for (std::size_t i=0; i<nn; ++i) {
+      esum += (*fvect)[i]->GetKineticEnergy();
+    }
+  }
+  // check energy balance
+  // remaining excitation energy of water molecule
+  G4double exc = bindingEnergy - esum;
+
+  // remaining projectile energy
+  G4double scatteredEnergy = kinE - bindingEnergy - esec;
+  if(scatteredEnergy < -tolerance || exc < -tolerance) {
+    G4cout << "G4DNARuddIonisationExtendedModel::SampleSecondaries: "
+           << "negative final E(keV)=" << scatteredEnergy/CLHEP::keV << " Ein(keV)="
+           << kinE/CLHEP::keV << "  " << pd->GetParticleName()
+           << " Edelta(keV)=" << esec/CLHEP::keV << " MeV, Exc(keV)=" << exc/CLHEP::keV
+	   << G4endl;
+  }
+
+  // projectile
+  if (!statCode) {
+    fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
+    fParticleChangeForGamma->ProposeLocalEnergyDeposit(exc);
+  } else {
+    fParticleChangeForGamma->SetProposedKineticEnergy(kinE);
+    fParticleChangeForGamma->ProposeLocalEnergyDeposit(kinE - scatteredEnergy);
+  }
+
+  // delta-electron
+  G4DynamicParticle* dp = new G4DynamicParticle(G4Electron::Electron(), deltaDir, esec);
+  fvect->push_back(dp);
+
+  // create radical
+  const G4Track* theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+  G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule, shell,
+							 theIncomingTrack);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
-                                                                          G4double k,
-                                                                          G4int shell)
+G4int G4DNARuddIonisationExtendedModel::SelectShell(G4double e)
 {
-    //-- Fast sampling method -----
-    G4double proposed_energy;
-    G4double random1;
-    G4double value_sampling;
-    G4double max1;
+  G4double sum = 0.0;
+  G4double xs;
+  for(G4int i=0; i<5; ++i) {
+    if (idx == 0 || idx == 1) {
+      auto ptr = xscurrent->GetComponent(i);
+      xs = (e > fElow) ? ptr->FindValue(e) : ptr->FindValue(fElow)*e/fElow;
 
-    do
-    {
-        proposed_energy = ProposedSampledEnergy(particleDefinition, k, shell); // Proposed energy by inverse function sampling
+    } else if (idx > 1) {
+      auto ptr = xsdata[idx]->GetComponent(i);
+      xs = (e > fElow) ? ptr->FindValue(e) : ptr->FindValue(fElow)*e/fElow;
 
-        max1=0.;
-
-        for(G4double en=0.; en<20.; en+=1.) if(RejectionFunction(particleDefinition, k, en, shell) > max1)
-            max1=RejectionFunction(particleDefinition, k, en, shell);
-
-        random1 = G4UniformRand()*max1;
-
-        value_sampling = RejectionFunction(particleDefinition, k, proposed_energy, shell);
-
-    } while(random1 > value_sampling);
-
-    return(proposed_energy);
+    } else {
+      // use scaling from proton
+      auto ptr = xsdata[1]->GetComponent(i);
+      G4double x = e*fMassRate;
+      xs = (x >= fLowestEnergy) ? ptr->FindValue(x) 
+	: ptr->FindValue(fLowestEnergy)*x/fLowestEnergy;
+    }
+    sum += xs;
+    fTemp[i] = sum;
+  }
+  sum *= G4UniformRand();
+  for(G4int i=0; i<5; ++i) {
+    if(sum <= fTemp[i]) { return i; }
+  }
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinition* particleDefinition, 
-                                                             G4double k,
-                                                             G4double proposed_ws,
-                                                             G4int ionizationLevelIndex)
+G4double G4DNARuddIonisationExtendedModel::SampleElectronEnergy(G4double kine,
+                                                                G4double eexc,
+                                                                G4int shell)
 {
-    const G4int j=ionizationLevelIndex;
-    G4double Bj_energy, alphaConst;
-    G4double Ry = 13.6*eV;
-    const G4double Gj[5] = {0.99, 1.11, 1.11, 0.52, 1.};
+  // kinematic limit
+  G4double tau = kine/fMass;
+  G4double emax = 2.0*CLHEP::electron_mass_c2*tau*(tau + 2.0);
+  // compute cumulative probability function
+  G4double step = 1*CLHEP::eV;
+  G4int nn = (G4int)(emax/step);
+  nn = std::max(nn, 10);
+  step = emax/(G4double)nn;
 
-    // const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV}; //Ding Paper
+  // find max probability
+  G4double pmax = ProbabilityFunction(kine, 0.0, eexc, shell);
+  //G4cout << "E(keV)=" << kine/keV << " emax=" << emax/keV
+  //       << " pmax(0)=" << pmax << " shell=" << shell << " nn=" << nn << G4endl;
 
-    // Following values provided by M. Dingfelder (priv. comm)
-    const G4double Bj[5] = {12.60*eV, 14.70*eV, 18.40*eV, 32.20*eV, 540*eV};
-
-    if (j == 4)
-    {
-        alphaConst = 0.66;
-        //---Note that the following (j==4) cases are provided by   M. Dingfelder (priv. comm)
-        Bj_energy = waterStructure.IonisationEnergy(ionizationLevelIndex);
-        //---
+  G4double e2 = 0.0; // backup energy
+  G4double e0 = 0.0; // energy with max probability
+  G4double e = 0.0;
+  for (G4int i=0; i<nn; ++i) {
+    e += step;
+    G4double prob = ProbabilityFunction(kine, e, eexc, shell);
+    if (prob < pmax) {
+      e2 = 2*e;
+      break;
     }
-    else
-    {
-        alphaConst = 0.64;
-        Bj_energy = Bj[ionizationLevelIndex];
+    pmax = prob;
+    e0 = e;
+  }
+  //G4cout << "         E0(keV)=" << e0/keV << " pmax=" << pmax << G4endl;
+  pmax *= 1.05;
+  // regression method with two regions
+  G4double e1 = emax;
+  G4double p1 = 0.0;
+  if (2*e0 < emax) {
+    e1 = e0 + 0.25*(emax - e0);
+    p1 = ProbabilityFunction(kine, e1, eexc, shell);
+  }
+  G4double s2 = p1*(emax - e1);
+  s2 /= (s2 + e1*pmax);
+  G4double s1 = 1.0 - s2;
+
+  // sampling
+  G4int count = 0;
+  G4double ymax, y, deltae;
+  for (G4int i = 0; i<100000; ++i) {
+    G4double q = G4UniformRand();
+    if (q <= s1) {
+      ymax = pmax;
+      deltae = e1 * q / s1;
+    } else {
+      ymax = p1;
+      deltae = e1 + (emax - e1)* (q - s1) / s2;
     }
-
-    G4double energyTransfer = proposed_ws + Bj_energy;
-    proposed_ws/=Bj_energy;
-
-    G4double tau = 0.;
-    G4double A_ion = 0.;
-    tau = (electron_mass_c2 / particleDefinition->GetPDGMass()) * k;
-    A_ion = particleDefinition->GetAtomicMass();
-
-    G4double v2;
-    G4double beta2;
-
-    if((tau/MeV)<5.447761194e-2)
-    {
-        v2 = tau / Bj_energy;
-        beta2 = 2.*tau / electron_mass_c2;
+    y = ProbabilityFunction(kine, deltae, eexc, shell);
+    //G4cout << "    " << i << ".  deltae=" << deltae/CLHEP::keV 
+    // << " y=" << y << " ymax=" << ymax << G4endl; 
+    if (y > ymax && count < 10) {
+      ++count;
+      G4cout << "G4DNARuddIonisationExtendedModel::SampleElectronEnergy warning: "
+	     << fParticle->GetParticleName() << " E(keV)=" << kine/CLHEP::keV
+	     << " Edelta(keV)=" << deltae/CLHEP::keV 
+	     << " y=" << y << " ymax=" << ymax << " n=" << i << G4endl; 
     }
-    // Relativistic
-    else
-    {
-        v2 = (electron_mass_c2 / 2. / Bj_energy) * (1. - (1./ pow( (1.+ (tau/electron_mass_c2)),2) ));
-        beta2 =1. - 1./(1.+ (tau/electron_mass_c2/A_ion))/(1.+ (tau/electron_mass_c2/A_ion));
+    if (ymax * G4UniformRand() < y) {
+      return deltae;
     }
-
-    G4double v = std::sqrt(v2);
-    G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj_energy));
-    G4double rejection_term = 1.+G4Exp(alphaConst*(proposed_ws - wc) / v);
-    rejection_term = (1./rejection_term)*CorrectionFactor(particleDefinition,k,ionizationLevelIndex) * Gj[j];
-    //* (S/Bj_energy) ; Not needed anymore
-
-    G4bool isHelium = false;
-
-    if (    particleDefinition == protonDef
-            || particleDefinition == hydrogenDef
-            )
-    {
-        return(rejection_term);
-    }
-
-    else if(particleDefinition->GetAtomicMass() > 4) // anything above Helium
-    {
-        G4double Z = particleDefinition->GetAtomicNumber();
-
-        G4double x = 100.*std::sqrt(beta2)/gpow->powA(Z, 2./3.);
-        G4double Zeffion = Z*(1.-G4Exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
-        rejection_term*=Zeffion*Zeffion;
-    }
-
-    else if (particleDefinition == alphaPlusPlusDef )
-    {
-        isHelium = true;
-        slaterEffectiveCharge[0]=0.;
-        slaterEffectiveCharge[1]=0.;
-        slaterEffectiveCharge[2]=0.;
-        sCoefficient[0]=0.;
-        sCoefficient[1]=0.;
-        sCoefficient[2]=0.;
-    }
-
-    else if (particleDefinition == alphaPlusDef )
-    {
-        isHelium = true;
-        slaterEffectiveCharge[0]=2.0;
-        // The following values are provided by M. Dingfelder (priv. comm)
-        slaterEffectiveCharge[1]=2.0;
-        slaterEffectiveCharge[2]=2.0;
-        //
-        sCoefficient[0]=0.7;
-        sCoefficient[1]=0.15;
-        sCoefficient[2]=0.15;
-    }
-
-    else if (particleDefinition == heliumDef )
-    {
-        isHelium = true;
-        slaterEffectiveCharge[0]=1.7;
-        slaterEffectiveCharge[1]=1.15;
-        slaterEffectiveCharge[2]=1.15;
-        sCoefficient[0]=0.5;
-        sCoefficient[1]=0.25;
-        sCoefficient[2]=0.25;
-    }
-
-    if (isHelium)
-    {
-
-        G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
-
-        zEff -= ( sCoefficient[0] * S_1s(k, energyTransfer, slaterEffectiveCharge[0], 1.) +
-                  sCoefficient[1] * S_2s(k, energyTransfer, slaterEffectiveCharge[1], 2.) +
-                  sCoefficient[2] * S_2p(k, energyTransfer, slaterEffectiveCharge[2], 2.) );
-
-        rejection_term*= zEff * zEff;
-    }
-
-    return (rejection_term);
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-G4double G4DNARuddIonisationExtendedModel::ProposedSampledEnergy(G4ParticleDefinition* particle, 
-                                                                 G4double k,
-                                                                 G4int ionizationLevelIndex)
-{
-
-    const G4int j=ionizationLevelIndex;
-
-    G4double A1, B1, C1, D1, E1, A2, B2, C2, D2;
-    //G4double alphaConst ;
-    G4double Bj_energy;
-
-    // const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV}; //Ding Paper
-    // Following values provided by M. Dingfelder (priv. comm)
-
-    const G4double Bj[5] = {12.60*eV, 14.70*eV, 18.40*eV, 32.20*eV, 540*eV};
-
-    if (j == 4)
-    {
-        //Data For Liquid Water K SHELL from Dingfelder (Protons in Water)
-        A1 = 1.25;
-        B1 = 0.5;
-        C1 = 1.00;
-        D1 = 1.00;
-        E1 = 3.00;
-        A2 = 1.10;
-        B2 = 1.30;
-        C2 = 1.00;
-        D2 = 0.00;
-        //alphaConst = 0.66;
-        //---Note that the following (j==4) cases are provided by   M. Dingfelder (priv. comm)
-        Bj_energy = waterStructure.IonisationEnergy(ionizationLevelIndex);
-        //---
-    }
-    else
-    {
-        //Data For Liquid Water from Dingfelder (Protons in Water)
-        A1 = 1.02;
-        B1 = 82.0;
-        C1 = 0.45;
-        D1 = -0.80;
-        E1 = 0.38;
-        A2 = 1.07;
-        //B2 = 14.6; From Ding Paper
-        // Value provided by M. Dingfelder (priv. comm)
-        B2 = 11.6;
-        //
-        C2 = 0.60;
-        D2 = 0.04;
-        //alphaConst = 0.64;
-
-        Bj_energy = Bj[ionizationLevelIndex];
-    }
-
-    G4double tau = 0.;
-    G4double A_ion = 0.;
-    tau = (electron_mass_c2 / particle->GetPDGMass()) * k;
-
-    A_ion = particle->GetAtomicMass();
-
-    G4double v2;
-    G4double beta2;
-    if((tau/MeV)<5.447761194e-2)
-    {
-        v2 = tau / Bj_energy;
-        beta2 = 2.*tau / electron_mass_c2;
-    }
-    // Relativistic
-    else
-    {
-        v2 = (electron_mass_c2 / 2. / Bj_energy) * (1. - (1./ pow( (1.+ (tau/electron_mass_c2)),2) ));
-        beta2 =1. - 1./(1.+ (tau/electron_mass_c2/A_ion))/(1.+ (tau/electron_mass_c2/A_ion));
-    }
-
-    G4double v = std::sqrt(v2);
-    //G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj_energy));
-    G4double L1 = (C1* gpow->powA(v,(D1))) / (1.+ E1*gpow->powA(v, (D1+4.)));
-    G4double L2 = C2*gpow->powA(v,(D2));
-    G4double H1 = (A1*G4Log(1.+v2)) / (v2+(B1/v2));
-    G4double H2 = (A2/v2) + (B2/(v2*v2));
-    G4double F1 = L1+H1;
-    G4double F2 = (L2*H2)/(L2+H2);
-
-    // ZF. generalized & relativistic version
-    G4double maximumEnergy;
-
-    //---- maximum kinetic energy , non relativistic ------
-    if( (k/MeV)/(particle->GetPDGMass()/MeV)  <= 0.1 )
-    {
-        maximumEnergy = 4.* (electron_mass_c2 / particle->GetPDGMass()) * k;
-    }
-    //---- relativistic -----------------------------------
-    else
-    {
-        G4double gamma = 1./sqrt(1.-beta2);
-        maximumEnergy = 2.*electron_mass_c2*(gamma*gamma-1.)/
-                (1.+2.*gamma*(electron_mass_c2/particle->GetPDGMass())+pow(electron_mass_c2/particle->GetPDGMass(), 2.) );
-    }
-
-    //either it is transfered energy or secondary electron energy ...
-    //maximumEnergy-=Bj_energy;
-
-    //-----------------------------------------------------
-    G4double wmax = maximumEnergy/Bj_energy;
-    G4double c = wmax*(F2*wmax+F1*(2.+wmax))/(2.*(1.+wmax)*(1.+wmax));
-    c=1./c; //!!!!!!!!!!! manual calculus leads to  c=1/c
-    G4double randVal = G4UniformRand();
-    G4double proposed_ws = F1*F1*c*c + 2.*F2*c*randVal - 2.*F1*c*randVal;
-    proposed_ws = -F1*c+2.*randVal+std::sqrt(proposed_ws);
-    //  proposed_ws = -F1*c+2.*randVal-std::sqrt(proposed_ws);
-    proposed_ws/= ( F1*c + F2*c - 2.*randVal );
-    proposed_ws*=Bj_energy;
-
-    return(proposed_ws);
-
+  }
+  deltae = e2;
+  return deltae;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationExtendedModel::S_1s(G4double t, 
-                                                G4double energyTransferred,
-                                                G4double slaterEffectiveChg,
+G4double G4DNARuddIonisationExtendedModel::ProbabilityFunction(G4double kine,
+                                                               G4double deltae,
+                                                               G4double bindingEnergy,
+                                                               G4int shell)
+{
+  // Shells ids are 0 1 2 3 4 (4 is k shell)
+  // !!Attention, "energyTransfer" here is the energy transfered to the electron which means
+  //             that the secondary kinetic energy is w = energyTransfer - bindingEnergy
+  //
+  //   ds            S                F1(nu) + w * F2(nu)
+  //  ---- = G(k) * ----     -------------------------------------------
+  //   dw            Bj       (1+w)^3 * [1 + exp{alpha * (w - wc) / nu}]
+  //
+  // w is the secondary electron kinetic Energy in eV
+  //
+  // All the other parameters can be found in Rudd's Papers
+  //
+  // M.Eugene Rudd, 1988, User-Friendly model for the energy distribution of
+  // electrons from protons or electron collisions. Nucl. Tracks Rad. Meas.Vol 16 N0 2/3 pp 219-218
+  //
+  G4double A1, B1, C1, D1, E1, A2, B2, C2, D2, alphaConst;
+  if (shell == 4) {
+    //Data For Liquid Water K SHELL from Dingfelder (Protons in Water)
+    A1 = 1.25;
+    B1 = 0.5;
+    C1 = 1.00;
+    D1 = 1.00;
+    E1 = 3.00;
+    A2 = 1.10;
+    B2 = 1.30;
+    C2 = 1.00;
+    D2 = 0.00;
+    alphaConst = 0.66;
+  } else {
+    //Data For Liquid Water from Dingfelder (Protons in Water)
+    A1 = 1.02;
+    B1 = 82.0;
+    C1 = 0.45;
+    D1 = -0.80;
+    E1 = 0.38;
+    A2 = 1.07;
+    // Value provided by M. Dingfelder (priv. comm)
+    B2 = 11.6;
+    C2 = 0.60;
+    D2 = 0.04;
+    alphaConst = 0.64;
+  }
+  G4double bEnergy = Bj[shell];
+  G4double w = deltae/bEnergy;
+  G4double u = Ry/bEnergy;
+  G4double tau = kine/fMass;
+  G4double gam = 1.0 + tau;;
+
+  G4double v2 = 0.5*CLHEP::electron_mass_c2*tau*(tau + 2.0)/(bEnergy*gam*gam);
+  G4double v = std::sqrt(v2);
+  G4double wc = 4.*v2 - 2.*v - 0.25*u;
+
+  G4double x = alphaConst*(w - wc)/v;
+  G4double y = (x > -15.) ? 1.0 + G4Exp(x) : 1.0;
+
+  G4double L1 = (C1 * fGpow->powA(v, D1)) / (1. + E1 * fGpow->powA(v, (D1 + 4.)));
+  G4double L2 = C2 * fGpow->powA(v, D2);
+  G4double H1 = (A1 * G4Log(1. + v2)) / (v2 + (B1 / v2));
+  G4double H2 = (A2 / v2) + (B2 / (v2 * v2));
+
+  G4double F1 = L1 + H1;
+  G4double F2 = (L2 * H2) / (L2 + H2);
+
+  G4double res = CorrectionFactor(kine, shell) * (F1 + w*F2) * Gj[shell] /
+    (fGpow->powN((1. + w)/u, 3) * y);
+
+  if(isHelium) {
+    G4double energyTransfer = deltae + bindingEnergy;
+    G4double Zeff = 2.0 -
+      (sCoefficient[0] * S_1s(kine, energyTransfer, slaterEffectiveCharge[0], 1.) +
+       sCoefficient[1] * S_2s(kine, energyTransfer, slaterEffectiveCharge[1], 2.) +
+       sCoefficient[2] * S_2p(kine, energyTransfer, slaterEffectiveCharge[2], 2.) );
+
+    res *= Zeff * Zeff;
+  }
+  return std::max(res, 0.0);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DNARuddIonisationExtendedModel::ComputeProbabilityFunction(
+         const G4ParticleDefinition* p, G4double e, G4double deltae, G4int shell)
+{
+  if (fParticle != p) { SetParticle(p); }
+  G4double bEnergy = (useDNAWaterStructure)
+    ? waterStructure.IonisationEnergy(shell) : Bj[shell];
+  return ProbabilityFunction(e, deltae, bEnergy, shell);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DNARuddIonisationExtendedModel::S_1s(G4double kine,
+                                                G4double energyTransfer,
+                                                G4double slaterEffCharge,
                                                 G4double shellNumber)
 {
-    // 1 - e^(-2r) * ( 1 + 2 r + 2 r^2)
-    // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
+  // 1 - e^(-2r) * ( 1 + 2 r + 2 r^2)
+  // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
 
-    G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value = 1. - G4Exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
-
-    return value;
+  G4double r = Rh(kine, energyTransfer, slaterEffCharge, shellNumber);
+  G4double value = 1. - G4Exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
+  return value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationExtendedModel::S_2s(G4double t,
-                                                G4double energyTransferred,
-                                                G4double slaterEffectiveChg,
+G4double G4DNARuddIonisationExtendedModel::S_2s(G4double kine,
+                                                G4double energyTransfer,
+                                                G4double slaterEffCharge,
                                                 G4double shellNumber)
 {
-    // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 2 r^4)
-    // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
+  // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 2 r^4)
+  // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
 
-    G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value =  1. - G4Exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
+  G4double r = Rh(kine, energyTransfer, slaterEffCharge, shellNumber);
+  G4double value =
+    1. - G4Exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
-    return value;
-
+  return value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationExtendedModel::S_2p(G4double t, 
-                                                G4double energyTransferred,
-                                                G4double slaterEffectiveChg,
+G4double G4DNARuddIonisationExtendedModel::S_2p(G4double kine, 
+                                                G4double energyTransfer,
+                                                G4double slaterEffCharge,
                                                 G4double shellNumber)
 {
-    // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 4/3 r^3 + 2/3 r^4)
-    // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
+  // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 4/3 r^3 + 2/3 r^4)
+  // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
 
-    G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value =  1. - G4Exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
+  G4double r = Rh(kine, energyTransfer, slaterEffCharge, shellNumber);
+  G4double value =
+    1. - G4Exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
 
-    return value;
+  return value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationExtendedModel::R(G4double t,
-                                             G4double energyTransferred,
-                                             G4double slaterEffectiveChg,
-                                             G4double shellNumber)
+G4double G4DNARuddIonisationExtendedModel::Rh(G4double ekin, G4double etrans,
+                                              G4double q, G4double shell)
 {
-    // tElectron = m_electron / m_alpha * t
-    // Dingfelder, in Chattanooga 2005 proceedings, p 4
+  // The following values are provided by M. Dingfelder (priv. comm)
+  // Dingfelder, in Chattanooga 2005 proceedings, p 4
 
-    G4double tElectron = 0.511/3728. * t;
+  G4double escaled = CLHEP::electron_mass_c2/fMass * ekin;
+  const G4double H = 13.60569172 * CLHEP::eV;
+  G4double value = 2.0*std::sqrt(escaled / H)*q*H /(etrans*shell);
+
+  return value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+G4DNARuddIonisationExtendedModel::CorrectionFactor(G4double kine, G4int shell) 
+{
+  // ZF Shortened
+  G4double res = 1.0;
+  if (shell < 4 && 0 != idx) {
+    const G4double ln10 = fGpow->logZ(10);
+    G4double x = 2.0*((G4Log(kine/CLHEP::eV)/ln10) - 4.2);
     // The following values are provided by M. Dingfelder (priv. comm)
-    G4double H = 2.*13.60569172 * eV;
-    G4double value = std::sqrt ( 2. * tElectron / H ) / ( energyTransferred / H ) *  (slaterEffectiveChg/shellNumber);
-
-    return value;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNARuddIonisationExtendedModel::CorrectionFactor(G4ParticleDefinition* particleDefinition, G4double k, G4int shell) 
-{
-    // ZF Shortened
-
-    if (particleDefinition == hydrogenDef && shell < 4)
-    {
-        G4double value = ((G4Log(k/eV)/gpow->logZ(10))-4.2)/0.5;
-        // The following values are provided by M. Dingfelder (priv. comm)
-        return((0.6/(1+G4Exp(value))) + 0.9);
-    }
-    else
-    {
-        return(1.);
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int G4DNARuddIonisationExtendedModel::RandomSelect(G4double k)
-{   
-    G4int level = 0;
- 
-    // Retrieve data table corresponding to the current particle type
-
-    G4DNACrossSectionDataSet* table = currentTable;
-
-    if (table != nullptr)
-        {
-            G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-
-            const G4int n = (G4int)table->NumberOfComponents();
-            G4int i(n);
-            G4double value = 0.;
-
-            while (i>0)
-            {
-                --i;
-                valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-
-                value += valuesBuffer[i];
-            }
-
-            value *= G4UniformRand();
-
-            i = n;
-
-            while (i > 0)
-            {
-                --i;
-
-                if (valuesBuffer[i] > value)
-                {
-                    delete[] valuesBuffer;
-                    return i;
-                }
-                value -= valuesBuffer[i];
-            }
-
-            if (valuesBuffer) delete[] valuesBuffer;
-
-        }
-    return level;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNARuddIonisationExtendedModel::PartialCrossSection(const G4Track& track )
-{
-    G4double sigma = 0.;
-
-    const G4DynamicParticle* particle = track.GetDynamicParticle();
-    G4double k = particle->GetKineticEnergy();
-
-    G4double lowLim = 0;
-    G4double highLim = 0;
-
-    const G4String& particleName = particle->GetDefinition()->GetParticleName();
-
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-    pos1 = lowEnergyLimit.find(particleName);
-
-    if (pos1 != lowEnergyLimit.end())
-    {
-        lowLim = pos1->second;
-    }
-
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
-
-    if (pos2 != highEnergyLimit.end())
-    {
-        highLim = pos2->second;
-    }
-
-    if (k >= lowLim && k <= highLim)
-    {
-        std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-        pos = tableData.find(particleName);
-
-        if (pos != tableData.end())
-        {
-            G4DNACrossSectionDataSet* table = pos->second;
-            if (table != 0)
-            {
-                sigma = table->FindValue(k);
-            }
-        }
-        else
-        {
-            G4Exception("G4DNARuddIonisationExtendedModel::PartialCrossSection","em0002",
-                        FatalException,"Model not applicable to particle type.");
-        }
-    }
-
-    return sigma;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNARuddIonisationExtendedModel::Sum(G4double /* energy */, const G4String& /* particle */)
-{
-    return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ParticleDefinition* G4DNARuddIonisationExtendedModel::GetDNAIonParticleDefinition(const G4ParticleDefinition* particleDefinition)
-{
-  //for proton, hydrogen, alphas
-  if(particleDefinition->GetAtomicMass() <= 4)
-  {
-    return const_cast<G4ParticleDefinition*>(particleDefinition);
+    res = 0.6/(1.0 + G4Exp(x)) + 0.9;
   }
-  else{
-    auto instance = G4DNAGenericIonsManager::Instance();
-
-    auto PDGEncoding = particleDefinition->GetPDGEncoding();
-    if(PDGEncoding == 1000140280){
-      return instance->GetIon("silicon");
-    }else if(PDGEncoding == 1000260560){
-      return instance->GetIon("iron");
-    }else if(PDGEncoding == 1000080160){
-      return instance->GetIon("oxygen");
-    }else if(PDGEncoding == 1000070140){
-      return instance->GetIon("nitrogen");
-    }else if(PDGEncoding == 1000060120){
-      return instance->GetIon("carbon");
-    }
-    //if there is no DNA particle, get nullptr
-    return nullptr;
-  }
+  return res;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

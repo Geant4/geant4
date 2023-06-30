@@ -58,6 +58,7 @@ class G4FilecoutDestination : public G4coutDestination
   // By default append to existing file
   void Close();
 
+  G4int ReceiveG4debug(const G4String& msg) override;
   G4int ReceiveG4cout(const G4String& msg) override;
   G4int ReceiveG4cerr(const G4String& msg) override;
 

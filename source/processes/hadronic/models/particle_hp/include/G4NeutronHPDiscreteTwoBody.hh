@@ -29,4 +29,4 @@
 #include "G4ParticleHPDiscreteTwoBody.hh"
 using G4NeutronHPDiscreteTwoBody = G4ParticleHPDiscreteTwoBody;
 
-#endif 
+#endif

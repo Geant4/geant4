@@ -27,18 +27,19 @@
 #/testem/phys/addPhysics  local
 #
 #/process/eLoss/UseICRU90 true
+#/process/eLoss/StepFunctionIons 0.1 0.1 mm
 #
 #
 /run/initialize
 #
-#/gun/particle ion
-#/gun/ion 6 12 6
-#/gun/energy 2.4 GeV
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 2.4 GeV
 #/gun/energy 240 MeV
 #
-/gun/particle ion
-/gun/ion 18 40 18
-/gun/energy 4 GeV
+#/gun/particle ion
+#/gun/ion 18 40 18
+#/gun/energy 4 GeV
 #/gun/energy 400 MeV
 #
 # step limit

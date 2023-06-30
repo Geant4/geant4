@@ -138,7 +138,7 @@ private:
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theMuonPlus;
   const G4ParticleDefinition* theMuonMinus;
-  std::vector<G4double> fTemp;
+  std::vector<G4double> temp;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

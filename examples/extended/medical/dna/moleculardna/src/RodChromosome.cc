@@ -38,10 +38,10 @@
 
 const G4String RodChromosome::fShape = "rod";
 
-RodChromosome::RodChromosome(const G4String& name, G4ThreeVector pos,
+RodChromosome::RodChromosome(const G4String& name, const G4ThreeVector& pos,
                              const G4double& radius, const G4double& height)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fRadius(radius)
   , fHeight(height)
   , fRotation(G4RotationMatrix())
@@ -51,14 +51,14 @@ RodChromosome::RodChromosome(const G4String& name, G4ThreeVector pos,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RodChromosome::RodChromosome(const G4String& name, G4ThreeVector pos,
+RodChromosome::RodChromosome(const G4String& name, const G4ThreeVector& pos,
                              const G4double& radius, const G4double& height,
-                             G4RotationMatrix rot)
+                             const G4RotationMatrix& rot)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fRadius(radius)
   , fHeight(height)
-  , fRotation(std::move(rot))
+  , fRotation(rot)
 {
   fInverseRotation = fRotation.inverse();
 }

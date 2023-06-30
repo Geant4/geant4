@@ -74,6 +74,7 @@ public:
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
   void usePreCompoundDeexcitation();
+  void useAblaDeexcitation();
 
 protected:
   void deexcite(const G4Fragment& fragment, G4CollisionOutput& globalOutput);

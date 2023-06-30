@@ -171,10 +171,7 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     //G4cout << "DEDXVector:" << G4endl;
     //G4cout << *dEdxVector << G4endl;
 
-    G4double ionloss = fPAIySection.GetMeanEnergyLoss();//  total <dE/dx>
-
-    if(ionloss < 0.0) ionloss = 0.0; 
-
+    G4double ionloss = std::max(fPAIySection.GetMeanEnergyLoss(), 0.0);//  total <dE/dx>
     dEdxMeanVector->PutValue(i,ionloss);
 
     PAItransferTable->insertAt(i,transferVector);

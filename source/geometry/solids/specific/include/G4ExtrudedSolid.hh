@@ -71,7 +71,7 @@
 class G4ExtrudedSolid : public G4TessellatedSolid
 {
 
-  public:  // without description
+  public:
 
     struct ZSection
     {
@@ -83,8 +83,6 @@ class G4ExtrudedSolid : public G4TessellatedSolid
       G4TwoVector fOffset;
       G4double    fScale;
     };
-
-  public:  // with description
 
     G4ExtrudedSolid( const G4String&                 pName,
                      const std::vector<G4TwoVector>& polygon,
@@ -100,7 +98,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
                            G4double scale2 = 1. );
       // Special constructor for solid with 2 z-sections
 
-    virtual ~G4ExtrudedSolid();
+    ~G4ExtrudedSolid() override;
       // Destructor
 
     // Accessors
@@ -115,28 +113,27 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     // Solid methods
 
-    EInside  Inside(const G4ThreeVector& p) const;
-    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
-    G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p ) const;
+    EInside  Inside(const G4ThreeVector& p) const override;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
+    G4double DistanceToIn(const G4ThreeVector& p,
+                          const G4ThreeVector& v) const override;
+    G4double DistanceToIn(const G4ThreeVector& p ) const override;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+                                 G4ThreeVector* n = nullptr) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
-    G4GeometryType GetEntityType () const;
-    G4VSolid* Clone() const;
+                                 G4double& pMin, G4double& pMax) const override;
+    G4GeometryType GetEntityType () const override;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     G4ExtrudedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object

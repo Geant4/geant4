@@ -56,8 +56,6 @@ class G4IntersectingCone
     inline G4double ZLo() const { return zLo; }
     inline G4double ZHi() const { return zHi; }
   
-  public:  // without description
-
     G4IntersectingCone(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for

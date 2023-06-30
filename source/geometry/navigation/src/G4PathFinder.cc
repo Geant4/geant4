@@ -93,7 +93,7 @@ G4PathFinder::G4PathFinder()
       fLimitTruth[num] = false;
       fLimitedStep[num] = kUndefLimited;
       fCurrentStepSize[num] = -1.0; 
-      fLocatedVolume[num] = 0;
+      fLocatedVolume[num] = nullptr;
       fPreSafetyValues[num]= -1.0; 
       fCurrentPreStepSafety[num] = -1.0;
       fNewSafetyComputed[num]= -1.0; 
@@ -106,7 +106,7 @@ G4PathFinder::G4PathFinder()
 G4PathFinder::~G4PathFinder() 
 {
    delete fpMultiNavigator;
-   fpPathFinder = 0;
+   fpPathFinder = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -544,8 +544,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
 {
   // Locate the point in each geometry
 
-  std::vector<G4Navigator*>::iterator pNavIter =
-              fpTransportManager->GetActiveNavigatorsIterator(); 
+  auto pNavIter = fpTransportManager->GetActiveNavigatorsIterator(); 
 
 #ifdef G4DEBUG_PATHFINDER
 
@@ -798,7 +797,7 @@ G4PathFinder::CreateTouchableHandle( G4int navId ) const
   }
 #endif
 
-  return G4TouchableHandle(touchHist); 
+  return {touchHist}; 
 }
 
 G4double
@@ -1127,7 +1126,7 @@ void G4PathFinder::PrintLimited()
     if (pNav != nullptr)
     {
        G4VPhysicalVolume *pWorld = pNav->GetWorldVolume(); 
-       if( pWorld )
+       if( pWorld != nullptr )
        {
           WorldName = pWorld->GetName(); 
        }

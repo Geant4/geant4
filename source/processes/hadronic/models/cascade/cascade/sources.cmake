@@ -26,6 +26,7 @@
 # Define the Geant4 Module.
 geant4_add_module(G4hadronic_bert_cascade
   PUBLIC_HEADERS
+    G4AblaDeexcitation.hh
     G4Analyser.hh
     G4BigBanger.hh
     G4CascadParticle.hh
@@ -153,6 +154,7 @@ geant4_add_module(G4hadronic_bert_cascade
     G4VTwoBodyAngDst.hh
     G4WatcherGun.hh
   SOURCES
+    G4AblaDeexcitation.cc
     G4Analyser.cc
     G4BigBanger.cc
     G4CascadParticle.cc
@@ -280,6 +282,7 @@ geant4_module_link_libraries(G4hadronic_bert_cascade
     G4baryons
     G4bosons
     G4had_preequ_exciton
+    G4hadronic_abla
     G4ions
     G4leptons
     G4mesons

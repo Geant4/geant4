@@ -76,11 +76,11 @@
 #include <sstream>
 #include <iostream>
 
-constexpr G4double lambdaFactor = 0.8;
-constexpr G4double invLambdaFactor = 1.0/lambdaFactor;
-
-// File-scope variable to capture environment variable at startup
-static const char* G4Hadronic_Random_File = std::getenv("G4HADRONIC_RANDOM_FILE");
+namespace
+{
+  constexpr G4double lambdaFactor = 0.8;
+  constexpr G4double invLambdaFactor = 1.0/lambdaFactor;
+}
 
 //////////////////////////////////////////////////////////////////
 
@@ -118,23 +118,14 @@ void G4HadronicProcess::InitialiseLocal() {
   theProcessStore = G4HadronicProcessStore::Instance();
   theProcessStore->Register(this);
   minKinEnergy = 1*CLHEP::MeV;
-  epCheckLevels.first = DBL_MAX;
-  epCheckLevels.second = DBL_MAX;
-  GetEnergyMomentumCheckEnvvars();
+
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  epReportLevel = param->GetEPReportLevel();
+  epCheckLevels.first = param->GetEPRelativeLevel();
+  epCheckLevels.second = param->GetEPAbsoluteLevel();
+
   unitVector.set(0.0, 0.0, 0.1);
   if(G4Threading::IsWorkerThread()) { isMaster = false; }
-}
-
-void G4HadronicProcess::GetEnergyMomentumCheckEnvvars() {
-  if ( std::getenv("G4Hadronic_epReportLevel") ) {
-    epReportLevel = std::strtol(std::getenv("G4Hadronic_epReportLevel"),0,10);
-  }
-  if ( std::getenv("G4Hadronic_epCheckRelativeLevel") ) {
-    epCheckLevels.first = std::strtod(std::getenv("G4Hadronic_epCheckRelativeLevel"),0);
-  }
-  if ( std::getenv("G4Hadronic_epCheckAbsoluteLevel") ) {
-    epCheckLevels.second = std::strtod(std::getenv("G4Hadronic_epCheckAbsoluteLevel"),0);
-  }
 }
 
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -168,9 +159,6 @@ G4HadronicProcess::GetElementCrossSection(const G4DynamicParticle * dp,
 
 void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
 {
-  if(std::getenv("G4HadronicProcess_debug")) {
-    G4HadronicProcess_debug_flag = true;
-  }
   if(nullptr == firstParticle) { firstParticle = &p; }
   theProcessStore->RegisterParticle(this, &p);
 }
@@ -193,8 +181,24 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
   fXSType = fHadNoIntegral;
 
+  if(nullptr == masterProcess) {
+    masterProcess = dynamic_cast<const G4HadronicProcess*>(GetMasterProcess());
+  }
+  if(nullptr == masterProcess) {
+    if(1 < param->GetVerboseLevel()) {
+      G4ExceptionDescription ed;
+      ed << "G4HadronicProcess::BuildPhysicsTable: for "
+	 << GetProcessName() << " for " << p.GetParticleName()
+	 << " fail due to undefined pointer to the master process \n"
+	 << "  ThreadID= " << G4Threading::G4GetThreadId()
+	 << "  initialisation of worker started before master initialisation";
+      G4Exception("G4HadronicProcess::BuildPhysicsTable", "had066", 
+		  JustWarning, ed);
+    }
+  }
+
   // check particle for integral method
-  if(isMaster) {
+  if(isMaster || nullptr == masterProcess) {
     G4double charge = p.GetPDGCharge()/eplus;
     G4bool isLepton = (p.GetLeptonNumber() != 0);
     G4bool ok = (p.GetAtomicNumber() != 0 || p.GetPDGMass() < GeV);
@@ -232,22 +236,10 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
       }
     }
   } else {
-    if(nullptr == masterProcess) {
-      masterProcess = 
-	dynamic_cast<const G4HadronicProcess*>(GetMasterProcess());
-    }
-    if(nullptr == masterProcess) {
-      G4cout << "G4HadronicProcess::BuildPhysicsTable: for "
-	     << GetProcessName() << " and " << p.GetParticleName()
-	     << " fail due to undefined pointer to the master process" 
-	     << G4endl;
-    } else {
-      // initialisation in worker threads
-      fXSType = masterProcess->CrossSectionType();
-      fXSpeaks = masterProcess->TwoPeaksXS();
-      theEnergyOfCrossSectionMax = 
-	masterProcess->EnergyOfCrossSectionMax();
-    }
+    // initialisation in worker threads
+    fXSType = masterProcess->CrossSectionType();
+    fXSpeaks = masterProcess->TwoPeaksXS();
+    theEnergyOfCrossSectionMax = masterProcess->EnergyOfCrossSectionMax();
   }
   if(isMaster && 1 < param->GetVerboseLevel()) {
     G4cout << "G4HadronicProcess::BuildPhysicsTable: for "
@@ -404,10 +396,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   {
     try
     {
-      // Save random engine if requested for debugging
-      if (G4Hadronic_Random_File) {
-         CLHEP::HepRandom::saveEngineStatus(G4Hadronic_Random_File);
-      }
       // Call the interaction
       result = theInteraction->ApplyYourself( thePro, targetNucleus);
       ++reentryCount;
@@ -559,7 +547,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     if(std::abs(dmass - mass) > delta_mass_lim) {
       G4double e =
         std::max(dynParticle->GetKineticEnergy() + dmass - mass, delta_ekin);
-      if(G4HadronicProcess_debug_flag) {
+      if(verboseLevel > 1) {
 	G4ExceptionDescription ed;
 	ed << "TrackID= "<< aT.GetTrackID()
 	   << "  " << aT.GetParticleDefinition()->GetParticleName()
@@ -588,17 +576,6 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     track->SetWeight(newWeight);
     track->SetTouchableHandle(aT.GetTouchableHandle());
     theTotalResult->AddSecondary(track);
-    if (G4HadronicProcess_debug_flag) {
-      G4double e = dynParticle->GetKineticEnergy();
-      if (e == 0.0) {
-	G4ExceptionDescription ed;
-	DumpState(aT,"Secondary has zero energy",ed);
-	ed << "Secondary " << part->GetParticleName()
-	   << G4endl;
-	G4Exception("G4HadronicProcess::FillResults", "had011", 
-		      JustWarning,ed);
-      }
-    }
   }
   aR->Clear();
   // G4cout << "FillResults done nICe= " << nICelectrons << G4endl;

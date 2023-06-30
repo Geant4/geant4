@@ -40,11 +40,11 @@ class HistoManager
 {
   public:
    HistoManager();
-  ~HistoManager();
+  ~HistoManager() = default;
 
   private:
     void Book();
-    G4String fFileName;
+    G4String fFileName = "testem18";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

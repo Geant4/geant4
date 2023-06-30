@@ -1067,6 +1067,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     if (existingViewer) {
       // ...bring view parameters up to date...
       fExistingVP = existingViewer->GetViewParameters();
+      fExistingSceneTree = existingViewer->AccessSceneTree();
     }
   }
 
@@ -1090,13 +1091,16 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
       fExistingVP.SetXGeometryString(vp.GetXGeometryString());
       vp = fExistingVP;
       newViewer->SetViewParameters(vp);
+      newViewer->AccessSceneTree() = fExistingSceneTree;
     }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New viewer \"" << newName << "\" created." << G4endl;
     }
     // Keep for next time...
     fThereWasAViewer = true;
-    fExistingVP = fpVisManager->GetCurrentViewer()->GetViewParameters();
+    auto viewer = fpVisManager->GetCurrentViewer();
+    fExistingVP = viewer->GetViewParameters();
+    fExistingSceneTree = viewer->AccessSceneTree();
   } else {
     G4ExceptionDescription ed;
     if (newViewer) {
@@ -2168,6 +2172,9 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
   fpVisManager -> SetCurrentViewer (viewer);
 
   RefreshIfRequired(viewer);
+
+  // Update GUI scene tree (make sure it's in sync)
+  viewer->UpdateGUISceneTree();
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////

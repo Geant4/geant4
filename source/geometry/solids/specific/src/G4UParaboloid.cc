@@ -64,7 +64,7 @@ G4UParaboloid::G4UParaboloid( __void__& a )
 //
 // Destructor
 
-G4UParaboloid::~G4UParaboloid() { }
+G4UParaboloid::~G4UParaboloid() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //

@@ -44,10 +44,10 @@ class G4ParticleDefinition;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction();
-   ~SteppingAction();
+    SteppingAction() = default;
+   ~SteppingAction() override = default;
 
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*) override;
     
   private:
     std::map<G4ParticleDefinition*,G4int> fParticleFlag;    

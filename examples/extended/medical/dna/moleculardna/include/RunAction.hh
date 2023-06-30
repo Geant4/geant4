@@ -43,7 +43,7 @@ class RunAction : public G4UserRunAction
  public:
   explicit RunAction(AnalysisManager*);
 
-  ~RunAction() override;
+  ~RunAction() override = default;
 
  public:
   void BeginOfRunAction(const G4Run*) override;

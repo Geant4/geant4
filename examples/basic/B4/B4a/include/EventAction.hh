@@ -76,7 +76,6 @@ inline void EventAction::AddGap(G4double de, G4double dl) {
 }
 
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

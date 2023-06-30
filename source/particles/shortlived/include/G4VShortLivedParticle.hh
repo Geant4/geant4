@@ -69,7 +69,7 @@ class G4VShortLivedParticle : public G4ParticleDefinition
                G4double         lifetime,
                G4DecayTable     *decaytable);
 
-   virtual ~G4VShortLivedParticle();
+   ~G4VShortLivedParticle() override = default;
 
    G4bool operator==(const G4VShortLivedParticle &right) const;
    G4bool operator!=(const G4VShortLivedParticle &right) const;

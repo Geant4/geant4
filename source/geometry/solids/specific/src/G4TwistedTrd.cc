@@ -59,9 +59,7 @@ G4TwistedTrd::G4TwistedTrd( __void__& a )
 //=====================================================================
 //* Destructor --------------------------------------------------------
 
-G4TwistedTrd::~G4TwistedTrd()
-{
-}
+G4TwistedTrd::~G4TwistedTrd() = default;
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
@@ -118,7 +116,7 @@ std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 
 G4GeometryType G4TwistedTrd::GetEntityType() const
 {
-  return G4String("G4TwistedTrd");
+  return {"G4TwistedTrd"};
 }
 
 //=====================================================================

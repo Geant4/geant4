@@ -39,9 +39,7 @@ G4SimpleLocator::G4SimpleLocator(G4Navigator *theNavigator)
 {
 }      
 
-G4SimpleLocator::~G4SimpleLocator()
-{
-}
+G4SimpleLocator::~G4SimpleLocator() = default;
 
 // --------------------------------------------------------------------------
 // G4bool G4PropagatorInField::LocateIntersectionPoint( 

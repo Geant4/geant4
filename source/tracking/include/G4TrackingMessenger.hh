@@ -50,26 +50,23 @@ class G4SteppingManager;
 
 class G4TrackingMessenger : public G4UImessenger
 {
+ public:
+  G4TrackingMessenger(G4TrackingManager* trMan);
+  ~G4TrackingMessenger() override;
+  void SetNewValue(G4UIcommand* command, G4String newValues) override;
+  G4String GetCurrentValue(G4UIcommand* command) override;
 
-  public:
+ private:
+  G4TrackingManager* trackingManager = nullptr;
+  G4SteppingManager* steppingManager = nullptr;
 
-    G4TrackingMessenger(G4TrackingManager* trMan);
-   ~G4TrackingMessenger();
-    void SetNewValue(G4UIcommand* command, G4String newValues);
-    G4String GetCurrentValue(G4UIcommand* command);
+  // commands
 
-  private:
-
-    G4TrackingManager* trackingManager = nullptr;
-    G4SteppingManager* steppingManager = nullptr;
-
-    // commands 
-
-    G4UIdirectory*           TrackingDirectory = nullptr;
-    G4UIcmdWithoutParameter* AbortCmd = nullptr;
-    G4UIcmdWithoutParameter* ResumeCmd = nullptr;
-    G4UIcmdWithAnInteger*    StoreTrajectoryCmd = nullptr;
-    G4UIcmdWithAnInteger*    VerboseCmd = nullptr;
+  G4UIdirectory* TrackingDirectory = nullptr;
+  G4UIcmdWithoutParameter* AbortCmd = nullptr;
+  G4UIcmdWithoutParameter* ResumeCmd = nullptr;
+  G4UIcmdWithAnInteger* StoreTrajectoryCmd = nullptr;
+  G4UIcmdWithAnInteger* VerboseCmd = nullptr;
 };
 
 #endif

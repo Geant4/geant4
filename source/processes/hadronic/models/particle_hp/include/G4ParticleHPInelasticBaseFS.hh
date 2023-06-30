@@ -48,41 +48,41 @@ class G4ParticleHPInelasticBaseFS : public G4ParticleHPFinalState
       hasXsec = true;
       theXsection = new G4ParticleHPVector;
 
-      theEnergyDistribution = 0;
-      theFinalStatePhotons = 0;
-      theEnergyAngData = 0;
-      theAngularDistribution = 0;
+      theEnergyDistribution = nullptr;
+      theFinalStatePhotons = nullptr;
+      theEnergyAngData = nullptr;
+      theAngularDistribution = nullptr;
 
       theNuclearMassDifference = 0.0;
       Qvalue = 0.0;
     }
 
-    virtual ~G4ParticleHPInelasticBaseFS()
+    ~G4ParticleHPInelasticBaseFS() override
     {
       delete theXsection;
-      if (theEnergyDistribution != 0) delete theEnergyDistribution;
-      if (theFinalStatePhotons != 0) delete theFinalStatePhotons;
-      if (theEnergyAngData != 0) delete theEnergyAngData;
-      if (theAngularDistribution != 0) delete theAngularDistribution;
+      delete theEnergyDistribution;
+      delete theFinalStatePhotons;
+      delete theEnergyAngData;
+      delete theAngularDistribution;
     }
 
     void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& bit,
-              G4ParticleDefinition*);
+              G4ParticleDefinition*) override;
 
     void BaseApply(const G4HadProjectile& theTrack, G4ParticleDefinition** theDefs, G4int nDef);
 
     void InitGammas(G4double AR, G4double ZR);
 
-    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) = 0;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override = 0;
 
-    virtual G4ParticleHPFinalState* New() = 0;
+    G4ParticleHPFinalState* New() override = 0;
 
-    virtual G4double GetXsec(G4double anEnergy)
+    G4double GetXsec(G4double anEnergy) override
     {
       return std::max(0., theXsection->GetY(anEnergy));
     }
 
-    virtual G4ParticleHPVector* GetXsec() { return theXsection; }
+    G4ParticleHPVector* GetXsec() override { return theXsection; }
 
   protected:
     G4ParticleHPVector* theXsection;

@@ -50,9 +50,15 @@ class G4TauNeutrinoNucleusProcess : public G4HadronicProcess
 {
 public:
 
-  G4TauNeutrinoNucleusProcess(G4String anEnvelopeName , const G4String& procName = "tau-neutrino-nucleus");
+  G4TauNeutrinoNucleusProcess(const G4String& anEnvelopeName, const G4String& procName = "tau-neutrino-nucleus");
 
-  virtual ~G4TauNeutrinoNucleusProcess();
+  ~G4TauNeutrinoNucleusProcess() override = default;
+
+  G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4ForceCondition* condition
+                            ) override;
  
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 					  const G4Step& aStep) override;
@@ -68,19 +74,20 @@ public:
   void SetBiasingFactors(G4double bfCc, G4double bfNc);
   void SetBiasingFactor(G4double bf);
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *) override;
+
+  // hide assignment operator as private 
+  G4TauNeutrinoNucleusProcess& operator=
+  (const G4TauNeutrinoNucleusProcess &right) = delete;
+  G4TauNeutrinoNucleusProcess(const G4TauNeutrinoNucleusProcess&) = delete;
   
 private:
 
-  // hide assignment operator as private 
-  G4TauNeutrinoNucleusProcess& operator=(const G4TauNeutrinoNucleusProcess &right);
-  G4TauNeutrinoNucleusProcess(const G4TauNeutrinoNucleusProcess& );
-
   G4double lowestEnergy;
-  G4bool   isInitialised, fBiased;
-  G4LogicalVolume* fEnvelope;
+  G4bool   isInitialised{false};
   G4String fEnvelopeName;
   G4TauNeutrinoNucleusTotXsc* fTotXsc;
-  G4double fNuNuclCcBias, fNuNuclNcBias, fNuNuclTotXscBias;
+  G4double fNuNuclCcBias{1.0}, fNuNuclNcBias{1.0}, fNuNuclTotXscBias{1.0};
+  G4double fXsc{0.0};
   G4SafetyHelper* safetyHelper;
 };
 

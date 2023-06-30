@@ -46,16 +46,16 @@
 // ###                      SigmacPlusPlus                            ###
 // ######################################################################
 
-G4SigmacPlusPlus* G4SigmacPlusPlus::theInstance = 0;
+G4SigmacPlusPlus* G4SigmacPlusPlus::theInstance = nullptr;
 
 G4SigmacPlusPlus* G4SigmacPlusPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "sigma_c++";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (theInstance ==0)
+  if (theInstance ==nullptr)
   {
   // create particle
   //
@@ -72,13 +72,13 @@ G4SigmacPlusPlus* G4SigmacPlusPlus::Definition()
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        4222,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,       "sigma_c");
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
+  auto  mode = new G4VDecayChannel*[1];
   // sigma_c++ -> lambda_c+ + pi+
   mode[0] = new G4PhaseSpaceDecayChannel("sigma_c++",1.000,2,"lambda_c+","pi+");
 

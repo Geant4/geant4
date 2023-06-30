@@ -74,12 +74,6 @@ G4GeometryWorkspace::G4GeometryWorkspace()
 
 // ----------------------------------------------------------------------
 //
-G4GeometryWorkspace::~G4GeometryWorkspace()
-{  
-}
-
-// ----------------------------------------------------------------------
-//
 void
 G4GeometryWorkspace::UseWorkspace()
 {
@@ -114,15 +108,14 @@ void G4GeometryWorkspace::ReleaseWorkspace()
 void G4GeometryWorkspace::InitialisePhysicalVolumes()
 {
   G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-  for (std::size_t ip=0; ip<physVolStore->size(); ++ip)
+  for (auto physVol : *physVolStore)
   {
-    G4VPhysicalVolume* physVol = (*physVolStore)[ip];
     G4LogicalVolume *logicalVol = physVol->GetLogicalVolume();
  
     // Use shadow pointer
     //
     G4VSolid* solid = logicalVol->GetMasterSolid();
-    G4PVReplica* g4PVReplica = dynamic_cast<G4PVReplica*>(physVol);
+    auto g4PVReplica = dynamic_cast<G4PVReplica*>(physVol);
     if (g4PVReplica == nullptr)
     {
       // Placement volume
@@ -196,11 +189,10 @@ void G4GeometryWorkspace::InitialiseWorkspace()
 void G4GeometryWorkspace::DestroyWorkspace()
 {
   G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-  for (std::size_t ip=0; ip<physVolStore->size(); ++ip)
+  for (auto physVol : *physVolStore)
   {
-    G4VPhysicalVolume* physVol = (*physVolStore)[ip];
     G4LogicalVolume* logicalVol = physVol->GetLogicalVolume();
-    G4PVReplica* g4PVReplica = dynamic_cast<G4PVReplica*>(physVol);
+    auto g4PVReplica = dynamic_cast<G4PVReplica*>(physVol);
     if (g4PVReplica != nullptr)
     {
       g4PVReplica->TerminateWorker(g4PVReplica);

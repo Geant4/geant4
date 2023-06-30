@@ -52,7 +52,7 @@ class G4AntiTriton : public G4Ions
  private:
    static G4AntiTriton* theInstance;
    G4AntiTriton(){}
-   ~G4AntiTriton(){}
+   ~G4AntiTriton() override= default;
 
  public:
    static G4AntiTriton* Definition();

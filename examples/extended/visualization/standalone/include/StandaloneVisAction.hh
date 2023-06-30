@@ -33,8 +33,15 @@
 
 #include "G4VUserVisAction.hh"
 
+class G4Polyhedron;
+
 class StandaloneVisAction: public G4VUserVisAction {
-  virtual void Draw();
+public:
+  StandaloneVisAction();
+  ~StandaloneVisAction();
+  void Draw() override;
+private:
+  G4Polyhedron* fpSubtractedPolyhedron;
 };
 
 #endif

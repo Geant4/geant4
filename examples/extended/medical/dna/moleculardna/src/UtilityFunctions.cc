@@ -94,15 +94,13 @@ namespace utility
 
   G4bool Path_exists(const G4String& fname)
   {
+    G4bool bool_val = false;
     if(FILE* file = std::fopen(fname, "r"))
     {
       fclose(file);
-      return true;
+      bool_val = true;
     }
-    else
-    {
-      return false;
-    }
+    return bool_val;
   }
 
   // Memory safe multi-platform getcwd

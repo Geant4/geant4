@@ -54,6 +54,7 @@ class G4ProcessManager;
 class G4ParticleDefinition;
 class G4EmConfigurator;
 class G4VMscModel;
+class G4VEmProcess;
 
 class G4EmModelActivator 
 {
@@ -72,7 +73,7 @@ private:
 
   void ActivateEmOptions();
 
-  void FindOrAddProcess(const G4ParticleDefinition*, const G4String&);
+  G4VEmProcess* FindOrAddProcess(const G4ParticleDefinition*, const G4String&);
 
   void AddStandardScattering(const G4ParticleDefinition*, G4EmConfigurator*,
                              G4VMscModel*, const G4String&, 

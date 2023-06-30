@@ -40,15 +40,11 @@
 #include "G4SystemOfUnits.hh"
 
 G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField* emField )
-  : G4EquationOfMotion( emField ), charge(0.), mass(0.), magMoment(0.),
-    spin(0.), fElectroMagCof(0.), fMassCof(0.), omegac(0.),
-    anomaly(0.0011659208), eta(0.), beta(0.), gamma(0.)
+  : G4EquationOfMotion( emField ) 
 {
 }
 
-G4EqEMFieldWithEDM::~G4EqEMFieldWithEDM()
-{
-} 
+G4EqEMFieldWithEDM::~G4EqEMFieldWithEDM() = default; 
 
 void  
 G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,
@@ -68,8 +64,14 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
-   else g_BMT = 2.;
+   if ( spin != 0. )
+   {
+     g_BMT = (std::abs(magMoment)/muB)/spin;
+   }
+   else
+   {
+     g_BMT = 2.;
+   }
 
    anomaly = (g_BMT - 2.)/2.;
 
@@ -152,8 +154,14 @@ G4EqEMFieldWithEDM::EvaluateRhsGivenB(const G4double y[],
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
    G4double pcharge;
-   if (charge == 0.) pcharge = 1.;
-   else pcharge = charge;
+   if (charge == 0.)
+   {
+     pcharge = 1.;
+   }
+   else
+   {
+     pcharge = charge; 
+   }
 
    G4ThreeVector dSpin(0.,0.,0.);
    if (Spin.mag2() != 0.)

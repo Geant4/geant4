@@ -69,6 +69,7 @@ This directory contains a set of Geant4-DNA examples.
              and LET.
    - scavenger
              Activation of the scavenging process in chemistry
+   - UHDR    Ultra High Dose Rate
 
   Geometry and other
 

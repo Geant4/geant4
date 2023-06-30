@@ -74,29 +74,29 @@ class G4PVParameterised : public G4PVReplica
 
   public:  // with description
 
-    virtual ~G4PVParameterised();
+    ~G4PVParameterised() override;
       // Virtual empty destructor.
 
-    G4bool IsParameterised() const;
+    G4bool IsParameterised() const override;
       // Returns true to identify it is a parameterised physical volume.
 
     EVolume VolumeType() const final;
    
-    G4VPVParameterisation* GetParameterisation() const;
+    G4VPVParameterisation* GetParameterisation() const override;
       // Returns the current pointer to the parameterisation.
 
     void GetReplicationData(EAxis& axis,
                             G4int& nReplicas,
                             G4double& width,
                             G4double& offset,
-                            G4bool& consuming) const;
+                            G4bool& consuming) const override;
       // Fills arguments with the attributes from the base replica.
 
-    virtual void SetRegularStructureId( G4int code ); 
+    void SetRegularStructureId( G4int code ) override; 
       // Method sets code and can prepare for special type of regular volumes.
 
     G4bool CheckOverlaps(G4int res = 1000, G4double tol = 0.,
-                         G4bool verbose = true, G4int maxErr = 1);
+                         G4bool verbose = true, G4int maxErr = 1) override;
       // Verifies if each instance of the parameterised volume is overlapping
       // with other instances or with the mother volume. Provides default
       // resolution for the number of points to be generated and verified.

@@ -6,19 +6,26 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-16 Stephan Hageboeck (geom-specific-V11-00-13)
-- Fixed uninitialised value in G4VCSGfaceted::SurfaceNormal().
+## 2023-06-16 Stephan Hageboeck (geom-specific-V11-01-05)
+- Fix an uninitialised value in G4VCSGfaceted::SurfaceNormal().
 
-## 2023-03-20 Gabriele Cosmo (geom-specific-V11-00-12)
+## 2023-06-12 Gabriele Cosmo (geom-specific-V11-01-04)
+- Use const iterator in G4Voxelizer::GetPointVoxel().
+- Fixed use of index in G4Tet::GetPointOnSurface().
+
+## 2023-05-10 Gabriele Cosmo (geom-specific-V11-01-03)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
+
+## 2023-03-20 Gabriele Cosmo (geom-specific-V11-01-02)
 - Fixed more potential uninitialised values in G4PolyconeSide,
   G4SolidExtentList and G4VTwistSurface.
 
-## 2023-03-13 Gabriele Cosmo
+## 2023-03-13 Gabriele Cosmo (geom-specific-V11-01-01)
 - Fixed potential uninitialised value for boundary type in
   G4VTwistSurface::GetBoundaryAtPZ().
 
-## 2023-01-02 Evgueni Tcherniaev (geom-specific-V11-00-11)
-- G4QuadrangularFacet: fixed warning message.
+## 2023-01-02 Evgueni Tcherniaev (geom-specific-V11-01-00)
+- G4QuadrangularFacet: Fixed warning message
 
 ## 2022-11-10 Gabriele Cosmo (geom-specific-V11-00-10)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.

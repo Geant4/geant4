@@ -55,11 +55,14 @@ class G4ChordFinder
         // The most flexible constructor, which allows the user to specify
         // any type of field, equation, stepper and integration driver.
 
+      enum kIntegrationType { kDefaultDriverType=0, kFSALStepperType=1, 
+         kTemplatedStepperType, kRegularStepperType, kBfieldDriverType, kQss2DriverType, kQss3DriverType };
+
       G4ChordFinder( G4MagneticField* itsMagField,
                      G4double         stepMinimum = 1.0e-2, // * mm 
                      G4MagIntegratorStepper* pItsStepper = nullptr,
                      // G4bool           useHigherEfficiencyStepper = true,
-                     G4int            stepperDriverChoice = 2  );
+                     G4int            stepperDriverChoice = kTemplatedStepperType );
         // A constructor that creates defaults for all "children" classes.
         //
         // The type of equation of motion is fixed.
@@ -67,8 +70,8 @@ class G4ChordFinder
         // and the corresponding integration driver.
         // Except if 'useFSAL' is set (true), which provides a FSAL stepper
         // and its corresponding specialised (templated) driver.
-      
-      virtual ~G4ChordFinder();
+
+    virtual ~G4ChordFinder();
 
       G4ChordFinder(const G4ChordFinder&) = delete;
       G4ChordFinder& operator=(const G4ChordFinder&) = delete;
@@ -113,17 +116,21 @@ class G4ChordFinder
       inline G4int SetVerbose( G4int newvalue=1); 
         // Set verbosity and return old value
 
-      void OnComputeStep();
+      void OnComputeStep(const G4FieldTrack* track);
 
       friend std::ostream&
              operator<<( std::ostream& os, const G4ChordFinder& cf);
 
+      static void SetVerboseConstruction(G4bool v=true) { gVerboseCtor=v;}
+        // Verbosity for contructor
    protected:   // .........................................................
 
       void     PrintDchordTrial(G4int    noTrials, 
                                 G4double stepTrial, 
                                 G4double oldStepTrial, 
                                 G4double dChordStep);
+
+      static G4bool gVerboseCtor;  // Verbosity for contructor
 
    private:  // ............................................................
 

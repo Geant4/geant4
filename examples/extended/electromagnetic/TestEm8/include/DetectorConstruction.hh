@@ -36,7 +36,7 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -53,59 +53,57 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4ProductionCuts;
 
-class DetectorConstruction : public G4VUserDetectorConstruction
-{
+class DetectorConstruction : public G4VUserDetectorConstruction {
 public:
-  
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
-     
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  explicit DetectorConstruction();
+  ~DetectorConstruction() override;
 
-  void SetGasMaterial (const G4String&);     
-  void SetContainerMaterial (const G4String&);     
-  void SetWorldMaterial(const G4String&);
+  G4VPhysicalVolume *Construct() override;
+  void ConstructSDandField() override;
 
-  void SetGasThickness(G4double);     
-  void SetGasRadius(G4double);          
-  void SetContainerThickness(G4double);     
+  void SetGasMaterial(const G4String &);
+  void SetContainerMaterial(const G4String &);
+  void SetWorldMaterial(const G4String &);
+
+  void SetGasThickness(G4double);
+  void SetGasRadius(G4double);
+  void SetContainerThickness(G4double);
 
   void SetPairEnergy(G4double);
 
-  inline G4VPhysicalVolume* GetWorldPhysVol() const { return fPhysWorld; }
+  DetectorConstruction &operator = (const DetectorConstruction &right) = delete;
+  DetectorConstruction(const DetectorConstruction &) = delete;
+
+  inline G4VPhysicalVolume *GetWorldPhysVol() const { return fPhysWorld; }
   inline void SetMaxChargedStep(G4double x) { fMaxStep = x; }
   inline G4double GetMaxChargedStep() const { return fMaxStep; }
-      
-private:
 
+private:
   void DefineMaterials();
   void ChangeGeometry();
 
-  G4Material*        fGasMat;
-  G4double           fGasThickness;
-  G4double           fGasRadius;
-  G4double           fMaxStep;
+  G4Material *fGasMat;
+  G4Material *fWindowMat;
+  G4Material *fWorldMaterial;
 
-  G4Material*        fWindowMat;
-  G4double           fWindowThick;
+  G4double fGasThickness;
+  G4double fGasRadius;
+  G4double fMaxStep;
+  G4double fWindowThick;
 
-  G4Material*        fWorldMaterial;
 
-  G4Tubs*            fSolidWorld;
-  G4Tubs*            fSolidContainer;
-  G4Tubs*            fSolidDetector;
-            
-  G4VPhysicalVolume* fPhysWorld;
-  G4LogicalVolume*   fLogicWorld;
-  G4LogicalVolume*   fLogicContainer;
-  G4LogicalVolume*   fLogicDetector;
+  G4Tubs *fSolidWorld = nullptr;
+  G4Tubs *fSolidContainer = nullptr;
+  G4Tubs *fSolidDetector = nullptr;
 
-  DetectorMessenger* fDetectorMessenger;  
-  G4ProductionCuts*  fGasDetectorCuts;
-  G4Region*          fRegGasDet;
+  G4VPhysicalVolume *fPhysWorld = nullptr;
+  G4LogicalVolume *fLogicWorld = nullptr;
+  G4LogicalVolume *fLogicContainer = nullptr;
+  G4LogicalVolume *fLogicDetector = nullptr;
 
+  DetectorMessenger *fDetectorMessenger;
+  G4ProductionCuts *fGasDetectorCuts;
+  G4Region *fRegGasDet = nullptr;
 };
 
 #endif
-

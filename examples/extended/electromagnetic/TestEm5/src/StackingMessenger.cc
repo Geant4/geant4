@@ -39,9 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:G4UImessenger(),fStackAction(stack),
- fStackDir(0),          
- fKillCmd(0)
+: fStackAction(stack)
 {
   fStackDir = new G4UIdirectory("/testem/stack/");
   fStackDir->SetGuidance("stacking control");

@@ -51,7 +51,7 @@ class G4KaonZeroShort : public G4ParticleDefinition
  private:
    static G4KaonZeroShort* theInstance;
    G4KaonZeroShort(){}
-   ~G4KaonZeroShort(){}
+   ~G4KaonZeroShort() override= default;
 
  public:
    static G4KaonZeroShort* Definition();

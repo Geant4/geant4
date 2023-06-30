@@ -44,9 +44,7 @@ G4HelixImplicitEuler::G4HelixImplicitEuler(G4Mag_EqRhs *EqRhs)
 {
 }
 
-G4HelixImplicitEuler::~G4HelixImplicitEuler()
-{
-}
+G4HelixImplicitEuler::~G4HelixImplicitEuler() = default;
   
 void
 G4HelixImplicitEuler::DumbStepper( const G4double yIn[],

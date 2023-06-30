@@ -42,17 +42,17 @@ G4BrentLocator::G4BrentLocator(G4Navigator *theNavigator)
   // Initialise the array of Pointers [max_depth+1] to do this  
   
   G4ThreeVector zeroV(0.0,0.0,0.0);
-  for (auto idepth=0; idepth<max_depth+1; ++idepth )
+  for (auto & idepth : ptrInterMedFT)
   {
-    ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
+    idepth = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
   }
 }
 
 G4BrentLocator::~G4BrentLocator()
 {
-  for ( auto idepth=0; idepth<max_depth+1; ++idepth )
+  for (auto & idepth : ptrInterMedFT)
   {
-    delete ptrInterMedFT[idepth];
+    delete idepth;
   }
 }
 
@@ -186,9 +186,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   //Final_section boolean store
   G4bool fin_section_depth[max_depth];
-  for (auto idepth=0; idepth<max_depth; ++idepth )
+  for (bool & idepth : fin_section_depth)
   {
-    fin_section_depth[idepth] = true;
+    idepth = true;
   }
 
   // 'SubStartPoint' is needed to calculate the length of the divided step

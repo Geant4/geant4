@@ -66,7 +66,7 @@ G4UHype::G4UHype( __void__& a )
 //
 // Destructor
 
-G4UHype::~G4UHype() { }
+G4UHype::~G4UHype() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //

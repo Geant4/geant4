@@ -61,11 +61,11 @@ class G4IntersectionSolid : public G4BooleanSolid
                                G4VSolid* pSolidB,
                          const G4Transform3D& transform    ) ;
 
-    virtual ~G4IntersectionSolid() ;
+    ~G4IntersectionSolid() override ;
 
-    G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4IntersectionSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -76,37 +76,37 @@ class G4IntersectionSolid : public G4BooleanSolid
     G4IntersectionSolid& operator=(const G4IntersectionSolid& rhs);
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
-                                  G4double& pMin, G4double& pMax) const ;
+                                  G4double& pMin, G4double& pMax) const override ;
        
-    EInside Inside( const G4ThreeVector& p ) const ;
+    EInside Inside( const G4ThreeVector& p ) const override ;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const override ;
 
     G4double DistanceToIn( const G4ThreeVector& p,
-                           const G4ThreeVector& v  ) const ;
+                           const G4ThreeVector& v  ) const override ;
 
-    G4double DistanceToIn( const G4ThreeVector& p) const ;
+    G4double DistanceToIn( const G4ThreeVector& p) const override ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
                             const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0      ) const ;
+                                  G4bool *validNorm=nullptr,
+                                  G4ThreeVector *n=nullptr      ) const override ;
 
-    G4double DistanceToOut( const G4ThreeVector& p ) const ;
+    G4double DistanceToOut( const G4ThreeVector& p ) const override ;
 
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
-                            const G4VPhysicalVolume* pRep ) ;
+                            const G4VPhysicalVolume* pRep ) override ;
                                    
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4Polyhedron* CreatePolyhedron () const ;
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const override ;
+    G4Polyhedron* CreatePolyhedron () const override ;
 };
 
 #endif

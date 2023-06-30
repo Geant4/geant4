@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -209,7 +209,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.660000s Real=0.669338s Sys=0.000000s
+  User=0.610000s Real=0.613729s Sys=0.010000s
+
+--------------------End of Global Run------------------------
+ The run consists of 100000 gamma of 9 MeV in a volume of C6F6 
+ Energy deposit per event:  mean = 930.463 keV    rms = 2.35286 MeV
+------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

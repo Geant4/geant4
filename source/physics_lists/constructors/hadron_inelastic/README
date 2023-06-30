@@ -35,6 +35,14 @@
    - final-state:   FTFP for all energies
 
 
+ G4HadronInelasticQBBC_ABLA
+ --------------------------
+ Similar to G4HadronInelasticQBBC, with the difference that for the final-state
+ of nuclear inelastic interactions of pion+, pion-, proton and neutron projectiles
+ the ABLA model (instead of the usual Precompound/de-excitation) is utilized for
+ nuclear de-excitation.
+
+
  G4HadronPhysicsFTFP_BERT
  ------------------------
  Hadron nuclear inelastic processes for all hadrons:
@@ -71,6 +79,7 @@
  - light anti-hypernuclei inelastic:
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   FTFP for all energies
+
 
  G4HadronPhysicsFTFP_BERT_ATL
  ----------------------------

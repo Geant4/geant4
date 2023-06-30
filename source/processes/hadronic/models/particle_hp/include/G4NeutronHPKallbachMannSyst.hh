@@ -29,4 +29,4 @@
 #include "G4ParticleHPKallbachMannSyst.hh"
 using G4NeutronHPKallbachMannSyst = G4ParticleHPKallbachMannSyst;
 
-#endif 
+#endif

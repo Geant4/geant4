@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-12-15 Igor Semeniouk (testem15-V11-01-00)
+ - README, README.gamma - changes from D.Bernard, cleanup
+ - .README.txt - cleanup, information from README.gamma added
+
 ## 2022-02-20 Igor Semeniouk (testem15-V11-00-02)
 - TestEm15 README.gamma update (documatation only)
   - Added description of UI commands to control G4BetheHeitler5DModel 

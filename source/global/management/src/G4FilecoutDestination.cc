@@ -70,6 +70,17 @@ void G4FilecoutDestination::Close()
 }
 
 // --------------------------------------------------------------------
+G4int G4FilecoutDestination::ReceiveG4debug(const G4String& msg)
+{
+  if(m_output == nullptr || !m_output->is_open())
+  {
+    Open(m_mode);
+  }
+  *m_output << msg;
+  return 0;
+}
+
+// --------------------------------------------------------------------
 G4int G4FilecoutDestination::ReceiveG4cout(const G4String& msg)
 {
   if(m_output == nullptr || !m_output->is_open())

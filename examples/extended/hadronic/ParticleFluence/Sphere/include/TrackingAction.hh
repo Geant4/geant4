@@ -81,7 +81,7 @@ class TrackingAction : public G4UserTrackingAction {
   private:
     Run* fRunPtr;  // Pointer to the Run object
   
-    std::array< G4int,    fkNumberCombinations > fArrayMultiplicities;
+    std::array< G4long,   fkNumberCombinations > fArrayMultiplicities;
     std::array< G4double, fkNumberCombinations > fArraySumKineticEnergies;
     // Keep record of the number of particles and their kinetic energy at production,
     // according to the particle type and their kinetic energy range (below/above 20 MeV).

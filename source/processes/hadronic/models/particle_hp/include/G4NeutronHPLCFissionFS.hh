@@ -29,4 +29,4 @@
 #include "G4ParticleHPLCFissionFS.hh"
 using G4NeutronHPLCFissionFS = G4ParticleHPLCFissionFS;
 
-#endif 
+#endif

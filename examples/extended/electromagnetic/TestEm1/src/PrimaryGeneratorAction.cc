@@ -45,16 +45,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction( DetectorConstruction* det)
-:G4VUserPrimaryGeneratorAction(),
- fParticleGun(0),
- fDetector(det),
- fRndmBeam(0),       
- fGunMessenger(0)     
-                                              
+ :fDetector(det)
 {
   fParticleGun  = new G4ParticleGun(1);
   SetDefaultKinematic(1);
-  fRndmBeam = 0.;
     
   //create a messenger for this class
   fGunMessenger = new PrimaryGeneratorMessenger(this);  

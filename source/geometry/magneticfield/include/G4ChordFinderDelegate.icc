@@ -290,8 +290,8 @@ void G4ChordFinderDelegate<T>::SetFractions_Last_Next(G4double fractLast,
                                                       G4double fractNext)
 {
     // Use -1.0 as request for Default.
-    if (fractLast == -1.0) fractLast = 1.0;   // 0.9;
-    if (fractNext == -1.0) fractNext = 0.98;  // 0.9; 
+    if (fractLast == -1.0) { fractLast = 1.0; }  // 0.9;
+    if (fractNext == -1.0) { fractNext = 0.98; } // 0.9; 
 
     // fFirstFraction  = 0.999; // Safe value, range: ~ 0.95 - 0.999
     if (GetDriver().GetVerboseLevel() > 0)

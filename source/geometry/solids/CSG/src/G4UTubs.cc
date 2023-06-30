@@ -67,9 +67,7 @@ G4UTubs::G4UTubs( __void__& a )
 //
 // Destructor
 
-G4UTubs::~G4UTubs()
-{
-}
+G4UTubs::~G4UTubs() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -277,7 +275,7 @@ G4UTubs::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Get parameters of the solid

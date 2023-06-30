@@ -59,7 +59,6 @@ G4bool compareLVByName::operator()(const G4LogicalVolume* lhs,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DNAGeometry::DNAGeometry()
-  : G4VDNAMolecularGeometry()
 {
   fpMessenger        = new DNAGeometryMessenger(this);
   fpChromosomeMapper = new ChromosomeMapper();

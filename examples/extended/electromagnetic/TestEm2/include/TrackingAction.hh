@@ -40,10 +40,10 @@
 class TrackingAction : public G4UserTrackingAction {
 
 public:
-  TrackingAction();
-  virtual ~TrackingAction() {};
+  TrackingAction() = default;
+ ~TrackingAction() override = default;
 
-  virtual void PostUserTrackingAction(const G4Track*);
+  void PostUserTrackingAction(const G4Track*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

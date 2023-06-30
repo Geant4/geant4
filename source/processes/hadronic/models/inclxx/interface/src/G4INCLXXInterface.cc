@@ -193,8 +193,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     return &theResult;
   }
 
-  // For reactions on nucleons, use the backup model (without complaining)
-  if(trackA<=1 && nucleusA<=1) {
+  // For reactions on nucleons, use the backup model (without complaining),
+  // except for anti_proton projectile (in this case, INCLXX is used).
+  if(trackA<=1 && nucleusA<=1 && (trackZ>=0 || trackA==0)) {
     return theBackupModelNucleon->ApplyYourself(aTrack, theNucleus);
   }
 
@@ -573,6 +574,7 @@ G4INCL::ParticleType G4INCLXXInterface::toINCLParticleType(G4ParticleDefinition 
   else if(pdef == G4Triton::Triton())               return G4INCL::Composite;
   else if(pdef == G4He3::He3())                     return G4INCL::Composite;
   else if(pdef == G4Alpha::Alpha())                 return G4INCL::Composite;
+  else if(pdef == G4AntiProton::AntiProton())       return G4INCL::antiProton;
   else if(pdef->GetParticleType() == G4GenericIon::GenericIon()->GetParticleType()) return G4INCL::Composite;
   else                                              return G4INCL::UnknownParticle;
 }
@@ -618,6 +620,8 @@ G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z
   } else if(PDGCode == 1003) { return G4Triton::Triton();
   } else if(PDGCode == 2003) { return G4He3::He3();
   } else if(PDGCode == 2004) { return G4Alpha::Alpha();
+
+  } else if(PDGCode == -2212) { return G4AntiProton::AntiProton();
   } else if(S != 0) {  // Assumed that -S gives the number of Lambdas
     if (A == 3 && Z == 1 && S == -1 ) return G4HyperTriton::Definition();
     if (A == 4 && Z == 1 && S == -1 ) return G4HyperH4::Definition();

@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4ParallelWorldProcess.hh
@@ -41,11 +41,15 @@
 //
 //---------------------------------------------------------------
 
-
 #ifndef G4ParallelWorldProcess_h
 #define G4ParallelWorldProcess_h 1
 
+#include "G4FieldTrack.hh"
+#include "G4MultiNavigator.hh"
+#include "G4TouchableHandle.hh"
+#include "G4VProcess.hh"
 #include "globals.hh"
+
 class G4Step;
 class G4StepPoint;
 class G4Navigator;
@@ -54,127 +58,117 @@ class G4PathFinder;
 class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
-#include "G4VProcess.hh"
-#include "G4FieldTrack.hh"
-#include "G4TouchableHandle.hh"
-#include "G4MultiNavigator.hh"
-
 //------------------------------------------
 //
 //        G4ParallelWorldProcess class
 //
 //------------------------------------------
 
-
 // Class Description:
 
 class G4ParallelWorldProcess : public G4VProcess
 {
-public: // with description
+  public:  // with description
+    //------------------------
+    // Constructor/Destructor
+    //------------------------
 
-  //------------------------
-  // Constructor/Destructor
-  //------------------------
-  
-  G4ParallelWorldProcess(const G4String& processName = "ParaWorld",
-				 G4ProcessType theType = fParallel);
-  virtual ~G4ParallelWorldProcess();
-  
-  //--------------------------------------------------------------
-  // Set Paralle World
-  //--------------------------------------------------------------
+    G4ParallelWorldProcess(const G4String& processName = "ParaWorld",
+                           G4ProcessType theType = fParallel);
+    ~G4ParallelWorldProcess() override;
 
-  void SetParallelWorld(G4String parallelWorldName);
-  void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
+    //--------------------------------------------------------------
+    // Set Paralle World
+    //--------------------------------------------------------------
 
-  //--------------------------------------------------------------
-  //     Process interface
-  //--------------------------------------------------------------
+    void SetParallelWorld(G4String parallelWorldName);
+    void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
 
-  void StartTracking(G4Track*);
-  
-  //------------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for AtRest 
-  //------------------------------------------------------------------------
-  
-  G4double AtRestGetPhysicalInteractionLength(const G4Track&,G4ForceCondition*);
-  G4VParticleChange* AtRestDoIt(const G4Track&,const G4Step&);
+    //--------------------------------------------------------------
+    //     Process interface
+    //--------------------------------------------------------------
 
-  //------------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for AlongStep 
-  //------------------------------------------------------------------------
-  
-  G4double AlongStepGetPhysicalInteractionLength(
-    const G4Track&,G4double,G4double,G4double&,G4GPILSelection*);
-  G4VParticleChange* AlongStepDoIt(const G4Track&,const G4Step&);
+    void StartTracking(G4Track*) override;
 
-  //-----------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for PostStep
-  //-----------------------------------------------------------------------
-  
-  G4double PostStepGetPhysicalInteractionLength(
-    const G4Track&,G4double,G4ForceCondition*);
-  G4VParticleChange* PostStepDoIt(const G4Track&,const G4Step&);
+    //------------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for AtRest
+    //------------------------------------------------------------------------
 
-  //-----------------------------------------------------------------------
-  // Flag for material switching
-  //-----------------------------------------------------------------------
+    G4double AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition*) override;
+    G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override;
 
-  inline void SetLayeredMaterialFlag(G4bool flg=true)
-  { layeredMaterialFlag = flg; }
-  inline G4bool GetLayeredMaterialFlag() const
-  { return layeredMaterialFlag; }
+    //------------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for AlongStep
+    //------------------------------------------------------------------------
 
-protected:
-  void CopyStep(const G4Step & step);
-  void SwitchMaterial(G4StepPoint*);
+    G4double AlongStepGetPhysicalInteractionLength(const G4Track&, G4double, G4double, G4double&,
+                                                   G4GPILSelection*) override;
+    G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override;
 
-public: // with description
-  //--------------------------------------------------------------------
-  // Returns whether a particular particle type requires AtRest process
-  //--------------------------------------------------------------------
-  G4bool IsAtRestRequired(G4ParticleDefinition*);
+    //-----------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for PostStep
+    //-----------------------------------------------------------------------
 
-protected:
-  G4Step * fGhostStep;
-  G4StepPoint * fGhostPreStepPoint;
-  G4StepPoint * fGhostPostStepPoint;
+    G4double PostStepGetPhysicalInteractionLength(const G4Track&, G4double,
+                                                  G4ForceCondition*) override;
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  G4VParticleChange aDummyParticleChange;
-  G4ParticleChange xParticleChange;
+    //-----------------------------------------------------------------------
+    // Flag for material switching
+    //-----------------------------------------------------------------------
 
-  G4TransportationManager* fTransportationManager;
-  G4PathFinder*        fPathFinder;
+    inline void SetLayeredMaterialFlag(G4bool flg = true) { layeredMaterialFlag = flg; }
+    inline G4bool GetLayeredMaterialFlag() const { return layeredMaterialFlag; }
 
-  // -------------------------------
-  // Navigation in the Ghost World:
-  // -------------------------------
-  G4String             fGhostWorldName;
-  G4VPhysicalVolume*   fGhostWorld;
-  G4Navigator*         fGhostNavigator;
-  G4int                fNavigatorID;
-  G4TouchableHandle    fOldGhostTouchable;
-  G4TouchableHandle    fNewGhostTouchable;
-  G4FieldTrack         fFieldTrack;
-  G4double             fGhostSafety;
-  G4bool               fOnBoundary;
+    //--------------------------------------------------------------------
+    // Returns whether a particular particle type requires AtRest process
+    //--------------------------------------------------------------------
+    G4bool IsAtRestRequired(G4ParticleDefinition*);
 
-  //-----------------------------------------------------------------------
-  // Flag for material switching
-  //-----------------------------------------------------------------------
-  G4bool layeredMaterialFlag;
+    //-----------------------------------------------------------------------
+    // Static G4Step object for "Hyper-step"
+    //-----------------------------------------------------------------------
+    static const G4Step* GetHyperStep();
+    static G4int GetHypNavigatorID();
 
-  //-----------------------------------------------------------------------
-  // Static G4Step object for "Hyper-step"
-  //-----------------------------------------------------------------------
-public:
-  static const G4Step* GetHyperStep();
-  static G4int GetHypNavigatorID();
-private:
-  static G4ThreadLocal G4Step* fpHyperStep;
-  static G4ThreadLocal G4int nParallelWorlds;
-  static G4ThreadLocal G4int fNavIDHyp;
-  G4int iParallelWorld;
+  protected:
+    void CopyStep(const G4Step& step);
+    void SwitchMaterial(G4StepPoint*);
+
+  protected:
+    G4Step* fGhostStep;
+    G4StepPoint* fGhostPreStepPoint;
+    G4StepPoint* fGhostPostStepPoint;
+
+    G4VParticleChange aDummyParticleChange;
+    G4ParticleChange xParticleChange;
+
+    G4TransportationManager* fTransportationManager;
+    G4PathFinder* fPathFinder;
+
+    // -------------------------------
+    // Navigation in the Ghost World:
+    // -------------------------------
+    G4String fGhostWorldName;
+    G4VPhysicalVolume* fGhostWorld{nullptr};
+    G4Navigator* fGhostNavigator{nullptr};
+    G4int fNavigatorID{-1};
+    G4TouchableHandle fOldGhostTouchable;
+    G4TouchableHandle fNewGhostTouchable;
+    G4FieldTrack fFieldTrack;
+    G4double fGhostSafety{0.};
+    G4bool fOnBoundary{false};
+
+    //-----------------------------------------------------------------------
+    // Flag for material switching
+    //-----------------------------------------------------------------------
+    G4bool layeredMaterialFlag{false};
+
+  private:
+    static G4ThreadLocal G4Step* fpHyperStep;
+    static G4ThreadLocal G4int nParallelWorlds;
+    static G4ThreadLocal G4int fNavIDHyp;
+    G4int iParallelWorld;
 };
 
 #endif

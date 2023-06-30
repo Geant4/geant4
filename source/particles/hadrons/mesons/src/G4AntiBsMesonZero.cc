@@ -42,16 +42,16 @@
 // ###                      AntiBsMesonZero                           ###
 // ######################################################################
 
-G4AntiBsMesonZero* G4AntiBsMesonZero::theInstance = 0;
+G4AntiBsMesonZero* G4AntiBsMesonZero::theInstance = nullptr;
 
 G4AntiBsMesonZero* G4AntiBsMesonZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_Bs0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -68,7 +68,7 @@ G4AntiBsMesonZero* G4AntiBsMesonZero::Definition()
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,        -531,
-                false,     1.505e-3*ns,          NULL,
+                false,     1.505e-3*ns,          nullptr,
                 false,       "Bs");
   }
   theInstance = static_cast<G4AntiBsMesonZero*>(anInstance);

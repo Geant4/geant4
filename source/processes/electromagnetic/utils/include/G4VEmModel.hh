@@ -317,6 +317,10 @@ public:
 
   void SetCrossSectionTable(G4PhysicsTable*, G4bool isLocal);
 
+  G4bool LPMFlag() const;
+  
+  void SetLPMFlag(G4bool val);
+
   inline G4ElementData* GetElementData();
 
   inline G4PhysicsTable* GetCrossSectionTable();
@@ -343,8 +347,6 @@ public:
 
   inline G4double SecondaryThreshold() const;
 
-  inline G4bool LPMFlag() const;
-
   inline G4bool DeexcitationFlag() const;
 
   inline G4bool ForceBuildTableFlag() const;
@@ -366,8 +368,6 @@ public:
   inline void SetPolarAngleLimit(G4double);
 
   inline void SetSecondaryThreshold(G4double);
-
-  inline void SetLPMFlag(G4bool val);
 
   inline void SetDeexcitationFlag(G4bool val);
 
@@ -447,7 +447,6 @@ protected:
 
 private:
 
-  G4bool theLPMflag = false;
   G4bool flagDeexcitation = false;
   G4bool flagForceBuildTable = false;
   G4bool isMaster = true;
@@ -673,13 +672,6 @@ inline G4double G4VEmModel::SecondaryThreshold() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4VEmModel::LPMFlag() const 
-{
-  return theLPMflag;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4bool G4VEmModel::DeexcitationFlag() const 
 {
   return flagDeexcitation;
@@ -788,13 +780,6 @@ inline void G4VEmModel::SetPolarAngleLimit(G4double val)
 inline void G4VEmModel::SetSecondaryThreshold(G4double val) 
 {
   secondaryThreshold = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmModel::SetLPMFlag(G4bool val) 
-{
-  theLPMflag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

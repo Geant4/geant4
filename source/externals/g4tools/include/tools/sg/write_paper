@@ -125,19 +125,16 @@ inline bool write_paper(std::ostream& a_out,
       return false;
     }
 
-    size_t sz;
-    unsigned char* buffer = action.get_rgbas(sz,a_top_to_bottom);
-    if(!buffer) {
+    std::vector<unsigned char> buffer;
+    if(!action.get_rgbas(a_top_to_bottom,buffer)) {
       a_out << "tools::sg::write_paper : can't get rgba image." << std::endl;
       return false;
     }
 
-    if(!a_png_writer(a_out,a_file,buffer,a_width,a_height,4)) {
+    if(!a_png_writer(a_out,a_file,vec_data(buffer),a_width,a_height,4)) {
       a_out << "tools::sg::write_paper : tools::png::write() failed." << std::endl;
-      delete [] buffer;
       return false;
     }
-    delete [] buffer;
     return true;
   }
 
@@ -148,19 +145,16 @@ inline bool write_paper(std::ostream& a_out,
       return false;
     }
 
-    size_t sz;
-    unsigned char* buffer = action.get_rgbs(sz,a_top_to_bottom);
-    if(!buffer) {
+    std::vector<unsigned char> buffer;
+    if(!action.get_rgbs(a_top_to_bottom,buffer)) {
       a_out << "tools::sg::write_paper : can't get rgb image." << std::endl;
       return false;
     }
 
-    if(!a_jpeg_writer(a_out,a_file,buffer,a_width,a_height,3,100)) {
+    if(!a_jpeg_writer(a_out,a_file,vec_data(buffer),a_width,a_height,3,100)) {
       a_out << "tools::sg::write_paper : tools::jpeg::write() failed." << std::endl;
-      delete [] buffer;
       return false;
     }
-    delete [] buffer;
     return true;
   }
 

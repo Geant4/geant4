@@ -141,8 +141,6 @@ geant4_add_module(G4had_par_hp
 	G4WattFissionSpectrumValues.hh
 ### FissionFragment Generator - end
 ### Headers of NeutronHP for backward compatibility - start
-    G4NeutronHPGamma.hh
-    G4NeutronHPLevel.hh
     G4NeutronHPList.hh
     G4NeutronHPIsoData.hh
     G4NeutronHP2AInelasticFS.hh

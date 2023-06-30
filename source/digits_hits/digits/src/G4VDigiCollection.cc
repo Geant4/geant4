@@ -30,25 +30,11 @@
 
 #include "G4VDigiCollection.hh"
 
-G4VDigiCollection::G4VDigiCollection()
-{
-  collectionName = "Unknown";
-  DMname         = "Unknown";
-}
-
 G4VDigiCollection::G4VDigiCollection(G4String DMnam, G4String colNam)
-{
-  collectionName = colNam;
-  DMname         = DMnam;
-}
-
-G4VDigiCollection::~G4VDigiCollection() { ; }
+  : collectionName(colNam), DMname(DMnam)
+{}
 
 G4bool G4VDigiCollection::operator==(const G4VDigiCollection& right) const
 {
   return ((collectionName == right.collectionName) && (DMname == right.DMname));
 }
-
-void G4VDigiCollection::DrawAllDigi() { ; }
-
-void G4VDigiCollection::PrintAllDigi() { ; }

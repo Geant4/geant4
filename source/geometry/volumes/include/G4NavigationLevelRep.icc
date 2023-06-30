@@ -47,8 +47,7 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
 
 inline
 G4NavigationLevelRep::G4NavigationLevelRep()
-   :  sTransform(),
-      sVolumeType(kReplica)
+   :  sVolumeType(kReplica)
 {
 }
 

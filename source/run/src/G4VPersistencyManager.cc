@@ -30,8 +30,7 @@
 
 #include "G4VPersistencyManager.hh"
 
-G4ThreadLocal G4VPersistencyManager*
-  G4VPersistencyManager::fPersistencyManager = nullptr;
+G4ThreadLocal G4VPersistencyManager* G4VPersistencyManager::fPersistencyManager = nullptr;
 
 // --------------------------------------------------------------------
 G4VPersistencyManager* G4VPersistencyManager::GetPersistencyManager()

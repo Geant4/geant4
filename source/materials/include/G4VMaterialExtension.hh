@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 
 //---------------------------------------------------------------------------
 //
@@ -40,45 +37,40 @@
 // G4ExtendedMaterial.
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef G4VMATERIALEXTENSION_HH
 #define G4VMATERIALEXTENSION_HH 1
 
-#include "globals.hh"
+#include "G4String.hh"
 #include "G4ios.hh"
+#include "globals.hh"
+
 #include <functional>
 #include <string>
-#include "G4String.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//Hash of extension material name
-using G4MaterialExtensionHash=std::hash<std::string>;
+// Hash of extension material name
+using G4MaterialExtensionHash = std::hash<std::string>;
 
 class G4VMaterialExtension
 {
-public:  // with description
-  //
+ public:  // with description
   // Base class constructor
-  //
-  G4VMaterialExtension(const G4String& name) :
-    fName(name),fHash(G4MaterialExtensionHash{}(name)) {}
-  virtual ~G4VMaterialExtension() {;}
+  G4VMaterialExtension(const G4String& name) : fName(name), fHash(G4MaterialExtensionHash{}(name))
+  {}
+  virtual ~G4VMaterialExtension() = default;
 
   virtual void Print() const = 0;
 
   // Return the hash value of this extension
-  const std::size_t& GetHash() const { return fHash;}
+  const std::size_t& GetHash() const { return fHash; }
   // Return the extension name
   const G4String& GetName() const { return fName; }
-protected:
+
+ protected:
   // Name of the extension
   const G4String& fName;
   // Hash value of the name.
   // Calculated at initialization time
   const std::size_t fHash;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -90,7 +90,9 @@ private:
   G4double fEmax;
 
   std::vector<G4int> fMatIndex;
-  // projectile Z <= 80, target element Z <= 92
+  // projectile (3<= Z <= 80), target element (1 <= Z <= 92)
+  const G4int ZPROJMAX = 80;
+  const G4int ZTARGMAX = 92;
   std::vector<G4PhysicsLogVector*>* fMatData[81] = {nullptr};
   G4PhysicsLogVector* fElmData[81][93] = {{nullptr}};
   G4PhysicsFreeVector* fVector = nullptr;

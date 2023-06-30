@@ -60,7 +60,7 @@ class G4VParticlePropertyReporter
   {   return (this != &right);    }
   
  public:
-  typedef std::vector<G4ParticlePropertyData*> G4PPDContainer;
+  using G4PPDContainer = std::vector<G4ParticlePropertyData *>;
 
  public:
   virtual G4bool FillList(G4String name); 

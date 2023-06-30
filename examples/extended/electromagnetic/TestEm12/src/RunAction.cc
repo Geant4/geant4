@@ -47,8 +47,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
-:G4UserRunAction(),
- fDetector(det),fPhysics(phys),fPrimary(kin),fRun(0),fHistoManager(0)
+: fDetector(det),fPhysics(phys),fPrimary(kin)
 {
   // Book predefined histograms
   fHistoManager = new HistoManager();

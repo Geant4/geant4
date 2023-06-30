@@ -37,12 +37,12 @@ const G4String EllipticalChromosome::fShape = "ellipse";
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EllipticalChromosome::EllipticalChromosome(const G4String& name,
-                                           G4ThreeVector pos,
+                                           const G4ThreeVector& pos,
                                            const G4double& sx,
                                            const G4double& sy,
                                            const G4double& sz)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fSemiX(std::abs(sx))
   , fSemiY(std::abs(sy))
   , fSemiZ(std::abs(sz))
@@ -53,14 +53,14 @@ EllipticalChromosome::EllipticalChromosome(const G4String& name,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EllipticalChromosome::EllipticalChromosome(
-  const G4String& name, G4ThreeVector pos, const G4double& sx,
-  const G4double& sy, const G4double& sz, G4RotationMatrix rot)
+  const G4String& name, const G4ThreeVector& pos, const G4double& sx,
+  const G4double& sy, const G4double& sz, const G4RotationMatrix& rot)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fSemiX(std::abs(sx))
   , fSemiY(std::abs(sy))
   , fSemiZ(std::abs(sz))
-  , fRotation(std::move(rot))
+  , fRotation(rot)
 {
   fInverseRotation = fRotation.inverse();
 }

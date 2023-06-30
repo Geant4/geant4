@@ -351,7 +351,7 @@ std::ostream & MixMaxRng::put ( std::ostream& os ) const
    char beginMarker[] = "MixMaxRng-begin";
    char endMarker[]   = "MixMaxRng-end";
 
-   int pr = os.precision(24);
+   long pr = os.precision(24);
    os << beginMarker << " ";
    os << theSeed << "\n";
    for (int i=0; i<rng_get_N(); ++i) {
@@ -458,7 +458,7 @@ bool MixMaxRng::getState (const std::vector<unsigned long> & v)
      S.V[i/2]= ( (v[i] & MASK32) | ( (myuint_t)(v[i+1]) << 32 ) );
      // unpack from a data structure which is 32-bit on some platforms
    }
-   S.counter = v[2*rng_get_N()+1];
+   S.counter = (int)v[2*rng_get_N()+1];
    precalc();
    if ( ( (v[2*rng_get_N()+2] & MASK32)
         | ( (myuint_t)(v[2*rng_get_N()+3]) << 32 ) ) != S.sumtot) {

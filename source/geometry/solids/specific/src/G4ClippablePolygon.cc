@@ -43,9 +43,7 @@ G4ClippablePolygon::G4ClippablePolygon()
 
 // Destructor
 //
-G4ClippablePolygon::~G4ClippablePolygon()
-{
-}
+G4ClippablePolygon::~G4ClippablePolygon() = default;
 
 // AddVertexInOrder
 //
@@ -72,7 +70,7 @@ G4bool G4ClippablePolygon::Clip( const G4VoxelLimits& voxelLimit )
     ClipAlongOneAxis( voxelLimit, kZAxis );
   }
   
-  return (vertices.size() > 0);
+  return (!vertices.empty());
 }
 
 // PartialClip
@@ -89,7 +87,7 @@ G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits& voxelLimit,
     if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
   }
   
-  return (vertices.size() > 0);
+  return (!vertices.empty());
 }
 
 // GetExtent
@@ -388,7 +386,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
   // If nothing is left from the above clip, we might as well return now
   // (but with an empty vertices)
   //
-  if (tempPolygon.size() == 0)
+  if (tempPolygon.empty())
   {
     vertices.clear();
     return;
@@ -405,7 +403,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
   //
   // If nothing is left, return now
   //
-  if (vertices.size() == 0) return;
+  if (vertices.empty()) return;
 }
 
 // ClipToSimpleLimits

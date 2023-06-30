@@ -33,39 +33,40 @@
 #ifndef G4WendtFissionFragmentGenerator_h
 #define G4WendtFissionFragmentGenerator_h 1
 
-#include <map>
-
+#include "G4FissionFragmentGenerator.hh"
 #include "G4HadFinalState.hh"
 
-#include "G4FissionFragmentGenerator.hh"
+#include <map>
 
 class G4WendtFissionFragmentGenerator
 {
-public:
-	G4HadFinalState* ApplyYourself(const G4HadProjectile& projectile, G4int Z, G4int A);
-	static G4WendtFissionFragmentGenerator* GetInstance() {
-           if ( instance == NULL) instance = new G4WendtFissionFragmentGenerator();
-           return instance;
-        }
+  public:
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& projectile, G4int Z, G4int A);
+    static G4WendtFissionFragmentGenerator* GetInstance()
+    {
+      if (instance == nullptr) instance = new G4WendtFissionFragmentGenerator();
+      return instance;
+    }
 
-	void InitializeANucleus(const G4int A, const G4int Z, const G4int M, const G4String& dataDirectory);
-	~G4WendtFissionFragmentGenerator();
+    void InitializeANucleus(const G4int A, const G4int Z, const G4int M,
+                            const G4String& dataDirectory);
+    ~G4WendtFissionFragmentGenerator();
 
-private:
-	// SINGLETON!!!
-	G4WendtFissionFragmentGenerator();
-	G4WendtFissionFragmentGenerator(G4WendtFissionFragmentGenerator const&);
-	void operator=(G4WendtFissionFragmentGenerator const&);
+  private:
+    // SINGLETON!!!
+    G4WendtFissionFragmentGenerator();
+    G4WendtFissionFragmentGenerator(G4WendtFissionFragmentGenerator const&) = delete;
+    void operator=(G4WendtFissionFragmentGenerator const&) = delete;
 
-        static G4ThreadLocal G4WendtFissionFragmentGenerator* instance;
-	// SINGLETON!!!
+    static G4ThreadLocal G4WendtFissionFragmentGenerator* instance;
+    // SINGLETON!!!
 
-	/** A map of all the fission isotopes loaded at initialization */
-    std::map< const G4int, G4FissionFragmentGenerator* > fissionIsotopes;
+    /** A map of all the fission isotopes loaded at initialization */
+    std::map<const G4int, G4FissionFragmentGenerator*> fissionIsotopes;
     G4ParticleHPNames fileNames;
 
     G4int Verbosity_;
-  
+
     G4int secID;  // Creator model ID for the fission fragments
 };
 #endif

@@ -71,7 +71,7 @@ void G4ParticleHPInelasticBaseFS::Init(G4double A, G4double Z, G4int M, G4String
                                        G4String& bit, G4ParticleDefinition*)
 {
   gammaPath = "/Inelastic/Gammas/";
-  if (!G4FindDataDir("G4NEUTRONHPDATA"))
+  if (G4FindDataDir("G4NEUTRONHPDATA") == nullptr)
     throw G4HadronicException(__FILE__, __LINE__,
                               "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section "
                               "files where Inelastic/Gammas data is found.");
@@ -173,7 +173,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
                                             G4ParticleDefinition** theDefs, G4int nDef)
 {
   // prepare neutron
-  if (theResult.Get() == NULL) theResult.Put(new G4HadFinalState);
+  if (theResult.Get() == nullptr) theResult.Put(new G4HadFinalState);
   theResult.Get()->Clear();
   G4double eKinetic = theTrack.GetKineticEnergy();
   const G4HadProjectile* hadProjectile = &theTrack;
@@ -192,10 +192,10 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
                G4Neutron::Neutron()->GetPDGMass();
 
   // give priority to ENDF vales for target mass
-  if (theEnergyAngData != 0) {
+  if (theEnergyAngData != nullptr) {
     targetMass = theEnergyAngData->GetTargetMass();
   }
-  if (theAngularDistribution != 0) {
+  if (theAngularDistribution != nullptr) {
     targetMass = theAngularDistribution->GetTargetMass();
   }
 
@@ -273,7 +273,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
       G4double dummy = 0;
       G4ReactionProduct* aSec = thePhaseSpaceDistribution.Sample(eKinetic, massCode, dummy);
       aSec->Lorentz(*aSec, -1. * theTarget);
-      G4DynamicParticle* aPart = new G4DynamicParticle();
+      auto aPart = new G4DynamicParticle();
       aPart->SetDefinition(aSec->GetDefinition());
       aPart->SetMomentum(aSec->GetMomentum());
       delete aSec;
@@ -301,16 +301,16 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
   }
 
   // set target and neutron in the relevant exit channel
-  if (theAngularDistribution != 0) {
+  if (theAngularDistribution != nullptr) {
     theAngularDistribution->SetTarget(theTarget);
     theAngularDistribution->SetProjectileRP(incidReactionProduct);
   }
-  else if (theEnergyAngData != 0) {
+  else if (theEnergyAngData != nullptr) {
     theEnergyAngData->SetTarget(theTarget);
     theEnergyAngData->SetProjectileRP(incidReactionProduct);
   }
 
-  G4ReactionProductVector* tmpHadrons = 0;
+  G4ReactionProductVector* tmpHadrons = nullptr;
 #ifdef G4PHPDEBUG
   // To avoid compilation error around line 532.
   G4int ii(0);
@@ -318,7 +318,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
   G4int dummy;
   std::size_t i;
 
-  if (theEnergyAngData != 0) {
+  if (theEnergyAngData != nullptr) {
     tmpHadrons = theEnergyAngData->Sample(eKinetic);
 
     if (!G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState()) {
@@ -353,8 +353,8 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
       }
     }
   }
-  else if (theAngularDistribution != 0) {
-    G4bool* Done = new G4bool[nDef];
+  else if (theAngularDistribution != nullptr) {
+    auto Done = new G4bool[nDef];
     G4int i0;
     for (i0 = 0; i0 < nDef; ++i0)
       Done[i0] = false;
@@ -367,7 +367,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
     for (i0 = 0; i0 < nDef; ++i0) {
       if (!Done[i0]) {
         aHadron = new G4ReactionProduct;
-        if (theEnergyDistribution != 0) {
+        if (theEnergyDistribution != nullptr) {
           aHadron->SetDefinition(theDefs[i0]);
           aHadron->SetKineticEnergy(theEnergyDistribution->Sample(eKinetic, dummy));
         }
@@ -385,13 +385,13 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
             "No energy distribution to sample from in InelasticBaseFS::BaseApply");
         }
         theAngularDistribution->SampleAndUpdate(*aHadron);
-        if (theEnergyDistribution == 0 && nDef == 2) {
+        if (theEnergyDistribution == nullptr && nDef == 2) {
           if (i0 == 0) {
             G4double mass1 = theDefs[0]->GetPDGMass();
             G4double mass2 = theDefs[1]->GetPDGMass();
             G4double massn = theProjectile->GetPDGMass();
-            G4int z1 = static_cast<G4int>(theBaseZ + eps - theDefs[0]->GetPDGCharge()
-                                          - theDefs[1]->GetPDGCharge());
+            auto z1 = static_cast<G4int>(theBaseZ + eps - theDefs[0]->GetPDGCharge()
+                                         - theDefs[1]->GetPDGCharge());
             G4int a1 = static_cast<G4int>(theBaseA + eps) - theDefs[0]->GetBaryonNumber()
                        - theDefs[1]->GetBaryonNumber();
             G4double concreteMass = G4NucleiProperties::GetNuclearMass(a1, z1);
@@ -446,20 +446,20 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
   }
 
   G4ReactionProductVector* thePhotons = nullptr;
-  if (theFinalStatePhotons != 0) {
+  if (theFinalStatePhotons != nullptr) {
     // the photon distributions are in the Nucleus rest frame.
     G4ReactionProduct boosted_tmp;
     boosted_tmp.Lorentz(incidReactionProduct, theTarget);
     G4double anEnergy = boosted_tmp.GetKineticEnergy();
     thePhotons = theFinalStatePhotons->GetPhotons(anEnergy);
-    if (thePhotons != 0) {
+    if (thePhotons != nullptr) {
       for (i = 0; i < thePhotons->size(); ++i) {
         // back to lab
         thePhotons->operator[](i)->Lorentz(*(thePhotons->operator[](i)), -1. * theTarget);
       }
     }
   }
-  else if (theEnergyAngData != 0) {
+  else if (theEnergyAngData != nullptr) {
     // PA130927: do not create photons to adjust binding energy
     G4bool bAdjustPhotons = true;
 #ifdef PHP_AS_HP
@@ -539,7 +539,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
   // fill the result
   std::size_t nSecondaries = tmpHadrons->size();
   std::size_t nPhotons = 0;
-  if (thePhotons != 0) {
+  if (thePhotons != nullptr) {
     nPhotons = thePhotons->size();
   }
   nSecondaries += nPhotons;
@@ -568,7 +568,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
   if (std::getenv("G4ParticleHPDebug"))
     G4cout << " G4ParticleHPInelasticBaseFS::BaseApply N photons " << nPhotons << G4endl;
 #endif
-  if (thePhotons != 0) {
+  if (thePhotons != nullptr) {
     for (i = 0; i < nPhotons; ++i) {
       theSec = new G4DynamicParticle;
       theSec->SetDefinition(thePhotons->operator[](i)->GetDefinition());
@@ -599,7 +599,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile& theTrack,
 
   // if data in MF=6 format (no correlated particle emission), then  adjust_final_state can give
   // severe errors:
-  if (theEnergyAngData == 0) {
+  if (theEnergyAngData == nullptr) {
     adjust_final_state(init_4p_lab);
   }
 

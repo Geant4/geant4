@@ -46,27 +46,26 @@ class G4SolidExtentList
 {
   public:
   
-  G4SolidExtentList();
-  G4SolidExtentList( const EAxis targetAxis,
-                     const G4VoxelLimits& voxelLimits );
-  ~G4SolidExtentList();
+    G4SolidExtentList();
+    G4SolidExtentList( const EAxis targetAxis,
+                       const G4VoxelLimits& voxelLimits );
+    ~G4SolidExtentList();
 
+    void AddSurface( const G4ClippablePolygon& surface );
 
-  void AddSurface( const G4ClippablePolygon& surface );
-
-  G4bool GetExtent( G4double& min, G4double& max ) const;
+    G4bool GetExtent( G4double& min, G4double& max ) const;
 
   protected:
   
-  EAxis    axis;     // Target axis
-  G4bool   limited = false;  // True if limited
-  G4double minLimit; // ... min limit
-  G4double maxLimit; // ... max limit
+    EAxis    axis;     // Target axis
+    G4bool   limited = false;  // True if limited
+    G4double minLimit; // ... min limit
+    G4double maxLimit; // ... max limit
 
-  G4ClippablePolygon minSurface,  // Minimum surface within limits
-                     maxSurface,  // Maximum
-                     minAbove,    // Minimum surface totally above max limit
-                     maxBelow;    // Maximum surface totally below min limit
+    G4ClippablePolygon minSurface,  // Minimum surface within limits
+                       maxSurface,  // Maximum
+                       minAbove,    // Minimum surface totally above max limit
+                       maxBelow;    // Maximum surface totally below min limit
 };
 
 #endif

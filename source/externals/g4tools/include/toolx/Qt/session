@@ -6,10 +6,8 @@
 
 // pure Qt code, no GL.
 
-#include <ostream>
-#include <vector>
+#include "s2q"
 
-#include <QtCore/qglobal.h> //For QT_VERSION.
 #include <QtCore/qnamespace.h>
 
 #if QT_VERSION < 0x050000
@@ -19,6 +17,9 @@
 #include <QtWidgets/qapplication.h>
 #include <QtWidgets/qwidget.h>
 #endif
+
+#include <ostream>
+#include <vector>
 
 namespace toolx {
 namespace Qt {
@@ -38,6 +39,11 @@ public:
       m_own_qapp = true;
     }
   }
+  session(std::ostream& a_out,QApplication* a_qapp)
+  :m_out(a_out)
+  ,m_qapp(a_qapp)
+  ,m_own_qapp(false)
+  {}
   virtual ~session() {
     if(m_own_qapp && m_qapp) delete m_qapp;
     m_qapp = 0;
@@ -63,7 +69,7 @@ public:
   }
   bool sync() {
     if(!m_qapp) return false;
-    //m_qapp->exec();
+    m_qapp->processEvents();
     return true;
   }
 public:
@@ -90,20 +96,13 @@ public:
     delete a_window;
   }
 protected:
-  QString s2q(const std::string& a_s) {
-#if QT_VERSION < 0x050000
-    return QString::fromAscii(a_s.c_str());
-#else
-    return QString::fromLatin1(a_s.c_str());
-#endif
-  }
-protected:
   std::ostream& m_out;
   QApplication* m_qapp;
   bool m_own_qapp;
 };
 
 }}
+
 
 #endif
 

@@ -38,7 +38,7 @@ inline G4TwoVector G4ExtrudedSolid::GetVertex(G4int index) const
   {
     G4Exception ("G4ExtrudedSolid::GetVertex()", "GeomSolids0003",
                  FatalException, "Index outside range.");
-    return G4TwoVector();
+    return {};
   }
   return fPolygon[index];
 }  
@@ -76,7 +76,7 @@ std::vector<G4ExtrudedSolid::ZSection> G4ExtrudedSolid::GetZSections() const
 inline
 G4bool G4ExtrudedSolid::PointInPolygon(const G4ThreeVector& p) const
 {
-  G4bool in = 0;
+  G4bool in = false;
   G4int icur = (fPolygon[fNv-1].y() > p.y()), iprev = 0;
   for (std::size_t i = 0; i < fNv; ++i)
   {

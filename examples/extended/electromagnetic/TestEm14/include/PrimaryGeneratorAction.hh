@@ -45,16 +45,16 @@ class DetectorConstruction;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+    PrimaryGeneratorAction(DetectorConstruction*);
+   ~PrimaryGeneratorAction() override;
 
   public:
-    virtual void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
     G4ParticleGun* GetParticleGun() {return fParticleGun;};
 
   private:
-    G4ParticleGun*        fParticleGun;
-    DetectorConstruction* fDetector;
+    G4ParticleGun*        fParticleGun = nullptr;
+    DetectorConstruction* fDetector    = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

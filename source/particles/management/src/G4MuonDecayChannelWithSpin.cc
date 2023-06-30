@@ -43,25 +43,10 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
-G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin()
-  : G4MuonDecayChannel()
-{
-}
-
 G4MuonDecayChannelWithSpin::
 G4MuonDecayChannelWithSpin(const G4String& theParentName, 
                                  G4double  theBR)
   : G4MuonDecayChannel(theParentName,theBR)
-{
-}
-
-G4MuonDecayChannelWithSpin::~G4MuonDecayChannelWithSpin()
-{
-}
-
-G4MuonDecayChannelWithSpin::
-G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin& right)
-  : G4MuonDecayChannel(right)
 {
 }
 
@@ -127,10 +112,10 @@ G4DecayProducts* G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
   // create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
+  auto products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // calculate electron energy
@@ -244,7 +229,7 @@ G4DecayProducts* G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   direction0.rotateUz(parent_polarization);
 
-  G4DynamicParticle * daughterparticle0 
+  auto  daughterparticle0 
     = new G4DynamicParticle( G4MT_daughters[0], daughtermomentum[0]*direction0);
 
   products->PushProducts(daughterparticle0);
@@ -263,9 +248,9 @@ G4DecayProducts* G4MuonDecayChannelWithSpin::DecayIt(G4double)
   G4double cosphin = std::cos(phin);
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
-  G4DynamicParticle * daughterparticle1 
+  auto  daughterparticle1 
     = new G4DynamicParticle( G4MT_daughters[1], direction1*(vmass/2.));
-  G4DynamicParticle * daughterparticle2
+  auto  daughterparticle2
     = new G4DynamicParticle( G4MT_daughters[2], direction1*(-1.0*vmass/2.));
 
   // boost to the muon rest frame
@@ -303,7 +288,7 @@ G4DecayProducts* G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
 G4double G4MuonDecayChannelWithSpin::R_c(G4double x,G4double omega)
 {
-  G4int n_max = (G4int)(100.*x);
+  auto  n_max = (G4int)(100.*x);
 
   if(n_max<10)n_max=10;
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,11 +39,11 @@ class HistoManager
 {
   public:
    HistoManager();
-  ~HistoManager();
+  ~HistoManager() = default;
 
   private:
     void Book();
-    G4String fFileName;
+    G4String fFileName = "testem14";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -591,6 +591,11 @@ void G4PhysicsModelCatalog::Initialize() {
     // IF YOU ARE NOT SURE, PLEASE CONTACT ONE OF THE COORDINATORS OF THE
     // GEANT4 PHYSICS WORKING GROUPS.
     
+    // Class: G4HadronicAbsorptionINCLXX
+    InsertModel( 26040, "model_hINCLXXCaptureAtRest_EMCascade" );
+    InsertModel( 26041, "model_hINCLXXCaptureAtRest_NuclearCapture" );
+    InsertModel( 26042, "model_hINCLXXCaptureAtRest_DIO" );
+
     // ...
     
     SanityCheck();

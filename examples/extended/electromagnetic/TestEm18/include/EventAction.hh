@@ -46,19 +46,19 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction(RunAction*);
-   ~EventAction();
+   ~EventAction() override = default;
 
   public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
     
     void SumEnergyDeposited(G4int trackID, G4double edep);
     void SumEnergyTransfered(const G4VProcess*, G4double);
 
   private:
-    RunAction*    fRunAction;
+    RunAction*    fRunAction = nullptr;
     
-    G4double      fEdepPrimary, fEdepSecondary;
+    G4double      fEdepPrimary = 0., fEdepSecondary = 0.;
     std::map<G4String,G4double> fEnergyTransfered;
     std::map<G4String,G4int> fProcessSubType;
 };

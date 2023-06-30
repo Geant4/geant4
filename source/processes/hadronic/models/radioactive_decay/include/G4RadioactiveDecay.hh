@@ -216,16 +216,10 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 
     //The last RadDecayMode
-    G4RadioactiveDecayMode theRadDecayMode;
-
-//    // Library of decay tables
-//    DecayTableMap* dkmap;
-// #ifdef G4MULTITHREADED
-//     static DecayTableMap* master_dkmap;
-// #endif
+  G4RadioactiveDecayMode theRadDecayMode{G4RadioactiveDecayMode::IT};
 
     // Remainder of life time at rest
-    G4double fRemainderLifeTime;
+    G4double fRemainderLifeTime{0.0};
     G4int verboseLevel;
 
     // Ignore radioactive decays at rest of nuclides happening after this (very long) time threshold

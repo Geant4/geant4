@@ -40,14 +40,14 @@
 
 class G4ErrorMag_UsualEqRhs : public G4Mag_UsualEqRhs
 {
-   public:  // with description
+   public:
 
      G4ErrorMag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4ErrorMag_UsualEqRhs();
+    ~G4ErrorMag_UsualEqRhs() override;
 
      void EvaluateRhsGivenB( const G4double y[],
                              const G4double B[3],
-                                   G4double dydx[] ) const;
+                                   G4double dydx[] ) const override;
        // Reverses dedx if propagation is backwards
 };
 

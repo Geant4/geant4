@@ -123,8 +123,18 @@ class G4PropagatorInField
      // Their new behaviour is to change the values for the global field
      // manager
 
-   inline void     SetLargestAcceptableStep( G4double newBigDist );
-   inline G4double GetLargestAcceptableStep();
+   void     SetLargestAcceptableStep( G4double newBigDist );
+   G4double GetLargestAcceptableStep();
+   void     ResetLargestAcceptableStep();
+     // Obtain / change the size of the largest step the method will undertake
+     // Reset method uses the world volume's 
+
+   G4double GetMaxStepSizeMultiplier();
+   void     SetMaxStepSizeMultiplier(G4double vm);
+     // Control extra Multiplier parameter for limiting long steps.
+   G4double GetMinBigDistance();
+   void     SetMinBigDistance(G4double val);
+     // Control minimum 'directional' distance in case of too-large step
 
    void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
      // Set the filter that examines & stores 'intermediate' 
@@ -210,7 +220,7 @@ class G4PropagatorInField
 
    void ReportLoopingParticle( G4int count,  G4double StepTaken,
                                G4double stepRequest, const char* methodName,
-                               G4ThreeVector      momentumVec,
+                               const G4ThreeVector&      momentumVec,
                                G4VPhysicalVolume* physVol);
    void ReportStuckParticle(G4int noZeroSteps, G4double proposedStep,
                             G4double lastTriedStep, G4VPhysicalVolume* physVol);
@@ -238,9 +248,15 @@ class G4PropagatorInField
    G4int fAbandonThreshold_NoZeroSteps = 50;      // Threshold # to abandon
    G4double fZeroStepThreshold = 0.0; 
      // Threshold *length* for counting of tiny or 'zero' steps 
- 
+
+   // Parameters related to handling of very large steps which
+   //   occur typically in large volumes with vacuum or very thin gas
    G4double fLargestAcceptableStep;
      // Maximum size of a step - for optimization (and to avoid problems)
+   G4double fMaxStepSizeMultiplier = 3;
+     // Multiplier for directional exit distance used as extra long-step limit 
+   G4double fMinBigDistance= 100. ; // * CLHEP::mm
+     // Minimum distance added to directional exit distance
    //  ** End of PARAMETERS -----
 
    G4double kCarTolerance;

@@ -1,0 +1,39 @@
+#
+# macro file pixe3d.mac
+#
+/control/verbose 1
+/run/verbose 1
+#/tracking/verbose 2
+#
+#/tomography/det/setPhantomType 1
+#
+# material and size of simple cube object
+# comment out if the object is not a cubic shape
+#/tomography/det/setAbsMat Gold
+#/tomography/det/setAbsMat G4_P
+#/tomography/det/setAbsThick 50 um
+#/tomography/det/setAbsYZ    50 um
+#/tomography/det/setAbsThick 5 um
+#/tomography/det/setAbsYZ    5 um
+#
+#Physics lists
+#/tomography/phys/addPhysics local
+/tomography/phys/addPhysics  elastic
+/tomography/phys/addPhysics  binary
+/tomography/phys/addPhysics  binary_ion
+#
+#Production cuts
+#/run/setCut 0.01 mm
+#/run/setCutForAGivenParticle gamma 0.5 um
+/run/setCut 1 nm
+/cuts/setLowEdge 900 eV
+#
+#/process/em/deexcitationIgnoreCut true
+#/process/em/deexcitation world true false true
+/process/em/applyCuts true
+/process/em/fluo true
+/process/em/fluoBearden true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+#

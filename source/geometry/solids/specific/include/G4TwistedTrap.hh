@@ -59,7 +59,7 @@
 
 class G4TwistedTrap : public G4VTwistedFaceted
 {
-  public:  // with description
+  public:
 
     G4TwistedTrap(const G4String& pName,
                         G4double  pPhiTwist,
@@ -83,7 +83,7 @@ class G4TwistedTrap : public G4VTwistedFaceted
                         G4double  pAlph    // tilt angle
                   );
  
-    virtual ~G4TwistedTrap();
+    ~G4TwistedTrap() override;
 
     // accessors
 
@@ -99,13 +99,11 @@ class G4TwistedTrap : public G4VTwistedFaceted
     inline G4double GetPolarAngleTheta()   const { return GetTheta() ; }
     inline G4double GetAzimuthalAnglePhi() const { return GetPhi()   ; }
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream &StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream &StreamInfo(std::ostream& os) const override;
 
     G4TwistedTrap(__void__&);
       // Fake default constructor for usage restricted to direct object

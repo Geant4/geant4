@@ -42,14 +42,14 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization(DetectorConstruction*, PhysicsList* );
-   ~ActionInitialization() override;
+   ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
 
   private:
-    DetectorConstruction* fDetector;
-    PhysicsList* fPhysics;    
+    DetectorConstruction* fDetector = nullptr;
+    PhysicsList* fPhysics = nullptr;
 };
 
 #endif

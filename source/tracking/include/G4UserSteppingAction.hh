@@ -41,23 +41,21 @@
 class G4Step;
 class G4SteppingManager;
 
-class G4UserSteppingAction 
+class G4UserSteppingAction
 {
-  public:
+ public:
+  // Constructor and destructor
 
-    // Constructor and destructor
+  G4UserSteppingAction();
+  virtual ~G4UserSteppingAction() = default;
 
-    G4UserSteppingAction();
-    virtual ~G4UserSteppingAction();
+  // Member functions
 
-    // Member functions
+  virtual void SetSteppingManagerPointer(G4SteppingManager* pValue);
+  virtual void UserSteppingAction(const G4Step*) {}
 
-    virtual void SetSteppingManagerPointer(G4SteppingManager* pValue);
-    virtual void UserSteppingAction(const G4Step*){}
-
-  protected:
-
-    G4SteppingManager* fpSteppingManager = nullptr;
+ protected:
+  G4SteppingManager* fpSteppingManager = nullptr;
 };
 
 #endif

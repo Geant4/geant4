@@ -55,7 +55,7 @@ class G4AdjointElectron : public G4ParticleDefinition
  private:
    static G4AdjointElectron* theInstance;
    G4AdjointElectron(){}
-   ~G4AdjointElectron(){}
+   ~G4AdjointElectron() override= default;
 
  public:
    static G4AdjointElectron* Definition();

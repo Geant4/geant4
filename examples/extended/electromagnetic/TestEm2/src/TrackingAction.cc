@@ -38,12 +38,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction()
-:G4UserTrackingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
  //count total track length

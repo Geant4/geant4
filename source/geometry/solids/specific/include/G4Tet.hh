@@ -54,10 +54,8 @@
 
 class G4Tet : public G4VSolid
 {
+  public:
 
-  public:  // with description
-
-    // Constructor
     G4Tet(const G4String& pName,
           const G4ThreeVector& anchor,
           const G4ThreeVector& p1,
@@ -65,10 +63,8 @@ class G4Tet : public G4VSolid
           const G4ThreeVector& p3,
                 G4bool* degeneracyFlag = nullptr);
 
-    // Destructor
-    virtual ~G4Tet();
+    ~G4Tet() override;
 
-    // Modifier
     void SetVertices(const G4ThreeVector& anchor,
                      const G4ThreeVector& p1,
                      const G4ThreeVector& p2,
@@ -82,8 +78,8 @@ class G4Tet : public G4VSolid
                      G4ThreeVector& p3) const;
     std::vector<G4ThreeVector> GetVertices() const;
 
-    // Set warning flag - depricated (dummy)
-    void PrintWarnings(G4bool) {};
+    // Set warning flag - deprecated (dummy)
+    inline void PrintWarnings(G4bool) {};
 
     // Return true if the tetrahedron is degenerate
     G4bool CheckDegeneracy(const G4ThreeVector& p0,
@@ -94,45 +90,43 @@ class G4Tet : public G4VSolid
     // Standard methods
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
     void SetBoundingLimits(const G4ThreeVector& pMin, const G4ThreeVector& pMax);
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pmin, G4double& pmax) const override;
 
-    EInside Inside(const G4ThreeVector& p) const;
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    EInside Inside(const G4ThreeVector& p) const override;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const override;
     G4double DistanceToIn(const G4ThreeVector& p,
-                          const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p) const;
+                          const G4ThreeVector& v) const override;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+                                 G4ThreeVector* n = nullptr) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
     // Methods for visualization
-    void DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    G4VisExtent GetExtent () const;
-    G4Polyhedron* CreatePolyhedron () const;
-    G4Polyhedron* GetPolyhedron () const;
-
-  public:   // without description
+    void DescribeYourselfTo (G4VGraphicsScene& scene) const override;
+    G4VisExtent GetExtent () const override;
+    G4Polyhedron* CreatePolyhedron () const override;
+    G4Polyhedron* GetPolyhedron () const override;
 
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for

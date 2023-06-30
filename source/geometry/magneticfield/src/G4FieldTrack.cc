@@ -129,7 +129,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   fChargeState.SetPDGSpin( pdgSpin );   
 
   G4ThreeVector PolarVec(0.0, 0.0, 0.0); 
-  if( pPolarization )  { PolarVec= *pPolarization; }
+  if( pPolarization != nullptr )  { PolarVec= *pPolarization; }
   SetPolarization( PolarVec );
 }
 

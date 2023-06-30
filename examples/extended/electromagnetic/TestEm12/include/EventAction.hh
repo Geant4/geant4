@@ -41,17 +41,17 @@
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction();
-   ~EventAction();
+    EventAction() = default;
+   ~EventAction() override = default;
 
   public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
     
     void AddEdep(G4double edep) {fTotalEdep += edep;};
                 
   private:
-    G4double fTotalEdep;
+    G4double fTotalEdep = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

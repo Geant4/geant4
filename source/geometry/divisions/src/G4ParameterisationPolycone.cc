@@ -53,7 +53,7 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
    G4Exception("G4VParameterisationPolycone::G4VParameterisationPolycone()",
                "GeomDiv0001", FatalException, message);
 	       #endif */
-  G4Polycone* msol = (G4Polycone*)(msolid);
+  auto msol = (G4Polycone*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     // Get constituent solid
@@ -71,10 +71,10 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
 
     // Invert z values
     //
-    G4double* zValuesRefl = new G4double[nofZplanes];
+    auto zValuesRefl = new G4double[nofZplanes];
     for (G4int i=0; i<nofZplanes; ++i)  { zValuesRefl[i] = - zValues[i]; }
     
-    G4Polycone* newSolid
+    auto newSolid
       = new G4Polycone(msol->GetName(),
                        msol->GetStartPhi(), 
                        msol->GetEndPhi() - msol->GetStartPhi(),
@@ -90,9 +90,7 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
 }
 
 //---------------------------------------------------------------------
-G4VParameterisationPolycone::~G4VParameterisationPolycone()
-{
-}
+G4VParameterisationPolycone::~G4VParameterisationPolycone() = default;
 
 //---------------------------------------------------------------------
 G4ParameterisationPolyconeRho::
@@ -104,7 +102,7 @@ G4ParameterisationPolyconeRho( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionPolyconeRho" );
 
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
 
   if( divType == DivWIDTH )
@@ -130,16 +128,14 @@ G4ParameterisationPolyconeRho( EAxis axis, G4int nDiv,
 }
 
 //---------------------------------------------------------------------
-G4ParameterisationPolyconeRho::~G4ParameterisationPolyconeRho()
-{
-}
+G4ParameterisationPolyconeRho::~G4ParameterisationPolyconeRho() = default;
 
 //---------------------------------------------------------------------
 void G4ParameterisationPolyconeRho::CheckParametersValidity()
 {
   G4VDivisionParameterisation::CheckParametersValidity();
 
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
 
   if( fDivisionType == DivNDIVandWIDTH || fDivisionType == DivWIDTH )
   {
@@ -166,7 +162,7 @@ void G4ParameterisationPolyconeRho::CheckParametersValidity()
 //------------------------------------------------------------------------
 G4double G4ParameterisationPolyconeRho::GetMaxParameter() const
 {
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
   G4PolyconeHistorical* original_pars = msol->GetOriginalParameters();
   return original_pars->Rmax[0] - original_pars->Rmin[0];
 }
@@ -213,7 +209,7 @@ G4ParameterisationPolyconeRho::
 ComputeDimensions( G4Polycone& pcone, const G4int copyNo,
                    const G4VPhysicalVolume* ) const
 {
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
 
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
   G4PolyconeHistorical origparam( *origparamMother );
@@ -251,7 +247,7 @@ G4ParameterisationPolyconePhi( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionPolyconePhi" );
 
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
   G4double deltaPhi = msol->GetEndPhi() - msol->GetStartPhi();
 
   if( divType == DivWIDTH )
@@ -275,14 +271,12 @@ G4ParameterisationPolyconePhi( EAxis axis, G4int nDiv,
 }
 
 //---------------------------------------------------------------------
-G4ParameterisationPolyconePhi::~G4ParameterisationPolyconePhi()
-{
-}
+G4ParameterisationPolyconePhi::~G4ParameterisationPolyconePhi() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationPolyconePhi::GetMaxParameter() const
 {
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
   return msol->GetEndPhi() - msol->GetStartPhi();
 }
 
@@ -328,7 +322,7 @@ G4ParameterisationPolyconePhi::
 ComputeDimensions( G4Polycone& pcone, const G4int,
                    const G4VPhysicalVolume* ) const
 {
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  auto msol = (G4Polycone*)(fmotherSolid);
 
   G4PolyconeHistorical* origparamMother = msol->GetOriginalParameters();
   G4PolyconeHistorical origparam( *origparamMother );
@@ -384,9 +378,7 @@ G4ParameterisationPolyconeZ( EAxis axis, G4int nDiv,
 }
 
 //---------------------------------------------------------------------
-G4ParameterisationPolyconeZ::~G4ParameterisationPolyconeZ()
-{
-}
+G4ParameterisationPolyconeZ::~G4ParameterisationPolyconeZ() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationPolyconeZ::GetR(G4double z, 

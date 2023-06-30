@@ -38,10 +38,10 @@
 const G4String SphericalChromosome::fShape = "sphere";
 
 SphericalChromosome::SphericalChromosome(const G4String& name,
-                                         G4ThreeVector pos,
+                                         const G4ThreeVector& pos,
                                          const G4double& radius)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fRadius(radius)
   , fRotation(G4RotationMatrix())
 {
@@ -51,13 +51,13 @@ SphericalChromosome::SphericalChromosome(const G4String& name,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SphericalChromosome::SphericalChromosome(const G4String& name,
-                                         G4ThreeVector pos,
+                                         const G4ThreeVector& pos,
                                          const G4double& radius,
-                                         G4RotationMatrix rot)
+                                         const G4RotationMatrix& rot)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fRadius(radius)
-  , fRotation(std::move(rot))
+  , fRotation(rot)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

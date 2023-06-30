@@ -60,7 +60,7 @@ G4UGenericTrap::G4UGenericTrap(const G4String& name, G4double halfZ,
 //                            for usage restricted to object persistency.
 //
 G4UGenericTrap::G4UGenericTrap(__void__& a)
-  : Base_t(a), fVisSubdivisions(0), fVertices()
+  : Base_t(a), fVisSubdivisions(0) 
 {
 }
 
@@ -69,9 +69,7 @@ G4UGenericTrap::G4UGenericTrap(__void__& a)
 //
 // Destructor
 //
-G4UGenericTrap::~G4UGenericTrap()
-{
-}
+G4UGenericTrap::~G4UGenericTrap() = default;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -81,7 +79,6 @@ G4UGenericTrap::~G4UGenericTrap()
 G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap& source)
   : Base_t(source), fVisSubdivisions(source.fVisSubdivisions),
     fVertices(source.fVertices)
-    
 {
 }
 
@@ -116,7 +113,7 @@ G4int G4UGenericTrap::GetNofVertices() const
 }
 G4TwoVector G4UGenericTrap::GetVertex(G4int index) const
 {
-  return G4TwoVector(GetVerticesX()[index], GetVerticesY()[index]);
+  return { GetVerticesX()[index], GetVerticesY()[index] };
 }
 const std::vector<G4TwoVector>& G4UGenericTrap::GetVertices() const
 {
@@ -206,7 +203,7 @@ G4UGenericTrap::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent

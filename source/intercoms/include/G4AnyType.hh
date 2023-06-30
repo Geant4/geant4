@@ -26,7 +26,7 @@
 // G4AnyType
 //
 // Class description:
-// 
+//
 // The class G4AnyType represents any data type.
 // The class only holds a reference to the type and not the value.
 
@@ -47,55 +47,53 @@
 #ifndef G4AnyType_hh
 #define G4AnyType_hh 1
 
+#include "G4UIcommand.hh"
+
 #include <algorithm>
-#include <typeinfo>
 #include <iostream>
 #include <sstream>
-
-#include "G4UIcommand.hh"
+#include <typeinfo>
 
 class G4String;
 namespace CLHEP
 {
-  class Hep3Vector;
+class Hep3Vector;
 }
 
 class G4AnyType
 {
   public:
-
     /** Constructors */
 
-   G4AnyType() = default;
+    G4AnyType() = default;
 
-   template <typename ValueType>
-   G4AnyType(ValueType& value)
-     : fContent(new Ref<ValueType>(value))
-   {}
+    template<typename ValueType>
+    G4AnyType(ValueType& value) : fContent(new Ref<ValueType>(value))
+    {}
 
-   /** Copy Constructor */
+    /** Copy Constructor */
 
-   G4AnyType(const G4AnyType& other)
-     : fContent(other.fContent != nullptr ? other.fContent->Clone() : nullptr)
-   {}
+    G4AnyType(const G4AnyType& other)
+      : fContent(other.fContent != nullptr ? other.fContent->Clone() : nullptr)
+    {}
 
-   /** Destructor */
+    /** Destructor */
 
-   ~G4AnyType() { delete fContent; }
+    ~G4AnyType() { delete fContent; }
 
-   /** bool operator */
+    /** bool operator */
 
-   operator bool() { return !Empty(); }
+    operator bool() { return !Empty(); }
 
-   /** Modifiers */
+    /** Modifiers */
 
-   G4AnyType& Swap(G4AnyType& rhs)
-   {
-     std::swap(fContent, rhs.fContent);
-     return *this;
+    G4AnyType& Swap(G4AnyType& rhs)
+    {
+      std::swap(fContent, rhs.fContent);
+      return *this;
     }
 
-    template <typename ValueType>
+    template<typename ValueType>
     G4AnyType& operator=(const ValueType& rhs)
     {
       G4AnyType(rhs).Swap(*this);
@@ -119,9 +117,7 @@ class G4AnyType
 
     /** Address */
 
-    void* Address() const {
-      return fContent != nullptr ? fContent->Address() : nullptr;
-    }
+    void* Address() const { return fContent != nullptr ? fContent->Address() : nullptr; }
 
     /** String conversions */
 
@@ -130,48 +126,41 @@ class G4AnyType
     void FromString(const std::string& val) { fContent->FromString(val); }
 
   private:
-
     class Placeholder
     {
       public:
-       Placeholder() = default;
+        Placeholder() = default;
 
-       virtual ~Placeholder() = default;
+        virtual ~Placeholder() = default;
 
-       /** Queries */
+        /** Queries */
 
-       virtual const std::type_info& TypeInfo() const = 0;
+        virtual const std::type_info& TypeInfo() const = 0;
 
-       virtual Placeholder* Clone() const = 0;
+        virtual Placeholder* Clone() const = 0;
 
-       virtual void* Address() const = 0;
+        virtual void* Address() const = 0;
 
-       /** ToString */
+        /** ToString */
 
-       virtual std::string ToString() const = 0;
+        virtual std::string ToString() const = 0;
 
-       /** FromString */
+        /** FromString */
 
-       virtual void FromString(const std::string& val) = 0;
+        virtual void FromString(const std::string& val) = 0;
     };
 
-    template <typename ValueType>
+    template<typename ValueType>
     class Ref : public Placeholder
     {
       public:
-
         /** Constructor */
 
-        Ref(ValueType& value)
-          : fRef(value)
-        {}
+        Ref(ValueType& value) : fRef(value) {}
 
         /** Query */
 
-        const std::type_info& TypeInfo() const override
-        {
-          return typeid(ValueType);
-        }
+        const std::type_info& TypeInfo() const override { return typeid(ValueType); }
 
         /** Clone */
 
@@ -179,7 +168,7 @@ class G4AnyType
 
         /** Address */
 
-        void* Address() const override { return (void*) (&fRef); }
+        void* Address() const override { return (void*)(&fRef); }
 
         /** ToString */
 
@@ -203,7 +192,7 @@ class G4AnyType
 
     /** representation */
 
-    template <typename ValueType>
+    template<typename ValueType>
     friend ValueType* any_cast(G4AnyType*);
 
     Placeholder* fContent = nullptr;
@@ -213,26 +202,24 @@ class G4AnyType
 // Specializations
 //
 
-template <>
+template<>
 inline void G4AnyType::Ref<bool>::FromString(const std::string& val)
 {
   fRef = G4UIcommand::ConvertToBool(val.c_str());
 }
 
-template <>
+template<>
 inline void G4AnyType::Ref<G4String>::FromString(const std::string& val)
 {
-  if(val[0] == '"')
-  {
+  if (val[0] == '"') {
     fRef = val.substr(1, val.size() - 2);
   }
-  else
-  {
+  else {
     fRef = val;
   }
 }
 
-template <>
+template<>
 inline void G4AnyType::Ref<G4ThreeVector>::FromString(const std::string& val)
 {
   fRef = G4UIcommand::ConvertTo3Vector(val.c_str());
@@ -245,17 +232,17 @@ inline void G4AnyType::Ref<G4ThreeVector>::FromString(const std::string& val)
 class G4BadAnyCast : public std::bad_cast
 {
   public:
-   G4BadAnyCast() = default;
+    G4BadAnyCast() = default;
 
-   const char* what() const throw() override
-   {
-     return "G4BadAnyCast: failed conversion using any_cast";
+    const char* what() const throw() override
+    {
+      return "G4BadAnyCast: failed conversion using any_cast";
     }
 };
 
 /** value */
 
-template <typename ValueType>
+template<typename ValueType>
 ValueType* any_cast(G4AnyType* operand)
 {
   return operand && operand->TypeInfo() == typeid(ValueType)
@@ -263,18 +250,17 @@ ValueType* any_cast(G4AnyType* operand)
            : nullptr;
 }
 
-template <typename ValueType>
+template<typename ValueType>
 const ValueType* any_cast(const G4AnyType* operand)
 {
   return any_cast<ValueType>(const_cast<G4AnyType*>(operand));
 }
 
-template <typename ValueType>
+template<typename ValueType>
 ValueType any_cast(const G4AnyType& operand)
 {
   const ValueType* result = any_cast<ValueType>(&operand);
-  if(!result)
-  {
+  if (!result) {
     throw G4BadAnyCast();
   }
   return *result;

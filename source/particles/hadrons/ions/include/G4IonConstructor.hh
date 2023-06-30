@@ -38,11 +38,7 @@
 class G4IonConstructor
 {
   //This class is a utility class for construction 
-
   public:
-    G4IonConstructor();
-    ~G4IonConstructor();
-  
     static void ConstructParticle();
 
   protected:

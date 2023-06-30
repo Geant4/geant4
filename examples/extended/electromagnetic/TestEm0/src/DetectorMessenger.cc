@@ -38,9 +38,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),fTestemDir(0),fDetDir(0),fMaterCmd(0)
-{ 
+DetectorMessenger::DetectorMessenger(DetectorConstruction* detector)
+:fDetector(detector)
+{
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance("commands specific to this example");
   

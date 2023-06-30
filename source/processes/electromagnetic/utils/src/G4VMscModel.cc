@@ -153,7 +153,7 @@ void G4VMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                     G4double, G4double)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......                                                                                                                                  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
                               const G4MaterialCutsCouple* couple)
@@ -166,9 +166,9 @@ G4double G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEner
     x = dedx*q*q;
   }
   return x;
-}                                                                                                                                                                                                                 
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......                                                                                                                                  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
                               const G4MaterialCutsCouple* couple, G4double logKinEnergy)
@@ -198,9 +198,9 @@ G4double G4VMscModel::GetRange(const G4ParticleDefinition* part, G4double kinEne
   }
   //G4cout << "R(mm)= " << localrange << "  "  << ionisation << G4endl;
   return localrange;
-}                                                                                                                                                                                                                 
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......                                                                                                                                  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
                                const G4MaterialCutsCouple* couple, G4double logKinEnergy)
@@ -216,7 +216,7 @@ G4double G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEner
   }
   //G4cout << "R(mm)= " << localrange << "  "  << ionisation << G4endl;
   return localrange;
-}                                                                                                                                                                                                                 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -201,9 +201,6 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
     G4double ehigh = pv->Energy(npoints-1);
     G4double dedx1 = (*pv)[0];
 
-    //G4cout << "i= " << i << "npoints= " << npoints << " dedx1= " 
-    //<< dedx1 << G4endl;
-
     // protection for specific cases dedx=0
     if(dedx1 == 0.0) {
       for (std::size_t k=1; k<npoints; ++k) {
@@ -214,9 +211,6 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       }
       npoints -= bin0;
     }
-    //G4cout<<"New Range vector" << G4endl;
-    //G4cout<<"nbins= "<<npoints-1<<" elow= "<<elow<<" ehigh= "<<ehigh
-    //            <<" bin0= " << bin0 <<G4endl;
 
     // initialisation of a new vector
     if(npoints < 3) { npoints = 3; }
@@ -229,7 +223,12 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
     // assumed dedx proportional to beta
     G4double energy1 = v->Energy(0);
     G4double range   = 2.*energy1/dedx1;
-    //G4cout << "range0= " << range << G4endl;
+    /*
+    G4cout << "New Range vector Npoints=" << v->GetVectorLength()
+	   << " coupleIdx=" << i << " spline=" << v->GetSpline() 
+	   << " Elow=" << v->GetMinEnergy() <<" Ehigh=" << v->GetMinEnergy()
+	   << " DEDX(Elow)=" << dedx1 << " R(Elow)=" << range << G4endl;
+    */
     v->PutValue(0,range);
 
     for (std::size_t j=1; j<npoints; ++j) {
@@ -239,14 +238,17 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       G4double energy  = energy2 + de*0.5;
       G4double sum = 0.0;
       std::size_t idx = j - 1;
-      //G4cout << "j= " << j << " e1= " << energy1 << " e2= " << energy2 
-      //       << " n= " << n << G4endl;
       for (std::size_t k=0; k<n; ++k) {
 	energy -= de;
 	dedx1 = pv->Value(energy, idx);
 	if(dedx1 > 0.0) { sum += de/dedx1; }
       }
       range += sum;
+      /*
+      if(energy < 10.) 
+	G4cout << "j= " << j << " e1= " << energy1 << " e2= " << energy2 
+	       << " n= " << n << " range=" << range<< G4endl;
+      */
       v->PutValue(j,range);
       energy1 = energy2;
     }

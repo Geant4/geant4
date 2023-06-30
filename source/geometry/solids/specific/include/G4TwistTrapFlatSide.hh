@@ -38,76 +38,73 @@
 
 class G4TwistTrapFlatSide : public G4VTwistSurface
 {
-  public:  // with description
+  public:
 
-   G4TwistTrapFlatSide( const G4String& name,
-                              G4double  PhiTwist,
-                              G4double  pDx1,
-                              G4double  pDx2,
-                              G4double  pDy,
-                              G4double  pDz,
-                              G4double  pAlpha,
-                              G4double  pPhi,
-                              G4double  pTheta,
-                              G4int     handedness  );
-   virtual ~G4TwistTrapFlatSide();
+    G4TwistTrapFlatSide( const G4String& name,
+                               G4double  PhiTwist,
+                               G4double  pDx1,
+                               G4double  pDx2,
+                               G4double  pDy,
+                               G4double  pDz,
+                               G4double  pAlpha,
+                               G4double  pPhi,
+                               G4double  pTheta,
+                               G4int     handedness  );
+   ~G4TwistTrapFlatSide() override;
 
-   virtual G4ThreeVector  GetNormal(const G4ThreeVector& /* xx */ ,
-                                          G4bool isGlobal = false);
-   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
-                                   const G4ThreeVector& gv,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[],
-                                         G4bool         isvalid[],
-                                         EValidate validate = kValidateWithTol);
+    G4ThreeVector  GetNormal(const G4ThreeVector& /* xx */ ,
+                                   G4bool isGlobal = false) override;
+    G4int DistanceToSurface(const G4ThreeVector& gp,
+                            const G4ThreeVector& gv,
+                                  G4ThreeVector  gxx[],
+                                  G4double       distance[],
+                                  G4int          areacode[],
+                                  G4bool         isvalid[],
+                            EValidate validate = kValidateWithTol) override;
 
-   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[]);
+    G4int DistanceToSurface(const G4ThreeVector& gp,
+                                  G4ThreeVector  gxx[],
+                                  G4double       distance[],
+                                  G4int          areacode[]) override;
 
+    inline G4ThreeVector SurfacePoint(G4double x, G4double y,
+                                      G4bool isGlobal = false) override;  
+    inline G4double GetBoundaryMin(G4double u) override;
+    inline G4double GetBoundaryMax(G4double u) override;
+    inline G4double GetSurfaceArea() override;
+    void GetFacets( G4int m, G4int n, G4double xyz[][3],
+                    G4int faces[][4], G4int iside ) override;
 
-   virtual G4ThreeVector SurfacePoint(G4double x, G4double y,
-                                      G4bool isGlobal = false);  
-   virtual G4double GetBoundaryMin(G4double u);
-   virtual G4double GetBoundaryMax(G4double u);
-   virtual G4double GetSurfaceArea();
-   virtual void GetFacets( G4int m, G4int n, G4double xyz[][3],
-                           G4int faces[][4], G4int iside );
+    G4TwistTrapFlatSide(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
-  public:  // without description
+  protected:
 
-   G4TwistTrapFlatSide(__void__&);
-     // Fake default constructor for usage restricted to direct object
-     // persistency for clients requiring preallocation of memory for
-     // persistifiable objects.
-
-  protected:  // with description
-
-   virtual G4int GetAreaCode(const G4ThreeVector& xx, 
-                                   G4bool withTol = true);
+    G4int GetAreaCode(const G4ThreeVector& xx, 
+                            G4bool withTol = true) override;
 
   private:
 
-   virtual void SetCorners();
-   virtual void SetBoundaries();
+    void SetCorners() override;
+    void SetBoundaries() override;
 
-   inline double xAxisMax(G4double u, G4double fTanAlpha) const;
+    inline G4double xAxisMax(G4double u, G4double fTanAlpha) const;
  
   private:
   
-   G4double fDx1;
-   G4double fDx2;
-   G4double fDy;
-   G4double fDz;
-   G4double fPhiTwist;
-   G4double fAlpha;
-   G4double fTAlph;
-   G4double fPhi;
-   G4double fTheta;
-   G4double fdeltaX;
-   G4double fdeltaY;
+    G4double fDx1;
+    G4double fDx2;
+    G4double fDy;
+    G4double fDz;
+    G4double fPhiTwist;
+    G4double fAlpha;
+    G4double fTAlph;
+    G4double fPhi;
+    G4double fTheta;
+    G4double fdeltaX;
+    G4double fdeltaY;
 };
 
 //========================================================

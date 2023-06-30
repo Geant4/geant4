@@ -32,7 +32,7 @@
 
 namespace
 {
-  G4PhysicsListWorkspace::pool_type thePool;
+G4PhysicsListWorkspace::pool_type thePool;
 }
 
 // --------------------------------------------------------------------
@@ -42,34 +42,27 @@ G4PhysicsListWorkspace::pool_type* G4PhysicsListWorkspace::GetPool()
 }
 
 // --------------------------------------------------------------------
-G4PhysicsListWorkspace::G4PhysicsListWorkspace(G4bool verbose)
-  : fVerbose(verbose)
+G4PhysicsListWorkspace::G4PhysicsListWorkspace(G4bool verbose) : fVerbose(verbose)
 {
-  fpVUPLSIM =
-    &const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager());
-  fpVPCSIM =
-    &const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager());
-  fpVMPLSIM =
-    &const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager());
+  fpVUPLSIM = &const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager());
+  fpVPCSIM = &const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager());
+  fpVMPLSIM = &const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager());
 
   // Copy information from master into PolyCone/Gon Sides in this thread.
   InitialiseWorkspace();
 
   // Capture its address of ParticleDefinition split-class in this thread
   fpVUPLOffset = fpVUPLSIM->GetOffset();
-  fpVPCOffset  = fpVPCSIM->GetOffset();
+  fpVPCOffset = fpVPCSIM->GetOffset();
   fpVMPLOffset = fpVMPLSIM->GetOffset();
 }
 
 // --------------------------------------------------------------------
-G4PhysicsListWorkspace::~G4PhysicsListWorkspace()
-{
-}
 
 // --------------------------------------------------------------------
 void G4PhysicsListWorkspace::UseWorkspace()
 {
-  if(fVerbose)
+  if (fVerbose)
     G4cout << "G4PhysicsListWorkspace::UseWorkspace: "
            << "Copying particles-definition Split-Class - Start " << G4endl;
 
@@ -89,14 +82,12 @@ void G4PhysicsListWorkspace::ReleaseWorkspace()
 }
 
 // --------------------------------------------------------------------
-void G4PhysicsListWorkspace::InitialisePhysicsList()
-{
-}
+void G4PhysicsListWorkspace::InitialisePhysicsList() {}
 
 // --------------------------------------------------------------------
 void G4PhysicsListWorkspace::InitialiseWorkspace()
 {
-  if(fVerbose)
+  if (fVerbose)
     G4cout << "G4PhysicsListWorkspace::InitialiseWorkspace: "
            << "Copying particles-definition Split-Class - Start " << G4endl;
 
@@ -111,7 +102,7 @@ void G4PhysicsListWorkspace::InitialiseWorkspace()
   // Additional initialisation if needed - beyond copying memory
   InitialisePhysicsList();
 
-  if(fVerbose)
+  if (fVerbose)
     G4cout << "G4PhysicsListWorkspace::CreateAndUseWorkspace: "
            << "Copying particles-definition Split-Class - Done!" << G4endl;
 }

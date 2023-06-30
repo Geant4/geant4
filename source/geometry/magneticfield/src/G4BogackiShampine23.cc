@@ -102,7 +102,7 @@ void G4BogackiShampine23::makeStep(const G4double yInput[],
     yOutput[i] = yInput[i] + hstep * (b41*dydx[i] + b42*ak2[i] + b43*ak3[i]);
   }
     
-  if (dydxOutput && yError)
+  if ((dydxOutput != nullptr) && (yError != nullptr))
   {
     RightHandSide(yOutput, dydxOutput);
     for(G4int i = 0; i < GetNumberOfVariables(); ++i)

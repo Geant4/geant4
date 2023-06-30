@@ -51,24 +51,24 @@
 
 class G4ElectroMagneticField : public G4Field
 {
-  public:  // with description
+  public:
 
-     G4ElectroMagneticField();
-     virtual ~G4ElectroMagneticField();
+    G4ElectroMagneticField();
+   ~G4ElectroMagneticField() override;
 
-     G4ElectroMagneticField(const G4ElectroMagneticField& r);
-     G4ElectroMagneticField& operator = (const G4ElectroMagneticField& p);
-       // Copy constructor & assignment operators.
+    G4ElectroMagneticField(const G4ElectroMagneticField& r);
+    G4ElectroMagneticField& operator = (const G4ElectroMagneticField& p);
+      // Copy constructor & assignment operators.
 
-     virtual void  GetFieldValue(const G4double Point[4],
-                                       G4double *Bfield ) const = 0;
-       // Return as Bfield[0], [1], [2] the magnetic field x, y & z components
-       // and   as Bfield[3], [4], [5] the electric field x, y & z components
+    void  GetFieldValue(const G4double Point[4],
+                              G4double *Bfield ) const override = 0;
+      // Return as Bfield[0], [1], [2] the magnetic field x, y & z components
+      // and    as Bfield[3], [4], [5] the electric field x, y & z components
 
-     virtual G4bool DoesFieldChangeEnergy() const = 0;
-       // For field with an electric component this should be true
-       // For pure magnetic field this should be false
-       // Alternative: default safe implementation { return true; }
+    G4bool DoesFieldChangeEnergy() const override = 0;
+      // For field with an electric component this should be true
+      // For pure magnetic field this should be false
+      // Alternative: default safe implementation { return true; }
 };
 
 #endif

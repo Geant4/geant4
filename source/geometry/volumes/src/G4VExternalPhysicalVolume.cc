@@ -45,7 +45,7 @@ G4VExternalPhysicalVolume( G4RotationMatrix* pRot,
                            G4VPhysicalVolume* pMother )
    : G4VPhysicalVolume(pRot, tlate, pName, pLogical, pMother)
 {
-  if (pMother)
+  if (pMother != nullptr)
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
     if (pLogical == motherLogical)
@@ -71,9 +71,7 @@ G4VExternalPhysicalVolume::G4VExternalPhysicalVolume( __void__& a )
 // ----------------------------------------------------------------------
 // Destructor
 //
-G4VExternalPhysicalVolume::~G4VExternalPhysicalVolume()
-{
-}
+G4VExternalPhysicalVolume::~G4VExternalPhysicalVolume() = default;
 
 // ----------------------------------------------------------------------
 // IsMany

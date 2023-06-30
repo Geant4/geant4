@@ -25,7 +25,6 @@
 //
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
-//
 // 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,9 +54,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
-: G4VModularPhysicsList(),
-  fEmPhysicsList(0),
-  fMessenger(0)
 {
   G4LossTableManager::Instance();  
 

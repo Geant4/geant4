@@ -48,7 +48,7 @@ class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
   using Shape_t = vecgeom::UnplacedGenericPolycone;
   using Base_t  = G4UAdapter<vecgeom::UnplacedGenericPolycone>;
 
-  public:  // with description
+  public:
 
     G4UGenericPolycone(const G4String& name, 
                        G4double phiStart,    // initial phi starting angle
@@ -57,7 +57,7 @@ class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
                  const G4double r[],         // r coordinate of these corners
                  const G4double z[]       ); // z coordinate of these corners
 
-   ~G4UGenericPolycone();
+   ~G4UGenericPolycone() override;
 
     G4double GetStartPhi()    const;
     G4double GetEndPhi()      const;
@@ -69,11 +69,9 @@ class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
     G4int  GetNumRZCorner()   const;
     G4PolyconeSideRZ GetCorner(G4int index) const;
   
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    G4VSolid* Clone() const;
-
-  public:  // without description
+    G4VSolid* Clone() const override;
 
     G4UGenericPolycone(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -84,14 +82,14 @@ class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
     G4UGenericPolycone& operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;
+                           G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   private:
 

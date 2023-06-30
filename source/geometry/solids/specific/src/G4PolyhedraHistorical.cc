@@ -30,9 +30,7 @@
 
 #include "G4PolyhedraHistorical.hh"
 
-G4PolyhedraHistorical::G4PolyhedraHistorical()
-{
-}
+G4PolyhedraHistorical::G4PolyhedraHistorical() = default;
 
 G4PolyhedraHistorical::G4PolyhedraHistorical( G4int z_planes )
   : Num_z_planes(z_planes)

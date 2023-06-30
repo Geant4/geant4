@@ -53,10 +53,16 @@ class G4ElNeutrinoNucleusProcess : public G4HadronicProcess
 {
 public:
 
-  G4ElNeutrinoNucleusProcess(G4String anEnvelopeName , const G4String& procName = "mu-neutrino-nucleus");
+  G4ElNeutrinoNucleusProcess(G4String anEnvelopeName , const G4String& procName = "el-neutrino-nucleus");
 
   virtual ~G4ElNeutrinoNucleusProcess();
- 
+  
+  G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4ForceCondition* condition
+                            ) override;
+  
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 					  const G4Step& aStep) override;
 
@@ -84,6 +90,7 @@ private:
   G4String fEnvelopeName;
   G4ElNeutrinoNucleusTotXsc* fTotXsc;
   G4double fNuNuclCcBias, fNuNuclNcBias, fNuNuclTotXscBias;
+  G4double fXsc;
   G4SafetyHelper* safetyHelper;
 };
 

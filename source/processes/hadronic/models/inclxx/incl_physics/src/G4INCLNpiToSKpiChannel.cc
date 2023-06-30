@@ -157,12 +157,14 @@ namespace G4INCL {
 				nucleon->setType(ParticleTable::getSigmaType(iso*2));
 			}
 		}
-
+		
+#ifdef INCLXX_IN_GEANT4_MODE
 		// Erase the parent resonance information of the nucleon and pion
 		nucleon->setParentResonancePDGCode(0);
 		nucleon->setParentResonanceID(0);
 		pion->setParentResonancePDGCode(0);
 		pion->setParentResonanceID(0);
+#endif
 		
 		ParticleList list;
 		list.push_back(nucleon);

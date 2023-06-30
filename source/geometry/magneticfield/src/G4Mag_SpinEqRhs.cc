@@ -39,9 +39,7 @@ G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
 {
 }
 
-G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs()
-{
-}
+G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs() = default;
 
 void
 G4Mag_SpinEqRhs::SetChargeMomentumMass(G4ChargeState particleCharge,
@@ -60,8 +58,14 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4ChargeState particleCharge,
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
-   else g_BMT = 2.;
+   if ( spin != 0. )
+   {
+     g_BMT = (std::abs(magMoment)/muB)/spin;
+   }
+   else
+   {
+     g_BMT = 2.;
+   }
 
    anomaly = (g_BMT - 2.)/2.;
 

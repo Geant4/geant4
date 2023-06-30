@@ -30,10 +30,6 @@
 
 #include "G4VWeightWindowAlgorithm.hh"
 
-G4VWeightWindowAlgorithm::G4VWeightWindowAlgorithm()
-{
-}
+G4VWeightWindowAlgorithm::G4VWeightWindowAlgorithm() = default;
 
-G4VWeightWindowAlgorithm::~G4VWeightWindowAlgorithm()
-{
-}
+G4VWeightWindowAlgorithm::~G4VWeightWindowAlgorithm() = default;

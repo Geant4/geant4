@@ -52,6 +52,12 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   gdmlDir = new G4UIdirectory("/persistency/gdml/");
   gdmlDir->SetGuidance("GDML parser and writer.");
 
+  ReaderSchema = new G4UIcmdWithAString("/persistency/gdml/schema", this);
+  ReaderSchema->SetGuidance("Set alternative GDML schema file for import validation.");
+  ReaderSchema->SetParameterName("schema_path_and_filename", false);
+  ReaderSchema->AvailableForStates(G4State_PreInit, G4State_Idle);
+  ReaderSchema->SetToBeBroadcasted(false);
+
   ReaderCmd = new G4UIcmdWithAString("/persistency/gdml/read", this);
   ReaderCmd->SetGuidance("Read GDML file.");
   ReaderCmd->SetParameterName("filename", false);
@@ -121,6 +127,7 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
 // --------------------------------------------------------------------
 G4GDMLMessenger::~G4GDMLMessenger()
 {
+  delete ReaderSchema;
   delete ReaderCmd;
   delete WriterCmd;
   delete ClearCmd;
@@ -147,6 +154,11 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   {
     pFlag = AppendCmd->GetNewBoolValue(newValue);
     myParser->SetAddPointerToName(pFlag);
+  }
+
+  if(command == ReaderSchema)
+  {
+    myParser->SetImportSchema(newValue);
   }
 
   if(command == ReaderCmd)

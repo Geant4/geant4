@@ -1,0 +1,151 @@
+=== Test of the HadronicGenerator ===
+
+=================  Configuration ==================
+Model: FTFP_BERT
+Ekin: [ 7000 , 7000 ] GeV
+Number of collisions:  10
+Number of hadron projectiles: 1
+Number of materials:   1
+IsIonProjectile: false
+===================================================
+
+### FinalStateHistoManager::Book: Successfully opended file all_secondaries.root for dumping histograms.
+
+================================================================================
+                                 INCL++ WARNING                                 
+INCL++/G4ExcitationHandler could not use its own level-density parameter for fission
+================================================================================
+
+	 Collision 0  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C=======================================================================
+======       Geant4 Native Pre-compound Model Parameters       ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy                  100 keV
+Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy                               10 eV 
+Min energy per nucleon for multifragmentation       200 GeV
+Limit excitation energy for Fermi BreakUp           20 MeV
+Level density (1/MeV)                               0.075
+Use simple level density model                      1
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1 ns 
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+
+	 --> #secondaries=44  impactParameter[fm]=2.20708  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=10  #NNcollisions=2
+	 	 List of produced secondaries: 
+	 	 	 j=0	pi0	 p=(-278.056,-54.2443,249603249603) MeV
+	 	 	 j=1	pi+	 p=(230.029,220.459,171303171304) MeV
+	 	 	 j=2	pi0	 p=(-469.822,62.0587,83597.283598.7) MeV
+	 	 	 j=3	kaon0L	 p=(-807.182,-630.872,7481.167567.36) MeV
+	 	 	 j=4	pi+	 p=(-18.2834,94.391,4761.174764.19) MeV
+	 	 	 j=5	pi-	 p=(-65.525,38.2802,21213.921214.5) MeV
+	 	 	 j=6	kaon+	 p=(902.744,526.473,225354225357) MeV
+	 	 	 j=7	pi-	 p=(-25.0614,-160.697,62327.162327.5) MeV
+	 	 	 j=8	proton	 p=(457.791,307.539,357.451145.55) MeV
+	 	 	 j=9	pi+	 p=(187.049,258.114,13773.813778.2) MeV
+	 	 	 j=10	eta_prime	 p=(407.557,161.798,29438.329457.2) MeV
+	 	 	 j=11	pi-	 p=(129.938,-141.881,4209.444216.15) MeV
+	 	 	 j=12	pi0	 p=(71.0042,453.782,6627.166644.43) MeV
+	 	 	 j=13	neutron	 p=(-16.419,129.541,310.001997.965) MeV
+	 	 	 j=14	proton	 p=(135.377,-168.25,28.0742963.212) MeV
+	 	 	 j=15	pi0	 p=(125.272,-388.858,1.53492e+061.53492e+06) MeV
+	 	 	 j=16	neutron	 p=(-255.463,71.5904,3.54864e+063.54864e+06) MeV
+	 	 	 j=17	pi0	 p=(117.323,-60.3735,-34.8848191.951) MeV
+	 	 	 j=18	neutron	 p=(446.611,-171.762,1383.281739.32) MeV
+	 	 	 j=19	pi-	 p=(210.496,175.307,1032.121076.94) MeV
+	 	 	 j=20	kaon+	 p=(690.16,73.5808,9055.49095.37) MeV
+	 	 	 j=21	pi-	 p=(177.308,-219.884,3488.423502.62) MeV
+	 	 	 j=22	pi0	 p=(-53.4748,65.7408,2602.062606.93) MeV
+	 	 	 j=23	pi+	 p=(-144.662,198.791,3725.553736.26) MeV
+	 	 	 j=24	pi-	 p=(429.909,309.238,52688.552691.4) MeV
+	 	 	 j=25	pi+	 p=(-15.7564,-416.423,91345.391346.3) MeV
+	 	 	 j=26	pi-	 p=(-35.5745,175.967,45452.845453.3) MeV
+	 	 	 j=27	pi+	 p=(-361.018,-259.16,2125021255.1) MeV
+	 	 	 j=28	pi-	 p=(-1222.43,64.7139,89625.989634.4) MeV
+	 	 	 j=29	pi0	 p=(-295.877,103.056,27493.927496) MeV
+	 	 	 j=30	pi+	 p=(-308.863,130.216,5371453715.3) MeV
+	 	 	 j=31	pi0	 p=(-106.131,119.136,43773.943774.4) MeV
+	 	 	 j=32	kaon0S	 p=(810.072,-3.24422,165782165785) MeV
+	 	 	 j=33	pi0	 p=(-115.05,-174.435,1450.991472.16) MeV
+	 	 	 j=34	pi-	 p=(291.714,445.213,3613.763655.41) MeV
+	 	 	 j=35	pi+	 p=(72.3103,36.167,1728917289.7) MeV
+	 	 	 j=36	anti_proton	 p=(-817.196,-1045.02,300634300639) MeV
+	 	 	 j=37	pi0	 p=(11.2051,-189.687,20817.620818.9) MeV
+	 	 	 j=38	proton	 p=(-249.068,59.6892,80867.280873) MeV
+	 	 	 j=39	He3	 p=(117.034,-199.489,-159.672822.42) MeV
+	 	 	 j=40	deuteron	 p=(-211.988,-209.404,-136.1621904.01) MeV
+	 	 	 j=41	neutron	 p=(23.8186,-71.9476,-141.265953.144) MeV
+	 	 	 j=42	neutron	 p=(-190.541,431.213,494.9871161.91) MeV
+	 	 	 j=43	proton	 p=(18.7242,-146.424,-86.6639953.759) MeV
+	 Collision 1  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=37  impactParameter[fm]=2.60398  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
+	 Collision 2  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=31  impactParameter[fm]=3.28119  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
+	 Collision 3  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=46  impactParameter[fm]=3.13666  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=10  #NNcollisions=2
+	 Collision 4  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=7  impactParameter[fm]=3.17708  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=0
+	 Collision 5  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=21  impactParameter[fm]=3.03126  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
+	 Collision 6  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=63  impactParameter[fm]=1.55971  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=9  #NNcollisions=3
+	 Collision 7  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=6  impactParameter[fm]=2.7974  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=0
+	 Collision 8  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=26  impactParameter[fm]=2.42631  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
+	 Collision 9  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
+	 --> #secondaries=42  impactParameter[fm]=2.60456  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=10  #NNcollisions=1
+========================================================
+Number of events                     10
+
+Average (per event) number of B10[718.380]              0.1
+Average (per event) number of He3              0.3
+Average (per event) number of alpha              0.8
+Average (per event) number of anti_lambda              0.1
+Average (per event) number of anti_proton              0.4
+Average (per event) number of deuteron              0.8
+Average (per event) number of eta              0.8
+Average (per event) number of eta_prime              0.9
+Average (per event) number of gamma              0.3
+Average (per event) number of kaon+              0.9
+Average (per event) number of kaon-              0.4
+Average (per event) number of kaon0L              0.7
+Average (per event) number of kaon0S              1
+Average (per event) number of lambda              0.1
+Average (per event) number of neutron              2.2
+Average (per event) number of pi+              6.4
+Average (per event) number of pi-              6.2
+Average (per event) number of pi0              6
+Average (per event) number of proton              3
+Average (per event) number of sigma+              0.1
+Average (per event) number of sigma-              0.2
+Average (per event) number of sigma0              0.3
+Average (per event) number of triton              0.3
+========================================================
+
+### All histograms saved to all_secondaries.root
+### All histograms saved to all_secondaries.hist
+
+ Final random number = 0.957412
+
+Processed 10 events (collisions) in 2.706730e-01 seconds. Average: 27.0673 ms / event.
+
+=== End of test ===

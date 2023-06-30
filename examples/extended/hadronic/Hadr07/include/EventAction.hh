@@ -43,18 +43,20 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction(DetectorConstruction*);
-   ~EventAction();
+   ~EventAction() override;
 
   public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
     
-    void AddEdep(G4int k, G4double edep) { fEdepAbsor[k] += edep; }
+    void AddEdep(G4int k, G4double edep);
+    void AddEleak (G4double eleak);
     
   private:
     DetectorConstruction* fDetector;
 
     G4double  fEdepAbsor[kMaxAbsor];
+    G4double  fEnergyLeak;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

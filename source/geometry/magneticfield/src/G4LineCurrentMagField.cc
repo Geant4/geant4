@@ -45,9 +45,7 @@ G4Field* G4LineCurrentMagField::Clone() const
 
 // -----------------------------------------------------------------
 
-G4LineCurrentMagField::~G4LineCurrentMagField()
-{
-}
+G4LineCurrentMagField::~G4LineCurrentMagField() = default;
 
 // -----------------------------------------------------------------
 

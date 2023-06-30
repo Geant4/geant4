@@ -46,9 +46,7 @@ G4PhantomParameterisation::G4PhantomParameterisation()
 
  
 //------------------------------------------------------------------
-G4PhantomParameterisation::~G4PhantomParameterisation()
-{
-}
+G4PhantomParameterisation::~G4PhantomParameterisation() = default;
 
 
 //------------------------------------------------------------------
@@ -62,6 +60,7 @@ BuildContainerSolid( G4VPhysicalVolume* pMotherPhysical )
 
   // CheckVoxelsFillContainer();
 }
+
 
 //------------------------------------------------------------------
 void G4PhantomParameterisation::
@@ -260,13 +259,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // if the direction is negative substract 1
 
   G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/(fVoxelHalfX*2.);
-  G4int nx = G4int(fx);
+  auto  nx = G4int(fx);
 
   G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/(fVoxelHalfY*2.); 
-  G4int ny = G4int(fy);
+  auto  ny = G4int(fy);
 
   G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/(fVoxelHalfZ*2.);
-  G4int nz = G4int(fz);
+  auto  nz = G4int(fz);
 
   // If it is on the surface side, check the direction: if direction is
   // negative place it in the previous voxel (if direction is positive it is
@@ -327,7 +326,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     }
   }
   
-  G4int copyNo = G4int(nx + fNoVoxelsX*ny + fNoVoxelsXY*nz);
+  auto  copyNo = G4int(nx + fNoVoxelsX*ny + fNoVoxelsXY*nz);
 
   // Check if there are still errors 
   //

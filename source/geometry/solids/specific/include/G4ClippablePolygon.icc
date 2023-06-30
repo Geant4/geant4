@@ -47,5 +47,5 @@ std::size_t G4ClippablePolygon::GetNumVertices() const
 inline
 G4bool G4ClippablePolygon::Empty() const
 {
-   return vertices.size()==0;
+   return vertices.empty();
 }

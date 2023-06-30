@@ -49,13 +49,13 @@ class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
   public:
 
     G4IdentityTrajectoryFilter() = default;
-    virtual ~G4IdentityTrajectoryFilter() = default;
+    ~G4IdentityTrajectoryFilter() override = default;
 
     G4IdentityTrajectoryFilter(const G4IdentityTrajectoryFilter&) =  delete;
     G4IdentityTrajectoryFilter& operator=(const G4IdentityTrajectoryFilter&) = delete;
       // Do not want these objects to be copied or assigned
 
-    void TakeIntermediatePoint( G4ThreeVector newPoint );
+    void TakeIntermediatePoint( G4ThreeVector newPoint ) override;
       // Submit intermediate points for the filter
       // to consider keeping or rejecting
 };

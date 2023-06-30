@@ -11,6 +11,7 @@ geant4_add_module(G4geomBoolean
     G4ScaledSolid.hh
     G4SubtractionSolid.hh
     G4UnionSolid.hh
+    G4VBooleanProcessor.hh
   SOURCES
     G4BooleanSolid.cc
     G4DisplacedSolid.cc

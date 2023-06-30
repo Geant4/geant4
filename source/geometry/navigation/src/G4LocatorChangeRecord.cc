@@ -51,7 +51,7 @@ std::ostream& G4LocatorChangeRecord::ReportVector ( std::ostream& os,
 {
   using std::setw;
   G4int prec= 16;
-  if( vecRec.size() == 0 )
+  if( vecRec.empty() )
   {
      os << "Locator Change Record for " << name << "  is empty" << G4endl;
      return os;

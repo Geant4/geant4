@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-01-30 M. Maire (exampleB4-V11-01-00)
+- PrimaryGeneratorAction: default e-, 300 MeV
+- RunAction: adjust binning of histograms
+- update of run1.mac and run2.mac
 
 ## 2022-11-29 I. Hrivnacova (exampleB4-V11-00-02)
 - Activated merging ntuples with score ntuple writer in B4d

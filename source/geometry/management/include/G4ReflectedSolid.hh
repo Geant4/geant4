@@ -41,58 +41,54 @@
 
 class G4ReflectedSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4ReflectedSolid( const G4String& pName,
                             G4VSolid* pSolid ,
                       const G4Transform3D& transform ) ;
       // For use in instantiating a transient instance.
 
-    virtual ~G4ReflectedSolid();
+    ~G4ReflectedSolid() override;
       // Virtual destructor.
-
-  public:  // without description 
 
     // Includes all the methods that a solid requires.
 
-    EInside Inside( const G4ThreeVector& p ) const; 
+    EInside Inside( const G4ThreeVector& p ) const override; 
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
-                                  G4double& pMin, G4double& pMax) const;
+                                  G4double& pMin, G4double& pMax) const override;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const override;
 
     G4double DistanceToIn( const G4ThreeVector& p,
-                           const G4ThreeVector& v ) const;
+                           const G4ThreeVector& v ) const override;
 
-    G4double DistanceToIn( const G4ThreeVector& p) const;
+    G4double DistanceToIn( const G4ThreeVector& p) const override;
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
                             const G4bool calcNorm = false,
                                   G4bool* validNorm = nullptr,
-                                  G4ThreeVector* n = nullptr ) const;
+                                  G4ThreeVector* n = nullptr ) const override;
 
-    G4double DistanceToOut( const G4ThreeVector& p ) const;
+    G4double DistanceToOut( const G4ThreeVector& p ) const override;
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
-                            const G4VPhysicalVolume* pRep );
+                            const G4VPhysicalVolume* pRep ) override;
 
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-  public:  // with description 
-
-    virtual G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const override;
 
     virtual const G4ReflectedSolid* GetReflectedSolidPtr() const;
     virtual       G4ReflectedSolid* GetReflectedSolidPtr();
@@ -106,17 +102,15 @@ class G4ReflectedSolid : public G4VSolid
     void SetDirectTransform3D(G4Transform3D&);
       // Accessors methods.
 
-    std::ostream& StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     G4ReflectedSolid(const G4ReflectedSolid& rhs);
     G4ReflectedSolid& operator=(const G4ReflectedSolid& rhs);
       // Copy constructor and assignment operator.
 
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const;
-    G4Polyhedron* CreatePolyhedron () const;
-    G4Polyhedron* GetPolyhedron    () const;
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const override;
+    G4Polyhedron* CreatePolyhedron () const override;
+    G4Polyhedron* GetPolyhedron    () const override;
       // For creating graphical representations (i.e. for visualisation).
 
   protected:

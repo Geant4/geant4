@@ -28,14 +28,14 @@
 // ---------------------------------------------------------------------
 
 #include "G4SDmessenger.hh"
+
 #include "G4SDManager.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
-G4SDmessenger::G4SDmessenger(G4SDManager* SDManager)
-  : fSDMan(SDManager)
+G4SDmessenger::G4SDmessenger(G4SDManager* SDManager) : fSDMan(SDManager)
 {
   hitsDir = new G4UIdirectory("/hits/");
   hitsDir->SetGuidance("Sensitive detectors and Hits");
@@ -69,20 +69,16 @@ G4SDmessenger::~G4SDmessenger()
 
 void G4SDmessenger::SetNewValue(G4UIcommand* command, G4String newVal)
 {
-  if(command == listCmd)
-  {
+  if (command == listCmd) {
     fSDMan->ListTree();
   }
-  if(command == activeCmd)
-  {
-    fSDMan->Activate(newVal, 1);
+  if (command == activeCmd) {
+    fSDMan->Activate(newVal, true);
   }
-  if(command == inactiveCmd)
-  {
-    fSDMan->Activate(newVal, 0);
+  if (command == inactiveCmd) {
+    fSDMan->Activate(newVal, false);
   }
-  if(command == verboseCmd)
-  {
+  if (command == verboseCmd) {
     fSDMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal));
   }
   return;

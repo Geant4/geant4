@@ -37,39 +37,39 @@
  * * * * * * * * * * * * * * * *   References   * * * * * * * * * * * * * * * */
 
 #ifndef G4FPYSAMPLINGOPS_HH
-#define	G4FPYSAMPLINGOPS_HH
-
-#include "Randomize.hh"
-#include "globals.hh"
+#define G4FPYSAMPLINGOPS_HH
 
 #include "G4FFGEnumerations.hh"
 #include "G4ShiftedGaussian.hh"
 #include "G4WattFissionSpectrumValues.hh"
+#include "Randomize.hh"
+#include "globals.hh"
 
 /** G4FPYSamplingOps performs all the uniform and Gaussian distribution sampling
  *  operations
  */
 class G4FPYSamplingOps
 {
-public:
-// Constructor definition
+  public:
+    // Constructor definition
     /** Default constructor
      *  - Usage: No arguments required
      *  - Notes:
      */
-    G4FPYSamplingOps( void );
+    G4FPYSamplingOps();
     /** Overloaded constructor
      *  - Usage:
      *      - \p Verbosity: Verbosity level
      *  - Notes:
      */
-    G4FPYSamplingOps( G4int Verbosity );
-protected:
-    /** Initialize is a common function called by all constructors. */
-    void Initialize( void );
+    G4FPYSamplingOps(G4int Verbosity);
 
-public:
-// Functions
+  protected:
+    /** Initialize is a common function called by all constructors. */
+    void Initialize();
+
+  public:
+    // Functions
     /** Returns an integer value taken from a Gaussian distribution.
      *  This overloaded version assumes that the range is not restricted to
      *  positive values only.
@@ -81,8 +81,7 @@ public:
      *        within the second standard deviation, etc...
      *  - Notes:
      */
-    G4int G4SampleIntegerGaussian( G4double Mean,
-                                   G4double StdDev );
+    G4int G4SampleIntegerGaussian(G4double Mean, G4double StdDev);
     /** Returns an integer value taken from a Gaussian distribution about
      *  \p Mean and with a standard deviation of \p StdDev.
      *  - Usage:
@@ -94,9 +93,8 @@ public:
      *      - \p Range: \p POSITIVE or \p ALL
      *  - Notes:
      */
-    G4int G4SampleIntegerGaussian( G4double Mean,
-                                   G4double StdDev,
-                                   G4FFGEnumerations::GaussianRange Range );
+    G4int G4SampleIntegerGaussian(G4double Mean, G4double StdDev,
+                                  G4FFGEnumerations::GaussianRange Range);
     /** Returns a double value taken from a Gaussian distribution about \p Mean
      *  and with a standard deviation of \p StdDev.
      *  - Usage:
@@ -107,8 +105,7 @@ public:
      *        within the second standard deviation, etc...
      *  - Notes:
      */
-    G4double G4SampleGaussian( G4double Mean,
-                               G4double StdDev );
+    G4double G4SampleGaussian(G4double Mean, G4double StdDev);
     /** Returns a double value taken from a Gaussian distribution about \p Mean
      *  and with a standard deviation of \p StdDev.
      *  - Usage:
@@ -120,14 +117,13 @@ public:
      *      - \p Range: \p POSITIVE or \p ALL
      *  - Notes:
      */
-    G4double G4SampleGaussian( G4double Mean,
-                               G4double StdDev,
-                               G4FFGEnumerations::GaussianRange Range );
+    G4double G4SampleGaussian(G4double Mean, G4double StdDev,
+                              G4FFGEnumerations::GaussianRange Range);
     /** Returns a double value evenly distributed in the range (0, 1].
      *  - Usage: No arguments required
      *  - Notes:
      */
-    G4double G4SampleUniform( void );
+    G4double G4SampleUniform();
     /** Returns a double value evenly distributed in the range
      *  (\p Lower, \p Upper].
      *  - Usage:
@@ -136,8 +132,7 @@ public:
      *
      *  - Notes:
      */
-    G4double G4SampleUniform( G4double Lower,
-                              G4double Upper );
+    G4double G4SampleUniform(G4double Lower, G4double Upper);
     /** Samples the Watt fission spectrum for the selected isotope, using an
      *  algorithm adopted from Ref. 1
      *  - Usage:
@@ -149,9 +144,8 @@ public:
      *      WattConstants_.
      *      -
      */
-    G4double G4SampleWatt( G4int WhatIsotope,
-                           G4FFGEnumerations::FissionCause WhatCause,
-                           G4double WhatEnergy );
+    G4double G4SampleWatt(G4int WhatIsotope, G4FFGEnumerations::FissionCause WhatCause,
+                          G4double WhatEnergy);
     /** Sets the verbosity levels
      *  - Usage:
      *      - \p WhichVerbosity: Combination of  levels
@@ -164,63 +158,64 @@ public:
      *      - \p GAMMA_INFO: Displays information about gamma sampling
      *      - \p ALPHA_INFO: Displays information about alpha sampling
      *      - \p MOMENTUM_INFO: Displays information about momentum balancing
-     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation or interpolation that occurs
+     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation
+     * or interpolation that occurs
      *      - \p DEBUG: Reports program flow as it steps through functions
      *      - \p PRINT_ALL: Displays any and all output
      */
-    void G4SetVerbosity( G4int WhatVerbosity );
+    void G4SetVerbosity(G4int WhatVerbosity);
 
-protected:
-// Variables
+  protected:
+    // Variables
     // Class descriptor variables
-        /** Mean for sampling a Gaussian distribution */
-        G4double Mean_;
-        /** Standard deviation for sampling a GaussianDistribution */
-        G4double StdDev_;
-        /** Structure chain that contains the all the previous values used
-         *  for sampling a Gaussian distribution
-         */
-        G4ShiftedGaussian* ShiftedGaussianValues_;
-        /** Verbosity level */
-        G4int Verbosity_;
-        /** Structure that contains the values for sampling the Watt fission
-         *  spectrum
-         */
-        WattSpectrumConstants* WattConstants_;
+    /** Mean for sampling a Gaussian distribution */
+    G4double Mean_;
+    /** Standard deviation for sampling a GaussianDistribution */
+    G4double StdDev_;
+    /** Structure chain that contains the all the previous values used
+     *  for sampling a Gaussian distribution
+     */
+    G4ShiftedGaussian* ShiftedGaussianValues_;
+    /** Verbosity level */
+    G4int Verbosity_;
+    /** Structure that contains the values for sampling the Watt fission
+     *  spectrum
+     */
+    WattSpectrumConstants* WattConstants_;
 
     // Pointers to external classes
-        /** Pointer to the CLHEP random number generator. */
-        CLHEP::HepRandomEngine* RandomEngine_;
+    /** Pointer to the CLHEP random number generator. */
+    CLHEP::HepRandomEngine* RandomEngine_;
 
     // Internal variables for use with sampling a Gaussian distribution.
-        /** Declares whether the second paired random number has been already
-         *  returned.
-         */
-        G4bool NextGaussianIsStoredInMemory_;
-        /** Contains the first of the two paired random numbers from the
-         *  Gaussian distribution sampling.
-         */
-        G4double GaussianOne_;
-        /** Contains the second of the two paired random numbers from the
-         *  Gaussian distribution sampling.
-         */
-        G4double GaussianTwo_;
-        /** Defines the tolerance that ShiftParameters() must match. */
-        G4double Tolerance_;
-// Functions
+    /** Declares whether the second paired random number has been already
+     *  returned.
+     */
+    G4bool NextGaussianIsStoredInMemory_;
+    /** Contains the first of the two paired random numbers from the
+     *  Gaussian distribution sampling.
+     */
+    G4double GaussianOne_;
+    /** Contains the second of the two paired random numbers from the
+     *  Gaussian distribution sampling.
+     */
+    G4double GaussianTwo_;
+    /** Defines the tolerance that ShiftParameters() must match. */
+    G4double Tolerance_;
+    // Functions
     /** Check to see if the user requested parameters have already been
      *  calculated. If they have, it recalls the stored parameters and sets
      *  them as the current values.
      */
-    G4bool CheckAndSetParameters( void );
+    G4bool CheckAndSetParameters();
     /** Evaluates the constants that are required for the Watt fission spectrum
      *  sampling.
      */
-    void EvaluateWattConstants( void );
+    void EvaluateWattConstants();
     /** Samples a Gaussian distribution defined by the internal class variables
      *  NewMean_ and NewStdDev_.
      */
-    G4double SampleGaussian( void );
+    G4double SampleGaussian();
     /** Sets the mean and standard deviation of the Gaussian distribution
      *  sampled by this class when \p POSITIVE values are requested.
      *  ShiftMean() performs two different operations based on the requested
@@ -233,13 +228,12 @@ protected:
      *    The chance that a negative value will result using this method is
      *    2.56E<sup>-12</sup>
      */
-    void ShiftParameters( G4FFGEnumerations::GaussianReturnType Type );
+    void ShiftParameters(G4FFGEnumerations::GaussianReturnType Type);
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default deconstructor. */
-    ~G4FPYSamplingOps( void );
+    ~G4FPYSamplingOps();
 };
 
-#endif	/* G4FPYSAMPLINGOPS_HH */
-
+#endif /* G4FPYSAMPLINGOPS_HH */

@@ -47,7 +47,7 @@ G4HyperHe5* G4HyperHe5::Definition() {
   const G4String name = "hyperHe5";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
+  auto  anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
   if ( anInstance == nullptr ) {
     // create particle
     //
@@ -71,7 +71,7 @@ G4HyperHe5* G4HyperHe5::Definition() {
     anInstance->SetPDGMagneticMoment( 2.97896248 * mN );
 
     // create Decay Table
-    G4DecayTable* table = new G4DecayTable;
+    auto  table = new G4DecayTable;
     // create decay channels
     /*
     // The decays "mode[1]" and "mode[3]" produce the secondaries "Li5" and "He5",
@@ -96,7 +96,7 @@ G4HyperHe5* G4HyperHe5::Definition() {
     // Replacement decay for the time being    
     const G4double br_lambda_to_p_pim = 0.639;
     const G4double br_lambda_to_n_piz = 0.358;
-    G4VDecayChannel** mode = new G4VDecayChannel*[2];
+    auto  mode = new G4VDecayChannel*[2];
     // lambda -> proton + pi- , with 0% probability of capturing the proton
     mode[0] = new G4PhaseSpaceDecayChannel( "hyperHe5", br_lambda_to_p_pim, 3,
 					    "alpha", "proton", "pi-" );

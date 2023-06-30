@@ -43,20 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(const DetectorConstruction* det)
-: G4Run(),
-  fDetector(det), 
-  fParticle(0), fEkin(0.),
-  fNbOfTraks0(0), fNbOfTraks1(0),
-  fNbOfSteps0(0), fNbOfSteps1(0),
-  fEdep(0.), fNIEL(0.),
-  fTrueRange(0.), fTrueRange2(0.),
-  fProjRange(0.), fProjRange2(0.),  
-  fTransvDev(0.), fTransvDev2(0.)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
+: fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

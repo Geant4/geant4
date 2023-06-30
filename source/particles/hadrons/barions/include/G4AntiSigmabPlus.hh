@@ -52,7 +52,7 @@ class G4AntiSigmabPlus : public G4ParticleDefinition
  private:
    static G4AntiSigmabPlus* theInstance;
    G4AntiSigmabPlus(){}
-   ~G4AntiSigmabPlus(){}
+   ~G4AntiSigmabPlus() override= default;
 
  public:
    static G4AntiSigmabPlus* Definition();

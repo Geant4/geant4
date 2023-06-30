@@ -6,7 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-02-06 Gabriele Cosmo (hadr-qgsm-V11-00-04)
+## 2023-03-09 Vladimir Ivanchenko (hadr-qgsm-V11-01-01)
+- G4BaryonSplitter, G4MesonSplitter, G4QGSMSplittableHadron, G4SPBaryon -
+    attempt make code more uniform in order to reduce probability of warnings
+    observed in CMS, when LTO option is enabled
+
+## 2023-02-06 Gabriele Cosmo (hadr-qgsm-V11-01-00)
 - Fixed potential uninitialised variables in G4QGSMSplitableHadron::GetValenceQuarkFlavors().
 
 ## 2022-10-07 Gabriele Cosmo (hadr-qgsm-V11-00-03)

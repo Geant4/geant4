@@ -57,6 +57,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fExplodeFactor         (1.),
   fNoOfSides             (24),
   fpSectionSolid         (0),
+  fCutawayMode           (cutawayUnion),
   fpCutawaySolid         (0),
   fpEvent                (0),
   fSpecialMeshRendering  (false)
@@ -85,6 +86,7 @@ G4ModelingParameters::G4ModelingParameters
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionSolid  (0),
+  fCutawayMode    (cutawayUnion),
   fpCutawaySolid  (0),
   fpEvent         (0),
   fSpecialMeshRendering (false)
@@ -226,6 +228,10 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   if (!mp.fpSectionSolid) os << "non-";
   os << "null";
 
+  os << "\n  Cutaway mode: ";
+  if (mp.GetCutawayMode() == G4ModelingParameters::cutawayUnion) os << "union";
+  else if (mp.GetCutawayMode() == G4ModelingParameters::cutawayIntersection) os << "intersection";
+
   os << "\n  Cutaway (DCUT) shape (G4DisplacedSolid) pointer: ";
   if (!mp.fpCutawaySolid) os << "non-";
   os << "null";
@@ -274,6 +280,7 @@ G4bool G4ModelingParameters::operator !=
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
       (fpSectionSolid          != mp.fpSectionSolid)          ||
+      (fCutawayMode            != mp.fCutawayMode)            ||
       (fpCutawaySolid          != mp.fpCutawaySolid)          ||
       (fpEvent                 != mp.fpEvent)                 ||
       (fSpecialMeshRendering   != mp.fSpecialMeshRendering)

@@ -1,0 +1,52 @@
+/control/verbose 2
+
+/vis/open OGL
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+# The above creates a scene handler and a viewer but needs a scene.
+# (Normally this would be /vis/drawVolume but we need to specialise.)
+/vis/scene/create
+/vis/scene/add/userAction
+/vis/sceneHandler/attach
+
+# Decorations
+# Axes, scale, etc.
+/vis/scene/add/scale   # Simple scale line
+/vis/scene/add/axes   50 0 -60 20 cm # Simple axes: x=red, y=green, z=blue.
+/vis/scene/add/eventID # Drawn at end of event
+/vis/scene/add/date    # Date stamp
+#
+# Frame
+/vis/set/colour red
+/vis/set/lineWidth 2
+/vis/scene/add/frame   # Simple frame around the view
+#/vis/set/colour        # Revert to default colour (white)
+/vis/set/lineWidth     # Revert to default line width (1.)
+
+# To get nice view
+# Make the "World" box invisible
+/vis/geometry/set/visibility worldLogical 0 false
+/vis/geometry/set/visibility phantomLogical 0 false
+
+# View parameters
+/vis/viewer/set/specialMeshRendering
+/vis/viewer/set/specialMeshRenderingOption surfaces
+/vis/viewer/set/style surface
+/vis/viewer/set/hiddenMarker true
+/vis/viewer/set/background 1 1 1 1 
+#
+# Specify view angle:
+/vis/viewer/set/upVector 0 0 1
+/vis/viewer/set/lightsVector -1 0 0
+/vis/viewer/zoomTo 2
+#/vis/viewer/set/viewpointVector -0.5 -1 0.3
+/vis/viewer/set/viewpointVector 0 -1 0
+/vis/viewer/set/targetPoint 0 0 0 mm
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings

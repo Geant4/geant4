@@ -65,14 +65,27 @@ if(GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_QT)
   message(STATUS "Forcing GEANT4_USE_QT to ON, required by selection of GEANT4_USE_INVENTOR_QT as ON")
 endif()
 set(GEANT4_USE_TOOLSSG_QT_GLES ${GEANT4_USE_QT})
+set(GEANT4_USE_TOOLSSG_QT_ZB   ${GEANT4_USE_QT})
+
+# TEMPORARY for 11.2 Beta Development
+# Decision still required on whether to allow selection of 5/6 in production
+cmake_dependent_option(GEANT4_USE_QT_QT6 "Require Qt6 when building Qt support" OFF "GEANT4_USE_QT" OFF)
+mark_as_advanced(GEANT4_USE_QT_QT6)
 
 # - Vtk
 option(GEANT4_USE_VTK "Build Geant4 with VTK visualisation" OFF)
 mark_as_advanced(GEANT4_USE_VTK)
 if(GEANT4_USE_VTK)
-  find_package(VTK 8.2 REQUIRED)
+  find_package(VTK 9 REQUIRED COMPONENTS
+          CommonColor
+          InteractionStyle
+          IOExport
+          GUISupportQt
+          RenderingVolumeOpenGL2
+          )
+  geant4_save_package_variables(VTK VTK_DIR)
 endif()
-geant4_add_feature(GEANT4_USE_VTK "Using VTK for visualisation (EXPERIMENTAL)")
+geant4_add_feature(GEANT4_USE_VTK "Using VTK for visualisation")
 
 # - Unix only
 if(UNIX)
@@ -86,6 +99,7 @@ if(UNIX)
     message(STATUS "Forcing GEANT4_USE_XM to ON, required by Inventor driver")
   endif()
   set(GEANT4_USE_TOOLSSG_XT_GLES ${GEANT4_USE_XM})
+  set(GEANT4_USE_TOOLSSG_XT_ZB ${GEANT4_USE_XM})
   geant4_add_feature(GEANT4_USE_XM "Build Geant4 with Xm Support")
 
   # - OpenGL/X11 Vis Driver
@@ -93,6 +107,9 @@ if(UNIX)
   option(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support" OFF)
   set(GEANT4_USE_TOOLSSG_X11_GLES ${GEANT4_USE_OPENGL_X11})
   geant4_add_feature(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support")
+
+  # tools/zb X11 Vis Driver
+  set(GEANT4_USE_TOOLSSG_X11_ZB ${X11_FOUND})
 
   # RayTracer driver with X11 support
   option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
@@ -104,6 +121,8 @@ if(WIN32)
   option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support" OFF)
   set(GEANT4_USE_TOOLSSG_WINDOWS_GLES ${GEANT4_USE_OPENGL_WIN32})
   geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+
+  set(GEANT4_USE_TOOLSSG_WINDOWS_ZB ON)
 endif()
 
 #-----------------------------------------------------------------------
@@ -136,19 +155,36 @@ endif()
 # - Qt5/6
 if(GEANT4_USE_QT)
   # Use versioned targets to support Qt5 < 5.15
+  # 5.9 is selected as the min version to support based on the system version on CentOS7
   # Once 5.15 is the minimum version, the "Qt${QT_VERSION_MAJOR}_..." variables can be dropped
   # - https://doc.qt.io/qt-6/cmake-manual.html
-  find_package(QT NAMES Qt5 COMPONENTS Core REQUIRED)
-  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL PrintSupport REQUIRED)
+  # TEMPORARY for 11.2 beta:
+  # - Decision still required on whether to allow selection of 5/6 in production
+  # TODO:
+  # - Because VTK and SoQt use Qt themselves, we may want to consider checking that we
+  #   have a consistent link to the same Qt version 
+  if(GEANT4_USE_QT_QT6)
+    find_package(QT NAMES Qt6 COMPONENTS Core REQUIRED)
+  else()
+    find_package(QT 5.9 NAMES Qt5 COMPONENTS Core REQUIRED)
+  endif()
+  
+  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets OpenGL REQUIRED)
 
   geant4_save_package_variables(Qt${QT_VERSION_MAJOR}
+    Qt${QT_VERSION_MAJOR}_DIR
     Qt${QT_VERSION_MAJOR}Core_DIR
     Qt${QT_VERSION_MAJOR}Gui_DIR
     Qt${QT_VERSION_MAJOR}Widgets_DIR
-    Qt${QT_VERSION_MAJOR}OpenGL_DIR
-    Qt${QT_VERSION_MAJOR}PrintSupport_DIR)
+    Qt${QT_VERSION_MAJOR}OpenGL_DIR)
 
-  get_target_property(QT_QMAKE_EXECUTABLE ${Qt${QT_VERSION_MAJOR}Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
+  # G4OpenGL and G4ToolsSG also require OpenGLWidgets in Qt6
+  if(QT_VERSION_MAJOR GREATER 5)
+    find_package(Qt${QT_VERSION_MAJOR}OpenGLWidgets REQUIRED)
+    geant4_save_package_variables(Qt${QT_VERSION_MAJOR} Qt${QT_VERSION_MAJOR}OpenGLWidgets_DIR)
+  endif()
+
+  get_target_property(QT_QMAKE_EXECUTABLE Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
   geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt${QT_VERSION_MAJOR} support")
 
   # Qt3D is only supported on 5.15 and above, but always on if available

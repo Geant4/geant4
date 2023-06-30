@@ -30,20 +30,18 @@
 // Created by Joanna Weng 26.11.2004
 
 // G4 includes
+#include "G4PhysListFactory.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4Timer.hh"
 #include "G4Types.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-#include "G4RunManagerFactory.hh"
-
 // my project
 #include "ExGflashActionInitialization.hh"
 #include "ExGflashDetectorConstruction.hh"
 
-#include "FTFP_BERT.hh"
 #include "G4FastSimulationPhysics.hh"
-
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
@@ -53,7 +51,7 @@ int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -61,16 +59,11 @@ int main(int argc, char** argv)
   G4Timer timer;
   timer.Start();
 
-  G4cout << "+-------------------------------------------------------+"
-         << G4endl;
-  G4cout << "|                                                       |"
-         << G4endl;
-  G4cout << "|          This is an example of Shower                 |"
-         << G4endl;
-  G4cout << "|          Parameterization with GFLASH                 |"
-         << G4endl;
-  G4cout << "+-------------------------------------------------------+"
-         << G4endl;
+  G4cout << "+-------------------------------------------------------+" << G4endl;
+  G4cout << "|                                                       |" << G4endl;
+  G4cout << "|          This is an example of Shower                 |" << G4endl;
+  G4cout << "|          Parameterization with GFLASH                 |" << G4endl;
+  G4cout << "+-------------------------------------------------------+" << G4endl;
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
 
@@ -79,7 +72,16 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(detector);
 
   // -- Select a physics list:
-  G4VModularPhysicsList* physicsList = new FTFP_BERT();
+  G4PhysListFactory listFactory;
+  G4String name;
+  auto list_name = std::getenv("PHYSLIST");
+  if (list_name == nullptr || std::strlen(list_name) == 0 ) {
+    name = "FTFP_BERT";
+  } else {
+    name = list_name;
+  }
+  G4VModularPhysicsList* physicsList = listFactory.GetReferencePhysList(name);
+
   // -- Create a fast simulation physics constructor, used to augment
   // -- the above physics list to allow for fast simulation:
   auto fastSimulationPhysics = new G4FastSimulationPhysics();
@@ -111,7 +113,7 @@ int main(int argc, char** argv)
   runManager->Initialize();
   UImanager->ApplyCommand("/Step/Verbose 0");
 
-  if ( ui != nullptr )  // Define UI terminal for interactive mode
+  if (ui != nullptr)  // Define UI terminal for interactive mode
   {
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();

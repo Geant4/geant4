@@ -344,11 +344,11 @@ bool RanshiEngine::getState (const std::vector<unsigned long> & v) {
     return false;
   }
   for (int i = 0; i < numBuff; ++i) {
-    buffer[i] = v[i+1];
+    buffer[i] = (unsigned int)v[i+1];
   }
-  redSpin  = v[numBuff+1];
-  numFlats = v[numBuff+2]; 
-  halfBuff = v[numBuff+3];
+  redSpin  = (unsigned int)v[numBuff+1];
+  numFlats = (unsigned int)v[numBuff+2]; 
+  halfBuff = (unsigned int)v[numBuff+3];
   return true;
 }
 

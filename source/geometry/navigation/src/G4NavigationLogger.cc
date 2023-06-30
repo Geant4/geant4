@@ -41,9 +41,7 @@ G4NavigationLogger::G4NavigationLogger(const G4String& id)
 {
 }
 
-G4NavigationLogger::~G4NavigationLogger()
-{
-}
+G4NavigationLogger::~G4NavigationLogger() = default;
 
 // ********************************************************************
 // PreComputeStepLog
@@ -493,12 +491,12 @@ G4NavigationLogger::ComputeSafetyLog(const G4VSolid* solid,
 {
   if( banner < 0 )
   {
-    banner = isMotherVolume;
+    banner = static_cast<G4int>(isMotherVolume);
   }
   if( fVerbose >= 1 )
   {
     G4String volumeType = isMotherVolume ? " Mother " : "Daughter";
-    if (banner)
+    if (banner != 0)
     {
       G4cout << "************** " << fId << "::ComputeSafety() ****************"
              << G4endl;
@@ -663,9 +661,9 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
                                         const G4VPhysicalVolume* physical,
                                               G4double triggerDist) const                                   
 {
-  const G4LogicalVolume* logicalVol = physical
+  const G4LogicalVolume* logicalVol = physical != nullptr
                                     ? physical->GetLogicalVolume() : nullptr;
-  const G4VSolid* solid = logicalVol
+  const G4VSolid* solid = logicalVol != nullptr
                         ? logicalVol->GetSolid() : nullptr;
 
   G4String fMethod = fId + "::ComputeStep()";
@@ -784,9 +782,9 @@ ReportVolumeAndIntersection( std::ostream& os,
                              const G4VPhysicalVolume* physical ) const 
 {
   G4String fMethod = fId + "::ComputeStep()";   
-  const G4LogicalVolume* logicalVol = physical
+  const G4LogicalVolume* logicalVol = physical != nullptr
                                     ? physical->GetLogicalVolume() : nullptr;
-  const G4VSolid* solid = logicalVol
+  const G4VSolid* solid = logicalVol != nullptr
                         ? logicalVol->GetSolid() : nullptr;
   if( solid == nullptr )
   {

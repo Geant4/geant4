@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,11 +95,6 @@ PhysListEmPenelope::PhysListEmPenelope(const G4String& name)
     param->SetVerbose(0);
     param->Dump();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysListEmPenelope::~PhysListEmPenelope()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

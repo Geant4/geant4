@@ -4,7 +4,6 @@
 #
 # It defines the following variables
 #  Geant4_INCLUDE_DIRS - include directories for Geant4
-#  Geant4_DEFINITIONS  - compile definitions needed to use Geant4
 #  Geant4_LIBRARIES    - libraries to link against
 #  Geant4_BUILD_TYPE   - Build type (e.g. "Release") used to build this
 #                        install. Only set if Geant4 was installed using
@@ -41,8 +40,8 @@
 # In Geant4, components can be optional subcomponents of an always
 # available library. In that case there will be no
 # Geant4_{COMPONENT}_LIBRARY variable. These non-library components are
-# generally activated by compile definitions, and in these cases the
-# appropriate definition will be added to the Geant4_DEFINITIONS component.
+# generally activated by compile definitions that are part of the target's
+# COMPILE_DEFINITIONS property.
 #
 # If you use the REQUIRED and/or COMPONENTS arguments of find_package to
 # specify components, then the module will issue a FATAL_ERROR if the
@@ -91,6 +90,11 @@
 #  vis_toolssg_xt_gles      (ToolsSG visualization with Xt windowing and GLES rendering)
 #  vis_toolssg_qt_gles      (ToolsSG visualization with Qt windowing and GLES rendering)
 #  vis_toolssg_windows_gles (ToolsSG visualization with Windows windowing and GLES rendering)
+
+#  vis_toolssg_x11_zb       (ToolsSG visualization with X11 windowing and g4tools zbuffer rendering)
+#  vis_toolssg_xt_zb        (ToolsSG visualization with Xt windowing and g4tools zbuffer rendering)
+#  vis_toolssg_qt_zb        (ToolsSG visualization with Qt windowing and g4tools zbuffer rendering)
+#  vis_toolssg_windows_zb   (ToolsSG visualization with Windows windowing and g4tools zbuffer rendering)
 #
 # In addition, two 'shorthand' components are defined to help activate all
 # available User Interface and Visualization drivers:
@@ -193,16 +197,6 @@ get_filename_component(_geant4_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 # - Provide variable indicating C++ Standard we were compiled against
 set(Geant4_CXX_STANDARD "@CMAKE_CXX_STANDARD@")
-
-#-----------------------------------------------------------------------
-# Set the base compile definitions required to use Geant4 if the variable
-# does not exist (we do this to ensure multiple calls to find_package
-# don't overwrite previous invocations)
-# Components may append to this, but should prefer usage requirements
-# via INTERFACE_COMPILE_DEFINITIONS
-if(NOT Geant4_DEFINITIONS)
-  set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
-endif()
 
 #-----------------------------------------------------------------------
 # Configure the path to the Geant4 headers, using a relative path if
@@ -367,19 +361,9 @@ endif()
 
 # - UI : TCSH
 set(Geant4_ui_tcsh_FOUND @UNIX@)
-if(Geant4_ui_tcsh_FOUND)
-  if(("ui_tcsh" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_TCSH)
-  endif()
-endif()
 
 # - UI : win32
 set(Geant4_ui_win32_FOUND @WIN32@)
-if(Geant4_ui_win32_FOUND)
-  if(("ui_win32" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_WIN32)
-  endif()
-endif()
 
 #-----------------------------------------------------------------------
 # Components which requires slightly more complex setup
@@ -389,10 +373,6 @@ set(Geant4_vis_raytracer_x11_FOUND @GEANT4_USE_RAYTRACER_X11@)
 if(Geant4_vis_raytracer_x11_FOUND)
   find_dependency(X11)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
-
-  if(("vis_raytracer_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_RAYTRACERX)
-  endif()
 endif()
 
 # - Qt (UI and Vis!)
@@ -405,7 +385,9 @@ if(Geant4_qt_FOUND)
   find_dependency(Qt@QT_VERSION_MAJOR@Gui REQUIRED)
   find_dependency(Qt@QT_VERSION_MAJOR@Widgets REQUIRED)
   find_dependency(Qt@QT_VERSION_MAJOR@OpenGL REQUIRED)
-  find_dependency(Qt@QT_VERSION_MAJOR@PrintSupport REQUIRED)
+  if(@QT_VERSION_MAJOR@ GREATER 5)
+    find_dependency(Qt@QT_VERSION_MAJOR@OpenGLWidgets REQUIRED)
+  endif()
 
   if(Geant4_qt3d_FOUND)
     find_dependency(Qt@QT_VERSION_MAJOR@3DCore @QT3D_MINIMUM_VERSION@ REQUIRED)
@@ -421,7 +403,6 @@ if(Geant4_qt_FOUND)
      OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
      OR ("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS)
      OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT)
     set(_geant4_use_opengl_library ON)
     # Qt3D is always on if available
     set(_geant4_use_qt3D_library ${Geant4_qt3d_FOUND})
@@ -446,7 +427,6 @@ if(Geant4_motif_FOUND)
      OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
      OR ("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS)
      OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_XM -DG4VIS_USE_OPENGLXM)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -463,7 +443,6 @@ if(Geant4_vis_opengl_x11_FOUND)
   endif()
 
   if(("vis_opengl_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGLX)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -473,7 +452,6 @@ set(Geant4_vis_opengl_win32_FOUND @GEANT4_USE_OPENGL_WIN32@)
 if(Geant4_vis_opengl_win32_FOUND)
   find_dependency(OpenGL)
   if(("vis_opengl_win32" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGLWIN32)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -499,16 +477,6 @@ if(Geant4_vis_openinventor_FOUND)
   endif()
 
   if(("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    if(Geant4_vis_openinventor_qt_FOUND)
-      list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIQT)
-    else()
-      if(WIN32)
-        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIWIN32)
-      else()
-        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIX)
-      endif()
-    endif()
-
     set(_geant4_use_inventor_library ON)
   endif()
 endif()
@@ -523,20 +491,23 @@ if(Geant4_vis_toolssg_x11_gles_FOUND)
   else()
     find_dependency(OpenGL)
   endif()
+endif()
 
-  if(("vis_toolssg_x11_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_X11_GLES)
-  endif()
+# - ToolsSG X11/ZB
+set(Geant4_vis_toolssg_x11_zb_FOUND @GEANT4_USE_TOOLSSG_X11_ZB@)
+if(Geant4_vis_toolssg_x11_zb_FOUND)
+  find_dependency(X11)
+  include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 endif()
 
 # - ToolsSG Windows/GLES
 set(Geant4_vis_toolssg_windows_gles_FOUND @GEANT4_USE_TOOLSSG_WINDOWS_GLES@)
 if(Geant4_vis_toolssg_windows_gles_FOUND)
   find_dependency(OpenGL)
-  if(("vis_toolssg_windows_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_WINDOWS_GLES)
-  endif()
 endif()
+
+# - ToolsSG Windows/ZB
+set(Geant4_vis_toolssg_windows_zb_FOUND @GEANT4_USE_TOOLSSG_WINDOWS_ZB@)
 
 # - ToolsSG Xt/GLES
 set(Geant4_vis_toolssg_xt_gles_FOUND @GEANT4_USE_TOOLSSG_XT_GLES@)
@@ -548,33 +519,37 @@ if(Geant4_vis_toolssg_xt_gles_FOUND)
   else()
     find_dependency(OpenGL)
   endif()
+endif()
 
-  if(("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_XT_GLES)
-  endif()
+# - ToolsSG Xt/ZB
+set(Geant4_vis_toolssg_xt_zb_FOUND @GEANT4_USE_TOOLSSG_XT_ZB@)
+if(Geant4_vis_toolssg_xt_zb_FOUND)
+  find_dependency(X11)
+  include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 endif()
 
 # - ToolsSG Qt/GLES
 set(Geant4_vis_toolssg_qt_gles_FOUND @GEANT4_USE_TOOLSSG_QT_GLES@)
 if(Geant4_vis_toolssg_qt_gles_FOUND)
   find_dependency(OpenGL)
-  if(("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_QT_GLES)
-  endif()
 endif()
+
+# - ToolsSG Qt/ZB
+set(Geant4_vis_toolssg_qt_zb_FOUND @GEANT4_USE_TOOLSSG_QT_ZB@)
 
 # Reset any OpenGL Preference
 set(OpenGL_GL_PREFERENCE "${OpenGL_GL_PREFERENCE_SAVE}")
 
 set(Geant4_vis_Vtk_FOUND @GEANT4_USE_VTK@)
 if(Geant4_vis_Vtk_FOUND)
-  find_dependency(VTK)
-  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VTK)
+  find_dependency(VTK 9 REQUIRED COMPONENTS
+    CommonColor
+    InteractionStyle
+    IOExport
+    GUISupportQt
+    RenderingVolumeOpenGL2
+  )
   set(_geant4_use_vtk_library ON)
-
-  if(Geant4_qt_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VTK_QT)
-  endif()
 endif()
 
 #-----------------------------------------------------------------------
@@ -628,13 +603,11 @@ set(_geant4_internal_libraries
 # - G4OpenGL if it's requested.
 if(_geant4_use_opengl_library)
   list(APPEND _geant4_internal_libraries Geant4::G4OpenGL${_geant4_lib_use_suffix})
-  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGL)
 endif()
 
 # - Qt3D if it's requested.
 if(_geant4_use_qt3D_library)
   list(APPEND _geant4_internal_libraries Geant4::G4visQt3D${_geant4_lib_use_suffix})
-  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_QT3D)
 endif()
 
 # - G4OpenInventor if it's requested.
@@ -644,6 +617,11 @@ endif()
 
 if(_geant4_use_vtk_library)
   list(APPEND _geant4_internal_libraries Geant4::G4visVtk${_geant4_lib_use_suffix})
+endif()
+
+# - GDML always added for now as old G4persistency lib always added if present
+if(Geant4_gdml_FOUND)
+  set(_geant4_g4gdml_library Geant4::G4gdml${_geant4_lib_use_suffix})
 endif()
 
 # - G3toG4 if it's requested
@@ -693,7 +671,9 @@ list(APPEND _geant4_internal_libraries
   Geant4::G4vis_management${_geant4_lib_use_suffix}
   Geant4::G4modeling${_geant4_lib_use_suffix}
   Geant4::G4interfaces${_geant4_lib_use_suffix}
-  Geant4::G4persistency${_geant4_lib_use_suffix}
+  Geant4::G4mctruth${_geant4_lib_use_suffix}
+  Geant4::G4geomtext${_geant4_lib_use_suffix}
+  ${_geant4_g4gdml_library}
   ${_geant4_g3tog4_library}
   Geant4::G4analysis${_geant4_lib_use_suffix}
   Geant4::G4error_propagation${_geant4_lib_use_suffix}
@@ -728,24 +708,9 @@ endforeach()
 set(Geant4_LIBRARIES ${_geant4_internal_libraries})
 
 #-----------------------------------------------------------------------
-# Remove any duplicates from the Geant4_{DEFINITIONS,INCLUDE_DIRS,LIBRARIES}
+# Remove any duplicates from the Geant4_{INCLUDE_DIRS,LIBRARIES}
 # variables so that multiple passes append things correctly
 #
-if(Geant4_DEFINITIONS)
-  list(REMOVE_DUPLICATES Geant4_DEFINITIONS)
-endif()
-# -  Create an interface target to export the selected definitions as
-#    usage requirements
-if(NOT TARGET Geant4::G4UIVisDefinitions)
-  add_library(Geant4::G4UIVisDefinitions INTERFACE IMPORTED)
-endif()
-string(REGEX REPLACE "^\-D|;-D" ";" G4UIVIS_COMPILE_DEFINITIONS "${Geant4_DEFINITIONS}")
-set_target_properties(Geant4::G4UIVisDefinitions PROPERTIES
-  INTERFACE_COMPILE_DEFINITIONS "${G4UIVIS_COMPILE_DEFINITIONS}")
-unset(G4UIVIS_COMPILE_DEFINITIONS)
-
-list(APPEND Geant4_LIBRARIES Geant4::G4UIVisDefinitions)
-
 if(Geant4_INCLUDE_DIRS)
   list(REMOVE_DUPLICATES Geant4_INCLUDE_DIRS)
 endif()

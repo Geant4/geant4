@@ -35,7 +35,7 @@
 class VirtualChromosome
 {
  public:
-  explicit VirtualChromosome(G4String );
+  explicit VirtualChromosome(const G4String&);
 
   virtual ~VirtualChromosome() = default;
 

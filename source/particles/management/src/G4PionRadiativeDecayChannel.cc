@@ -66,12 +66,6 @@ namespace
 }
 
 // --------------------------------------------------------------------
-G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel()
-  : G4VDecayChannel()
-{
-}
-
-// --------------------------------------------------------------------
 G4PionRadiativeDecayChannel::
 G4PionRadiativeDecayChannel(const G4String& theParentName,
                                   G4double        theBR)
@@ -108,18 +102,6 @@ G4PionRadiativeDecayChannel(const G4String& theParentName,
     }
 #endif
   }
-}
-
-// --------------------------------------------------------------------
-G4PionRadiativeDecayChannel::~G4PionRadiativeDecayChannel()
-{
-}
-
-// --------------------------------------------------------------------
-G4PionRadiativeDecayChannel::
-G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel& right)
-  : G4VDecayChannel(right)
-{
 }
 
 G4PionRadiativeDecayChannel&
@@ -184,10 +166,10 @@ G4DecayProducts* G4PionRadiativeDecayChannel::DecayIt(G4double)
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
   // create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
+  auto products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   G4double x, y;
@@ -236,7 +218,7 @@ G4DecayProducts* G4PionRadiativeDecayChannel::DecayIt(G4double)
 
   G4ThreeVector direction0(px,py,pz);
 
-  G4DynamicParticle * daughterparticle0 
+  auto  daughterparticle0 
     = new G4DynamicParticle(G4MT_daughters[0], daughtermomentum[0]*direction0);
 
   products->PushProducts(daughterparticle0);
@@ -259,7 +241,7 @@ G4DecayProducts* G4PionRadiativeDecayChannel::DecayIt(G4double)
 
   direction1.rotateUz(direction0);
 
-  G4DynamicParticle * daughterparticle1
+  auto  daughterparticle1
     = new G4DynamicParticle(G4MT_daughters[1], daughtermomentum[1]*direction1);
 
   products->PushProducts(daughterparticle1);

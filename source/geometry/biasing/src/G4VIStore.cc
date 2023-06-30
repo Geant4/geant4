@@ -30,10 +30,6 @@
 
 #include "G4VIStore.hh"
 
-G4VIStore::G4VIStore()
-{
-}
+G4VIStore::G4VIStore() = default;
 
-G4VIStore::~G4VIStore() 
-{
-}
+G4VIStore::~G4VIStore() = default;

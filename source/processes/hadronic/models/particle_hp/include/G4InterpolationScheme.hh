@@ -34,11 +34,13 @@
 // unit base interpolation
 // corresponding point interpolation
 
+// clang-format off
 enum G4InterpolationScheme 
 {
   START,  HISTO,  LINLIN,  LINLOG,  LOGLIN,  LOGLOG, RANDOM, 
   CSTART_,CHISTO, CLINLIN, CLINLOG, CLOGLIN, CLOGLOG, CRANDOM, 
   USTART, UHISTO, ULINLIN, ULINLOG, ULOGLIN, ULOGLOG, URANDOM 
 };
+// clang-format on
 
 #endif

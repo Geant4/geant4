@@ -34,24 +34,20 @@ class G4MolecularConfiguration;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmDNAChemistry_option2 
-    : public G4VUserChemistryList
-    , public G4VPhysicsConstructor
+class G4EmDNAChemistry_option2 : public G4VUserChemistryList, public G4VPhysicsConstructor
 {
-public:
-    G4EmDNAChemistry_option2();
-    virtual ~G4EmDNAChemistry_option2() override;
+ public:
+  G4EmDNAChemistry_option2();
+  ~G4EmDNAChemistry_option2() override = default;
 
-    void ConstructParticle() override
-    {
-        ConstructMolecule();
-    }
-    void ConstructMolecule() override;
-    void ConstructProcess() override;
+  void ConstructParticle() override
+  {
+    ConstructMolecule();
+  }
+  void ConstructMolecule() override;
+  void ConstructProcess() override;
 
-    void ConstructDissociationChannels() override;
-    void ConstructReactionTable(
-    G4DNAMolecularReactionTable* pTable) override;
-    void ConstructTimeStepModel(
-    G4DNAMolecularReactionTable* pTable) override;
+  void ConstructDissociationChannels() override;
+  void ConstructReactionTable(G4DNAMolecularReactionTable* pTable) override;
+  void ConstructTimeStepModel(G4DNAMolecularReactionTable* pTable) override;
 };

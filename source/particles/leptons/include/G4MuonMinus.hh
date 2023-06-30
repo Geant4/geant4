@@ -51,7 +51,7 @@ class G4MuonMinus : public G4ParticleDefinition
  private:
    static G4MuonMinus* theInstance;
    G4MuonMinus(){}
-   ~G4MuonMinus(){}
+   ~G4MuonMinus() override= default;
 
  public:
    static G4MuonMinus* Definition();

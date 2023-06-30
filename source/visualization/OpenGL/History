@@ -6,6 +6,70 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+# 2023-05-31 Ben Morgan (opengl-V11-01-09)
+- Remove support for Qt < 5.9
+  - Clarify remaining version checks using QT_VERSION_CHECK instead of raw hex
+- Add inclusion of qdesktopwidget header required by Qt < 5.10
+
+## 2023-05-16 John Allison (opengl-V11-01-08)
+- G4OpenGLQtViewer: Disable the "old" scene tree.
+  - Comment out just two lines:
+    - Prevent G4OpenGLQtViewer overwriting the "new" scene tree.
+    - Prevent G4OpenGLQtViewer registering the "old" widget.
+  - The problem is G4OpenGLQtViewer removes the "new" scene tree and
+    registers the "old" one, not just for the OGLSQt viewer,
+    but for *all* subsequent viewers, so using OGLSQt completely prevents
+    use of the "new" scene tree. Geant4 examples execute
+    "/vis/open OGL" in the "vis.mac" macro, so the "new" scene tree is
+    never seen nor used. 
+  - This is a "stop-gap" solution - we need to decide how to proceed.
+    - We could keep the "old" scene tree as an option.
+      - In favour of this: the "old" tree is more highly featured.
+    - We could remove the "old" scene tree completely.
+      - We should then transfer nice features of the "old" scene tree
+        to the "new" one.
+      - In any case, new features will be progressively added to the
+        "new" scene tree in future developments.
+
+## 2023-04-27 Ben Morgan (opengl-V11-01-07)
+- Minimum build and code changes required to compile/link against both Qt5 and Qt6
+
+## 2023-04-14 John Allison (opengl-V11-01-06)
+- Co-working: visman-V11-01-04, greps-V11-01-03, interfaces-V11-01-11,
+  openinventor-V11-01-04, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- Revert earlier changes for the new scene tree.
+  - After the introduction of virtual G4VInteractiveSession::UpdateSceneTree
+    they are no loner necessary.
+
+## 2023-04-02 Ben Morgan (opengl-V11-01-05)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+- Remove inclusion of qprinter.h.
+
+## 2023-03-28 John Allison (opengl-V11-01-04)
+- G4OpenGLQtViewer:
+  - Move G4UIQt* fUiQt from private to protected.
+  - Implement UpdateGUISceneTree.
+    - fUiQt->UpdateSceneTree(fSceneTree).
+- G4OpenGLImmediateQtViewer.cc:
+  - Use UpdateGUISceneTree in DrawView.
+- G4OpenGLStoredQtViewer.cc:
+  - Use UpdateGUISceneTree if (kernelVisitWasNeeded).
+
+## 2023-03-22 Ben Morgan (opengl-V11-01-03)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-03-03 Ben Morgan (opengl-V11-01-02)
+- Remove obsolete G4OPENGL_VERSION_2 symbol and G4OpenGLVboDrawer class.
+
+## 2023-01-30 Ben Morgan (opengl-V11-01-01)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
+## 2023-01-28 Ben Morgan (opengl-V11-01-00)
+- Make G4modeling a private dependency, unless Qt is active, when it must be public.
+
 ## 2022-11-25 Gabriele Cosmo (opengl-V11-00-21)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

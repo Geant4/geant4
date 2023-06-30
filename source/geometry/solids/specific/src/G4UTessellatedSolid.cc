@@ -121,7 +121,7 @@ G4bool G4UTessellatedSolid::AddFacet(G4VFacet* aFacet)
   }
   if (aFacet->GetNumberOfVertices() == 3)
   {
-    G4TriangularFacet* a3Facet = dynamic_cast<G4TriangularFacet*>(aFacet);
+    auto a3Facet = dynamic_cast<G4TriangularFacet*>(aFacet);
     return Base_t::AddTriangularFacet(U3Vector(a3Facet->GetVertex(0).x(),
                                                a3Facet->GetVertex(0).y(),
                                                a3Facet->GetVertex(0).z()),
@@ -135,7 +135,7 @@ G4bool G4UTessellatedSolid::AddFacet(G4VFacet* aFacet)
   }
   else if (aFacet->GetNumberOfVertices() == 4)
   {
-    G4QuadrangularFacet* a4Facet = dynamic_cast<G4QuadrangularFacet*>(aFacet);
+    auto a4Facet = dynamic_cast<G4QuadrangularFacet*>(aFacet);
     return Base_t::AddQuadrilateralFacet(U3Vector(a4Facet->GetVertex(0).x(),
                                                   a4Facet->GetVertex(0).y(),
                                                   a4Facet->GetVertex(0).z()),
@@ -179,17 +179,17 @@ void G4UTessellatedSolid::SetSolidClosed(const G4bool t)
     for (std::size_t j = 0; j < nVertices; ++j)
     {
       U3Vector vt = fTessellated.fVertices[j];
-      fVertexList.push_back(G4ThreeVector(vt.x(), vt.y(), vt.z()));
+      fVertexList.emplace_back(vt.x(), vt.y(), vt.z());
     }
     for (std::size_t i = 0; i < nFacets; ++i)
     {
       vecgeom::TriangleFacet<G4double>* afacet = Base_t::GetFacet(i);
       std::vector<G4ThreeVector> v;
-      for (G4int k=0; k<3; ++k)
+      for (const auto & vertex : afacet->fVertices)
       {
-        v.push_back(G4ThreeVector(afacet->fVertices[k].x(),
-                                  afacet->fVertices[k].y(),
-                                  afacet->fVertices[k].z()));
+        v.emplace_back(vertex.x(),
+                                  vertex.y(),
+                                  vertex.z());
       }
       G4VFacet* facet = new G4TriangularFacet(v[0], v[1], v[2],
                                               G4FacetVertexType::ABSOLUTE);
@@ -379,9 +379,9 @@ G4UTessellatedSolid::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UTessellatedSolid::CreatePolyhedron () const
 {
-  G4int nVertices = (G4int)fVertexList.size();
-  G4int nFacets = (G4int)fFacets.size();
-  G4Polyhedron* polyhedron = new G4Polyhedron(nVertices, nFacets);
+  auto nVertices = (G4int)fVertexList.size();
+  auto nFacets = (G4int)fFacets.size();
+  auto polyhedron = new G4Polyhedron(nVertices, nFacets);
   for (auto i = 0; i < nVertices; ++i)
   {
     polyhedron->SetVertex(i+1, fVertexList[i]);

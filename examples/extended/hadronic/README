@@ -93,6 +93,14 @@ containmentby the cladding in a water moderated sub-critical assembly. It could
 also be further extended to calculate the effective multiplication factor of
 the subcritical assembly for various loading schemes.
 
+FlukaCern
+-------------
+A set of 2 examples, demonstrating how to make use of 
+the interface to `FLUKA` hadron-nucleus inelastic physics in a G4 application.
+The examples are at the process (interaction) level, but a physics list 
+(G4_HP_CernFLUKAHadronInelastic_PhysicsList) is also made available.
+The interface to `FLUKA` itself is also included.
+
 NeutronSource
 -------------
 NeutronSource is an example of neutrons production. It illustrates the cooperative work

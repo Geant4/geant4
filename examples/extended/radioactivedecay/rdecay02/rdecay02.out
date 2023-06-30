@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -201,7 +201,7 @@ eBrem:  for e-  XStype:3  SubType=3
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -233,7 +233,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -265,7 +265,7 @@ hPairProd:  for proton  XStype:1  SubType=4
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -278,7 +278,6 @@ ionIoni:  for GenericIon  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -341,7 +340,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -373,7 +372,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -405,7 +404,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -437,7 +436,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -469,7 +468,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -501,7 +500,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -533,7 +532,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -864,12 +863,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 ================================================================
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
@@ -935,51 +943,52 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.810000s Real=0.821603s Sys=0.000000s
+  User=0.720000s Real=0.719823s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 eV  through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 806.94 keV  rms = 418.79 keV
- Mean energy deposit in detector, in time window = 17.908 keV  rms = 107.21 keV
+ Mean energy deposit in target,   in time window = 814.98 keV  rms = 422.54 keV
+ Mean energy deposit in detector, in time window = 17.805 keV  rms = 107 keV
 
  Process calls frequency in target :
-            NoProcess=  10000       Radioactivation=  50746                  Rayl=    253
-       Transportation=  50164               annihil=    168                 compt=   4175
-                 conv=    174                 eIoni=  25978               ionIoni=  39517
-                  msc=   3734                  phot=   1599 
+            NoProcess=  10000       Radioactivation=  50811                  Rayl=    244
+       Transportation=  50209               annihil=    183                 compt=   4278
+                 conv=    188                 eIoni=  26150               ionIoni=  38049
+                  msc=   3757                  phot=   1635 
 
  Process calls frequency in detector:
-                 Rayl=   1251        Transportation=  45864               annihil=    356
-                compt=  22561                  conv=    353                 eIoni=  27526
-                  msc=   5923                  phot=   4281 
+                 Rayl=   1258        Transportation=  45953               annihil=    368
+                compt=  22666                  conv=    370                 eIoni=  27684
+                  msc=   6691                  phot=   4314 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.155 eV 	( 41.932 eV  --> 802.68 eV )
-  Mg24[1368.672]:    9995  Emean =  169.92 eV 	( 45.911 eV  --> 349.16 eV )
-  Mg24[4122.889]:    9980  Emean =   38.79 eV 	( 14.563 meV --> 74.702 eV )
-  Mg24[5235.120]:       9  Emean =  3.7618 eV 	( 1.0366 eV  --> 5.4592 eV )
-           Na24:    9995  Emean =  4.9965 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     759  Emean =  27.439 eV 	( 61.911 meV --> 52.248 eV )
-  Na24[472.207]:   10000  Emean =  68.294 eV 	( 154.07 meV --> 133.6 eV )
-  Na24[563.199]:       8  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  982.25 keV	( 30.292 keV --> 4.6137 MeV)
-             e+:     174  Emean =  857.81 keV	( 15.799 keV --> 1.6532 MeV)
-             e-:   25965  Emean =  637.67 keV	( 72.285 eV  --> 4.7194 MeV)
-          gamma:   31074  Emean =  1.5046 MeV	( 90.991 keV --> 3.8661 MeV)
+           Mg24:   10000  Emean =  42.171 eV 	( 41.932 eV  --> 843.69 eV )
+  Mg24[1368.672]:    9996  Emean =  169.96 eV 	( 71.883 eV  --> 363.92 eV )
+  Mg24[4122.889]:    9980  Emean =  39.397 eV 	( 230.27 meV --> 74.43 eV )
+  Mg24[4238.240]:       1  Emean =  22.241 eV 	( 22.241 eV  --> 22.241 eV )
+  Mg24[5235.120]:      10  Emean =  4.4701 eV 	( 522.19 meV --> 7.1731 eV )
+           Na24:    9997  Emean =   4.998 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.621]:     820  Emean =  27.521 eV 	( 521.05 meV --> 52.503 eV )
+  Na24[472.207]:    9998  Emean =  67.889 eV 	( 185.29 meV --> 133.9 eV )
+  Na24[563.199]:       9  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  972.94 keV	( 46.738 keV --> 4.6304 MeV)
+             e+:     188  Emean =  801.98 keV	( 12.554 keV --> 2.5726 MeV)
+             e-:   26120  Emean =  642.35 keV	( 35.637 eV  --> 2.8814 MeV)
+          gamma:   31170  Emean =  1.5024 MeV	( 90.991 keV --> 4.2378 MeV)
 
  List of generated particles in detector:
-             e+:     353  Emean =  811.06 keV	( 44.173 keV --> 1.6652 MeV)
-             e-:   27181  Emean =  373.28 keV	( 103.28 eV  --> 2.7429 MeV)
-          gamma:     712  Emean =  516.18 keV	( 422.15 keV --> 1.5666 MeV)
+             e+:     370  Emean =  768.42 keV	( 45.96 keV --> 1.6475 MeV)
+             e-:   27334  Emean =  372.49 keV	( 106.6 eV  --> 3.2315 MeV)
+          gamma:     736  Emean =  517.43 keV	( 508.85 keV --> 1.0907 MeV)
 
 ... write file : rdecay02.root - done
 ... close file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 390690496, 754703547
+ Current couple of seeds = 85692760, 1444773713
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0

@@ -226,7 +226,11 @@ LDLIBS1 := $(EXTRALIBS)
 # VISLIBS (and UILIBS?) is handled by the granular library script...
 #
 ifdef GLOBALLIBS
-  LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4persistency
+  LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4mctruth -lG4geomtext
+
+  ifdef G4LIB_USE_GDML
+    LDLIBS2 += -lG4gdml
+  endif
 
   ifdef G4LIB_USE_G3TOG4
     LDLIBS2 += -lG3toG4

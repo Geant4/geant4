@@ -6,23 +6,75 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-16 Vladimir Ivanchenko (hadr-hpp-V11-00-22)
+## 2023-06-17 Vladimir Ivanchenko (hadr-hpp-V11-01-09)
+- G4ParticleHPEnergyDistribution, G4ParticleHPContAngularPar,
+  G4ParticleHPEnAngCorrelation - fixed old Coverity reports
+
+## 2023-06-16 Vladimir Ivanchenko (hadr-hpp-V11-01-08)
 - G4ParticleHPInelasticBaseFS - real fix of memory leak reported by Coverity
 
-## 2023-06-07 Vladimir Ivanchenko
+## 2023-06-07 Vladimir Ivanchenko (hadr-hpp-V11-01-07)
 - G4ParticleHPInelasticBaseFS - fix potential memory leak reported by Coverity
 
-## 2023-03-13 Vladimir Ivanchenko (hadr-hpp-V11-00-21)
+## 2023-05-04 Ben Morgan (hadr-hpp-V11-01-06)
+- Apply clang-tidy fixes
+
+## 2023-05-02 Ben Morgan (hadr-hpp-V11-01-05)
+- Apply clang-format to headers/sources
+  - FastLegendre source files are marked to be ignored due to complexity/size
+
+## 2023-03-13 Vladimir Ivanchenko (hadr-hpp-V11-01-04)
+- G4ParticleHPGamma, G4ParticleHPLevel : are removed
 - G4ParticleHPNucLevel : added new data structure for nuclear levels
 - G4ParticleHPDeExGammas : rewitten in order to avoid usage of C-arrays,
-    which provoked a problem for CMS static build; code now fully based on
+    which provokes a problem for CMS static build; code now fully based on
     std::vector of G4ParticleHPNucLevel; public interfaces are not changed;
-    if in DB probability of decay for a given level is zero, it is 
-    substituted by 1.e-6
+    if in DB probability of decay for a give level is zero; it is substituted 
+    to 1.e-6
 - G4ParticleHPInelasticBaseFS, G4ParticleHPInelasticCompFS - gamma cascade
     sampling is checked and simplified (removed unnecessary computations)
 
-## 2023-02-06 Gabriele Cosmo (hadr-hpp-V11-00-20)
+## 2023-03-27 Alberto Ribon (hadr-hpp-V11-01-03)
+- G4ParticleHPManager : removed the neutron kinetic energy threshold for applying
+  the SVT (Sampling of the Velocity of the Target) algorithm, because this 
+  parameter is in G4HadronicParameters.
+- G4ParticleHPMessenger : when changing the neutron kinetic energy threshold
+  for applying the SVT algorithm - as part of the setting of the DBRC 
+  (Double Broadening Rejection Correction) algorithm - update the corresponding
+  value in G4HadronicParameters.
+- G4ParticleHPElasticFS : get the neutron kinetic energy threshold for applying
+  the SVT algorithm from G4HadronicParameters; 
+  in the method GetBiasedThermalNucleus, corrected mistake in the interval 
+  where the max neutron cross section is considered for rejection.
+
+## 2023-03-13 Vladimir Ivanchenko (hadr-hpp-V11-01-02)
+- G4ParticleHPGamma, G4ParticleHPLevel, G4ParticleHPDeExGammas - attempt to 
+    fix compilation warning in CMSSW, reported in Geant4 issue #158;
+    removed internal counter; delete only objects, which are created
+
+## 2023-03-04 Alberto Ribon (hadr-hpp-V11-01-01)
+Accurate modelling of elastic resonant scattering in heavy nuclei by
+Marek Zmeskal and Loic Thulliez by the use of DBRC (Doppler Broadening
+Rejection Correction) algorithm:
+- G4ParticleHPManager : added new member variables, and corresponding
+  Get and Set methods, related to the DBRC algorithm.
+- G4ParticleHPMessenger : added new UI commands to enable DBRC (which is off
+  by default) and to specify its parameters.
+- G4ParticleHPVector : added new method GetMaxY to provide the maximum
+  cross section in the interval between two kinetic energy values.
+- G4ParticleHPChannel : modified method ApplyYourself, with an extra argument,
+  for a special treatment of the elastic channel.
+- G4ParticleHPElastic : modified call to G4ParticleHPChannel::ApplyYourself,
+  with an extra parameter.
+- G4ParticleHPElasticFS : implemented the DBRC algorithm in the new method
+  GetBiasedThermalNucleus (in the case that DBRC algorithm should not be
+  applied, then this method calls G4Nucleus::GetBiasedThermalNucleus);
+  modified the method ApplyYourself to call the new method
+  GetBiasedThermalNucleus;
+  introduced two more new methods, InitializeScatterKernelParameters and
+  RegisterCrossSection, and corresponding new member variables.
+
+## 2023-02-06 Gabriele Cosmo (hadr-hpp-V11-01-00)
 - Minor cleanup in G4ParticleHPDeExGammas header for data initialisation.
 
 ## 2022-11-26 Gabriele Cosmo (hadr-hpp-V11-00-19)

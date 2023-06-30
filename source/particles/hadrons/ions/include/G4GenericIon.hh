@@ -58,7 +58,7 @@ class G4GenericIon : public G4Ions
  private:
    static G4GenericIon* theInstance;
    G4GenericIon(){}
-   ~G4GenericIon(){}
+   ~G4GenericIon() override= default;
 
  public:
    static G4GenericIon* Definition();

@@ -48,11 +48,6 @@ G4PDGCodeChecker::G4PDGCodeChecker()
 }
 
 // --------------------------------------------------------------------
-G4PDGCodeChecker::~G4PDGCodeChecker()
-{
-}
-
-// --------------------------------------------------------------------
 G4int  G4PDGCodeChecker::CheckPDGCode( G4int PDGcode, 
                                        const G4String& particleType )
 {
@@ -80,20 +75,20 @@ G4int  G4PDGCodeChecker::CheckPDGCode( G4int PDGcode,
   {
     return CheckForQuarks();
   }
-  else if  (theParticleType =="diquarks")
+  if  (theParticleType =="diquarks")
   {
     return CheckForDiQuarks();
   }
-  else if (theParticleType =="gluons")
+  if (theParticleType =="gluons")
   {
     return code; // gluons, do not care about
   }
-  else if (theParticleType == "meson")
+  if (theParticleType == "meson")
   {
     return CheckForMesons();
 
   }
-  else if (theParticleType == "baryon")
+  if (theParticleType == "baryon")
   {
     return CheckForBaryons();
   }
@@ -274,7 +269,7 @@ G4int G4PDGCodeChecker::CheckForMesons()
   }
 
   // check heavier quark type
-  if (quark2 & 1)
+  if ((quark2 & 1) != 0)
   {
     // down type qurak
     if (tempPDGcode >0)
@@ -315,13 +310,13 @@ G4int G4PDGCodeChecker::CheckForDiQuarks()
     return 0;
 
   }
-  else if (quark1 < quark2)
+  if (quark1 < quark2)
   {
     //  --- code is wrong 
     return 0;
 
   }
-  else if (quark2>NumberOfQuarkFlavor)
+  if (quark2>NumberOfQuarkFlavor)
   {
 #ifdef G4VERBOSE
     if (verboseLevel>0)

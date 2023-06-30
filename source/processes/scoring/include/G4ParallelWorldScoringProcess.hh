@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4ParallelWorldScoringProcess.hh
@@ -38,11 +38,14 @@
 //
 //---------------------------------------------------------------
 
-
 #ifndef G4ParallelWorldScoringProcess_h
 #define G4ParallelWorldScoringProcess_h 1
 
+#include "G4FieldTrack.hh"
+#include "G4TouchableHandle.hh"
+#include "G4VProcess.hh"
 #include "globals.hh"
+
 class G4Step;
 class G4Navigator;
 class G4TransportationManager;
@@ -51,121 +54,100 @@ class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
 class G4ParticleDefinition;
-#include "G4VProcess.hh"
-#include "G4FieldTrack.hh"
-#include "G4TouchableHandle.hh"
-
 //------------------------------------------
 //
 //        G4ParallelWorldScoringProcess class
 //
 //------------------------------------------
 
-
 // Class Description:
 
 class G4ParallelWorldScoringProcess : public G4VProcess
 {
-public: // with description
+  public:  // with description
+    //------------------------
+    // Constructor/Destructor
+    //------------------------
 
-  //------------------------
-  // Constructor/Destructor
-  //------------------------
-  
-  G4ParallelWorldScoringProcess(const G4String& processName = "ParaWorldScore",
-				 G4ProcessType theType = fParameterisation);
-  virtual ~G4ParallelWorldScoringProcess();
-  
-  //--------------------------------------------------------------
-  // Set Paralle World
-  //--------------------------------------------------------------
+    G4ParallelWorldScoringProcess(const G4String& processName = "ParaWorldScore",
+                                  G4ProcessType theType = fParameterisation);
+    ~G4ParallelWorldScoringProcess() override;
 
-  void SetParallelWorld(G4String parallelWorldName);
-  void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
-  G4bool IsAtRestRequired(G4ParticleDefinition* partDef);
+    //--------------------------------------------------------------
+    // Set Paralle World
+    //--------------------------------------------------------------
 
-  //--------------------------------------------------------------
-  //     Process interface
-  //--------------------------------------------------------------
+    void SetParallelWorld(G4String parallelWorldName);
+    void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
+    G4bool IsAtRestRequired(G4ParticleDefinition* partDef);
 
-  void StartTracking(G4Track*);
-  
-  //------------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for AtRest 
-  //------------------------------------------------------------------------
-  
-  G4double AtRestGetPhysicalInteractionLength(
-					      const G4Track& ,
-					      G4ForceCondition* 
-					      );
+    //--------------------------------------------------------------
+    //     Process interface
+    //--------------------------------------------------------------
 
-  G4VParticleChange* AtRestDoIt(
-			       const G4Track& ,
-			       const G4Step&
-			       );
+    void StartTracking(G4Track*) override;
 
-  //------------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for AlongStep 
-  //------------------------------------------------------------------------
-  
-  G4double AlongStepGetPhysicalInteractionLength(
-						 const G4Track&,
-						 G4double  ,
-						 G4double  ,
-						 G4double&,
-						 G4GPILSelection*
-						 );
+    //------------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for AtRest
+    //------------------------------------------------------------------------
 
-  G4VParticleChange* AlongStepDoIt(
-				  const G4Track& ,
-				  const G4Step& 
-				  );
+    G4double AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition*) override;
 
-  //-----------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for PostStep
-  //-----------------------------------------------------------------------
-  
-  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-						G4double   previousStepSize,
-						G4ForceCondition* condition);
-  
-  G4VParticleChange* PostStepDoIt(const G4Track& ,const G4Step& );
+    G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override;
 
-private:
-  void CopyStep(const G4Step & step);
+    //------------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for AlongStep
+    //------------------------------------------------------------------------
 
-  G4Step * fGhostStep;
-  G4StepPoint * fGhostPreStepPoint;
-  G4StepPoint * fGhostPostStepPoint;
+    G4double AlongStepGetPhysicalInteractionLength(const G4Track&, G4double, G4double, G4double&,
+                                                   G4GPILSelection*) override;
 
-  G4VParticleChange aDummyParticleChange;
-  G4ParticleChange xParticleChange;
+    G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override;
 
-  G4TransportationManager* fTransportationManager;
-  G4PathFinder*        fPathFinder;
+    //-----------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for PostStep
+    //-----------------------------------------------------------------------
 
-  // -------------------------------
-  // Navigation in the Ghost World:
-  // -------------------------------
-  G4String             fGhostWorldName;
-  G4VPhysicalVolume*   fGhostWorld;
-  G4Navigator*         fGhostNavigator;
-  G4int                fNavigatorID;
-  G4TouchableHandle    fOldGhostTouchable;
-  G4TouchableHandle    fNewGhostTouchable;
-  G4FieldTrack         fFieldTrack;
-  G4double             fGhostSafety;
-  G4bool               fOnBoundary;
+    G4double PostStepGetPhysicalInteractionLength(const G4Track& track, G4double previousStepSize,
+                                                  G4ForceCondition* condition) override;
 
-  // ******************************************************
-  // ******************************************************
-  //
-  //  For TESTS:
-  //
-  // ******************************************************
-  // ******************************************************
-public:
-  void Verbose(const G4Step&) const;
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
+
+  private:
+    void CopyStep(const G4Step& step);
+
+    G4Step* fGhostStep;
+    G4StepPoint* fGhostPreStepPoint;
+    G4StepPoint* fGhostPostStepPoint;
+
+    G4VParticleChange aDummyParticleChange;
+    G4ParticleChange xParticleChange;
+
+    G4TransportationManager* fTransportationManager;
+    G4PathFinder* fPathFinder;
+
+    // -------------------------------
+    // Navigation in the Ghost World:
+    // -------------------------------
+    G4String fGhostWorldName;
+    G4VPhysicalVolume* fGhostWorld;
+    G4Navigator* fGhostNavigator{nullptr};
+    G4int fNavigatorID{-1};
+    G4TouchableHandle fOldGhostTouchable;
+    G4TouchableHandle fNewGhostTouchable;
+    G4FieldTrack fFieldTrack;
+    G4double fGhostSafety;
+    G4bool fOnBoundary;
+
+    // ******************************************************
+    // ******************************************************
+    //
+    //  For TESTS:
+    //
+    // ******************************************************
+    // ******************************************************
+  public:
+    void Verbose(const G4Step&) const;
 };
 
 #endif

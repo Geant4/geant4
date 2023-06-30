@@ -53,7 +53,7 @@ G4ThreadLocal G4bool G4LogicalVolumeStore::locked = false;
 // ***************************************************************************
 //
 G4LogicalVolumeStore::G4LogicalVolumeStore()
- : std::vector<G4LogicalVolume*>()
+  
 {
   reserve(100);
 }
@@ -157,7 +157,7 @@ void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
     std::vector<G4LogicalVolume*> vol_vec { pVolume };
     store->bmap.insert(std::make_pair(vol_name, vol_vec));
   }
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
   store->mvalid = true;
 }
 

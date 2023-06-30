@@ -46,16 +46,16 @@
 // ###                      LambdacPlus                               ###
 // ######################################################################
 
-G4LambdacPlus* G4LambdacPlus::theInstance = 0;
+G4LambdacPlus* G4LambdacPlus::theInstance = nullptr;
 
 G4LambdacPlus* G4LambdacPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "lambda_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -72,7 +72,7 @@ G4LambdacPlus* G4LambdacPlus::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        4122,
-                false,     0.200e-3*ns,          NULL,
+                false,     0.200e-3*ns,          nullptr,
                 false,       "lambda_c");
   }
   theInstance = static_cast<G4LambdacPlus*>(anInstance);

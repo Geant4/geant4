@@ -148,7 +148,7 @@ G4PVDivision::G4PVDivision(const G4String& pName,
                            const G4double width,
                            const G4double offset )
   : G4PVReplica(pName, nDivs, pAxis, pLogical,
-                pMotherPhysical ? pMotherPhysical->GetLogicalVolume() : nullptr)
+                pMotherPhysical != nullptr ? pMotherPhysical->GetLogicalVolume() : nullptr)
 {
   if (pMotherPhysical == nullptr)
   {
@@ -231,7 +231,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   // in G4VPVParameterisation::ComputeTransformation, for others
   // it will stay the unity
   //
-  G4RotationMatrix* pRMat = new G4RotationMatrix();
+  auto  pRMat = new G4RotationMatrix();
   SetRotation(pRMat);
   
   switch (faxis)
@@ -269,9 +269,7 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
 }
 
 //--------------------------------------------------------------------------
-G4PVDivision::~G4PVDivision()
-{
-}
+G4PVDivision::~G4PVDivision() = default;
 
 //--------------------------------------------------------------------------
 EAxis G4PVDivision::GetDivisionAxis() const

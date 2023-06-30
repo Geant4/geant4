@@ -93,16 +93,32 @@
 #include "G4ToolsSGX11GLES.hh" // no_geant4_module_check
 #endif
 
+#ifdef G4VIS_USE_TOOLSSG_X11_ZB
+#include "G4ToolsSGX11ZB.hh" // no_geant4_module_check
+#endif
+
 #ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
 #include "G4ToolsSGWindowsGLES.hh" // no_geant4_module_check
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_ZB
+#include "G4ToolsSGWindowsZB.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_XT_GLES
 #include "G4ToolsSGXtGLES.hh" // no_geant4_module_check
 #endif
 
+#ifdef G4VIS_USE_TOOLSSG_XT_ZB
+#include "G4ToolsSGXtZB.hh" // no_geant4_module_check
+#endif
+
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
 #include "G4ToolsSGQtGLES.hh" // no_geant4_module_check
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_ZB
+#include "G4ToolsSGQtZB.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_VTK
@@ -111,6 +127,10 @@
 
 #ifdef G4VIS_USE_VTK_QT
 #include "G4VtkQt.hh" // no_geant4_module_check
+#endif
+
+#if defined (G4VIS_USE_OPENGLQT) || (G4VIS_USE_TOOLSSG_QT_GLES)
+#include <QtGlobal>
 #endif
 
 // The inline keyword prevents the compiler making an external
@@ -148,6 +168,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
 // super-abbreviated names and fallback names where approproiate.
 
 #ifdef G4VIS_USE_OPENGLQT
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   G4VGraphicsSystem* ogliqt = new G4OpenGLImmediateQt;
   G4VGraphicsSystem* oglsqt = new G4OpenGLStoredQt;
   RegisterGraphicsSystem(ogliqt);
@@ -155,6 +176,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
   ogliqt->AddNickname("OGLI");
   oglsqt->AddNickname("OGL");
   oglsqt->AddNickname("OGLS");
+#endif
 #endif
 
 #ifdef G4VIS_USE_OPENGLXM
@@ -252,6 +274,12 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #endif
 #endif
 
+#ifdef G4VIS_USE_TOOLSSG_X11_ZB
+  G4VGraphicsSystem* tsg_x11_zb = new G4ToolsSGX11ZB;
+  RegisterGraphicsSystem(tsg_x11_zb);
+  tsg_x11_zb->AddNickname("TSGX11ZB");
+#endif
+
 #ifdef G4VIS_USE_TOOLSSG_XT_GLES
   G4VGraphicsSystem* tsg_xt_gles = new G4ToolsSGXtGLES;
   RegisterGraphicsSystem(tsg_xt_gles);
@@ -261,10 +289,22 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #endif
 #endif
 
+#ifdef G4VIS_USE_TOOLSSG_XT_ZB
+  G4VGraphicsSystem* tsg_xt_zb = new G4ToolsSGXtZB;
+  RegisterGraphicsSystem(tsg_xt_zb);
+  tsg_xt_zb->AddNickname("TSGXtZB");
+#endif
+
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   G4VGraphicsSystem* tsg_qt_gles = new G4ToolsSGQtGLES;
   RegisterGraphicsSystem(tsg_qt_gles);
   tsg_qt_gles->AddNickname("TSGQt");
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_ZB
+  G4VGraphicsSystem* tsg_qt_zb = new G4ToolsSGQtZB;
+  RegisterGraphicsSystem(tsg_qt_zb);
+  tsg_qt_zb->AddNickname("TSGQtZB");
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
@@ -272,8 +312,17 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem(tsg_windows_gles);
 #endif
 
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_ZB
+  G4VGraphicsSystem* tsg_windows_zb = new G4ToolsSGWindowsZB;
+  RegisterGraphicsSystem(tsg_windows_zb);
+#endif
+
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   tsg_qt_gles->AddNickname("TSG");
+#  if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  G4cout << "  Qt6: Asking ToolsSG to stand in for OpenGL" << G4endl;
+  tsg_qt_gles->AddNickname("OGL");
+#  endif
 #elif defined(G4VIS_USE_TOOLSSG_XT_GLES)
   tsg_xt_gles->AddNickname("TSG");
 #elif defined(G4VIS_USE_TOOLSSG_X11_GLES)

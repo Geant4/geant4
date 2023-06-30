@@ -41,10 +41,10 @@
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction();
-   ~StackingAction();
+    StackingAction() = default;
+   ~StackingAction() override = default;
      
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

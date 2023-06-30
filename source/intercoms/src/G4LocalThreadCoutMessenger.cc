@@ -30,15 +30,14 @@
 
 #include "G4LocalThreadCoutMessenger.hh"
 
-#include "G4UImanager.hh"
-
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
+#include "G4Tokenizer.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImanager.hh"
 #include "G4UIparameter.hh"
-#include "G4Tokenizer.hh"
 
 // --------------------------------------------------------------------
 G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
@@ -47,12 +46,9 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
   coutDir->SetGuidance("Control cout/cerr for local thread.");
 
   coutFileNameCmd = new G4UIcommand("/control/cout/setCoutFile", this);
-  coutFileNameCmd->SetGuidance(
-    "Send G4cout stream to a file dedicated to a thread. ");
-  coutFileNameCmd->SetGuidance(
-    "To have a display output, use special keyword \"**Screen**\".");
-  coutFileNameCmd->SetGuidance(
-    "If append flag is true output is appended to file,");
+  coutFileNameCmd->SetGuidance("Send G4cout stream to a file dedicated to a thread. ");
+  coutFileNameCmd->SetGuidance("To have a display output, use special keyword \"**Screen**\".");
+  coutFileNameCmd->SetGuidance("If append flag is true output is appended to file,");
   coutFileNameCmd->SetGuidance("otherwise file output is overwritten.");
   coutFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   auto* pp = new G4UIparameter("fileName", 's', true);
@@ -63,12 +59,9 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
   coutFileNameCmd->SetParameter(pp);
 
   cerrFileNameCmd = new G4UIcommand("/control/cout/setCerrFile", this);
-  cerrFileNameCmd->SetGuidance(
-    "Send G4cerr stream to a file dedicated to a thread. ");
-  cerrFileNameCmd->SetGuidance(
-    "To have a display output, use special keyword \"**Screen**\".");
-  cerrFileNameCmd->SetGuidance(
-    "If append flag is true output is appended to file,");
+  cerrFileNameCmd->SetGuidance("Send G4cerr stream to a file dedicated to a thread. ");
+  cerrFileNameCmd->SetGuidance("To have a display output, use special keyword \"**Screen**\".");
+  cerrFileNameCmd->SetGuidance("If append flag is true output is appended to file,");
   cerrFileNameCmd->SetGuidance("otherwise file output is overwritten.");
   cerrFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   pp = new G4UIparameter("fileName", 's', true);
@@ -80,43 +73,39 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
 
   bufferCoutCmd = new G4UIcmdWithABool("/control/cout/useBuffer", this);
   bufferCoutCmd->SetGuidance("Send cout and/or cerr stream to a buffer.");
-  bufferCoutCmd->SetGuidance(
-    "The buffered text will be printed at the end of the job");
+  bufferCoutCmd->SetGuidance("The buffered text will be printed at the end of the job");
   bufferCoutCmd->SetGuidance(
     "for each thread at a time, so that output of each thread is grouped.");
-  bufferCoutCmd->SetGuidance(
-    "This command has no effect if output goes to a file.");
+  bufferCoutCmd->SetGuidance("This command has no effect if output goes to a file.");
   bufferCoutCmd->SetParameterName("flag", true);
   bufferCoutCmd->SetDefaultValue(true);
   bufferCoutCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   prefixCmd = new G4UIcmdWithAString("/control/cout/prefixString", this);
-  prefixCmd->SetGuidance(
-    "Set the prefix string for each cout/cerr line from a thread.");
+  prefixCmd->SetGuidance("Set the prefix string for each cout/cerr line from a thread.");
   prefixCmd->SetParameterName("prefix", true);
   prefixCmd->SetDefaultValue("G4WT");
   prefixCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  ignoreCmd =
-    new G4UIcmdWithAnInteger("/control/cout/ignoreThreadsExcept", this);
+  ignoreCmd = new G4UIcmdWithAnInteger("/control/cout/ignoreThreadsExcept", this);
   ignoreCmd->SetGuidance("Omit cout from threads except the specified one.");
-  ignoreCmd->SetGuidance("This command takes effect only if cout destination "
-                         "is screen without buffering.");
   ignoreCmd->SetGuidance(
-    "If specified thread ID is greater than the number of threads,");
-  ignoreCmd->SetGuidance(
-    "no cout is displayed from worker threads. -1 to reset.");
+    "This command takes effect only if cout destination "
+    "is screen without buffering.");
+  ignoreCmd->SetGuidance("If specified thread ID is greater than the number of threads,");
+  ignoreCmd->SetGuidance("no cout is displayed from worker threads. -1 to reset.");
   ignoreCmd->SetGuidance("This command does not affect to cerr.");
   ignoreCmd->SetParameterName("threadID", true);
   ignoreCmd->SetDefaultValue(0);
   ignoreCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  ignoreInitCmd =
-    new G4UIcmdWithABool("/control/cout/ignoreInitializationCout", this);
-  ignoreInitCmd->SetGuidance("Omit cout from threads during initialization, as "
-                             "they should be identical to the master thread.");
-  ignoreInitCmd->SetGuidance("This command takes effect only if cout "
-                             "destination is screen without buffering.");
+  ignoreInitCmd = new G4UIcmdWithABool("/control/cout/ignoreInitializationCout", this);
+  ignoreInitCmd->SetGuidance(
+    "Omit cout from threads during initialization, as "
+    "they should be identical to the master thread.");
+  ignoreInitCmd->SetGuidance(
+    "This command takes effect only if cout "
+    "destination is screen without buffering.");
   ignoreInitCmd->SetGuidance("This command does not affect to cerr.");
   ignoreInitCmd->SetParameterName("IgnoreInit", true);
   ignoreInitCmd->SetDefaultValue(true);
@@ -136,38 +125,31 @@ G4LocalThreadCoutMessenger::~G4LocalThreadCoutMessenger()
 }
 
 // --------------------------------------------------------------------
-void G4LocalThreadCoutMessenger::SetNewValue(G4UIcommand* command,
-                                             G4String newVal)
+void G4LocalThreadCoutMessenger::SetNewValue(G4UIcommand* command, G4String newVal)
 {
   G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(command == coutFileNameCmd)
-  {
+  if (command == coutFileNameCmd) {
     G4Tokenizer next(newVal);
     G4String fn = next();
-    G4bool af   = StoB(next());
+    G4bool af = StoB(next());
     UI->SetCoutFileName(fn, af);
   }
-  else if(command == cerrFileNameCmd)
-  {
+  else if (command == cerrFileNameCmd) {
     G4Tokenizer next(newVal);
     G4String fn = next();
-    G4bool af   = StoB(next());
+    G4bool af = StoB(next());
     UI->SetCerrFileName(fn, af);
   }
-  else if(command == bufferCoutCmd)
-  {
+  else if (command == bufferCoutCmd) {
     UI->SetThreadUseBuffer(StoB(newVal));
   }
-  else if(command == prefixCmd)
-  {
+  else if (command == prefixCmd) {
     UI->SetThreadPrefixString(newVal);
   }
-  else if(command == ignoreCmd)
-  {
+  else if (command == ignoreCmd) {
     UI->SetThreadIgnore(StoI(newVal));
   }
-  else if(command == ignoreInitCmd)
-  {
+  else if (command == ignoreInitCmd) {
     UI->SetThreadIgnoreInit(StoB(newVal));
   }
 }

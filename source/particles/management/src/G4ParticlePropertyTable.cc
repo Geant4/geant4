@@ -52,9 +52,9 @@ G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
 // --------------------------------------------------------------------
 G4ParticlePropertyTable::~G4ParticlePropertyTable()
 {
-  for (std::size_t idx=0; idx<arrayDataObject.size(); ++idx)
+  for (const auto & idx : arrayDataObject)
   {
-    delete arrayDataObject[idx];
+    delete idx;
   }
   arrayDataObject.clear();
 }
@@ -68,9 +68,9 @@ G4ParticlePropertyTable::G4ParticlePropertyTable()
 // --------------------------------------------------------------------
 void G4ParticlePropertyTable::Clear()
 {
-  for (std::size_t idx=0; idx<arrayDataObject.size(); ++idx)
+  for (const auto & idx : arrayDataObject)
   {
-    delete arrayDataObject[idx];
+    delete idx;
   }
   arrayDataObject.clear();
 }
@@ -90,7 +90,7 @@ G4ParticlePropertyData* G4ParticlePropertyTable::
 GetParticleProperty(const G4ParticleDefinition* aParticle)
 {
   if (aParticle == nullptr ) return nullptr;
-  G4ParticlePropertyData* pData
+  auto  pData
     = new G4ParticlePropertyData(aParticle->GetParticleName());
   pData->thePDGMass        = aParticle->GetPDGMass();
   pData->thePDGWidth       = aParticle->GetPDGWidth();

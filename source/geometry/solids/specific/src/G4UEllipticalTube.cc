@@ -64,7 +64,7 @@ G4UEllipticalTube::G4UEllipticalTube( __void__& a )
 //
 // Destructor
 
-G4UEllipticalTube::~G4UEllipticalTube() { }
+G4UEllipticalTube::~G4UEllipticalTube() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -175,7 +175,7 @@ G4UEllipticalTube::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis, pVoxelLimit, pTransform, pMin, pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   G4double dx = GetDx();

@@ -42,15 +42,12 @@
 
 //------------------------------------------------------------------
 G4PartialPhantomParameterisation::G4PartialPhantomParameterisation()
-  : G4PhantomParameterisation()
 {
 }
 
 
 //------------------------------------------------------------------
-G4PartialPhantomParameterisation::~G4PartialPhantomParameterisation()
-{
-}
+G4PartialPhantomParameterisation::~G4PartialPhantomParameterisation() = default;
 
 //------------------------------------------------------------------
 void G4PartialPhantomParameterisation::
@@ -172,13 +169,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // if the direction is negative substract 1
 
   G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/(fVoxelHalfX*2.);
-  G4int nx = G4int(fx);
+  auto  nx = G4int(fx);
 
   G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/(fVoxelHalfY*2.);
-  G4int ny = G4int(fy);
+  auto  ny = G4int(fy);
 
   G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/(fVoxelHalfZ*2.);
-  G4int nz = G4int(fz);
+  auto  nz = G4int(fz);
 
   // If it is on the surface side, check the direction: if direction is
   // negative place it on the previous voxel (if direction is positive it is
@@ -289,7 +286,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
                 "GeomNav1002", JustWarning, message);
   }
 
-  G4int nyz = G4int(nz*fNoVoxelsY+ny);
+  auto  nyz = G4int(nz*fNoVoxelsY+ny);
   auto ite = fFilledIDs.cbegin();
 /*
   for( ite = fFilledIDs.cbegin(); ite != fFilledIDs.cend(); ++ite )

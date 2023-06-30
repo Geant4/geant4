@@ -32,15 +32,11 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 
-G4DELPHIMagField::G4DELPHIMagField()
-{
-}
+G4DELPHIMagField::G4DELPHIMagField() = default;
 
 ////////////////////////////////////////////////////////////////////////
 
-G4DELPHIMagField::~G4DELPHIMagField()
-{
-}
+G4DELPHIMagField::~G4DELPHIMagField() = default;
 
 ///////////////////////////////////////////////////////////////////////
 

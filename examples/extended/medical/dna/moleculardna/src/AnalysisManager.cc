@@ -715,7 +715,7 @@ void BinaryTree::Insert(const DNAHit* hit)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAHit* BinaryTree::Search(const int64_t& index)  // dousatsu
+DNAHit* BinaryTree::Search(int64_t index)  // dousatsu
 {
   return Search_(index, fRoot);
 }
@@ -797,7 +797,7 @@ void BinaryTree::Insert_(DNAHit* hit, Node* node)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAHit* BinaryTree::Search_(const int64_t& key, Node* node)  // dousatsu check
+DNAHit* BinaryTree::Search_(int64_t key, Node* node)  // dousatsu check
 {
   if(node != nullptr)
   {
@@ -880,7 +880,7 @@ DNAHit* BinaryTree::Next(const DNAHit* hit) const
 // Looks more complicated than it is
 // The interface to these functions with integer keys rather than node
 // objects makes this look more complicated than standard algorithms
-DNAHit* BinaryTree::Next_(const int64_t& key, Node* node) const  // dousatsu
+DNAHit* BinaryTree::Next_(int64_t key, Node* node) const  // dousatsu
 {
   if(key < node->fkey)
   {
@@ -929,9 +929,9 @@ const char* DamageRecord::fHitNoDamageChar    = "~";
 const char* DamageRecord::fNotHitChar         = "-";
 const char* DamageRecord::fBothDamageChar     = "X";
 
-DamageRecord::DamageRecord(G4String name, const int64_t& startIndex,
-                           const G4int& place_idx, const G4int& chain_idx)
-  : fName(std::move(name))
+DamageRecord::DamageRecord(const G4String& name, int64_t startIndex,
+                           G4int place_idx, G4int chain_idx)
+  : fName(name)
   , fStartIndex(startIndex)
   , fStartPlacement(place_idx)
   , fChainIdx(chain_idx)
@@ -2193,7 +2193,7 @@ void AnalysisManager::TestClassification()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DamageRecord::AddEmptyBPDamage(const int64_t& ii)  // dousatsu
+void DamageRecord::AddEmptyBPDamage(int64_t ii)  // dousatsu
 {
   auto basePairNumber = ii;
   while(basePairNumber > 0)

@@ -46,13 +46,15 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction* detector);
-   ~Run();
+   ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
 
     void AddEdep (G4int i, G4double e);
     void AddTotEdep     (G4double e);
+    void AddEleak       (G4double);
+    void AddEtotal      (G4double);    
     void AddTrackLength (G4double t);
     void AddProjRange   (G4double x);
     void AddStepSize    (G4int nb, G4double st);
@@ -64,23 +66,22 @@ class Run : public G4Run
     G4double GetCsdaRange (G4int i);
     G4double GetXfrontNorm(G4int i);   
             
-    virtual void Merge(const G4Run*);
+    void Merge(const G4Run*) override;
     void EndOfRun();
     
   private:
-    DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin; 
+    DetectorConstruction*  fDetector = nullptr;
+    G4ParticleDefinition*  fParticle = nullptr;
+    G4double  fEkin = 0.;
 
-    G4double   fTrackLen,  fTrackLen2;
-    G4double   fProjRange, fProjRange2;
-    G4int      fNbOfSteps, fNbOfSteps2;
-    G4double   fStepSize,  fStepSize2;
+    G4double    fTrackLen = 0.,  fTrackLen2 = 0.;
+    G4double   fProjRange = 0., fProjRange2 = 0.;
+    G4int      fNbOfSteps = 0 , fNbOfSteps2 = 0;
+    G4double    fStepSize = 0.,  fStepSize2 = 0.;
     G4int      fStatus[3];
     
-    G4double   fEdeposit[kMaxAbsor];
-    G4double   fEmin[kMaxAbsor], fEmax[kMaxAbsor];
-    G4double   fTotEdep[3];
+    G4double   fEdeposit[kMaxAbsor], fEmin[kMaxAbsor], fEmax[kMaxAbsor];
+    G4double   fTotEdep[3], fEleak[3], fEtotal[3];
     G4double   fCsdaRange[kMaxAbsor];
     G4double   fXfrontNorm[kMaxAbsor];    
 };

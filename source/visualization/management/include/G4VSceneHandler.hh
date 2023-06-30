@@ -354,11 +354,11 @@ protected:
   public:
     PseudoSceneFor3DRectMeshPositions
     (G4PhysicalVolumeModel* pvModel  // input
-     , G4int depth // input...the following are outputs by reference
+     , const G4Mesh* pMesh  // input...the following are outputs by reference
      , std::multimap<const G4Material*,const G4ThreeVector>& positionByMaterial
      , std::map<const G4Material*,NameAndVisAtts>& nameAndVisAttsByMaterial)
     : fpPVModel(pvModel)
-    , fDepth(depth)
+    , fpMesh(pMesh)
     , fPositionByMaterial(positionByMaterial)
     , fNameAndVisAttsByMaterial(nameAndVisAttsByMaterial)
     {}
@@ -369,7 +369,7 @@ protected:
       // Do nothing if uninteresting solids found, e.g., the container if not marked invisible.
     }
     G4PhysicalVolumeModel* fpPVModel;
-    G4int fDepth;
+    const G4Mesh* fpMesh;
     std::multimap<const G4Material*,const G4ThreeVector>& fPositionByMaterial;
     std::map<const G4Material*,NameAndVisAtts>& fNameAndVisAttsByMaterial;
   };
@@ -378,11 +378,11 @@ protected:
   public:
     PseudoSceneForTetVertices
     (G4PhysicalVolumeModel* pvModel  // input
-     , G4int depth // input...the following are outputs by reference
+     , const G4Mesh* pMesh  // input...the following are outputs by reference
      , std::multimap<const G4Material*,std::vector<G4ThreeVector>>& verticesByMaterial
      , std::map<const G4Material*,NameAndVisAtts>& nameAndVisAttsByMaterial)
     : fpPVModel(pvModel)
-    , fDepth(depth)
+    , fpMesh(pMesh)
     , fVerticesByMaterial(verticesByMaterial)
     , fNameAndVisAttsByMaterial(nameAndVisAttsByMaterial)
     {}
@@ -393,7 +393,7 @@ protected:
       // Do nothing if uninteresting solids found, e.g., the container if not marked invisible.
     }
     G4PhysicalVolumeModel* fpPVModel;
-    G4int fDepth;
+    const G4Mesh* fpMesh;
     std::multimap<const G4Material*,std::vector<G4ThreeVector>>& fVerticesByMaterial;
     std::map<const G4Material*,NameAndVisAtts>& fNameAndVisAttsByMaterial;
   };

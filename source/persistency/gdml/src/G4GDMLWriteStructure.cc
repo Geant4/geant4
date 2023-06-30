@@ -890,7 +890,7 @@ void G4GDMLWriteStructure::SetSDExport(G4bool fsd)
 // --------------------------------------------------------------------
 void G4GDMLWriteStructure::ExportSD(const G4LogicalVolume* const lvol)
 {
-  G4VSensitiveDetector* sd = lvol->GetSensitiveDetector();
+  G4VSensitiveDetector* sd = lvol->GetMasterSensitiveDetector();
 
   if(sd != nullptr)
   {

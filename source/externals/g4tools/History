@@ -6,6 +6,34 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-15 Gabriele Cosmo (g4tools-V11-01-04)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1
+  in toolsx/Xt/zb_viewer.
+
+## 2023-05-29 Guy Barrand (g4tools-V11-01-03)
+- toolx/Qt: zb_viewer, pixwin, session, s2q: have a Qt viewer for the tools/zbuffer rendering.
+- toolx/Xt: zb_viewer, ImageArea, session: have a Xt viewer for the tools/zbuffer rendering.
+- toolx/X11: zb_viewer, pixwin, colors, base_session: have a X11 viewer for the tools/zbuffer rendering.
+- toolx/Windows: zb_viewer, pixwin, ession: have a Windows viewer for the tools/zbuffer rendering.
+- tools/sg/zb_viewer: generic code used by the upper zb_viewer doing the connection with a windowing system.
+- tools: sg/zb_action, sg/write_paper, mat4f, buffer, mat4: modifications used by the upper files.
+- tools: zb/buffer: optimizations. In particular by avoiding the usage of the point_writer class (now removed).
+
+## 2023-04-13 Guy Barrand (g4tools-V11-01-02)
+- toolx/Xt/session: quiet coverity: remove unused field m_app_owner.
+- toolx/sg/GL_manager: quiet coverity: remove unused field m_gsto_on_cardsy.
+- toolx/sg/gl: quiet coverity: in gl_dump_if_errors(), avoid to set the std::hex format on arg a_out. Have a local std::ostringstream.
+- tools/version: pass to 6.1.2.
+
+## 2023-01-18 Guy Barrand (g4tools-V11-01-01)
+- toolx/Qt/glarea: handle Qt6.
+- toolx/Qt/glarea: for Qt5, Qt6: in paintGL(), use devicePixelRatio() to set the size of the toolx::sg::GL_viewer.
+
+## 2023-01-16 Guy Barrand (g4tools-V11-01-00)
+- tools/ccontour: intel-icx: fix compilation warnings about argument of type 'double[]' with mismatched bound.
+- tools/rcsv_histo: coverity: quiet coverity about some "Unchecked return value (CHECKED_RETURN)".
+- tools/version: pass to 6.1.1.
+
 ## 2022-11-25 Gabriele Cosmo (g4tools-V11-00-13)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1
   in files: spline, THistogram and zlib.

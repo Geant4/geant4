@@ -380,9 +380,11 @@ G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
-                                  const G4Material*, G4double)
-{}
+void G4VEmModel::SetupForMaterial(const G4ParticleDefinition* p,
+                                  const G4Material* mat, G4double ekin)
+{
+  GetChargeSquareRatio(p, mat, ekin);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -405,6 +407,18 @@ void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
     xSectionTable = p;
   }
   localTable = isLocal;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....                                                                                                                                     
+G4bool G4VEmModel::LPMFlag() const
+{
+  return G4EmParameters::Instance()->LPM();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....                                                                                                                                     
+void G4VEmModel::SetLPMFlag(G4bool val)
+{
+  G4EmParameters::Instance()->SetLPM(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

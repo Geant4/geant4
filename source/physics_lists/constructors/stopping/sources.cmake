@@ -5,9 +5,11 @@ geant4_add_module(G4phys_ctor_stopping
   PUBLIC_HEADERS
     G4StoppingPhysics.hh
     G4StoppingPhysicsFritiofWithBinaryCascade.hh
+    G4StoppingPhysicsWithINCLXX.hh
   SOURCES
     G4StoppingPhysics.cc
-    G4StoppingPhysicsFritiofWithBinaryCascade.cc)
+    G4StoppingPhysicsFritiofWithBinaryCascade.cc
+    G4StoppingPhysicsWithINCLXX.cc)
 
 geant4_module_link_libraries(G4phys_ctor_stopping
   PUBLIC

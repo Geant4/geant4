@@ -78,9 +78,7 @@ G4Trd::G4Trd( __void__& a )
 //
 // Destructor
 
-G4Trd::~G4Trd()
-{
-}
+G4Trd::~G4Trd() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -293,7 +291,7 @@ G4bool G4Trd::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent
@@ -396,7 +394,7 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
 
   // Return normal
   //
-  if (nsurf == 1)      return G4ThreeVector(nx,ny,nz);
+  if (nsurf == 1)      return {nx,ny,nz};
   else if (nsurf != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else
   {
@@ -439,9 +437,9 @@ G4ThreeVector G4Trd::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 
   G4double distz = std::abs(p.z()) - fDz;
   if (dist > distz)
-    return G4ThreeVector(fPlanes[iside].a, fPlanes[iside].b, fPlanes[iside].c);
+    return { fPlanes[iside].a, fPlanes[iside].b, fPlanes[iside].c };
   else
-    return G4ThreeVector(0, 0, (p.z() < 0) ? -1 : 1);
+    return { 0, 0, (G4double)((p.z() < 0) ? -1 : 1) };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -676,7 +674,7 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4Trd::GetEntityType() const
 {
-  return G4String("G4Trd");
+  return {"G4Trd"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -732,11 +730,11 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
   //
   G4double select = ssurf[5]*G4QuickRand();
   G4int k = 5;
-  k -= (select <= ssurf[4]);
-  k -= (select <= ssurf[3]);
-  k -= (select <= ssurf[2]);
-  k -= (select <= ssurf[1]);
-  k -= (select <= ssurf[0]);
+  k -= (G4int)(select <= ssurf[4]);
+  k -= (G4int)(select <= ssurf[3]);
+  k -= (G4int)(select <= ssurf[2]);
+  k -= (G4int)(select <= ssurf[1]);
+  k -= (G4int)(select <= ssurf[0]);
 
   // Generate point on selected surface
   //
@@ -746,7 +744,7 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
   {
     case 0: // base at -Z
     {
-      return G4ThreeVector((2.*u - 1.)*fDx1, (2.*v - 1.)*fDy1, -fDz);
+      return { (2.*u - 1.)*fDx1, (2.*v - 1.)*fDy1, -fDz };
     }
     case 1: // X face at -Y
     {
@@ -786,10 +784,10 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
     }
     case 5: // base at +Z
     {
-      return G4ThreeVector((2.*u - 1.)*fDx2, (2.*v - 1.)*fDy2, fDz);
+      return { (2.*u - 1.)*fDx2, (2.*v - 1.)*fDy2, fDz };
     }
   }
-  return G4ThreeVector(0., 0., 0.);
+  return {0., 0., 0.};
 }
 
 //////////////////////////////////////////////////////////////////////////

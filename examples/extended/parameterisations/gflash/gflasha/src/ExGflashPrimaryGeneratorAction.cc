@@ -34,7 +34,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashPrimaryGeneratorAction::ExGflashPrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction(), fParticleGun(nullptr)
 {
   fParticleGun = new G4GeneralParticleSource;
 }

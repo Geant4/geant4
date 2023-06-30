@@ -54,7 +54,7 @@ class G4AdjointAlpha : public G4AdjointIons
  private:
    static G4AdjointAlpha* theInstance;
    G4AdjointAlpha(){}
-   ~G4AdjointAlpha(){}
+   ~G4AdjointAlpha() override= default;
 
  public:
    static G4AdjointAlpha* Definition();

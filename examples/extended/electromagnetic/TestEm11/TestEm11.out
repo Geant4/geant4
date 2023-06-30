@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -55,7 +55,7 @@ PhysicsList::AddPhysicsList: <emstandard_opt3>
 
 -------------------------------------------------------------
  ---> The Absorber is 1 layers of:
- 	       G4_Si:      1 mm   divided in 1 slices
+ 	           G4_Si:      1 mm   divided in 1 slices
 -------------------------------------------------------------
 
 #
@@ -293,7 +293,7 @@ min MeanLife (from G4NuclideTable)                1 ps
 Max life time (from G4DeexPrecoParameters)        1 ns 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           0
-Enabled atomic relaxation mode                    1
+Enabled atomic relaxation mode                    0
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
@@ -540,7 +540,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=0.750000s Real=0.759832s Sys=0.000000s
+  User=0.820000s Real=0.862824s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -548,6 +548,8 @@ Run Summary
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
  Edep in absorber 1 = 448.476 keV	(13.860 keV-->500.000 keV)
+ Energy leakage     = 51.524 keV	(5.048 keV-->486.140 keV)
+ Energy total       = 500.000 keV	(500.000 keV-->500.000 keV)
 
  Track length of primary track = 884.384 um  +- 189.614 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
@@ -556,7 +558,8 @@ Run Summary
 
  Nb of steps of primary track  = 12.02 +- 2.92	 Step size= 75.905 um  +- 19.096 um 
 
- absorbed = 77.66 %   transmit = 5.93 %   reflected = 16.41 %
+ absorbed = 77.66 %   transmit = 5.93 %   reflected = 16.41 % 
+
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

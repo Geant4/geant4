@@ -104,6 +104,10 @@ public:
 
   inline G4double LevelDensity(const G4double U) const;
 
+  inline const std::vector<G4double>& GetLevelEnergies() const;
+
+  inline const std::vector<const G4NucLevel*>& GetLevels() const;
+
   const G4String& FloatingType(const std::size_t i) const;
 
   void StreamInfo(std::ostream& os) const;
@@ -207,6 +211,16 @@ inline G4double G4LevelManager::ShellCorrection() const
 inline G4double G4LevelManager::LevelDensity(const G4double) const
 {
   return fLevelDensity;
+}
+
+inline const std::vector<G4double>& G4LevelManager::GetLevelEnergies() const
+{
+  return fLevelEnergy;
+}
+
+inline const std::vector<const G4NucLevel*>& G4LevelManager::GetLevels() const
+{
+  return fLevels;
 }
 
 #endif

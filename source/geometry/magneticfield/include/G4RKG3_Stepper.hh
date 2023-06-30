@@ -42,22 +42,22 @@ class G4Mag_EqRhs;
 
 class G4RKG3_Stepper : public G4MagIntegratorStepper
 {
-  public:  // with description
+  public:
 
     G4RKG3_Stepper(G4Mag_EqRhs* EqRhs);
       // Integrate over 6 variables only:  position & velocity.
       // Not implemented yet !
 
-    ~G4RKG3_Stepper();
+    ~G4RKG3_Stepper() override;
 
     void Stepper( const G4double yIn[],
                   const G4double dydx[],
                         G4double h,
                         G4double yOut[],
-                        G4double yErr[] );
+                        G4double yErr[] ) override;
       // The method which must be provided, even if less efficient.
 
-    G4double  DistChord() const ;
+    G4double  DistChord() const override ;
  
     void StepNoErr( const G4double tIn[8],
                     const G4double dydx[6],
@@ -83,9 +83,7 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
       // B1[3] is input  and is the first magnetic field values
       // B2[3] is output and is the final magnetic field values.
 
-  public:  // without description
-
-    inline G4int IntegratorOrder() const { return 4; }
+    inline G4int IntegratorOrder() const override { return 4; }
 
   private:
 

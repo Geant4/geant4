@@ -55,6 +55,7 @@ G4VisExtent                                         G4VVisCommand::fCurrentExten
 std::vector<G4PhysicalVolumesSearchScene::Findings> G4VVisCommand::fCurrrentPVFindingsForField;
 G4bool G4VVisCommand::fThereWasAViewer = false;
 G4ViewParameters G4VVisCommand::fExistingVP;
+G4SceneTreeItem  G4VVisCommand::fExistingSceneTree;
 
 G4VVisCommand::G4VVisCommand () {}
 
@@ -339,7 +340,6 @@ void G4VVisCommand::InterpolateToNewView
 
 void G4VVisCommand::Twinkle
 // Twinkles the touchables in paths
-// /vis/viewer/centreOn to see its effect
  (G4VViewer* currentViewer,
   const G4ViewParameters& baseVP,
   const std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>>& paths)
@@ -379,16 +379,11 @@ void G4VVisCommand::Twinkle
 
   // Twinkle
   std::vector<G4ViewParameters> viewVector;
-  viewVector.push_back(loVP);
-  viewVector.push_back(hiVP);
-  viewVector.push_back(loVP);
-  viewVector.push_back(hiVP);
-  viewVector.push_back(loVP);
-  viewVector.push_back(hiVP);
-  viewVector.push_back(loVP);
-  viewVector.push_back(hiVP);
-  viewVector.push_back(loVP);
-  viewVector.push_back(hiVP);
+  // Just 5 twinkles is reasonable to get a human's attention
+  for (G4int i = 0; i < 5; i++) {
+    viewVector.push_back(loVP);
+    viewVector.push_back(hiVP);
+  }
   // Just 5 interpolation points for a reasonable twinkle rate
   InterpolateViews(currentViewer,viewVector,5);
 }

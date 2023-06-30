@@ -41,18 +41,19 @@ class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingMessenger: public G4UImessenger
-{
+class StackingMessenger : public G4UImessenger {
 public:
-  StackingMessenger(StackingAction*);
-  ~StackingMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
+  explicit StackingMessenger(StackingAction *);
+  ~StackingMessenger() override;
 
-  StackingAction*    fStackAction;    
-  G4UIcmdWithABool*  fKillCmd;
+  void SetNewValue(G4UIcommand *, G4String) override;
+
+  StackingMessenger &operator = (const StackingMessenger &right) = delete;
+  StackingMessenger(const StackingMessenger &) = delete;
+
+private:
+  StackingAction *fStackAction;
+  G4UIcmdWithABool *fKillCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

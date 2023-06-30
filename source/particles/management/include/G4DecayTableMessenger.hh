@@ -59,10 +59,10 @@ class G4DecayTableMessenger : public G4UImessenger
   public:
 
     G4DecayTableMessenger(G4ParticleTable* pTable = nullptr);
-    virtual ~G4DecayTableMessenger();
+    ~G4DecayTableMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand* command);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
     G4DecayTableMessenger(const G4DecayTableMessenger&) = delete;
     G4DecayTableMessenger& operator= (const G4DecayTableMessenger&) = delete;

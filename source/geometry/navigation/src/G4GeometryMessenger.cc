@@ -317,14 +317,14 @@ G4GeometryMessenger::ResetNavigator()
   //
   G4ThreeVector pt(0,0,0);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
-  navigator->LocateGlobalPointAndSetup(pt,0,false);
+  navigator->LocateGlobalPointAndSetup(pt,nullptr,false);
 }
 
 //
 // Set navigator verbosity
 //
 void
-G4GeometryMessenger::SetVerbosity(G4String input)
+G4GeometryMessenger::SetVerbosity(const G4String& input)
 {
   G4int level = verbCmd->GetNewIntValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
@@ -335,7 +335,7 @@ G4GeometryMessenger::SetVerbosity(G4String input)
 // Set navigator mode
 //
 void
-G4GeometryMessenger::SetCheckMode(G4String input)
+G4GeometryMessenger::SetCheckMode(const G4String& input)
 {
   G4bool mode = chkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
@@ -348,7 +348,7 @@ G4GeometryMessenger::SetCheckMode(G4String input)
 // Set navigator verbosity for push notifications
 //
 void
-G4GeometryMessenger::SetPushFlag(G4String input)
+G4GeometryMessenger::SetPushFlag(const G4String& input)
 {
   G4bool mode = pchkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();

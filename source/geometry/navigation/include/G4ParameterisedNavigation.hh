@@ -56,7 +56,7 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
   public:  // with description
 
     G4ParameterisedNavigation();
-    ~G4ParameterisedNavigation();
+    ~G4ParameterisedNavigation() override;
 
     inline G4SmartVoxelNode* ParamVoxelLocate( G4SmartVoxelHeader* pHead,
                                          const G4ThreeVector& localPoint );
@@ -67,7 +67,7 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
                   const G4ThreeVector& globalPoint,
                   const G4ThreeVector* globalDirection,
                   const G4bool pLocatedOnEdge, 
-                        G4ThreeVector& localPoint );
+                        G4ThreeVector& localPoint ) override;
 
     G4double ComputeStep( const G4ThreeVector& globalPoint,
                           const G4ThreeVector& globalDirection,
@@ -79,11 +79,11 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
                                 G4bool& exiting,
                                 G4bool& entering,
                                 G4VPhysicalVolume *(*pBlockedPhysical),
-                                G4int& blockedReplicaNo );
+                                G4int& blockedReplicaNo ) override;
 
     G4double ComputeSafety( const G4ThreeVector& localPoint,
                             const G4NavigationHistory& history,
-                            const G4double pProposedMaxLength=DBL_MAX );
+                            const G4double pProposedMaxLength=DBL_MAX ) override;
 
   private:
 

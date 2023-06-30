@@ -34,36 +34,38 @@
 class G4ParticleHPFieldPoint
 {
   public:
-  
-  G4ParticleHPFieldPoint()
-  {
-    X = 0;
-    nP = 0;
-    Y = 0;
-  }
-  
-  G4ParticleHPFieldPoint(G4int n);
-  
-  void operator= (const G4ParticleHPFieldPoint & aSet);
+    G4ParticleHPFieldPoint()
+    {
+      X = 0;
+      nP = 0;
+      Y = nullptr;
+    }
 
-  ~G4ParticleHPFieldPoint();
-    
-  void InitY(G4int n);
+    G4ParticleHPFieldPoint(G4int n);
 
-  inline G4int GetDepth() const {return nP;}
-  inline G4double GetX() const {return X;}
-  inline G4double GetY(G4int i) const {return Y[i];}
-  
-  inline void SetX(G4double e) {X = e;}
-  inline void SetY(G4int i, G4double x) {Y[i] = x;}
-  
-  inline void SetData(G4double e, G4int i, G4double x) {X = e; Y[i] = x;}
-  
+    void operator=(const G4ParticleHPFieldPoint& aSet);
+
+    ~G4ParticleHPFieldPoint();
+
+    void InitY(G4int n);
+
+    inline G4int GetDepth() const { return nP; }
+    inline G4double GetX() const { return X; }
+    inline G4double GetY(G4int i) const { return Y[i]; }
+
+    inline void SetX(G4double e) { X = e; }
+    inline void SetY(G4int i, G4double x) { Y[i] = x; }
+
+    inline void SetData(G4double e, G4int i, G4double x)
+    {
+      X = e;
+      Y[i] = x;
+    }
+
   private:
-  
-  G4double X;
-  G4double * Y;
-  G4int nP;
+    G4double X;
+    G4double* Y;
+    G4int nP;
 };
 
 #endif

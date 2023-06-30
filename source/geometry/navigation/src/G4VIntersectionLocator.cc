@@ -403,7 +403,7 @@ GetLocalSurfaceNormal(const G4ThreeVector& CurrentE_Point, G4bool& validNormal)
   //        which side you are located onto (can return vector with wrong sign.)
   // TO-DO: use direction (of chord) to identify volume we will be "entering"
 
-  if( located != 0)
+  if( located != nullptr)
   { 
     G4LogicalVolume* pLogical= located->GetLogicalVolume(); 
     G4VSolid*        pSolid; 
@@ -821,7 +821,7 @@ void G4VIntersectionLocator::ReportProgress( std::ostream& oss,
 
 {
   oss << "ReportProgress: Current status of intersection search: " << G4endl;
-  if( depth > 0 ) oss << " Depth= " << depth;
+  if( depth > 0 ) { oss << " Depth= " << depth; }
   oss << " Substep no = " << substep_no << G4endl;
   G4int  verboseLevel = 5; 
   G4double safetyPrev = -1.0;  // Add as argument ?

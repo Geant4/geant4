@@ -88,8 +88,8 @@ PhysListEmStandard::PhysListEmStandard(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
-{}
+//PhysListEmStandard::~PhysListEmStandard()
+//{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

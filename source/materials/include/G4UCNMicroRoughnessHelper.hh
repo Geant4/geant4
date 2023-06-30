@@ -22,10 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 //---------------------------------------------------------------------------
-//
 // ClassName:   G4UCNMicroRoughnessHelper
 //
 // Class description:
@@ -39,8 +37,6 @@
 // hang-up at the generation of the polar angle due to a very sharp angular
 // distribution
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 // 12-05-14, adopted from Stefan Heule (PSI) Thesis by P.Gumplinger
 //           reported in F. Atchison et al., Eur. Phys. J. A 44, 23–29 (2010)
 //                       DOI:  10.1140/epja/i2010-10926-x
@@ -55,134 +51,110 @@
 
 #include "G4Types.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4UCNMicroRoughnessHelper
 {
-  public:  // with description
+ public:  // with description
+  static G4UCNMicroRoughnessHelper* GetInstance();
 
-    static G4UCNMicroRoughnessHelper* GetInstance();
+ public:  // with description
+  // Transmitted intensity with k-vector in vacuum
+  // arguments:
+  //         1) cos(theta)^2,
+  //         2) (k_l/k)^2
+  G4double S2(G4double, G4double) const;
 
-  protected:
+  // Transmitted intensity with k-vector within the medium
+  // arguments:
+  //         1) cos(theta')^2,
+  //         2) (k_l/k')^2
+  G4double SS2(G4double, G4double) const;
 
-    G4UCNMicroRoughnessHelper();
-    ~G4UCNMicroRoughnessHelper();
+  // Fourier-tranform of the autocorrelation function with k-vector in vacuum
+  // arguments:
+  //         1) k^2,
+  //         2) theta_i,
+  //         3) theta_o,
+  //         4) phi_o,
+  //         5) b^2,
+  //         6) w^2,
+  //         7) angular cut
+  G4double Fmu(G4double, G4double, G4double, G4double, G4double, G4double, G4double) const;
 
-  public:  // with description
+  // Fourier-tranform of the autocorrelation function with k-vector within
+  // the medium
+  // arguments:
+  //         1) k,
+  //         2) k',
+  //         3) theta_i,
+  //         4) theta'_o,
+  //         5) phi'_o,
+  //         6) b^2,
+  //         7) w^2,
+  //         8) angular cut
+  //         9) theta_refract
+  G4double FmuS(
+    G4double, G4double, G4double, G4double, G4double, G4double, G4double, G4double, G4double) const;
 
-// Transmitted intensity with k-vector in vacuum
+  // Integral probability for non-specular reflection
+  // arguments:
+  //         1) E,
+  //         2) V_F,
+  //         3) theta_i,
+  //         4) number of angles theta_o for which the probability is calculated,
+  //         5) number of angles phi_o for which the probability is calculated,
+  //         6) b^2,
+  //         7) w^2,
+  //         8) pointer to G4double array with max values of the probability,
+  //         9) angular cut
+  G4double IntIplus(
+    G4double, G4double, G4double, G4int, G4int, G4double, G4double, G4double*, G4double) const;
 
-// arguments:
-//         1) cos(theta)^2,
-//         2) (k_l/k)^2
+  // Probability of non-specular reflection with the microroughness model
+  // arguments:
+  //         1) E,
+  //         2) V_F,
+  //         3) theta_i,
+  //         4) theta_o,
+  //         5) phi_o,
+  //         6) b,
+  //         7) w,
+  //         8) angular cut
+  G4double ProbIplus(
+    G4double, G4double, G4double, G4double, G4double, G4double, G4double, G4double) const;
 
-    G4double S2(G4double, G4double) const;
+  // Integral probability for non-specular transmission
+  // arguments:
+  //         1) E,
+  //         2) V_F,
+  //         3) theta_i,
+  //         4) number of angles theta_o for which the probability is calculated,
+  //         5) number of angles phi_o for which the probability is calculated,
+  //         6) b^2,
+  //         7) w^2,
+  //         8) pointer to G4double array with max values of the probability,
+  //         9) angular cut
+  G4double IntIminus(
+    G4double, G4double, G4double, G4int, G4int, G4double, G4double, G4double*, G4double) const;
 
-// Transmitted intensity with k-vector within the medium
+  // Probability of non-specular transmission with the microroughness model
+  // arguments:
+  //         1) E,
+  //         2) V_F,
+  //         3) theta_i,
+  //         4) theta'_o,
+  //         5) phi'_o,
+  //         6) b,
+  //         7) w,
+  //         8) angular cut
+  G4double ProbIminus(
+    G4double, G4double, G4double, G4double, G4double, G4double, G4double, G4double) const;
 
-// arguments:
-//         1) cos(theta')^2,
-//         2) (k_l/k')^2
+ protected:
+  G4UCNMicroRoughnessHelper() = default;
+  ~G4UCNMicroRoughnessHelper();
 
-    G4double SS2(G4double, G4double) const;
-
-// Fourier-tranform of the autocorrelation function with k-vector in vacuum
-
-// arguments:
-//         1) k^2,
-//         2) theta_i,
-//         3) theta_o,
-//         4) phi_o,
-//         5) b^2,
-//         6) w^2,
-//         7) angular cut
-
-    G4double Fmu(G4double, G4double, G4double,
-                 G4double, G4double, G4double, G4double) const;
-
-// Fourier-tranform of the autocorrelation function with k-vector within
-// the medium
-
-// arguments:
-//         1) k,
-//         2) k',
-//         3) theta_i,
-//         4) theta'_o,
-//         5) phi'_o,
-//         6) b^2,
-//         7) w^2,
-//         8) angular cut
-//         9) theta_refract
-
-    G4double FmuS(G4double, G4double, G4double, G4double,
-                  G4double, G4double, G4double, G4double, G4double) const;
-
-// Integral probability for non-specular reflection
-
-// arguments:
-//         1) E,
-//         2) V_F,
-//         3) theta_i,
-//         4) number of angles theta_o for which the probability is calculated,
-//         5) number of angles phi_o for which the probability is calculated,
-//         6) b^2,
-//         7) w^2,
-//         8) pointer to G4double array with max values of the probability,
-//         9) angular cut
-
-    G4double IntIplus(G4double, G4double, G4double, G4int, G4int,
-                      G4double, G4double, G4double*, G4double) const;
-
-// Probability of non-specular reflection with the microroughness model
-
-// arguments:
-//         1) E,
-//         2) V_F,
-//         3) theta_i,
-//         4) theta_o,
-//         5) phi_o,
-//         6) b,
-//         7) w,
-//         8) angular cut
-
-    G4double ProbIplus (G4double, G4double, G4double, G4double,
-                        G4double, G4double, G4double, G4double) const;
-
-// Integral probability for non-specular transmission
-
-// arguments:
-//         1) E,
-//         2) V_F,
-//         3) theta_i,
-//         4) number of angles theta_o for which the probability is calculated,
-//         5) number of angles phi_o for which the probability is calculated,
-//         6) b^2,
-//         7) w^2,
-//         8) pointer to G4double array with max values of the probability,
-//         9) angular cut
-
-    G4double IntIminus(G4double, G4double, G4double, G4int, G4int,
-                       G4double, G4double, G4double*, G4double) const;
-
-// Probability of non-specular transmission with the microroughness model
-
-// arguments:
-//         1) E,
-//         2) V_F,
-//         3) theta_i,
-//         4) theta'_o,
-//         5) phi'_o,
-//         6) b,
-//         7) w,
-//         8) angular cut
-
-    G4double ProbIminus (G4double, G4double, G4double, G4double,
-                         G4double, G4double, G4double, G4double) const;
-
-  private:
-
-    static G4UCNMicroRoughnessHelper* fpInstance;
-
+ private:
+  static G4UCNMicroRoughnessHelper* fpInstance;
 };
 
-#endif // G4MICROROUGHNESSHELPER_HH
+#endif  // G4MICROROUGHNESSHELPER_HH

@@ -56,9 +56,9 @@ class G4GlobalMagFieldMessenger : public G4UImessenger
   public:  // with description
 
     G4GlobalMagFieldMessenger(const G4ThreeVector& value = G4ThreeVector());
-    virtual ~G4GlobalMagFieldMessenger();
+    ~G4GlobalMagFieldMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
     void  SetFieldValue(const G4ThreeVector& value);
     G4ThreeVector GetFieldValue() const;

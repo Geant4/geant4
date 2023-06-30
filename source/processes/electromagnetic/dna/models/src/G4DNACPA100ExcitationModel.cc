@@ -37,12 +37,15 @@
 //
 // 15.01.2014: creation
 //
+// 1/2/2023 : Hoang added modification for DNA cross sections
 
 #include "G4DNACPA100ExcitationModel.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
+
 #include "G4DNAChemistryManager.hh"
+#include "G4DNAMaterialManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,387 +55,271 @@ using namespace std;
 
 G4DNACPA100ExcitationModel::G4DNACPA100ExcitationModel(const G4ParticleDefinition*,
                                                        const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+  : G4VDNAModel(nam, "all")
 {
-    fpMolWaterDensity = 0;
-
-    SetLowEnergyLimit(11*eV);
-    SetHighEnergyLimit(255955*eV);
-
-    verboseLevel= 0;
-    // Verbosity scale:
-    // 0 = nothing
-    // 1 = warning for energy non-conservation
-    // 2 = details of energy budget
-    // 3 = calculation of cross sections, file openings, sampling of atoms
-    // 4 = entering in methods
-
-    if( verboseLevel>0 )
-    {
-        G4cout << "CPA100 excitation model is constructed " << G4endl;
-    }
-    fParticleChangeForGamma = 0;
-
-    // Selection of stationary mode
-
-    statCode = false;
+  fpGuanine = G4Material::GetMaterial("G4_GUANINE", false);
+  fpG4_WATER = G4Material::GetMaterial("G4_WATER", false);
+  fpDeoxyribose = G4Material::GetMaterial("G4_DEOXYRIBOSE", false);
+  fpCytosine = G4Material::GetMaterial("G4_CYTOSINE", false);
+  fpThymine = G4Material::GetMaterial("G4_THYMINE", false);
+  fpAdenine = G4Material::GetMaterial("G4_ADENINE", false);
+  fpPhosphate = G4Material::GetMaterial("G4_PHOSPHORIC_ACID", false);
+  fpParticle = G4Electron::ElectronDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNACPA100ExcitationModel::~G4DNACPA100ExcitationModel()
-{
-    // Cross section
-
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    for (pos = tableData.begin(); pos != tableData.end(); ++pos)
-    {
-        G4DNACrossSectionDataSet* table = pos->second;
-        delete table;
-    }
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4DNACPA100ExcitationModel::Initialise(const G4ParticleDefinition* particle,
+void G4DNACPA100ExcitationModel::Initialise(const G4ParticleDefinition* p,
                                             const G4DataVector& /*cuts*/)
 {
+  if (isInitialised) {
+    return;
+  }
+  if (verboseLevel > 3) {
+    G4cout << "Calling G4DNACPA100ExcitationModel::Initialise()" << G4endl;
+  }
 
-    if (verboseLevel > 3)
-        G4cout << "Calling G4DNACPA100ExcitationModel::Initialise()" << G4endl;
-
-    G4String fileElectron("dna/sigma_excitation_e_cpa100");
-
-    G4double scaleFactor = 1.e-20 *m*m;
-
-    // *** ELECTRON
-
-    G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
-    G4String electron;
-    electron = electronDef->GetParticleName();
-
-    tableFile[electron] = fileElectron;
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableE
-     = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV, scaleFactor );
-
-    /*
-      G4DNACrossSectionDataSet* tableE =
-       new G4DNACrossSectionDataSet(new G4DNACPA100LogLogInterpolation, eV, scaleFactor );
-    */
-
-    tableE->LoadData(fileElectron);
-
-    tableData[electron] = tableE;
-
-    //
-
-    if( verboseLevel>0 )
-    {
-        G4cout << "CPA100 excitation model is initialized " << G4endl
-               << "Energy range: "
-               << LowEnergyLimit() / eV << " eV - "
-               << HighEnergyLimit() / keV << " keV for "
-               << particle->GetParticleName()
-               << G4endl;
+  if (!G4DNAMaterialManager::Instance()->IsLocked()) {
+    if (p != fpParticle) {
+      std::ostringstream oss;
+      oss << " Model is not applied for this particle " << p->GetParticleName();
+      G4Exception("G4DNACPA100ExcitationModel::G4DNACPA100ExcitationModel", "CPA001",
+                  FatalException, oss.str().c_str());
     }
 
-    // Initialize water density pointer
-    fpMolWaterDensity =
-      G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+    char* path = getenv("G4LEDATA");
 
-    if (isInitialised) return;
-    fParticleChangeForGamma = GetParticleChangeForGamma();
-    isInitialised = true;
+    if (!path) {
+      G4Exception("G4DNACPA100ExcitationModel::Initialise", "em0006", FatalException,
+                  "G4LEDATA environment variable not set.");
+      return;
+    }
+
+    std::size_t index;
+    if (fpG4_WATER != nullptr) {
+      index = fpG4_WATER->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100", 1.e-20 * m * m);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 255955 * eV);
+    }
+    if (fpGuanine != nullptr) {
+      index = fpGuanine->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100_guanine", 1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpDeoxyribose != nullptr) {
+      index = fpDeoxyribose->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100_deoxyribose", 1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpCytosine != nullptr) {
+      index = fpCytosine->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100_cytosine", 1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpThymine != nullptr) {
+      index = fpThymine->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100_thymine", 1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpAdenine != nullptr) {
+      index = fpAdenine->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100_adenine", 1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpPhosphate != nullptr) {
+      index = fpPhosphate->GetIndex();
+      AddCrossSectionData(index, p, "dna/sigma_excitation_e_cpa100_phosphoric_acid", 1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+
+    LoadCrossSectionData(p);
+    G4DNAMaterialManager::Instance()->SetMasterDataModel(DNAModelType::fDNAExcitation, this);
+    fpModelData = this;
+  }
+  else {
+    auto dataModel = dynamic_cast<G4DNACPA100ExcitationModel*>(
+      G4DNAMaterialManager::Instance()->GetModel(DNAModelType::fDNAExcitation));
+    if (dataModel == nullptr) {
+      G4cout << "G4DNACPA100ExcitationModel::CrossSectionPerVolume:: not good modelData" << G4endl;
+      throw;
+    }
+    else {
+      fpModelData = dataModel;
+    }
+  }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4DNACPA100ExcitationModel::CrossSectionPerVolume(const G4Material* material,
-                                                           const G4ParticleDefinition* particleDefinition,
-                                                           G4double ekin,
-                                                           G4double,
-                                                           G4double)
+                                                           const G4ParticleDefinition* p,
+                                                           G4double ekin, G4double, G4double)
 {
+  // Get the name of the current particle
+  G4String particleName = p->GetParticleName();
+  auto MatID = material->GetIndex();
+  // initialise variables
+  G4double lowLim;
+  G4double highLim;
+  G4double sigma = 0;
 
-    if (verboseLevel > 3)
-        G4cout << "Calling CrossSectionPerVolume() of G4DNACPA100ExcitationModel" << G4endl;
+  // Get the low energy limit for the current particle
+  lowLim = fpModelData->GetLowELimit(MatID, p);
 
-    if (particleDefinition != G4Electron::ElectronDefinition()) return 0;
+  // Get the high energy limit for the current particle
+  highLim = fpModelData->GetHighELimit(MatID, p);
 
-    // Calculate total cross section for model
+  // Check that we are in the correct energy range
+  if (ekin >= lowLim && ekin < highLim) {
+    // Get the map with all the data tables
+    auto Data = fpModelData->GetData();
 
-    G4double sigma=0;
-
-    G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
-
-    const G4String& particleName = particleDefinition->GetParticleName();
-
-    if (ekin >= LowEnergyLimit() && ekin <= HighEnergyLimit())
-    {
-        std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-        pos = tableData.find(particleName);
-
-        if (pos != tableData.end())
-        {
-            G4DNACrossSectionDataSet* table = pos->second;
-            if (table != 0)
-            {
-                sigma = table->FindValue(ekin);
-            }
-        }
-        else
-        {
-          G4Exception("G4DNACPA100ExcitationModel::CrossSectionPerVolume","em0002",
-                      FatalException,"Model not applicable to particle type.");
-        }
+    if ((*Data)[MatID][p] == nullptr) {
+      G4Exception("G4DNACPA100ExcitationModel::CrossSectionPerVolume", "em00236", FatalException,
+                  "No model is registered");
     }
+    // Retrieve the cross section value
+    sigma = (*Data)[MatID][p]->FindValue(ekin);
 
-    if (verboseLevel > 2)
-    {
-       G4cout << "__________________________________" << G4endl;
-       G4cout << "G4DNACPA100ExcitationModel - XS INFO START" << G4endl;
-       G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
-       G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-       G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-       // G4cout << " - Cross section per water molecule (cm^-1)="
-       // << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-       G4cout << "G4DNACPA100ExcitationModel - XS INFO END" << G4endl;
+    if (verboseLevel > 2) {
+      auto MolDensity =
+        (*G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(material))[MatID];
+      G4cout << "__________________________________" << G4endl;
+      G4cout << "°°° G4DNACPA100ExcitationModel - XS INFO START" << G4endl;
+      G4cout << "°°° Kinetic energy(eV)=" << ekin / eV << " particle : " << particleName << G4endl;
+      G4cout << "°°° lowLim (eV) = " << lowLim / eV << " highLim (eV) : " << highLim / eV << G4endl;
+      G4cout << "°°° Materials = " << (*G4Material::GetMaterialTable())[MatID]->GetName() << G4endl;
+      G4cout << "°°° Cross section per " << MatID << " ID molecule (cm^2)=" << sigma / cm / cm
+             << G4endl;
+      G4cout << "°°° Cross section per Phosphate molecule (cm^-1)="
+             << sigma * MolDensity / (1. / cm) << G4endl;
+      G4cout << "°°° G4DNACPA100ExcitationModel - XS INFO END" << G4endl;
     }
+  }
 
-    return sigma*waterDensity;
-
+  // Return the cross section value
+  auto MolDensity = (*G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(material))[MatID];
+  return sigma * MolDensity;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNACPA100ExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* ,
-                                                 const G4MaterialCutsCouple*,
-                                                 const G4DynamicParticle* aDynamicParticle,
-                                                 G4double,
-                                                 G4double)
+void G4DNACPA100ExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                                                   const G4MaterialCutsCouple* couple,
+                                                   const G4DynamicParticle* aDynamicParticle,
+                                                   G4double, G4double)
 {
+  auto materialID = couple->GetMaterial()->GetIndex();
+  G4double k = aDynamicParticle->GetKineticEnergy();
+  const auto& particle = aDynamicParticle->GetDefinition();
+  G4double lowLim = fpModelData->GetLowELimit(materialID, particle);
+  G4double highLim = fpModelData->GetHighELimit(materialID, particle);
 
-    if (verboseLevel > 3)
-        G4cout << "Calling SampleSecondaries() of G4DNACPA100ExcitationModel" << G4endl;
+  // Check if we are in the correct energy range
+  if (k >= lowLim && k < highLim) {
+    G4int level;
+    G4double excitationEnergy;
+    G4double newEnergy;
+    if (materialID == fpG4_WATER->GetIndex()) {
+      level = fpModelData->RandomSelectShell(k, particle, materialID);
+      excitationEnergy = eStructure.ExcitationEnergy(level, materialID);
+    }
+    else {
+      do {
+        level = eStructure.NumberOfLevels(materialID) * G4UniformRand();
+        excitationEnergy = eStructure.ExcitationEnergy(level, materialID);
+      } while ((k - eStructure.ExcitationEnergy(level, materialID)) < 0);
+    }
+    newEnergy = k - excitationEnergy;
 
-    G4double k = aDynamicParticle->GetKineticEnergy();
-
-    const G4String& particleName = aDynamicParticle->GetDefinition()->GetParticleName();
-
-    G4int level = RandomSelect(k,particleName);
-    G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
-    G4double newEnergy = k - excitationEnergy;
-
-    if (newEnergy > 0)
-    {
-        // fParticleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
-
-        // We take into account direction change as described page 87 (II.92) in thesis by S. Edel
-
-        G4double cosTheta =
-
-         (excitationEnergy/k) / (1. + (k/(2*electron_mass_c2))*(1.-excitationEnergy/k) );
-
-        cosTheta = std::sqrt(1.-cosTheta);
-
-        G4double phi = 2. * pi * G4UniformRand();
-
-        G4ThreeVector zVers = aDynamicParticle->GetMomentumDirection();
-
-        //G4ThreeVector xVers = zVers.orthogonal();
-        //G4ThreeVector yVers = zVers.cross(xVers);
-        //G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
-        //G4double yDir = xDir;
-        //xDir *= std::cos(phi);
-        //yDir *= std::sin(phi);
-        // G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
-
-        // Computation of scattering angles (from Subroutine DIRAN in CPA100)
-
-        G4double CT1, ST1, CF1, SF1, CT2, ST2, CF2, SF2;
-        G4double sinTheta = std::sqrt (1-cosTheta*cosTheta);
-
-        CT1=0;
-        ST1=0;
-        CF1=0;
-        SF1=0;
-        CT2=0;
-        ST2=0;
-        CF2=0;
-        SF2=0;
-
-        CT1 = zVers.z();
-        ST1=std::sqrt(1.-CT1*CT1);
-
-        if (ST1!=0) CF1 = zVers.x()/ST1; else CF1 = std::cos(2. * pi * G4UniformRand());
-        if (ST1!=0) SF1 = zVers.y()/ST1; else SF1 = std::sqrt(1.-CF1*CF1);
-
-        G4double A3, A4, A5, A2, A1;
-        A3=0;
-        A4=0;
-        A5=0;
-        A2=0;
-        A1=0;
-
-        A3 = sinTheta*std::cos(phi);
-        A4 = A3*CT1 + ST1*cosTheta;
-        A5 = sinTheta * std::sin(phi);
-        A2 = A4 * SF1 + A5 * CF1;
-        A1 = A4 * CF1 - A5 * SF1;
-
-        CT2 = CT1*cosTheta - ST1*A3;
-        ST2 = std::sqrt(1.-CT2*CT2);
-
-        if (ST2==0) ST2=1E-6;
-        CF2 = A1/ST2;
-        SF2 = A2/ST2;
-
-        /*
-        G4cout << "CT1=" << CT1 << G4endl;
-        G4cout << "ST1=" << ST1 << G4endl;
-        G4cout << "CF1=" << CF1 << G4endl;
-        G4cout << "SF1=" << SF1 << G4endl;
-        G4cout << "cosTheta=" << cosTheta << G4endl;
-        G4cout << "sinTheta=" << sinTheta << G4endl;
-        G4cout << "cosPhi=" << std::cos(phi) << G4endl;
-        G4cout << "sinPhi=" << std::sin(phi) << G4endl;
-        G4cout << "CT2=" << CT2 << G4endl;
-        G4cout << "ST2=" << ST2 << G4endl;
-        G4cout << "CF2=" << CF2 << G4endl;
-        G4cout << "SF2=" << SF2 << G4endl;
-        */
-
-        G4ThreeVector zPrimeVers(ST2*CF2,ST2*SF2,CT2);
-
-        //
-
-        fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit()) ;
-
-        //
-
-        if (!statCode) fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
-        else fParticleChangeForGamma->SetProposedKineticEnergy(k);
-
-        fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+    if (k - newEnergy <= 0) {
+      G4cout << "k : " << k << "  newEnergy : " << newEnergy << G4endl;
+      G4cout << "newEnergy : " << newEnergy << " k : " << k
+             << "  excitationEnergy: " << excitationEnergy << G4endl;
+      G4cout << "G4DNACPA100ExcitationModel::level : " << eStructure.NumberOfLevels(materialID)
+             << " excitationEnergy : " << excitationEnergy << G4endl;
+      G4cout << "°°° Materials = " << (*G4Material::GetMaterialTable())[materialID]->GetName()
+             << G4endl;
+      G4cout << "Attention an error occured !!!" << G4endl;
+      abort();
     }
 
-    // Chemistry
+    if (newEnergy >= 0) {
+      // We take into account direction change as described page 87 (II.92) in thesis by S. Edel
 
-    const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-    G4DNAChemistryManager::Instance()->CreateWaterMolecule(eExcitedMolecule,
-                                                           level,
-                                                           theIncomingTrack);
-}
+      G4double cosTheta =
+        (excitationEnergy / k) / (1. + (k / (2 * electron_mass_c2)) * (1. - excitationEnergy / k));
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+      cosTheta = std::sqrt(1. - cosTheta);
+      G4double phi = 2. * pi * G4UniformRand();
+      const G4ThreeVector& zVers = aDynamicParticle->GetMomentumDirection();
+      // Computation of scattering angles (from Subroutine DIRAN in CPA100)
 
-G4int G4DNACPA100ExcitationModel::RandomSelect(G4double k, const G4String& particle)
-{
-    G4int level = 0;
+      G4double CT1, ST1, CF1, SF1, CT2, ST2, CF2, SF2;
+      G4double sinTheta = std::sqrt(1 - cosTheta * cosTheta);
+      CT1 = zVers.z();
+      ST1 = std::sqrt(1. - CT1 * CT1);
 
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    pos = tableData.find(particle);
+      ST1 != 0 ? CF1 = zVers.x() / ST1 : CF1 = std::cos(2. * pi * G4UniformRand());
+      ST1 != 0 ? SF1 = zVers.y() / ST1 : SF1 = std::sqrt(1. - CF1 * CF1);
+      G4double A3, A4, A5, A2, A1;
+      A3 = sinTheta * std::cos(phi);
+      A4 = A3 * CT1 + ST1 * cosTheta;
+      A5 = sinTheta * std::sin(phi);
+      A2 = A4 * SF1 + A5 * CF1;
+      A1 = A4 * CF1 - A5 * SF1;
 
-    if (pos != tableData.end())
-    {
-        G4DNACrossSectionDataSet* table = pos->second;
+      CT2 = CT1 * cosTheta - ST1 * A3;
+      ST2 = std::sqrt(1. - CT2 * CT2);
 
-        if (table != 0)
-        {
-            G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const G4int n = (G4int)table->NumberOfComponents();
-            G4int i(n);
-            G4double value = 0.;
+      if (ST2 == 0) {
+        ST2 = 1E-6;
+      }
+      CF2 = A1 / ST2;
+      SF2 = A2 / ST2;
 
- //Verification
- /*
- G4double tmp=10.481*eV;
- G4cout <<  table->GetComponent(0)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(1)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(2)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(3)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(4)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<
- table->GetComponent(0)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(1)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(2)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(3)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(4)->FindValue(tmp)/(1e-20*m*m)
- << G4endl;
- abort();
- */
- //
- //Dump
- //
- /*
- G4double minEnergy = 10.481  * eV;
-        G4double maxEnergy = 255955. * eV;
-        G4int nEnergySteps = 1000;
-        G4double energy(minEnergy);
-        G4double stpEnergy(std::pow(maxEnergy/energy, 1./static_cast<G4double>(nEnergySteps-1)));
-        G4int step(nEnergySteps);
-        system ("rm -rf excitation-cap100.out");
- FILE* myFile=fopen("excitation-cpa100.out","a");
-        while (step>0)
-        {
-          step--;
-          fprintf (myFile,"%16.9le %16.9le %16.9le %16.9le %16.9le %16.9le %16.9le \n",
-   energy/eV,
-   table->GetComponent(0)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(1)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(2)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(3)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(4)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(0)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(1)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(2)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(3)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(4)->FindValue(energy)/(1e-20*m*m)
-    );
-          energy*=stpEnergy;
-        }
-        fclose (myFile);
- abort();
- */
- //
- // end of dump
- //
+      G4ThreeVector zPrimeVers(ST2 * CF2, ST2 * SF2, CT2);
+      fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
+      if (!statCode) {
+        fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
+      }
+      else {
+        fParticleChangeForGamma->SetProposedKineticEnergy(k);
+      }
 
-            while (i>0)
-            {
-                i--;
-                valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-                value += valuesBuffer[i];
-            }
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
 
-            value *= G4UniformRand();
-
-            i = n;
-
-            while (i > 0)
-            {
-                i--;
-
-                if (valuesBuffer[i] > value)
-                {
-                    delete[] valuesBuffer;
-                    return i;
-                }
-                value -= valuesBuffer[i];
-            }
-
-            if (valuesBuffer) delete[] valuesBuffer;
-
-        }
+      // Chemistry only for water;
+      if (materialID == fpG4_WATER->GetIndex()) {
+        const G4Track* theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+        G4DNAChemistryManager::Instance()->CreateWaterMolecule(eExcitedMolecule, level,
+                                                               theIncomingTrack);
+      }
     }
-    else
-    {
-        G4Exception("G4DNACPA100ExcitationModel::RandomSelect","em0002",
-                    FatalException,"Model not applicable to particle type.");
+    else {
+      G4cerr << "newEnergy : " << newEnergy << " k : " << k
+             << "  excitationEnergy: " << excitationEnergy << G4endl;
+      G4cerr << "G4DNACPA100ExcitationModel::level : " << eStructure.NumberOfLevels(materialID)
+             << " excitationEnergy : " << excitationEnergy << G4endl;
+      G4cerr << "°°° Materials = " << (*G4Material::GetMaterialTable())[materialID]->GetName()
+             << G4endl;
+      G4cerr << "Attention an error occured !!!" << G4endl;
+      G4Exception("G4DNACPA100ExcitationModel::SampleSecondaries", "em00236", FatalException,
+                  "model is not registered for this energy");
     }
-    return level;
+  }
+  else {
+    G4cerr << "k : " << k << "  lowLim : " << lowLim << "  highLim : " << highLim << G4endl;
+    G4Exception("G4DNACPA100ExcitationModel::SampleSecondaries", "em00236", FatalException,
+                "model is not registered for this energy");
+  }
 }

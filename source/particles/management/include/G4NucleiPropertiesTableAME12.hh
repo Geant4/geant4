@@ -52,7 +52,7 @@ class G4NucleiPropertiesTableAME12
 {
   public:
 
-    ~G4NucleiPropertiesTableAME12() {}
+    ~G4NucleiPropertiesTableAME12() = default;
        // Destructor
 
     enum {nEntries = 3353,MaxA = 295, ZMax = 120}; 
@@ -63,7 +63,7 @@ class G4NucleiPropertiesTableAME12
 
   private:
   
-    G4NucleiPropertiesTableAME12();
+    G4NucleiPropertiesTableAME12() = default;
       // Default constructor - this class should only be created once!
 
     static G4double GetMassExcess(G4int Z, G4int A); 

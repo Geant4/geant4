@@ -166,7 +166,7 @@ inline void G4Cons::CheckDPhiAngle(G4double dPhi)
 inline void G4Cons::CheckPhiAngles(G4double sPhi, G4double dPhi)
 {
   CheckDPhiAngle(dPhi);
-  if ( (fDPhi<CLHEP::twopi) && (sPhi) ) { CheckSPhiAngle(sPhi); }
+  if ( (fDPhi<CLHEP::twopi) && ((sPhi) != 0.0) ) { CheckSPhiAngle(sPhi); }
   InitializeTrigonometry();
 }
 

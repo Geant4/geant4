@@ -34,8 +34,6 @@
 // graphics-system-indepedent description of a Geant4 component.
 // The key fuctionality of a model is to know how to describe itself
 // to a scene handler.  A scene is a collection of models.
-// A special case is made for G4PhysicalVolumeModel - a non-null pointer
-// is to be returned by G4PhysicalVolumeModel::GetG4PhysicalVolumeModel().
 
 #ifndef G4VMODEL_HH
 #define G4VMODEL_HH
@@ -45,8 +43,6 @@
 
 class G4VGraphicsScene;
 class G4ModelingParameters;
-
-class G4PhysicalVolumeModel;  // Special case - see above.
 
 class G4VModel {
 

@@ -52,7 +52,7 @@ class G4Etac : public G4ParticleDefinition
  private:
    static G4Etac* theInstance;
    G4Etac(){}
-   ~G4Etac(){}
+   ~G4Etac() override= default;
 
  public:
    static G4Etac* Definition();

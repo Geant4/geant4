@@ -45,9 +45,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-  : G4VUserDetectorConstruction()
-  , fpDNAGeometry(new DNAGeometry())
-  , fpDetectorMessenger(new DetectorMessenger(this))
+  : fpDNAGeometry(new DNAGeometry()),
+  fpDetectorMessenger(new DetectorMessenger(this))
 {
   G4bool useParallelPhysicsWorld = false;
   if (useParallelPhysicsWorld) {

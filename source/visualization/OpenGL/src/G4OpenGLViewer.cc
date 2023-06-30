@@ -51,22 +51,12 @@
 #include "G4AttCheck.hh"
 #include "G4Text.hh"
 
-#ifdef G4OPENGL_VERSION_2
-#include "G4OpenGLVboDrawer.hh"
-#endif
-
-// GL2PS
-//#include "Geant4_gl2ps.h"
-
 #include <sstream>
 #include <string>
 #include <iomanip>
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-#ifdef G4OPENGL_VERSION_2
-fVboDrawer(NULL),
-#endif
 fPrintColour (true),
 fVectoredPs (true),
 fOpenGLSceneHandler(scene),
@@ -90,15 +80,6 @@ fGl2psDefaultLineWith(1),
 fGl2psDefaultPointSize(2),
 fGlViewInitialized(false),
 fIsGettingPickInfos(false)
-#ifdef G4OPENGL_VERSION_2
-,fShaderProgram(0)
-,fVertexPositionAttribute(0)
-,fVertexNormalAttribute(0)
-,fpMatrixUniform(0)
-,fcMatrixUniform(0)
-,fmvMatrixUniform(0)
-,fnMatrixUniform(0)
-#endif
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
@@ -142,54 +123,6 @@ G4OpenGLViewer::~G4OpenGLViewer ()
 
 void G4OpenGLViewer::InitializeGLView () 
 {
-#ifdef G4OPENGL_VERSION_2
-  if (fVboDrawer) {
-    
-    // First, load a simple shader
-    fShaderProgram = glCreateProgram();
-    Shader vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const char * vSrc = fVboDrawer->getVertexShaderSrc();
-    glShaderSource(vertexShader, 1, &vSrc, NULL);
-    glCompileShader(vertexShader);
-    glAttachShader(fShaderProgram, vertexShader);
-    
-    Shader fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char * fSrc = fVboDrawer->getFragmentShaderSrc();
-    glShaderSource(fragmentShader, 1, &fSrc, NULL);
-    glCompileShader(fragmentShader);
-    
-    glAttachShader(fShaderProgram, fragmentShader);
-    glLinkProgram(fShaderProgram);
-    glUseProgram(fShaderProgram);
-    
-    //   UniformLocation uColor = getUniformLocation(fShaderProgram, "uColor");
-    //   uniform4fv(uColor, [0.0, 0.3, 0.0, 1.0]);
-    
-    // Extract the references to the attributes from the shader.
-    
-    fVertexPositionAttribute =
-    glGetAttribLocation(fShaderProgram, "aVertexPosition");
-    
-    
-    glEnableVertexAttribArray(fVertexPositionAttribute);
-    
-    // Extract the references the uniforms from the shader
-    fpMatrixUniform  = glGetUniformLocation(fShaderProgram, "uPMatrix");
-    fcMatrixUniform  = glGetUniformLocation(fShaderProgram, "uCMatrix");
-    fmvMatrixUniform = glGetUniformLocation(fShaderProgram, "uMVMatrix");
-    fnMatrixUniform  = glGetUniformLocation(fShaderProgram, "uNMatrix");
-    ftMatrixUniform  = glGetUniformLocation(fShaderProgram, "uTMatrix");
-    
-    /*    glUniformMatrix4fv(fcMatrixUniform, 1, 0, identity);
-     glUniformMatrix4fv(fpMatrixUniform, 1, 0, identity);
-     glUniformMatrix4fv(ftMatrixUniform, 1, 0, identity);
-     glUniformMatrix4fv(fmvMatrixUniform, 1, 0, identity);
-     */
-    // We have to set that in order to avoid calls on opengl commands before all is ready
-    fGlViewInitialized = true;
-  }
-#endif
-  
   if (fWinSize_x == 0) {
     fWinSize_x = fVP.GetWindowSizeHintX();
   }
@@ -199,10 +132,8 @@ void G4OpenGLViewer::InitializeGLView ()
 
   glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth (1.0);
-#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LINE_SMOOTH);
   glDisable (GL_POLYGON_SMOOTH);
-#endif
 
 // clear the buffers and window?
   ClearView ();
@@ -1512,21 +1443,6 @@ void G4OpenGLViewer::g4GlFrustum (GLdouble left, GLdouble right, GLdouble bottom
   glMultMatrixd(proj);
   
 }
-
-
-#ifdef G4OPENGL_VERSION_2
-
-// Associate the VBO drawer to the OpenGLViewer and the OpenGLSceneHandler
-void G4OpenGLViewer::setVboDrawer(G4OpenGLVboDrawer* drawer) {
-  fVboDrawer = drawer;
-  try {
-    G4OpenGLSceneHandler& sh = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
-    sh.setVboDrawer(fVboDrawer);
-  } catch(std::bad_cast exp) { }
-}
-
-#endif
-
 
 G4String G4OpenGLViewerPickMap::print() {
   std::ostringstream txt;

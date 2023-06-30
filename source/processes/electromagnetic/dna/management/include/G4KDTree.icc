@@ -160,9 +160,9 @@ template<typename Position>
     {
       G4bool do_break = false;
       dist_sq = 0;
-      for (G4int i = 0; i < (G4int)fDim; ++i)
+      for (std::size_t i = 0; i < fDim; ++i)
       {
-        dist_sq += sqr((*node)[i] - pos[i]);
+        dist_sq += sqr((*node)[i] - pos[(G4int)i]);
         if (dist_sq > range_sq)
         {
           do_break = true;
@@ -244,9 +244,9 @@ template<typename Position>
     {
       dist_sq = 0;
       G4bool do_break = false;
-      for (G4int i = 0; i < (G4int)fDim; ++i)
+      for (std::size_t i = 0; i < fDim; ++i)
       {
-        dist_sq += sqr((*node)[i] - pos[i]);
+        dist_sq += sqr((*node)[i] - pos[(G4int)i]);
         if (dist_sq > *result_dist_sq)
         {
           do_break = true;

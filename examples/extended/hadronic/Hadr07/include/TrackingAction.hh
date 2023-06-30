@@ -37,13 +37,14 @@
 #include "globals.hh"
 
 class TrackingMessenger;
+class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction();
+    TrackingAction(EventAction*);
    ~TrackingAction() override;
    
     void  PreUserTrackingAction(const G4Track*) override;  
@@ -53,7 +54,8 @@ class TrackingAction : public G4UserTrackingAction {
     
   private:
     TrackingMessenger*  fTrackMessenger;
-    
+    EventAction*        fEventAct;
+        
     G4bool fParticleCount;    
 };
 

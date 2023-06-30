@@ -54,7 +54,7 @@ class G4AdjointTriton : public G4AdjointIons
  private:
    static G4AdjointTriton* theInstance;
    G4AdjointTriton(){}
-   ~G4AdjointTriton(){}
+   ~G4AdjointTriton() override= default;
 
  public:
    static G4AdjointTriton* Definition();

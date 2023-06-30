@@ -122,12 +122,14 @@ namespace G4INCL {
 		nucleon->adjustEnergyFromMomentum();
 		pion->adjustEnergyFromMomentum();
 		
+#ifdef INCLXX_IN_GEANT4_MODE
 		// Erase the parent resonance information of the nucleon and pion
 		nucleon->setParentResonancePDGCode(0);
 		nucleon->setParentResonanceID(0);
 		pion->setParentResonancePDGCode(0);
 		pion->setParentResonanceID(0);
- 
+#endif
+		
 		fs->addModifiedParticle(nucleon);
 		fs->addModifiedParticle(pion);
 		

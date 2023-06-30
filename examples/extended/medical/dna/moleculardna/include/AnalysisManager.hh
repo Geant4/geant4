@@ -107,9 +107,8 @@ struct DamageClassification
 class DamageRecord
 {
  public:
-  DamageRecord(G4String , const int64_t&, const G4int&,
-               const G4int&);  // dousatsu
-  virtual ~DamageRecord();
+  DamageRecord(const G4String&, int64_t, G4int, G4int);  // dousatsu
+  ~DamageRecord();
 
   void AddBasePairDamage(BasePairDamageRecord* bp, const G4ThreeVector& pos)
   {
@@ -117,7 +116,7 @@ class DamageRecord
     fPositions.push_back(pos);
   };
 
-  void AddEmptyBPDamage(const int64_t& ii);
+  void AddEmptyBPDamage(int64_t ii);
 
   void AddStrandHit(const G4MoleculeDefinition* mol);
 
@@ -207,7 +206,7 @@ class BinaryTree
 
   void Insert(const DNAHit*);
 
-  DNAHit* Search(const int64_t&);
+  DNAHit* Search(int64_t);
 
   void Destroy_tree();
 
@@ -222,11 +221,11 @@ class BinaryTree
 
   void Insert_(DNAHit*, Node*);
 
-  DNAHit* Search_(const int64_t&, Node*);
+  DNAHit* Search_(int64_t, Node*);
 
   DNAHit* First_(Node*) const;
 
-  DNAHit* Next_(const int64_t&, Node*) const;
+  DNAHit* Next_(int64_t, Node*) const;
 
   Node* fRoot;
 };
@@ -254,11 +253,11 @@ class AnalysisManager
   inline void SetStrandDirectory(const G4String& dir) { fStrandDirectory =
       dir; };
 
-  inline void SetFragmentGap(const G4int& gap) { fFragmentGap = gap; };
+  inline void SetFragmentGap(G4int gap) { fFragmentGap = gap; };
 
-  inline void SetDSBDistance(const G4int& gap) { fDSBDistance = gap; };
+  inline void SetDSBDistance(G4int gap) { fDSBDistance = gap; };
 
-  inline void SetChainToSave(const G4int& i) { fChainToSave = i; };
+  inline void SetChainToSave(G4int i) { fChainToSave = i; };
 
   inline void SetFileName(const G4String& name) { fFileName = name; };
 

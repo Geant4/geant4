@@ -41,13 +41,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction()
-:G4UserTrackingAction(),
- fNbStep1(0),fNbStep2(0),fTrackLen1(0.),fTrackLen2(0.),fTime1(0.),fTime2(0.)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void TrackingAction::PreUserTrackingAction(const G4Track*)
 {
   fNbStep1 = fNbStep2 = 0;

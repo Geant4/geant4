@@ -66,7 +66,9 @@ G4FieldManager::G4FieldManager(G4Field* detectorField,
    }
 
    if( fVerboseConstruction)
-      G4cout << "G4FieldManager/ctor#1 fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
+   {
+     G4cout << "G4FieldManager/ctor#1 fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
+   }
 
    // Add to store
    //
@@ -83,7 +85,9 @@ G4FieldManager::G4FieldManager(G4MagneticField* detectorField)
    fChordFinder = new G4ChordFinder( detectorField );
 
    if( fVerboseConstruction )
-      G4cout << "G4FieldManager/ctor#2 fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
+   {
+     G4cout << "G4FieldManager/ctor#2 fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
+   }
    // Add to store
    //
    G4FieldManagerStore::Register(this);
@@ -256,7 +260,8 @@ G4bool G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
   if(    (newEpsMax > 0.0) && ( newEpsMax <= fMaxAcceptedEpsilon)
      &&  (fMinAcceptedEpsilon <= newEpsMax ) ) // (std::fabs(1.0+newEpsMax)>1.0) )
   {
-    if(newEpsMax >= fEpsilonMin){
+    if(newEpsMax >= fEpsilonMin)
+    {
       fEpsilonMax = newEpsMax;
       succeeded = true;
       if (fVerboseConstruction)
@@ -264,7 +269,9 @@ G4bool G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
         G4cout << "G4FieldManager/SetEpsMax :  eps_max = " << std::setw(10) << fEpsilonMax
                << " ( Note: unchanged eps_min=" << std::setw(10) << fEpsilonMin << " )" << G4endl;
       }
-    } else {
+    }
+    else
+    {
       G4ExceptionDescription erm;
       erm << " Call to set eps_max = " << newEpsMax << " . The problem is that"
           << " its value must be at larger or equal to eps_min= " << fEpsilonMin << G4endl;
@@ -307,7 +314,8 @@ G4bool G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
       G4cout << "G4FieldManager/SetEpsMin :  eps_min = "
              << std::setw(10) << fEpsilonMin << G4endl;
     }
-    if( fEpsilonMax < fEpsilonMin ){
+    if( fEpsilonMax < fEpsilonMin )
+    {
       // Ensure consistency
       G4ExceptionDescription erm;
       erm << "Setting eps_min = " << newEpsMin
@@ -385,14 +393,18 @@ G4bool   G4FieldManager::SetMaxAcceptedEpsilon(G4double maxAcceptValue, G4bool s
           << " is larger than the top of the range = " << fMaxFinalEpsilon
           << G4endl;
       if( softFailure )
-         erm << " Using the latter value instead." << G4endl;
+      {
+        erm << " Using the latter value instead." << G4endl;
+      }
       erm << G4endl;
       erm << " Please adjust to request maxAccepted <= " << fMaxFinalEpsilon
           << G4endl << G4endl;
-      if( softFailure == false )
-         erm << " NOTE: you can accept the ceiling value and turn this into a " 
-             << " warning by using a 2nd argument  " << G4endl
-             << " in your call to SetMaxAcceptedEpsilon:  softFailure = true ";
+      if( !softFailure )
+      {
+        erm << " NOTE: you can accept the ceiling value and turn this into a " 
+            << " warning by using a 2nd argument  " << G4endl
+            << " in your call to SetMaxAcceptedEpsilon:  softFailure = true ";
+      }
       severity = softFailure ? JustWarning : FatalException; 
       // if( softFailure ) severity= JustWarning;
       // else severity= FatalException;

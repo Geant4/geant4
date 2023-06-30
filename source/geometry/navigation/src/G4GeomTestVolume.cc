@@ -146,9 +146,9 @@ void G4GeomTestVolume::TestOverlapInTree() const
     {
       G4VPhysicalVolume* daughter = logical->GetDaughter(i);
       G4LogicalVolume* daughterLogical = daughter->GetLogicalVolume();
-      if (daughterLogical->GetNoDaughters() == 0) continue;
+      if (daughterLogical->GetNoDaughters() == 0) { continue; }
       G4bool found = (daughterLogical == previousLogical);
-      if (!found) found = (checked.find(daughterLogical) != checked.cend());
+      if (!found) { found = (checked.find(daughterLogical) != checked.cend()); }
       if (!found)
       {
         checked.emplace(daughterLogical);
@@ -158,9 +158,11 @@ void G4GeomTestVolume::TestOverlapInTree() const
       else
       {
         if (verbosity)
+        {
           G4cout << "Checking overlaps in tree of volume " << daughter->GetName()
                  << " (" << daughterLogical->GetSolid()->GetEntityType() << ")"
                  << " is omitted, to avoid duplication" << G4endl;
+        }
       }
     }
   }
@@ -175,9 +177,9 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
   // If not depth specified (i.e. set to -1), visit the whole tree.
   // If requested initial level of depth is not zero, visit from beginning
   //
-  if (depth == 0) return;
-  if (depth != -1) depth--;
-  if (slevel != 0) slevel--;
+  if (depth == 0) { return; }
+  if (depth != -1) { depth--; }
+  if (slevel != 0) { slevel--; }
 
   //
   // As long as we reached the requested
@@ -194,7 +196,7 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
   std::set<const G4LogicalVolume *> tested;
 
   const G4LogicalVolume *logical = target->GetLogicalVolume();
-  G4int nDaughter = (G4int)logical->GetNoDaughters();
+  auto  nDaughter = (G4int)logical->GetNoDaughters();
   for( auto iDaughter=0; iDaughter<nDaughter; ++iDaughter )
   {
     G4VPhysicalVolume *daughter = logical->GetDaughter(iDaughter);

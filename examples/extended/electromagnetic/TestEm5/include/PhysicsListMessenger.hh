@@ -46,17 +46,17 @@ class PhysicsListMessenger: public G4UImessenger
 {
 public:
   
-  PhysicsListMessenger(PhysicsList* );
- ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList*);
+ ~PhysicsListMessenger() override;
     
   void SetNewValue(G4UIcommand*, G4String) override;
     
 private:
   
-  PhysicsList*               fPhysicsList;
+  PhysicsList*               fPhysicsList = nullptr;
     
-  G4UIdirectory*             fPhysDir;    
-  G4UIcmdWithAString*        fListCmd;    
+  G4UIdirectory*             fPhysDir = nullptr;
+  G4UIcmdWithAString*        fListCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -46,7 +46,7 @@ G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient)
 // -------------------------------------------------------------------
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient,
-                                           G4ThreeVector pOrigin,
+                                           const G4ThreeVector& pOrigin,
                                            G4RotationMatrix* pMatrix)
 {
    fGradient = pGradient ;
@@ -63,9 +63,7 @@ G4Field* G4QuadrupoleMagField::Clone() const
 
 // -------------------------------------------------------------------
 
-G4QuadrupoleMagField::~G4QuadrupoleMagField()
-{
-}
+G4QuadrupoleMagField::~G4QuadrupoleMagField() = default;
 
 // -------------------------------------------------------------------
 

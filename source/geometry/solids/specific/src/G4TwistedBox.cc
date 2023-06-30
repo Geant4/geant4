@@ -57,9 +57,7 @@ G4TwistedBox::G4TwistedBox( __void__& a )
 //=====================================================================
 //* Destructor --------------------------------------------------------
 
-G4TwistedBox::~G4TwistedBox()
-{
-}
+G4TwistedBox::~G4TwistedBox() = default;
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
@@ -114,7 +112,7 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 
 G4GeometryType G4TwistedBox::GetEntityType() const
 {
-  return G4String("G4TwistedBox");
+  return {"G4TwistedBox"};
 }
 
 //=====================================================================

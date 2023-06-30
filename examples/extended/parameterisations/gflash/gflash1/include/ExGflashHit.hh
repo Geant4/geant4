@@ -29,90 +29,72 @@
 //
 #ifndef ExGflashHit_h
 #define ExGflashHit_h 1
- 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
+
 #include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4THitsCollection.hh"
+#include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 
 class G4LogicalVolume;
 
 class ExGflashHit : public G4VHit
 {
   public:
+    ExGflashHit();
+    ExGflashHit(G4LogicalVolume* logVol);
+    ~ExGflashHit() override;
+    ExGflashHit(const ExGflashHit& right);
+    const ExGflashHit& operator=(const ExGflashHit& right);
+    G4bool operator==(const ExGflashHit& right) const;
 
-      ExGflashHit();
-      ExGflashHit(G4LogicalVolume* logVol);
-      ~ExGflashHit();
-      ExGflashHit(const ExGflashHit &right);
-      const ExGflashHit& operator=(const ExGflashHit &right);
-      G4bool operator==(const ExGflashHit &right) const;
-
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
-      void *operator new(size_t,void*p){return p;}
+    inline void* operator new(size_t);
+    inline void operator delete(void* aHit);
+    void* operator new(size_t, void* p) { return p; }
 #ifndef G4NOT_ISO_DELETES
-      void operator delete(void *,void*){}
+    void operator delete(void*, void*) {}
 #endif
 
-      virtual void Draw();
-      virtual void Print();
+    void Draw() override;
+    void Print() override;
 
   private:
-      G4double fEdep;
-      G4ThreeVector fPos;
-      G4int fCrystalNumber;
-      G4ThreeVector fStart;
-      G4RotationMatrix fRot;
-      const G4LogicalVolume* fLogV;
+    G4double fEdep;
+    G4ThreeVector fPos;
+    G4int fCrystalNumber;
+    G4ThreeVector fStart;
+    G4RotationMatrix fRot;
+    const G4LogicalVolume* fLogV;
 
   public:
-      inline void SetEdep(G4double de)
-      { fEdep = de; };
-      inline void AddEdep(G4double de)
-      { fEdep += de; };
-      inline G4double GetEdep()
-      { return fEdep; };
-      inline void SetPos(G4ThreeVector xyz)
-      { fPos = xyz; };
-      inline G4int GetCrystalNum()
-      { return fCrystalNumber; };  
-      inline void SetCrystalNum(G4int num)
-      { fCrystalNumber=num; };
-      inline G4ThreeVector GetPos()
-      { return fPos; };
-      inline void SetStart(G4ThreeVector xyz)
-      { fStart = xyz; };
-      inline G4ThreeVector GetStart()
-      { return fStart; };
+    inline void SetEdep(G4double de) { fEdep = de; };
+    inline void AddEdep(G4double de) { fEdep += de; };
+    inline G4double GetEdep() { return fEdep; };
+    inline void SetPos(G4ThreeVector xyz) { fPos = xyz; };
+    inline G4int GetCrystalNum() { return fCrystalNumber; };
+    inline void SetCrystalNum(G4int num) { fCrystalNumber = num; };
+    inline G4ThreeVector GetPos() { return fPos; };
+    inline void SetStart(G4ThreeVector xyz) { fStart = xyz; };
+    inline G4ThreeVector GetStart() { return fStart; };
 
-      inline void SetRot(G4RotationMatrix rmat)
-      { fRot = rmat; };
-      inline G4RotationMatrix GetRot()
-      { return fRot; };
-      inline const G4LogicalVolume * GetLogV()
-      { return fLogV; };
+    inline void SetRot(G4RotationMatrix rmat) { fRot = rmat; };
+    inline G4RotationMatrix GetRot() { return fRot; };
+    inline const G4LogicalVolume* GetLogV() { return fLogV; };
 };
 
-typedef G4THitsCollection<ExGflashHit> ExGflashHitsCollection;
+using ExGflashHitsCollection = G4THitsCollection<ExGflashHit>;
 
 extern G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator;
 
 inline void* ExGflashHit::operator new(size_t)
 {
-  if(!ExGflashHitAllocator) ExGflashHitAllocator = new G4Allocator<ExGflashHit>;
-  return (void *) ExGflashHitAllocator->MallocSingle();
+  if (!ExGflashHitAllocator) ExGflashHitAllocator = new G4Allocator<ExGflashHit>;
+  return (void*)ExGflashHitAllocator->MallocSingle();
 }
 
-inline void ExGflashHit::operator delete(void *aHit)
+inline void ExGflashHit::operator delete(void* aHit)
 {
-  ExGflashHitAllocator->FreeSingle((ExGflashHit*) aHit);
+  ExGflashHitAllocator->FreeSingle((ExGflashHit*)aHit);
 }
 
 #endif
-
-
-
-
-

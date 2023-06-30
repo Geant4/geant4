@@ -44,6 +44,7 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4Log.hh"
 #include "G4PhysicsModelCatalog.hh"
+#include "G4HadronicParameters.hh"
 
 G4int G4BinaryLightIonReaction::theBLIR_ID = -1;
 
@@ -67,7 +68,7 @@ G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
 	theModel = new G4BinaryCascade(theProjectileFragmentation);
 	theHandler = theProjectileFragmentation->GetExcitationHandler();
     	theBLIR_ID = G4PhysicsModelCatalog::GetModelID("model_G4BinaryLightIonReaction");
-	debug_G4BinaryLightIonReactionResults=std::getenv("debug_G4BinaryLightIonReactionResults")!=0;
+	debug_G4BinaryLightIonReactionResults = G4HadronicParameters::Instance()->GetBinaryDebug();
 }
 
 G4BinaryLightIonReaction::~G4BinaryLightIonReaction()
@@ -91,7 +92,7 @@ struct ReactionProduct4Mom
 G4HadFinalState *G4BinaryLightIonReaction::
 ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 {
-	if(std::getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction starts ######### " << G4endl;
+	if(debug_G4BinaryLightIonReactionResults) G4cerr << " ######### Binary Light Ion Reaction starts ######### " << G4endl;
 	G4ping debug("debug_G4BinaryLightIonReaction");
 	pA=aTrack.GetDefinition()->GetBaryonNumber();
 	pZ=G4lrint(aTrack.GetDefinition()->GetPDGCharge()/eplus);
@@ -344,7 +345,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 			<< "        3mom.mag() " << (aTrack.Get4Momentum()+ G4LorentzVector(m_nucl) - ptot).vect().mag() << G4endl;
 #endif
 
-	if(std::getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number ends ######### " << G4endl;
+	if(debug_G4BinaryLightIonReactionResults) G4cerr << " ######### Binary Light Ion Reaction number ends ######### " << G4endl;
 
 	return &theResult;
 }

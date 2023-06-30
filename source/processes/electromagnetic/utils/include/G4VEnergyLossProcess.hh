@@ -505,7 +505,7 @@ private:
   G4CrossSectionType fXSType = fEmOnePeak;
 
   G4bool lossFluctuationFlag = true;
-  G4bool rndmStepFlag = false;
+  G4bool useCutAsFinalRange = false;
   G4bool tablesAreBuilt = false;
   G4bool spline = true;
   G4bool isIon = false;
@@ -616,7 +616,8 @@ inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
     coupleIdxRange = currentCoupleIndex;
     fRangeEnergy = e;
     fRange = reduceFactor*((*theRangeTableForLoss)[basedCoupleIndex])->Value(e, idxRange);
-    if(e < minKinEnergy) { fRange *= std::sqrt(e/minKinEnergy); }
+    if (fRange < 0.0) { fRange = 0.0; }
+    else if (e < minKinEnergy) { fRange *= std::sqrt(e/minKinEnergy); }
   }
   //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
   //         << basedCoupleIndex << " E(MeV)= " << e 
@@ -634,7 +635,8 @@ G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e, G4double loge)
     coupleIdxRange = currentCoupleIndex;
     fRangeEnergy = e;
     fRange = reduceFactor*((*theRangeTableForLoss)[basedCoupleIndex])->LogVectorValue(e, loge);
-    if(e < minKinEnergy) { fRange *= std::sqrt(e/minKinEnergy); }
+    if (fRange < 0.0) { fRange = 0.0; }
+    else if (e < minKinEnergy) { fRange *= std::sqrt(e/minKinEnergy); }
   }
   //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
   //         << basedCoupleIndex << " E(MeV)= " << e 
@@ -648,7 +650,8 @@ inline G4double
 G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 {
   G4double x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e, idxCSDA);
-  if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
+  if (x < 0.0) { x = 0.0; }
+  else if (e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
 
@@ -659,7 +662,8 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e,
                                                          G4double loge)
 {
   G4double x = ((*theCSDARangeTable)[basedCoupleIndex])->LogVectorValue(e, loge);
-  if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
+  if (x < 0.0) { x = 0.0; }
+  else if (e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
 

@@ -41,12 +41,12 @@
 class CylindricalChromosome : public VirtualChromosome
 {
  public:
-  CylindricalChromosome(const G4String&, G4ThreeVector, const G4double&,
+  CylindricalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
                         const G4double&);
 
-  CylindricalChromosome(const G4String& name, G4ThreeVector pos,
+  CylindricalChromosome(const G4String& name, const G4ThreeVector& pos,
                         const G4double& radius, const G4double& height,
-                        G4RotationMatrix rot);
+                        const G4RotationMatrix& rot);
 
   ~CylindricalChromosome() override = default;
 

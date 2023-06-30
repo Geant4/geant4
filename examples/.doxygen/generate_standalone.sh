@@ -36,7 +36,7 @@ for DIR in eventgenerator/HepMC/MCTruth eventgenerator/pythia/py8decayer hadroni
 done  
 
 # process examples in fourth level directory in extended
-for DIR in  parallel/MPI/examples/exMPI01 parallel/MPI/examples/exMPI02  parallel/MPI/examples/exMPI03; do
+for DIR in hadronic/FlukaCern/ProcessLevel/CrossSection hadronic/FlukaCern/ProcessLevel/FinalState parallel/MPI/examples/exMPI01 parallel/MPI/examples/exMPI02 parallel/MPI/examples/exMPI03; do
   generate ${DIR} ${BACK_PATH4}
 done  
  

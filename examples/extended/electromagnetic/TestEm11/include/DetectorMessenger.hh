@@ -50,20 +50,20 @@ class DetectorMessenger: public G4UImessenger
   public:
   
     DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+   ~DetectorMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
   
-    DetectorConstruction*      fDetector;
+    DetectorConstruction*      fDetector = nullptr;
       
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir; 
-    G4UIcmdWithAnInteger*      fNbAbsorCmd;           
-    G4UIcommand*               fAbsorCmd;
-    G4UIcommand*               fNdivCmd;    
-    G4UIcmdWithADoubleAndUnit* fSizeYZCmd;    
+    G4UIdirectory*             fTestemDir = nullptr;
+    G4UIdirectory*             fDetDir = nullptr;
+    G4UIcmdWithAnInteger*      fNbAbsorCmd = nullptr;
+    G4UIcommand*               fAbsorCmd = nullptr;
+    G4UIcommand*               fNdivCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeYZCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

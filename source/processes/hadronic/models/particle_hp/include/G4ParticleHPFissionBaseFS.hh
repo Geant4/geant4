@@ -29,74 +29,66 @@
 #ifndef G4ParticleHPFissionBaseFS_h
 #define G4ParticleHPFissionBaseFS_h 1
 
-#include "globals.hh"
-#include "G4ReactionProduct.hh"
+#include "G4Cache.hh"
 #include "G4DynamicParticleVector.hh"
+#include "G4ParticleHPAngular.hh"
+#include "G4ParticleHPEnergyDistribution.hh"
 #include "G4ParticleHPFinalState.hh"
 #include "G4ParticleHPNames.hh"
 #include "G4ParticleHPVector.hh"
-#include "G4ParticleHPEnergyDistribution.hh"
-#include "G4ParticleHPAngular.hh"
-#include "G4Cache.hh"
+#include "G4ReactionProduct.hh"
+#include "globals.hh"
 
 class G4ParticleHPFissionBaseFS : public G4ParticleHPFinalState
 {
-  struct toBeCached
-  {
-    const G4ReactionProduct* theNeutronRP;
-    const G4ReactionProduct* theTarget;
-    toBeCached() : theNeutronRP(0),theTarget(0) {}
-  };
+    struct toBeCached
+    {
+        const G4ReactionProduct* theNeutronRP{nullptr};
+        const G4ReactionProduct* theTarget{nullptr};
+        toBeCached() = default;
+    };
 
-public:
-  
-  G4ParticleHPFissionBaseFS()
-  { 
-    hasXsec = true; 
-    theXsection = new G4ParticleHPVector;
-  }
+  public:
+    G4ParticleHPFissionBaseFS()
+    {
+      hasXsec = true;
+      theXsection = new G4ParticleHPVector;
+    }
 
-  virtual ~G4ParticleHPFissionBaseFS()
-  {
-    delete theXsection;
-  }
+    ~G4ParticleHPFissionBaseFS() override { delete theXsection; }
 
-  void Init (G4double A, G4double Z, G4int M,
-             G4String & dirName, G4String & bit, G4ParticleDefinition*);
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& bit,
+              G4ParticleDefinition*) override;
 
-  G4DynamicParticleVector * ApplyYourself(G4int Prompt);
+    G4DynamicParticleVector* ApplyYourself(G4int Prompt);
 
-  virtual G4double GetXsec(G4double anEnergy)
-  {
-    return std::max(0., theXsection->GetY(anEnergy));
-  }
+    G4double GetXsec(G4double anEnergy) override
+    {
+      return std::max(0., theXsection->GetY(anEnergy));
+    }
 
-  virtual G4ParticleHPVector * GetXsec()
-  {
-    return theXsection;
-  }
+    G4ParticleHPVector* GetXsec() override { return theXsection; }
 
-  inline void SetNeutronRP(const G4ReactionProduct & aNeutron)
-  { 
-    fCache.Get().theNeutronRP = &aNeutron;
-    theAngularDistribution.SetProjectileRP(aNeutron);
-  }
-  
-  inline void SetTarget(const G4ReactionProduct & aTarget)
-  { 
-    fCache.Get().theTarget = &aTarget; 
-    theAngularDistribution.SetTarget(aTarget);
-  }
-  
-private:
-  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & ) {return 0;}
-  
-  G4ParticleHPVector * theXsection;
-  G4ParticleHPEnergyDistribution theEnergyDistribution;
-  G4ParticleHPAngular theAngularDistribution;
-  
-  G4Cache<toBeCached> fCache;
+    inline void SetNeutronRP(const G4ReactionProduct& aNeutron)
+    {
+      fCache.Get().theNeutronRP = &aNeutron;
+      theAngularDistribution.SetProjectileRP(aNeutron);
+    }
+
+    inline void SetTarget(const G4ReactionProduct& aTarget)
+    {
+      fCache.Get().theTarget = &aTarget;
+      theAngularDistribution.SetTarget(aTarget);
+    }
+
+  private:
+    G4HadFinalState* ApplyYourself(const G4HadProjectile&) override { return nullptr; }
+
+    G4ParticleHPVector* theXsection;
+    G4ParticleHPEnergyDistribution theEnergyDistribution;
+    G4ParticleHPAngular theAngularDistribution;
+
+    G4Cache<toBeCached> fCache;
 };
 
 #endif

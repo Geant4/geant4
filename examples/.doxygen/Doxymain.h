@@ -32,7 +32,7 @@ examples are also used as "acceptance"-tests for the release process.
 See more on each examples category pages:
 - \ref README_basic
 - \ref README_extended
-- <a href="https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamples">
+- <a href="https://www.geant4.org/docs/advanced_examples_doc/index">
   <b>Advanced Examples </b></a>
 
 The previous set of examples oriented to novice users, <b>"novice"</b>,

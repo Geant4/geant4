@@ -46,16 +46,16 @@
 // ######################################################################
 // ###                          MUONPLUS                              ###
 // ######################################################################
-G4MuonPlus* G4MuonPlus::theInstance = 0;
+G4MuonPlus* G4MuonPlus::theInstance = nullptr;
 
 G4MuonPlus* G4MuonPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "mu+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -71,7 +71,7 @@ G4MuonPlus* G4MuonPlus::Definition()
 		    1,               0,                0,          
 		    0,               0,                0,             
 	     "lepton",              -1,                0,        -13,
-		false,      2196.98*ns,             NULL,
+		false,      2196.98*ns,             nullptr,
              false,           "mu"
               );
    // Bohr Magnetron
@@ -80,7 +80,7 @@ G4MuonPlus* G4MuonPlus::Definition()
    anInstance->SetPDGMagneticMoment( muB * 1.0011659209);
 
   //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
   // create a decay channel
   G4VDecayChannel* mode = new G4MuonDecayChannel("mu+",1.00);
   table->Insert(mode);

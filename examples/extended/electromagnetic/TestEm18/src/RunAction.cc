@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:G4UserRunAction(),fDetector(det), fPrimary(kin), fHistoManager(0)
+: fDetector(det), fPrimary(kin)
 { 
   fHistoManager = new HistoManager(); 
 }

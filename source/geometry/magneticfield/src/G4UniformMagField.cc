@@ -38,9 +38,7 @@ G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
    fFieldComponents[2] = FieldVector.z();
 }
 
-G4UniformMagField::~G4UniformMagField()
-{
-}
+G4UniformMagField::~G4UniformMagField() = default;
 
 G4UniformMagField::G4UniformMagField (const G4UniformMagField& p)
    : G4MagneticField(p)
@@ -53,7 +51,7 @@ G4UniformMagField::G4UniformMagField (const G4UniformMagField& p)
 
 G4UniformMagField& G4UniformMagField::operator = (const G4UniformMagField& p)
 {
-   if (&p == this) return *this;
+   if (&p == this) { return *this;}
    G4MagneticField::operator=(p); 
    for (auto i=0; i<3; ++i)
    {

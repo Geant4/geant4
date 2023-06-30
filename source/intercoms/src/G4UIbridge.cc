@@ -28,34 +28,29 @@
 // Author: A.Dotti, 2013
 // --------------------------------------------------------------------
 #include "G4UIbridge.hh"
+
 #include "G4UImanager.hh"
 
 // --------------------------------------------------------------------
-G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir)
-  : localUImanager(localUI)
+G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir) : localUImanager(localUI)
 {
   // make sure dirName starts and ends with '/'
-  if(dir[0] == '/')
-  {
+  if (dir[0] == '/') {
     dirName = dir;
   }
-  else
-  {
+  else {
     dirName = "/" + dir;
   }
-  if(dirName.back() != '/')
-  {
+  if (dirName.back() != '/') {
     dirName += "/";
   }
 
   // register to the master G4UImanager
   G4UImanager* masterUI = G4UImanager::GetMasterUIpointer();
-  if(masterUI != nullptr)
-  {
+  if (masterUI != nullptr) {
     masterUI->RegisterBridge(this);
   }
-  else
-  {
+  else {
     G4Exception("G4UIbridge::G4UIbridge()", "UI7001", FatalException,
                 "G4UImanager for the master thread is not yet instantiated. "
                 "Instantiate G4MTRunManager first.");

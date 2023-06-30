@@ -43,7 +43,7 @@
  	
 \section Hadr03_s4 PHYSICS
  
-   An event is killed at the first interaction of the incident paticle.
+   An event is killed at the first interaction of the incident particle.
    The absorption length, also called mean free path, is computed as 
    the mean value of the track length of the incident particle.
    This is why the medium must be 'infinite' : to be sure that interaction

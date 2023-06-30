@@ -46,7 +46,7 @@ G4Mag_EqRhs* toMagneticEquation(G4EquationOfMotion* equation)
 {
     auto e = dynamic_cast<G4Mag_EqRhs*>(equation);
 
-    if (!e) 
+    if (e == nullptr) 
     {
         G4Exception("G4BFieldIntegrationDriver::G4BFieldIntegrationDriver",
                     "GeomField0003", FatalErrorInArgument,

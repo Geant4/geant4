@@ -58,14 +58,12 @@
 class G4WorkerRunManagerKernel : public G4RunManagerKernel
 {
   public:
-
     G4WorkerRunManagerKernel();
-    virtual ~G4WorkerRunManagerKernel();
+    ~G4WorkerRunManagerKernel() override;
 
   protected:
-
-    void SetupShadowProcess() const;
-      // Overwrite default behavior.
+    // Overwrite default behavior.
+    void SetupShadowProcess() const override;
 };
 
 #endif

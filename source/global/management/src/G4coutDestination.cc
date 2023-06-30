@@ -37,8 +37,16 @@ G4coutDestination* G4coutDestination::masterG4coutDestination = nullptr;
 // --------------------------------------------------------------------
 void G4coutDestination::ResetTransformers()
 {
+  transformersDebug.clear();
   transformersCout.clear();
   transformersCerr.clear();
+}
+
+// --------------------------------------------------------------------
+G4int G4coutDestination::ReceiveG4debug(const G4String& msg)
+{
+  std::cout << msg << std::flush;
+  return 0;
 }
 
 // --------------------------------------------------------------------
@@ -53,6 +61,28 @@ G4int G4coutDestination::ReceiveG4cerr(const G4String& msg)
 {
   std::cerr << msg << std::flush;
   return 0;
+}
+
+// --------------------------------------------------------------------
+G4int G4coutDestination::ReceiveG4debug_(const G4String& msg)
+{
+  // Avoid copy of string if not necessary
+  if(!transformersDebug.empty())
+  {
+    G4String m    = msg;
+    G4bool result = true;
+    for(const auto& el : transformersDebug)
+    {
+      result &= el(m);
+      if(!result)
+      {
+        break;
+      }
+    }
+    return (result ? ReceiveG4debug(m) : 0);
+  }
+
+  return ReceiveG4debug(msg);
 }
 
 // --------------------------------------------------------------------

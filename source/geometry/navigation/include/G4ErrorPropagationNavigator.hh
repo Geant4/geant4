@@ -46,23 +46,23 @@ class G4ErrorPropagationNavigator : public G4Navigator
   public:  // with description
 
     G4ErrorPropagationNavigator();
-   ~G4ErrorPropagationNavigator();
+   ~G4ErrorPropagationNavigator() override;
   
     G4double ComputeStep (const G4ThreeVector &pGlobalPoint,
                           const G4ThreeVector &pDirection,
                           const G4double pCurrentProposedStepLength,
-                                G4double &pNewSafety);
+                                G4double &pNewSafety) override;
       // Calls the navigation in the detector geometry and then checks
       // if the distance to surface is smaller than the proposed step
 
     G4double ComputeSafety(const G4ThreeVector &globalpoint,
                            const G4double pProposedMaxLength = DBL_MAX,
-                           const G4bool keepState = true);
+                           const G4bool keepState = true) override;
       // Calls the navigation in the detector geometry and then checks
       // if the distance to surface is smaller than the proposed safety
   
     G4ThreeVector GetGlobalExitNormal(const G4ThreeVector& point,
-                                            G4bool* valid);
+                                            G4bool* valid) override;
       // Return Exit Surface Normal and validity too. Can only be called if
       // the Navigator's last Step has crossed a volume geometrical boundary.
       // Normal points out of the volume exited and/or into the volume entered.

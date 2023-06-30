@@ -55,20 +55,20 @@ class G4GeometryMessenger : public G4UImessenger
   public:  // with description
 
     G4GeometryMessenger(G4TransportationManager* tman);
-    ~G4GeometryMessenger();
+    ~G4GeometryMessenger() override;
       // Constructor and destructor
 
-    void SetNewValue( G4UIcommand* command, G4String newValues );
-    G4String GetCurrentValue( G4UIcommand* command );
+    void SetNewValue( G4UIcommand* command, G4String newValues ) override;
+    G4String GetCurrentValue( G4UIcommand* command ) override;
   
   private:
 
     void Init();
     void CheckGeometry();
     void ResetNavigator();
-    void SetVerbosity(G4String newValue);
-    void SetCheckMode(G4String newValue);
-    void SetPushFlag(G4String newValue);
+    void SetVerbosity(const G4String& newValue);
+    void SetCheckMode(const G4String& newValue);
+    void SetPushFlag(const G4String& newValue);
     void RecursiveOverlapTest();
 
     G4UIdirectory             *geodir, *navdir, *testdir;

@@ -223,7 +223,11 @@ public: // With description
 
   static G4ModelingParameters::PVNameCopyNoPath GetPVNameCopyNoPath
   (const std::vector<G4PhysicalVolumeNodeID>&);
-  // Converts
+  // Converts to PVNameCopyNoPath
+
+  static G4String GetPVNamePathString(const std::vector<G4PhysicalVolumeNodeID>&);
+  // Converts to path string, e.g., " World 0 Envelope 0 Shape1 0".
+  // Note leading space character.
 
   const std::map<G4String,G4AttDef>* GetAttDefs() const;
   // Attribute definitions for current solid.
@@ -304,6 +308,7 @@ protected:
   mutable G4bool     fCurtailDescent;// Can be set to curtail descent.
   G4VSolid*          fpClippingSolid;
   ClippingMode       fClippingMode;
+  G4int              fNClippers;     // No of clipping/cutting solids - only 0 or 1 allowed
 
 private:
 

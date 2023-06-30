@@ -53,7 +53,7 @@ G4Navigator* G4TransportationManager::fFirstTrackingNavigator= nullptr;
 //
 G4TransportationManager::G4TransportationManager() 
 { 
-  if (fTransportationManager)
+  if (fTransportationManager != nullptr)
   {
     G4Exception("G4TransportationManager::G4TransportationManager()",
                 "GeomNav0002", FatalException,
@@ -63,15 +63,17 @@ G4TransportationManager::G4TransportationManager()
   // Create the navigator for tracking and activate it; add to collections
   //
   G4Navigator* trackingNavigator= nullptr; 
-  if( fFirstTrackingNavigator && fFirstTrackingNavigator->GetExternalNavigation() )
+  if( (fFirstTrackingNavigator != nullptr) && (fFirstTrackingNavigator->GetExternalNavigation() != nullptr) )
   {
      trackingNavigator = fFirstTrackingNavigator->Clone();
   }
   else
   {
      trackingNavigator = new G4Navigator();
-     if( fFirstTrackingNavigator == nullptr ) 
+     if( fFirstTrackingNavigator == nullptr )
+     { 
         fFirstTrackingNavigator = trackingNavigator;
+     }
   }
   trackingNavigator->Activate(true);
   fNavigators.push_back(trackingNavigator);
@@ -132,7 +134,7 @@ void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
    // Message the PropagatorInField, 
    // which also maintains this information (to be reviewed)
    //
-   if( fPropagatorInField )
+   if( fPropagatorInField != nullptr )
    {
       fPropagatorInField -> SetDetectorFieldManager( newFieldManager );
    }
@@ -159,9 +161,9 @@ void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
 //
 void G4TransportationManager::ClearNavigators()
 {
-   for (auto pNav=fNavigators.cbegin(); pNav!=fNavigators.cend(); ++pNav)
+   for (const auto & fNavigator : fNavigators)
    {
-     delete *pNav;
+     delete fNavigator;
    }
    fNavigators.clear();
    fActiveNavigators.clear();
@@ -203,9 +205,12 @@ G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
 {
    // If already existing, return the stored pointer to the navigator
    //
-   for (auto pNav=fNavigators.cbegin(); pNav!=fNavigators.cend(); ++pNav)
+   for (const auto & fNavigator : fNavigators)
    {
-      if ((*pNav)->GetWorldVolume()->GetName() == worldName) { return *pNav; }
+      if (fNavigator->GetWorldVolume()->GetName() == worldName)
+      {
+        return fNavigator;
+      }
    }
 
    // Check if world of that name already exists,
@@ -240,9 +245,9 @@ G4Navigator* G4TransportationManager::GetNavigator( const G4String& worldName )
 //
 G4Navigator* G4TransportationManager::GetNavigator( G4VPhysicalVolume* aWorld )
 {
-   for (auto pNav=fNavigators.cbegin(); pNav!=fNavigators.cend(); ++pNav)
+   for (const auto & fNavigator : fNavigators)
    {
-     if ((*pNav)->GetWorldVolume() == aWorld) { return *pNav; }
+     if (fNavigator->GetWorldVolume() == aWorld) { return fNavigator; }
    }
    G4Navigator* aNavigator = nullptr;
    auto pWorld = std::find(fWorlds.cbegin(), fWorlds.cend(), aWorld);
@@ -325,10 +330,9 @@ G4int G4TransportationManager::ActivateNavigator( G4Navigator* aNavigator )
 
    aNavigator->Activate(true);
    G4int id = 0;
-   for(auto pActiveNav=fActiveNavigators.cbegin();
-       pActiveNav!=fActiveNavigators.cend(); ++pActiveNav)
+   for(const auto & fActiveNavigator : fActiveNavigators)
    {
-      if (*pActiveNav == aNavigator)  { return id; }
+      if (fActiveNavigator == aNavigator)  { return id; }
       ++id;
    }
    
@@ -375,10 +379,9 @@ void G4TransportationManager::DeActivateNavigator( G4Navigator* aNavigator )
 //
 void G4TransportationManager::InactivateAll( )
 {
-   for (auto pNav=fActiveNavigators.cbegin();
-             pNav!=fActiveNavigators.cend(); ++pNav)
+   for (const auto & fActiveNavigator : fActiveNavigators)
    {
-      (*pNav)->Activate(false);
+      fActiveNavigator->Activate(false);
    }
    fActiveNavigators.clear();
 
@@ -400,11 +403,11 @@ G4TransportationManager::IsWorldExisting ( const G4String& name )
    auto pWorld = fWorlds.begin();
    if ( *pWorld==nullptr )  { *pWorld=fNavigators[0]->GetWorldVolume(); }
 
-   for (auto cpWorld=fWorlds.cbegin(); cpWorld!=fWorlds.cend(); ++cpWorld)
+   for (const auto & fWorld : fWorlds)
    {
-      if ((*cpWorld)->GetName() == name ) { return *cpWorld; }
+      if (fWorld->GetName() == name ) { return fWorld; }
    }
-   return 0;
+   return nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -472,7 +475,7 @@ void G4TransportationManager::ClearParallelWorlds()
 
    fNavigators.push_back(trackingNavigator);
    fActiveNavigators.push_back(trackingNavigator);
-   fWorlds.push_back(0); // NULL registered
+   fWorlds.push_back(nullptr); // NULL registered
 }
 
 // ----------------------------------------------------------------------------

@@ -165,6 +165,7 @@
   histo 1 : energy deposit in absorber 1
   histo 2 : energy deposit in absorber 2
   ...etc...........
+  histo 10 : total energy deposit
     
   histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV/event)
   histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
@@ -172,7 +173,8 @@
   
   histo 21 : energy flow (MeV/event)
   histo 22 : lateral energy leak (MeV/event)  
-  ...etc...........
+  histo 23 : total energy leakage
+  histo 24 : total energy: Edep + Eleak
       
   NB. Numbering scheme for histograms:
   layer     : from 1 to NbOfLayers (included)

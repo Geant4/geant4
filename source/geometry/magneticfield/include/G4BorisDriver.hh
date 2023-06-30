@@ -41,35 +41,36 @@
 #include "G4ChordFinderDelegate.hh"
 
 
-class G4BorisDriver: 
-    public G4VIntegrationDriver,
-    public G4ChordFinderDelegate<G4BorisDriver>
+class G4BorisDriver : public G4VIntegrationDriver,
+                      public G4ChordFinderDelegate<G4BorisDriver>
 {
   public:
 
     G4BorisDriver( G4double hminimum,
                    G4BorisScheme* Boris,
                    G4int numberOfComponents = 6,
-                   bool verbosity = false);
+                   G4bool verbosity = false);
    
-    inline ~G4BorisDriver() = default;
+    inline ~G4BorisDriver() override = default;
 
     inline G4BorisDriver(const G4BorisDriver&) = delete;
     inline G4BorisDriver& operator=(const G4BorisDriver&) = delete;
 
     // 1. Core methods that advance the integration
-    virtual G4bool AccurateAdvance( G4FieldTrack& track,
-                                    G4double stepLen,
-                                    G4double epsilon,
-                                    G4double beginStep = 0) override;
-    // Advance integration accurately - by relative accuracy better than 'epsilon'
-   
-     virtual G4bool QuickAdvance( G4FieldTrack& y_val,   // In/Out
-                                  const G4double dydx[],    
-                                  G4double       hstep,
-                                  G4double&   missDist,  // Out: estimated sagitta
-                                  G4double&   dyerr   ) override;
-    // Attempt one integration step, and return estimated error 'dyerr'
+
+    G4bool AccurateAdvance( G4FieldTrack& track,
+                            G4double stepLen,
+                            G4double epsilon,
+                            G4double beginStep = 0) override;
+      // Advance integration accurately
+      // - by relative accuracy better than 'epsilon'
+
+    G4bool QuickAdvance(       G4FieldTrack& y_val,   // In/Out
+                         const G4double dydx[],    
+                               G4double       hstep,
+                               G4double&   missDist,  // Out: estimated sagitta
+                               G4double&   dyerr   ) override;
+      // Attempt one integration step, and return estimated error 'dyerr'
 
     void OneGoodStep(G4double  yCurrentState[],  // In/Out: state ('y')
                      G4double& curveLength,      // In/Out: 'x'
@@ -79,75 +80,79 @@ class G4BorisDriver:
                      G4double  charge,
                      G4double& hdid,             // Out: step achieved
                      G4double& hnext);           // Out: proposed next step
-    //   Method to implement Accurate Advance
+      // Method to implement Accurate Advance
    
     // 2. Methods needed to co-work with G4ChordFinder
-    virtual G4double AdvanceChordLimited(G4FieldTrack& track,
-                                         G4double hstep,
-                                         G4double eps,
-                                         G4double chordDistance) override
+
+    G4double AdvanceChordLimited(G4FieldTrack& track,
+                                 G4double hstep,
+                                 G4double eps,
+                                 G4double chordDistance) override
     {
       return ChordFinderDelegate::
              AdvanceChordLimitedImpl(track, hstep, eps, chordDistance);
     }
 
-    virtual void OnStartTracking() override {
+    void OnStartTracking() override
+    {
       ChordFinderDelegate::ResetStepEstimate();
     }
 
-    virtual void OnComputeStep() override {};
+    void OnComputeStep(const G4FieldTrack*) override {}
 
+    // 3. Does the method redo integrations when called to obtain values for
+    //    internal, smaller intervals? (when needed to identify an intersection)
 
-
-    // 3. Does the method redo integrations when called to obtain values
-    //      for internal, smaller intervals ? 
-    //        (when needed to identify an intersection.) 
-    virtual G4bool DoesReIntegrate() const override { return true; }
-    //    It would be no if it just used interpolation to provide a result.
+    G4bool DoesReIntegrate() const override { return true; }
+      // It would be no if it just used interpolation to provide a result.
 
     // 4. Relevant for calculating a new step size to achieve required accuracy
-    inline virtual G4double ComputeNewStepSize(
-                          G4double  errMaxNorm,    // normalised error
-                          G4double  hstepCurrent) override; // current step size
+
+    inline G4double ComputeNewStepSize(G4double  errMaxNorm, // normalised error
+                                       G4double  hstepCurrent) override; // current step size
 
     G4double ShrinkStepSize2(G4double h, G4double error2) const;
     G4double GrowStepSize2(G4double h, G4double error2) const;
-    // Calculate the next step size given the square of the relative error
+      // Calculate the next step size given the square of the relative error
    
     // 5. Auxiliary Methods ...
-    virtual void GetDerivatives( const G4FieldTrack& track,
-                                 G4double dydx[]) const override;
 
-    virtual void GetDerivatives( const G4FieldTrack& track,
-                                 G4double dydx[],
-                                 G4double field[]) const override;
+    void GetDerivatives( const G4FieldTrack& track,
+                               G4double dydx[] ) const override;
 
-    inline virtual void SetVerboseLevel(G4int level) override;
-    inline virtual G4int GetVerboseLevel() const override;
+    void GetDerivatives( const G4FieldTrack& track,
+                               G4double dydx[],
+                               G4double field[] ) const override;
 
-    inline virtual G4EquationOfMotion* GetEquationOfMotion() override;
+    inline void SetVerboseLevel(G4int level) override;
+    inline G4int GetVerboseLevel() const override;
+
+    inline G4EquationOfMotion* GetEquationOfMotion() override;
     inline const G4EquationOfMotion* GetEquationOfMotion() const;
-    virtual void SetEquationOfMotion(G4EquationOfMotion* equation) override;
+    void SetEquationOfMotion(G4EquationOfMotion* equation) override;
 
-    virtual void  StreamInfo( std::ostream& os ) const override;
+    void  StreamInfo( std::ostream& os ) const override;
      // Write out the parameters / state of the driver
    
     // 6. Not relevant for Boris and other non-RK methods
-    inline virtual const G4MagIntegratorStepper* GetStepper() const override;
-    inline virtual G4MagIntegratorStepper* GetStepper() override;
+
+    inline const G4MagIntegratorStepper* GetStepper() const override;
+    inline G4MagIntegratorStepper* GetStepper() override;
 
   private:
+
     inline G4int GetNumberOfVariables() const;
 
     inline void CheckStep(const G4ThreeVector& posIn,                              
                           const G4ThreeVector& posOut,
-                          G4double hdid) const;
+                                G4double hdid) const;
    
   private:
+
     // INVARIANTS -- remain unchanged during tracking / integration 
     // Parameters
     G4double fMinimumStep;
-    bool     fVerbosity;
+    G4bool   fVerbosity;
 
     // State -- The core stepping algorithm
     G4BorisScheme* boris;
@@ -165,7 +170,7 @@ class G4BorisDriver:
     // const G4int interval_sequence[2];
    
     // INVARIANTS -- Parameters for ensuring that one call has finite number of integration steps
-    static constexpr int      fMaxNoSteps = 300; 
+    static constexpr G4int    fMaxNoSteps = 300; 
     static constexpr G4double fSmallestFraction= 1e-12; // To avoid FP underflow !  ( 1.e-6 for single prec)
 
     static constexpr G4int    fIntegratorOrder= 2; //  2nd order method -- needed for error control
@@ -179,8 +184,7 @@ class G4BorisDriver:
     static const G4double fErrorConstraintShrink;
     static const G4double fErrorConstraintGrow;
    
-    using ChordFinderDelegate =
-          G4ChordFinderDelegate<G4BorisDriver>;
+    using ChordFinderDelegate = G4ChordFinderDelegate<G4BorisDriver>;
 };
 
 #include "G4BorisDriver.icc"

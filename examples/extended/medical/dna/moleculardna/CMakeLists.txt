@@ -28,8 +28,8 @@ set(GEOMETRY_FILE_NAME "geometries.tar.gz")
 set(GEOMETRY_FOlDER_NAME "geometries")
 set(GEOMETRY_LOCAL_FILENAME "${PROJECT_BINARY_DIR}/${GEOMETRY_FILE_NAME}")
 set(GEOMETRY_DATASETS_URL
-        "http://geant4-dna.in2p3.fr/geometries/molecularDNA/${GEOMETRY_FILE_NAME}")
-set(HASH_MD5 "3e28151dc4c4647af3ae37d0385fc443")
+        "https://cern.ch/geant4-data/datasets/examples/extended/medical/dna/moleculardna/${GEOMETRY_FILE_NAME}")
+set(HASH_MD5 "cbe6ac77f46d33865cf7d6ea2c94ef67")
 
 if (EXISTS "${GEOMETRY_FOlDER_NAME}")
     set(GEOMETRY_NEEDS_DOWNLOAD FALSE)

@@ -38,16 +38,13 @@
 SteppingAction::SteppingAction(EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  fScoringVolume(0)
-{}
-
-SteppingAction::~SteppingAction()
+  fScoringVolume(nullptr)
 {}
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
   if (!fScoringVolume) { 
-    const DetectorConstruction* detectorConstruction
+    const auto* detectorConstruction
       = static_cast<const DetectorConstruction*>
         (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
     fScoringVolume = detectorConstruction->GetScoringVolume();   

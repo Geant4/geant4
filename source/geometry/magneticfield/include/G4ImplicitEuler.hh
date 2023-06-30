@@ -44,18 +44,17 @@
 
 class G4ImplicitEuler : public G4MagErrorStepper
 {
-
-  public:  // with description
+  public:
 
     G4ImplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6);
-   ~G4ImplicitEuler();
+   ~G4ImplicitEuler() override;
 
     void  DumbStepper( const G4double y[] ,
                        const G4double dydx[] ,
                              G4double h ,
-                             G4double yout[] );
+                             G4double yout[] ) override;
 
-    inline G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const override { return 2; }
 
   private:
 

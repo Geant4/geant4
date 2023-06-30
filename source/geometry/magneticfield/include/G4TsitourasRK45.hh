@@ -49,7 +49,7 @@ class G4TsitourasRK45 : public G4MagIntegratorStepper
     G4TsitourasRK45(G4EquationOfMotion* EqRhs,
                     G4int numberOfVariables = 6,
                     G4bool primary =  true);
-   ~G4TsitourasRK45();
+   ~G4TsitourasRK45() override;
 
     G4TsitourasRK45(const G4TsitourasRK45&) = delete;
     G4TsitourasRK45& operator=(const G4TsitourasRK45&) = delete;
@@ -58,7 +58,7 @@ class G4TsitourasRK45 : public G4MagIntegratorStepper
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] );
+                        G4double yerr[] ) override;
     
     void SetupInterpolation( /* const G4double yInput[],
                               const G4double dydx[],
@@ -77,8 +77,8 @@ class G4TsitourasRK45 : public G4MagIntegratorStepper
                             G4double Step,
                             G4double tau);
 
-    G4double DistChord() const;
-    inline G4int IntegratorOrder() const { return 4; }
+    G4double DistChord() const override;
+    inline G4int IntegratorOrder() const override { return 4; }
     
   private :
     

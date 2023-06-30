@@ -4,6 +4,17 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-06-13   I. Semeniouk  (exgflash-V11-01-01)
+- gflash1,2,3,a - replaces static with inline static and moveinitialization into .hh files
+- gflasha - Use G4PhysListFactory for physics list initialization
+- gflash2 - remove unused statics from Detector Construction class
+- Update History and gflasha README files
+
+## 2023-04-19   I. Semeniouk  (exgflash-V11-01-00)
+- gflash1,2,3,a  clang-tidy and clang format
+- gflasha add cmpE.C macro
+- gfalsh1,2,3 comment /run/beamOn commands
+- Add History entry
 
 ## 2022-11-04  I. Hrivnacova (exgflash-V11-00-01)
 - Fixed Doxygen file descriptions in glash2 and gflash3
@@ -15,7 +26,7 @@ be used as a substitute for writing good git commit messages!
 
 # History entries prior to 11.0
 
-18-Oct-2021 I. Semeniouk  (exgflash-V10-07-02)
+18-Oct-2021
   - clang-tidy and clang-format on code
   - remove local History file and power-off.png
   - test.mac run twice with and without gflash

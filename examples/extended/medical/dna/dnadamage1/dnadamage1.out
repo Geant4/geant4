@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,7 +45,9 @@ Registered graphics systems are:
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -520,17 +522,17 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   2913 kByte
-    Total CPU time elapsed for geometry optimisation: 8.7 seconds
+    Total CPU time elapsed for geometry optimisation: 6.9 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      99.31         8.60         0.01         2914k VoxelStraight_logic
+      98.98         6.81         0.01         2914k VoxelStraight_logic
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00       2913k     20884    21735      54614         8.60    VoxelStraight_logic
+     100.00       2913k     20884    21735      54614         6.81    VoxelStraight_logic
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
@@ -638,7 +640,7 @@ At time :  376.29 ps  Reaction : Histone^0 (-6454) + H3O^1 (-14525) -> Histone^0
 At time :  385.29 ps  Reaction : Adenine^0 (-2623) + OH^0 (-14530) -> Damaged_Adenine^0 (-14666)
 At time :  400.29 ps  Reaction : H^0 (-14539) + OH^0 (-14631) -> No product
 At time :  406.29 ps  Reaction : H^0 (-14569) + Histone^0 (-7255) -> Histone^0 (-14667)
-At time :  409.29 ps  Reaction : Thymine^0 (-6901) + H^0 (-14612) -> Damaged_Thymine^0 (-14668)
+At time :  409.29 ps  Reaction : H^0 (-14612) + Thymine^0 (-6901) -> Damaged_Thymine^0 (-14668)
 At time :   461.8 ps  Reaction : Histone^0 (-14667) + H^0 (-14559) -> Histone^0 (-14669)
 At time :   470.8 ps  Reaction : H^0 (-14555) + Deoxyribose^0 (-12250) -> Damaged_Deoxyribose^0 (-14670)
 At time :  556.82 ps  Reaction : H^0 (-14597) + OH^0 (-14606) -> No product
@@ -654,7 +656,7 @@ At time :  785.45 ps  Reaction : Histone^0 (-2449) + H3O^1 (-14534) -> Histone^0
 At time :  788.45 ps  Reaction : H^0 (-14579) + Deoxyribose^0 (-2065) -> Damaged_Deoxyribose^0 (-14680)
 At time :  804.05 ps  Reaction : OH^0 (-14553) + Thymine^0 (-12208) -> Damaged_Thymine^0 (-14681)
 At time :  983.44 ps  Reaction : OH^0 (-14542) + H^0 (-14620) -> No product
-At time :  1.0364 ns  Reaction : H_2^0 (-14654) + Histone^0 (-14676) -> Histone^0 (-14682)
+At time :  1.0364 ns  Reaction : Histone^0 (-14676) + H_2^0 (-14654) -> Histone^0 (-14682)
 At time :  1.4601 ns  Reaction : OH^0 (-14578) + Guanine^0 (-2939) -> Damaged_Guanine^0 (-14683)
 At time :  1.4701 ns  Reaction : H^0 (-14589) + Deoxyribose^0 (-2049) -> Damaged_Deoxyribose^0 (-14684)
 At time :  1.4901 ns  Reaction : H_2^0 (-14562) + Histone^0 (-14674) -> Histone^0 (-14685)
@@ -754,7 +756,7 @@ ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=134.760000s Real=135.644230s Sys=0.090000s
+  User=129.940000s Real=130.978560s Sys=0.060000s
 
 ----> Histograms are saved
 Graphics systems deleted.

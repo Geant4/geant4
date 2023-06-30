@@ -43,16 +43,16 @@
 // ###                      ANTI ALPHA                                ###
 // ######################################################################
 
-G4AntiAlpha* G4AntiAlpha::theInstance = 0;
+G4AntiAlpha* G4AntiAlpha::theInstance = nullptr;
 
 G4AntiAlpha* G4AntiAlpha::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_alpha";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -69,7 +69,7 @@ G4AntiAlpha* G4AntiAlpha::Definition()
                     0,              +1,             0,
                     0,               0,             0,
        "anti_nucleus",               0,            -4,  -1000020040,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 		false,        "static",    1000020040,
                   0.0,               0
                );

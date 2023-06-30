@@ -57,11 +57,11 @@ class G4DNAEventScheduler : public IEventScheduler
   using MolType    = const G4MolecularConfiguration*;
   using MapList    = std::map<MolType, size_t>;
   using MapCounter = std::map<MolType, G4int>;
-  G4DNAEventScheduler(const G4DNABoundingBox& boundingBox, G4int pixel);
+  G4DNAEventScheduler();
   ~G4DNAEventScheduler() override;
   G4DNAEventScheduler(const G4DNAEventScheduler&) = delete;
   G4DNAEventScheduler& operator=(const G4DNAEventScheduler& right) = delete;
-  void Initialize();
+  void Initialize(const G4DNABoundingBox& boundingBox, G4int pixel);
   void InitializeInMesh();
   void Voxelizing();
   void ReVoxelizing(G4int);
@@ -106,11 +106,10 @@ class G4DNAEventScheduler : public IEventScheduler
   G4double fGlobalTime = 1 * CLHEP::picosecond;
   G4double fJumpingNumber = 0;
   G4double fReactionNumber = 0;
-  G4int fPixel;
+  G4int fPixel = 0;
   G4bool fIsChangeMesh = false;
   G4bool fSetChangeMesh = true;
   G4int fStepNumberInMesh = 0;
-  G4double fInitialPixels;
   G4double fTransferTime = 0.;
   const G4double C = 20;
   const G4double D = G4H2O2::Definition()->GetDiffusionCoefficient();  // this is the biggest D

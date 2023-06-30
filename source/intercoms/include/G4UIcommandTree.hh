@@ -36,15 +36,14 @@
 #ifndef G4UIcommandTree_hh
 #define G4UIcommandTree_hh 1
 
-#include <vector>
-
-#include "globals.hh"
 #include "G4UIcommand.hh"
+#include "globals.hh"
+
+#include <vector>
 
 class G4UIcommandTree
 {
   public:
-
     G4UIcommandTree() = default;
     G4UIcommandTree(const char* thePathName);
 
@@ -59,9 +58,9 @@ class G4UIcommandTree
     G4UIcommandTree* FindCommandTree(const char* commandPath);
     G4String GetFirstMatchedString(const G4String&, const G4String&) const;
 
+    // Complete most available characters in common into command path in the
+    // command line given
     G4String CompleteCommandPath(const G4String& commandPath);
-      // Complete most available characters in common into command path in the
-      // command line given
 
     void List() const;
     void ListCurrent() const;
@@ -77,15 +76,14 @@ class G4UIcommandTree
     inline G4UIcommand* GetCommand(G4int i) { return command[i - 1]; }
     inline const G4String GetTitle() const
     {
-      return (guidance == nullptr) ? G4String("...Title not available...")
-                                   : guidance->GetTitle();
+      return (guidance == nullptr) ? G4String("...Title not available...") : guidance->GetTitle();
     }
 
   private:
-
     G4String CreateFileName(const char* pName);
     G4String ModStr(const char* strS);
 
+  private:
     std::vector<G4UIcommand*> command;
     std::vector<G4UIcommandTree*> tree;
     G4UIcommand* guidance = nullptr;

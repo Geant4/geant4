@@ -5,13 +5,18 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2023-01-26 John Apostolakis (transport-V11-01-02)
+- Added a method to set both warning & important energies in G4TransporationParameters
+  Added method to report lock errors.
+  Improve reporting of inconsistent changes of 'warning' & 'important' energies
+    (not only enforce warning_E < important_E but also warn about violations.)
 
-## 2023-01-25 John Apostolakis (transport-V11-00-11)
+## 2023-01-25 John Apostolakis (transport-V11-01-01)
 - Fix unwanted change of default looper parameters.
   ( Reversed inadvertent creation of G4TransportationParameters in
     calls to G4Transportation constructor.)
 
-## 2023-01-09 Jonas Hahnfeld
+## 2023-01-09 Jonas Hahnfeld (transport-V11-01-00)
 - Fix compilation warning about unused variable without `G4VERBOSE`.
 
 ## 2022-11-25 Gabriele Cosmo (transport-V11-00-10)

@@ -47,7 +47,6 @@ geant4_add_module(G4tracking
     G4MultiTrackingAction.cc
     G4VSteppingVerbose.cc
     G4VTrajectory.cc
-    G4VTrajectoryPoint.cc
     G4MultiSteppingAction.cc)
 
 geant4_module_compile_definitions(G4tracking PRIVATE G4TRACKING_ALLOC_EXPORT)

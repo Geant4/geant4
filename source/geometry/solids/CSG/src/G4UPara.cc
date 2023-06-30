@@ -135,9 +135,7 @@ G4UPara::G4UPara( __void__& a )
 //
 // Destructor
 
-G4UPara::~G4UPara()
-{
-}
+G4UPara::~G4UPara() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -423,7 +421,7 @@ G4bool G4UPara::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent

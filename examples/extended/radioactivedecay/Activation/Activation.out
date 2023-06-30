@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -156,35 +156,35 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.140000s Real=0.142808s Sys=0.000000s
+  User=0.110000s Real=0.110464s Sys=0.000000s
 
  The run is 1000 neutron of 25 meV through 1 cm  of G4_Co (density: 8.9 g/cm3 )
 
  Process calls frequency :
-            NoProcess=   1082       Radioactivation=   2841                  Rayl=    108
-       Transportation=  13704               annihil=     47                 compt=   1619
-                 conv=     48                 eIoni=   5355            hadElastic=    135
-              ionIoni=   2029                   msc=    446              nCapture=    947
-                 phot=    675 
+            NoProcess=   1094       Radioactivation=   2813                  Rayl=    117
+       Transportation=  13482               annihil=     42                 compt=   1523
+                 conv=     45                 eIoni=   5098            hadElastic=    156
+              ionIoni=   2032                   msc=    663              nCapture=    938
+                 phot=    658 
 
  List of generated particles (with meanLife != 0):
-           Co59:     135  Emean =  38.653 meV	( 0.31874 meV --> 159.3 meV)	stable
-           Co60:     947  Emean =  220.53 eV 	( 1.6775 eV  --> 521.51 eV )	mean life = 7.6098 y  
-           Ni60:     947  Emean =  15.919 eV 	( 15.907 eV  --> 27.832 eV )	stable
-      anti_nu_e:     947  Emean =  225.64 keV	( 17.743 keV --> 316.97 keV)	stable
-             e+:      48  Emean =  1.5809 MeV	( 95.987 keV --> 4.2878 MeV)	stable
-             e-:    3294  Emean =  313.53 keV	( 4.0273 eV  --> 5.3361 MeV)	stable
-          gamma:    6028  Emean =   1.578 MeV	( 13.027 eV  --> 7.4329 MeV)	stable
+           Co59:     156  Emean =  32.877 meV	( 2.2117 meV --> 192.54 meV)	stable
+           Co60:     938  Emean =  229.59 eV 	( 1.0373 eV  --> 510.62 eV )	mean life = 7.6098 y  
+           Ni60:     938  Emean =  15.907 eV 	( 15.907 eV  --> 15.907 eV )	stable
+      anti_nu_e:     938  Emean =  223.77 keV	( 16.657 keV --> 549.34 keV)	stable
+             e+:      45  Emean =  1.4218 MeV	( 21.553 keV --> 4.4741 MeV)	stable
+             e-:    3172  Emean =  311.74 keV	( 4.0309 eV  --> 5.7246 MeV)	stable
+          gamma:    5897  Emean =  1.5967 MeV	( 13.031 eV  --> 7.4329 MeV)	stable
 
- Mean energy deposit per event = 1.0509 MeV  rms = 1.2361 MeV
- Mean energy flow per event    = 8.7151 MeV  rms = 2.3928 MeV
+ Mean energy deposit per event = 1.0009 MeV  rms = 1.1863 MeV
+ Mean energy flow per event    = 8.6712 MeV  rms = 2.5132 MeV
 
  List of particles emerging from the target :
-      anti_nu_e:     947  Emean =  225.64 keV	( 17.743 keV --> 316.97 keV) 	Eflow/event = 213.69 keV
-             e+:       2  Emean =  2.7584 MeV	( 1.8677 MeV --> 3.6491 MeV) 	Eflow/event = 5.5168 keV
-             e-:      44  Emean =  1.3024 MeV	( 43.337 keV --> 4.4039 MeV) 	Eflow/event = 57.305 keV
-          gamma:    5305  Emean =  1.5907 MeV	( 56.688 keV --> 7.4329 MeV) 	Eflow/event = 8.4386 MeV
-        neutron:      53  Emean =  24.955 meV	( 13.524 meV --> 46.757 meV) 	Eflow/event = 1.3226 meV
+      anti_nu_e:     938  Emean =  223.77 keV	( 16.657 keV --> 549.34 keV) 	Eflow/event = 209.9 keV
+             e+:       3  Emean =  2.5118 MeV	( 1.9541 MeV --> 2.901 MeV) 	Eflow/event = 7.5353 keV
+             e-:      41  Emean =  1.1994 MeV	( 83.338 keV --> 3.3621 MeV) 	Eflow/event = 49.175 keV
+          gamma:    5194  Emean =  1.6181 MeV	( 48.943 keV --> 7.4329 MeV) 	Eflow/event = 8.4046 MeV
+        neutron:      62  Emean =  26.659 meV	( 12.147 meV --> 51.812 meV) 	Eflow/event = 1.6529 meV
 
  histo Id for populations :
                  Co59  id =  26
@@ -194,7 +194,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1134064772, 488124082
+ Current couple of seeds = 2052790144, 1917113182
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

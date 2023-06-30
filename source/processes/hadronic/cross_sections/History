@@ -6,6 +6,33 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-05-24 Vladimir Ivanchenko (hadr-cross-V11-01-05)
+- G4GammaNuclearXS - more accurate usage of cache to fix the nightly problems;
+    simplified GetIsoCrosssection(..) and SelectIsotope(..) methods
+
+## 2023-05-23 Gabriele Cosmo (hadr-cross-V11-01-04)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode>=14.1.
+
+## 2023-05-08 Vladimir Ivanchenko (hadr-cross-V11-01-03)
+- G4GammaNuclearXS - general clean-up of the class: instantiate data only once
+    for all instances of this x-section class; upload data for all elements
+    before the first run; simplified computation of isotope x-section; added
+    extra public method LowEnergyCrossSection(..)
+
+## 2023-04-25 Vladimir Ivanchenko (hadr-cross-V11-01-02)
+- G4CrossSectionDataStore - removed remaining call to getenv
+
+## 2023-02-17 Vladimir Grichine (hadr-cross-V11-01-01)
+- G4ElNeutrinoNucleusTotXsc - uncommented methods for interface with G4ElNeutrinoNucleusProcess
+
+## 2023-01-14 Vladimir Ivanchenko (hadr-cross-V11-01-00)
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS, G4GammaNuclearXS,
+  G4ParticleInelasticXS - do not call to environment variable G4PARTICLEXSDATA,
+    instead use G4HadrpnicParameters access method. Address issue #139 for
+    hadronic cross sections
+  G4CrossSectionDataStore - reduced number of calls to environment variable,
+    which are done only to print html output for documentation
+
 ## 2022-11-26 Gabriele Cosmo (hadr-cross-V11-00-15)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

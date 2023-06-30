@@ -49,16 +49,16 @@
 // ###                          PIONZERO                              ###
 // ######################################################################
 
-G4PionZero* G4PionZero::theInstance = 0;
+G4PionZero* G4PionZero::theInstance = nullptr;
 
 G4PionZero* G4PionZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "pi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -75,14 +75,14 @@ G4PionZero* G4PionZero::Definition()
                     0,              -1,            +1,
                     2,               0,            -1,
               "meson",               0,             0,         111,
-                false,      8.52e-8*ns,          NULL,
+                false,      8.52e-8*ns,          nullptr,
                 false,            "pi",          111);
 
    // Life time is given from width
    anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
      
   //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create a decay channel
   G4VDecayChannel* mode;

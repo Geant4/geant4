@@ -50,16 +50,25 @@ Run::Run(DetectorConstruction* det)
   fDetector(det), 
   fParticle(nullptr), fEkin(0.)
 {
-  //initialize cumulative quantities
+  //initialize energy deposited per absorber
   //
   for (G4int k=0; k<kMaxAbsor; k++) {
     fSumEAbs[k] = fSum2EAbs[k]  = fSumLAbs[k] = fSum2LAbs[k] = 0.;
   }
   
+  // initialize total energy deposited
+  //
+  fEdepTot = fEdepTot2 = 0.;
+  
   // initialize leakage
   //
   fEnergyLeak[0] = fEnergyLeak[1] = 0.;
-    
+  fEleakTot = fEleakTot2 = 0.;
+  
+  // initialize total energy released
+  //
+  fEtotal = fEtotal2 = 0.;
+      
   //initialize Eflow
   //
   G4int nbPlanes = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor()) + 2;
@@ -97,7 +106,7 @@ void Run::CountProcesses(const G4VProcess* process)
    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::FillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
+void Run::SumEdepPerAbsorber(G4int kAbs, G4double EAbs, G4double LAbs)
 {
   //accumulate statistic with restriction
   //
@@ -107,9 +116,16 @@ void Run::FillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEnergyLeak(G4double eleak, G4int index)
+void Run::SumEnergies(G4double edeptot, G4double eleak0, G4double eleak1)
 {
-  fEnergyLeak[index] += eleak;
+  fEdepTot += edeptot; fEdepTot2 += edeptot*edeptot;
+ 
+  fEnergyLeak[0] += eleak0; fEnergyLeak[1] += eleak1;
+  G4double eleaktot = eleak0 + eleak1;
+  fEleakTot += eleaktot; fEleakTot2 += eleaktot*eleaktot;
+  
+  G4double etotal = edeptot + eleaktot;
+  fEtotal += etotal; fEtotal2 += etotal*etotal;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -137,10 +153,19 @@ void Run::Merge(const G4Run* run)
     fSumLAbs[k]  += localRun->fSumLAbs[k]; 
     fSum2LAbs[k] += localRun->fSum2LAbs[k];
   }
-
+  
+  fEdepTot  += localRun->fEdepTot;
+  fEdepTot2 += localRun->fEdepTot2;
+  
   fEnergyLeak[0]  += localRun->fEnergyLeak[0];
   fEnergyLeak[1]  += localRun->fEnergyLeak[1];
-   
+  
+  fEleakTot  += localRun->fEleakTot;
+  fEleakTot2 += localRun->fEleakTot2;
+  
+  fEtotal  += localRun->fEtotal;
+  fEtotal2 += localRun->fEtotal2;  
+     
   G4int nbPlanes = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor()) + 2;
   for (G4int k=0; k<nbPlanes; k++) {
     fEnergyFlow[k]   += localRun->fEnergyFlow[k];
@@ -193,14 +218,13 @@ void Run::EndOfRun()
   if(norm > 0) norm = 1./norm;
   G4double qnorm = std::sqrt(norm);
 
-  //compute and print statistic
+  //energy deposit per absorber
   //
   G4double beamEnergy = fEkin;
   G4double sqbeam = std::sqrt(beamEnergy/GeV);
 
   G4double MeanEAbs,MeanEAbs2,rmsEAbs,resolution,rmsres;
   G4double MeanLAbs,MeanLAbs2,rmsLAbs;
-  G4double EdepTot = 0.;
 
   std::ios::fmtflags mode = G4cout.flags();
   G4int  prec = G4cout.precision(2);
@@ -215,8 +239,6 @@ void Run::EndOfRun()
       MeanEAbs  = fSumEAbs[k]*norm;
       MeanEAbs2 = fSum2EAbs[k]*norm;
       rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
-      
-      EdepTot += MeanEAbs;
 
       resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
       rmsres    = resolution*qnorm;
@@ -243,25 +265,41 @@ void Run::EndOfRun()
        << std::setw(5) << G4BestUnit( rmsLAbs,"Length")
        << G4endl;
     }
-
-  G4cout << "\n   Total Edep = " << std::setprecision(4)
-         << G4BestUnit(EdepTot,"Energy") << G4endl;
+ 
+  //total energy deposited
+  //
+  fEdepTot      /= nEvt;
+  fEdepTot2     /= nEvt;
+  G4double rmsEdep = std::sqrt(std::abs(fEdepTot2 - fEdepTot*fEdepTot));
   
+  G4cout << "\n Total energy deposited = " << std::setprecision(4)
+         << G4BestUnit(fEdepTot,"Energy")
+	 << " +- " << G4BestUnit(rmsEdep, "Energy") << G4endl;	   
+         
   //Energy leakage
   //
   fEnergyLeak[0] /= nEvt;  
   fEnergyLeak[1] /= nEvt;
-  G4double EleakTot = fEnergyLeak[0] + fEnergyLeak[1];
+  fEleakTot      /= nEvt;
+  fEleakTot2     /= nEvt;
+  G4double rmsEleak = std::sqrt(std::abs(fEleakTot2 - fEleakTot*fEleakTot));
   
-  G4cout << "   Leakage :  primary = "
+  G4cout << " Leakage :  primary = "
          << G4BestUnit(fEnergyLeak[0],"Energy")
          << "   secondaries = "
          << G4BestUnit(fEnergyLeak[1],"Energy")
-         << "  ---> total = " << G4BestUnit(EleakTot, "Energy") << G4endl;
+         << "  ---> total = " << G4BestUnit(fEleakTot, "Energy")
+	 << " +- " << G4BestUnit(rmsEleak, "Energy") << G4endl;
+	 
+  //total energy released
+  //
+  fEtotal      /= nEvt;
+  fEtotal2     /= nEvt;
+  G4double rmsEtotal = std::sqrt(std::abs(fEtotal2 - fEtotal*fEtotal));
          
-  G4cout << "   Total energy released :  Edep + Eleak = "
-         << G4BestUnit(EdepTot + EleakTot,"Energy") << G4endl;
-         
+  G4cout << " Total energy released :  Edep + Eleak = "
+         << G4BestUnit(fEtotal,"Energy")
+	 << " +- " << G4BestUnit(rmsEtotal, "Energy") << G4endl;	            
   G4cout << "------------------------------------------------------------\n";
                      
   //Energy flow
@@ -269,12 +307,12 @@ void Run::EndOfRun()
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   G4int Idmax = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor());
   for (G4int Id=1; Id<=Idmax+1; Id++) {
-    analysis->FillH1(2*kMaxAbsor+1, (G4double)Id, fEnergyFlow[Id]);
+    analysis->FillH1(2*kMaxAbsor+1, (G4double)Id, fEnergyFlow[Id]/nEvt);
   }
   
   //normalize histograms
   //
-  for (G4int ih = kMaxAbsor+1; ih < kMaxHisto; ih++) {
+  for (G4int ih = kMaxAbsor+1; ih < 2*kMaxAbsor+1; ih++) {
     analysis->ScaleH1(ih,norm/MeV);
   }
   

@@ -59,8 +59,8 @@ class G4IsotopeMagneticMomentTable : public G4VIsotopeTable
   //   
 public:
   //
-  typedef std::vector<G4IsotopeProperty*> G4IsotopeList;
-  typedef std::vector<G4String>           G4IsotopeNameList;
+  using G4IsotopeList = std::vector<G4IsotopeProperty *>;
+  using G4IsotopeNameList = std::vector<G4String>;
 
 public:
   // constructor
@@ -74,7 +74,7 @@ protected:
 
 public:
   // destructor
-  virtual ~G4IsotopeMagneticMomentTable();
+  ~G4IsotopeMagneticMomentTable() override;
 
 public:
   // with description
@@ -84,9 +84,9 @@ public:
   // abstract base class G4VIstopeTable.  We don't use this fuction in this
   // implementation, instead we use the next function.
   //
-  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float);
-  virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0);
+  G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
+            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) override;
+  G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0) override;
   //
   //   again it will replace the pure virtual one in the abstract base class.
   //

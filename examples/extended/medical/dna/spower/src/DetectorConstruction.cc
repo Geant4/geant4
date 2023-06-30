@@ -136,7 +136,8 @@ void DetectorConstruction::SetRadius(G4double value)
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // search the material by its name   
+  // search the material by its name
+  G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial) fAbsorMaterial = pttoMaterial;
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();  

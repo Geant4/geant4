@@ -43,10 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
-:G4UImessenger(),fRunAction(run),
- fRunDir(0),
- fAccCmd(0),
- fLimCmd(0)
+:fRunAction(run)
 {
   fRunDir = new G4UIdirectory("/testem/run/");
   fRunDir->SetGuidance("run commands");

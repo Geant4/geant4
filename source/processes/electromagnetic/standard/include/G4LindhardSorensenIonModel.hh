@@ -55,7 +55,7 @@
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
 class G4LindhardSorensenData;
-class G4BraggIonModel;
+class G4BraggModel;
 class G4BetheBlochModel;
 class G4IonICRU73Data;
 
@@ -126,8 +126,6 @@ protected:
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
                               G4double kinEnergy) override;
 
-  inline G4double GetChargeSquareRatio() const;
-
   inline void SetChargeSquareRatio(G4double val);
 
 private:
@@ -142,19 +140,18 @@ private:
 
   inline void SetParticle(const G4ParticleDefinition* p);
 
-  static const G4int MAXZION = 93;
+  //  static const G4int MAXZION = 93;
 
   static G4IonICRU73Data* fIonData;
   static G4LindhardSorensenData* lsdata;
-  static std::vector<G4float>*   fact[MAXZION];
 
-  const G4ParticleDefinition* particle;
-  G4ParticleDefinition*       theElectron;
-  G4EmCorrections*            corr;
-  G4ParticleChangeForLoss*    fParticleChange;
-  G4NistManager*              nist;
-  G4BraggIonModel*            fBraggModel;
-  G4BetheBlochModel*          fBBModel;
+  const G4ParticleDefinition* particle = nullptr;
+  G4ParticleDefinition* theElectron;
+  G4EmCorrections* corr;
+  G4ParticleChangeForLoss* fParticleChange = nullptr;
+  G4NistManager* nist;
+  G4BraggModel* fBraggModel;
+  G4BetheBlochModel* fBBModel;
 
   G4int Zin = 1;
   G4double mass = 0.0;
@@ -168,6 +165,7 @@ private:
   G4double formfact = 0.0;
   G4double twoln10;
   G4double fElimit;
+  G4bool isFirst = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -179,13 +177,6 @@ G4LindhardSorensenIonModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     SetupParameters();
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4LindhardSorensenIonModel::GetChargeSquareRatio() const
-{
-  return chargeSquare;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

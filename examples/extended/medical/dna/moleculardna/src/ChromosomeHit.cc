@@ -33,21 +33,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4Allocator<ChromosomeHit>* MolecularChromosomeHitAllocator =
-  nullptr;
+G4ThreadLocal G4Allocator<ChromosomeHit>* MolecularChromosomeHitAllocator = nullptr;
 
-ChromosomeHit::ChromosomeHit(G4String  name)
-  : G4VHit()
-  , fName(std::move(name))
+ChromosomeHit::ChromosomeHit(const G4String& name)
+  : fName(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChromosomeHit::~ChromosomeHit() = default;
-
 ChromosomeHit::ChromosomeHit(const ChromosomeHit& right)
-  : G4VHit()
-  , fName(right.GetName())
+  : fName(right.GetName())
   , fEdepChromosome(right.GetChromosomeEdep())
   , fEdepDNA(right.GetDNAEdep())
 {

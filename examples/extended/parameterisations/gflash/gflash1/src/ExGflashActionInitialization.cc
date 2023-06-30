@@ -28,22 +28,18 @@
 /// \brief Implementation of the ExGflashActionInitialization class
 
 #include "ExGflashActionInitialization.hh"
+
+#include "ExGflashEventAction.hh"
 #include "ExGflashPrimaryGeneratorAction.hh"
 #include "ExGflashRunAction.hh"
-#include "ExGflashEventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashActionInitialization::ExGflashActionInitialization()
- : G4VUserActionInitialization()
-{
-}
+ExGflashActionInitialization::ExGflashActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashActionInitialization::~ExGflashActionInitialization()
-{
-}
+ExGflashActionInitialization::~ExGflashActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +55,6 @@ void ExGflashActionInitialization::Build() const
   SetUserAction(new ExGflashPrimaryGeneratorAction);
   SetUserAction(new ExGflashRunAction);
   SetUserAction(new ExGflashEventAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

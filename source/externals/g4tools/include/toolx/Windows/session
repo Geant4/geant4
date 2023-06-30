@@ -8,6 +8,7 @@
 #include <windowsx.h>
 
 #include <ostream>
+#include <cstdlib>
 
 namespace toolx {
 namespace Windows {
@@ -64,10 +65,18 @@ public:
   //void post(HWND a_hwnd,LPARAM a_msg){
   //  ::PostMessage(a_hwnd,WM_USER,(WPARAM)0,a_msg);
   //}
+public:
+  bool tmp_dir(std::string& a_dir) {
+    char* env = ::getenv("TEMP");
+    if(!env) {a_dir.clear();return false;}
+    a_dir = env;
+    return true;
+  }
 protected:
   std::ostream& m_out;
 };
 
 }}
+
 
 #endif

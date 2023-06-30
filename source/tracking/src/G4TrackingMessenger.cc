@@ -33,22 +33,23 @@
 // --------------------------------------------------------------------
 
 #include "G4TrackingMessenger.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UImanager.hh"
-#include "globals.hh"
-#include "G4TrackingManager.hh"
+
+#include "G4IdentityTrajectoryFilter.hh"
+#include "G4PropagatorInField.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackStatus.hh"
-#include "G4ios.hh"
+#include "G4TrackingManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4PropagatorInField.hh"
-#include "G4IdentityTrajectoryFilter.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImanager.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 ///////////////////////////////////////////////////////////////////
 G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager* trMan)
-///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
   : trackingManager(trMan)
 {
   steppingManager = trackingManager->GetSteppingManager();
@@ -56,13 +57,13 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager* trMan)
   TrackingDirectory = new G4UIdirectory("/tracking/");
   TrackingDirectory->SetGuidance("TrackingManager and SteppingManager control commands.");
 
-  AbortCmd = new G4UIcmdWithoutParameter("/tracking/abort",this);
+  AbortCmd = new G4UIcmdWithoutParameter("/tracking/abort", this);
   AbortCmd->SetGuidance("Abort current G4Track processing.");
 
-  ResumeCmd = new G4UIcmdWithoutParameter("/tracking/resume",this);
+  ResumeCmd = new G4UIcmdWithoutParameter("/tracking/resume", this);
   ResumeCmd->SetGuidance("Resume current G4Track processing.");
 
-  StoreTrajectoryCmd = new G4UIcmdWithAnInteger("/tracking/storeTrajectory",this);
+  StoreTrajectoryCmd = new G4UIcmdWithAnInteger("/tracking/storeTrajectory", this);
   StoreTrajectoryCmd->SetGuidance("Store trajectories or not.");
   StoreTrajectoryCmd->SetGuidance(" 0 : Don't Store trajectories.");
   StoreTrajectoryCmd->SetGuidance(" !=0 : Store trajectories.");
@@ -70,11 +71,11 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager* trMan)
   StoreTrajectoryCmd->SetGuidance(" 2 : Choose G4SmoothTrajectory as default.");
   StoreTrajectoryCmd->SetGuidance(" 3 : Choose G4RichTrajectory as default.");
   StoreTrajectoryCmd->SetGuidance(" 4 : Choose G4RichTrajectory with auxiliary points as default.");
-  StoreTrajectoryCmd->SetParameterName("Store",true);
+  StoreTrajectoryCmd->SetParameterName("Store", true);
   StoreTrajectoryCmd->SetDefaultValue(0);
-  StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 4"); 
+  StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 4");
 
-  VerboseCmd = new G4UIcmdWithAnInteger("/tracking/verbose",this);
+  VerboseCmd = new G4UIcmdWithAnInteger("/tracking/verbose", this);
 #ifdef G4VERBOSE
   VerboseCmd->SetGuidance("Set Verbose level of tracking category.");
   VerboseCmd->SetGuidance(" -1 : Silent.");
@@ -84,14 +85,14 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager* trMan)
   VerboseCmd->SetGuidance(" 3 : Addition to Level=1, pre/postStepoint information");
   VerboseCmd->SetGuidance("     after all AlongStep/PostStep process executions.");
   VerboseCmd->SetGuidance(" 4 : Addition to Level=3, pre/postStepoint information");
-  VerboseCmd->SetGuidance("     at each AlongStepPostStep process execution."); 
+  VerboseCmd->SetGuidance("     at each AlongStepPostStep process execution.");
   VerboseCmd->SetGuidance(" 5 : Addition to Level=4, proposed Step length information");
-  VerboseCmd->SetGuidance("     from each AlongStepPostStep process."); 
-  VerboseCmd->SetParameterName("verbose_level",true);
+  VerboseCmd->SetGuidance("     from each AlongStepPostStep process.");
+  VerboseCmd->SetParameterName("verbose_level", true);
   VerboseCmd->SetDefaultValue(0);
   VerboseCmd->SetRange("verbose_level >=-1  ");
-#else 
-  VerboseCmd->SetGuidance("You need to recompile the tracking category defining G4VERBOSE ");  
+#else
+  VerboseCmd->SetGuidance("You need to recompile the tracking category defining G4VERBOSE ");
 #endif
 }
 
@@ -107,43 +108,37 @@ G4TrackingMessenger::~G4TrackingMessenger()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void G4TrackingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void G4TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 ///////////////////////////////////////////////////////////////////////////////
 {
-  if( command == VerboseCmd )
-  {
+  if (command == VerboseCmd) {
     trackingManager->SetVerboseLevel(VerboseCmd->ConvertToInt(newValues));
   }
 
-  if( command == AbortCmd )
-  {
+  if (command == AbortCmd) {
     steppingManager->GetTrack()->SetTrackStatus(fStopAndKill);
     G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
   }
 
-  if( command == ResumeCmd )
-  {
+  if (command == ResumeCmd) {
     G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
   }
 
-  static G4ThreadLocal
-         G4IdentityTrajectoryFilter* auxiliaryPointsFilter = nullptr;
-  if(auxiliaryPointsFilter == nullptr)
-  {
+  static G4ThreadLocal G4IdentityTrajectoryFilter* auxiliaryPointsFilter = nullptr;
+  if (auxiliaryPointsFilter == nullptr) {
     auxiliaryPointsFilter = new G4IdentityTrajectoryFilter;
   }
-  if( command == StoreTrajectoryCmd )
-  {
+  if (command == StoreTrajectoryCmd) {
     G4int trajType = StoreTrajectoryCmd->ConvertToInt(newValues);
-    if(trajType==2||trajType==4)
-    {
+    if (trajType == 2 || trajType == 4) {
       G4TransportationManager::GetTransportationManager()
-        ->GetPropagatorInField()->SetTrajectoryFilter(auxiliaryPointsFilter);
+        ->GetPropagatorInField()
+        ->SetTrajectoryFilter(auxiliaryPointsFilter);
     }
-    else
-    {
+    else {
       G4TransportationManager::GetTransportationManager()
-        ->GetPropagatorInField()->SetTrajectoryFilter(0);
+        ->GetPropagatorInField()
+        ->SetTrajectoryFilter(nullptr);
     }
     trackingManager->SetStoreTrajectory(trajType);
   }
@@ -153,14 +148,11 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
 G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand* command)
 ////////////////////////////////////////////////////////////////////
 {
-  if( command == VerboseCmd )
-  {
+  if (command == VerboseCmd) {
     return VerboseCmd->ConvertToString(trackingManager->GetVerboseLevel());
   }
-  else if( command == StoreTrajectoryCmd )
-  {
-    return StoreTrajectoryCmd
-           ->ConvertToString(trackingManager->GetStoreTrajectory());
+  if (command == StoreTrajectoryCmd) {
+    return StoreTrajectoryCmd->ConvertToString(trackingManager->GetStoreTrajectory());
   }
-  return G4String(1,'\0');
+  return G4String(1, '\0');
 }

@@ -685,7 +685,6 @@ protected:
 
   std::map<unsigned int,gsto_t*> m_gstos;
 
-  bool m_gsto_on_card;
   unsigned int m_gen_id;
   tools::sg::gsto_mode m_gsto_mode;
   bool m_warned;

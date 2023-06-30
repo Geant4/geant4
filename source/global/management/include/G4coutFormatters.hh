@@ -46,7 +46,7 @@
 
 #include "G4String.hh"
 #include "G4ios.hh"
-#include "G4strstreambuf.hh"
+#include "G4coutDestination.hh"
 
 namespace G4coutFormatters
 {

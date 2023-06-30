@@ -30,29 +30,24 @@
 #include "globals.hh"
 #include <vector>
 #include <map>
-
- 
+class G4Material;
 class G4DNAPTBExcitationStructure
 {
 public:
-  
+
   G4DNAPTBExcitationStructure();
-  
-  virtual ~G4DNAPTBExcitationStructure() = default;
-  
-  G4double ExcitationEnergy(G4int ExcLevel, const G4String &materialName);
-
-  G4int NumberOfExcLevels(const G4String& materialName);
-  
-    
+  ~G4DNAPTBExcitationStructure() = default;
+  G4double ExcitationEnergy(const G4int& ExcLevel, const size_t &materialID);
+  G4int NumberOfExcLevels(const size_t& materialID);
+  G4DNAPTBExcitationStructure(const G4DNAPTBExcitationStructure&) = delete;  // prevent copy-construction
+  G4DNAPTBExcitationStructure& operator=(
+    const G4DNAPTBExcitationStructure& right) = delete;  // prevent assignement
 private:
-   
   // Number of Excitation levels of the water molecule
-  std::map<G4String, G4int> nExcLevels;
-
-  std::map<G4String, std::vector<G4double> > energyConstant;
-  
-  G4String ReplaceMaterial(const G4String &materialName);
+  std::map<size_t, G4int> nExcLevels;
+  std::map<size_t, std::vector<G4double> > energyConstant;
+  size_t ReplaceMaterial(const size_t &materialName);
+  G4Material* fpN2;
 };
 
 #endif

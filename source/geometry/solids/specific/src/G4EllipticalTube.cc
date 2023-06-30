@@ -213,7 +213,7 @@ G4EllipticalTube::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis, pVoxelLimit, pTransform, pMin, pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   G4double dx = fDx;
@@ -338,7 +338,7 @@ G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   if (distR > distZ && (x * x + y * y) > 0)
     return G4ThreeVector(p.x() * fDDy, p.y() * fDDx, 0.).unit();
   else
-    return G4ThreeVector(0, 0, (p.z() < 0 ? -1. : 1.));
+    return {0, 0, (p.z() < 0 ? -1. : 1.)};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -619,7 +619,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4EllipticalTube::GetEntityType() const
 {
-  return G4String("G4EllipticalTube");
+  return {"G4EllipticalTube"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -793,7 +793,7 @@ void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 
 G4VisExtent G4EllipticalTube::GetExtent() const
 {
-  return G4VisExtent( -fDx, fDx, -fDy, fDy, -fDz, fDz );
+  return { -fDx, fDx, -fDy, fDy, -fDz, fDz };
 }
 
 #endif // !defined(G4GEOM_USE_UELLIPTICALTUBE) || !defined(G4GEOM_USE_SYS_USOLIDS)

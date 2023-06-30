@@ -29,8 +29,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-VirtualChromosome::VirtualChromosome(G4String  name)
-  : fName(std::move(name))
+VirtualChromosome::VirtualChromosome(const G4String& name)
+  : fName(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

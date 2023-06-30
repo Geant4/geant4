@@ -65,7 +65,7 @@ G4GenericPolycone::G4GenericPolycone( const G4String& name,
   : G4VCSGfaceted( name )
 {
 
-  G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
+  auto rz = new G4ReduciblePolygon( r, z, numRZ );
 
   Create( phiStart, phiTotal, rz );
 
@@ -467,7 +467,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, RZ contour of the polycone is subdivided
@@ -483,7 +483,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyconeSideRZ corner = GetCorner(i);
-    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+    contourRZ.emplace_back(corner.r,corner.z);
   }
   G4double area = G4GeomTools::PolygonArea(contourRZ);
   if (area < 0.) std::reverse(contourRZ.begin(),contourRZ.end());
@@ -588,7 +588,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
 //
 G4GeometryType  G4GenericPolycone::GetEntityType() const
 {
-  return G4String("G4GenericPolycone");
+  return {"G4GenericPolycone"};
 }
 
 // Clone
@@ -727,10 +727,10 @@ void G4GenericPolycone::SetSurfaceElements() const
     for (G4int i=0; i<nrz; ++i)
     {
       G4PolyconeSideRZ corner = GetCorner(i);
-      contourRZ.push_back(G4TwoVector(corner.r, corner.z));
+      contourRZ.emplace_back(corner.r, corner.z);
     }
     G4GeomTools::TriangulatePolygon(contourRZ, triangles);
-    G4int ntria = (G4int)triangles.size();
+    auto  ntria = (G4int)triangles.size();
     for (G4int i=0; i<ntria; i+=3)
     {
       G4GenericPolycone::surface_element selem;
@@ -760,7 +760,7 @@ void G4GenericPolycone::SetSurfaceElements() const
 G4ThreeVector G4GenericPolycone::GetPointOnSurface() const
 {
   // Set surface elements
-  if (!fElements)
+  if (fElements == nullptr)
   {
     G4AutoLock l(&surface_elementsMutex);
     SetSurfaceElements();
@@ -815,7 +815,7 @@ G4ThreeVector G4GenericPolycone::GetPointOnSurface() const
     r = (p1.r - p0.r)*u +  (p2.r - p0.r)*v + p0.r;
     z = (p1.z - p0.z)*u +  (p2.z - p0.z)*v + p0.z;
   }
-  return G4ThreeVector(r*std::cos(phi), r*std::sin(phi), z);
+  return {r*std::cos(phi), r*std::sin(phi), z};
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -6,19 +6,49 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-02-10 Vladimir Ivanchenko (hadr-proc-V11-00-13)
+## 2023-06-17 Vladimir Ivanchenko (hadr-proc-V11-01-11)
+- G4NuVacOscProcess - clean-up to resolve Coverity report, removed unused class
+    memebrs
+
+## 2023-06-09 Vladimir Ivanchenko (hadr-proc-V11-01-10)
+- G4TauNeutrinoNucleusProcess - clean-up constructor and destructor to resolve
+    Coverity warning
+
+## 2023-04-13 Vladimir Grichine (hadr-proc-V11-01-09)
+- G4NuVacOscProcess - new process for vacuum 3- flavor neutrino oscillation
+
+## 2023-02-24 Vladimir Ivanchenko (hadr-proc-V11-01-08)
+- G4NeutronGeneralProcess - added two access methods and removed possible
+    variable shadowing
+
+## 2023-02-18 Vladimir Grichine (hadr-proc-V11-01-07)
+- G4ElNeutrinoNucleusProcess - update the process name to be el-neutrino-nucleus
+
+
+## 2023-02-16 Vladimir Grichine (hadr-proc-V11-01-06)
+- G4(El,Tau)NeutrinoNucleusProcess - neutrino XS biasing in selected detector-region update
+
+
+## 2023-02-15 Vladimir Grichine (hadr-proc-V11-01-05)
+- G4MuNeutrinoNucleusProcess - neutrino XS biasing in selected detector-region update
+
+
+## 2023-02-13 Vladimir Grichine (hadr-proc-V11-01-04)
+- G4NeutrinoElectronProcess - neutrino XS biasing in selected detector-region update
+
+## 2023-02-10 Vladimir Ivanchenko (hadr-proc-V11-01-03)
 - G4NeutronGeneralProcess - added extra Set method
 
-## 2023-02-01 Vladimir Ivanchenko (hadr-proc-V11-00-12)
+## 2023-02-01 Vladimir Ivanchenko (hadr-proc-V11-01-02)
 - G4HadronElasticProcess, G4NeutronGeneralProcess - fixed problems identified 
     by Coverity
 
-## 2023-01-17 Vladimir Ivanchenko
+## 2023-01-17 Vladimir Ivanchenko (hadr-proc-V11-01-01)
 - G4HadronElasticProcess - removed obsolete (try/catch construction not
     applicable for hadron elastic models; added forgotten integral approach
     for charged particles
 
-## 2022-12-30 Vladimir Ivanchenko
+## 2022-12-30 Vladimir Ivanchenko (hadr-proc-V11-01-00)
 - G4NeutronGeneralProcess - optimized code: initialisation methods are
     moved to the source, avoid double instantiation of capture cross section;
     reduced number of calls to cross section, added cross section data store

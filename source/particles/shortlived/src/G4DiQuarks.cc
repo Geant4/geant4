@@ -58,6 +58,3 @@ G4DiQuarks::G4DiQuarks(
 {
    SetParticleSubType("di_quark");
 }
-
-G4DiQuarks::~G4DiQuarks() {}
-

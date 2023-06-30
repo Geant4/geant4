@@ -34,47 +34,40 @@
 #include "ExGflash2ParallelWorld.hh"
 
 // G4 Classes
-#include "G4NistManager.hh"
-#include "G4Material.hh"
-#include "G4ThreeVector.hh"
-#include "G4PVPlacement.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Box.hh"
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4AutoDelete.hh"
+#include "G4Box.hh"
+#include "G4Colour.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
 #include "globals.hh"
 
-//fast simulation
-#include "GFlashHomoShowerParameterisation.hh"
-#include "G4FastSimulationManager.hh"
-#include "GFlashShowerModel.hh"
+// fast simulation
 #include "GFlashHitMaker.hh"
+#include "GFlashHomoShowerParameterisation.hh"
 #include "GFlashParticleBounds.hh"
+#include "GFlashShowerModel.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ThreadLocal GFlashShowerModel* ExGflash2ParallelWorld::fFastShowerModel = 0; 
-G4ThreadLocal 
-GFlashHomoShowerParameterisation* ExGflash2ParallelWorld::fParameterisation = 0;
-G4ThreadLocal GFlashParticleBounds* ExGflash2ParallelWorld::fParticleBounds = 0;
-G4ThreadLocal GFlashHitMaker* ExGflash2ParallelWorld::fHitMaker = 0;
+#include "G4FastSimulationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflash2ParallelWorld::ExGflash2ParallelWorld(G4String aWorldName)
-  :G4VUserParallelWorld(aWorldName), fRegion(nullptr)
+  : G4VUserParallelWorld(aWorldName)
 {
-  G4cout<<"ExGflash2ParallelWorld::Parralel world constructor"<<G4endl;
+  G4cout << "ExGflash2ParallelWorld::Parralel world constructor" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflash2ParallelWorld::~ExGflash2ParallelWorld()
 {
-  delete fFastShowerModel; 
+  delete fFastShowerModel;
   delete fParameterisation;
   delete fParticleBounds;
   delete fHitMaker;
@@ -85,55 +78,48 @@ ExGflash2ParallelWorld::~ExGflash2ParallelWorld()
 void ExGflash2ParallelWorld::Construct()
 {
   // In parallel world material does not matter
-  G4Material* dummy   = nullptr;
+  G4Material* dummy = nullptr;
 
   // Build parallel/ghost geometry:
   auto ghostLogicalVolume = GetWorld()->GetLogicalVolume();
-  
+
   // Use part of the Ex1GflashDetectorConstruction (without individual crystals)
-  
-  G4int nbOfCrystals = 10;  // this are the crystals PER ROW in this example 
-                       // cube of 10 x 10 crystals 
-                       // don't change it @the moment, since 
-                       // the readout in event action assumes this 
-                       // dimensions and is not automatically adapted
-                       // in this version of the example :-( 
-  // Simplified `CMS-like` PbWO4 crystal calorimeter  
-  G4double calo_xside = 31*cm;
-  G4double calo_yside = 31*cm;
-  G4double calo_zside = 24*cm; 
 
-  G4double crystalWidth = 3*cm;
-  G4double crystalLength = 24*cm;
+  G4int nbOfCrystals = 10;  // this are the crystals PER ROW in this example
+                            // cube of 10 x 10 crystals
+                            // don't change it @the moment, since
+                            // the readout in event action assumes this
+                            // dimensions and is not automatically adapted
+                            // in this version of the example :-(
+  // Simplified `CMS-like` PbWO4 crystal calorimeter
+  G4double calo_xside = 31 * cm;
+  G4double calo_yside = 31 * cm;
+  G4double calo_zside = 24 * cm;
 
-  calo_xside = (crystalWidth*nbOfCrystals)+1*cm;
-  calo_yside = (crystalWidth*nbOfCrystals)+1*cm;
+  G4double crystalWidth = 3 * cm;
+  G4double crystalLength = 24 * cm;
+
+  calo_xside = (crystalWidth * nbOfCrystals) + 1 * cm;
+  calo_yside = (crystalWidth * nbOfCrystals) + 1 * cm;
   calo_zside = crystalLength;
-  
-  G4Box* calo_box= new G4Box("CMS calorimeter",  // its name
-                             calo_xside/2.,      // size
-                             calo_yside/2.,
-                             calo_zside/2.);
-  G4LogicalVolume* calo_log 
-    = new G4LogicalVolume(calo_box,      // its solid
-                          dummy,           // its material
-                          "calo log",    // its name
-                          0,             // opt: fieldManager
-                          0,             // opt: SensitiveDetector 
-                          0);            // opt: UserLimit
+
+  auto calo_box = new G4Box("CMS calorimeter",  // its name
+                            calo_xside / 2.,  // size
+                            calo_yside / 2., calo_zside / 2.);
+  auto calo_log = new G4LogicalVolume(calo_box,  // its solid
+                                      dummy,  // its material
+                                      "calo log",  // its name
+                                      nullptr,  // opt: fieldManager
+                                      nullptr,  // opt: SensitiveDetector
+                                      nullptr);  // opt: UserLimit
 
   G4double xpos = 0.0;
   G4double ypos = 0.0;
-  G4double zpos = 100.0*cm;
-  new G4PVPlacement(0,
-                    G4ThreeVector(xpos, ypos, zpos),
-                    calo_log,
-                    "calorimeter",
-                    ghostLogicalVolume,
-                    false,
-                    1);
+  G4double zpos = 100.0 * cm;
+  new G4PVPlacement(nullptr, G4ThreeVector(xpos, ypos, zpos), calo_log, "calorimeter",
+                    ghostLogicalVolume, false, 1);
 
-  G4VisAttributes* caloVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto caloVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   calo_log->SetVisAttributes(caloVisAtt);
 
   // define the fParameterisation region
@@ -148,7 +134,7 @@ void ExGflash2ParallelWorld::ConstructSD()
 {
   // Get nist material manager
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4Material*          pbWO4 = nistManager->FindOrBuildMaterial("G4_PbWO4");
+  G4Material* pbWO4 = nistManager->FindOrBuildMaterial("G4_PbWO4");
   // -- fast simulation models:
   // **********************************************
   // * Initializing shower modell
@@ -163,7 +149,7 @@ void ExGflash2ParallelWorld::ConstructSD()
   // Makes the EnergieSpots
   fHitMaker = new GFlashHitMaker();
   fFastShowerModel->SetHitMaker(*fHitMaker);
-  G4cout<<"end shower parameterization."<<G4endl;
+  G4cout << "end shower parameterization." << G4endl;
   // **********************************************
 }
 

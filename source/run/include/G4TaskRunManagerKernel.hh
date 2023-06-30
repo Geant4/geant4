@@ -53,43 +53,47 @@
 #ifndef G4TaskRunManagerKernel_hh
 #define G4TaskRunManagerKernel_hh 1
 
-#include "rundefs.hh"
 #include "G4RunManagerKernel.hh"
 #include "G4TaskRunManager.hh"
 #include "G4Threading.hh"
 
+#include "rundefs.hh"
+
+#include <vector>
+
 class G4WorkerThread;
 class G4WorkerTaskRunManager;
-#include <vector>
 
 class G4TaskRunManagerKernel : public G4RunManagerKernel
 {
- public:
-  G4TaskRunManagerKernel();
-  virtual ~G4TaskRunManagerKernel();
+  public:
+    G4TaskRunManagerKernel();
+    ~G4TaskRunManagerKernel() override = default;
 
- public:  // with descroption
-  static G4WorkerThread* GetWorkerThread();
-  // G4ThreadPool tasks
-  static void InitializeWorker();
-  static void ExecuteWorkerInit();
-  static void ExecuteWorkerTask();
-  static void TerminateWorkerRunEventLoop();
-  static void TerminateWorker();
-  static void TerminateWorkerRunEventLoop(G4WorkerTaskRunManager*);
-  static void TerminateWorker(G4WorkerTaskRunManager*);
+  public:  // with descroption
+    static G4WorkerThread* GetWorkerThread();
+    // G4ThreadPool tasks
+    static void InitializeWorker();
+    static void ExecuteWorkerInit();
+    static void ExecuteWorkerTask();
+    static void TerminateWorkerRunEventLoop();
+    static void TerminateWorker();
+    static void TerminateWorkerRunEventLoop(G4WorkerTaskRunManager*);
+    static void TerminateWorker(G4WorkerTaskRunManager*);
 
-  static std::vector<G4String>& InitCommandStack();
-  // Fill decay tables with particle definition pointers of
-  // decay products. This method has to be invoked by
-  // MTRunManager before event loop starts on workers.
-  void SetUpDecayChannels();
-  // This method should be invoked by G4TaskRunManager
-  void BroadcastAbortRun(G4bool softAbort);
+    static std::vector<G4String>& InitCommandStack();
 
- protected:
-  void SetupShadowProcess() const;
-  G4RUN_DLL static std::vector<G4String> initCmdStack;
+    // Fill decay tables with particle definition pointers of
+    // decay products. This method has to be invoked by
+    // MTRunManager before event loop starts on workers.
+    void SetUpDecayChannels();
+
+    // This method should be invoked by G4TaskRunManager
+    void BroadcastAbortRun(G4bool softAbort);
+
+  protected:
+    void SetupShadowProcess() const override;
+    G4RUN_DLL static std::vector<G4String> initCmdStack;
 };
 
 #endif  // G4TaskRunManagerKernel_hh

@@ -31,116 +31,92 @@
 #ifndef G4ParticleHPFissionERelease_h
 #define G4ParticleHPFissionERelease_h 1
 
-#include <fstream>
+#include "G4ios.hh"
+#include "globals.hh"
+
 #include <CLHEP/Units/SystemOfUnits.h>
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include <fstream>
 
 class G4ParticleHPFissionERelease
 {
   public:
-     G4ParticleHPFissionERelease()
-     : totalEnergy( 0.0 )
-     , fragmentKinetic( 0.0 )
-     , promptNeutronKinetic( 0.0 )
-     , delayedNeutronKinetic( 0.0 )
-     , promptGammaEnergy( 0.0 )
-     , delayedGammaEnergy( 0.0 )
-     , delayedBetaEnergy( 0.0 )
-     , neutrinoEnergy( 0.0 )
-     , reducedTotalEnergy( 0.0 )
-     {
-     }
-  ~G4ParticleHPFissionERelease(){}
-  
-  inline void Init(std::istream & aDataFile)
-  {
-    G4double dummy;
-    
-    aDataFile >>dummy
-              >>fragmentKinetic
-              >>promptNeutronKinetic
-              >>delayedNeutronKinetic
-              >>promptGammaEnergy
-              >>delayedGammaEnergy
-              >>delayedBetaEnergy
-              >>neutrinoEnergy
-              >>reducedTotalEnergy
-              >>totalEnergy;
-            
-    fragmentKinetic*=CLHEP::eV;
-    promptNeutronKinetic*=CLHEP::eV;
-    delayedNeutronKinetic*=CLHEP::eV;
-    promptGammaEnergy*=CLHEP::eV;
-    delayedGammaEnergy*=CLHEP::eV;
-    delayedBetaEnergy*=CLHEP::eV;
-    neutrinoEnergy*=CLHEP::eV;
-    reducedTotalEnergy*=CLHEP::eV;
-    totalEnergy*=CLHEP::eV;
-  }
-  
-  inline G4double GetTotalEnergy(G4double deltaNNeu, G4double anEnergy) 
-  {
-     G4double result, delta, energy;
-     energy = anEnergy/CLHEP::eV;
-     delta = -(1.057*energy - 8.07*deltaNNeu);
-     result = totalEnergy - delta*CLHEP::eV;
-     return result;
-  }
-  inline G4double GetFragmentKinetic() 
-  {
-     return fragmentKinetic;
-  }
-  inline G4double GetPromptNeutronKinetic(G4double deltaNNeu, G4double anEnergy)
-  {
-     G4double result, delta, energy;
-     energy = anEnergy/CLHEP::eV;
-     delta = -(1.307*energy - 8.07*deltaNNeu);
-     result = totalEnergy - delta*CLHEP::eV;
-     return result;
-  }
-  inline G4double GetDelayedNeutronKinetic()
-  {
-    return delayedNeutronKinetic;
-  }
-  inline G4double GetPromptGammaEnergy()
-  {
-    return promptGammaEnergy;
-  }
-  inline G4double GetDelayedGammaEnergy(G4double anEnergy)
-  {
-    G4double delta = 0.075*anEnergy;
-    G4double result = delayedGammaEnergy-delta;
-    return result;
-  }
-  inline G4double GetDelayedBetaEnergy(G4double anEnergy)
-  {
-    G4double delta = 0.075*anEnergy;
-    G4double result = delayedBetaEnergy-delta;
-    return result;
-  }
-  inline G4double GetNeutrinoEnergy(G4double anEnergy)
-  {
-    G4double delta = 0.1*anEnergy;
-    G4double result = neutrinoEnergy-delta;
-    return result;
-  }
-  inline G4double GetReducedTotal(G4double deltaNNeu, G4double anEnergy)
-  {
-    return GetTotalEnergy(deltaNNeu, anEnergy) - GetNeutrinoEnergy(anEnergy);
-  }
+    G4ParticleHPFissionERelease()
+
+      = default;
+    ~G4ParticleHPFissionERelease() = default;
+
+    inline void Init(std::istream& aDataFile)
+    {
+      G4double dummy;
+
+      aDataFile >> dummy >> fragmentKinetic >> promptNeutronKinetic >> delayedNeutronKinetic
+        >> promptGammaEnergy >> delayedGammaEnergy >> delayedBetaEnergy >> neutrinoEnergy
+        >> reducedTotalEnergy >> totalEnergy;
+
+      fragmentKinetic *= CLHEP::eV;
+      promptNeutronKinetic *= CLHEP::eV;
+      delayedNeutronKinetic *= CLHEP::eV;
+      promptGammaEnergy *= CLHEP::eV;
+      delayedGammaEnergy *= CLHEP::eV;
+      delayedBetaEnergy *= CLHEP::eV;
+      neutrinoEnergy *= CLHEP::eV;
+      reducedTotalEnergy *= CLHEP::eV;
+      totalEnergy *= CLHEP::eV;
+    }
+
+    inline G4double GetTotalEnergy(G4double deltaNNeu, G4double anEnergy)
+    {
+      G4double result, delta, energy;
+      energy = anEnergy / CLHEP::eV;
+      delta = -(1.057 * energy - 8.07 * deltaNNeu);
+      result = totalEnergy - delta * CLHEP::eV;
+      return result;
+    }
+    inline G4double GetFragmentKinetic() { return fragmentKinetic; }
+    inline G4double GetPromptNeutronKinetic(G4double deltaNNeu, G4double anEnergy)
+    {
+      G4double result, delta, energy;
+      energy = anEnergy / CLHEP::eV;
+      delta = -(1.307 * energy - 8.07 * deltaNNeu);
+      result = totalEnergy - delta * CLHEP::eV;
+      return result;
+    }
+    inline G4double GetDelayedNeutronKinetic() { return delayedNeutronKinetic; }
+    inline G4double GetPromptGammaEnergy() { return promptGammaEnergy; }
+    inline G4double GetDelayedGammaEnergy(G4double anEnergy)
+    {
+      G4double delta = 0.075 * anEnergy;
+      G4double result = delayedGammaEnergy - delta;
+      return result;
+    }
+    inline G4double GetDelayedBetaEnergy(G4double anEnergy)
+    {
+      G4double delta = 0.075 * anEnergy;
+      G4double result = delayedBetaEnergy - delta;
+      return result;
+    }
+    inline G4double GetNeutrinoEnergy(G4double anEnergy)
+    {
+      G4double delta = 0.1 * anEnergy;
+      G4double result = neutrinoEnergy - delta;
+      return result;
+    }
+    inline G4double GetReducedTotal(G4double deltaNNeu, G4double anEnergy)
+    {
+      return GetTotalEnergy(deltaNNeu, anEnergy) - GetNeutrinoEnergy(anEnergy);
+    }
+
   private:
-  
-  G4double totalEnergy;
-  G4double fragmentKinetic;
-  G4double promptNeutronKinetic;
-  G4double delayedNeutronKinetic;
-  G4double promptGammaEnergy;
-  G4double delayedGammaEnergy;
-  G4double delayedBetaEnergy;
-  G4double neutrinoEnergy;
-  G4double reducedTotalEnergy;  // total - neutrino
+    G4double totalEnergy{0.0};
+    G4double fragmentKinetic{0.0};
+    G4double promptNeutronKinetic{0.0};
+    G4double delayedNeutronKinetic{0.0};
+    G4double promptGammaEnergy{0.0};
+    G4double delayedGammaEnergy{0.0};
+    G4double delayedBetaEnergy{0.0};
+    G4double neutrinoEnergy{0.0};
+    G4double reducedTotalEnergy{0.0};  // total - neutrino
 };
 
 #endif

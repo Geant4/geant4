@@ -31,6 +31,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExGflashMessenger.hh"
+
 #include "ExGflashDetectorConstruction.hh"
 
 #include "G4UIcmdWith3Vector.hh"
@@ -42,8 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashMessenger::ExGflashMessenger(ExGflashDetectorConstruction* Det)
-  : G4UImessenger(), fDetector(Det)
+ExGflashMessenger::ExGflashMessenger(ExGflashDetectorConstruction* Det) : fDetector(Det)
 {
   fExGflashDir = new G4UIdirectory("/exgflash/");
   fExGflashDir->SetGuidance(" Gflash example commands.");
@@ -99,19 +99,19 @@ ExGflashMessenger::~ExGflashMessenger()
 
 void ExGflashMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if ( command == fMaterCmd ) {
+  if (command == fMaterCmd) {
     fDetector->SetMaterial(newValue);
   }
 
-  if ( command == fVerbose ) {
+  if (command == fVerbose) {
     fDetector->SetVerbose(fVerbose->GetNewIntValue(newValue));
   }
 
-  if ( command == fLBinCmd ) {
+  if (command == fLBinCmd) {
     fDetector->SetLBining(fLBinCmd->GetNew3VectorValue(newValue));
   }
 
-  if ( command == fRBinCmd ) {
+  if (command == fRBinCmd) {
     fDetector->SetRBining(fRBinCmd->GetNew3VectorValue(newValue));
   }
 }

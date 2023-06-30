@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (adapted from B2bChamberParameterisation)
 // Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
@@ -38,11 +37,8 @@ CloudParameterisation::CloudParameterisation(
         const std::vector<G4ThreeVector>& positions)
  : G4VPVParameterisation()
 {
-   fPositions     =  positions;
+ fPositions  =  positions;
 }
-
-CloudParameterisation::~CloudParameterisation()
-{ }
 
 void CloudParameterisation::ComputeTransformation
 (const G4int copyNo, G4VPhysicalVolume* physVol) const

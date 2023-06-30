@@ -22,21 +22,32 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-
 //
 // Class Description:
 //
 // A utility static class, responsable for keeping common parameters
 // for all transportation processes.  These parameters can be relevant only
-// to some types of particles, e.g. only charged particles.
+// to some types of particles, e.g. only stable charged particles.
 //
-// It must initialized only by the master thread.
-// It can be updated before the transportation processes have been instantiated or
-//   after their instantiation.
+// Constraints (creation/update):
+// - It must initialized only by the master thread.
+// - It should be updated before the transportation processes have been instantiated.
 // Note: It can be updated only if the state of the simulation is PreInit, Init or Idle.
-// Parameters may be used in run time or at initialisation
-// 
-// Author:  J. Apostolakis Nov 2022 
+//
+//  Only those instances of G4Transportation (and derived classes) that are created
+//    *after* G4TransportationParameters will be aware of it and will copy
+//    the values of its parameters.
+//  (So in a multithreaded application, runs that start after this is created will obtain them.)
+//
+// Use: Parameters may be used in run time or at initialisation
+//
+// Meaning of parameters:
+// - Warning   energy: below this, looping tracks can be killed without any message  
+// - Important energy: between warning E and this, looping tracks will complain and die
+// - Number of Trials: above 'important energy' looping tracks get this number of chances.
+
+// Author:  J. Apostolakis Nov 2022
+//          Inspired by G4EmParameters by V. Ivanchenko
 // -------------------------------------------------------------------
 //
 
@@ -53,8 +64,15 @@ public:
   ~G4TransportationParameters() = default;
 
   G4bool   SetNumberOfTrials(  G4int val );
+
+   // All three methods below enforce the relation WarningE <= ImportantE   
   G4bool   SetWarningEnergy(   G4double val );
   G4bool   SetImportantEnergy( G4double val );
+   //  If the relation fails, the methods above warn and use the new value for both.
+  G4bool   SetWarningAndImportantEnergies( G4double warnE, G4double imprtE );
+   //  If the relation does *not* hold, it warns and
+   //     uses the smaller as the 'warning Energy'
+   //     and  the larger  as the 'important energy'
 
   G4int    GetNumberOfTrials() const { return fNumberOfTrials; }
   G4double GetWarningEnergy() const { return fWarningEnergy; }
@@ -72,6 +90,9 @@ public:
   
   G4bool   GetSilenceAllLooperWarnings(){ return fSilenceLooperWarnings; }
 
+  void     ReportLockError(G4String methodName, G4bool verbose= false) const;
+   // Report error - in case the state of G4 is incorrect, and update methods fail
+   
   // Probe whether the 'default' instance exists, without creating it
   static G4bool  Exists() { return theInstance != nullptr; } 
 

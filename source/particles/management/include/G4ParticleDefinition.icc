@@ -40,8 +40,8 @@ G4bool G4ParticleDefinition::GetPDGStable() const
 {
   if(IsGeneralIon())
   { return (GetIonLifeTime()<0.); }
-  else
-  { return thePDGStable; }
+  
+  return thePDGStable;
 }
 
 inline
@@ -216,8 +216,7 @@ G4int G4ParticleDefinition::GetParticleDefinitionID() const
 inline
 G4bool G4ParticleDefinition::IsHypernucleus() const
 {
-  if ( GetNumberOfLambdasInHypernucleus() > 0 ) return true;
-  return false;
+  return GetNumberOfLambdasInHypernucleus() > 0;
 }
 
 inline
@@ -234,8 +233,7 @@ G4int G4ParticleDefinition::GetNumberOfLambdasInHypernucleus() const
 inline
 G4bool G4ParticleDefinition::IsAntiHypernucleus() const
 {
-  if ( GetNumberOfAntiLambdasInAntiHypernucleus() > 0 ) return true;
-  return false;
+  return GetNumberOfAntiLambdasInAntiHypernucleus() > 0;
 }
 
 inline

@@ -29,4 +29,4 @@
 #include "G4ParticleHPInelasticBaseFS.hh"
 using G4NeutronHPInelasticBaseFS = G4ParticleHPInelasticBaseFS;
 
-#endif 
+#endif

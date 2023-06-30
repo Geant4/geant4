@@ -45,11 +45,7 @@
 
 G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int ,
 						       G4int )
-    :   type("meson"), leptonNumber(0), baryonNumber(0)
-{
-}
-
-G4ExcitedMesonConstructor::~G4ExcitedMesonConstructor()
+    :   type("meson") 
 {
 }
 
@@ -125,7 +121,7 @@ void G4ExcitedMesonConstructor::ConstructMesons(G4int iState, G4int iType)
                 iGParity[iState][iType],
 	                           type,  leptonNumber,   baryonNumber, 
      GetEncoding(iIso3, iState, iType),
-	                          false,           0.0,            NULL
+	                          false,           0.0,            nullptr
 				    );
 
     if ( (iType==TEta) || (iType==TEtaPrime) || ((iType==TPi)&&(iIso3==0)) ) {
@@ -254,7 +250,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::CreateDecayTable(
 					    G4int           iType)
 {
    // create decay table
-  G4DecayTable* decayTable =  new G4DecayTable();
+  auto  decayTable =  new G4DecayTable();
   G4double br;
  
   if ((iType==TK)||(iType==TAntiK)) {

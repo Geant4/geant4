@@ -94,7 +94,6 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
     G4double energyLimit = std::min(EmModel(0)->HighEnergyLimit(), CLHEP::GeV);
     EmModel(0)->SetHighEnergyLimit(energyLimit);
     EmModel(0)->SetSecondaryThreshold(param->BremsstrahlungTh());
-    EmModel(0)->SetLPMFlag(false);
     AddEmModel(1, EmModel(0), fm);
 
     if(emax > energyLimit) {
@@ -104,7 +103,6 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
       EmModel(1)->SetLowEnergyLimit(energyLimit);
       EmModel(1)->SetHighEnergyLimit(emax); 
       EmModel(1)->SetSecondaryThreshold(param->BremsstrahlungTh());
-      EmModel(1)->SetLPMFlag(param->LPM());
       AddEmModel(1, EmModel(1), fm);
     }
     isInitialised = true;

@@ -6,10 +6,32 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-16 I. Hrivnacova (gdml-V11-00-06)
+## 2023-06-16 I. Hrivnacova (gdml-V11-01-02)
 - Let G4ThreeVectorCompare obey the strict weak ordering requirements;
   which fixes failures in inserting elements in the std::map with
   this compare operator used in writing tessellated solid.
+
+# 2023-05-31 Ben Morgan (gdml-V11-01-01)
+- Allow setting of alternative grammar for schema validation via an environment
+  variable `G4GDML_SCHEMA_FILE`, which overrides the value set by `SetImportSchema`
+  if both are non-empty strings.
+- Update checking of grammar and schema override to fail on missing schema, and
+  to force parser to ignore any schema set in the input GDML file.
+
+## 2023-04-26 Gabriele Cosmo (gdml-V11-01-00)
+- Added possibility to set alternative grammar for schema validation while
+  reading a GDML file. This can be achieved by either calling the new method
+  SetImportSchema(..) from G4GDMLParser, providing the absolute path and file
+  name of the XML schema, or by using the new UI command:
+    /persistency/gdml/schema "[absolute_path]/schema_filename"
+  before importing the GDML file.
+  By setting a locally stored alternative grammar, it will instruct the parser
+  to ignore the default schema specified in the GDML file and therefore
+  no longer require access to the network for retrieving the schema. 
+- In G4GDMLWriteStructure::ExportSD(), use GetMasterSensitiveDetector() from
+  logical volume to retrieve the shadow pointer of the sensitive detector.
+  Fixes issue reported by CMS when exporting sensitive detector auxiliary
+  data in MT mode.
 
 ## 2022-11-11 Gabriele Cosmo (gdml-V11-00-05)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.

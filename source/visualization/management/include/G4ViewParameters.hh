@@ -101,7 +101,7 @@ public: // With description
 
   enum CutawayMode {
     cutawayUnion,       // Union (addition) of result of each cutaway plane.
-    cutawayIntersection // Intersection (multiplication) " .
+    cutawayIntersection // Intersection (multiplication).
   };
 
   enum RotationStyle {
@@ -110,6 +110,7 @@ public: // With description
   };
 
   enum SMROption {  // Special Mesh Rendering Option
+    meshAsDefault,
     meshAsDots,
     meshAsSurfaces
   };

@@ -41,7 +41,7 @@
 // -------------------------------------------------------------------
 
 #include "G4eDPWAElasticDCS.hh"
-
+#include "G4EmParameters.hh"
 #include "G4Physics2DVector.hh"
 
 #include "zlib.h"
@@ -502,16 +502,9 @@ G4double G4eDPWAElasticDCS::SampleMu(std::size_t izet, std::size_t ie, G4double 
 const G4String& G4eDPWAElasticDCS::FindDirectoryPath() {
   // check environment variable
   if (gDataDirectory.empty()) {
-    const char* path = G4FindDataDir("G4LEDATA");
-    if (path) {
-      std::ostringstream ost;
-      ost << path << "/dpwa/";
-      gDataDirectory = ost.str();
-    } else {
-      G4Exception("G4eDPWAElasticDCS::FindDirectoryPath()","em0006",
-                  FatalException,
-                  "Environment variable G4LEDATA not defined");
-    }
+    std::ostringstream ost;
+    ost << G4EmParameters::Instance()->GetDirLEDATA() << "/dpwa/";
+    gDataDirectory = ost.str();
   }
   return gDataDirectory;
 }

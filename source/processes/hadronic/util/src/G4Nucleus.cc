@@ -50,6 +50,7 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "G4HyperNucleiProperties.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4Nucleus::G4Nucleus()
@@ -117,10 +118,12 @@ G4Nucleus::~G4Nucleus() {}
 G4ReactionProduct 
 G4Nucleus::GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) const
 {
-  // If E_neutron <= 400*kB*T    (400 is a common value encounter in MC neutron transport code)
-  // Then apply the Sampling ot the Velocity of the Target (SVT) method
-  // Else consider the target nucleus being without motion
-  G4double E_threshold = 400.0*8.617333262E-11*temp; // 400*kBoltzman*T
+  // If E_neutron <= E_threshold, Then apply the Sampling ot the Velocity of the Target (SVT) method;
+  // Else consider the target nucleus being without motion.
+  G4double E_threshold = G4HadronicParameters::Instance()->GetNeutronKineticEnergyThresholdForSVT();
+  if ( E_threshold == -1. ) {
+    E_threshold = 400.0*8.617333262E-11*temp;
+  }
   G4double E_neutron = 0.5*aVelocity.mag2()*G4Neutron::Neutron()->GetPDGMass(); // E=0.5*m*v2
 
   G4ReactionProduct result;
@@ -170,57 +173,8 @@ G4Nucleus::GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4do
       randThreshold = G4UniformRand();
     } while ( randThreshold >= acceptThreshold );
 
-    // Get target nucleus direction from the neutron direction and the relative angle between target nucleus and neutron (mu)
-    G4double cosTh = mu;
-    G4ThreeVector uNorm = aVelocity;
-	
-    G4double sinTh = std::sqrt(1. - cosTh*cosTh);
-	
-    // Sample randomly the phi angle between the neutron veloicty and the target velocity
-    G4double phi = CLHEP::twopi*G4UniformRand();
-    G4double sinPhi = std::sin(phi);
-    G4double cosPhi = std::cos(phi);
-
-    // Find orthogonal vector to aVelocity - solve equation xx' + yy' + zz' = 0
-    G4ThreeVector ortho(1,1,1);
-    if      ( uNorm[0] )  ortho[0] = -(uNorm[1]+uNorm[2])/uNorm[0];
-    else if ( uNorm[1] )  ortho[1] = -(uNorm[0]+uNorm[2])/uNorm[1];
-    else if ( uNorm[2] )  ortho[2] = -(uNorm[0]+uNorm[1])/uNorm[2];
-
-    // Normalize the vector
-    ortho = (1/ortho.mag())*ortho;
-	
-    // Find vector to draw a plan perpendicular to uNorm (i.e neutron velocity) with vectors ortho & orthoComp
-    G4ThreeVector orthoComp( uNorm[1]*ortho[2] - ortho[1]*uNorm[2],
-                             uNorm[2]*ortho[0] - ortho[2]*uNorm[0],
-                             uNorm[0]*ortho[1] - ortho[0]*uNorm[1] );
-
-    // Find the direction of the target velocity in the laboratory frame
-    G4ThreeVector directionTarget( cosTh*uNorm[0] + sinTh*(cosPhi*orthoComp[0] + sinPhi*ortho[0]),
-                                   cosTh*uNorm[1] + sinTh*(cosPhi*orthoComp[1] + sinPhi*ortho[1]),
-                                   cosTh*uNorm[2] + sinTh*(cosPhi*orthoComp[2] + sinPhi*ortho[2]) );
-	
-    // Normalize directionTarget
-    directionTarget = (1/directionTarget.mag())*directionTarget;
-
-    // Set momentum
-    G4double px = result.GetMass()*vT_norm*directionTarget[0];
-    G4double py = result.GetMass()*vT_norm*directionTarget[1];
-    G4double pz = result.GetMass()*vT_norm*directionTarget[2];
-    result.SetMomentum(px, py, pz);
-
-    G4double tMom = std::sqrt(px*px+py*py+pz*pz);
-    G4double tEtot = std::sqrt((tMom+result.GetMass())*(tMom+result.GetMass())
-  		               - 2.*tMom*result.GetMass());
-
-    if ( tEtot/result.GetMass() - 1. > 0.001 ) {
-      // use relativistic energy for higher energies
-      result.SetTotalEnergy(tEtot);
-    } else {
-      // use p**2/2M for lower energies (to preserve precision?)
-      result.SetKineticEnergy(tMom*tMom/(2.*result.GetMass()));
-    }
-
+    DoKinematicsOfThermalNucleus(mu, vT_norm, aVelocity, result);
+    
   } else { // target nucleus considered as being without motion
     
     result.SetMomentum(0., 0., 0.);
@@ -229,6 +183,64 @@ G4Nucleus::GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4do
   }
 
   return result;
+}
+
+
+void
+G4Nucleus::DoKinematicsOfThermalNucleus(const G4double mu, const G4double vT_norm, const G4ThreeVector& aVelocity,
+                                        G4ReactionProduct& result) const {
+
+  // Get target nucleus direction from the neutron direction and the relative angle between target nucleus and neutron (mu)
+  G4double cosTh = mu;
+  G4ThreeVector uNorm = aVelocity;
+  	
+  G4double sinTh = std::sqrt(1. - cosTh*cosTh);
+  	
+  // Sample randomly the phi angle between the neutron veloicty and the target velocity
+  G4double phi = CLHEP::twopi*G4UniformRand();
+  G4double sinPhi = std::sin(phi);
+  G4double cosPhi = std::cos(phi);
+
+  // Find orthogonal vector to aVelocity - solve equation xx' + yy' + zz' = 0
+  G4ThreeVector ortho(1., 1., 1.);
+  if      ( uNorm[0] )  ortho[0] = -(uNorm[1]+uNorm[2])/uNorm[0];
+  else if ( uNorm[1] )  ortho[1] = -(uNorm[0]+uNorm[2])/uNorm[1];
+  else if ( uNorm[2] )  ortho[2] = -(uNorm[0]+uNorm[1])/uNorm[2];
+
+  // Normalize the vector
+  ortho = (1/ortho.mag())*ortho;
+  	
+  // Find vector to draw a plan perpendicular to uNorm (i.e neutron velocity) with vectors ortho & orthoComp
+  G4ThreeVector orthoComp( uNorm[1]*ortho[2] - ortho[1]*uNorm[2],
+                           uNorm[2]*ortho[0] - ortho[2]*uNorm[0],
+                           uNorm[0]*ortho[1] - ortho[0]*uNorm[1] );
+
+  // Find the direction of the target velocity in the laboratory frame
+  G4ThreeVector directionTarget( cosTh*uNorm[0] + sinTh*(cosPhi*orthoComp[0] + sinPhi*ortho[0]),
+                                 cosTh*uNorm[1] + sinTh*(cosPhi*orthoComp[1] + sinPhi*ortho[1]),
+                                 cosTh*uNorm[2] + sinTh*(cosPhi*orthoComp[2] + sinPhi*ortho[2]) );
+  	
+  // Normalize directionTarget
+  directionTarget = ( 1./directionTarget.mag() )*directionTarget;
+
+  // Set momentum
+  G4double px = result.GetMass()*vT_norm*directionTarget[0];
+  G4double py = result.GetMass()*vT_norm*directionTarget[1];
+  G4double pz = result.GetMass()*vT_norm*directionTarget[2];
+  result.SetMomentum(px, py, pz);
+
+  G4double tMom = std::sqrt(px*px+py*py+pz*pz);
+  G4double tEtot = std::sqrt( (tMom+result.GetMass())*(tMom+result.GetMass())
+  		              - 2.*tMom*result.GetMass() );
+
+  if ( tEtot/result.GetMass() - 1. > 0.001 ) {
+    // use relativistic energy for higher energies
+    result.SetTotalEnergy(tEtot);
+  } else {
+    // use p**2/2M for lower energies (to preserve precision?)
+    result.SetKineticEnergy(tMom*tMom/(2.*result.GetMass()));
+  }
+
 }
 
 

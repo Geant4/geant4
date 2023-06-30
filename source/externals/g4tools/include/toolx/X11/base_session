@@ -12,9 +12,9 @@
 #include "dispatcher"
 #include <tools/forit>
 
-#include <X11/Xatom.h>      //XA_INTEGER
+#include <X11/Xatom.h>     //XA_INTEGER
 
-#include <X11/Xutil.h>      //XVisualInfo
+#include <X11/Xutil.h>     //XVisualInfo
 
 namespace toolx {
 namespace X11 {
@@ -96,6 +96,7 @@ public:
 
   bool is_valid() const {return m_display?true:false;}
 
+  unsigned int monitor() const {return m_monitor;}
   Display* display() const {return m_display;}
 
   bool steer() {
@@ -367,7 +368,29 @@ protected:
   static Bool wait_unmap_notify(Display*,XEvent* a_event,char* a_arg){
     return (a_event->type == UnmapNotify) && (a_event->xmap.window == (Window)a_arg);
   }
-  
+
+/*
+  void wait_xxx(Window a_window) {
+    if(!m_display) return;
+   {wait_what arg;
+    arg.m_event_type = ConfigureNotify;
+    arg.m_window = a_window;
+    XEvent event;
+    ::XIfEvent(m_display,&event,wait_for,(char*)&arg);
+    dispatch(event);}
+  }
+
+  struct wait_what {
+    int m_event_type;
+    Window m_window;
+  };
+  static Bool wait_for(Display*,XEvent* a_event,char* a_arg){
+    wait_what* arg = (wait_what*)a_arg;
+    return (a_event->type == arg->m_event_type) &&
+           (a_event->xmap.window == arg->m_window);
+  }
+*/
+
   void clear_dispatchers() {
     tools_vforit_npp(dispatcher*,m_dispatchers,it) {
       dispatcher* obj = *it;
@@ -387,6 +410,7 @@ protected:
 };
 
 }}
+
 
 #endif
 

@@ -55,14 +55,12 @@ class G4VScoreHistFiller
 
   // methods
   virtual void FillH1(G4int id, G4double value, G4double weight = 1.0) = 0;
-  virtual void FillH2(G4int id, G4double xvalue, G4double yvalue,
-                      G4double weight = 1.0)                           = 0;
-  virtual void FillH3(G4int id, G4double xvalue, G4double yvalue,
-                      G4double zvalue, G4double weight = 1.0)          = 0;
-  virtual void FillP1(G4int id, G4double xvalue, G4double yvalue,
-                      G4double weight = 1.0)                           = 0;
-  virtual void FillP2(G4int id, G4double xvalue, G4double yvalue,
-                      G4double zvalue, G4double weight = 1.0)          = 0;
+  virtual void FillH2(G4int id, G4double xvalue, G4double yvalue, G4double weight = 1.0) = 0;
+  virtual void FillH3(
+    G4int id, G4double xvalue, G4double yvalue, G4double zvalue, G4double weight = 1.0) = 0;
+  virtual void FillP1(G4int id, G4double xvalue, G4double yvalue, G4double weight = 1.0) = 0;
+  virtual void FillP2(
+    G4int id, G4double xvalue, G4double yvalue, G4double zvalue, G4double weight = 1.0) = 0;
 
   virtual G4bool CheckH1(G4int id) = 0;
   virtual G4bool CheckH2(G4int id) = 0;

@@ -3,6 +3,8 @@
 # Define the Geant4 Module.
 geant4_add_module(G4RayTracer
   PUBLIC_HEADERS 
+    G4RayTracer.hh
+  PRIVATE_HEADERS
     G4RTJpeg.hh
     G4RTJpegCoder.hh
     G4RTJpegCoderTables.hh
@@ -16,7 +18,6 @@ geant4_add_module(G4RayTracer
     G4RTSteppingAction.hh
     G4RTTrackingAction.hh
     G4RTWorkerInitialization.hh
-    G4RayTracer.hh
     G4RayTracerFeatures.hh
     G4RayTracerSceneHandler.hh
     G4RayTracerViewer.hh
@@ -51,25 +52,25 @@ geant4_module_compile_definitions(G4RayTracer PRIVATE G4RAYTRACER_ALLOC_EXPORT)
 
 geant4_module_link_libraries(G4RayTracer
   PUBLIC
-    G4globman
-    G4graphics_reps
-    G4modeling
-    G4run
-    G4hits
-    G4track
-    G4intercoms
-    G4tracking
     G4vis_management
-    G4hepgeometry
   PRIVATE
-    G4event
     G4bosons
-    G4geometrymng
-    G4scoring
-    G4partman
-    G4procman
     G4cuts
     G4detector
+    G4event
+    G4globman
+    G4graphics_reps
+    G4geometrymng
+    G4hepgeometry
+    G4hits
+    G4intercoms
+    G4modeling
+    G4partman
+    G4procman
+    G4run
+    G4scoring
+    G4track
+    G4tracking
     G4navigation)
 
 # X11 RayTracer only if selected
@@ -77,6 +78,7 @@ if(GEANT4_USE_RAYTRACER_X11)
   geant4_module_sources(G4RayTracer
     PUBLIC_HEADERS
       G4RayTracerX.hh
+    PRIVATE_HEADERS
       G4RayTracerXViewer.hh
       G4RTXScanner.hh
     SOURCES
@@ -84,5 +86,7 @@ if(GEANT4_USE_RAYTRACER_X11)
       G4RayTracerXViewer.cc
       G4RTXScanner.cc)
 
-  geant4_module_link_libraries(G4RayTracer PUBLIC X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
+  geant4_module_compile_definitions(G4RayTracer PUBLIC G4VIS_USE_RAYTRACERX)
+
+  geant4_module_link_libraries(G4RayTracer PRIVATE X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
 endif()

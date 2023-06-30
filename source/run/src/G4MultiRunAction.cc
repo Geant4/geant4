@@ -28,27 +28,25 @@
 // Author: A.Dotti, 17 January 2016
 // --------------------------------------------------------------------
 
-#include <algorithm>
-
 #include "G4MultiRunAction.hh"
+
 #include "G4Run.hh"
+
+#include <algorithm>
 
 // --------------------------------------------------------------------
 G4Run* G4MultiRunAction::GenerateRun()
 {
   G4Run* aRun = nullptr;
-  for(auto& ru : *this)
-  {
+  for (auto& ru : *this) {
     auto anotherRun = ru->GenerateRun();
-    if(aRun != nullptr && anotherRun != nullptr)
-    {
+    if (aRun != nullptr && anotherRun != nullptr) {
       G4Exception("G4MultiRunAction::GenerateRun()", "Run0036", FatalException,
                   "More than one registered UserRunAction return an instance"
                   " of G4Run, not allowed.");
       return nullptr;
     }
-    if(anotherRun != nullptr)
-      aRun = anotherRun;
+    if (anotherRun != nullptr) aRun = anotherRun;
   }
   return aRun;
 }
@@ -56,21 +54,18 @@ G4Run* G4MultiRunAction::GenerateRun()
 // --------------------------------------------------------------------
 void G4MultiRunAction::BeginOfRunAction(const G4Run* run)
 {
-  std::for_each(begin(), end(),
-                [run](G4UserRunActionUPtr& e) { e->BeginOfRunAction(run); });
+  std::for_each(begin(), end(), [run](G4UserRunActionUPtr& e) { e->BeginOfRunAction(run); });
 }
 
 // --------------------------------------------------------------------
 void G4MultiRunAction::EndOfRunAction(const G4Run* run)
 {
-  std::for_each(begin(), end(),
-                [run](G4UserRunActionUPtr& e) { e->EndOfRunAction(run); });
+  std::for_each(begin(), end(), [run](G4UserRunActionUPtr& e) { e->EndOfRunAction(run); });
 }
 
 // --------------------------------------------------------------------
 void G4MultiRunAction::SetMaster(G4bool val)
 {
   G4UserRunAction::SetMaster(val);
-  std::for_each(begin(), end(),
-                [val](G4UserRunActionUPtr& e) { e->SetMaster(val); });
+  std::for_each(begin(), end(), [val](G4UserRunActionUPtr& e) { e->SetMaster(val); });
 }

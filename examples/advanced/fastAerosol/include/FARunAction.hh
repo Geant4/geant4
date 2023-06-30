@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (copied from B1RunAction)
 
 #ifndef RunAction_h
@@ -43,20 +42,19 @@ class G4Run;
 
 class RunAction : public G4UserRunAction
 {
-  public:
-    RunAction();
-    virtual ~RunAction();
+public:
+ explicit RunAction();
+ virtual ~RunAction()=default;
 
-    // virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+ // virtual G4Run* GenerateRun();
+ virtual void BeginOfRunAction(const G4Run*) override;
+ virtual void   EndOfRunAction(const G4Run*) override;
 
-    void AddEdep (G4double edep); 
+ void AddEdep (G4double edep); 
 
-  private:
-    G4Accumulable<G4double> fEdep;
-    G4Accumulable<G4double> fEdep2;
+private:
+  G4Accumulable<G4double> fEdep;
+  G4Accumulable<G4double> fEdep2;
 };
-
 #endif
 

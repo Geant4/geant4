@@ -46,7 +46,9 @@
 
 #include "G4Types.hh"
 #include "G4FieldTrack.hh"
-#include "G4MagIntegratorStepper.hh"
+#include "G4EquationOfMotion.hh"
+
+class G4MagIntegratorStepper;
 
 class G4VIntegrationDriver
 {
@@ -73,7 +75,7 @@ class G4VIntegrationDriver
     virtual void SetVerboseLevel(G4int level) = 0;
     virtual G4int GetVerboseLevel() const = 0;
 
-    virtual void OnComputeStep() = 0;
+    virtual void OnComputeStep(const G4FieldTrack* /*track*/ = nullptr) = 0;
 
     virtual void OnStartTracking() = 0;
 

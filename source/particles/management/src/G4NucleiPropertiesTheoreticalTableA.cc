@@ -74,10 +74,9 @@ G4double G4NucleiPropertiesTheoreticalTable::GetMassExcess(G4int Z, G4int A)
   {
     return AtomicMassExcess[i]*MeV;
   }
-  else
-  {
-    return 0.0;
-  }
+  
+      return 0.0;
+ 
 }
 
 G4double G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(G4int Z, G4int A)
@@ -89,10 +88,10 @@ G4double G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(G4int Z, G4int A)
     const G4double Mn = 8.071431*MeV;  // neutron mass excess
     return G4double(Z)*Mh + G4double(A-Z)*Mn - AtomicMassExcess[i]*MeV;
   }
-  else
-  { 
+  
+  
     return 0.0;
-  }
+ 
 }
 
 G4double  G4NucleiPropertiesTheoreticalTable::GetAtomicMass(G4int Z, G4int A)
@@ -102,10 +101,9 @@ G4double  G4NucleiPropertiesTheoreticalTable::GetAtomicMass(G4int Z, G4int A)
   {
     return AtomicMassExcess[i]*MeV + A*amu_c2;
   }
-  else
-  {
-    return 0.0;
-  }
+  
+      return 0.0;
+ 
 }
 
 G4double  G4NucleiPropertiesTheoreticalTable::GetNuclearMass(G4int Z, G4int A)
@@ -116,10 +114,9 @@ G4double  G4NucleiPropertiesTheoreticalTable::GetNuclearMass(G4int Z, G4int A)
     return GetAtomicMass(Z,A)
          - G4double(Z)*electron_mass_c2 + ElectronicBindingEnergy(Z);
   }
-  else
-  {
-    return 0.0;
-  }
+  
+      return 0.0;
+ 
 }
 
 G4double G4NucleiPropertiesTheoreticalTable::ElectronicBindingEnergy(G4int Z)

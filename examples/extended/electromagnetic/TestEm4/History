@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-04-06 Michel Maire (testem4-V11-01-00)
+- revision of all headers
+- RunAction: print run conditions and histograms statistic
 
 ## 2021-12-10 Ben Morgan (testem4-V11-00-00)
 - Change to new Markdown History format

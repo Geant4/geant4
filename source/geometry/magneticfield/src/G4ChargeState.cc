@@ -40,7 +40,10 @@ void G4ChargeState::SetChargeSpinMoments(G4double charge,
 {
    fCharge = charge;
    fSpin   = spin;
-   if( magnetic_dipole_moment < DBL_MAX) fMagn_dipole= magnetic_dipole_moment;
-   if( electric_dipole_moment < DBL_MAX) fElec_dipole= electric_dipole_moment;
-   if( magnetic_charge < DBL_MAX)        fMagneticCharge= magnetic_charge;
+   if( magnetic_dipole_moment < DBL_MAX)
+     { fMagn_dipole= magnetic_dipole_moment; }
+   if( electric_dipole_moment < DBL_MAX)
+     { fElec_dipole= electric_dipole_moment; }
+   if( magnetic_charge < DBL_MAX)
+     { fMagneticCharge= magnetic_charge; }
 }

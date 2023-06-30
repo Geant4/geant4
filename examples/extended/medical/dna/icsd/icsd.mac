@@ -4,4 +4,4 @@
 /run/initialize
 /gun/particle e-
 /gun/energy 500 eV
-/run/beamOn 75
+/run/beamOn 1

@@ -51,11 +51,11 @@ class RunAction : public G4UserRunAction
 public:
 
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-  virtual ~RunAction();
+ ~RunAction() override;
 
-  virtual G4Run* GenerateRun();  
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void   EndOfRunAction(const G4Run*);
+  virtual G4Run* GenerateRun() override;
+  void BeginOfRunAction(const G4Run*) override;
+  void   EndOfRunAction(const G4Run*) override;
 
   void SetVerbose(G4int val);
 
@@ -66,17 +66,17 @@ private:
   void BookHisto();
   
 private:
-  DetectorConstruction*   fDet;
-  PrimaryGeneratorAction* fKin;
-  RunActionMessenger*     fRunMessenger;
-  G4AnalysisManager*      fAnalysisManager;
-  Run*  fRun;
+  DetectorConstruction*   fDet = nullptr;
+  PrimaryGeneratorAction* fKin = nullptr;
+  RunActionMessenger*     fRunMessenger = nullptr;
+  G4AnalysisManager*      fAnalysisManager = nullptr;
+  Run*  fRun = nullptr;
 
-  G4int    fVerbose;
+  G4int    fVerbose   = 0;
     
-  G4double fEdeptrue;
-  G4double fRmstrue;
-  G4double fLimittrue;
+  G4double fEdeptrue  = 1.;
+  G4double fRmstrue   = 1.;
+  G4double fLimittrue = DBL_MAX;
 
 };
 

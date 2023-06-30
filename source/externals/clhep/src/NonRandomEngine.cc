@@ -209,7 +209,7 @@ bool NonRandomEngine::get (const std::vector<unsigned long> & v) {
 }
 
 bool NonRandomEngine::getState (const std::vector<unsigned long> & v) {
-  unsigned int seqSize = v[9];
+  unsigned long seqSize = v[9];
   if (v.size() != 2*seqSize + 10 ) {
     std::cerr << 
    "\nNonRandomEngine get:state vector has wrong length - state unchanged\n";
@@ -222,10 +222,10 @@ bool NonRandomEngine::getState (const std::vector<unsigned long> & v) {
   sequenceHasBeenSet = (v[2]!=0);
   intervalHasBeenSet = (v[3]!=0);
   t[0] = v[4]; t[1] = v[5]; nextRandom = DoubConv::longs2double(t);
-  nInSeq = v[6];
+  nInSeq = (unsigned int)v[6];
   t[0] = v[7]; t[1] = v[8]; randomInterval = DoubConv::longs2double(t);
   sequence.clear();
-  for (unsigned int i=0; i<seqSize; ++i) {
+  for (unsigned long i=0; i<seqSize; ++i) {
     t[0] = v[2*i+10]; t[1] = v[2*i+11];
     sequence.push_back(DoubConv::longs2double(t));
   }

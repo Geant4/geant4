@@ -53,6 +53,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4NistManager.hh"
+#include "G4HadronicParameters.hh"
 #include <algorithm>
 #include <typeinfo>
 
@@ -336,7 +337,10 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 
   G4double ehi = 0;
   G4double elo = 0;
-  G4String physListName(std::getenv("G4PhysListName"));
+  auto param = G4HadronicParameters::Instance();
+  G4String physListName = param->GetPhysListName();
+  G4String dirName = param->GetPhysListDocDir();
+
   for (G4int i = nDataSetList-1; i > 0; i--) {
     elo = dataSetList[i]->GetMinKinEnergy()/GeV;
     ehi = dataSetList[i]->GetMaxKinEnergy()/GeV;
@@ -344,7 +348,7 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 	    << dataSetList[i]->GetName() << ".html\"> "
             << dataSetList[i]->GetName() << "</a> from "
             << elo << " GeV to " << ehi << " GeV </b></li>\n";
-    PrintCrossSectionHtml(dataSetList[i]);			
+    PrintCrossSectionHtml(dataSetList[i], physListName, dirName);
   }
 
   G4double defaultHi = dataSetList[0]->GetMaxKinEnergy()/GeV;
@@ -353,16 +357,16 @@ void G4CrossSectionDataStore::DumpHtml(const G4ParticleDefinition& /* pD */,
 	    << ".html\"> "
             << dataSetList[0]->GetName() << "</a> from "
             << ehi << " GeV to " << defaultHi << " GeV </b></li>\n";
-    PrintCrossSectionHtml(dataSetList[0]);			
+    PrintCrossSectionHtml(dataSetList[0], physListName, dirName);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4CrossSectionDataStore::PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const
+void G4CrossSectionDataStore::PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs,
+                                                    const G4String& physListName,
+                                                    const G4String& dirName) const
 {
-  G4String dirName(std::getenv("G4PhysListDocDir"));
-  G4String physListName(std::getenv("G4PhysListName"));
 
   G4String pathName = dirName + "/" + physListName + "_" + HtmlFileName(cs->GetName());
   std::ofstream outCS;

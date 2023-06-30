@@ -6,14 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-02-03 Gabriele Cosmo (exhadr10-V11-00-02)
+## 2023-02-03 Gabriele Cosmo (exhadr10-V11-01-01)
 - DetectorMessenger: define "/mydet/update" command also for PreInit state
   and call "/run/initialize" after geometry update in hadr10.in script, to
   avoid run-time warning messages in output:
   "Start re-initialization because Geometry has been modified since last Run."
   repeated many times in MT mode.
 
-## 2023-02-01 Alberto Ribon (exhadr10-V11-00-01)
+## 2023-01-30 Alberto Ribon (exhadr10-V11-01-00)
 - SteppingAction: protect the argument of acos to be within -1 and +1
   (in system testing we have seen recently cases of crashes caused by the
    argument of acos being outside that interval).

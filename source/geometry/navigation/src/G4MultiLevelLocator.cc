@@ -44,9 +44,9 @@ G4MultiLevelLocator::G4MultiLevelLocator(G4Navigator *theNavigator)
   // Initialise the array of Pointers [max_depth+1] to do this  
   
   G4ThreeVector zeroV(0.0,0.0,0.0);
-  for ( auto idepth=0; idepth<max_depth+1; ++idepth )
+  for (auto & idepth : ptrInterMedFT)
   {
-    ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
+    idepth = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
   }
 
   if (fCheckMode)
@@ -60,9 +60,9 @@ G4MultiLevelLocator::G4MultiLevelLocator(G4Navigator *theNavigator)
 
 G4MultiLevelLocator::~G4MultiLevelLocator()
 {
-  for ( auto idepth=0; idepth<max_depth+1; ++idepth )
+  for (auto & idepth : ptrInterMedFT)
   {
-    delete ptrInterMedFT[idepth];
+    delete idepth;
   }
 #ifdef G4DEBUG_FIELD
   ReportStatistics(); 
@@ -236,9 +236,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   // Final_section boolean store
   //
   G4bool fin_section_depth[max_depth];
-  for ( auto idepth=0; idepth<max_depth; ++idepth )
+  for (bool & idepth : fin_section_depth)
   {
-    fin_section_depth[idepth] = true;
+    idepth = true;
   }
   // 'SubStartPoint' is needed to calculate the length of the divided step
   //
@@ -276,17 +276,21 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         G4cerr.precision(op);
         // G4LocatorChangeRecord::ReportVector(G4cerr, "endPointB", endChangeB );
         // G4cerr<<"EndPoints A(start) and B(end): combined changes " << G4endl;
-        if (fCheckMode) {
-           G4LocatorChangeLogger::ReportEndChanges(G4cerr, endChangeA, endChangeB);
+        if (fCheckMode)
+        {
+          G4LocatorChangeLogger::ReportEndChanges(G4cerr, endChangeA, endChangeB);
         }
       }
 #endif    
-      if( !validIntersectP ){
+      if( !validIntersectP )
+      {
         G4ExceptionDescription errmsg;
         errmsg << "Assertion FAILURE - invalid (stale) Interection point. Substep: "
                << substep_no << " call: " << fNumCalls << G4endl;
         if (fCheckMode)
-           G4LocatorChangeRecord::ReportEndChanges(errmsg, endChangeA, endChangeB );
+        {
+          G4LocatorChangeRecord::ReportEndChanges(errmsg, endChangeA, endChangeB );
+        }
         G4Exception("G4MultiLevelLocator::EstimateIntersectionPoint", "GeomNav0004",
                     JustWarning, errmsg);
       }
@@ -593,8 +597,11 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         }
         else
         {
-          if( CurrentB_PointVelocity.GetCurveLength() < CurrentA_PointVelocity.GetCurveLength() )
+          if( CurrentB_PointVelocity.GetCurveLength()
+            < CurrentA_PointVelocity.GetCurveLength() )
+          {
             errorEndPt = 2;
+          }
         }
 
         if( errorEndPt > 1 )  // errorEndPt = 1 is milder, just: len(B)=len(A)
@@ -608,7 +615,8 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
                                SubStart_PointVelocity, CurrentE_Point,
                                ApproxIntersecPointV, substep_no, substep_no_p, depth);
           
-          if (fCheckMode) {
+          if (fCheckMode)
+          {
             G4LocatorChangeRecord::ReportEndChanges(errmsg, endChangeA, endChangeB );
           }
 
@@ -840,8 +848,11 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           }
           else
           {          
-            if( CurrentB_PointVelocity.GetCurveLength() < CurrentA_PointVelocity.GetCurveLength() )
+            if( CurrentB_PointVelocity.GetCurveLength()
+              < CurrentA_PointVelocity.GetCurveLength() )
+            {
               errorEndPt = 2;
+            }
           }
           
           if (fCheckMode)
@@ -1009,9 +1020,9 @@ void G4MultiLevelLocator::ReportFieldValue( const G4FieldTrack& locationPV,
    G4double startPoint[4] = { position.x(), position.y(), position.z(),
                               locationPV.GetLabTimeOfFlight() };
    G4double FieldVec[maxNumFieldComp]; // 24 ;
-   for (auto i=0; i<maxNumFieldComp; ++i )
+   for (double & i : FieldVec)
    {
-     FieldVec[i] = 0.0;
+     i = 0.0;
    }
    equation->GetFieldValue( startPoint, FieldVec);
    G4cout << "  B-field value (" << nameLoc << ")=   "

@@ -130,6 +130,11 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fHNCmd->SetGuidance("Enable hyper-nuclei hadronic physics");
   fHNCmd->SetParameterName("HyperNuclei",false);
   fHNCmd->AvailableForStates(G4State_PreInit);
+
+  fNGPCmd = new G4UIcmdWithABool("/testhadr/NeutronGeneralProcess",this);
+  fNGPCmd->SetGuidance("Enable neutron general process");
+  fNGPCmd->SetParameterName("NeutronGeneralProcess",false);
+  fNGPCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,6 +153,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fEdepCmd;
   delete fBCCmd;
   delete fHNCmd;
+  delete fNGPCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,6 +183,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4HadronicParameters::Instance()->SetEnableBCParticles(fBCCmd->GetNewBoolValue(newValue));
   } else if( command == fHNCmd ) {
     G4HadronicParameters::Instance()->SetEnableHyperNuclei(fHNCmd->GetNewBoolValue(newValue));
+  } else if( command == fNGPCmd ) {
+    G4HadronicParameters::Instance()->SetEnableNeutronGeneralProcess(fNGPCmd->GetNewBoolValue(newValue));
   }
 }
 

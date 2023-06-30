@@ -39,9 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunMessenger::RunMessenger(RunAction* run)
-:G4UImessenger(),fRun(run),
- fRunDir(0),
- fPrintCmd(0)
+:fRun(run)
 {
   fRunDir = new G4UIdirectory("/testhadr/run/");
   fRunDir->SetGuidance("run commands");

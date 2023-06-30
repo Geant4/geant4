@@ -70,10 +70,11 @@ G4ElNeutrinoNucleusProcess::G4ElNeutrinoNucleusProcess( G4String anEnvelopeName,
   lowestEnergy = 1.*keV;
   fEnvelope  = nullptr;
   fEnvelopeName = anEnvelopeName;
-  fTotXsc = nullptr; // new G4ElNeutrinoNucleusTotXsc();
-  fNuNuclCcBias=1.;
-  fNuNuclNcBias=1.;
-  fNuNuclTotXscBias=1.;
+  fTotXsc = new G4ElNeutrinoNucleusTotXsc();
+  fNuNuclCcBias     = 1.;
+  fNuNuclNcBias     = 1.;
+  fNuNuclTotXscBias = 1.;
+  fXsc = 0.;
   safetyHelper = G4TransportationManager::GetTransportationManager()->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
 }
@@ -88,20 +89,25 @@ G4ElNeutrinoNucleusProcess::~G4ElNeutrinoNucleusProcess()
 void G4ElNeutrinoNucleusProcess::SetBiasingFactor(G4double bf)
 {
   fNuNuclTotXscBias = bf;
-
-  fTotXsc = new G4ElNeutrinoNucleusTotXsc();
-  fTotXsc->SetBiasingFactor(bf);
 }
 
 ///////////////////////////////////////////////////////
 
 void G4ElNeutrinoNucleusProcess::SetBiasingFactors(G4double bfCc, G4double bfNc)
 {
-  fNuNuclCcBias=bfCc;
-  fNuNuclNcBias=bfNc;
+  fNuNuclCcBias = bfCc;
+  fNuNuclNcBias = bfNc;
+  fNuNuclTotXscBias = std::max(fNuNuclCcBias, fNuNuclNcBias);
+}
 
-  fTotXsc = new G4ElNeutrinoNucleusTotXsc();
-  // fTotXsc->SetBiasingFactors(bfCc, bfNc);
+///////////////////////////////////////////////
+
+G4double G4ElNeutrinoNucleusProcess::PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                      G4double previousStepSize,
+                                      G4ForceCondition* condition )
+{
+  return G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(  track,
+                                       previousStepSize,  condition );
 }
 
 //////////////////////////////////////////////////
@@ -242,7 +248,10 @@ G4ElNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
   G4HadProjectile theProj( track );
   G4HadronicInteraction* hadi = nullptr;
   G4HadFinalState* result = nullptr;
-
+  const G4Element* elm =  GetCrossSectionDataStore()->SampleZandA(dynParticle, material,
+                                                    *targNucleus);
+  G4int ZZ = elm->GetZasInt();
+  fXsc = fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
   G4double ccTotRatio = fTotXsc->GetCcTotRatio();
 
   if( G4UniformRand() < ccTotRatio )  // Cc-model

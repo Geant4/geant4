@@ -42,7 +42,7 @@ class G4VisExtent;
 
 class G4VCSGfaceted : public G4VSolid 
 {
-  public:  // with description
+  public:
 
     G4VCSGfaceted( const G4String& name );
     virtual ~G4VCSGfaceted();
@@ -50,36 +50,36 @@ class G4VCSGfaceted : public G4VSolid
     G4VCSGfaceted( const G4VCSGfaceted& source );
     G4VCSGfaceted& operator=( const G4VCSGfaceted& source );
   
-    virtual G4bool CalculateExtent( const EAxis pAxis,
-                                    const G4VoxelLimits& pVoxelLimit,
-                                    const G4AffineTransform& pTransform,
-                                          G4double& pmin, G4double& pmax) const;
+    G4bool CalculateExtent( const EAxis pAxis,
+                            const G4VoxelLimits& pVoxelLimit,
+                            const G4AffineTransform& pTransform,
+                                  G4double& pmin, G4double& pmax) const override;
   
-    virtual EInside Inside( const G4ThreeVector& p ) const;
+    EInside Inside( const G4ThreeVector& p ) const override;
 
-    virtual G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const override;
 
-    virtual G4double DistanceToIn( const G4ThreeVector& p,
-                                   const G4ThreeVector& v ) const;
-    virtual G4double DistanceToIn( const G4ThreeVector& p ) const;
-    virtual G4double DistanceToOut( const G4ThreeVector& p,
-                                    const G4ThreeVector& v,
-                                    const G4bool calcNorm = false,
-                                          G4bool* validNorm = nullptr,
-                                          G4ThreeVector* n = nullptr ) const;
-    virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
+    G4double DistanceToIn( const G4ThreeVector& p,
+                           const G4ThreeVector& v ) const override;
+    G4double DistanceToIn( const G4ThreeVector& p ) const override;
+    G4double DistanceToOut( const G4ThreeVector& p,
+                            const G4ThreeVector& v,
+                            const G4bool calcNorm = false,
+                                  G4bool* validNorm = nullptr,
+                                  G4ThreeVector* n = nullptr ) const override;
+    G4double DistanceToOut( const G4ThreeVector& p ) const override;
 
-    virtual G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    virtual std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    virtual G4Polyhedron* CreatePolyhedron() const = 0;
+    G4Polyhedron* CreatePolyhedron() const override = 0;
 
-    virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
+    void DescribeYourselfTo( G4VGraphicsScene& scene ) const override;
 
-    virtual G4VisExtent GetExtent() const;
+    G4VisExtent GetExtent() const override;
 
-    virtual G4Polyhedron* GetPolyhedron () const;
+    G4Polyhedron* GetPolyhedron () const override;
 
     G4int GetCubVolStatistics() const;
     G4double GetCubVolEpsilon() const;
@@ -90,21 +90,19 @@ class G4VCSGfaceted : public G4VSolid
     void SetAreaStatistics(G4int st);
     void SetAreaAccuracy(G4double ep);
 
-    virtual G4double GetCubicVolume();
+    G4double GetCubicVolume() override;
       // Returns an estimation of the geometrical cubic volume of the
       // solid. Caches the computed value once computed the first time.
-    virtual G4double GetSurfaceArea();
+    G4double GetSurfaceArea() override;
       // Returns an estimation of the geometrical surface area of the
       // solid. Caches the computed value once computed the first time.
-
-  public:  // without description
 
     G4VCSGfaceted(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-  protected:  // without description
+  protected:
 
     G4int numFace = 0;
     G4VCSGface **faces = nullptr;
@@ -129,7 +127,6 @@ class G4VCSGfaceted : public G4VSolid
     G4double fCubVolEpsilon;
     G4double fAreaAccuracy;
       // Statistics, error accuracy for volume estimation.
-
 };
 
 #endif

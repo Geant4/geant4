@@ -6,7 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-02 Vladimir Ivanchenko (emhighenergy-V11-00-05)
+## 2023-06-06 Helmut Burkhardt (emhighenergy-V11-01-01)
+- G4GammaConversionToMuons removing using namespace std + cling-tidy
+- G4AnnihiToMuPair removing using namespace std + cling-tidy
+
+## 2023-06-02 Vladimir Ivanchenko (emhighenergy-V11-01-00)
 - G4GammaConversionToMuons - fixed FPE exception in compound, when selected
   element and address issue of cross section factor reported in #2543
 

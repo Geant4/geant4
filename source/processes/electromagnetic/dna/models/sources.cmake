@@ -58,7 +58,6 @@ geant4_add_module(G4emdna-models
     G4LEPTSExcitationModel.hh
     G4VDNAModel.hh
     G4DNAModelInterface.hh
-    G4DNADummyModel.hh
     G4DNADiracRMatrixExcitationModel.hh
     G4DNAQuinnPlasmonExcitationModel.hh
     G4DNARelativisticIonisationModel.hh
@@ -127,7 +126,6 @@ geant4_add_module(G4emdna-models
     G4LEPTSDiffXS.cc
     G4VDNAModel.cc
     G4DNAModelInterface.cc
-    G4DNADummyModel.cc
     G4DNADiracRMatrixExcitationModel.cc
     G4DNAQuinnPlasmonExcitationModel.cc
     G4DNARelativisticIonisationModel.cc

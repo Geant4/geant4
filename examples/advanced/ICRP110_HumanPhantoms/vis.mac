@@ -99,7 +99,8 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
-#Define the primary particles
+#
+# Define the primary particles
 /control/execute primary.mac
 #
 # Try "/vis/viewer/interpolate g4views 1000 0", which runs a cutaway

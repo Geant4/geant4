@@ -50,15 +50,16 @@ class G4Event;
 
 class EventActionMessenger;
 
-class EventAction : public G4UserEventAction
-{
-public: // Without description
-
+class EventAction : public G4UserEventAction {
+public:
   EventAction();
-  virtual ~EventAction();
+  ~EventAction() override = default;
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event *) override;
+  void EndOfEventAction(const G4Event *) override;
+
+  EventAction &operator = (const EventAction &right) = delete;
+  EventAction(const EventAction &) = delete;
 };
 
 #endif

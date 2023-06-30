@@ -138,10 +138,10 @@ class G4KDTree
     template <typename Position>
     void SetMinMax(const Position& min, const Position& max)
     {
-      for(G4int i = 0; i < (G4int)fDim; ++i)
+      for(std::size_t i = 0; i < fDim; ++i)
       {
-        fMin[i] = min[i];
-        fMax[i] = max[i];
+        fMin[i] = min[(G4int)i];
+        fMax[i] = max[(G4int)i];
       }
     }
 
@@ -185,15 +185,15 @@ class G4KDTree
     {
       G4double result = 0;
 
-      for(G4int i = 0; i < (G4int)fDim; ++i)
+      for(std::size_t i = 0; i < fDim; ++i)
       {
-        if(pos[i] < fMin[i])
+        if(pos[(G4int)i] < fMin[i])
         {
-          result += sqr(fMin[i] - pos[i]);
+          result += sqr(fMin[i] - pos[(G4int)i]);
         }
-        else if(pos[i] > fMax[i])
+        else if(pos[(G4int)i] > fMax[i])
         {
-          result += sqr(fMax[i] - pos[i]);
+          result += sqr(fMax[i] - pos[(G4int)i]);
         }
 
         if(result >= *bestmatch){

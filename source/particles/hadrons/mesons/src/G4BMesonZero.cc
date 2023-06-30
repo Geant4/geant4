@@ -42,16 +42,16 @@
 // ###                          BMesonZero                            ###
 // ######################################################################
 
-G4BMesonZero* G4BMesonZero::theInstance = 0;
+G4BMesonZero* G4BMesonZero::theInstance = nullptr;
 
 G4BMesonZero* G4BMesonZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "B0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -68,7 +68,7 @@ G4BMesonZero* G4BMesonZero::Definition()
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,         511,
-                false,     1.520e-3*ns,          NULL,
+                false,     1.520e-3*ns,          nullptr,
                 false,       "B");
   }
   theInstance = static_cast<G4BMesonZero*>(anInstance);

@@ -105,8 +105,8 @@ public:
   G4double GetLevelDensity(G4int Z, G4int A, G4double U);
   G4double GetPairingCorrection(G4int Z, G4int A);
 
-  // enable uploading of data for all Z < maxZ
-  void UploadNuclearLevelData(G4int Z);
+  // enable uploading of data for all Z <= Zlim
+  void UploadNuclearLevelData(G4int Zlim);
 
   // stream only existing levels
   void StreamLevels(std::ostream& os, G4int Z, G4int A);
@@ -117,11 +117,11 @@ public:
 private:
 
   G4DeexPrecoParameters* fDeexPrecoParameters;
-  G4LevelReader*         fLevelReader;
-  G4PairingCorrection*   fPairingCorrection;
-  G4ShellCorrection*     fShellCorrection;
-  G4Pow*                 fG4calc;
-  G4bool                 fInitialized;
+  G4LevelReader* fLevelReader;
+  G4PairingCorrection* fPairingCorrection;
+  G4ShellCorrection* fShellCorrection;
+  G4Pow* fG4calc;
+  G4bool fInitialized = false;
 
   static const G4int ZMAX = 118;
   static const G4int AMIN[ZMAX];

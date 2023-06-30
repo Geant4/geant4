@@ -73,6 +73,7 @@ namespace G4INCL {
     const G4double effectivePionMass = 138.0;
     const G4double effectiveLambdaMass = 1115.683;
     const G4double effectiveSigmaMass = 1197.45; // max value
+    const G4double effectiveXiMass = 1321.71; // max value
     const G4double effectiveKaonMass = 497.614; // max value
     const G4double effectiveAntiKaonMass = 497.614; // max value
     const G4double effectiveEtaMass = 547.862;
@@ -103,6 +104,8 @@ namespace G4INCL {
 
     /// \brief Get the native INCL name of the ion
     std::string getName(const G4int A, const G4int Z);
+
+    /// \brief Get the native INCL name of the ion
     std::string getName(const G4int A, const G4int Z, const G4int S);
 
     /// \brief Get the short INCL name of the ion
@@ -283,7 +286,7 @@ namespace G4INCL {
 
     /// \brief Get the type of sigma
     ParticleType getSigmaType(const G4int isosp);
-
+    
     /// \brief Get the type of kaon
     ParticleType getKaonType(const G4int isosp);
 

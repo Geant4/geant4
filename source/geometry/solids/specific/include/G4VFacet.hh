@@ -75,7 +75,7 @@ class G4VFacet
     virtual G4double GetArea() const = 0;
     virtual G4ThreeVector GetPointOnFace() const = 0;
 
-    void ApplyTranslation (const G4ThreeVector v);
+    void ApplyTranslation (const G4ThreeVector& v);
 
     std::ostream& StreamInfo(std::ostream& os) const;
 

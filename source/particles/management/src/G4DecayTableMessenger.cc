@@ -75,10 +75,10 @@ G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
 
 G4DecayTableMessenger::~G4DecayTableMessenger()
 {
-  if (dumpCmd != nullptr) delete dumpCmd;
-  if (selectCmd != nullptr) delete selectCmd;
-  if (brCmd != nullptr) delete brCmd;
-  if (thisDirectory != nullptr) delete thisDirectory;
+  delete dumpCmd;
+  delete selectCmd;
+  delete brCmd;
+  delete thisDirectory;
 }
 
 void G4DecayTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)

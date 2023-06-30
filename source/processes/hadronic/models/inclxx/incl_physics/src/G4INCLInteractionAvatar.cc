@@ -431,15 +431,16 @@ namespace G4INCL {
       } else {
         (*i)->setPotentialEnergy(0.);
       }
+
 //jcd      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
-        if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
-           !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isLambda()) { // This translates AECSVT's loops 1, 3 and 4
+      if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
+         !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda()) { // This translates AECSVT's loops 1, 3 and 4
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
-         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
-         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
-         G4double locEOld;
-         G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
-         for(G4int iterLocE=0;
+        const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
+        G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
+        G4double locEOld;
+        G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
+        for(G4int iterLocE=0;
             deltaLocE>InteractionAvatar::locEAccuracy && iterLocE<InteractionAvatar::maxIterLocE;
             ++iterLocE) {
           locEOld = locE;
@@ -448,17 +449,17 @@ namespace G4INCL {
           theNucleus->updatePotentialEnergy(*i); // ...update its potential energy...
           locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // ...and recompute locE.
           deltaLocE = std::abs(locE-locEOld);
-         }
         }
+      }
 
 //jlrs  For lambdas and nuclei with masses higher than 19 also local energy
-        if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19) {
+      if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19) {
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
-         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
-         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
-         G4double locEOld;
-         G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
-         for(G4int iterLocE=0;
+        const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
+        G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
+        G4double locEOld;
+        G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
+        for(G4int iterLocE=0;
             deltaLocE>InteractionAvatar::locEAccuracy && iterLocE<InteractionAvatar::maxIterLocE;
             ++iterLocE) {
           locEOld = locE;
@@ -467,8 +468,8 @@ namespace G4INCL {
           theNucleus->updatePotentialEnergy(*i); // ...update its potential energy...
           locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // ...and recompute locE.
           deltaLocE = std::abs(locE-locEOld);
-         }
         }
+      }
     }
   }
 

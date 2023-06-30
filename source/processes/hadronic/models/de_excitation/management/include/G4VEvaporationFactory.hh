@@ -42,16 +42,14 @@ public:
 
   explicit G4VEvaporationFactory(G4VEvaporationChannel* ptr);
 
-  virtual ~G4VEvaporationFactory();
+  virtual ~G4VEvaporationFactory() = default;
 
-  virtual std::vector<G4VEvaporationChannel*> * GetChannel() = 0;
+  virtual std::vector<G4VEvaporationChannel*>* GetChannel() = 0;
 
-private:
-
-  G4VEvaporationFactory(const G4VEvaporationFactory & );
-  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
-  G4bool operator==(const G4VEvaporationFactory & val) const;
-  G4bool operator!=(const G4VEvaporationFactory & val) const;
+  G4VEvaporationFactory(const G4VEvaporationFactory &) = delete;
+  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory&) = delete;
+  G4bool operator==(const G4VEvaporationFactory&) const = delete;
+  G4bool operator!=(const G4VEvaporationFactory&) const = delete;
 
 protected:
 

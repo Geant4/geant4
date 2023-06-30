@@ -44,16 +44,16 @@
 // ###                         ANTI  TRITON                           ###
 // ######################################################################
 
-G4AntiTriton* G4AntiTriton::theInstance = 0;
+G4AntiTriton* G4AntiTriton::theInstance = nullptr;
 
 G4AntiTriton* G4AntiTriton::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //

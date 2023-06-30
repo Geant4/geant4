@@ -30,29 +30,29 @@
 //
 
 #include "G4ParticleHPWattSpectrum.hh"
+
 #include "G4SystemOfUnits.hh"
 
-  G4double G4ParticleHPWattSpectrum::Sample(G4double anEnergy) 
-  {
-    G4double a = theApar.GetY(anEnergy)*eV;
-    G4double b = theBpar.GetY(anEnergy)/eV;
-    G4double result=0.;
-    G4double random, cut, max;
-    max = std::sinh(std::sqrt(b*15.*a));
+G4double G4ParticleHPWattSpectrum::Sample(G4double anEnergy)
+{
+  G4double a = theApar.GetY(anEnergy) * eV;
+  G4double b = theBpar.GetY(anEnergy) / eV;
+  G4double result = 0.;
+  G4double random, cut, max;
+  max = std::sinh(std::sqrt(b * 15. * a));
 
-    G4int icounter=0;
-    G4int icounter_max=1024;
-    do
-    {
-      icounter++;
-      if ( icounter > icounter_max ) {
-	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
-         break;
-      }
-      random = G4UniformRand();
-      result = -a*G4Log(random);
-      cut = G4UniformRand();
+  G4int icounter = 0;
+  G4int icounter_max = 1024;
+  do {
+    icounter++;
+    if (icounter > icounter_max) {
+      G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of "
+             << __FILE__ << "." << G4endl;
+      break;
     }
-    while(cut>std::sinh(std::sqrt(b*result))/max); // Loop checking, 11.05.2015, T. Koi
-    return result;
-  }
+    random = G4UniformRand();
+    result = -a * G4Log(random);
+    cut = G4UniformRand();
+  } while (cut > std::sinh(std::sqrt(b * result)) / max);  // Loop checking, 11.05.2015, T. Koi
+  return result;
+}

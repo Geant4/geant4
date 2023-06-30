@@ -47,15 +47,15 @@ class G4UEllipticalCone : public G4UAdapter<vecgeom::UnplacedEllipticalCone>
   using Shape_t = vecgeom::UnplacedEllipticalCone;
   using Base_t  = G4UAdapter<vecgeom::UnplacedEllipticalCone>;
 
-  public:  // with description
+  public:
 
     G4UEllipticalCone(const G4String& name, G4double pxSemiAxis,
                                             G4double pySemiAxis,
                                             G4double zMax,
                                             G4double pzTopCut);
-   ~G4UEllipticalCone();
+   ~G4UEllipticalCone() override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetSemiAxisMin () const;
     G4double GetSemiAxisMax () const;
@@ -66,9 +66,7 @@ class G4UEllipticalCone : public G4UAdapter<vecgeom::UnplacedEllipticalCone>
     void SetSemiAxis (G4double x, G4double y, G4double z);
     void SetZCut (G4double newzTopCut);
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:  // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UEllipticalCone(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -79,12 +77,12 @@ class G4UEllipticalCone : public G4UAdapter<vecgeom::UnplacedEllipticalCone>
     G4UEllipticalCone& operator=( const G4UEllipticalCone& source );
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pmin, G4double& pmax) const;
-    G4Polyhedron* CreatePolyhedron() const;
+                           G4double& pmin, G4double& pmax) const override;
+    G4Polyhedron* CreatePolyhedron() const override;
 };
 
 // --------------------------------------------------------------------

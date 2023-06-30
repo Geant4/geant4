@@ -143,7 +143,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     G4double eF   = material->GetIonisation()->GetFermiEnergy();
     G4double v1sq = reducedEnergy/eF;
     G4double vFsq = eF/energyBohr;
-    G4double vF   = std::sqrt(eF/energyBohr);
+    G4double vF = std::sqrt(vFsq);
 
     G4double y = ( v1sq > 1.0 ) 
       // Faster than Fermi velocity

@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2022-22-12 Ben Morgan (detdigits-V11-01-00)
+- Apply standard clang-tidy and clang-format fixes
+- General code tidy and modernization
+
 ## 2021-12-10 Ben Morgan (detdigits-V11-00-00)
 - Change to new Markdown History format
 

@@ -88,7 +88,7 @@ using G4PhSideManager = G4GeomSplitter<G4PhSideData>;
 class G4PolyhedraSide : public G4VCSGface
 {
 
-  public:  // with description
+  public:
 
     G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
                      const G4PolyhedraSideRZ* tail,
@@ -97,7 +97,7 @@ class G4PolyhedraSide : public G4VCSGface
                            G4int numSide,
                            G4double phiStart, G4double phiTotal, 
                            G4bool phiIsOpen, G4bool isAllBehind = false );
-    virtual ~G4PolyhedraSide();
+    ~G4PolyhedraSide() override;
   
     G4PolyhedraSide( const G4PolyhedraSide& source );
     G4PolyhedraSide& operator=( const G4PolyhedraSide& source );
@@ -105,39 +105,36 @@ class G4PolyhedraSide : public G4VCSGface
     G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,  
                             G4bool outgoing, G4double surfTolerance,
                             G4double& distance, G4double& distFromSurface,
-                            G4ThreeVector& normal, G4bool& allBehind );
+                            G4ThreeVector& normal, G4bool& allBehind ) override;
 
-    G4double Distance( const G4ThreeVector& p, G4bool outgoing );
+    G4double Distance( const G4ThreeVector& p, G4bool outgoing ) override;
   
     EInside Inside( const G4ThreeVector &p, G4double tolerance, 
-                          G4double *bestDistance );
+                          G4double *bestDistance ) override;
   
-    G4ThreeVector Normal( const G4ThreeVector& p,  G4double* bestDistance );
+    G4ThreeVector Normal( const G4ThreeVector& p,
+                                G4double* bestDistance ) override;
 
-    G4double Extent( const G4ThreeVector axis );
+    G4double Extent( const G4ThreeVector axis ) override;
   
     void CalculateExtent( const EAxis axis, 
                           const G4VoxelLimits &voxelLimit,
                           const G4AffineTransform& tranform,
-                                G4SolidExtentList& extentList );
+                                G4SolidExtentList& extentList ) override;
 
-    G4VCSGface* Clone() { return new G4PolyhedraSide( *this ); }
-
-  public:  // without description
+    G4VCSGface* Clone() override { return new G4PolyhedraSide( *this ); }
 
     // Methods used for GetPointOnSurface()
 
-    G4double SurfaceTriangle( G4ThreeVector p1,
-                              G4ThreeVector p2,
-                              G4ThreeVector p3,
+    G4double SurfaceTriangle( const G4ThreeVector& p1,
+                              const G4ThreeVector& p2,
+                              const G4ThreeVector& p3,
                               G4ThreeVector* p4 );
-    G4ThreeVector GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1, 
-                                   G4ThreeVector p2, G4ThreeVector p3,
+    G4ThreeVector GetPointOnPlane( const G4ThreeVector& p0, const G4ThreeVector& p1, 
+                                   const G4ThreeVector& p2, const G4ThreeVector& p3,
                                    G4double* Area );
-    G4double SurfaceArea();
-    G4ThreeVector GetPointOnFace();  
-
-  public:  // without description
+    G4double SurfaceArea() override;
+    G4ThreeVector GetPointOnFace() override;  
 
     G4PolyhedraSide(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -156,14 +153,14 @@ class G4PolyhedraSide : public G4VCSGface
     struct sG4PolyhedraSideVec;         // Secret recipe for allowing
     friend struct sG4PolyhedraSideVec;  // protected nested structures
 
-    typedef struct sG4PolyhedraSideEdge
+    using G4PolyhedraSideEdge = struct sG4PolyhedraSideEdge
     {
       G4ThreeVector  normal;       // Unit normal to this edge
       G4ThreeVector  corner[2];    // The two corners of this phi edge
       G4ThreeVector  cornNorm[2];  // The normals of these corners
-    } G4PolyhedraSideEdge;
+    };
   
-    typedef struct sG4PolyhedraSideVec
+    using G4PolyhedraSideVec = struct sG4PolyhedraSideVec
     {
       G4ThreeVector  normal,   // Normal (point out of the shape)
                      center,   // Point in center of side
@@ -172,7 +169,7 @@ class G4PolyhedraSide : public G4VCSGface
       G4PolyhedraSideEdge* edges[2];  // The phi boundary edges to this side 
                                       //     [0]=low phi [1]=high phi
       G4ThreeVector edgeNorm[2];      // RZ edge normals [i] at {r[i],z[i]}
-    } G4PolyhedraSideVec;
+    };
 
   protected:
 

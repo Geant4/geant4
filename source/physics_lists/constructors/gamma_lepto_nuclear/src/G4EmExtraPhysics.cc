@@ -377,7 +377,6 @@ void G4EmExtraPhysics::ConstructProcess()
     else
     {
       theNuEleProcess->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
-      theNuEleTotXsc->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
     }
     theNuEleProcess->AddDataSet(theNuEleTotXsc);
 

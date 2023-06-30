@@ -41,7 +41,6 @@ const G4String G4VDecayChannel::noName = " ";
 
 // --------------------------------------------------------------------
 G4VDecayChannel::G4VDecayChannel()
-  : parent_polarization()
 {
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -49,7 +48,7 @@ G4VDecayChannel::G4VDecayChannel()
 
 // --------------------------------------------------------------------
 G4VDecayChannel::G4VDecayChannel(const G4String& aName, G4int verbose)
-  : kinematics_name(aName), parent_polarization(), verboseLevel(verbose)
+  : kinematics_name(aName),  verboseLevel(verbose)
 {
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -65,7 +64,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String& aName,
                                  const G4String& theDaughterName3,
                                  const G4String& theDaughterName4,
                                  const G4String& theDaughterName5 )
-  : kinematics_name(aName), rbranch(theBR), parent_polarization(),
+  : kinematics_name(aName), rbranch(theBR), 
     numberOfDaughters(theNumberOfDaughters) 
 {
   // set pointer to G4ParticleTable (static and singleton object)
@@ -350,8 +349,8 @@ void G4VDecayChannel::FillDaughters()
 
   // create and set the array of pointers to daughter particles
   G4MT_daughters = new G4ParticleDefinition*[numberOfDaughters];
-  if (G4MT_daughters_mass != nullptr) delete [] G4MT_daughters_mass;
-  if (G4MT_daughters_width != nullptr) delete [] G4MT_daughters_width;
+  delete [] G4MT_daughters_mass;
+  delete [] G4MT_daughters_width;
   G4MT_daughters_mass = new G4double[numberOfDaughters];
   G4MT_daughters_width = new G4double[numberOfDaughters];
   // loop over all daughters

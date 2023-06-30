@@ -52,7 +52,7 @@ class G4Positron : public G4ParticleDefinition
  private:
    static G4Positron* theInstance;
    G4Positron(){}
-   ~G4Positron(){}
+   ~G4Positron() override= default;
 
  public:
    static G4Positron* Definition();

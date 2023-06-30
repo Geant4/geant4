@@ -39,7 +39,6 @@ G4Allocator<G4NavigationHistory>*& aNavigHistoryAllocator()
 }
 
 G4NavigationHistory::G4NavigationHistory()
-  : fStackDepth(0)
 {
   fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
   Clear();
@@ -53,7 +52,7 @@ G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
     fNavHistory->resize( h.GetMaxDepth() );
   }
 
-  for ( G4long ilev=G4long(h.fStackDepth); ilev>=0; --ilev )
+  for ( auto ilev=G4long(h.fStackDepth); ilev>=0; --ilev )
   { 
     (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
   }

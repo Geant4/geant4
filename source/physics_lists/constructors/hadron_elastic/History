@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-04-13 Alberto Ribon (phys-ctor-helastic-V11-01-00)
+- Created new class G4HadronElasticPhysicsHPT, which inherits from
+  G4HadronElasticPhysicsHP and activates the special treatment of elastic
+  scattering of thermal neutrons.
+- G4HadronElasticPhysicsHP : changed the method ConstructProcess from "final"
+  to "override", to be able to define the ConstructProcess method for the
+  derived class G4HadronElasticPhysicsHPT.
+
 ## 2022-11-24 Gabriele Cosmo (phys-ctor-helastic-V11-00-03)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

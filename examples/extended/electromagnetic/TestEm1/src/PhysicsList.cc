@@ -82,7 +82,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det) 
-  : G4VModularPhysicsList(), fEmPhysicsList(nullptr), fEmName(" "), fDet(det)
+  : fDet(det)
 {
   fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
@@ -264,11 +264,14 @@ void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
   
-  radioactiveDecay->SetARM(true);                //Atomic Rearangement
+  G4bool armFlag = false;
+  radioactiveDecay->SetARM(armFlag);                //Atomic Rearangement
 
   // atomic de-excitation module
-  G4EmParameters::Instance()->SetAuger(true);
-  G4EmParameters::Instance()->SetDeexcitationIgnoreCut(true);
+  if (armFlag) {
+    G4EmParameters::Instance()->SetAuger(true);
+    G4EmParameters::Instance()->SetDeexcitationIgnoreCut(true);
+  }
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());

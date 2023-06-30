@@ -29,16 +29,16 @@
 // --------------------------------------------------------------------
 
 #include "G4ParticlePropertyMessenger.hh"
-#include "G4UImanager.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithABool.hh"
-#include "G4ParticleDefinition.hh"
+
 #include "G4DecayTableMessenger.hh"
-#include "G4ParticlePropertyMessenger.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
+#include "G4UImanager.hh"
 #include "G4ios.hh"
 
 #include <iomanip>                  // Include from 'system'
@@ -107,7 +107,7 @@ G4ParticlePropertyMessenger::~G4ParticlePropertyMessenger()
 void G4ParticlePropertyMessenger::
 SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  G4ParticleDefinition* currentParticle
+  auto  currentParticle
     = const_cast<G4ParticleDefinition*>(theParticleTable->GetSelectedParticle());
 
   if (currentParticle == nullptr)

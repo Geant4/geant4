@@ -47,6 +47,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "Randomize.hh"
+#include "G4EmParameters.hh"
 
 #include "G4String.hh"
 
@@ -333,13 +334,7 @@ void G4SBBremTable::InitSamplingTables() {
 
 // should be called only from LoadSamplingTables(G4int) and once
 void G4SBBremTable::LoadSTGrid() {
-  const char* path = G4FindDataDir("G4LEDATA");
-  if (!path) {
-    G4Exception("G4SBBremTable::LoadSTGrid()","em0006",
-                FatalException, "Environment variable G4LEDATA not defined");
-    return;
-  }
-  const G4String fname =  G4String(path) + "/brem_SB/SBTables/grid";
+  const G4String fname =  G4EmParameters::Instance()->GetDirLEDATA() + "/brem_SB/SBTables/grid";
   std::ifstream infile(fname,std::ios::in);
   if (!infile.is_open()) {
     G4String msgc = "Cannot open file: " + fname;
@@ -391,13 +386,8 @@ void G4SBBremTable::LoadSamplingTables(G4int iz) {
   }
   // load data for a given Z only once
   iz = std::max(std::min(fMaxZet, iz),1);
-  const char* path = G4FindDataDir("G4LEDATA");
-  if (!path) {
-    G4Exception("G4SBBremTable::LoadSamplingTables()","em0006",
-                FatalException, "Environment variable G4LEDATA not defined");
-    return;
-  }
-  const G4String fname =  G4String(path) + "/brem_SB/SBTables/sTableSB_"
+
+  const G4String fname = G4EmParameters::Instance()->GetDirLEDATA() + "/brem_SB/SBTables/sTableSB_"
                         + std::to_string(iz);
   std::istringstream infile(std::ios::in);
   // read the compressed data file into the stream

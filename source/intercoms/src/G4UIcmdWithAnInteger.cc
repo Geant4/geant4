@@ -31,8 +31,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 
 // --------------------------------------------------------------------
-G4UIcmdWithAnInteger::G4UIcmdWithAnInteger(const char* theCommandPath,
-                                           G4UImessenger* theMessenger)
+G4UIcmdWithAnInteger::G4UIcmdWithAnInteger(const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
   auto* intParam = new G4UIparameter('i');
@@ -47,8 +46,7 @@ G4int G4UIcmdWithAnInteger::GetNewIntValue(const char* paramString)
 }
 
 // --------------------------------------------------------------------
-void G4UIcmdWithAnInteger::SetParameterName(const char* theName,
-                                            G4bool omittable,
+void G4UIcmdWithAnInteger::SetParameterName(const char* theName, G4bool omittable,
                                             G4bool currentAsDefault)
 {
   G4UIparameter* theParam = GetParameter(0);

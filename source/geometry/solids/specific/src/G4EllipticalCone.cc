@@ -216,7 +216,7 @@ G4EllipticalCone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent
@@ -285,7 +285,7 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
   {
     norm = G4ThreeVector(p.x()*invXX, p.y()*invYY, hp - p.z());
     G4double mag = norm.mag();
-    if (mag == 0) return G4ThreeVector(0,0,1); // apex
+    if (mag == 0) return {0,0,1}; // apex
     norm *= (1/mag);
     ++nsurf;
   }
@@ -335,7 +335,7 @@ G4EllipticalCone::ApproxSurfaceNormal(const G4ThreeVector& p) const
   if (ds > dz && std::abs(hp - p.z()) > halfCarTol)
     return G4ThreeVector(p.x()*invXX, p.y()*invYY, hp - p.z()).unit();
   else
-    return G4ThreeVector(0., 0.,(p.z() < 0) ? -1. : 1.);
+    return { 0., 0., (G4double)((p.z() < 0) ? -1. : 1.) };
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -799,7 +799,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
 
 G4GeometryType G4EllipticalCone::GetEntityType() const
 {
-  return G4String("G4EllipticalCone");
+  return {"G4EllipticalCone"};
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -965,9 +965,7 @@ G4VisExtent G4EllipticalCone::GetExtent() const
   //
   G4ThreeVector pmin,pmax;
   BoundingLimits(pmin,pmax);
-  return G4VisExtent(pmin.x(),pmax.x(),
-                     pmin.y(),pmax.y(),
-                     pmin.z(),pmax.z());
+  return { pmin.x(), pmax.x(), pmin.y(), pmax.y(), pmin.z(), pmax.z() };
 }
 
 G4Polyhedron* G4EllipticalCone::CreatePolyhedron () const

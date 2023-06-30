@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -43,6 +43,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
    G2 (T/m) = 16.4947
    G3 (T/m) = 9.86677
    G4 (T/m) = -6.24449
+ G4ChordFinder: stepperDriverId: 2
 PhysicsList::SetCuts:CutLength : 1 um 
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
@@ -98,6 +99,7 @@ G4Material WARNING: duplicate name of material Vacuum
    G2 (T/m) = 16.4953
    G3 (T/m) = 9.86726
    G4 (T/m) = -6.2448
+ G4ChordFinder: stepperDriverId: 2
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -264,7 +266,6 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -293,7 +294,7 @@ Index : 0     used in the geometry : Yes
 
 ==================================================================
 
-##### Create analysis manager   0x1e7ab50
+##### Create analysis manager   0x13c4a00
 Using  analysis manager
 Ntuple-1 created
 Ntuple-2 created

@@ -50,8 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(EventAction* evt)
-  : G4UserSteppingAction()
-  , fEventAction(evt)
+  : fEventAction(evt)
 {
   const auto* det = dynamic_cast<const DetectorConstruction*>(
     G4RunManager::GetRunManager()->GetUserDetectorConstruction());
@@ -61,15 +60,13 @@ SteppingAction::SteppingAction(EventAction* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction() = default;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep == 0)
+  {
     return;
+  }
 
   // Work out if we are in the Logical volume assigned to DNA
   const G4VTouchable* touch = aStep->GetPreStepPoint()->GetTouchable();
@@ -180,8 +177,10 @@ void SteppingAction::ProcessDNARegionHit(const G4Step* aStep)
       {
         G4String lvname = pv->GetLogicalVolume()->GetName();
         G4String motherlvname;
-        if(lv)
+        if(lv != nullptr)
+        {
           motherlvname = lv->GetName();
+        }
         G4cout << "Could not find octree for logical volume." << G4endl
                << "Particle in LV: " << lvname
                << ", with mother LV: " << motherlvname << G4endl;

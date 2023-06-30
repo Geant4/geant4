@@ -29,4 +29,4 @@
 #include "G4ParticleHPElasticData.hh"
 using G4NeutronHPElasticData = G4ParticleHPElasticData;
 
-#endif 
+#endif

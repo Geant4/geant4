@@ -69,29 +69,19 @@
 #include "G4BraggIonModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4LossTableManager.hh"
-#include "G4WaterStopping.hh"
-#include "G4EmCorrections.hh"
 #include "G4EmParameters.hh"
 #include "G4EmStandUtil.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ionIonisation::G4ionIonisation(const G4String& name)
-  : G4VEnergyLossProcess(name),
-    theParticle(nullptr),
-    isInitialised(false),
-    stopDataActive(false)
+  : G4VEnergyLossProcess(name)
 {
   SetLinearLossLimit(0.02);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
-  corr = G4LossTableManager::Instance()->EmCorrections();
   eth = 2*CLHEP::MeV;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4ionIonisation::~G4ionIonisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -167,40 +157,9 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
       emax = std::max(emax, eth*10); 
       EmModel(1)->SetHighEnergyLimit(emax);
       AddEmModel(2, EmModel(1), FluctModel());  
-
-      // Add ion stoping tables for Generic Ion if the default 
-      // model is used (with eth ~= 2 MeV)
-      if(part == ion && (EmModel(1)->GetName() == "BetheBloch" ||
-			 EmModel(1)->GetName() == "BetheBlochGasIon")) {
-	stopDataActive = true;
-	G4WaterStopping  ws(corr, true);
-	corr->SetIonisationModels(EmModel(0), EmModel(1));
-      }
     }
     isInitialised = true;
   }
-  // reinitialisation of corrections for the new run
-  if(part == ion) { corr->InitialiseForNewRun(); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionIonisation::StreamProcessInfo(std::ostream& out) const
-{
-  if (stopDataActive && G4GenericIon::GenericIon() == theParticle) {
-    out << "      Stopping Power data for " 
-	<< corr->GetNumberOfStoppingVectors()
-	<< " ion/material pairs" << G4endl;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ionIonisation::AddStoppingData(G4int Z, G4int A,
-				      const G4String& mname,
-				      G4PhysicsVector* dVector)
-{
-  corr->AddStoppingData(Z, A, mname, dVector);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -52,11 +52,11 @@ class RunAction : public G4UserRunAction
 public:
 
   RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim=0);
- ~RunAction();
+ ~RunAction() override;
 
-  virtual G4Run* GenerateRun();
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void   EndOfRunAction(const G4Run*);
+  G4Run* GenerateRun() override;
+  void BeginOfRunAction(const G4Run*) override;
+  void   EndOfRunAction(const G4Run*) override;
    
   // Acceptance parameters
   void SetEdepAndRMS(G4int, G4double, G4double, G4double);
@@ -64,12 +64,12 @@ public:
 
 private:
   
-  DetectorConstruction*   fDetector;
-  PrimaryGeneratorAction* fPrimary;
-  Run*                    fRun;      
-  RunActionMessenger*     fRunMessenger;
-  HistoManager*           fHistoManager;
-  G4Timer*                fTimer;
+  DetectorConstruction*   fDetector = nullptr;
+  PrimaryGeneratorAction* fPrimary = nullptr;
+  Run*                    fRun = nullptr;
+  RunActionMessenger*     fRunMessenger = nullptr;
+  HistoManager*           fHistoManager = nullptr;
+  G4Timer*                fTimer = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

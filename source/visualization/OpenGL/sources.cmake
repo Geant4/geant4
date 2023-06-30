@@ -32,7 +32,6 @@ geant4_add_module(G4OpenGL
 geant4_module_link_libraries(G4OpenGL
   PUBLIC
     G4globman
-    G4modeling
     G4graphics_reps
     G4hepgeometry
     G4intercoms
@@ -40,6 +39,17 @@ geant4_module_link_libraries(G4OpenGL
   PRIVATE
     G4geometrymng
     G4run)
+
+# Minor hack: G4modeling is a private dependency, unless Qt is activated when it 
+# becomes a public dependency. CMake will deduplicate the link in favour of PUBLIC
+# when appropriate, but we can't then check consistency reliably. So we have to
+# make the link dependent on building for Qt...
+# Another demonstratation of awkward vis system of more than one driver per library...
+if(GEANT4_USE_QT)
+  geant4_module_link_libraries(G4OpenGL PUBLIC G4modeling)
+else()
+  geant4_module_link_libraries(G4OpenGL PRIVATE G4modeling)
+endif()
 
 #----------------------------------------------------------------------------
 # Add X11 OpenGL Support if requested
@@ -59,7 +69,9 @@ if(GEANT4_USE_OPENGL_X11)
       G4OpenGLXViewer.cc)
 
   # Add the compile definitions needed for the X11 component (G4OpenGL.hh, G4OpenGLViewer.cc)
-  geant4_module_compile_definitions(G4OpenGL PRIVATE G4VIS_BUILD_OPENGLX_DRIVER)
+  geant4_module_compile_definitions(G4OpenGL
+    PUBLIC G4VIS_USE_OPENGLX
+    PRIVATE G4VIS_BUILD_OPENGLX_DRIVER)
 endif()
 
 #----------------------------------------------------------------------------
@@ -123,10 +135,12 @@ if(GEANT4_USE_XM)
   endif()
 
   # Add the compile definitions needed for the Xm component (G4OpenGL.hh, G4OpenGLViewer.cc)
-  geant4_module_compile_definitions(G4OpenGL PRIVATE G4VIS_BUILD_OPENGLXM_DRIVER)
+  geant4_module_compile_definitions(G4OpenGL
+    PUBLIC G4VIS_USE_OPENGLXM
+    PRIVATE G4VIS_BUILD_OPENGLXM_DRIVER)
 
   # Add in Xm and needed modules
-  geant4_module_link_libraries(G4OpenGL PUBLIC Motif::Xm PRIVATE G4UIcommon)
+  geant4_module_link_libraries(G4OpenGL PUBLIC Motif::Xm PRIVATE G4UIimplementation)
 endif()
 
 # Common X11/Xm link libraries
@@ -149,7 +163,6 @@ if(GEANT4_USE_QT)
       G4OpenGLQt.hh
       G4OpenGLQtExportDialog.hh
       G4OpenGLQtMovieDialog.hh
-      G4OpenGLVboDrawer.hh
       G4OpenGLQtViewer.hh
       G4OpenGLStoredQt.hh
       G4OpenGLStoredQtSceneHandler.hh
@@ -160,19 +173,24 @@ if(GEANT4_USE_QT)
       G4OpenGLQt.cc
       G4OpenGLQtExportDialog.cc
       G4OpenGLQtMovieDialog.cc
-      G4OpenGLVboDrawer.cc
       G4OpenGLQtViewer.cc
       G4OpenGLStoredQt.cc
       G4OpenGLStoredQtSceneHandler.cc
       G4OpenGLStoredQtViewer.cc)
 
   # Add the definitions (G4OpenGL.hh, G4OpenGLViewer.cc)
-  geant4_module_compile_definitions(G4OpenGL PRIVATE G4VIS_BUILD_OPENGLQT_DRIVER)
+  geant4_module_compile_definitions(G4OpenGL 
+    PUBLIC G4VIS_USE_OPENGLQT
+    PRIVATE G4VIS_BUILD_OPENGLQT_DRIVER)
 
   # Add in Qt libraries and geant4 modules
   geant4_module_link_libraries(G4OpenGL
-    PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Widgets OpenGL::GL
-    PRIVATE G4UIbasic G4UIcommon)
+    PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets OpenGL::GL
+    PRIVATE G4UIimplementation)
+
+  if(QT_VERSION_MAJOR GREATER 5)
+    geant4_module_link_libraries(G4OpenGL PRIVATE Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
+  endif()
 endif()
 
 #----------------------------------------------------------------------------
@@ -194,7 +212,10 @@ if(GEANT4_USE_OPENGL_WIN32)
       G4OpenGLWin32Viewer.cc )
 
   # Add the compile definitions (G4OpenGL.hh, G4OpenGLViewer.cc)
-  geant4_module_compile_definitions(G4OpenGL PRIVATE G4VIS_BUILD_OPENGLWIN32_DRIVER)
+  geant4_module_compile_definitions(G4OpenGL
+    PUBLIC G4VIS_USE_OPENGLWIN32
+    PRIVATE G4VIS_BUILD_OPENGLWIN32_DRIVER)
+  
   geant4_module_link_libraries(G4OpenGL PUBLIC OpenGL::GL)
 endif()
 

@@ -42,117 +42,122 @@
 // the corresponding process.
 // Class Description - End
 
-#include "globals.hh"
-#include "G4ParticleHPThermalScatteringNames.hh"
 #include "G4HadronicInteraction.hh"
+#include "G4ParticleHPThermalScatteringNames.hh"
+#include "globals.hh"
 
 class G4ParticleHPThermalScatteringData;
 class G4ParticleHPElastic;
 
-struct E_isoAng 
+struct E_isoAng
 {
-   G4double energy;
-   G4int n;
-   std::vector < G4double > isoAngle; 
-   E_isoAng() {
-      energy=0.0;
-      n=0;
-   };
+    G4double energy;
+    G4int n;
+    std::vector<G4double> isoAngle;
+    E_isoAng()
+    {
+      energy = 0.0;
+      n = 0;
+    };
 };
 
-struct E_P_E_isoAng 
+struct E_P_E_isoAng
 {
-   G4double energy;
-   G4int n;
-   std::vector < G4double > prob; 
-   std::vector < E_isoAng* > vE_isoAngle; 
-   G4double sum_of_probXdEs;  // should be close to 1
-   std::vector< G4double > secondary_energy_cdf;
-   std::vector< G4double > secondary_energy_pdf;
-   std::vector< G4double > secondary_energy_value; 
-   G4int secondary_energy_cdf_size;
-   E_P_E_isoAng() {
-      energy=0.0;
-      n=0;
-      sum_of_probXdEs=0.0;
-      secondary_energy_cdf_size=0;
-   };
+    G4double energy;
+    G4int n;
+    std::vector<G4double> prob;
+    std::vector<E_isoAng*> vE_isoAngle;
+    G4double sum_of_probXdEs;  // should be close to 1
+    std::vector<G4double> secondary_energy_cdf;
+    std::vector<G4double> secondary_energy_pdf;
+    std::vector<G4double> secondary_energy_value;
+    G4int secondary_energy_cdf_size;
+    E_P_E_isoAng()
+    {
+      energy = 0.0;
+      n = 0;
+      sum_of_probXdEs = 0.0;
+      secondary_energy_cdf_size = 0;
+    };
 };
 
 class G4ParticleHPThermalScattering : public G4HadronicInteraction
 {
-   public: 
-  
-      G4ParticleHPThermalScattering();
-  
-      ~G4ParticleHPThermalScattering();
-  
-      G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+  public:
+    G4ParticleHPThermalScattering();
 
-      virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+    ~G4ParticleHPThermalScattering() override;
 
-      //For user prepared thermal files 
-                              //Name of G4Element , Name of NDL file
-      void AddUserThermalScatteringFile( G4String , G4String );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& aTargetNucleus) override;
 
-      void BuildPhysicsTable(const G4ParticleDefinition&);
+    const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const override;
 
-      virtual void ModelDescription(std::ostream& outFile) const;
+    // For user prepared thermal files
+    // Name of G4Element , Name of NDL file
+    void AddUserThermalScatteringFile(G4String, G4String);
 
-   private:
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-      void clearCurrentFSData();
+    void ModelDescription(std::ostream& outFile) const override;
 
-      G4ParticleHPThermalScatteringNames names;
+  private:
+    void clearCurrentFSData();
 
-      // Coherent Elastic 
-      //         ElementID             temp                             BraggE     cumulativeP
-      std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >* coherentFSs;
-      std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* readACoherentFSDATA( G4String );
+    G4ParticleHPThermalScatteringNames names;
 
-      // Incoherent Elastic 
-      //         ElementID          temp       aFS for this temp (and this element)
-      std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >* incoherentFSs;
-      std::map < G4double , std::vector < E_isoAng* >* >* readAnIncoherentFSDATA( G4String );
-      E_isoAng* readAnE_isoAng ( std::istream* );
+    // Coherent Elastic
+    //         ElementID             temp                             BraggE     cumulativeP
+    std::map<G4int, std::map<G4double, std::vector<std::pair<G4double, G4double>*>*>*>* coherentFSs{
+      nullptr};
+    std::map<G4double, std::vector<std::pair<G4double, G4double>*>*>* readACoherentFSDATA(G4String);
 
-      // Inelastic 
-      //         ElementID          temp        aFS for this temp (and this element) 
-      std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >* inelasticFSs;
-      std::map < G4double , std::vector < E_P_E_isoAng* >* >* readAnInelasticFSDATA( G4String );
-      E_P_E_isoAng* readAnE_P_E_isoAng ( std::istream* );
-  
-      G4ParticleHPThermalScatteringData* theXSection;
+    // Incoherent Elastic
+    //         ElementID          temp       aFS for this temp (and this element)
+    std::map<G4int, std::map<G4double, std::vector<E_isoAng*>*>*>* incoherentFSs{nullptr};
+    std::map<G4double, std::vector<E_isoAng*>*>* readAnIncoherentFSDATA(G4String);
+    E_isoAng* readAnE_isoAng(std::istream*);
 
-      G4ParticleHPElastic* theHPElastic;
-      
-      G4double getMu ( E_isoAng* );
-      G4double getMu ( G4double rndm1 , G4double rndm2 , E_isoAng* anEPM );
+    // Inelastic
+    //         ElementID          temp        aFS for this temp (and this element)
+    std::map<G4int, std::map<G4double, std::vector<E_P_E_isoAng*>*>*>* inelasticFSs{nullptr};
+    std::map<G4double, std::vector<E_P_E_isoAng*>*>* readAnInelasticFSDATA(G4String);
+    E_P_E_isoAng* readAnE_P_E_isoAng(std::istream*);
 
-      std::pair< G4double , G4double > find_LH ( G4double , std::vector<G4double>* );
-      G4double get_linear_interpolated ( G4double , std::pair < G4double , G4double > , std::pair < G4double , G4double > );
+    G4ParticleHPThermalScatteringData* theXSection;
 
-      E_isoAng create_E_isoAng_from_energy( G4double , std::vector< E_isoAng* >* );
+    G4ParticleHPElastic* theHPElastic;
 
-      G4double get_secondary_energy_from_E_P_E_isoAng ( G4double random , E_P_E_isoAng* anE_P_E_isoAng );
+    G4double getMu(E_isoAng*);
+    G4double getMu(G4double rndm1, G4double rndm2, E_isoAng* anEPM);
 
-      std::pair< G4double, G4double > sample_inelastic_E_mu( G4double pE , std::vector< E_P_E_isoAng* >* vNEP_EPM ); 
-      std::pair< G4double, G4int > sample_inelastic_E( G4double rndm1 , G4double rndm2 , E_P_E_isoAng* anE_P_E_isoAng );
+    std::pair<G4double, G4double> find_LH(G4double, std::vector<G4double>*);
+    G4double get_linear_interpolated(G4double, std::pair<G4double, G4double>,
+                                     std::pair<G4double, G4double>);
 
-      std::pair< G4double , E_isoAng > create_sE_and_EPM_from_pE_and_vE_P_E_isoAng ( G4double , G4double , std::vector < E_P_E_isoAng* >* );
+    E_isoAng create_E_isoAng_from_energy(G4double, std::vector<E_isoAng*>*);
 
-      std::map < std::pair < const G4Material* , const G4Element* > , G4int > dic;   
-      void buildPhysicsTable();
-      G4int getTS_ID( const G4Material* , const G4Element* );
+    G4double get_secondary_energy_from_E_P_E_isoAng(G4double random, E_P_E_isoAng* anE_P_E_isoAng);
 
-      //size_t sizeOfMaterialTable;
+    std::pair<G4double, G4double> sample_inelastic_E_mu(G4double pE,
+                                                        std::vector<E_P_E_isoAng*>* vNEP_EPM);
+    std::pair<G4double, G4int> sample_inelastic_E(G4double rndm1, G4double rndm2,
+                                                  E_P_E_isoAng* anE_P_E_isoAng);
 
-      G4bool check_E_isoAng( E_isoAng* );
+    std::pair<G4double, E_isoAng>
+    create_sE_and_EPM_from_pE_and_vE_P_E_isoAng(G4double, G4double, std::vector<E_P_E_isoAng*>*);
 
-      //In order to judge whether the rebuilding of physics table is a necessity or not
-      size_t nMaterial;
-      size_t nElement;
+    std::map<std::pair<const G4Material*, const G4Element*>, G4int> dic;
+    void buildPhysicsTable();
+    G4int getTS_ID(const G4Material*, const G4Element*);
 
+    // size_t sizeOfMaterialTable;
+
+    G4bool check_E_isoAng(E_isoAng*);
+
+    // In order to judge whether the rebuilding of physics table is a necessity or not
+    size_t nMaterial;
+    size_t nElement;
 };
 
 #endif

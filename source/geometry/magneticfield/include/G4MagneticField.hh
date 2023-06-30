@@ -39,21 +39,21 @@
 
 class G4MagneticField : public G4Field
 {
-  public:  // with description
+  public:
 
-     G4MagneticField();
-     virtual ~G4MagneticField();
-       // Constructor and destructor. No actions.
+    G4MagneticField();
+   ~G4MagneticField() override;
+      // Constructor and destructor. No actions.
 
-     G4MagneticField(const G4MagneticField& r);
-     G4MagneticField& operator= (const G4MagneticField& p);
-       // Copy constructor & assignment operator.
+    G4MagneticField(const G4MagneticField& r);
+    G4MagneticField& operator= (const G4MagneticField& p);
+      // Copy constructor & assignment operator.
 
-     inline G4bool DoesFieldChangeEnergy() const { return false; }
-       // Since a pure magnetic field does not change track energy
+    inline G4bool DoesFieldChangeEnergy() const override { return false; }
+      // Since a pure magnetic field does not change track energy
 
-     virtual void GetFieldValue( const G4double Point[4],
-                                       G4double* Bfield ) const = 0;
+    void GetFieldValue( const G4double Point[4],
+                              G4double* Bfield ) const override = 0;
 };
 
 #endif

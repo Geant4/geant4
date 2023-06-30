@@ -37,14 +37,20 @@
 //
 // 15.01.2014: creation
 //
+// Based on the study by S. Zein et. al. Nucl. Inst. Meth. B 488 (2021) 70-82
+// 1/2/2023 : Hoang added modification
 
 #include "G4DNACPA100IonisationModel.hh"
+
+#include "G4DNAChemistryManager.hh"
+#include "G4DNAMaterialManager.hh"
+#include "G4DNAMolecularMaterial.hh"
+#include "G4LossTableManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UAtomicDeexcitation.hh"
-#include "G4LossTableManager.hh"
-#include "G4DNAChemistryManager.hh"
-#include "G4DNAMolecularMaterial.hh"
+
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -54,1206 +60,803 @@ using namespace std;
 
 G4DNACPA100IonisationModel::G4DNACPA100IonisationModel(const G4ParticleDefinition*,
                                                        const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+  : G4VDNAModel(nam, "all")
 {
-    verboseLevel= 0;
-    // Verbosity scale:
-    // 0 = nothing
-    // 1 = warning for energy non-conservation
-    // 2 = details of energy budget
-    // 3 = calculation of cross sections, file openings, sampling of atoms
-    // 4 = entering in methods
-
-    if( verboseLevel>0 )
-    {
-        G4cout << "CPA100 ionisation model is constructed " << G4endl;
-    }
-
-    SetLowEnergyLimit(11*eV);
-    SetHighEnergyLimit(255955*eV);
-
-    // Mark this model as "applicable" for atomic deexcitation
-    SetDeexcitationFlag(true);
-    fAtomDeexcitation = 0;
-    fParticleChangeForGamma = 0;
-    fpMolWaterDensity = 0;
-
-    // Selection of computation method
-
-    // useDcs = true if usage of dcs for sampling of secondaries
-    // useDcs = false if usage of composition sampling (DEFAULT)
-
-    useDcs = true;
-
-    // if useDcs is true, one has the following choice
-    // fasterCode = true for usage of cumulated dcs (DEFAULT)
-    // fasterCode = false for usage of non-cumulated dcs
-
-    fasterCode = true;
-
-    // Selection of stationary mode
-
-    statCode = false;
+  fpGuanine = G4Material::GetMaterial("G4_GUANINE", false);
+  fpG4_WATER = G4Material::GetMaterial("G4_WATER", false);
+  fpDeoxyribose = G4Material::GetMaterial("G4_DEOXYRIBOSE", false);
+  fpCytosine = G4Material::GetMaterial("G4_CYTOSINE", false);
+  fpThymine = G4Material::GetMaterial("G4_THYMINE", false);
+  fpAdenine = G4Material::GetMaterial("G4_ADENINE", false);
+  fpPhosphate = G4Material::GetMaterial("G4_PHOSPHORIC_ACID", false);
+  fpParticle = G4Electron::ElectronDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNACPA100IonisationModel::~G4DNACPA100IonisationModel()
+void G4DNACPA100IonisationModel::Initialise(const G4ParticleDefinition* p,
+                                            const G4DataVector& /*cuts*/)
 {
-    // Cross section
+  if (isInitialised) {
+    return;
+  }
+  if (verboseLevel > 3) {
+    G4cout << "Calling G4DNACPA100IonisationModel::Initialise()" << G4endl;
+  }
 
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    for (pos = tableData.begin(); pos != tableData.end(); ++pos)
-    {
-        G4DNACrossSectionDataSet* table = pos->second;
-        delete table;
+  if (!G4DNAMaterialManager::Instance()->IsLocked()) {
+    if (p != fpParticle) {
+      std::ostringstream oss;
+      oss << " Model is not applied for this particle " << p->GetParticleName();
+      G4Exception("G4DNACPA100IonisationModel::G4DNACPA100IonisationModel", "CPA001",
+                  FatalException, oss.str().c_str());
     }
 
-    // Final state
+    char* path = getenv("G4LEDATA");
 
-    eVecm.clear();
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4DNACPA100IonisationModel::Initialise(const G4ParticleDefinition* particle,
-                                          const G4DataVector& /*cuts*/)
-{
-
-    if (verboseLevel > 3)
-        G4cout << "Calling G4DNACPA100IonisationModel::Initialise()" << G4endl;
-
-    // Energy limits
-
-    // The following file is proved by M. Terrissol et al. (sigion3)
-
-    G4String fileElectron("dna/sigma_ionisation_e_cpa100_form_rel");
-
-    G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
-
-    G4String electron;
-
-    G4double scaleFactor = 1.e-20 * m*m;
-
-    const char *path = G4FindDataDir("G4LEDATA");
-
-    // *** ELECTRON
-
-    electron = electronDef->GetParticleName();
-
-    tableFile[electron] = fileElectron;
-
-    // Cross section
-
-    G4DNACrossSectionDataSet* tableE =
-     new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
-
-    //G4DNACrossSectionDataSet* tableE =
-    // new G4DNACrossSectionDataSet(new G4DNACPA100LogLogInterpolation, eV,scaleFactor );
-
-    tableE->LoadData(fileElectron);
-
-    tableData[electron] = tableE;
-
-    // Final state
-
-    // ******************************
-
-    if (useDcs)
-    {
-
-    std::ostringstream eFullFileName;
-
-    if (fasterCode)  eFullFileName << path << "/dna/sigmadiff_cumulated_ionisation_e_cpa100_rel.dat";
-
-    if (!fasterCode) eFullFileName << path << "/dna/sigmadiff_ionisation_e_cpa100_rel.dat";
-
-    std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
-
-    if (!eDiffCrossSection)
-    {
-        if (fasterCode)  G4Exception("G4DNACPA100IonisationModel::Initialise","em0003",
-                         FatalException,"Missing data file:/dna/sigmadiff_cumulated_ionisation_e_cpa100_rel.dat");
-
-        if (!fasterCode) G4Exception("G4DNACPA100IonisationModel::Initialise","em0003",
-                         FatalException,"Missing data file:/dna/sigmadiff_ionisation_e_cpa100_rel.dat");
+    if (!path) {
+      G4Exception("G4DNACPA100IonisationModel::Initialise", "em0006", FatalException,
+                  "G4LEDATA environment variable not set.");
+      return;
     }
 
-    // Clear the arrays for re-initialization case (MT mode)
-    // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
-
-    eTdummyVec.clear();
-    eVecm.clear();
-    eProbaShellMap->clear();
-    eDiffCrossSectionData->clear();
-    eNrjTransfData->clear();
-
-    //
-
-    eTdummyVec.push_back(0.);
-    while(!eDiffCrossSection.eof())
-    {
-        G4double tDummy;
-        G4double eDummy;
-        eDiffCrossSection>>tDummy>>eDummy;
-        if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
-        for (G4int j=0; j<5; j++)
-        {
-            eDiffCrossSection>>eDiffCrossSectionData[j][tDummy][eDummy];
-
-            if (fasterCode)
-            {
-              eNrjTransfData[j][tDummy][eDiffCrossSectionData[j][tDummy][eDummy]]=eDummy;
-              eProbaShellMap[j][tDummy].push_back(eDiffCrossSectionData[j][tDummy][eDummy]);
-            }
-
-            // SI - only if eof is not reached
-            if (!eDiffCrossSection.eof() && !fasterCode)
-              eDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
-
-            if (!fasterCode) eVecm[tDummy].push_back(eDummy);
-
-       }
+    std::size_t index;
+    if (fpG4_WATER != nullptr) {
+      index = fpG4_WATER->GetIndex();
+      G4String eFullFileName = "";
+      fasterCode ? eFullFileName = "/dna/sigmadiff_cumulated_ionisation_e_cpa100_rel"
+                 : eFullFileName = "/dna/sigmadiff_ionisation_e_cpa100_rel";
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_form_rel", eFullFileName,
+                          1.e-20 * m * m);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 255955 * eV);
     }
-
-    //
-
-    } // end of if (useDcs)
-
-    // ******************************
-
-    //
-
-    if( verboseLevel>0 )
-    {
-        G4cout << "CPA100 ionisation model is initialized " << G4endl
-               << "Energy range: "
-               << LowEnergyLimit() / eV << " eV - "
-               << HighEnergyLimit() / keV << " keV for "
-               << particle->GetParticleName()
-               << G4endl;
-    }
-
-    // Initialize water density pointer
-    fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
-
-    // AD
-    fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
-
-    if (isInitialised) return;
-    fParticleChangeForGamma = GetParticleChangeForGamma();
-    isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4DNACPA100IonisationModel::CrossSectionPerVolume( const G4Material* material,
-                                                            const G4ParticleDefinition* particleDefinition,
-                                                            G4double ekin,
-                                                            G4double,
-                                                            G4double)
-{
-
-    if (verboseLevel > 3)
-    G4cout << "Calling CrossSectionPerVolume() of G4DNACPA100IonisationModel" << G4endl;
-
-    if (particleDefinition != G4Electron::ElectronDefinition()) return 0;
-
-    // Calculate total cross section for model
-
-    G4double sigma=0;
-
-    G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
-
-    const G4String& particleName = particleDefinition->GetParticleName();
-
-    if (ekin >= LowEnergyLimit() && ekin <= HighEnergyLimit())
-    {
-      std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-      pos = tableData.find(particleName);
-
-      if (pos != tableData.end())
-      {
-          G4DNACrossSectionDataSet* table = pos->second;
-          if (table != 0) sigma = table->FindValue(ekin);
+    if (fpGuanine != nullptr) {
+      index = fpGuanine->GetIndex();
+      G4String eFullFileName = "";
+      if(useDcs) {
+        fasterCode ? eFullFileName = "/dna/sigmadiff_cumulated_elastic_e_cpa100_guanine"
+                   : eFullFileName = "/dna/sigmadiff_ionisation_e_cpa100_guanine";
       }
-      else
-      {
-          G4Exception("G4DNACPA100IonisationModel::CrossSectionPerVolume","em0002",
-                FatalException,"Model not applicable to particle type.");
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_guanine", eFullFileName,
+                          1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpDeoxyribose != nullptr) {
+      index = fpDeoxyribose->GetIndex();
+      G4String eFullFileName = "";
+      if(useDcs) {
+        eFullFileName = "/dna/sigmadiff_cumulated_ionisation_e_cpa100_deoxyribose";
       }
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_deoxyribose", eFullFileName,
+                          1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpCytosine != nullptr) {
+      index = fpCytosine->GetIndex();
+      G4String eFullFileName = "";
+      if(useDcs) {
+        fasterCode ? eFullFileName = "/dna/sigmadiff_cumulated_ionisation_e_cpa100_cytosine"
+                   : eFullFileName = "/dna/sigmadiff_ionisation_e_cpa100_cytosine";
+      }
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_cytosine", eFullFileName,
+                          1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpThymine != nullptr) {
+      index = fpThymine->GetIndex();
+      G4String eFullFileName = "";
+      if(useDcs) {
+        fasterCode ? eFullFileName = "/dna/sigmadiff_cumulated_ionisation_e_cpa100_thymine"
+                   : eFullFileName = "/dna/sigmadiff_ionisation_e_cpa100_thymine";
+      }
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_thymine", eFullFileName,
+                          1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpAdenine != nullptr) {
+      index = fpAdenine->GetIndex();
+      G4String eFullFileName = "";
+      if(useDcs) {
+        fasterCode ? eFullFileName = "/dna/sigmadiff_cumulated_ionisation_e_cpa100_adenine"
+                   : eFullFileName = "/dna/sigmadiff_ionisation_e_cpa100_adenine";
+      }
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_adenine", eFullFileName,
+                          1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    if (fpPhosphate != nullptr) {
+      index = fpPhosphate->GetIndex();
+      G4String eFullFileName = "";
+      if(useDcs) {
+        eFullFileName = "dna/sigmadiff_cumulated_ionisation_e_cpa100_phosphoric_acid";
+      }
+      AddCrossSectionData(index, p, "dna/sigma_ionisation_e_cpa100_phosphoric_acid",eFullFileName,
+                          1. * cm * cm);
+      SetLowELimit(index, p, 11 * eV);
+      SetHighELimit(index, p, 1 * MeV);
+    }
+    LoadCrossSectionData(p);
+    G4DNAMaterialManager::Instance()->SetMasterDataModel(DNAModelType::fDNAIonisation, this);
+    fpModelData = this;
+  }
+  else {
+    auto dataModel = dynamic_cast<G4DNACPA100IonisationModel*>(
+      G4DNAMaterialManager::Instance()->GetModel(DNAModelType::fDNAIonisation));
+    if (dataModel == nullptr) {
+      G4cout << "G4DNACPA100IonisationModel::CrossSectionPerVolume:: not good modelData" << G4endl;
+      throw;
+    }
+    else {
+      fpModelData = dataModel;
+    }
+  }
+
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
+}
+
+G4double G4DNACPA100IonisationModel::CrossSectionPerVolume(const G4Material* material,
+                                                           const G4ParticleDefinition* p,
+                                                           G4double ekin, G4double, G4double)
+{
+  // initialise the cross section value (output value)
+  G4double sigma(0);
+
+  // Get the current particle name
+  const G4String& particleName = p->GetParticleName();
+
+  if (p != fpParticle) {
+    G4Exception("G4DNACPA100IonisationModel::CrossSectionPerVolume", "em00223", FatalException,
+                "No model is registered for this particle");
+  }
+
+  auto matID = material->GetIndex();
+
+  // Set the low and high energy limits
+  G4double lowLim = fpModelData->GetLowELimit(matID, p);
+  G4double highLim = fpModelData->GetHighELimit(matID, p);
+
+  // Check that we are in the correct energy range
+  if (ekin >= lowLim && ekin < highLim) {
+    // Get the map with all the model data tables
+    auto tableData = fpModelData->GetData();
+
+    if ((*tableData)[matID][p] == nullptr) {
+      G4Exception("G4DNACPA100IonisationModel::CrossSectionPerVolume", "em00236", FatalException,
+                  "No model is registered");
+    }
+    else {
+      sigma = (*tableData)[matID][p]->FindValue(ekin);
     }
 
-    if (verboseLevel > 2)
-    {
+    if (verboseLevel > 2) {
+      auto MolDensity =
+        (*G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(material))[matID];
       G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNACPA100IonisationModel - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "G4DNACPA100IonisationModel - XS INFO END" << G4endl;
+      G4cout << "°°° G4DNACPA100IonisationModel - XS INFO START" << G4endl;
+      G4cout << "°°° Kinetic energy(eV)=" << ekin / eV << " particle : " << particleName << G4endl;
+      G4cout << "°°° lowLim (eV) = " << lowLim / eV << " highLim (eV) : " << highLim / eV << G4endl;
+      G4cout << "°°° Materials = " << (*G4Material::GetMaterialTable())[matID]->GetName() << G4endl;
+      G4cout << "°°° Cross section per " << matID << " index molecule (cm^2)=" << sigma / cm / cm
+             << G4endl;
+      G4cout << "°°° Cross section per Phosphate molecule (cm^-1)="
+             << sigma * MolDensity / (1. / cm) << G4endl;
+      G4cout << "°°° G4DNACPA100IonisationModel - XS INFO END" << G4endl;
     }
+  }
 
-    return sigma*waterDensity;
+  auto MolDensity = (*G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(material))[matID];
+  return sigma * MolDensity;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNACPA100IonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-                                                 const G4MaterialCutsCouple* ,//must be set!
-                                                 const G4DynamicParticle* particle,
-                                                 G4double,
-                                                 G4double)
+void G4DNACPA100IonisationModel::SampleSecondaries(
+  std::vector<G4DynamicParticle*>* fvect,
+  const G4MaterialCutsCouple* couple,  // must be set!
+  const G4DynamicParticle* particle, G4double, G4double)
 {
-    if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling SampleSecondaries() of G4DNACPA100IonisationModel" << G4endl;
+  }
+  auto k = particle->GetKineticEnergy();
 
-    G4double k = particle->GetKineticEnergy();
+  const G4Material* material = couple->GetMaterial();
 
-    const G4String& particleName = particle->GetDefinition()->GetParticleName();
+  auto MatID = material->GetIndex();
 
-    if (k >= LowEnergyLimit() && k <= HighEnergyLimit())
-    {
-        G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
-        G4double particleMass = particle->GetDefinition()->GetPDGMass();
-        G4double totalEnergy = k + particleMass;
-        G4double pSquare = k * (totalEnergy + particleMass);
-        G4double totalMomentum = std::sqrt(pSquare);
+  auto p = particle->GetDefinition();
 
-        G4int ionizationShell = -1;
+  auto lowLim = fpModelData->GetLowELimit(MatID, p);
+  auto highLim = fpModelData->GetHighELimit(MatID, p);
 
-        ionizationShell = RandomSelect(k,particleName);
+  // Check if we are in the correct energy range
+  if (k >= lowLim && k < highLim) {
+    const auto& primaryDirection = particle->GetMomentumDirection();
+    auto particleMass = particle->GetDefinition()->GetPDGMass();
+    auto totalEnergy = k + particleMass;
+    auto pSquare = k * (totalEnergy + particleMass);
+    auto totalMomentum = std::sqrt(pSquare);
+    G4int shell = -1;
+    G4double bindingEnergy, secondaryKinetic;
+    shell = fpModelData->RandomSelectShell(k, p, MatID);
+    bindingEnergy = iStructure.IonisationEnergy(shell, MatID);
 
-        //SI: PROTECTION FOR G4LOGLOGINTERPOLATION ON UPPER VALUE
-        if (k<waterStructure.IonisationEnergy(ionizationShell)) { return; }
-
-        G4double bindingEnergy = 0;
-        bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
-
-        G4double secondaryKinetic=-1000*eV;
-
-        if (useDcs && !fasterCode)
-          secondaryKinetic = RandomizeEjectedElectronEnergy(particle->GetDefinition(),k,ionizationShell);
-
-        if (useDcs && fasterCode)
-          secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(particle->GetDefinition(),k,ionizationShell);
-
-        if (!useDcs)
-          secondaryKinetic = RandomizeEjectedElectronEnergyFromCompositionSampling(particle->GetDefinition(),k,ionizationShell);
-
-        // Quick test
-        /*
-        FILE* myFile;
-        myFile=fopen("nrj.txt","a");
-        fprintf(myFile,"%e\n", secondaryKinetic/eV );
-        fclose(myFile);
-        */
-
-        G4double cosTheta = 0.;
-        G4double phi = 0.;
-        RandomizeEjectedElectronDirection(particle->GetDefinition(), k,secondaryKinetic, cosTheta, phi);
-
-        G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-        G4double dirX = sinTheta*std::cos(phi);
-        G4double dirY = sinTheta*std::sin(phi);
-        G4double dirZ = cosTheta;
-        G4ThreeVector deltaDirection(dirX,dirY,dirZ);
-        deltaDirection.rotateUz(primaryDirection);
-
-        // SI - For atom. deexc. tagging - 23/05/2017
-        if (secondaryKinetic>0)
-        {
-          G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
-          fvect->push_back(dp);
-        }
-        //
-
-        if (particle->GetDefinition() == G4Electron::ElectronDefinition())
-        {
-            G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
-
-            G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
-            G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
-            G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-            G4double finalMomentum = std::sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
-            finalPx /= finalMomentum;
-            finalPy /= finalMomentum;
-            finalPz /= finalMomentum;
-
-            G4ThreeVector direction;
-            direction.set(finalPx,finalPy,finalPz);
-
-            fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
-        }
-
-        else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection) ;
-
-        // SI - For atom. deexc. tagging - 23/05/2017
-
-	// AM: sample deexcitation
-        // here we assume that H_{2}O electronic levels are the same of Oxigen.
-        // this can be considered true with a rough 10% error in energy on K-shell,
-
-        std::size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
-        std::size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
-
-        G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
-
-        // SI: only atomic deexcitation from K shell is considered
-        if(fAtomDeexcitation && ionizationShell == 4)
-        {
-          G4int Z = 8;
-          const G4AtomicShell* shell =
-          fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
-          secNumberInit = fvect->size();
-          fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
-          secNumberFinal = fvect->size();
-
-          if(secNumberFinal > secNumberInit)
-          {
-             for (std::size_t i=secNumberInit; i<secNumberFinal; ++i)
-             {
-                //Check if there is enough residual energy
-                if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
-                {
-                  //Ok, this is a valid secondary: keep it
-        	  bindingEnergy -= ((*fvect)[i])->GetKineticEnergy();
-                }
-                else
-                {
-         	  //Invalid secondary: not enough energy to create it!
-         	  //Keep its energy in the local deposit
-                  delete (*fvect)[i];
-                  (*fvect)[i]=0;
-                }
-	     }
-          }
-
-        }
-
-        //This should never happen
-        if(bindingEnergy < 0.0)
-        G4Exception("G4DNACPA100IonisatioModel1::SampleSecondaries()",
-                    "em2050",FatalException,"Negative local energy deposit");
-
-        //bindingEnergy has been decreased
-        //by the amount of energy taken away by deexc. products
-
-        if (!statCode)
-        {
-          fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
-          fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
-        }
-        else
-        {
-          fParticleChangeForGamma->SetProposedKineticEnergy(k);
-         fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
-        }
-
-        // TEST //////////////////////////
-        // if (secondaryKinetic<0) abort();
-        // if (scatteredEnergy<0) abort();
-        // if (k-scatteredEnergy-secondaryKinetic-deexSecEnergy<0) abort();
-        // if (k-scatteredEnergy<0) abort();
-        /////////////////////////////////
-
-        const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-        G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
-                                                               ionizationShell,
-                                                               theIncomingTrack);
+    if (k < bindingEnergy) {
+      return;
     }
 
+    auto info = std::make_tuple(MatID, k, shell);
+
+    secondaryKinetic = -1000 * eV;
+
+    if (useDcs && !fasterCode) {
+      secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergy(info);
+    }
+    if ( (useDcs && fasterCode) || fpG4_WATER->GetIndex() == MatID) {
+      secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergyFromCumulatedDcs(info);
+    }
+    if (!useDcs && fpG4_WATER->GetIndex() != MatID) {
+      secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergyFromanalytical(info);
+    }
+
+    G4double cosTheta = 0.;
+    G4double phi = 0.;
+    RandomizeEjectedElectronDirection(particle->GetDefinition(), k, secondaryKinetic, cosTheta,
+                                      phi);
+
+    G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
+    G4double dirX = sinTheta * std::cos(phi);
+    G4double dirY = sinTheta * std::sin(phi);
+    G4double dirZ = cosTheta;
+    G4ThreeVector deltaDirection(dirX, dirY, dirZ);
+    deltaDirection.rotateUz(primaryDirection);
+
+    // SI - For atom. deexc. tagging - 23/05/2017
+    if (secondaryKinetic > 0) {
+      auto dp = new G4DynamicParticle(G4Electron::Electron(), deltaDirection, secondaryKinetic);
+      fvect->push_back(dp);
+    }
+
+    if (particle->GetDefinition() != fpParticle) {
+      fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
+    }
+    else {
+      G4double deltaTotalMomentum =
+        std::sqrt(secondaryKinetic * (secondaryKinetic + 2. * electron_mass_c2));
+      G4double finalPx =
+        totalMomentum * primaryDirection.x() - deltaTotalMomentum * deltaDirection.x();
+      G4double finalPy =
+        totalMomentum * primaryDirection.y() - deltaTotalMomentum * deltaDirection.y();
+      G4double finalPz =
+        totalMomentum * primaryDirection.z() - deltaTotalMomentum * deltaDirection.z();
+      G4double finalMomentum = std::sqrt(finalPx * finalPx + finalPy * finalPy + finalPz * finalPz);
+      finalPx /= finalMomentum;
+      finalPy /= finalMomentum;
+      finalPz /= finalMomentum;
+
+      G4ThreeVector direction;
+      direction.set(finalPx, finalPy, finalPz);
+
+      fParticleChangeForGamma->ProposeMomentumDirection(direction.unit());
+    }
+
+    // SI - For atom. deexc. tagging - 23/05/2017
+
+    // AM: sample deexcitation
+    // here we assume that H_{2}O electronic levels are the same of Oxigen.
+    // this can be considered true with a rough 10% error in energy on K-shell,
+
+    G4double scatteredEnergy = k - bindingEnergy - secondaryKinetic;
+
+    // SI: only atomic deexcitation from K shell is considered
+    // Hoang: only for water
+    if (fpG4_WATER != nullptr && material == G4Material::GetMaterial("G4_WATER")) {
+      std::size_t secNumberInit = 0;  // need to know at a certain point the energy of secondaries
+      std::size_t secNumberFinal = 0;  // So I'll make the diference and then sum the energies
+      if (fAtomDeexcitation && shell == 4) {
+        G4int Z = 8;
+        auto Kshell = fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
+        secNumberInit = fvect->size();
+        fAtomDeexcitation->GenerateParticles(fvect, Kshell, Z, 0, 0);
+        secNumberFinal = fvect->size();
+        if (secNumberFinal > secNumberInit) {
+          for (std::size_t i = secNumberInit; i < secNumberFinal; ++i) {
+            // Check if there is enough residual energy
+            if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy()) {
+              // Ok, this is a valid secondary: keep it
+              bindingEnergy -= ((*fvect)[i])->GetKineticEnergy();
+            }
+            else {
+              // Invalid secondary: not enough energy to create it!
+              // Keep its energy in the local deposit
+              delete (*fvect)[i];
+              (*fvect)[i] = nullptr;
+            }
+          }
+        }
+      }
+    }
+
+    // This should never happen
+    if (bindingEnergy < 0.0) {
+      G4Exception("G4DNACPA100IonisatioModel1::SampleSecondaries()", "em2050", FatalException,
+                  "Negative local energy deposit");
+    }
+    if (!statCode) {
+      fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
+    }
+    else {
+      fParticleChangeForGamma->SetProposedKineticEnergy(k);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(k - scatteredEnergy);
+    }
+
+    // only water for chemistry
+    if (fpG4_WATER != nullptr && material == G4Material::GetMaterial("G4_WATER")) {
+      const G4Track* theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+      G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule, shell,
+                                                             theIncomingTrack);
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNACPA100IonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition,
-                                                                  G4double k, G4int shell)
+G4double G4DNACPA100IonisationModel::RandomizeEjectedElectronEnergy(PartKineticInMat info)
 {
-    // G4cout << "*** SLOW computation for " << " " << particleDefinition->GetParticleName() << G4endl;
+  auto MatID = std::get<0>(info);
+  auto k = std::get<1>(info);
+  auto shell = std::get<2>(info);
+  G4double maximumEnergyTransfer = 0.;
+  auto IonLevel = iStructure.IonisationEnergy(shell, MatID);
+  (k + IonLevel) / 2. > k ? maximumEnergyTransfer = k : maximumEnergyTransfer = (k + IonLevel) / 2.;
 
-    if (particleDefinition == G4Electron::ElectronDefinition())
-    {
-        G4double maximumEnergyTransfer=0.;
-        if ((k+waterStructure.IonisationEnergy(shell))/2. > k) maximumEnergyTransfer=k;
-        else maximumEnergyTransfer = (k+waterStructure.IonisationEnergy(shell))/2.;
+  G4double crossSectionMaximum = 0.;
 
-        // SI : original method
-        /*
-         G4double crossSectionMaximum = 0.;
-         for(G4double value=waterStructure.IonisationEnergy(shell); value<=maximumEnergyTransfer; value+=0.1*eV)
-         {
-           G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k/eV, value/eV, shell);
-           if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
-         }
-        */
+  G4double minEnergy = IonLevel;
+  G4double maxEnergy = maximumEnergyTransfer;
 
-        // SI : alternative method
+  // nEnergySteps can be optimized - 100 by default
+  G4int nEnergySteps = 50;
 
-        G4double crossSectionMaximum = 0.;
+  G4double value(minEnergy);
+  G4double stpEnergy(std::pow(maxEnergy / value, 1. / static_cast<G4double>(nEnergySteps - 1)));
+  G4int step(nEnergySteps);
+  G4double differentialCrossSection = 0.;
+  while (step > 0) {
+    step--;
+    differentialCrossSection = DifferentialCrossSection(info, value / eV);
 
-        G4double minEnergy = waterStructure.IonisationEnergy(shell);
-        G4double maxEnergy = maximumEnergyTransfer;
-
-        // nEnergySteps can be optimized - 100 by default
-        G4int nEnergySteps = 50;
-
-        // *** METHOD 1
-        // FOR SLOW COMPUTATION ONLY
-        /*
-        G4double value(minEnergy);
-        G4double stpEnergy(std::pow(maxEnergy/value, 1./static_cast<G4double>(nEnergySteps-1)));
-        G4int step(nEnergySteps);
-        while (step>0)
-        {
-            step--;
-            G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k/eV, value/eV, shell);
-            if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
-            value*=stpEnergy;
-        }
-        */
-
-        // *** METHOD 2 : Faster method for CPA100 only since DCS is monotonously decreasing
-        // FOR SLOW COMPUTATION ONLY
-
-        G4double value(minEnergy);
-        G4double stpEnergy(std::pow(maxEnergy/value, 1./static_cast<G4double>(nEnergySteps-1)));
-        G4int step(nEnergySteps);
-        G4double differentialCrossSection = 0.;
-        while (step>0)
-        {
-            step--;
-            differentialCrossSection = DifferentialCrossSection(particleDefinition, k/eV, value/eV, shell);
-            if(differentialCrossSection >0)
-            {
-              crossSectionMaximum=differentialCrossSection;
-              break;
-            }
-            value*=stpEnergy;
-        }
-
-        //
-
-        G4double secondaryElectronKineticEnergy=0.;
-        do
-        {
-            secondaryElectronKineticEnergy = G4UniformRand() * (maximumEnergyTransfer-waterStructure.IonisationEnergy(shell));
-        } while(G4UniformRand()*crossSectionMaximum >
-                DifferentialCrossSection(particleDefinition, k/eV,
-                 (secondaryElectronKineticEnergy+waterStructure.IonisationEnergy(shell))/eV,shell));
-
-        return secondaryElectronKineticEnergy;
-
+    if (differentialCrossSection > 0) {
+      crossSectionMaximum = differentialCrossSection;
+      break;
     }
+    value *= stpEnergy;
+  }
 
-    return 0;
+  G4double secondaryElectronKineticEnergy = 0.;
+  do {
+    secondaryElectronKineticEnergy = G4UniformRand() * (maximumEnergyTransfer - IonLevel);
+  } while (G4UniformRand() * crossSectionMaximum
+           > DifferentialCrossSection(info, (secondaryElectronKineticEnergy + IonLevel) / eV));
+
+  return secondaryElectronKineticEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4DNACPA100IonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefinition*,
-                                                                 G4double k,
-                                                                 G4double secKinetic,
-                                                                 G4double & cosTheta,
-                                                                 G4double & phi )
+                                                                   G4double k, G4double secKinetic,
+                                                                   G4double& cosTheta,
+                                                                   G4double& phi)
 {
-
-    phi = twopi * G4UniformRand();
-    G4double sin2O = (1.-secKinetic/k) / (1.+secKinetic/(2.*electron_mass_c2));
-    cosTheta = std::sqrt(1.-sin2O);
-
+  phi = twopi * G4UniformRand();
+  G4double sin2O = (1. - secKinetic / k) / (1. + secKinetic / (2. * electron_mass_c2));
+  cosTheta = std::sqrt(1. - sin2O);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNACPA100IonisationModel::DifferentialCrossSection(G4ParticleDefinition * particleDefinition,
-                                                          G4double k,
-                                                          G4double energyTransfer,
-                                                          G4int ionizationLevelIndex)
+G4double G4DNACPA100IonisationModel::DifferentialCrossSection(PartKineticInMat info,
+                                                              const G4double& energyTransfer)
 {
-    G4double sigma = 0.;
+  auto MatID = std::get<0>(info);
+  auto k = std::get<1>(info) / eV;  // in eV unit
+  auto shell = std::get<2>(info);
+  G4double sigma = 0.;
+  G4double shellEnergy = iStructure.IonisationEnergy(shell, MatID);
+  G4double kSE(energyTransfer - shellEnergy);
 
-    if (energyTransfer >= waterStructure.IonisationEnergy(ionizationLevelIndex)/eV)
+  if (energyTransfer >= shellEnergy) {
+    G4double valueT1 = 0;
+    G4double valueT2 = 0;
+    G4double valueE21 = 0;
+    G4double valueE22 = 0;
+    G4double valueE12 = 0;
+    G4double valueE11 = 0;
+
+    G4double xs11 = 0;
+    G4double xs12 = 0;
+    G4double xs21 = 0;
+    G4double xs22 = 0;
+
+    auto t2 = std::upper_bound(fTMapWithVec[MatID][fpParticle].begin(),
+                               fTMapWithVec[MatID][fpParticle].end(), k);
+    auto t1 = t2 - 1;
+
+    if (kSE <= fEMapWithVector[MatID][fpParticle][(*t1)].back()
+        && kSE <= fEMapWithVector[MatID][fpParticle][(*t2)].back())
     {
-        G4double valueT1 = 0;
-        G4double valueT2 = 0;
-        G4double valueE21 = 0;
-        G4double valueE22 = 0;
-        G4double valueE12 = 0;
-        G4double valueE11 = 0;
+      auto e12 = std::upper_bound(fEMapWithVector[MatID][fpParticle][(*t1)].begin(),
+                                  fEMapWithVector[MatID][fpParticle][(*t1)].end(), kSE);
+      auto e11 = e12 - 1;
 
-        G4double xs11 = 0;
-        G4double xs12 = 0;
-        G4double xs21 = 0;
-        G4double xs22 = 0;
+      auto e22 = std::upper_bound(fEMapWithVector[MatID][fpParticle][(*t2)].begin(),
+                                  fEMapWithVector[MatID][fpParticle][(*t2)].end(), kSE);
+      auto e21 = e22 - 1;
 
-        if (particleDefinition == G4Electron::ElectronDefinition())
-        {
-            // Protection against out of boundary access
-            if (k==eTdummyVec.back()) k=k*(1.-1e-12);
-            //
+      valueT1 = *t1;
+      valueT2 = *t2;
+      valueE21 = *e21;
+      valueE22 = *e22;
+      valueE12 = *e12;
+      valueE11 = *e11;
 
-            // k should be in eV and energy transfer eV also
-
-            std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
-
-            std::vector<G4double>::iterator t1 = t2-1;
-
-            // SI : the following condition avoids situations where energyTransfer >last vector element
-
-            if (energyTransfer <= eVecm[(*t1)].back() && energyTransfer <= eVecm[(*t2)].back() )
-            {
-                std::vector<G4double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),eVecm[(*t1)].end(), energyTransfer);
-                std::vector<G4double>::iterator e11 = e12-1;
-
-                std::vector<G4double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),eVecm[(*t2)].end(), energyTransfer);
-                std::vector<G4double>::iterator e21 = e22-1;
-
-                valueT1  =*t1;
-                valueT2  =*t2;
-                valueE21 =*e21;
-                valueE22 =*e22;
-                valueE12 =*e12;
-                valueE11 =*e11;
-
-                xs11 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE11];
-                xs12 = eDiffCrossSectionData[ionizationLevelIndex][valueT1][valueE12];
-                xs21 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE21];
-                xs22 = eDiffCrossSectionData[ionizationLevelIndex][valueT2][valueE22];
-
-            }
-
-        }
-
-        G4double xsProduct = xs11 * xs12 * xs21 * xs22;
-        if (xsProduct != 0.)
-        {
-            sigma = QuadInterpolator(     valueE11, valueE12,
-                                          valueE21, valueE22,
-                                          xs11, xs12,
-                                          xs21, xs22,
-                                          valueT1, valueT2,
-                                          k, energyTransfer);
-        }
-
+      xs11 = diffCrossSectionData[MatID][fpParticle][shell][valueT1][valueE11];
+      xs12 = diffCrossSectionData[MatID][fpParticle][shell][valueT1][valueE12];
+      xs21 = diffCrossSectionData[MatID][fpParticle][shell][valueT2][valueE21];
+      xs22 = diffCrossSectionData[MatID][fpParticle][shell][valueT2][valueE22];
     }
-    return sigma;
+
+    G4double xsProduct = xs11 * xs12 * xs21 * xs22;
+
+    if (xsProduct != 0.) {
+      sigma = QuadInterpolator(valueE11, valueE12, valueE21, valueE22, xs11, xs12, xs21, xs22,
+                               valueT1, valueT2, k, kSE);
+    }
+  }
+
+  return sigma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNACPA100IonisationModel::Interpolate(      G4double e1,
-                                                     G4double e2,
-                                                     G4double e,
-                                                     G4double xs1,
-                                                     G4double xs2)
+G4double G4DNACPA100IonisationModel::Interpolate(G4double e1, G4double e2, G4double e, G4double xs1,
+                                                 G4double xs2)
 {
-
-    G4double value = 0.;
-
-    // Log-log interpolation by default
-
-    if (e1!=0 && e2!=0  && (std::log10(e2)-std::log10(e1)) !=0 && !fasterCode && useDcs)
-    {
-      G4double a = (std::log10(xs2)-std::log10(xs1)) / (std::log10(e2)-std::log10(e1));
-      G4double b = std::log10(xs2) - a*std::log10(e2);
-      G4double sigma = a*std::log10(e) + b;
-      value = (std::pow(10.,sigma));
-    }
-
-    // Switch to lin-lin interpolation
-    /*
-    if ((e2-e1)!=0)
-    {
-      G4double d1 = xs1;
-      G4double d2 = xs2;
-      value = (d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
-    }
-    */
-
-    // Switch to log-lin interpolation for faster code
-
-    if ((e2-e1)!=0 && xs1 !=0 && xs2 !=0 && fasterCode && useDcs )
-    {
-      G4double d1 = std::log10(xs1);
-      G4double d2 = std::log10(xs2);
-      value = std::pow(10.,(d1 + (d2 - d1)*(e - e1)/ (e2 - e1)) );
-    }
-
-    // Switch to lin-lin interpolation for faster code
-    // in case one of xs1 or xs2 (=cum proba) value is zero
-
-    if ((e2-e1)!=0 && (xs1 ==0 || xs2 ==0) && fasterCode && useDcs )
-    {
-      G4double d1 = xs1;
-      G4double d2 = xs2;
-      value = (d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
-    }
-
-    /*
-    G4cout
-    << e1 << " "
-    << e2 << " "
-    << e  << " "
-    << xs1 << " "
-    << xs2 << " "
-    << value
-    << G4endl;
-    */
-
-    return value;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNACPA100IonisationModel::QuadInterpolator(G4double e11, G4double e12,
-                                                    G4double e21, G4double e22,
-                                                    G4double xs11, G4double xs12,
-                                                    G4double xs21, G4double xs22,
-                                                    G4double t1, G4double t2,
-                                                    G4double t, G4double e)
-{
-    G4double interpolatedvalue1 = Interpolate(e11, e12, e, xs11, xs12);
-    G4double interpolatedvalue2 = Interpolate(e21, e22, e, xs21, xs22);
-    G4double value = Interpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-
-    return value;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int G4DNACPA100IonisationModel::RandomSelect(G4double k, const G4String& particle )
-{
-    G4int level = 0;
-
-    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-    pos = tableData.find(particle);
-
-    if (pos != tableData.end())
-    {
-        G4DNACrossSectionDataSet* table = pos->second;
-
-        if (table != 0)
-        {
-            G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const G4int n = (G4int)table->NumberOfComponents();
-            G4int i(n);
-            G4double value = 0.;
-
- //Verification
- /*
- G4double tmp=200*keV;
- G4cout <<  table->GetComponent(0)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(1)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(2)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(3)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<  table->GetComponent(4)->FindValue(tmp)/(1e-20*m*m) << G4endl;
- G4cout <<
- table->GetComponent(0)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(1)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(2)->FindValue(tmp)/(1e-20*m*m) +
- table->GetComponent(3)->FindValue(tmp)/(1e-20*m*m)
- << G4endl;
- abort();
- */
- //
- //Dump
- //
- /*
- G4double minEnergy = 10.985  * eV;
- G4double maxEnergy = 255955. * eV;
- G4int nEnergySteps = 1000;
- G4double energy(minEnergy);
- G4double stpEnergy(std::pow(maxEnergy/energy, 1./static_cast<G4double>(nEnergySteps-1)));
- G4int step(nEnergySteps);
- system ("rm -rf ionisation-cpa100.out");
- FILE* myFile=fopen("ionisation-cpa100.out","a");
- while (step>0)
- {
-   step--;
-   fprintf (myFile,"%16.9le %16.9le %16.9le %16.9le %16.9le %16.9le %16.9le \n",
-   energy/eV,
-   table->GetComponent(0)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(1)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(2)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(3)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(4)->FindValue(energy)/(1e-20*m*m),
-   table->GetComponent(0)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(1)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(2)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(3)->FindValue(energy)/(1e-20*m*m)+
-   table->GetComponent(4)->FindValue(energy)/(1e-20*m*m)
- );
- energy*=stpEnergy;
- }
- fclose (myFile);
- abort();
- */
- //
- // end of dump
- //
- // Test of diff XS
- // G4double nrj1 = .26827E+04; // in eV
- // G4double nrj2 =  .57991E+03; // in eV
- // Shells run from 0 to 4
- // G4cout << DifferentialCrossSection(G4Electron::ElectronDefinition(), nrj1, nrj2, 0)/(1e-20*m*m) << G4endl;
- // G4cout << DifferentialCrossSection(G4Electron::ElectronDefinition(), nrj1, nrj2, 1)/(1e-20*m*m) << G4endl;
- // G4cout << DifferentialCrossSection(G4Electron::ElectronDefinition(), nrj1, nrj2, 2)/(1e-20*m*m) << G4endl;
- // G4cout << DifferentialCrossSection(G4Electron::ElectronDefinition(), nrj1, nrj2, 3)/(1e-20*m*m) << G4endl;
- // G4cout << DifferentialCrossSection(G4Electron::ElectronDefinition(), nrj1, nrj2, 4)/(1e-20*m*m) << G4endl;
- // abort();
- //
-
-            while (i>0)
-            {
-                i--;
-                valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-                value += valuesBuffer[i];
-            }
-
-            value *= G4UniformRand();
-
-            i = n;
-
-            while (i > 0)
-            {
-                i--;
-                if (valuesBuffer[i] > value)
-                {
-                    delete[] valuesBuffer;
-
-                    return i;
-                }
-                value -= valuesBuffer[i];
-            }
-
-            if (valuesBuffer) delete[] valuesBuffer;
-
-        }
-    }
-    else
-    {
-        G4Exception("G4DNACPA100IonisationModel::RandomSelect","em0002",
-                    FatalException,"Model not applicable to particle type.");
-    }
-
-    return level;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNACPA100IonisationModel::RandomizeEjectedElectronEnergyFromCumulatedDcs
-(G4ParticleDefinition* particleDefinition, G4double k, G4int shell)
-{
-   //G4cout << "*** FAST computation for " << " " << particleDefinition->GetParticleName() << G4endl;
-
-   G4double secondaryElectronKineticEnergy = 0.;
-
-   secondaryElectronKineticEnergy=
-   RandomTransferedEnergy(particleDefinition, k/eV, shell)*eV-waterStructure.IonisationEnergy(shell);
-
-   //G4cout << RandomTransferedEnergy(particleDefinition, k/eV, shell) << G4endl;
-   if (secondaryElectronKineticEnergy<0.) return 0.;
-   //
-
-   return secondaryElectronKineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNACPA100IonisationModel::RandomTransferedEnergy
-(G4ParticleDefinition* particleDefinition,G4double k, G4int ionizationLevelIndex)
-{
-
-    G4double random = G4UniformRand();
-
-    G4double nrj = 0.;
-
-    G4double valueK1 = 0;
-    G4double valueK2 = 0;
-    G4double valuePROB21 = 0;
-    G4double valuePROB22 = 0;
-    G4double valuePROB12 = 0;
-    G4double valuePROB11 = 0;
-
-    G4double nrjTransf11 = 0;
-    G4double nrjTransf12 = 0;
-    G4double nrjTransf21 = 0;
-    G4double nrjTransf22 = 0;
-
-    if (particleDefinition == G4Electron::ElectronDefinition())
-    {
-
-      // Protection against out of boundary access
-      if (k==eTdummyVec.back()) k=k*(1.-1e-12);
-      //
-
-      // k should be in eV
-
-      std::vector<G4double>::iterator k2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
-
-      std::vector<G4double>::iterator k1 = k2-1;
-
-      /*
-      G4cout << "----> k=" << k
-      << " " << *k1
-      << " " << *k2
-      << " " << random
-      << " " << ionizationLevelIndex
-      << " " << eProbaShellMap[ionizationLevelIndex][(*k1)].back()
-      << " " << eProbaShellMap[ionizationLevelIndex][(*k2)].back()
-      << G4endl;
-      */
-
-      // SI : the following condition avoids situations where random >last vector element
-
-      if (    random <= eProbaShellMap[ionizationLevelIndex][(*k1)].back()
-           && random <= eProbaShellMap[ionizationLevelIndex][(*k2)].back() )
-
-      {
-
-        std::vector<G4double>::iterator prob12 =
-          std::upper_bound(eProbaShellMap[ionizationLevelIndex][(*k1)].begin(),
-                     eProbaShellMap[ionizationLevelIndex][(*k1)].end(), random);
-
-        std::vector<G4double>::iterator prob11 = prob12-1;
-
-
-        std::vector<G4double>::iterator prob22 =
-          std::upper_bound(eProbaShellMap[ionizationLevelIndex][(*k2)].begin(),
-                     eProbaShellMap[ionizationLevelIndex][(*k2)].end(), random);
-
-        std::vector<G4double>::iterator prob21 = prob22-1;
-
-        valueK1  =*k1;
-        valueK2  =*k2;
-        valuePROB21 =*prob21;
-        valuePROB22 =*prob22;
-        valuePROB12 =*prob12;
-        valuePROB11 =*prob11;
-
-
-        /*
-        G4cout << "        " << random << " " << valuePROB11 << " "
-               << valuePROB12 << " " << valuePROB21 << " " << valuePROB22 << G4endl;
-        */
-
-        nrjTransf11 = eNrjTransfData[ionizationLevelIndex][valueK1][valuePROB11];
-        nrjTransf12 = eNrjTransfData[ionizationLevelIndex][valueK1][valuePROB12];
-        nrjTransf21 = eNrjTransfData[ionizationLevelIndex][valueK2][valuePROB21];
-        nrjTransf22 = eNrjTransfData[ionizationLevelIndex][valueK2][valuePROB22];
-
-        /*
-        G4cout << "        " << ionizationLevelIndex << " "
-               << random << " " <<valueK1 << " " << valueK2 << G4endl;
-
-        G4cout << "        " << random << " " << nrjTransf11 << " "
-               << nrjTransf12 << " " << nrjTransf21 << " " <<nrjTransf22 << G4endl;
-        */
-
-        // Avoids cases where cum xs is 1 in last bin only and zero everywhere else
-        
-        if (valuePROB11==0. && valuePROB12==1.)
-        {
-          G4double interpolatedvalue2 = Interpolate(valuePROB21, valuePROB22, random, nrjTransf21, nrjTransf22);
-          G4double valueNrjTransf = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
-          return valueNrjTransf;
-        }
-
-      }
-
-      // Avoids cases where cum xs is zero for k1 and is not for k2 (with always k1<k2)
-
-      if ( random > eProbaShellMap[ionizationLevelIndex][(*k1)].back() )
-      {
-
-         std::vector<G4double>::iterator prob22 =
-
-         std::upper_bound(eProbaShellMap[ionizationLevelIndex][(*k2)].begin(),
-           eProbaShellMap[ionizationLevelIndex][(*k2)].end(), random);
-
-         std::vector<G4double>::iterator prob21 = prob22-1;
-
-         valueK1  =*k1;
-         valueK2  =*k2;
-         valuePROB21 =*prob21;
-         valuePROB22 =*prob22;
-
-         //G4cout << "        " << random << " " << valuePROB21 << " " << valuePROB22 << G4endl;
-
-         nrjTransf21 = eNrjTransfData[ionizationLevelIndex][valueK2][valuePROB21];
-         nrjTransf22 = eNrjTransfData[ionizationLevelIndex][valueK2][valuePROB22];
-
-         G4double interpolatedvalue2 = Interpolate(valuePROB21, valuePROB22, random, nrjTransf21, nrjTransf22);
-
-         // zero is explicitly set
-
-         G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
-
-         /*
-         G4cout << "        " << ionizationLevelIndex << " "
-                << random << " " <<valueK1 << " " << valueK2 << G4endl;
-
-         G4cout << "        " << random << " " << nrjTransf11 << " "
-                << nrjTransf12 << " " << nrjTransf21 << " " <<nrjTransf22 << G4endl;
-
-         G4cout << "ici" << " " << value << G4endl;
-         */
-
-         return value;
-      }
-
-    }
-
-    // End electron case
-
-    G4double nrjTransfProduct = nrjTransf11 * nrjTransf12 * nrjTransf21 * nrjTransf22;
-
-    //G4cout << "nrjTransfProduct=" << nrjTransfProduct << G4endl;
-
-    if (nrjTransfProduct != 0.)
-    {
-      nrj = QuadInterpolator( valuePROB11, valuePROB12,
-                              valuePROB21, valuePROB22,
-                              nrjTransf11, nrjTransf12,
-                              nrjTransf21, nrjTransf22,
-                              valueK1, valueK2,
-                              k, random);
-    }
-
-    //G4cout << nrj << endl;
-
-    return nrj ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4DNACPA100IonisationModel::RandomizeEjectedElectronEnergyFromCompositionSampling
-(G4ParticleDefinition*, G4double tt, G4int shell)
-{
- //G4cout << "*** Rejection method for " << " " << particleDefinition->GetParticleName() << G4endl;
-
- // ***** METHOD 1 ***** (sequential)
- /*
-
- // ww is KINETIC ENERGY OF SECONDARY ELECTRON
- G4double un=1.;
- G4double deux=2.;
-
- G4double bb = waterStructure.IonisationEnergy(shell);
- G4double uu = waterStructure.UEnergy(shell);
-
- if (tt<=bb) return 0.;
-
- G4double t = tt/bb;
- G4double u = uu/bb;
- G4double tp1 = t + un;
- G4double tu1 = t + u + un;
- G4double tm1 = t - un;
- G4double tp12 = tp1 * tp1;
- G4double dlt = std::log(t);
-
- G4double a1 = t * tm1 / tu1 / tp12;
- G4double a2 = tm1 / tu1 / t / tp1 / deux;
- G4double a3 = dlt * (tp12 - deux * deux ) / tu1 / tp12;
- G4double ato = a1 + a2 + a3;
-
- // 15
-
- G4double r1 =G4UniformRand();
- G4double r2 =G4UniformRand();
- G4double r3 =G4UniformRand();
-
- while (r1<=a1/ato)
- {
-         G4double fx1=r2*tm1/tp1;
-         G4double wx1=un/(un-fx1)-un;
-         G4double gx1=(t-wx1)/t;
-         if(r3 <= gx1) return wx1*bb;
-
-         r1 =G4UniformRand();
-         r2 =G4UniformRand();
-         r3 =G4UniformRand();
-
- }
-
- // 20
-
- while (r1<=(a1+a2)/ato)
- {
-         G4double fx2=tp1+r2*tm1;
-         G4double wx2=t-t*tp1/fx2;
-         G4double gx2=deux*(un-(t-wx2)/tp1);
-         if(r3 <= gx2) return wx2*bb;
-
-          // REPEAT 15
-          r1 =G4UniformRand();
-          r2 =G4UniformRand();
-          r3 =G4UniformRand();
-
-   while (r1<=a1/ato)
-   {
-           G4double fx1=r2*tm1/tp1;
-           G4double wx1=un/(un-fx1)-un;
-           G4double gx1=(t-wx1)/t;
-           if(r3 <= gx1) return wx1*bb;
-           r1 =G4UniformRand();
-           r2 =G4UniformRand();
-           r3 =G4UniformRand();
-   }
-   // END 15
-
- }
-
- // 30
-
- G4double wx3=std::sqrt(un/(un-r2*(tp12-deux*deux)/tp12))-un;
- G4double gg3=(wx3+un)/(t-wx3);
- G4double gx3=(un+gg3*gg3*gg3)/deux;
-
- while (r3>gx3)
- {
-
-  // 15
-
-  r1 =G4UniformRand();
-  r2 =G4UniformRand();
-  r3 =G4UniformRand();
-
-  while (r1<=a1/ato)
+  G4double value = 0.;
+
+  // Log-log interpolation by default
+
+  if (e1 != 0 && e2 != 0 && (std::log10(e2) - std::log10(e1)) != 0 && !fasterCode) {
+    G4double a = (std::log10(xs2) - std::log10(xs1)) / (std::log10(e2) - std::log10(e1));
+    G4double b = std::log10(xs2) - a * std::log10(e2);
+    G4double sigma = a * std::log10(e) + b;
+    value = (std::pow(10., sigma));
+  }
+
+  // Switch to lin-lin interpolation
+  /*
+  if ((e2-e1)!=0)
   {
-          G4double fx1=r2*tm1/tp1;
-          G4double wx1=un/(un-fx1)-un;
-          G4double gx1=(t-wx1)/t;
-          if(r3 <= gx1) return wx1*bb;
+    G4double d1 = xs1;
+    G4double d2 = xs2;
+    value = (d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
+  }
+  */
 
-          r1 =G4UniformRand();
-          r2 =G4UniformRand();
-          r3 =G4UniformRand();
+  // Switch to log-lin interpolation for faster code
 
+  if ((e2 - e1) != 0 && xs1 != 0 && xs2 != 0 && fasterCode) {
+    G4double d1 = std::log10(xs1);
+    G4double d2 = std::log10(xs2);
+    value = std::pow(10., (d1 + (d2 - d1) * (e - e1) / (e2 - e1)));
   }
 
-         // 20
+  // Switch to lin-lin interpolation for faster code
+  // in case one of xs1 or xs2 (=cum proba) value is zero
 
-  while (r1<=(a1+a2)/ato)
+  if ((e2 - e1) != 0 && (xs1 == 0 || xs2 == 0) && fasterCode) {
+    G4double d1 = xs1;
+    G4double d2 = xs2;
+    value = (d1 + (d2 - d1) * (e - e1) / (e2 - e1));
+  }
+  return value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4DNACPA100IonisationModel::QuadInterpolator(G4double e11, G4double e12, G4double e21,
+                                                      G4double e22, G4double xs11, G4double xs12,
+                                                      G4double xs21, G4double xs22, G4double t1,
+                                                      G4double t2, G4double t, G4double e)
+{
+  G4double interpolatedvalue1 = Interpolate(e11, e12, e, xs11, xs12);
+  G4double interpolatedvalue2 = Interpolate(e21, e22, e, xs21, xs22);
+  G4double value = Interpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+
+  return value;
+}
+
+G4double
+G4DNACPA100IonisationModel::RandomizeEjectedElectronEnergyFromCumulatedDcs(PartKineticInMat info)
+{
+  auto MatID = std::get<0>(info);
+  auto shell = std::get<2>(info);
+  G4double secondaryElectronKineticEnergy =
+    RandomTransferedEnergy(info) * eV - iStructure.IonisationEnergy(shell, MatID);
+  if (secondaryElectronKineticEnergy < 0.) {
+    return 0.;
+  }
+  return secondaryElectronKineticEnergy;
+}
+
+G4double G4DNACPA100IonisationModel::RandomTransferedEnergy(PartKineticInMat info)
+{
+  auto materialID = std::get<0>(info);
+  auto k = std::get<1>(info) / eV;  // data table in eV
+  auto shell = std::get<2>(info);
+  G4double ejectedElectronEnergy = 0.;
+  G4double valueK1 = 0;
+  G4double valueK2 = 0;
+  G4double valueCumulCS21 = 0;
+  G4double valueCumulCS22 = 0;
+  G4double valueCumulCS12 = 0;
+  G4double valueCumulCS11 = 0;
+  G4double secElecE11 = 0;
+  G4double secElecE12 = 0;
+  G4double secElecE21 = 0;
+  G4double secElecE22 = 0;
+
+  if (k == fTMapWithVec[materialID][fpParticle].back()) {
+    k = k * (1. - 1e-12);
+  }
+
+  G4double random = G4UniformRand();
+  auto k2 = std::upper_bound(fTMapWithVec[materialID][fpParticle].begin(),
+                             fTMapWithVec[materialID][fpParticle].end(), k);
+  auto k1 = k2 - 1;
+
+  if (random <= fProbaShellMap[materialID][fpParticle][shell][(*k1)].back()
+      && random <= fProbaShellMap[materialID][fpParticle][shell][(*k2)].back())
   {
-          G4double fx2=tp1+r2*tm1;
-          G4double wx2=t-t*tp1/fx2;
-          G4double gx2=deux*(un-(t-wx2)/tp1);
-          if(r3 <= gx2)return wx2*bb;
+    auto cumulCS12 =
+      std::upper_bound(fProbaShellMap[materialID][fpParticle][shell][(*k1)].begin(),
+                       fProbaShellMap[materialID][fpParticle][shell][(*k1)].end(), random);
+    auto cumulCS11 = cumulCS12 - 1;
+    // Second one.
+    auto cumulCS22 =
+      std::upper_bound(fProbaShellMap[materialID][fpParticle][shell][(*k2)].begin(),
+                       fProbaShellMap[materialID][fpParticle][shell][(*k2)].end(), random);
+    auto cumulCS21 = cumulCS22 - 1;
 
-          // REPEAT 15
-          r1 =G4UniformRand();
-          r2 =G4UniformRand();
-          r3 =G4UniformRand();
+    valueK1 = *k1;
+    valueK2 = *k2;
+    valueCumulCS11 = *cumulCS11;
+    valueCumulCS12 = *cumulCS12;
+    valueCumulCS21 = *cumulCS21;
+    valueCumulCS22 = *cumulCS22;
 
-   while (r1<=a1/ato)
-   {
-           G4double fx1=r2*tm1/tp1;
-           G4double wx1=un/(un-fx1)-un;
-           G4double gx1=(t-wx1)/t;
-           if(r3 <= gx1) return wx1*bb;
+    secElecE11 = fEnergySecondaryData[materialID][fpParticle][shell][valueK1][valueCumulCS11];
+    secElecE12 = fEnergySecondaryData[materialID][fpParticle][shell][valueK1][valueCumulCS12];
+    secElecE21 = fEnergySecondaryData[materialID][fpParticle][shell][valueK2][valueCumulCS21];
+    secElecE22 = fEnergySecondaryData[materialID][fpParticle][shell][valueK2][valueCumulCS22];
 
-           r1 =G4UniformRand();
-           r2 =G4UniformRand();
-           r3 =G4UniformRand();
-   }
-   //
-
+    if (valueCumulCS11 == 0. && valueCumulCS12 == 1.) {
+      auto interpolatedvalue2 =
+        Interpolate(valueCumulCS21, valueCumulCS22, random, secElecE21, secElecE22);
+      G4double valueNrjTransf = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
+      return valueNrjTransf;
+    }
   }
 
-  wx3=std::sqrt(un/(un-r2*(tp12-deux*deux)/tp12))-un;
-  gg3=(wx3+un)/(t-wx3);
-  gx3=(un+gg3*gg3*gg3)/deux;
+  if (random > fProbaShellMap[materialID][fpParticle][shell][(*k1)].back()) {
+    auto cumulCS22 =
+      std::upper_bound(fProbaShellMap[materialID][fpParticle][shell][(*k2)].begin(),
+                       fProbaShellMap[materialID][fpParticle][shell][(*k2)].end(), random);
+    auto cumulCS21 = cumulCS22 - 1;
+    valueK1 = *k1;
+    valueK2 = *k2;
+    valueCumulCS21 = *cumulCS21;
+    valueCumulCS22 = *cumulCS22;
 
+    secElecE21 = fEnergySecondaryData[materialID][fpParticle][shell][valueK2][valueCumulCS21];
+    secElecE22 = fEnergySecondaryData[materialID][fpParticle][shell][valueK2][valueCumulCS22];
+
+    G4double interpolatedvalue2 =
+      Interpolate(valueCumulCS21, valueCumulCS22, random, secElecE21, secElecE22);
+
+    G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
+    return value;
   }
+  G4double nrjTransfProduct = secElecE11 * secElecE12 * secElecE21 * secElecE22;
+
+  if (nrjTransfProduct != 0.) {
+    ejectedElectronEnergy =
+      QuadInterpolator(valueCumulCS11, valueCumulCS12, valueCumulCS21, valueCumulCS22, secElecE11,
+                       secElecE12, secElecE21, secElecE22, valueK1, valueK2, k, random);
+  }
+  return ejectedElectronEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double
+G4DNACPA100IonisationModel::RandomizeEjectedElectronEnergyFromanalytical(PartKineticInMat info)
+{
+  auto MatID = std::get<0>(info);
+  auto tt = std::get<1>(info);
+  auto shell = std::get<2>(info);
+  // ***** METHOD by M. C. Bordage ***** (optimized)
+  //  Composition sampling method based on eq 7 in (Guerra et al. 2015) the RBEBV
+
+  //// Defining constants
+  G4double alfa = 1. / 137;  // fine structure constant
+  G4double e_charge = 1.6e-19;  // electron charge
+  G4double e_mass = 9.1e-31;  // electron mass in kg
+  G4double c = 3e8;  // speed of light in vacuum constant c (m/s)
+  G4double mc2 = e_mass * c * c / e_charge;  //
+
+  G4double BB = iStructure.IonisationEnergy(shell, MatID);  // binding energy of the shell (eV)
+
+  if (tt <= BB) return 0.;
+
+  G4double b_prime = BB / mc2;  // binding energy divided by mc2
+  G4double beta_b2 = 1. - 1. / ((1 + b_prime) * (1 + b_prime));  // binding energy Beta
+
+  //// Indicent energy
+  //// tt is the incident electron energy
+
+  G4double t_prime = tt / mc2;  // incident energy divided by mc2
+  G4double t = tt / BB;  // reduced incident energy by binding energy
+
+  G4double D = (1 + 2 * t_prime) / ((1 + t_prime / 2) * (1 + t_prime / 2));
+  G4double F = b_prime * b_prime / ((1 + t_prime / 2) * (1 + t_prime / 2));
+
+  G4double beta_t2 = 1 - 1 / ((1 + t_prime) * (1 + t_prime));  // incident energy Beta
+
+  G4double PHI_R = std::cos(std::sqrt(alfa * alfa / (beta_t2 + beta_b2))
+                            * std::log(beta_t2 / beta_b2));  // relativistic Vriens function phi
+  G4double G_R = std::log(beta_t2 / (1 - beta_t2)) - beta_t2 - std::log(2 * b_prime);
+
+  G4double tplus1 = t + 1;
+  G4double tminus1 = t - 1;
+  G4double tplus12 = tplus1 * tplus1;
+  G4double ZH1max = 1 + F - (PHI_R * D * (2 * t + 1) / (2 * t * tplus1));
+  G4double ZH2max = 1 - PHI_R * D / 4;
+
+  G4double A1_p = ZH1max * tminus1 / tplus1;  // A1'
+  G4double A2_p = ZH2max * tminus1 / (t * tplus1);  // A2'
+  G4double A3_p = ((tplus12 - 4) / tplus12) * G_R;  // A3'
+
+  G4double AAA = A1_p + A2_p + A3_p;
+
+  G4double AA1_R = A1_p / AAA;
+  G4double AA2_R = (A1_p + A2_p) / AAA;
+
+  G4int FF = 0;
+  G4double fx = 0;
+  G4double gx = 0;
+  G4double gg = 0;
+  G4double wx = 0;
+
+  G4double r1 = 0;
+  G4double r2 = 0;
+  G4double r3 = 0;
 
   //
 
-  return wx3*bb;
-  */
+  do {
+    r1 = G4UniformRand();
+    r2 = G4UniformRand();
+    r3 = G4UniformRand();
 
- // ***** METHOD by M. C. Bordage ***** (optimized)
+    if (r1 > AA2_R)
+      FF = 3;
+    else if ((r1 > AA1_R) && (r1 < AA2_R))
+      FF = 2;
+    else
+      FF = 1;
 
-    G4double un=1.;
-    G4double deux=2.;
-
-    G4double bb = waterStructure.IonisationEnergy(shell);
-    G4double uu = waterStructure.UEnergy(shell);
-
-    if (tt<=bb) return 0.;
-
-    G4double t = tt/bb;
-    G4double u = uu/bb;
-    G4double tp1 = t + un;
-    G4double tu1 = t + u + un;
-    G4double tm1 = t - un;
-    G4double tp12 = tp1 * tp1;
-    G4double dlt = std::log(t);
-
-    G4double a1 = t * tm1 / tu1 / tp12;
-    G4double a2 = tm1 / tu1 / t / tp1 / deux;
-    G4double a3 = dlt * (tp12 - deux * deux ) / tu1 / tp12;
-    G4double ato = a1 + a2 + a3;
-
-    G4double A1 = a1/ato;
-    G4double A2 = (a1+a2)/ato;
-    G4int F = 0;
-    G4double fx=0;
-    G4double gx=0;
-    G4double gg=0;
-    G4double wx=0;
-
-    G4double r1=0;
-    G4double r2=0;
-    G4double r3=0;
-
-    //
-
-    do
-    {
-      r1 =G4UniformRand();
-      r2 =G4UniformRand();
-      r3 =G4UniformRand();
-
-      if (r1>A2)
-       F=3;
-      else if ((r1>A1) && (r1< A2))
-       F=2;
-      else
-       F=1;
-
-      switch (F)
-      {
-       case 1:
-       {
-        fx=r2*tm1/tp1;
-        wx=un/(un-fx)-un;
-        gx=(t-wx)/t;
+    switch (FF) {
+      case 1: {
+        fx = r2 * tminus1 / tplus1;
+        wx = 1 / (1 - fx) - 1;
+        gg = PHI_R * D * (wx + 1) / tplus1;
+        gx = 1 - gg;
+        gx = gx - gg * (wx + 1) / (2 * (t - wx));
+        gx = gx + F * (wx + 1) * (wx + 1);
+        gx = gx / ZH1max;
         break;
-       }
+      }
 
-       case 2:
-       {
-        fx=tp1+r2*tm1;
-        wx=t-t*tp1/fx;
-        gx=deux*(un-(t-wx)/tp1);
+      case 2: {
+        fx = tplus1 + r2 * tminus1;
+        wx = t * tminus1 * r2 / fx;
+        gx = 1 - (PHI_R * D * (t - wx) / (2 * tplus1));
+        gx = gx / ZH2max;
         break;
-       }
+      }
 
-       case 3:
-       {
-        fx=un-r2*(tp12-deux*deux)/tp12;
-        wx=sqrt(un/fx)-un;
-        gg=(wx+un)/(t-wx);
-        gx=(un+gg*gg*gg)/deux;
+      case 3: {
+        fx = 1 - r2 * (tplus12 - 4) / tplus12;
+        wx = std::sqrt(1 / fx) - 1;
+        gg = (wx + 1) / (t - wx);
+        gx = (1 + gg * gg * gg) / 2;
         break;
-       }
-      } // switch
+      }
+    }  // switch
 
-     } while (r3>gx);
+  } while (r3 > gx);
 
-     return wx*bb;
+  return wx * BB;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4DNACPA100IonisationModel::ReadDiffCSFile(const std::size_t& materialID,
+                                                const G4ParticleDefinition* p, const G4String& file,
+                                                const G4double& scaleFactor)
+{
+  const char* path = G4FindDataDir("G4LEDATA");
+  if (!path) {
+    G4Exception("G4DNACPA100IonisationModel::ReadAllDiffCSFiles", "em0006", FatalException,
+                "G4LEDATA environment variable was not set.");
+    return;
+  }
+
+  std::ostringstream fullFileName;
+  fullFileName << path << "/" << file << ".dat";
+
+  std::ifstream diffCrossSection(fullFileName.str().c_str());
+  std::stringstream endPath;
+  if (!diffCrossSection) {
+    endPath << "Missing data file: " << file;
+    G4Exception("G4DNACPA100IonisationModel::Initialise", "em0003", FatalException,
+                endPath.str().c_str());
+  }
+
+  // load data from the file
+  fTMapWithVec[materialID][p].push_back(0.);
+
+  G4String line;
+
+  while (!diffCrossSection.eof()) {
+    G4double T, E;
+    diffCrossSection >> T >> E;
+
+    if (T != fTMapWithVec[materialID][p].back()) {
+      fTMapWithVec[materialID][p].push_back(T);
+    }
+
+    // T is incident energy, E is the energy transferred
+    if (T != fTMapWithVec[materialID][p].back()) {
+      fTMapWithVec[materialID][p].push_back(T);
+    }
+
+    auto eshell = (G4int)iStructure.NumberOfLevels(materialID);
+    for (G4int shell = 0; shell < eshell; ++shell) {
+      diffCrossSection >> diffCrossSectionData[materialID][p][shell][T][E];
+      if (fasterCode) {
+        fEnergySecondaryData[materialID][p][shell][T]
+                            [diffCrossSectionData[materialID][p][shell][T][E]] = E;
+
+        fProbaShellMap[materialID][p][shell][T].push_back(
+          diffCrossSectionData[materialID][p][shell][T][E]);
+      }
+      else {
+        diffCrossSectionData[materialID][p][shell][T][E] *= scaleFactor;
+        fEMapWithVector[materialID][p][T].push_back(E);
+      }
+    }
+  }
 }

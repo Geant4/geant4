@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // John Allison  5th April 2001
 // A template for a simplest possible graphics driver.
 //?? Lines beginning like this require specialisation for your driver.
@@ -35,12 +35,13 @@
 
 #include "G4VGraphicsSystem.hh"
 
-class G4Vtk: public G4VGraphicsSystem {
-public:
-  G4Vtk();
-  virtual ~G4Vtk();
-  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
+class G4Vtk : public G4VGraphicsSystem
+{
+  public:
+    G4Vtk();
+    ~G4Vtk() override = default;
+    G4VSceneHandler* CreateSceneHandler(const G4String& name = "") override;
+    G4VViewer* CreateViewer(G4VSceneHandler&, const G4String& name = "") override;
 };
 
 #endif

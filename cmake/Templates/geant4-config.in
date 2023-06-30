@@ -116,7 +116,8 @@ for g4incdir in ${includedirs} ; do
 done
 
 libs="-lG4interfaces \
--lG4persistency \
+-lG4geomtext \
+-lG4mctruth \
 -lG4analysis \
 -lG4error_propagation \
 -lG4readout \
@@ -176,6 +177,7 @@ feature_list="${feature_list} gdml[${have_gdml}]"
 
 if test "x${have_gdml}" = "xyes" ; then
   cflags="${cflags} @G4_XERCESC_CFLAGS@"
+  libs="-lG4gdml ${libs}"
 fi
 
 # - PTL

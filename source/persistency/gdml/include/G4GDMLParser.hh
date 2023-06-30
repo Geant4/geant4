@@ -125,6 +125,7 @@ class G4GDMLParser
     inline void SetEnergyCutsExport(G4bool);
     inline void SetSDExport(G4bool);
     inline void SetReverseSearch(G4bool);
+    inline void SetImportSchema(const G4String& path_and_filename);
 
     inline G4int GetMaxExportLevel() const;  // Manage max number of levels
     inline void SetMaxExportLevel(G4int);    // to export

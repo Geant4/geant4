@@ -40,24 +40,21 @@
 
 #include "G4AnnihiToMuPair.hh"
 
+#include "G4Exp.hh"
+#include "G4LossTableManager.hh"
+#include "G4Material.hh"
+#include "G4MuonMinus.hh"
+#include "G4MuonPlus.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4Positron.hh"
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TauMinus.hh"
+#include "G4TauPlus.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4TauPlus.hh"
-#include "G4TauMinus.hh"
-#include "G4Material.hh"
-#include "G4Step.hh"
-#include "G4LossTableManager.hh"
-#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
 
 G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type)
@@ -74,12 +71,11 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
     part2 = G4MuonMinus::MuonMinus();
   }
   fMass = part1->GetPDGMass();
-  fLowEnergyLimit = 
-    2.*fMass*fMass/CLHEP::electron_mass_c2 - CLHEP::electron_mass_c2;
- 
-  //model is ok up to 1000 TeV due to neglected Z-interference
-  fHighEnergyLimit = 1000.*TeV;
- 
+  fLowEnergyLimit = 2. * fMass * fMass / CLHEP::electron_mass_c2 - CLHEP::electron_mass_c2;
+
+  // model is ok up to 1000 TeV due to neglected Z-interference
+  fHighEnergyLimit = 1000. * TeV;
+
   fCurrentSigma = 0.0;
   fCrossSecFactor = 1.;
   fManager = G4LossTableManager::Instance();
@@ -138,12 +134,14 @@ G4double G4AnnihiToMuPair::ComputeCrossSectionPerElectron(const G4double e)
   // Sigma per electron * number of electrons per atom
   if(xi <= 1.0 - 100*piaxi*piaxi) {
     sigma *= std::sqrt(1.0 - xi);
-  } else if( xi >= 1.0 - 0.01*piaxi*piaxi) {
-    sigma *= piaxi;
-  } else {
-    sigma *= piaxi/(1. - G4Exp( -piaxi/std::sqrt(1-xi) ));
   }
-  //G4cout << "### sigma= " << sigma << G4endl;
+  else if (xi >= 1.0 - 0.01 * piaxi * piaxi) {
+    sigma *= piaxi;
+  }
+  else {
+    sigma *= piaxi / (1. - G4Exp(-piaxi / std::sqrt(1 - xi)));
+  }
+  // G4cout << "### sigma= " << sigma << G4endl;
   return sigma;
 }
 
@@ -197,10 +195,9 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
   G4double xs = CrossSectionPerVolume(Epos, aTrack.GetMaterial());
 
   // test of cross section
-  if(xs > 0.0 && fCurrentSigma*G4UniformRand() > xs) 
-    {
-      return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
-    }
+  if(xs > 0.0 && fCurrentSigma*G4UniformRand() > xs) {
+    return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  }
 
   const G4ThreeVector PosiDirection = aDynamicPositron->GetMomentumDirection();
   G4double xi = fLowEnergyLimit/Epos; // xi is always less than 1,
@@ -212,7 +209,7 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
   do { cost = 2.*G4UniformRand()-1.; }
   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (2.*G4UniformRand() > 1.+xi+cost*cost*(1.-xi) ); 
-  G4double sint = sqrt(1.-cost*cost);
+  G4double sint = std::sqrt(1.-cost*cost);
 
   // generate phi
   //
@@ -240,10 +237,8 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 
   // mu+ mu- directions for Positron in z-direction
   //
-  G4ThreeVector
-    MuPlusDirection(PmuPlusX/PmuPlus, PmuPlusY/PmuPlus, PmuPlusZ/PmuPlus);
-  G4ThreeVector
-    MuMinusDirection(PmuMinusX/PmuMinus,PmuMinusY/PmuMinus,PmuMinusZ/PmuMinus);
+  G4ThreeVector MuPlusDirection(PmuPlusX / PmuPlus, PmuPlusY / PmuPlus, PmuPlusZ / PmuPlus);
+  G4ThreeVector MuMinusDirection(PmuMinusX / PmuMinus, PmuMinusY / PmuMinus, PmuMinusZ / PmuMinus);
 
   // rotate to actual Positron direction
   //
@@ -253,12 +248,10 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.SetNumberOfSecondaries(2);
 
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1 = 
-    new G4DynamicParticle(part1, MuPlusDirection, EmuPlus-fMass);
+  auto aParticle1 = new G4DynamicParticle(part1, MuPlusDirection, EmuPlus - fMass);
   aParticleChange.AddSecondary(aParticle1);
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2 =
-    new G4DynamicParticle(part2, MuMinusDirection, EmuMinus-fMass);
+  auto aParticle2 = new G4DynamicParticle(part2, MuMinusDirection, EmuMinus - fMass);
   aParticleChange.AddSecondary(aParticle2);
 
   // Kill the incident positron 
@@ -274,11 +267,10 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 void G4AnnihiToMuPair::PrintInfoDefinition()
 {
   G4String comments = fInfo + " annihilation, atomic e- at rest, SubType=";
-  G4cout << G4endl << GetProcessName() << ":  " << comments 
-	 << GetProcessSubType() << G4endl;
-  G4cout << "        threshold at " << fLowEnergyLimit/CLHEP::GeV << " GeV"
-         << " good description up to "
-         << fHighEnergyLimit/CLHEP::TeV << " TeV for all Z." << G4endl;
+  G4cout << G4endl << GetProcessName() << ":  " << comments << GetProcessSubType() << G4endl;
+  G4cout << "        threshold at " << fLowEnergyLimit / CLHEP::GeV << " GeV"
+         << " good description up to " << fHighEnergyLimit / CLHEP::TeV << " TeV for all Z."
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

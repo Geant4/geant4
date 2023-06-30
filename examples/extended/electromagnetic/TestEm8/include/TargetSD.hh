@@ -36,7 +36,7 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 #ifndef TargetSD_h
 #define TargetSD_h 1
@@ -51,26 +51,24 @@ class G4TouchableHistory;
 class G4HCofThisEvent;
 class Run;
 
-class TargetSD : public G4VSensitiveDetector
-{
-public: // Without description
+class TargetSD : public G4VSensitiveDetector {
+public:
+  explicit TargetSD(const G4String &);
+  ~TargetSD() override = default;
 
-  TargetSD(const G4String&);
-  virtual ~TargetSD();
+  void Initialize(G4HCofThisEvent *) override;
+  G4bool ProcessHits(G4Step *, G4TouchableHistory *) override;
+  void EndOfEvent(G4HCofThisEvent *) override;
+  void clear() override;
+  void PrintAll() override;
 
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void PrintAll();
+  TargetSD &operator = (const TargetSD &right) = delete;
+  TargetSD(const TargetSD &) = delete;
 
 private:
-
-  Run* fRun;
-
+  Run *fRun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

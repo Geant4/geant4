@@ -40,10 +40,10 @@
 class SphericalChromosome : public VirtualChromosome
 {
  public:
-  SphericalChromosome(const G4String&, G4ThreeVector, const G4double&);
+  SphericalChromosome(const G4String&, const G4ThreeVector&, const G4double&);
 
-  SphericalChromosome(const G4String&, G4ThreeVector, const G4double&,
-                      G4RotationMatrix);
+  SphericalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
+                      const G4RotationMatrix&);
 
   ~SphericalChromosome() override;
 
@@ -59,7 +59,7 @@ class SphericalChromosome : public VirtualChromosome
 
   inline void SetRotation(const G4RotationMatrix& rot)
   {
-    fRotation        = rot;
+    fRotation = rot;
     fInverseRotation = fRotation.inverse();
   };
 

@@ -35,75 +35,71 @@
 #ifndef G4PhysicsListHelper_hh
 #define G4PhysicsListHelper_hh 1
 
-#include <vector>
-
-#include "G4ios.hh"
-#include "globals.hh"
-
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListOrderingParameter.hh"
 #include "G4ThreadLocalSingleton.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <vector>
 
 class G4VProcess;
 
 class G4PhysicsListHelper
 {
-  friend class G4ThreadLocalSingleton<G4PhysicsListHelper>;
+    friend class G4ThreadLocalSingleton<G4PhysicsListHelper>;
 
   public:
-
+    // Returns the pointer to the physics list helper
     static G4PhysicsListHelper* GetPhysicsListHelper();
-      // Returns the pointer to the physics list helper
 
+    // Registers a process to the particle type according to the ordering
+    // parameter table. Returns 'true' if process is successfully registered.
     G4bool RegisterProcess(G4VProcess* process, G4ParticleDefinition* particle);
-      // Registers a process to the particle type according to the ordering
-      // parameter table. Returns 'true' if process is successfully registered.
 
+    // User must invoke this method in his ConstructProcess() implementation
+    // in order to enable particle transportation.
     void AddTransportation();
-      // User must invoke this method in his ConstructProcess() implementation
-      // in order to enable particle transportation.
 
+    // Set flag for using G4CoupledTransportation.
     void UseCoupledTransportation(G4bool vl = true);
-      // Set flag for using G4CoupledTransportation.
 
+    // Change the thresholds for killing looping tracks in transportation.
     void UseHighLooperThresholds() { theLooperThresholds = 2; }
     void UseLowLooperThresholds() { theLooperThresholds = 0; }
-      // Change the thresholds for killing looping tracks in transportation.
 
+    // Check consistencies of list of particles.
     void CheckParticleList() const;
-      // Check consistencies of list of particles.
 
+    // Dump OrdingParameterTable.
     void DumpOrdingParameterTable(G4int subType = -1) const;
-      // Dump OrdingParameterTable.
 
     G4PhysicsListOrderingParameter GetOrdingParameter(G4int subType) const;
 
+    // set/get controle flag for output message
+    //  0: Silent
+    //  1: Warning message
+    //  2: More
     void SetVerboseLevel(G4int value);
     G4int GetVerboseLevel() const;
-      // set/get controle flag for output message
-      //  0: Silent
-      //  1: Warning message
-      //  2: More
 
   private:
-
+    // Hidden constructor and destructor.
     G4PhysicsListHelper();
     ~G4PhysicsListHelper();
-      // Hidden constructor and destructor.
 
     void ReadOrdingParameterTable();
     void ReadInDefaultOrderingParameter();
 
   private:
-
     using G4OrdParamTable = std::vector<G4PhysicsListOrderingParameter>;
 
     static G4ThreadLocal G4PhysicsListHelper* pPLHelper;
 
+    // The particle table has the complete List of existing particle types.
     G4ParticleTable* theParticleTable = nullptr;
     G4ParticleTable::G4PTblDicIterator* aParticleIterator = nullptr;
-      // The particle table has the complete List of existing particle types.
 
     G4bool useCoupledTransportation = false;
     G4int theLooperThresholds = 1;  //  0 = Low,  1 = default, 2 = high

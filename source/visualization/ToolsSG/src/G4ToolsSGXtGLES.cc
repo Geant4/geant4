@@ -33,23 +33,20 @@
 #include "G4Xt.hh"
 
 class session : public toolx::Xt::session {
-  typedef toolx::Xt::session parent;
+  using parent = toolx::Xt::session;
 public:
-  session(std::ostream& a_out,int a_argc,char** a_argv)
-  :parent(a_out,a_argc,a_argv)
+  session(std::ostream& a_out)
+  :parent(a_out)
   {
-    if(m_app_widget) {::XtDestroyWidget(m_app_widget);m_app_widget = nullptr;}
-    if(m_app_context) {::XtDestroyApplicationContext(m_app_context);m_app_context = nullptr;}
     m_app_widget = (Widget)G4Xt::getInstance()->GetMainInteractor();
     m_app_context = ::XtWidgetToApplicationContext(m_app_widget);
+    m_app_owner = false;
   }
   virtual ~session() {}
 protected:
   session(const session& a_from):parent(a_from){}
   session& operator=(const session& a_from){parent::operator=(a_from);return *this;}
 };
-
-#include <tools/argcv>
 
 G4ToolsSGXtGLES::G4ToolsSGXtGLES():
 parent
@@ -67,10 +64,7 @@ G4ToolsSGXtGLES::~G4ToolsSGXtGLES() {
 
 void G4ToolsSGXtGLES::Initialise() {
   if(fSGSession) return; //done.
-  int* argc = new int;
-  char** argv = nullptr;
-  tools::new_argcv(std::vector<std::string>(),*argc,argv);
-  fSGSession = new session(G4cout,*argc,argv);
+  fSGSession = new session(G4cout);
   if(!fSGSession->is_valid()) {
     G4cerr << "G4ToolsSGXtGLES::Initialise : session::is_valid() failed." << G4endl;
     delete fSGSession;
@@ -106,32 +100,4 @@ G4VViewer* G4ToolsSGXtGLES::CreateViewer(G4VSceneHandler& a_scene,const G4String
     << G4endl;
   }
   return pView;
-}
-
-G4bool G4ToolsSGXtGLES::IsUISessionCompatible () const
-{
-  G4bool isCompatible = false;
-//  G4UImanager* ui = G4UImanager::GetUIpointer();
-//  G4UIsession* session = ui->GetSession();
-//
-//  // If session is a batch session, it may be:
-//  // a) this is a batch job (the user has not instantiated any UI session);
-//  // b) we are currently processing a UI command, in which case the UI
-//  //    manager creates a temporary batch session and to find out if there is
-//  //    a genuine UI session that the user has instantiated we must drill
-//  //    down through previous sessions to a possible non-batch session.
-//  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
-//    session = batch->GetPreviousSession();
-//  }
-//
-//  // Qt windows are only appropriate in a Qt session.
-//  if (session) {
-//    // If non-zero, this is the originating non-batch session
-//    // The user has instantiated a UI session...
-//    if (dynamic_cast<G4UIQt*>(session)) {
-//      // ...and it's a G4UIQt session, which is OK.
-      isCompatible = true;
-//    }
-//  }
-  return isCompatible;
 }

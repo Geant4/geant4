@@ -165,7 +165,7 @@ void RanluxppEngine::skip(uint64_t n) {
   n -= left;
   // Need to advance and possibly skip over blocks.
   int nPerState = kMaxPos / kBits;
-  int skip = (n / nPerState);
+  int skip = int(n / nPerState);
 
   uint64_t a_skip[9];
   powermod(kA_2048, a_skip, skip + 1);
@@ -176,7 +176,7 @@ void RanluxppEngine::skip(uint64_t n) {
   to_ranlux(lcg, fState, fCarry);
 
   // Potentially skip numbers in the freshly generated block.
-  int remaining = n - skip * nPerState;
+  int remaining = int(n - skip * nPerState);
   assert(remaining >= 0 && "should not end up at a negative position!");
   fPosition = remaining * kBits;
   assert(fPosition <= kMaxPos && "position out of range!");
@@ -297,8 +297,8 @@ bool RanluxppEngine::getState(const std::vector<unsigned long> &v) {
     uint64_t upper = v[2 * i + 2];
     fState[i] = (upper << 32) + lower;
   }
-  fCarry = v[19];
-  fPosition = v[20];
+  fCarry = (unsigned int)v[19];
+  fPosition = (int)v[20];
 
   return true;
 }

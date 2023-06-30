@@ -53,6 +53,7 @@
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "G4Element.hh"
+#include "G4EmParameters.hh"
 
 #include <iostream>
 #include <fstream>
@@ -262,14 +263,7 @@ void G4GSMottCorrection::LoadMCDataElement(const G4Element *elem) {
   fMCDataPerElement[izet]  = perElem;
   //
   // load data from file
-  const char* tmppath = G4FindDataDir("G4LEDATA");
-  if (!tmppath) {
-    G4Exception("G4GSMottCorrection::LoadMCDataElement()","em0006",
-		FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
-  std::string path(tmppath);
+  std::string path = G4EmParameters::Instance()->GetDirLEDATA();
   if (fIsElectron) {
     path += "/msc_GS/MottCor/el/";
   } else {

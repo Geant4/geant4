@@ -137,9 +137,7 @@ G4VTwistSurface::G4VTwistSurface( __void__& )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4VTwistSurface::~G4VTwistSurface()
-{
-}
+G4VTwistSurface::~G4VTwistSurface() = default;
 
 //=====================================================================
 //* AmIOnLeftSide -----------------------------------------------------
@@ -447,7 +445,7 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector& gp,
 
          // now, we can accept xx intersection
 
-         if (isaccepted[0] == true && isaccepted[1] == true)
+         if (isaccepted[0] && isaccepted[1])
          {
             if (distance[i] < bestdistance)
             {
@@ -634,8 +632,7 @@ G4VTwistSurface::IsSameBoundary(G4VTwistSurface* surf1, G4int areacode1,
       G4ThreeVector corner2 = 
            surf2->ComputeGlobalPoint(surf2->GetCorner(areacode2));
 
-      if ((corner1 - corner2).mag() < kCarTolerance) { return true; }
-      else                                           { return false; }
+      return (corner1 - corner2).mag() < kCarTolerance;
    }
    else if ((IsBoundary(areacode1, testbitmode) && (!iscorner[0])) &&
             (IsBoundary(areacode2, testbitmode) && (!iscorner[1])))
@@ -652,9 +649,8 @@ G4VTwistSurface::IsSameBoundary(G4VTwistSurface* surf1, G4int areacode1,
       d1  = surf1->ComputeGlobalDirection(ld1);
       d2  = surf2->ComputeGlobalDirection(ld2);
 
-      if ((x01 - x02).mag() < kCarTolerance &&
-          (d1 - d2).mag() < kCarTolerance) { return true; }
-      else                                 { return false; }
+      return (x01 - x02).mag() < kCarTolerance
+            && (d1 - d2).mag() < kCarTolerance;
    }
    else
    {
@@ -674,10 +670,9 @@ void G4VTwistSurface::GetBoundaryParameters(const G4int& areacode,
    // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
    // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
    
-   for (G4int i=0; i<4; ++i)
+   for (const auto & boundary : fBoundaries)
    {
-      if (fBoundaries[i].GetBoundaryParameters(areacode, d, x0,
-                                               boundarytype))
+      if (boundary.GetBoundaryParameters(areacode, d, x0, boundarytype))
       {
          return;
       }
@@ -702,7 +697,7 @@ G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
    // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
    // sAxis1 & sAxisMin, sAxis1 & sAxisMax.
 
-   if (areacode & sAxis0 && areacode & sAxis1)
+   if (((areacode & sAxis0) != 0) && ((areacode & sAxis1) != 0))
    {
      std::ostringstream message;
      message << "Point is in the corner area." << G4endl
@@ -718,10 +713,9 @@ G4ThreeVector G4VTwistSurface::GetBoundaryAtPZ(G4int areacode,
    G4int         boundarytype = 0;
    G4bool        found = false;
    
-   for (G4int i=0; i<4; ++i)
+   for (const auto & boundary : fBoundaries)
    {
-      if (fBoundaries[i].GetBoundaryParameters(areacode, d, x0, 
-                                               boundarytype))
+      if (boundary.GetBoundaryParameters(areacode, d, x0, boundarytype))
       {
          found = true;
          continue;
@@ -797,7 +791,7 @@ void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
       
       // extracted axiscode of whichaxis
       G4int axiscode = whichaxis & sAxisMask & areacode ; 
-      if (axiscode) {
+      if (axiscode != 0) {
          if (axiscode == (whichaxis & sAxisX)) {
             axis[i] = kXAxis;
          } else if (axiscode == (whichaxis & sAxisY)) {
@@ -824,28 +818,28 @@ void G4VTwistSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 
 void G4VTwistSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
-   if (areacode & sCorner) {
-      if (areacode & sC0Min1Min) {
+   if ((areacode & sCorner) != 0) {
+      if ((areacode & sC0Min1Min) != 0) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & sC0Max1Min) {
+      } else if ((areacode & sC0Max1Min) != 0) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & sC0Max1Max) {
+      } else if ((areacode & sC0Max1Max) != 0) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMax[1];
-      } else if (areacode & sC0Min1Max) {
+      } else if ((areacode & sC0Min1Max) != 0) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMax[1];
       }
-   } else if (areacode & sBoundary) {
-      if (areacode & (sAxis0 | sAxisMin)) {
+   } else if ((areacode & sBoundary) != 0) {
+      if ((areacode & (sAxis0 | sAxisMin)) != 0) {
          limit[0] = fAxisMin[0];
-      } else if (areacode & (sAxis1 | sAxisMin)) {
+      } else if ((areacode & (sAxis1 | sAxisMin)) != 0) {
          limit[0] = fAxisMin[1];
-      } else if (areacode & (sAxis0 | sAxisMax)) {
+      } else if ((areacode & (sAxis0 | sAxisMax)) != 0) {
          limit[0] = fAxisMax[0];
-      } else if (areacode & (sAxis1 | sAxisMax)) {
+      } else if ((areacode & (sAxis1 | sAxisMax)) != 0) {
          limit[0] = fAxisMax[1];
       }
    } else {
@@ -872,12 +866,11 @@ void G4VTwistSurface::SetBoundary(const G4int& axiscode,
        (code == (sAxis1 & sAxisMax)))
    {
       G4bool done = false;
-      for (auto i=0; i<4; ++i)
+      for (auto & boundary : fBoundaries)
       {
-         if (fBoundaries[i].IsEmpty())
+         if (boundary.IsEmpty())
          {
-            fBoundaries[i].SetFields(axiscode, direction,
-                                     x0, boundarytype);
+            boundary.SetFields(axiscode, direction, x0, boundarytype);
             done = true;
             break;
          }
@@ -1189,8 +1182,7 @@ G4VTwistSurface::CurrentStatus::CurrentStatus()
 //* CurrentStatus::~CurrentStatus -------------------------------------
 
 G4VTwistSurface::CurrentStatus::~CurrentStatus() 
-{
-}
+= default;
 
 //=====================================================================
 //* CurrentStatus::SetCurrentStatus -----------------------------------
@@ -1279,16 +1271,13 @@ G4VTwistSurface::CurrentStatus::DebugPrint() const
 //* Boundary::Boundary ------------------------------------------------
 
 G4VTwistSurface::Boundary::Boundary()
- : fBoundaryAcode(-1), fBoundaryType(0)
 {
 }
 
 //=====================================================================
 //* Boundary::~Boundary -----------------------------------------------
 
-G4VTwistSurface::Boundary::~Boundary()
-{
-}
+G4VTwistSurface::Boundary::~Boundary() = default;
 
 //=====================================================================
 //* Boundary::SetFields -----------------------------------------------
@@ -1310,8 +1299,7 @@ G4VTwistSurface::Boundary::SetFields(const G4int& areacode,
 
 G4bool G4VTwistSurface::Boundary::IsEmpty() const 
 {
-  if (fBoundaryAcode == -1) return true;
-  return false;
+  return fBoundaryAcode == -1;
 }
 
 //=====================================================================
@@ -1327,7 +1315,7 @@ G4VTwistSurface::Boundary::GetBoundaryParameters(const G4int& areacode,
   // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
   // sAxis1 & sAxisMin, sAxis1 & sAxisMax
   //
-  if ((areacode & sAxis0) && (areacode & sAxis1))
+  if (((areacode & sAxis0) != 0) && ((areacode & sAxis1) != 0))
   {
     std::ostringstream message;
     message << "Located in the corner area." << G4endl

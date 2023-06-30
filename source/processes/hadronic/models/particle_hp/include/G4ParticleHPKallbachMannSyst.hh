@@ -36,60 +36,59 @@
 class G4ParticleHPKallbachMannSyst
 {
   public:
-  
-   G4ParticleHPKallbachMannSyst(G4double aCompoundFraction,
-                               G4double anIncidentEnergy, G4double anIncidentMass,
-                               G4double aProductEnergy, G4double aProductMass,
-                               G4double aResidualMass, G4int aResidualA, G4int aResidualZ,
-      			       G4double aTargetMass, G4int aTargetA, G4int aTargetZ,
-			       G4int aProjectileA,G4int aProjectileZ,G4int aProductA,G4int aProductZ)
-  {
-    theCompoundFraction = aCompoundFraction;
-    theIncidentEnergy = anIncidentEnergy;
-    theIncidentMass = anIncidentMass;
-    theProductEnergy = aProductEnergy;
-    theProductMass = aProductMass;
-    theResidualMass = aResidualMass;
-    theResidualA = aResidualA;
-    theResidualZ = aResidualZ;
-    theTargetMass = aTargetMass;
-    theTargetA = aTargetA;
-    theTargetZ = aTargetZ;
-    theProjectileA=aProjectileA;
-    theProjectileZ=aProjectileZ;
-    theProductA=aProductA;
-    theProductZ=aProductZ;
-  }
-  
-  ~G4ParticleHPKallbachMannSyst() {};
-  
-  G4double Sample(G4double anEnergy);
-  
-  G4double Kallbach(G4double cosTh, G4double anEnergy);
-  
-  G4double GetKallbachZero(G4double anEnergy);
-  
-  G4double A(G4double anEnergy);
-  
-  G4double SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA,G4int Abinding,G4int Zbinding);
-  
+    G4ParticleHPKallbachMannSyst(G4double aCompoundFraction, G4double anIncidentEnergy,
+                                 G4double anIncidentMass, G4double aProductEnergy,
+                                 G4double aProductMass, G4double aResidualMass, G4int aResidualA,
+                                 G4int aResidualZ, G4double aTargetMass, G4int aTargetA,
+                                 G4int aTargetZ, G4int aProjectileA, G4int aProjectileZ,
+                                 G4int aProductA, G4int aProductZ)
+    {
+      theCompoundFraction = aCompoundFraction;
+      theIncidentEnergy = anIncidentEnergy;
+      theIncidentMass = anIncidentMass;
+      theProductEnergy = aProductEnergy;
+      theProductMass = aProductMass;
+      theResidualMass = aResidualMass;
+      theResidualA = aResidualA;
+      theResidualZ = aResidualZ;
+      theTargetMass = aTargetMass;
+      theTargetA = aTargetA;
+      theTargetZ = aTargetZ;
+      theProjectileA = aProjectileA;
+      theProjectileZ = aProjectileZ;
+      theProductA = aProductA;
+      theProductZ = aProductZ;
+    }
+
+    ~G4ParticleHPKallbachMannSyst() = default;
+
+    G4double Sample(G4double anEnergy);
+
+    G4double Kallbach(G4double cosTh, G4double anEnergy);
+
+    G4double GetKallbachZero(G4double anEnergy);
+
+    G4double A(G4double anEnergy);
+
+    G4double SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA, G4int Abinding,
+                              G4int Zbinding);
+
   private:
-  
-  G4double theCompoundFraction;
-  G4double theIncidentEnergy;
-  G4double theIncidentMass;
-  G4double theProductEnergy;
-  G4double theProductMass;
-  G4double theResidualMass;
-  G4double theTargetMass;
-  G4int theResidualA;
-  G4int theResidualZ;
-  G4int theTargetA;
-  G4int theTargetZ;
-  G4int theProjectileA;
-  G4int theProjectileZ;
-  G4int theProductA;
-  G4int theProductZ;
+    G4double theCompoundFraction;
+    G4double theIncidentEnergy;
+    G4double theIncidentMass;
+    G4double theProductEnergy;
+    G4double theProductMass;
+    G4double theResidualMass;
+    G4double theTargetMass;
+    G4int theResidualA;
+    G4int theResidualZ;
+    G4int theTargetA;
+    G4int theTargetZ;
+    G4int theProjectileA;
+    G4int theProjectileZ;
+    G4int theProductA;
+    G4int theProductZ;
 };
 
 #endif

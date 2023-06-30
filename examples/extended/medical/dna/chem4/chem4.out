@@ -1,4 +1,4 @@
-Seed used : 1686681246
+Seed used : 1687915050
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -50,7 +50,9 @@ Registered graphics systems are:
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -586,7 +588,7 @@ H^0 + H^0 -> H_2^0                          1.2e+10                       0.2265
 DNAMolecularStepByStepModel will be used
 Start event 1
  * PrimaryKiller: aborts event 1, energy loss is too large. 
- * Energy loss by primary is: 2.8357 keV. Event is aborted if the Eloss is > 2 keV
+ * Energy loss by primary is: 4.945 keV. Event is aborted if the Eloss is > 2 keV
 Start event 2
 Start event 3
 Start event 4
@@ -599,7 +601,7 @@ Start event 9
 --------------------End of Global Run-----------------------
   The run has 9 events 
 Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 9876.1 eV
+ Total energy deposited in the world volume : 9218.2 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

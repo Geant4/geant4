@@ -47,16 +47,14 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     QTFLAGS  += -I$(QTHOME)/include/QtGui
     QTFLAGS  += -I$(QTHOME)/include/QtWidgets
     QTFLAGS  += -I$(QTHOME)/include/QtOpenGL
-    QTFLAGS  += -I$(QTHOME)/include/QtPrintSupport
   endif
   ifndef QTMOC
     QTMOC    := $(QTHOME)/bin/moc
   endif
   ifndef QTLIBS              # Qt5
-    QTLIBS   := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5PrintSupport.lib
-  endif
+    QTLIBS   := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib
   ifndef GLQTLIBS
-    GLQTLIBS := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5OpenGL.lib Qt5PrintSupport.lib
+    GLQTLIBS := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5OpenGL.lib
   endif
 
 #

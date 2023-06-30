@@ -85,6 +85,8 @@ namespace G4INCL {
         pTransBalance((Float_t)0.0),
         nCascadeParticles(0),
         transparent(false),
+        annihilationP(false),
+        annihilationN(false),
         forcedCompoundNucleus(false),
         nucleonAbsorption(false),
         pionAbsorption(false),
@@ -280,6 +282,10 @@ namespace G4INCL {
       Short_t nCascadeParticles;
       /** \brief True if the event is transparent */
       Bool_t transparent;
+      /** \brief True if annihilation at rest on a proton */
+      Bool_t annihilationP;
+      /** \brief True if annihilation at rest on a neutron */
+      Bool_t annihilationN;
       /** \brief True if the event is a forced CN */
       Bool_t forcedCompoundNucleus;
       /** \brief True if the event is a nucleon absorption */
@@ -373,6 +379,8 @@ namespace G4INCL {
         pTransBalance = (Float_t)0.0;
         nCascadeParticles = 0;
         transparent = false;
+        annihilationP = false;
+        annihilationN = false;
         forcedCompoundNucleus = false;
         nucleonAbsorption = false;
         pionAbsorption = false;

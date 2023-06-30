@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-22 Ben Morgan (det-V11-01-00)
+- Apply standard clang-tidy plus range-based for and boolean simplification fixes
+- General code tidy and modernization
+  - Use consistent, grouped ordering of public-protected-private members
+- Move docstrings prior to function declarations for doxygen/IDE compatibility
+
 ## 2022-11-17 Gabriele Cosmo (det-V11-00-01)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

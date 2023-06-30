@@ -30,59 +30,64 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPND2AInelasticFS.hh"
-#include "G4Nucleus.hh"
-#include "G4Deuteron.hh"
+
 #include "G4Alpha.hh"
+#include "G4Deuteron.hh"
+#include "G4Nucleus.hh"
 #include "G4PhysicsModelCatalog.hh"
 
 G4ParticleHPND2AInelasticFS::G4ParticleHPND2AInelasticFS()
 {
-  secID = G4PhysicsModelCatalog::GetModelID( "model_G4ParticleHPND2AInelasticFS_F16" );
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4ParticleHPND2AInelasticFS_F16");
 }
 
-G4HadFinalState * G4ParticleHPND2AInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
+G4HadFinalState* G4ParticleHPND2AInelasticFS::ApplyYourself(const G4HadProjectile& theTrack)
 {
-// these are the particle types in the final state
+  // these are the particle types in the final state
 
-  G4ParticleDefinition * theDefs[4];
+  G4ParticleDefinition* theDefs[4];
   theDefs[0] = G4Neutron::Neutron();
   theDefs[1] = G4Deuteron::Deuteron();
   theDefs[2] = G4Alpha::Alpha();
   theDefs[3] = G4Alpha::Alpha();
-  
-// fill the final state  
+
+  // fill the final state
   G4ParticleHPInelasticBaseFS::BaseApply(theTrack, theDefs, 4);
-  
-// return the result
-   return theResult.Get();
+
+  // return the result
+  return theResult.Get();
 }
 
-void G4ParticleHPND2AInelasticFS::
-Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* projectile)
+void G4ParticleHPND2AInelasticFS::Init(G4double A, G4double Z, G4int M, G4String& dirName,
+                                       G4String& aFSType, G4ParticleDefinition* projectile)
 {
-   G4ParticleHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType, projectile);
-   G4double ResidualA = 0;
-   G4double ResidualZ = 0;
-   if( projectile == G4Neutron::Neutron() ) {
-     ResidualA = A-10;
-     ResidualZ = Z-5;
-   } else if( projectile == G4Proton::Proton() ) {
-     ResidualA = A-10;
-     ResidualZ = Z-4;
-   } else if( projectile == G4Deuteron::Deuteron() ) {
-     ResidualA = A-9;
-     ResidualZ = Z-4;
-   } else if( projectile == G4Triton::Triton() ) {
-     ResidualA = A-8;
-     ResidualZ = Z-4;
-   } else if( projectile == G4He3::He3() ) {
-     ResidualA = A-8;
-     ResidualZ = Z-3;
-   } else if( projectile == G4Alpha::Alpha() ) {
-     ResidualA = A-7;
-     ResidualZ = Z-3;
-   }
+  G4ParticleHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType, projectile);
+  G4double ResidualA = 0;
+  G4double ResidualZ = 0;
+  if (projectile == G4Neutron::Neutron()) {
+    ResidualA = A - 10;
+    ResidualZ = Z - 5;
+  }
+  else if (projectile == G4Proton::Proton()) {
+    ResidualA = A - 10;
+    ResidualZ = Z - 4;
+  }
+  else if (projectile == G4Deuteron::Deuteron()) {
+    ResidualA = A - 9;
+    ResidualZ = Z - 4;
+  }
+  else if (projectile == G4Triton::Triton()) {
+    ResidualA = A - 8;
+    ResidualZ = Z - 4;
+  }
+  else if (projectile == G4He3::He3()) {
+    ResidualA = A - 8;
+    ResidualZ = Z - 3;
+  }
+  else if (projectile == G4Alpha::Alpha()) {
+    ResidualA = A - 7;
+    ResidualZ = Z - 3;
+  }
 
-   G4ParticleHPInelasticBaseFS::InitGammas(ResidualA, ResidualZ);
+  G4ParticleHPInelasticBaseFS::InitGammas(ResidualA, ResidualZ);
 }
-

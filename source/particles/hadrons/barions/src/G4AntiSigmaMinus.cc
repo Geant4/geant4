@@ -47,16 +47,16 @@
 // ###                           AntiSigmaMinus                       ###
 // ######################################################################
 
-G4AntiSigmaMinus* G4AntiSigmaMinus::theInstance = 0;
+G4AntiSigmaMinus* G4AntiSigmaMinus::theInstance = nullptr;
 
 G4AntiSigmaMinus* G4AntiSigmaMinus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_sigma-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4AntiSigmaMinus* G4AntiSigmaMinus::Definition()
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            -1,       -3112,
-                false,       0.1479*ns,          NULL,
+                false,       0.1479*ns,          nullptr,
                 false,       "sigma");
 
     // Magnetic Moment
@@ -81,10 +81,10 @@ G4AntiSigmaMinus* G4AntiSigmaMinus::Definition()
     anInstance->SetPDGMagneticMoment( 1.160 * mN);
  
     //create Decay Table
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels
-    G4VDecayChannel** mode = new G4VDecayChannel*[1];
+    auto  mode = new G4VDecayChannel*[1];
   // anti_sigma- -> anti_neutron + pi+
     mode[0] = new G4PhaseSpaceDecayChannel("anti_sigma-",1.00,2,"anti_neutron","pi+");
     

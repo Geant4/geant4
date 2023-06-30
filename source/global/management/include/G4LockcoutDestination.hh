@@ -44,6 +44,7 @@ class G4LockcoutDestination : public G4coutDestination
  public:
   G4LockcoutDestination() = default;
   ~G4LockcoutDestination() override = default;
+  G4int ReceiveG4debug(const G4String& msg) override;
   G4int ReceiveG4cout(const G4String& msg) override;
   G4int ReceiveG4cerr(const G4String& msg) override;
 };

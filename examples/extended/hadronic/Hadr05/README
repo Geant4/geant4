@@ -149,8 +149,11 @@
   ...etc...........  
   
   histo 21 : energy flow (MeV/event)
-  histo 22 : lateral energy leak (MeV/event)  
-      
+  
+  histo 22 : total energy deposited 
+  histo 23 : total energy leakage  
+  histo 24 : total energy released : Edep + Eleak
+       
   NB. Numbering scheme for histograms:
   layer     : from 1 to NbOfLayers (included)
   absorbers : from 1 to NbOfAbsor (included)

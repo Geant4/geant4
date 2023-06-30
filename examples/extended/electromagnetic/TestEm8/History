@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-04-25 V. Ivanchenko (testem8-V11-01-00)
+- Coding guidelines: applied clang-format and clean-up headers
+
 ## 2022-10-26 I. Hrivnacova (testem8-V11-00-01)
 - Coding guidelines: start data members with 'f' (StepMax)
 

@@ -27,33 +27,32 @@
 #define G4ParticleHPThreadLocalManager_h 1
 
 // Class Description
-// ThreadLocalManager of NeutronHP 
+// ThreadLocalManager of NeutronHP
 // Class Description - End
 
 // 140825 First implementation done by T. Koi (SLAC/PPA)
 //
-#include "globals.hh"
 #include "G4ThreadLocalSingleton.hh"
+#include "globals.hh"
 
 class G4ParticleHPReactionWhiteBoard;
 
-class G4ParticleHPThreadLocalManager 
+class G4ParticleHPThreadLocalManager
 {
-   friend class G4ThreadLocalSingleton<G4ParticleHPThreadLocalManager>;
+    friend class G4ThreadLocalSingleton<G4ParticleHPThreadLocalManager>;
 
-   public:
-      static G4ParticleHPThreadLocalManager* GetInstance();
-      G4ParticleHPReactionWhiteBoard* GetReactionWhiteBoard();
-      void OpenReactionWhiteBoard();
-      void CloseReactionWhiteBoard();
+  public:
+    static G4ParticleHPThreadLocalManager* GetInstance();
+    G4ParticleHPReactionWhiteBoard* GetReactionWhiteBoard();
+    void OpenReactionWhiteBoard();
+    void CloseReactionWhiteBoard();
 
-   private: 
-      G4ParticleHPThreadLocalManager();
-      G4ParticleHPThreadLocalManager( const G4ParticleHPThreadLocalManager& );
-      ~G4ParticleHPThreadLocalManager();
+  private:
+    G4ParticleHPThreadLocalManager();
+    G4ParticleHPThreadLocalManager(const G4ParticleHPThreadLocalManager&);
+    ~G4ParticleHPThreadLocalManager() = default;
 
-   private:
-      G4ParticleHPReactionWhiteBoard* RWB;
- 
+  private:
+    G4ParticleHPReactionWhiteBoard* RWB{nullptr};
 };
 #endif

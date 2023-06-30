@@ -48,22 +48,21 @@
 #define G4MULTITRACKINGACTION_HH
 
 #include "G4UserTrackingAction.hh"
-#include <vector>
+
 #include <memory>
+#include <vector>
 
-using G4UserTrackingActionUPtr=std::unique_ptr<G4UserTrackingAction>;
-using G4UserTrackingActionVector=std::vector<G4UserTrackingActionUPtr>;
+using G4UserTrackingActionUPtr = std::unique_ptr<G4UserTrackingAction>;
+using G4UserTrackingActionVector = std::vector<G4UserTrackingActionUPtr>;
 
-class G4MultiTrackingAction : public G4UserTrackingAction,
-                              public G4UserTrackingActionVector
+class G4MultiTrackingAction : public G4UserTrackingAction, public G4UserTrackingActionVector
 {
-  public:
-
-    G4MultiTrackingAction() = default;
-    virtual ~G4MultiTrackingAction() override = default;
-    virtual void SetTrackingManagerPointer(G4TrackingManager* pVal) override;
-    virtual void PreUserTrackingAction(const G4Track*) override;
-    virtual void PostUserTrackingAction(const G4Track*) override;
+ public:
+  G4MultiTrackingAction() = default;
+  ~G4MultiTrackingAction() override = default;
+  void SetTrackingManagerPointer(G4TrackingManager* pVal) override;
+  void PreUserTrackingAction(const G4Track*) override;
+  void PostUserTrackingAction(const G4Track*) override;
 };
 
 #endif

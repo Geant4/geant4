@@ -29,4 +29,4 @@
 #include "G4ParticleHPHash.hh"
 using G4NeutronHPHash = G4ParticleHPHash;
 
-#endif 
+#endif

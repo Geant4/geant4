@@ -44,8 +44,8 @@ class G4VUserPrimaryParticleInformation
 {
   public:
 
-    G4VUserPrimaryParticleInformation();
-    virtual ~G4VUserPrimaryParticleInformation();
+    G4VUserPrimaryParticleInformation() = default;
+    virtual ~G4VUserPrimaryParticleInformation() = default;
 
     virtual void Print() const = 0;
 };

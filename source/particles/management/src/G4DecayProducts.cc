@@ -59,7 +59,7 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts& right)
   for (G4int index=0; index<right.numberOfProducts; ++index)
   {
     G4DynamicParticle* daughter = right.theProductVector->at(index);
-    G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
+    auto  pDaughter =  new G4DynamicParticle(*daughter);
 
     G4double properTime = daughter->GetPreAssignedDecayProperTime();
     if(properTime>0.0) pDaughter->SetPreAssignedDecayProperTime(properTime); 
@@ -68,7 +68,7 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts& right)
       = daughter->GetPreAssignedDecayProducts();
     if (pPreAssigned != nullptr)
     {
-      G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
+      auto  pPA = new G4DecayProducts(*pPreAssigned);
       pDaughter->SetPreAssignedDecayProducts(pPA);
     }
     theProductVector->push_back( pDaughter );
@@ -83,7 +83,7 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
   if (this != &right)
   { 
     // recreate parent
-    if (theParentParticle != nullptr) delete theParentParticle;
+    delete theParentParticle;
     theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
     // delete G4DynamicParticle objects
@@ -97,7 +97,7 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
     for (index=0; index<right.numberOfProducts; ++index)
     {
       G4DynamicParticle* daughter = right.theProductVector->at(index);
-      G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
+      auto  pDaughter =  new G4DynamicParticle(*daughter);
 
       G4double properTime = daughter->GetPreAssignedDecayProperTime();
       if(properTime>0.0) pDaughter->SetPreAssignedDecayProperTime(properTime); 
@@ -106,7 +106,7 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
         = daughter->GetPreAssignedDecayProducts();
       if (pPreAssigned != nullptr)
       {
-        G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
+        auto  pPA = new G4DecayProducts(*pPreAssigned);
         pDaughter->SetPreAssignedDecayProducts(pPA);
       }
       theProductVector->push_back( pDaughter );
@@ -119,7 +119,7 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
 G4DecayProducts::~G4DecayProducts()
 {
   //delete parent
-  if (theParentParticle != nullptr) delete theParentParticle;
+  delete theParentParticle;
   theParentParticle = nullptr;
 
   // delete G4DynamicParticle object
@@ -142,10 +142,9 @@ G4DynamicParticle* G4DecayProducts::PopProducts()
     theProductVector->pop_back();
     return part;
   }
-  else
-  {
-    return nullptr;
-  }
+  
+      return nullptr;
+ 
 }
 
 G4int G4DecayProducts::PushProducts(G4DynamicParticle* aParticle)
@@ -161,15 +160,14 @@ G4DynamicParticle* G4DecayProducts::operator[](G4int anIndex) const
   {
     return  theProductVector->at(anIndex);
   }
-  else
-  {
-    return nullptr;
-  }
+  
+      return nullptr;
+ 
 }
 
 void G4DecayProducts::SetParentParticle(const G4DynamicParticle& aParticle)
 {
-  if (theParentParticle != nullptr) delete theParentParticle;
+  delete theParentParticle;
   theParentParticle = new G4DynamicParticle(aParticle);
 }
 
@@ -335,7 +333,7 @@ void G4DecayProducts::DumpInfo() const
 {
    G4cout << " ----- List of DecayProducts  -----" << G4endl;
    G4cout << " ------ Parent Particle ----------" << G4endl;
-   if (theParentParticle != 0) theParentParticle->DumpInfo();
+   if (theParentParticle != nullptr) theParentParticle->DumpInfo();
    G4cout << " ------ Daughter Particles  ------" << G4endl;  
    for (G4int index=0; index<numberOfProducts; ++index)
    {

@@ -39,12 +39,12 @@
 
 class G4ClassicalRK4 : public G4MagErrorStepper 
 {
-  public:  // with description
+  public:
 
     G4ClassicalRK4(G4EquationOfMotion* EquationMotion,
                    G4int numberOfVariables = 6) ;
 
-    ~G4ClassicalRK4() ;
+    ~G4ClassicalRK4() override ;
 
     G4ClassicalRK4(const G4ClassicalRK4&) = delete;
     G4ClassicalRK4& operator=(const G4ClassicalRK4&) = delete;
@@ -56,7 +56,7 @@ class G4ClassicalRK4 : public G4MagErrorStepper
     void DumbStepper( const G4double yIn[],
                       const G4double dydx[],
                             G4double h,
-                            G4double yOut[] ) ;
+                            G4double yOut[] ) override ;
       // Given values for the variables y[0,..,n-1] and their derivatives
       // dydx[0,...,n-1] known at x, use the classical 4th Runge-Kutta
       // method to advance the solution over an interval h and return the
@@ -65,9 +65,7 @@ class G4ClassicalRK4 : public G4MagErrorStepper
       // which returns derivatives dydx at x. The source is routine rk4 from
       // NRC p. 712-713 .
 
-  public:  // without description
-
-    G4int IntegratorOrder() const { return 4; }
+    G4int IntegratorOrder() const override { return 4; }
 
   private:
 
@@ -82,8 +80,6 @@ class G4ClassicalRK4 : public G4MagErrorStepper
       // No longer used. Obsolete.
 
   private:
-
-    // G4int fNumberOfVariables ; // is set default to 6 in constructor
 
     G4double *dydxm, *dydxt, *yt; // scratch space - not state 
 };

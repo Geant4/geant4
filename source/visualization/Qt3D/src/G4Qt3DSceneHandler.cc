@@ -63,7 +63,25 @@
 // following warning: "findBoundingVolumeComputeData: Position attribute not
 // suited for bounding volume computation", so for now we use float.
 #define PRECISION float
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #define BASETYPE Qt3DRender::QAttribute::Float
+#else
+#define BASETYPE Qt3DCore::QAttribute::Float
+#endif
+
+// Qt3D types move between namespaces between 5 and 6
+namespace G4Qt3DCompat
+{
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  using Qt3DRender::QAttribute;
+  using Qt3DRender::QBuffer;
+  using Qt3DRender::QGeometry;
+#else
+  using Qt3DCore::QAttribute;
+  using Qt3DCore::QBuffer;
+  using Qt3DCore::QGeometry;
+#endif
+}
 
 G4int G4Qt3DSceneHandler::fSceneIdCount = 0;
 
@@ -302,17 +320,18 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
     polylineBufferArray[iLine++] = polyline[i+1].y();
     polylineBufferArray[iLine++] = polyline[i+1].z();
   }
-  auto polylineGeometry = new Qt3DRender::QGeometry();
+  auto polylineGeometry = new G4Qt3DCompat::QGeometry();
   polylineGeometry->setObjectName("polylineGeometry");
-  auto polylineBuffer = new Qt3DRender::QBuffer(polylineGeometry);
+
+  auto polylineBuffer = new G4Qt3DCompat::QBuffer(polylineGeometry);
   polylineBuffer->setObjectName("Polyline buffer");
   polylineBuffer->setData(polylineByteArray);
 
-  auto polylineAtt = new Qt3DRender::QAttribute;
+  auto polylineAtt = new G4Qt3DCompat::QAttribute;
   polylineAtt->setObjectName("Position attribute");
-  polylineAtt->setName(Qt3DRender::QAttribute::defaultPositionAttributeName());
+  polylineAtt->setName(G4Qt3DCompat::QAttribute::defaultPositionAttributeName());
   polylineAtt->setBuffer(polylineBuffer);
-  polylineAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
+  polylineAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
   polylineAtt->setVertexBaseType(BASETYPE);
   polylineAtt->setVertexSize(3);
   polylineAtt->setCount((G4int)nLines);
@@ -331,10 +350,19 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   polylineEntity->addComponent(material);
 
   auto renderer = new Qt3DRender::QGeometryRenderer;
-  renderer->setObjectName("polylineWireframeRenderer");
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+  auto geometryView = new Qt3DCore::QGeometryView(polylineGeometry);
+  geometryView->setObjectName("polylineGeometryView");
+  geometryView->setGeometry(polylineGeometry);
+  geometryView->setVertexCount(2*nLines);
+  geometryView->setPrimitiveType(Qt3DCore::QGeometryView::Lines);
+  renderer->setView(geometryView);
+#else
+  renderer->setObjectName("polylineRenderer");
   renderer->setGeometry(polylineGeometry);
   renderer->setVertexCount(2*(G4int)nLines);
   renderer->setPrimitiveType(Qt3DRender::QGeometryRenderer::Lines);
+#endif
   polylineEntity->addComponent(renderer);
 }
 
@@ -383,17 +411,17 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         polymarkerBufferArray[iMarker++] = polymarker[i].y();
         polymarkerBufferArray[iMarker++] = polymarker[i].z();
       }
-      auto polymarkerGeometry = new Qt3DRender::QGeometry();
+      auto polymarkerGeometry = new G4Qt3DCompat::QGeometry();
       polymarkerGeometry->setObjectName("polymarkerGeometry");
-      auto polymarkerBuffer = new Qt3DRender::QBuffer(polymarkerGeometry);
+      auto polymarkerBuffer = new G4Qt3DCompat::QBuffer(polymarkerGeometry);
       polymarkerBuffer->setObjectName("Polymarker buffer");
       polymarkerBuffer->setData(polymarkerByteArray);
 
-      auto polymarkerAtt = new Qt3DRender::QAttribute;
+      auto polymarkerAtt = new G4Qt3DCompat::QAttribute;
       polymarkerAtt->setObjectName("Position attribute");
-      polymarkerAtt->setName(Qt3DRender::QAttribute::defaultPositionAttributeName());
+      polymarkerAtt->setName(G4Qt3DCompat::QAttribute::defaultPositionAttributeName());
       polymarkerAtt->setBuffer(polymarkerBuffer);
-      polymarkerAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
+      polymarkerAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
       polymarkerAtt->setVertexBaseType(BASETYPE);
       polymarkerAtt->setVertexSize(3);
       polymarkerAtt->setCount((G4int)nDots);
@@ -821,14 +849,14 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
 
   const auto vertexByteSize  = 3*sizeof(PRECISION);
 
-  Qt3DRender::QGeometry* vertexGeometry = nullptr;
-  Qt3DRender::QGeometry* lineGeometry   = nullptr;
+  G4Qt3DCompat::QGeometry* vertexGeometry = nullptr;
+  G4Qt3DCompat::QGeometry* lineGeometry   = nullptr;
 
-  Qt3DRender::QAttribute* positionAtt = nullptr;
-  Qt3DRender::QAttribute* normalAtt   = nullptr;
-  Qt3DRender::QAttribute* lineAtt     = nullptr;
+  G4Qt3DCompat::QAttribute* positionAtt = nullptr;
+  G4Qt3DCompat::QAttribute* normalAtt   = nullptr;
+  G4Qt3DCompat::QAttribute* lineAtt     = nullptr;
 
-  Qt3DRender::QBuffer* vertexBuffer = nullptr;
+  G4Qt3DCompat::QBuffer* vertexBuffer = nullptr;
   if (drawing_style == G4ViewParameters::hlr ||
       drawing_style == G4ViewParameters::hsr ||
       drawing_style == G4ViewParameters::hlhsr) {
@@ -849,18 +877,18 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       vertexBufferArray[i1++] = normals[i].z();
     }
     // Vertex buffer (vertices and normals)
-    vertexGeometry = new Qt3DRender::QGeometry();
+    vertexGeometry = new G4Qt3DCompat::QGeometry();
     vertexGeometry->setObjectName("vertexGeometry");
-    vertexBuffer = new Qt3DRender::QBuffer(vertexGeometry);
+    vertexBuffer = new G4Qt3DCompat::QBuffer(vertexGeometry);
     vertexBuffer->setObjectName("Vertex buffer");
     vertexBuffer->setData(vertexByteArray);
 
     // Position attribute
-    positionAtt = new Qt3DRender::QAttribute;
+    positionAtt = new G4Qt3DCompat::QAttribute;
     positionAtt->setObjectName("Position attribute");
-    positionAtt->setName(Qt3DRender::QAttribute::defaultPositionAttributeName());
+    positionAtt->setName(G4Qt3DCompat::QAttribute::defaultPositionAttributeName());
     positionAtt->setBuffer(vertexBuffer);
-    positionAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
+    positionAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
     positionAtt->setVertexBaseType(BASETYPE);
     positionAtt->setVertexSize(3);
     positionAtt->setCount((G4int)nVerts);
@@ -868,11 +896,11 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     positionAtt->setByteStride(2*vertexByteSize);
 
     // Normal attribute
-    normalAtt = new Qt3DRender::QAttribute;
+    normalAtt = new G4Qt3DCompat::QAttribute;
     normalAtt->setObjectName("Normal attribute");
-    normalAtt->setName(Qt3DRender::QAttribute::defaultNormalAttributeName());
+    normalAtt->setName(G4Qt3DCompat::QAttribute::defaultNormalAttributeName());
     normalAtt->setBuffer(vertexBuffer);
-    normalAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
+    normalAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
     normalAtt->setVertexBaseType(BASETYPE);
     normalAtt->setVertexSize(3);
     normalAtt->setCount((G4int)nVerts);
@@ -880,7 +908,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     normalAtt->setByteStride(2*vertexByteSize);
   }
 
-  Qt3DRender::QBuffer* lineBuffer = nullptr;
+  G4Qt3DCompat::QBuffer* lineBuffer = nullptr;
   if (drawing_style == G4ViewParameters::wireframe ||
       drawing_style == G4ViewParameters::hlr ||
       drawing_style == G4ViewParameters::hlhsr) {
@@ -900,18 +928,18 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       lineBufferArray[i2++] = line.second.z();
     }
     // Line loop buffer
-    lineGeometry = new Qt3DRender::QGeometry();
+    lineGeometry = new G4Qt3DCompat::QGeometry();
     lineGeometry->setObjectName("lineGeometry");
-    lineBuffer = new Qt3DRender::QBuffer(lineGeometry);
+    lineBuffer = new G4Qt3DCompat::QBuffer(lineGeometry);
     lineBuffer->setObjectName("Line buffer");
     lineBuffer->setData(lineByteArray);
 
     // Line attribute
-    lineAtt = new Qt3DRender::QAttribute;
+    lineAtt = new G4Qt3DCompat::QAttribute;
     lineAtt->setObjectName("Position attribute");
-    lineAtt->setName(Qt3DRender::QAttribute::defaultPositionAttributeName());
+    lineAtt->setName(G4Qt3DCompat::QAttribute::defaultPositionAttributeName());
     lineAtt->setBuffer(lineBuffer);
-    lineAtt->setAttributeType(Qt3DRender::QAttribute::VertexAttribute);
+    lineAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
     lineAtt->setVertexBaseType(BASETYPE);
     lineAtt->setVertexSize(3);
     lineAtt->setCount((G4int)nLines);

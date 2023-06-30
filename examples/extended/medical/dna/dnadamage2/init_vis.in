@@ -1,0 +1,59 @@
+# Set Number of Threads
+/run/numberOfThreads 1
+
+# Set electron solvation process: "Meesungnoen2002", "Ritchie1994", "Terrisol1990"
+/process/dna/e-SolvationSubType Ritchie1994
+
+# Chemistry Scavenger Settings
+/chem/scavenger/DMSO   5e-4
+/chem/scavenger/Oxygen 0.27e-3
+
+# Register Physics and Chemistries
+/physics/SetPhysics   G4EmDNAPhysics_option4
+/physics/SetChemistry G4EmDNAChemistry_ForPlasmids
+
+# Plasmid DNA Settings (Befor Initialize)
+/det/PlasmidFile  pUC19.xyz
+/det/OffSetFile   PlasmidOffsets.txt
+/det/UseDNAVolumes True
+/det/NbOfPlasmids 1
+
+/run/initialize
+
+# World Size Settings
+/det/setSize 1 um
+
+# Spectrum source settings
+/fpGun/SourceFile CaesiumSource.src
+
+# Number of primaries per event 
+# Correlates with Dose per Event.
+/fpGun/PrimariesPerEvent 1
+
+# Chemistry Scheduler Settings
+/scheduler/endTime 100 microsecond
+/scorer/species/nOfTimeBins 100
+/scorer/species/addTimeToRecord 1 microsecond
+/scorer/species/addTimeToRecord 10 microsecond
+
+# GValues: Output Options
+/scorer/species/OutputFile SpeciesInfo
+/scorer/species/OutputFormat ASCII 
+
+# SB: Output Options
+/scorer/StrandBreak/OutputFile StrandBreakInfo
+/scorer/StrandBreak/OutputFormat ASCII
+/scorer/StrandBreak/BreakEnergy 17.5 eV
+
+# Verbose Settings
+/tracking/verbose 0
+/scheduler/verbose 0
+
+# Print Chemistry
+/chem/reaction/print
+
+/control/execute vis.in
+
+# Run
+/run/printProgress 1
+/run/beamOn 0

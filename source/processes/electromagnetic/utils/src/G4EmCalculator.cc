@@ -1011,7 +1011,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   if(nullptr != elproc) {
     currentModel = elproc->SelectModelForMaterial(scaledEnergy, idx);
     currentModel->InitialiseForMaterial(part, currentMaterial);
-    currentModel->SetupForMaterial(part, currentMaterial, scaledEnergy);
+    currentModel->SetupForMaterial(part, currentMaterial, kinEnergy);
     G4double eth = currentModel->LowEnergyLimit();
     if(eth > 0.0) {
       loweModel = elproc->SelectModelForMaterial(eth - CLHEP::eV, idx);

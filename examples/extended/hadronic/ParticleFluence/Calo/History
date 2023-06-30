@@ -5,6 +5,13 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-05-08 Alberto Ribon (exhadrParticleFluenceCalo-V11-01-00)
+- Run, TrackingAction : replaced G4int with G4long for keeping the information
+  on the multiplicity of particle production.
+  (This avoids rare cases of negative multiplicities due to integer overflow,
+   seen for runs with at least 4000 events, in particular with heavy materials,
+   such as Tungsten and Lead.)
+
 ## 2022-09-07 Alberto Ribon (exhadrParticleFluenceCalo-V11-00-02)
 - Added complementary information on particle production (multiplicity,
   kinetic energy, and total energy flow) in the calorimeter.

@@ -37,7 +37,7 @@
 G4LogicalSkinSurfaceTable *G4LogicalSkinSurface::theSkinSurfaceTable = nullptr;
 
 //
-// Constructors & destructor
+// Constructor
 //
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&  name,
@@ -55,9 +55,11 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&  name,
   theSkinSurfaceTable->push_back(this);
 }
 
-G4LogicalSkinSurface::~G4LogicalSkinSurface()
-{
-}
+//
+// Default destructor
+//
+
+G4LogicalSkinSurface::~G4LogicalSkinSurface() = default;
 
 //
 // Operators
@@ -102,10 +104,9 @@ G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
   if (theSkinSurfaceTable != nullptr)
   {
-    for(auto pos = theSkinSurfaceTable->cbegin();
-        pos != theSkinSurfaceTable->cend(); ++pos)
+    for(auto pos : *theSkinSurfaceTable)
     {
-      if ((*pos)->GetLogicalVolume() == vol)  { return *pos; }
+      if (pos->GetLogicalVolume() == vol)  { return pos; }
     }
   }
   return nullptr;
@@ -120,12 +121,11 @@ void G4LogicalSkinSurface::DumpInfo()
 
   if (theSkinSurfaceTable != nullptr)
   {
-    for(auto pos = theSkinSurfaceTable->cbegin();
-        pos != theSkinSurfaceTable->cend(); ++pos)
+    for(auto pos : *theSkinSurfaceTable)
     {
-      G4cout << (*pos)->GetName() << " : " << G4endl
+      G4cout << pos->GetName() << " : " << G4endl
              << " Skin of logical volume "
-             << (*pos)->GetLogicalVolume()->GetName()
+             << pos->GetLogicalVolume()->GetName()
              << G4endl;
     }
   }
@@ -134,12 +134,11 @@ void G4LogicalSkinSurface::DumpInfo()
 
 void G4LogicalSkinSurface::CleanSurfaceTable()
 {
-  if (theSkinSurfaceTable)
+  if (theSkinSurfaceTable != nullptr)
   {
-    for(auto pos = theSkinSurfaceTable->cbegin();
-        pos != theSkinSurfaceTable->cend(); ++pos)
+    for(auto pos : *theSkinSurfaceTable)
     {
-      if (*pos) { delete *pos; }
+      if (pos != nullptr) { delete pos; }
     }
     theSkinSurfaceTable->clear();
   }

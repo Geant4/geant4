@@ -29,134 +29,120 @@
 #ifndef G4ParticleHPParticleYield_h
 #define G4ParticleHPParticleYield_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#include "globals.hh"
-#include "G4ParticleHPVector.hh"
-#include "G4ParticleHPPolynomExpansion.hh"
 #include "G4ParticleHPList.hh"
+#include "G4ParticleHPPolynomExpansion.hh"
+#include "G4ParticleHPVector.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 class G4ParticleHPParticleYield
 {
   public:
-  G4ParticleHPParticleYield()
-  {
-    simpleMean = true;
-    spontPrompt = true;
-    hasPromptData = false;
-    hasDelayedData = false;
+    G4ParticleHPParticleYield()
+    {
+      simpleMean = true;
+      spontPrompt = true;
+      hasPromptData = false;
+      hasDelayedData = false;
 
-   targetMass = 0.0;
-   theSpontPrompt = 0.0;
-   spontDelayed = true;
-   theSpontDelayed = 0.0;
-  }
-  ~G4ParticleHPParticleYield(){}
-  
-  G4double GetTargetMass() { return targetMass; }
-  
-  void InitMean(std::istream & aDataFile)
-  {
-    G4int iflag;
-    aDataFile >> targetMass >>iflag;
-    if(iflag == 1) simpleMean=false;
-    if(simpleMean)
-    {
-      theSimpleMean.Init(aDataFile, CLHEP::eV);
+      targetMass = 0.0;
+      theSpontPrompt = 0.0;
+      spontDelayed = true;
+      theSpontDelayed = 0.0;
     }
-    else
-    {
-      theMean.Init(aDataFile);
-    }
-  }
+    ~G4ParticleHPParticleYield() = default;
 
-  void InitPrompt(std::istream & aDataFile)
-  { 
-    hasPromptData = true;
-    G4int iflag;
-    aDataFile >> targetMass >>iflag;
-    if(iflag == 2) spontPrompt = false;
-    if(spontPrompt)
+    G4double GetTargetMass() { return targetMass; }
+
+    void InitMean(std::istream& aDataFile)
     {
-      aDataFile >> theSpontPrompt;
+      G4int iflag;
+      aDataFile >> targetMass >> iflag;
+      if (iflag == 1) simpleMean = false;
+      if (simpleMean) {
+        theSimpleMean.Init(aDataFile, CLHEP::eV);
+      }
+      else {
+        theMean.Init(aDataFile);
+      }
     }
-    else
+
+    void InitPrompt(std::istream& aDataFile)
     {
-      thePrompt.Init(aDataFile, CLHEP::eV);
+      hasPromptData = true;
+      G4int iflag;
+      aDataFile >> targetMass >> iflag;
+      if (iflag == 2) spontPrompt = false;
+      if (spontPrompt) {
+        aDataFile >> theSpontPrompt;
+      }
+      else {
+        thePrompt.Init(aDataFile, CLHEP::eV);
+      }
     }
-  }
- 
-  void InitDelayed(std::istream & aDataFile)
-  {
-    hasDelayedData = true;
-    G4int iflag;
-    aDataFile >> targetMass >>iflag;
-    thePrecursorDecayConstants.Init(aDataFile, 1./CLHEP::s); // s is the CLHEP unit second
-    if(iflag == 2) spontDelayed = false;
-    if(spontDelayed)
+
+    void InitDelayed(std::istream& aDataFile)
     {
-      aDataFile >> theSpontDelayed;
+      hasDelayedData = true;
+      G4int iflag;
+      aDataFile >> targetMass >> iflag;
+      thePrecursorDecayConstants.Init(aDataFile, 1. / CLHEP::s);  // s is the CLHEP unit second
+      if (iflag == 2) spontDelayed = false;
+      if (spontDelayed) {
+        aDataFile >> theSpontDelayed;
+      }
+      else {
+        theDelayed.Init(aDataFile, CLHEP::eV);
+      }
     }
-    else
+
+    G4double GetMean(G4double anEnergy)
     {
-      theDelayed.Init(aDataFile, CLHEP::eV);
+      if (simpleMean) {
+        return theSimpleMean.GetY(anEnergy);
+      }
+      return theMean.GetValue(anEnergy);
     }
-  }
-  
-  G4double GetMean(G4double anEnergy)
-  {
-    if(simpleMean)
+
+    G4double GetPrompt(G4double anEnergy)
     {
-    return theSimpleMean.GetY(anEnergy);
+      if (!hasPromptData) return 0;
+      if (spontPrompt) {
+        return theSpontPrompt;
+      }
+      return thePrompt.GetY(anEnergy);
     }
-    return theMean.GetValue(anEnergy);
-  }
-  
-  G4double GetPrompt(G4double anEnergy)
-  {
-    if(!hasPromptData) return 0;
-    if(spontPrompt)
+
+    G4double GetDelayed(G4double anEnergy)
     {
-      return theSpontPrompt;
+      if (!hasDelayedData) return 0;
+      if (spontDelayed) {
+        return theSpontDelayed;
+      }
+      return theDelayed.GetY(anEnergy);
     }
-    return thePrompt.GetY(anEnergy);
-  }
-  
-  G4double GetDelayed(G4double anEnergy)
-  {
-    if(!hasDelayedData) return 0;
-    if(spontDelayed)
-    {
-      return theSpontDelayed;
-    }
-    return theDelayed.GetY(anEnergy);
-  }
-  
-  inline G4double GetDecayConstant(G4int i)
-  {
-    return thePrecursorDecayConstants.GetValue(i);
-  }
-  
+
+    inline G4double GetDecayConstant(G4int i) { return thePrecursorDecayConstants.GetValue(i); }
+
   private:
-  
-  G4double targetMass;
-  // total mean
-  G4bool simpleMean;
-  G4ParticleHPPolynomExpansion theMean;
-  G4ParticleHPVector theSimpleMean;
-  
-  // Prompt neutrons
-  G4bool hasPromptData;
-  G4bool spontPrompt;
-  G4ParticleHPVector thePrompt;
-  G4double theSpontPrompt;
-  
-  // delayed neutrons
-  G4bool hasDelayedData;
-  G4bool spontDelayed;
-  G4ParticleHPList thePrecursorDecayConstants;
-  G4ParticleHPVector theDelayed;
-  G4double theSpontDelayed;
+    G4double targetMass;
+    // total mean
+    G4bool simpleMean;
+    G4ParticleHPPolynomExpansion theMean;
+    G4ParticleHPVector theSimpleMean;
 
+    // Prompt neutrons
+    G4bool hasPromptData;
+    G4bool spontPrompt;
+    G4ParticleHPVector thePrompt;
+    G4double theSpontPrompt;
+
+    // delayed neutrons
+    G4bool hasDelayedData;
+    G4bool spontDelayed;
+    G4ParticleHPList thePrecursorDecayConstants;
+    G4ParticleHPVector theDelayed;
+    G4double theSpontDelayed;
 };
 #endif

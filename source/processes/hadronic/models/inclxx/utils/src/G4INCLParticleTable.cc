@@ -78,6 +78,7 @@ namespace G4INCL {
       G4ThreadLocal G4double SigmaZeroMass = 0.0;
       G4ThreadLocal G4double SigmaMinusMass = 0.0;
       G4ThreadLocal G4double LambdaMass = 0.0;
+      G4ThreadLocal G4double antiProtonMass = 0.0;
       G4ThreadLocal G4double KPlusMass = 0.0;
       G4ThreadLocal G4double KZeroMass = 0.0;
       G4ThreadLocal G4double KZeroBarMass = 0.0;
@@ -88,7 +89,7 @@ namespace G4INCL {
       G4ThreadLocal G4double omegaMass = 0.0;
       G4ThreadLocal G4double etaPrimeMass = 0.0;
       G4ThreadLocal G4double photonMass = 0.0;
-
+      
       // Hard-coded values of the real particle masses (MeV/c^2)
       G4ThreadLocal G4double theRealProtonMass = 938.27203;
       G4ThreadLocal G4double theRealNeutronMass = 939.56536;
@@ -98,13 +99,14 @@ namespace G4INCL {
       G4ThreadLocal G4double theRealSigmaPlusMass = 1189.37;
       G4ThreadLocal G4double theRealSigmaZeroMass = 1192.64;
       G4ThreadLocal G4double theRealSigmaMinusMass = 1197.45;
+      G4ThreadLocal G4double theRealAntiProtonMass = 938.27203;
       G4ThreadLocal G4double theRealChargedKaonMass = 493.677;
       G4ThreadLocal G4double theRealNeutralKaonMass = 497.614;
       G4ThreadLocal G4double theRealEtaMass = 547.862;
       G4ThreadLocal G4double theRealOmegaMass = 782.65;
       G4ThreadLocal G4double theRealEtaPrimeMass = 957.78;
       G4ThreadLocal G4double theRealPhotonMass = 0.0;
-
+      
       // Width (second)
       const G4double theChargedPiWidth = 2.6033e-08;
       const G4double thePiZeroWidth = 8.52e-17;
@@ -132,7 +134,7 @@ namespace G4INCL {
       G4ThreadLocal G4double KMinusWidth = 0.0;
       G4ThreadLocal G4double KShortWidth = 0.0;
       G4ThreadLocal G4double KLongWidth = 0.0;
-        
+
 
       const G4int mediumNucleiTableSize = 30;
 
@@ -339,29 +341,17 @@ namespace G4INCL {
       piPlusMass = theINCLPionMass;
       piMinusMass = theINCLPionMass;
       piZeroMass = theINCLPionMass;
-      /*
-      SigmaPlusMass = theINCLSigmaMass;
-      SigmaMinusMass = theINCLSigmaMass;
-      SigmaZeroMass = theINCLSigmaMass;
-      LambdaMass = theINCLLambdaMass;
-      KPlusMass = theINCLKaonMass;
-      KZeroMass = theINCLKaonMass;
-      KZeroBarMass = theINCLKaonMass;
-      KShortMass = theINCLKaonMass;
-      KLongMass = theINCLKaonMass;
-      KMinusMass = theINCLKaonMass;
-      */
       SigmaPlusMass = theRealSigmaPlusMass;
       SigmaMinusMass = theRealSigmaMinusMass;
       SigmaZeroMass = theRealSigmaZeroMass;
       LambdaMass = theINCLLambdaMass;
+      antiProtonMass = theRealAntiProtonMass;
       KPlusMass = theRealChargedKaonMass;
       KZeroMass = theRealNeutralKaonMass;
       KZeroBarMass = theRealNeutralKaonMass;
       KShortMass = theRealNeutralKaonMass;
       KLongMass = theRealNeutralKaonMass;
       KMinusMass = theRealChargedKaonMass;
-      
       etaMass = theINCLEtaMass;
       omegaMass = theINCLOmegaMass;
       etaPrimeMass = theINCLEtaPrimeMass;
@@ -398,6 +388,7 @@ namespace G4INCL {
       theRealLambdaMass = theG4ParticleTable->FindParticle("lambda")->GetPDGMass() / MeV;
       theRealChargedKaonMass = theG4ParticleTable->FindParticle("kaon+")->GetPDGMass() / MeV;
       theRealNeutralKaonMass = theG4ParticleTable->FindParticle("kaon0")->GetPDGMass() / MeV;
+      theRealAntiProtonMass = theG4ParticleTable->FindParticle("anti_proton")->GetPDGMass() / MeV;
 #endif
 
       minDeltaMass = theRealNeutronMass + theRealChargedPiMass + 0.5;
@@ -523,6 +514,8 @@ namespace G4INCL {
         return 0;
       } else if(t == Photon) {
         return 0;
+      } else if(t == antiProton) {
+        return -1;
       }
       INCL_ERROR("Requested isospin of an unknown particle!");
       return -10; // Unknown
@@ -598,6 +591,8 @@ namespace G4INCL {
         return std::string("sigma0");
       } else if(p == G4INCL::SigmaMinus) {
         return std::string("sigma-");
+      } else if(p == G4INCL::antiProton) {
+        return std::string("antiproton");
       } else if(p == G4INCL::KPlus) {
         return std::string("kaon+");
       } else if(p == G4INCL::KZero) {
@@ -651,6 +646,8 @@ namespace G4INCL {
         return std::string("s0");
       } else if(p == G4INCL::SigmaMinus) {
         return std::string("s-");
+      } else if(p == G4INCL::antiProton) {
+        return std::string("pb");
       } else if(p == G4INCL::KPlus) {
         return std::string("k+");
       } else if(p == G4INCL::KZero) {
@@ -696,6 +693,8 @@ namespace G4INCL {
         return SigmaZeroMass;
       } else if(pt == Lambda) {
         return LambdaMass;
+      } else if(pt == antiProton) {
+        return antiProtonMass;
       } else if(pt == KPlus) {
         return KPlusMass;
       } else if(pt == KZero) {
@@ -716,6 +715,8 @@ namespace G4INCL {
         return etaPrimeMass;
       } else if(pt == Photon) {
         return photonMass;
+      
+      
       } else {
         INCL_ERROR("getMass : Unknown particle type." << '\n');
         return 0.0;
@@ -748,6 +749,9 @@ namespace G4INCL {
           break;
         case Lambda:
           return theRealLambdaMass;
+          break;
+        case antiProton:
+          return theRealAntiProtonMass;
           break;
         case KPlus:
         case KMinus:
@@ -861,6 +865,9 @@ namespace G4INCL {
         case Lambda:
           return 1;
           break;
+        case antiProton:
+          return -1;
+          break;
         case PiPlus:
         case PiMinus:
         case PiZero:
@@ -913,6 +920,7 @@ namespace G4INCL {
         case PiMinus:
         case SigmaMinus:
         case KMinus:
+        case antiProton:
           return -1;
           break;
         default:
@@ -936,6 +944,7 @@ namespace G4INCL {
         case Omega:
         case EtaPrime:
         case Photon:
+        case antiProton:
           return 0;
           break;
         case Lambda:
@@ -1290,6 +1299,7 @@ namespace G4INCL {
         }
     }
 
+
     ParticleType getKaonType(const G4int isosp) {
 // assert(isosp == -1 || isosp == 1);
         if (isosp == -1) {
@@ -1310,8 +1320,14 @@ namespace G4INCL {
         }
     }
 
+    
+
     G4double getWidth(const ParticleType pt) {
-// assert(pt == PiPlus || pt == PiMinus || pt == PiZero || pt == Eta || pt == Omega || pt == EtaPrime || pt == KShort || pt == KLong || pt== KPlus || pt == KMinus || pt == Lambda || pt == SigmaPlus || pt == SigmaZero || pt == SigmaMinus);
+// assert(pt == PiPlus || pt == PiMinus || pt == PiZero || pt == Eta || pt == Omega || 
+//        pt == EtaPrime || pt == KShort || pt == KLong || pt== KPlus || pt == KMinus || pt == Lambda || 
+//        pt == SigmaPlus || pt == SigmaZero || pt == SigmaMinus 
+//        /* || pt == antiLambda || pt == antiSigmaPlus || pt == antiSigmaZero || pt == antiSigmaMinus ||
+//        pt == XiMinus || pt == XiZero || pt == antiXiZero || pt == antiXiMinus || */);
           if(pt == PiPlus) {
               return piPlusWidth;
           } else if(pt == PiMinus) {
@@ -1338,6 +1354,8 @@ namespace G4INCL {
               return KShortWidth;
           } else if(pt == KLong) {
               return KLongWidth;
+          } else if(pt == Lambda) { 
+              return LambdaWidth;
           } else {
               INCL_ERROR("getWidth : Unknown particle type." << '\n');
               return 0.0;

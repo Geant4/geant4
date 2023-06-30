@@ -90,10 +90,10 @@ class G4BulirschStoer
     // Modified midpoint algorithm
     G4ModifiedMidpoint m_midpoint;
 
-    G4bool m_last_step_rejected;
-    G4bool m_first;
+    G4bool m_last_step_rejected{false};
+    G4bool m_first{true};
 
-    G4double m_dt_last;
+    G4double m_dt_last{0.0};
     // G4double m_t_last;
 
     // Max allowed time step

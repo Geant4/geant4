@@ -44,23 +44,13 @@
 #include <iomanip>
 #include <fstream>       
 
-//////////////////////////////
-G4TextPPReporter::G4TextPPReporter():G4VParticlePropertyReporter()
-{ 
-}
-
-////////////////////////////
-G4TextPPReporter::~G4TextPPReporter()
-{
-}    
-
 /////////////////////
 void G4TextPPReporter::Print(const G4String& option)
 {
   SparseOption( option );
 
-  for (size_t i=0; i< pList.size(); i++){
-    G4ParticleDefinition* particle  = G4ParticleTable::GetParticleTable()->FindParticle( pList[i]->GetParticleName() ); 
+  for (const auto & i : pList){
+    G4ParticleDefinition* particle  = G4ParticleTable::GetParticleTable()->FindParticle( i->GetParticleName() ); 
 
     GeneratePropertyTable(particle);
   }
@@ -115,7 +105,7 @@ void  G4TextPPReporter::GeneratePropertyTable(const G4ParticleDefinition* partic
 
 // Decay Table  
   G4DecayTable* dcyTable = particle->GetDecayTable(); 
-  if (dcyTable != 0) { 
+  if (dcyTable != nullptr) { 
     for (G4int i=0; i< dcyTable->entries(); i++){
       G4VDecayChannel * channel = dcyTable->GetDecayChannel(i);
       // column 1  : BR

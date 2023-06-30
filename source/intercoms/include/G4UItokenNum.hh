@@ -38,59 +38,39 @@
 
 namespace G4UItokenNum
 {
-  enum tokenNum
-  {
-    NONE        = 0,
-    IDENTIFIER  = 257,
-    CONSTINT    = 258,
-    CONSTDOUBLE = 259,
-    CONSTCHAR   = 260,
-    CONSTSTRING = 261,
-    GT          = 262,
-    GE          = 263,
-    LT          = 264,
-    LE          = 265,
-    EQ          = 266,
-    NE          = 267,
-    // LOGICALNOT = 268,
-    CONSTLONG   = 268,
-    LOGICALOR  = 269,
-    LOGICALAND = 270,
-    SCAREAMER  = 33,
-    LPAREN     = 40,
-    PLUS       = 43,
-    MINUS      = 45
-  };
+enum tokenNum
+{
+  NONE = 0,
+  IDENTIFIER = 257,
+  CONSTINT = 258,
+  CONSTDOUBLE = 259,
+  CONSTCHAR = 260,
+  CONSTSTRING = 261,
+  GT = 262,
+  GE = 263,
+  LT = 264,
+  LE = 265,
+  EQ = 266,
+  NE = 267,
+  // LOGICALNOT = 268,
+  CONSTLONG = 268,
+  LOGICALOR = 269,
+  LOGICALAND = 270,
+  SCAREAMER = 33,
+  LPAREN = 40,
+  PLUS = 43,
+  MINUS = 45
+};
 
-  using yystype = struct yystype
-  {
-    tokenNum type{ tokenNum::NONE };
-    G4double D{ 0.0 };
-    G4int I{ 0 };
-    G4long L{ 0 };
-    char C{ ' ' };
+struct yystype
+{
+    tokenNum type{tokenNum::NONE};
+    G4double D{0.0};
+    G4int I{0};
+    G4long L{0};
+    char C{' '};
     G4String S;
-
-    yystype()
-      : S("")
-    {}
-    G4bool operator==(const yystype& right) const { return this == &right; }
-    yystype& operator=(const yystype& right)
-    {
-      if(&right == this)
-      {
-        return *this;
-      }
-      type = right.type;
-      D    = right.D;
-      I    = right.I;
-      L    = right.L;
-      C    = right.C;
-      S    = right.S;
-      return *this;
-    }
-    yystype(const yystype& right) { *this = right; }
-  };
+};
 }  // namespace G4UItokenNum
 
 #endif

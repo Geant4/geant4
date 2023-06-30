@@ -35,7 +35,7 @@
 inline
 G4bool G4Region::operator==(const G4Region& rg) const
 {
-  return (this==&rg) ? true : false;
+  return this==&rg;
 }
 
 // ********************************************************************

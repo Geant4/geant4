@@ -43,7 +43,6 @@ protected:
 public:
   G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
   G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
-  G4bool IsUISessionCompatible () const;
 protected:  
   void Initialise();
 protected:

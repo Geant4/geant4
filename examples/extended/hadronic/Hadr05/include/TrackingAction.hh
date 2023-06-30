@@ -37,13 +37,14 @@
 #include "globals.hh"
 
 class DetectorConstruction;
+class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*);
+    TrackingAction(DetectorConstruction*, EventAction*);
    ~TrackingAction() override {};
    
     void  PreUserTrackingAction(const G4Track*) override;   
@@ -51,6 +52,7 @@ class TrackingAction : public G4UserTrackingAction {
     
   private:
     DetectorConstruction* fDetector;
+    EventAction*          fEventAct;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

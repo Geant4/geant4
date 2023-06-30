@@ -36,15 +36,14 @@
 
 #include "G4VSolid.hh" 
 
-#include "G4Orb.hh"
-#include "G4Voxelizer.hh"
-#include "G4SolidStore.hh"
-#include "Randomize.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4GeometryTolerance.hh"
 #include "G4CSGSolid.hh"
+#include "G4GeometryTolerance.hh"
 #include "G4Orb.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SolidStore.hh"
 #include "G4Types.hh"
+#include "G4Voxelizer.hh"
+#include "Randomize.hh"
 #include "geomdefs.hh"
 
 using namespace std;
@@ -65,9 +64,7 @@ G4Voxelizer::G4Voxelizer()
 }
 
 //______________________________________________________________________________
-G4Voxelizer::~G4Voxelizer()
-{
-}
+G4Voxelizer::~G4Voxelizer() = default;
 
 //______________________________________________________________________________
 void G4Voxelizer::BuildEmpty()
@@ -91,7 +88,7 @@ void G4Voxelizer::BuildEmpty()
     {
       for (xyz[0] = 0; xyz[0] < max[0]; ++xyz[0])
       {
-        if (GetCandidatesVoxelArray(xyz, candidates)) 
+        if (GetCandidatesVoxelArray(xyz, candidates) != 0) 
         {
           G4int index = GetVoxelsIndex(xyz);
           fEmpty.SetBitNumber(index, false);
@@ -272,8 +269,8 @@ void G4Voxelizer::BuildBoundaries()
 #ifdef G4SPECSDEBUG	
         if (j == 0) G4cout << "Examining " << newBoundary << "..." << G4endl;
 #endif
-        G4int size = (G4int)boundary.size();
-        if(!size || std::abs(boundary[size-1] - newBoundary) > tolerance)
+        auto size = (G4int)boundary.size();
+        if((size == 0) || std::abs(boundary[size-1] - newBoundary) > tolerance)
         {
           {
 #ifdef G4SPECSDEBUG	    
@@ -288,7 +285,7 @@ void G4Voxelizer::BuildBoundaries()
         // only the first one is considered   
       }
 
-      G4int n = (G4int)boundary.size();
+      auto n = (G4int)boundary.size();
       G4int max = 100000;
       if (n > max/2)
       {
@@ -298,7 +295,7 @@ void G4Voxelizer::BuildBoundaries()
         for (G4int i = 0; i < n; ++i)
         {
           // 50 ok for 2k, 1000, 2000
-          G4int size = (G4int)boundary.size();
+          auto size = (G4int)boundary.size();
           if (i % skip == 0 || i == 0 || i == size - 1)
           {
             // this condition of merging boundaries was wrong,
@@ -411,7 +408,7 @@ G4String G4Voxelizer::GetCandidatesAsString(const G4SurfBits& bits) const
   // Decodes the candidates in mask as G4String.
 
   stringstream ss;
-  G4int numNodes = (G4int)fBoxes.size();
+  auto numNodes = (G4int)fBoxes.size();
 
   for(auto i=0; i<numNodes; ++i)
   {
@@ -432,7 +429,7 @@ void G4Voxelizer::DisplayListNodes() const
   for (auto j = 0; j <= 2; ++j)
   {
     G4cout << " * " << axis[j] << " axis:" << G4endl;
-    G4int count = (G4int)fBoundaries[j].size();
+    auto count = (G4int)fBoundaries[j].size();
     for(G4int i=0; i < count-1; ++i)
     {
       G4cout << "    Slice #" << i+1 << ": [" << fBoundaries[j][i]
@@ -511,7 +508,7 @@ void G4Voxelizer::BuildReduceVoxels(std::vector<G4double> boundaries[],
   for (auto k = 0; k <= 2; ++k)
   {
     std::vector<G4int> &candidatesCount = fCandidatesCounts[k];
-    G4int max = (G4int)candidatesCount.size();
+    auto max = (G4int)candidatesCount.size();
     std::vector<G4VoxelInfo> voxels(max);
     G4VoxelComparator comp(voxels);
     std::set<G4int, G4VoxelComparator> voxelSet(comp);
@@ -574,12 +571,12 @@ void G4Voxelizer::BuildReduceVoxels(std::vector<G4double> boundaries[],
       }  // Loop checking, 13.08.2015, G.Cosmo
     }
 
-    if (mergings.size())
+    if (!mergings.empty())
     {
       std::sort(mergings.begin(), mergings.end());
 
       const std::vector<G4double>& boundary = boundaries[k];
-      G4int mergingsSize = (G4int)mergings.size();
+      auto mergingsSize = (G4int)mergings.size();
       vector<G4double> reducedBoundary;
       G4int skip = mergings[0], i = 0;
       max = (G4int)boundary.size();
@@ -666,7 +663,7 @@ void G4Voxelizer::BuildReduceVoxels2(std::vector<G4double> boundaries[],
   for (auto k = 0; k <= 2; ++k)
   {
     std::vector<G4int> &candidatesCount = fCandidatesCounts[k];
-    G4int max = (G4int)candidatesCount.size();
+    auto max = (G4int)candidatesCount.size();
     G4int total = 0;
     for (G4int i = 0; i < max; ++i) total += candidatesCount[i];
 
@@ -714,9 +711,9 @@ void G4Voxelizer::Voxelize(std::vector<G4VSolid*>& solids,
                 // actually only makes performance slower,
                 // these are only pre-calculated but not used by multi-union
 
-  for (auto i = 0; i < 3; ++i)
+  for (auto & fCandidatesCount : fCandidatesCounts)
   {
-    fCandidatesCounts[i].resize(0);
+    fCandidatesCount.resize(0);
   }
 }
 
@@ -735,7 +732,7 @@ void G4Voxelizer::CreateMiniVoxels(std::vector<G4double> boundaries[],
       for (voxel[0] = 0; voxel[0] < maxVoxels[0] - 1; ++voxel[0])
       {
         std::vector<G4int> candidates;
-        if (GetCandidatesVoxelArray(voxel, bitmasks, candidates, 0))
+        if (GetCandidatesVoxelArray(voxel, bitmasks, candidates, nullptr) != 0)
         {
           // find a box for corresponding non-empty voxel
           G4VoxelBox box;
@@ -765,9 +762,9 @@ void G4Voxelizer::Voxelize(std::vector<G4VFacet*>& facets)
   std::size_t size = facets.size();
   if (size < 10)
   {
-    for (std::size_t i = 0; i < facets.size(); ++i)
+    for (const auto & facet : facets)
     { 
-      if (facets[i]->GetNumberOfVertices() > 3) ++size;
+      if (facet->GetNumberOfVertices() > 3) ++size;
     }
   }
 
@@ -789,7 +786,7 @@ void G4Voxelizer::Voxelize(std::vector<G4VFacet*>& facets)
     G4cout << "Building bitmasks..." << G4endl;
 #endif
     
-    BuildBitmasks(fBoundaries, 0, true);
+    BuildBitmasks(fBoundaries, nullptr, true);
 
     if (maxVoxels < 0 && reductionRatio == G4ThreeVector())
     {
@@ -910,9 +907,9 @@ void G4Voxelizer::FindComponentsFastest(unsigned int mask,
     {
       for (G4int bit = 0; bit < 8; ++bit)
       {
-        if (maskByte & 1) 
+        if ((maskByte & 1) != 0) 
           { list.push_back(8*(sizeof(unsigned int)*i+ byte) + bit); }
-        if (!(maskByte >>= 1)) break;
+        if ((maskByte >>= 1) == 0) break;
       }
     }
     mask >>= 8;
@@ -990,22 +987,22 @@ G4int G4Voxelizer::GetCandidatesVoxelArray(const G4ThreeVector &point,
       if (fBoundaries[0].size() > 2)
       {
         slice = BinarySearch(fBoundaries[0], point.x());
-        if (!(mask = ((unsigned int*) fBitmasks[0].fAllBits)[slice]))
+        if ((mask = ((unsigned int*) fBitmasks[0].fAllBits)[slice]) == 0u)
           return 0;
       }
       if (fBoundaries[1].size() > 2)
       {
         slice = BinarySearch(fBoundaries[1], point.y());
-        if (!(mask &= ((unsigned int*) fBitmasks[1].fAllBits)[slice]))
+        if ((mask &= ((unsigned int*) fBitmasks[1].fAllBits)[slice]) == 0u)
           return 0;
       }
       if (fBoundaries[2].size() > 2)
       {
         slice = BinarySearch(fBoundaries[2], point.z());
-        if (!(mask &= ((unsigned int*) fBitmasks[2].fAllBits)[slice]))
+        if ((mask &= ((unsigned int*) fBitmasks[2].fAllBits)[slice]) == 0u)
           return 0;
       }
-      if (crossed && (!(mask &= ~((unsigned int*)crossed->fAllBits)[0])))
+      if ((crossed != nullptr) && ((mask &= ~((unsigned int*)crossed->fAllBits)[0]) == 0u))
         return 0;
 
       FindComponentsFastest(mask, list, 0);
@@ -1019,18 +1016,18 @@ G4int G4Voxelizer::GetCandidatesVoxelArray(const G4ThreeVector &point,
         masks[i] = ((unsigned int*) fBitmasks[i].fAllBits)
                  + slice * fNPerSlice;
       }
-      unsigned int* maskCrossed = crossed
-                                ? (unsigned int*)crossed->fAllBits : 0;
+      unsigned int* maskCrossed = crossed != nullptr
+                                ? (unsigned int*)crossed->fAllBits : nullptr;
 
       for (G4int i = 0 ; i < fNPerSlice; ++i)
       {
         // Logic "and" of the masks along the 3 axes x, y, z:
         // removing "if (!" and ") continue" => slightly slower
         //
-        if (!(mask = masks[0][i])) continue;
-        if (!(mask &= masks[1][i])) continue;
-        if (!(mask &= masks[2][i])) continue;
-        if (maskCrossed && !(mask &= ~maskCrossed[i])) continue;
+        if ((mask = masks[0][i]) == 0u) continue;
+        if ((mask &= masks[1][i]) == 0u) continue;
+        if ((mask &= masks[2][i]) == 0u) continue;
+        if ((maskCrossed != nullptr) && ((mask &= ~maskCrossed[i]) == 0u)) continue;
 
         FindComponentsFastest(mask, list, i);
       }
@@ -1101,13 +1098,13 @@ G4Voxelizer::GetCandidatesVoxelArray(const std::vector<G4int>& voxels,
     if (fNPerSlice == 1)
     {
       unsigned int mask;
-      if (!(mask = ((unsigned int *) bitmasks[0].fAllBits)[voxels[0]]))
+      if ((mask = ((unsigned int *) bitmasks[0].fAllBits)[voxels[0]]) == 0u)
         return 0;
-      if (!(mask &= ((unsigned int *) bitmasks[1].fAllBits)[voxels[1]]))
+      if ((mask &= ((unsigned int *) bitmasks[1].fAllBits)[voxels[1]]) == 0u)
         return 0;
-      if (!(mask &= ((unsigned int *) bitmasks[2].fAllBits)[voxels[2]]))
+      if ((mask &= ((unsigned int *) bitmasks[2].fAllBits)[voxels[2]]) == 0u)
         return 0;
-      if (crossed && (!(mask &= ~((unsigned int *)crossed->fAllBits)[0])))
+      if ((crossed != nullptr) && ((mask &= ~((unsigned int *)crossed->fAllBits)[0]) == 0u))
         return 0;
 
       FindComponentsFastest(mask, list, 0);
@@ -1121,17 +1118,17 @@ G4Voxelizer::GetCandidatesVoxelArray(const std::vector<G4int>& voxels,
                  + voxels[i]*fNPerSlice;
       }
       unsigned int *maskCrossed = crossed != nullptr
-                                ? (unsigned int *)crossed->fAllBits : 0;
+                                ? (unsigned int *)crossed->fAllBits : nullptr;
 
       for (G4int i = 0 ; i < fNPerSlice; ++i)
       {
         // Logic "and" of the masks along the 3 axes x, y, z:
         // removing "if (!" and ") continue" => slightly slower
         //
-        if (!(mask = masks[0][i])) continue;
-        if (!(mask &= masks[1][i])) continue;
-        if (!(mask &= masks[2][i])) continue;
-        if (maskCrossed && !(mask &= ~maskCrossed[i])) continue;
+        if ((mask = masks[0][i]) == 0u) continue;
+        if ((mask &= masks[1][i]) == 0u) continue;
+        if ((mask &= masks[2][i]) == 0u) continue;
+        if ((maskCrossed != nullptr) && ((mask &= ~maskCrossed[i]) == 0u)) continue;
 
         FindComponentsFastest(mask, list, i);
       }
@@ -1361,7 +1358,7 @@ G4int G4Voxelizer::AllocatedMemory()
   size += fBitmasks[0].GetNbytes() + fBitmasks[1].GetNbytes()
         + fBitmasks[2].GetNbytes();
 
-  G4int csize = (G4int)fCandidates.size();
+  auto csize = (G4int)fCandidates.size();
   for (G4int i = 0; i < csize; ++i)
   {
     size += sizeof(vector<G4int>) + fCandidates[i].capacity() * sizeof(G4int);

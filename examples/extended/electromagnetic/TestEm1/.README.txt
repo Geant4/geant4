@@ -122,6 +122,7 @@ Idle> exit
   Macros to be run interactively:
   - annihil.mac: To visualise 100 MeV e+ annihilation
   - decayinfly.mac: To visualise decay in fly of N16
+  - etaDecay.mac: to visualise decay of eta particle
   - gammaconversion.mac: To visualise gamma conversion and e+ annihilation
   - photon.mac: To visualiza p300 keV photon beam
   - stepMax.mac: to test command /testem/stepMax

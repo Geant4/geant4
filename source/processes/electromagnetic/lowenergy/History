@@ -6,6 +6,28 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-03-14 Z.Li (emlowen-V11-01-03)
+- applied clang-tidy, clang-format for: G4LivermoreRayleighModel.cc/hh,
+ G4LivermoreGammaConversion5DModel.cc/hh,
+ G4LivermoreGammaConversionModel.cc/hh,
+ G4LivermoreComptonModel.cc/hh,
+ G4LivermorePhotoElectricModel.cc/hh
+- used access to G4LEDATA via G4EmParameters for G4LivermoreComptonModel,
+ G4LivermoreGammaConversion5DModel,
+ G4LivermoreGammaConversionModel
+
+## 2023-03-05 V. Ivanchenko (emlowen-V11-01-02)
+- G4LowEWentzelVIModel - update according to Coulomb scattering models
+
+## 2023-02-27 Z.Li (emlowen-V11-01-01)
+- G4LivermoreGammaConversionModel, G4LivermoreGammaConversion5DModel - fix
+spline interpolation by calling FillSecondDerivatives()
+
+## 2023-01-27 V. Ivanchenko (emlowen-V11-01-00)
+- G4LivermorePhotoElectricModel, G4LivermoreRayleighModel - do not call
+    directly environment variable - use G4EmParameters method,
+    uniformly implement lock for reading data on fly, minor code format
+
 ## 2022-11-23 Gabriele Cosmo (emlowen-V11-00-16)
 - Fixed more compilation warnings for implicit type conversions.
 

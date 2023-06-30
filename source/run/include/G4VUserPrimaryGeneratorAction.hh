@@ -47,9 +47,8 @@ class G4Event;
 class G4VUserPrimaryGeneratorAction
 {
   public:
-
     G4VUserPrimaryGeneratorAction();
-    virtual ~G4VUserPrimaryGeneratorAction();
+    virtual ~G4VUserPrimaryGeneratorAction() = default;
 
     virtual void GeneratePrimaries(G4Event* anEvent) = 0;
 };

@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(RunAction* runaction)
-:G4UserTrackingAction(), fRunAction(runaction)
+: fRunAction(runaction)
 { 
   fEkin1 = 0.;
 }

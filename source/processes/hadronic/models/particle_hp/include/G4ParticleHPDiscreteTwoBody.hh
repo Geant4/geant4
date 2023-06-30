@@ -29,72 +29,67 @@
 #ifndef G4ParticleHPDiscreteTwoBody_h
 #define G4ParticleHPDiscreteTwoBody_h 1
 
-//101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
+// 101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
 
-#include "G4ios.hh"
-#include <fstream>
-#include "globals.hh"
-#include "G4VParticleHPEnergyAngular.hh"
-#include "G4ParticleHPLegendreTable.hh"
-#include "G4ParticleHPInterpolator.hh"
 #include "G4InterpolationManager.hh"
+#include "G4ParticleHPInterpolator.hh"
+#include "G4ParticleHPLegendreTable.hh"
+#include "G4VParticleHPEnergyAngular.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <fstream>
 
 class G4ParticleHPDiscreteTwoBody : public G4VParticleHPEnergyAngular
 {
   public:
-  
-  G4ParticleHPDiscreteTwoBody()
-  {
-    theCoeff = 0;
-    bCheckDiffCoeffRepr = true;
-    if ( std::getenv( "G4PHP_DO_NOT_CHECK_DIFF_COEFF_REPR" ) ) bCheckDiffCoeffRepr = false;
-    nEnergy = 0;
-  }
-  ~G4ParticleHPDiscreteTwoBody()
-  {
-    if(theCoeff!=0) delete [] theCoeff;
-  }
-  
-  void Init(std::istream & aDataFile)
-  {
-    aDataFile >> nEnergy;
-    theManager.Init(aDataFile);
-    theCoeff = new G4ParticleHPLegendreTable[nEnergy];
-    for(G4int i=0; i<nEnergy; i++)
+    G4ParticleHPDiscreteTwoBody()
     {
-      G4double energy;
-      G4int aRep, nCoeff;
-      aDataFile >> energy >> aRep >> nCoeff;
-      //-      G4cout << this << " " << i << " G4ParticleHPDiscreteTwoBody READ DATA " << energy << " " << aRep << " " << nCoeff << G4endl;
-      energy*=CLHEP::eV;
-      G4int nPoints=nCoeff;
-      if(aRep>0) nPoints*=2;
-      //theCoeff[i].Init(energy, nPoints);
-
-      theCoeff[i].Init(energy, nPoints-1);
-      theCoeff[i].SetRepresentation(aRep);
-      for(G4int ii=0; ii<nPoints; ii++)
-      {
-        G4double y;
-        aDataFile >> y;
-        theCoeff[i].SetCoeff(ii, y);
-       }
+      theCoeff = nullptr;
+      bCheckDiffCoeffRepr = true;
+      if (std::getenv("G4PHP_DO_NOT_CHECK_DIFF_COEFF_REPR") != nullptr) bCheckDiffCoeffRepr = false;
+      nEnergy = 0;
     }
-  }
-    
-  G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
-  G4double MeanEnergyOfThisInteraction() { return -1; }
-  
-  private:
-  
-  G4int nEnergy;
-  G4InterpolationManager theManager; // knows the interpolation between stores
-  G4ParticleHPLegendreTable * theCoeff;
-    
-  private:
-  
-  G4ParticleHPInterpolator theInt;
+    ~G4ParticleHPDiscreteTwoBody() override { delete[] theCoeff; }
 
-  G4bool bCheckDiffCoeffRepr; // for example ENDF-VII0_proton/Inelastic/F01/4_9_Beryllium has 0 for energy 7.5E+07 and 12 for energy 1.e+08
+    void Init(std::istream& aDataFile) override
+    {
+      aDataFile >> nEnergy;
+      theManager.Init(aDataFile);
+      theCoeff = new G4ParticleHPLegendreTable[nEnergy];
+      for (G4int i = 0; i < nEnergy; i++) {
+        G4double energy;
+        G4int aRep, nCoeff;
+        aDataFile >> energy >> aRep >> nCoeff;
+        //-      G4cout << this << " " << i << " G4ParticleHPDiscreteTwoBody READ DATA " << energy
+        //<< " " << aRep << " " << nCoeff << G4endl;
+        energy *= CLHEP::eV;
+        G4int nPoints = nCoeff;
+        if (aRep > 0) nPoints *= 2;
+        // theCoeff[i].Init(energy, nPoints);
+
+        theCoeff[i].Init(energy, nPoints - 1);
+        theCoeff[i].SetRepresentation(aRep);
+        for (G4int ii = 0; ii < nPoints; ii++) {
+          G4double y;
+          aDataFile >> y;
+          theCoeff[i].SetCoeff(ii, y);
+        }
+      }
+    }
+
+    G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
+    G4double MeanEnergyOfThisInteraction() override { return -1; }
+
+  private:
+    G4int nEnergy;
+    G4InterpolationManager theManager;  // knows the interpolation between stores
+    G4ParticleHPLegendreTable* theCoeff;
+
+  private:
+    G4ParticleHPInterpolator theInt;
+
+    G4bool bCheckDiffCoeffRepr;  // for example ENDF-VII0_proton/Inelastic/F01/4_9_Beryllium has 0
+                                 // for energy 7.5E+07 and 12 for energy 1.e+08
 };
 #endif

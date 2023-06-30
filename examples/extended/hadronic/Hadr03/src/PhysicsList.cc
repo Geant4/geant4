@@ -71,7 +71,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-:G4VModularPhysicsList()
 {
   G4int verb = 1;  
   SetVerboseLevel(verb);
@@ -94,10 +93,10 @@ PhysicsList::PhysicsList()
   // Hadron Inelastic physics
   //
   ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  //  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC(verb));  
-  RegisterPhysics( new G4HadronInelasticQBBC(verb));
+  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   ////RegisterPhysics( new G4HadronPhysicsShielding(verb));
     
@@ -120,11 +119,6 @@ PhysicsList::PhysicsList()
   // Radioactive decay
   RegisterPhysics(new G4RadioactiveDecayPhysics());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

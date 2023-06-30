@@ -38,9 +38,6 @@ G4VEvaporationFactory::G4VEvaporationFactory(G4VEvaporationChannel* ptr)
   : thePhotonEvaporation(ptr)
 {}
 
-G4VEvaporationFactory::~G4VEvaporationFactory()
-{}
-
 
 
 

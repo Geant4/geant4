@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,7 +45,9 @@ Registered graphics systems are:
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -332,7 +334,7 @@ eBrem:  for e-  XStype:4  SubType=3
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -364,7 +366,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -396,7 +398,7 @@ hPairProd:  for proton  XStype:1  SubType=4
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -409,7 +411,6 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -455,7 +456,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -487,7 +488,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -519,7 +520,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -551,7 +552,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -583,7 +584,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -615,7 +616,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -647,7 +648,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -1033,12 +1034,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 ================================================================
 ### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
@@ -1115,7 +1125,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.980000s Real=1.235965s Sys=0.250000s
+  User=0.850000s Real=1.145353s Sys=0.290000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1398,7 +1408,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.620000s Real=2.021582s Sys=0.380000s
+  User=1.410000s Real=1.879351s Sys=0.460000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1712,7 +1722,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.610000s Real=0.771954s Sys=0.160000s
+  User=0.390000s Real=0.515297s Sys=0.130000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1720,124 +1730,124 @@ Region : Calor-A
  Production thresholds :
     gamma 200 um     e- 200 um     e+ 200 um 
  Energy deposition in an event :
-    Absorber 1.19552 GeV      Gap 511.23 MeV
+    Absorber 728.001 MeV      Gap 315.739 MeV
  Number of secondaries in an event :
-    gamma in Absorber 234.1    in Gap 66.3
-    e-    in Absorber 1354.6    in Gap 565
-    e+    in Absorber 14.5    in Gap 3.5
+    gamma in Absorber 91    in Gap 24.8
+    e-    in Absorber 494.4    in Gap 234
+    e+    in Absorber 4.2    in Gap 1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.25598 keV    in Gap 1.49714 keV
-    e-    in Absorber 102.532 eV     in Gap 107.703 eV 
-    e+    in Absorber 86.1261 keV    in Gap 874.058 keV
+    gamma in Absorber 3.24746 keV    in Gap 1.55735 keV
+    e-    in Absorber 108.164 eV     in Gap 107.539 eV 
+    e+    in Absorber 1.02427 MeV    in Gap 312.188 keV
  Total track length of e+/e- in an event :
-    Absorber 1.93992 m        Gap 1.81687 m  
+    Absorber 82.4607 cm       Gap 77.4857 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 2602.6      Gap 1212.4
+    Absorber 1009.7      Gap 508.4
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    1342.62      212.7      634.4       11.8    2639.71     1739.1
-       1    183.735       51.2      292.2        2.8    598.346      647.7
-       2    64.3192       13.4      203.6        1.1    201.593      331.8
-       3    40.7937        8.5      170.7        0.9    129.265      260.4
-       4     19.922        4.6        125        0.4     50.724      178.4
-       5    19.4524        4.5      111.6        0.4    57.1305        163
-       6    7.19639        1.6       83.1        0.3    14.2719      104.5
-       7    5.53024        0.4       69.8        0.1    10.7496       87.9
-       8    5.77545        0.9       51.6        0.1    12.4482       70.7
-       9    4.86693        0.8       41.7          0    12.9146       57.8
-      10    2.77177        0.6       36.6          0    4.83976       44.8
-      11    1.92761        0.1       22.9          0    4.62547       27.3
-      12    1.73948        0.1         19          0    5.29724       26.5
-      13    1.27924          0       12.3          0    3.72482         16
-      14   0.710906        0.3        8.9          0    1.21006       11.3
-      15   0.574269        0.2        7.8        0.1   0.860434        9.6
-      16    1.49909        0.3        8.8          0    4.52008       12.9
-      17   0.932657        0.2          7          0    1.99012        9.2
-      18   0.306185          0        3.2          0    1.12983        3.7
-      19   0.424798          0        3.8          0   0.991884        5.7
+       0    954.259       96.6      369.6        4.1    1321.58      949.7
+       1     57.792       14.1       93.4        0.7    198.537      212.7
+       2     10.638        2.2       57.1        0.1    31.8616       80.8
+       3    6.76831          1       48.9          0    15.8042       67.9
+       4    3.83111        0.2       37.5          0    9.17188       54.2
+       5    1.49227        0.4       28.1        0.1    2.06383       34.4
+       6     1.2796        0.2       22.2          0    3.12037       26.4
+       7     1.8701        0.2       17.1          0     3.3927       21.5
+       8   0.708296        0.1       14.6          0   0.744674       17.4
+       9   0.418581          0         10          0   0.337419       10.9
+      10   0.808717        0.2        6.8        0.2    1.48594       10.2
+      11    1.33151        0.3        5.5          0    4.02852        8.7
+      12   0.287192          0          3          0    1.03687        4.2
+      13   0.159013          0        3.7          0   0.174192        4.7
+      14    0.13879          0        2.4          0   0.126448        2.5
+      15   0.259761          0        2.6          0   0.551937        3.1
+      16    1.38269        0.3        3.7          0    4.77012        5.7
+      17   0.198867          0        0.6          0   0.472143        1.4
+      18 0.00966625          0        0.3          0 0.00782306        0.3
+      19   0.047436          0        0.2          0   0.141041        0.2
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 567.281 MeV      Gap 246.856 MeV
+    Absorber 649.538 MeV      Gap 285.189 MeV
  Number of secondaries in an event :
-    gamma in Absorber 30.3    in Gap 10.1
-    e-    in Absorber 173.2    in Gap 78
-    e+    in Absorber 1.2    in Gap 0.9
+    gamma in Absorber 50.5    in Gap 16.3
+    e-    in Absorber 282.8    in Gap 120.3
+    e+    in Absorber 3.2    in Gap 1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 9.66217 keV    in Gap 4.26122 keV
-    e-    in Absorber 119.794 eV     in Gap 105.255 eV 
-    e+    in Absorber 2.81327 MeV    in Gap 1.6348 MeV
+    gamma in Absorber 9.63969 keV    in Gap 4.26122 keV
+    e-    in Absorber 101.101 eV     in Gap 107.59 eV 
+    e+    in Absorber 447.351 keV    in Gap 659.421 keV
  Total track length of e+/e- in an event :
-    Absorber 36.102 cm       Gap 34.7306 cm 
+    Absorber 55.2114 cm       Gap 54.9258 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 384.5      Gap 206.4
+    Absorber 593.2      Gap 298.9
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    770.796       31.1       81.4          1    589.597      329.1
-       1     17.768          4       31.3        0.3    53.1624       60.5
-       2     6.9899        1.4         30        0.1    18.8324       43.9
-       3    6.22643        1.4       20.4        0.2    16.8842       32.2
-       4    3.40658        0.6       17.6        0.1    8.25077       25.9
-       5     4.2777        1.1       18.6        0.2    11.0803       28.8
-       6   0.750727        0.1         12          0    1.69591       16.7
-       7   0.831454        0.1        7.1          0    2.40055       11.9
-       8   0.265234          0        6.3          0   0.166322        7.5
-       9   0.178006          0          4          0    0.22946        4.3
-      10   0.724718        0.2        4.6        0.1    1.94056        5.8
-      11   0.198995          0          3          0   0.364021        4.5
-      12    1.17537        0.4          3        0.1    3.11665        6.1
-      13   0.100875          0        2.6          0  0.0803943        3.1
-      14   0.085801          0        2.3          0   0.060638        2.6
-      15   0.047615          0        0.9          0  0.0571591          1
-      16  0.0738247          0        1.1          0  0.0607894        1.4
-      17  0.0966271          0        2.5          0  0.0630644        2.8
-      18  0.0179558          0        0.6          0  0.0183024        0.6
-      19   0.109946          0        1.1          0   0.260164        1.3
+       0    854.778         52        114          3    870.938        441
+       1    39.4923        8.8       59.3        0.6    122.152      123.1
+       2    14.3661        2.3       42.9        0.1    44.2012       67.4
+       3    7.80178          1       41.2        0.1     20.426       61.4
+       4    4.71302        1.1       31.9        0.3    10.4895       43.4
+       5     5.6183        0.9       25.1          0    15.9068         38
+       6    2.03703        0.2       21.9          0    5.77876       29.1
+       7    1.27589        0.2       15.6          0    2.99576       21.4
+       8    2.00796        0.2       11.9        0.1    4.80815       16.5
+       9   0.584875        0.1        7.9          0   0.583106        9.2
+      10   0.732646          0       10.2          0    1.24578       11.7
+      11   0.319293          0          5          0   0.529479        9.8
+      12   0.335173          0        4.4          0   0.406687        6.2
+      13   0.123144          0        2.6          0   0.152004        2.9
+      14    0.07537          0        1.1          0   0.135234        1.4
+      15  0.0726208          0        2.7          0  0.0284834        3.1
+      16   0.134296          0        1.8          0   0.184562          2
+      17  0.0562335          0        1.8          0  0.0261102        2.3
+      18  0.0959391          0        0.7          0   0.127205          1
+      19  0.0945655          0        0.6          0   0.251453        0.7
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 589.853 MeV      Gap 257.617 MeV
+    Absorber 766.113 MeV      Gap 325.651 MeV
  Number of secondaries in an event :
-    gamma in Absorber 26.2    in Gap 6.5
-    e-    in Absorber 153.2    in Gap 67.4
-    e+    in Absorber 1.7    in Gap 0.1
+    gamma in Absorber 63.7    in Gap 19.4
+    e-    in Absorber 352.1    in Gap 151.8
+    e+    in Absorber 5    in Gap 1.6
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 28.474 keV    in Gap 10.5033 keV
-    e-    in Absorber 109.484 eV     in Gap 108.401 eV 
-    e+    in Absorber 282.376 keV    in Gap 991.655 keV
+    gamma in Absorber 28.5584 keV    in Gap 10.5033 keV
+    e-    in Absorber 106.842 eV     in Gap 108.401 eV 
+    e+    in Absorber 285.866 keV    in Gap 991.655 keV
  Total track length of e+/e- in an event :
-    Absorber 29.6272 cm       Gap 28.7327 cm 
+    Absorber 66.2788 cm       Gap 62.7681 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 292.7      Gap 125.3
+    Absorber 659.5      Gap 284.6
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    785.219       22.9       37.9        0.7    407.179      130.2
-       1    33.6477        6.4       32.6        0.5    96.0399       75.7
-       2    9.65042        1.1       26.3        0.3    27.2302       42.4
-       3    6.64106          1       24.8        0.2    21.0532       34.6
-       4    2.83688        0.4       19.9          0    7.67334       25.8
-       5    1.98337        0.3       18.9          0    4.23383       25.6
-       6     1.4278        0.1       15.7          0    3.30465       19.9
-       7    1.69195        0.3          9        0.1    5.27679       13.5
-       8     1.3009        0.1        6.4          0    4.30337       13.6
-       9    1.69681        0.1        5.6          0    5.05333        7.9
-      10   0.328891          0        5.4          0   0.404211        6.5
-      11   0.233676          0        6.7          0   0.196472        8.6
-      12   0.380454          0        3.7          0    1.00506        5.1
-      13  0.0884787          0        2.4          0   0.109534        2.7
-      14    0.16583          0          2          0   0.192872        2.3
-      15  0.0563058          0        1.3          0  0.0522996        1.3
-      16 0.00411174          0        0.1          0 0.00151729        0.1
-      17  0.0314167          0        0.3          0  0.0352033        0.3
-      18  0.0644641          0        0.2          0   0.246982        0.3
-      19  0.0140478          0        0.9          0 0.00437329          1
+       0    979.184       65.3       97.1        4.5      985.6      336.2
+       1    60.4834       11.1       79.2        1.2    171.593      163.1
+       2    20.4805        3.2       64.8        0.4    55.3444       95.1
+       3    10.3586        1.7       49.4        0.4    29.7366       68.7
+       4    5.38725        0.6         43          0    13.0717       57.7
+       5    3.53666        0.3       37.8          0    7.51604         47
+       6    2.76645        0.2       35.2          0    5.12492       44.2
+       7    2.30659        0.3         24        0.1    5.72193       31.6
+       8    1.92203        0.1       17.9          0    5.42761       26.9
+       9    2.22174        0.2       12.3          0    5.86431       16.2
+      10    1.22549        0.1        9.9          0    2.43221       13.8
+      11   0.399014          0        9.4          0   0.414366       12.4
+      12   0.556136          0        5.7          0    1.48952        8.2
+      13   0.245392          0        5.8          0   0.243354        6.7
+      14   0.230322          0          4          0   0.238537        4.4
+      15   0.118979          0          3          0  0.0926345        4.7
+      16  0.0354621          0        0.8          0  0.0405596        1.9
+      17  0.0426964          0        0.4          0  0.0436959        0.4
+      18  0.0786557          0        0.5          0   0.259725        0.6
+      19  0.0474738          0        1.4          0  0.0337627        1.6
 ############################################################
 /run/dumpCouples
 
@@ -2055,7 +2065,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.570000s Real=0.722543s Sys=0.140000s
+  User=0.480000s Real=0.667565s Sys=0.180000s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2063,124 +2073,124 @@ Region : Calor-A
  Production thresholds :
     gamma 10 um     e- 10 um     e+ 10 um 
  Energy deposition in an event :
-    Absorber 585.717 MeV      Gap 259.27 MeV
+    Absorber 553.278 MeV      Gap 245.771 MeV
  Number of secondaries in an event :
-    gamma in Absorber 58.4    in Gap 15.1
-    e-    in Absorber 1067.3    in Gap 1013.4
-    e+    in Absorber 2    in Gap 0.2
+    gamma in Absorber 50.8    in Gap 11.7
+    e-    in Absorber 972.8    in Gap 954.5
+    e+    in Absorber 1    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 1.02488 keV    in Gap 1.04149 keV
-    e-    in Absorber 10.2233 eV     in Gap 195.675 eV 
-    e+    in Absorber 1.49103 MeV    in Gap 1.90735 MeV
+    gamma in Absorber 997.226 eV     in Gap 992.995 eV 
+    e-    in Absorber 28.3342 eV     in Gap 132.647 eV 
+    e+    in Absorber 733.675 keV    in Gap 827.494 keV
  Total track length of e+/e- in an event :
-    Absorber 50.5193 cm       Gap 48.4697 cm 
+    Absorber 42.4409 cm       Gap 40.9812 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1631.7      Gap 1505.9
+    Absorber 1446.8      Gap 1367.9
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    793.024       57.5       1794        1.2    829.857     2646.6
-       1    29.2932        9.1       93.2        0.3    95.6807        195
-       2    7.89954        2.2         47        0.3    28.0737       85.1
-       3    4.04918        1.8       31.7        0.1    9.03112       48.7
-       4    1.70351        0.3       23.8          0    2.88524       30.6
-       5    3.13708        1.1       24.2        0.2    8.99409       37.1
-       6     0.9436        0.2       13.9          0    2.16874       19.6
-       7   0.455112        0.1        9.6          0   0.485602       13.2
-       8    1.02879        0.1        9.4          0    3.69018       15.2
-       9    0.47612        0.2          6          0   0.897147        8.2
-      10   0.224993          0        3.6          0   0.554174        4.7
-      11   0.194514          0        2.9          0   0.595437          4
-      12   0.169351        0.1        3.7          0   0.229825        4.3
-      13  0.0455694          0        1.3          0  0.0361715        1.4
-      14   0.252419          0        3.3          0    0.37695        5.2
-      15  0.0692999          0        1.4          0  0.0702359        1.5
-      16   0.205377        0.1        2.5          0   0.353812        3.3
-      17   0.059276          0        1.8          0  0.0544481        1.8
-      18    1.53294        0.7        4.3        0.1    5.51196        8.3
-      19    0.16659          0        1.8          0   0.283356        2.3
+       0    753.145       48.4     1684.7        0.5    685.968     2389.8
+       1    22.9178        6.7       75.1        0.3    79.0745      163.8
+       2    7.90767        2.7       39.4        0.2    27.3976       68.6
+       3    4.94264        1.4       33.9        0.2    16.7343       56.8
+       4    1.73332        0.7       23.6          0    3.53076       31.4
+       5    3.69015        0.9       18.4          0    10.7712       30.1
+       6    1.07835        0.4         12          0    2.74197       16.6
+       7   0.496483        0.2          7          0    1.16342        9.7
+       8   0.191226          0        4.6          0   0.271286        6.8
+       9   0.354164          0        6.8          0   0.386845        8.2
+      10   0.545928        0.2        6.1          0    1.03249        7.8
+      11   0.790888        0.2        5.2          0    2.48037        8.4
+      12  0.0675242          0        2.9          0  0.0337332        3.3
+      13  0.0615859        0.1        1.3          0  0.0723459        1.5
+      14   0.890815        0.6        2.9          0    2.25766        5.4
+      15   0.138195          0        1.7          0   0.209642        4.1
+      16  0.0136212          0        0.5          0 0.00488403        0.6
+      17   0.064214          0        0.7          0  0.0819523        1.2
+      18  0.0186744          0        0.5          0 0.00757987        0.6
+      19          0          0          0          0          0          0
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 100 um     e- 100 um     e+ 100 um 
  Energy deposition in an event :
-    Absorber 595.105 MeV      Gap 259.577 MeV
+    Absorber 538.52 MeV      Gap 230.306 MeV
  Number of secondaries in an event :
-    gamma in Absorber 53.3    in Gap 14
-    e-    in Absorber 412.5    in Gap 215.2
-    e+    in Absorber 1    in Gap 0.5
+    gamma in Absorber 34.2    in Gap 7.8
+    e-    in Absorber 307.8    in Gap 170.6
+    e+    in Absorber 0.9    in Gap 0.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 2.3491 keV    in Gap 1.15784 keV
-    e-    in Absorber 113.282 eV     in Gap 106.099 eV 
-    e+    in Absorber 405.986 keV    in Gap 1.33754 MeV
+    gamma in Absorber 2.3487 keV    in Gap 1.13219 keV
+    e-    in Absorber 113.719 eV     in Gap 159.551 eV 
+    e+    in Absorber 352.402 keV    in Gap 31.7914 MeV
  Total track length of e+/e- in an event :
-    Absorber 50.3585 cm       Gap 46.9645 cm 
+    Absorber 37.1589 cm       Gap 31.0624 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 754.4      Gap 425.9
+    Absorber 564.1      Gap 300.4
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    807.122         57      424.5        0.9    827.081      847.7
-       1    26.4883        6.1       47.4        0.4    90.3887      108.3
-       2    10.0733        1.7       37.4          0    32.4118       66.6
-       3    2.70069        0.6       26.9        0.1    5.56859       36.8
-       4     2.8193        0.8       19.9          0    6.02826       28.7
-       5    1.28801        0.4       15.9          0    3.97078       24.2
-       6   0.841962        0.2       11.4        0.1    2.32673         15
-       7   0.712279          0        9.5          0    1.21512       11.1
-       8    0.27373          0        6.7          0   0.317157        7.3
-       9   0.581481        0.1          6          0   0.932896        7.2
-      10   0.214299          0        3.7          0   0.363906        4.4
-      11   0.241297          0        3.5          0    0.22378        4.1
-      12   0.462932        0.1        2.6          0    1.14887          4
-      13   0.204397        0.1        3.4          0   0.212986        4.2
-      14  0.0538057          0        1.8          0  0.0274146        2.1
-      15   0.101464          0        1.6          0   0.121352        1.8
-      16   0.044573          0        0.9          0  0.0472837          1
-      17  0.0559909          0          1          0  0.0944923        1.1
-      18  0.0304629          0        1.3          0   0.016996        1.4
-      19  0.0513452        0.1          1          0  0.0527761        1.3
+       0    741.102         35      354.2        0.6    608.062        672
+       1    14.9708        5.2       33.5        0.5    40.8923       63.9
+       2    6.09035        1.2       20.7          0    18.0816       35.5
+       3    2.26613        0.3       13.5          0    5.74094       23.6
+       4    0.44282          0        8.6          0    0.67612        9.8
+       5   0.765354          0       10.2          0    1.13407       12.3
+       6    1.08668          0        9.2          0    3.61044       11.9
+       7   0.839604        0.3        5.9          0    2.24363        9.2
+       8   0.374962          0        3.3          0   0.820106        4.6
+       9   0.118705          0        2.8          0   0.137405        3.2
+      10   0.190042          0        2.8          0   0.235701        3.3
+      11  0.0715621          0        0.8          0   0.156254        0.9
+      12  0.0436695          0        1.3          0    0.04137        1.4
+      13   0.180372          0        2.4          0   0.187779        2.6
+      14  0.0470512          0        1.1          0  0.0410691        1.3
+      15  0.0564005          0        2.6          0  0.0306559        2.9
+      16  0.0143579          0        0.8          0 0.00420542        0.9
+      17  0.0147929          0        0.9          0 0.00429595          1
+      18  0.0478342          0        1.4          0  0.0353442        1.6
+      19 0.00958035          0        0.9          0 0.00286521        0.9
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 625.564 MeV      Gap 265.174 MeV
+    Absorber 704.058 MeV      Gap 319.763 MeV
  Number of secondaries in an event :
-    gamma in Absorber 51.8    in Gap 11.6
-    e-    in Absorber 273    in Gap 119.4
-    e+    in Absorber 2.5    in Gap 0.4
+    gamma in Absorber 70.9    in Gap 20.8
+    e-    in Absorber 396.3    in Gap 184.4
+    e+    in Absorber 3.1    in Gap 1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 7.07923 keV    in Gap 3.05725 keV
-    e-    in Absorber 101.874 eV     in Gap 139.808 eV 
-    e+    in Absorber 122.812 keV    in Gap 7.37788 MeV
+    gamma in Absorber 7.06396 keV    in Gap 2.93924 keV
+    e-    in Absorber 107.876 eV     in Gap 143.427 eV 
+    e+    in Absorber 191.97 keV    in Gap 131.891 keV
  Total track length of e+/e- in an event :
-    Absorber 52.1373 cm       Gap 46.6686 cm 
+    Absorber 70.4635 cm       Gap 75.8072 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 571.7      Gap 278.9
+    Absorber 800.2      Gap 415.6
 ------------------------------------------------------------
 Scores in parallel geometry
 layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
-       0    822.002       51.1      138.6        2.1    786.778      465.9
-       1     37.584        7.2         49        0.5    116.463      110.9
-       2    11.8859        2.2       49.7        0.2    34.6437       68.5
-       3    4.46113        0.9       32.2        0.1    12.4679       42.7
-       4    4.66085        0.6       26.7          0    12.2543       34.2
-       5    2.23439        0.1       25.9          0    5.46285       31.4
-       6   0.631639          0       16.5          0   0.637368         19
-       7    1.35121        0.2       10.4          0    3.69004         20
-       8    1.22403          0        8.6          0    3.64453       10.7
-       9    1.54481        0.5        8.7          0     4.9885       11.7
-      10    1.73719        0.3        6.2          0    4.37516        8.9
-      11   0.622882          0        3.8          0    1.77233        5.7
-      12   0.337802          0        5.5          0   0.357564        7.3
-      13   0.150336        0.1        3.9          0   0.110553        5.2
-      14   0.179318        0.1          3          0   0.295092        3.9
-      15  0.0439066        0.1        1.5          0  0.0201232        1.9
-      16  0.0170146          0        0.9          0 0.00682534          1
-      17  0.0613513          0        0.8          0  0.0896161        1.1
-      18 0.00808667          0        0.5          0 0.00230322        0.6
-      19          0          0          0          0          0          0
+       0    904.424       70.5      173.7        2.5    1095.98      584.5
+       1    56.1562       11.4       79.7        0.6    184.842      167.7
+       2    20.0452        3.2       61.6        0.2    63.7514       96.6
+       3    14.0023        2.1       57.8        0.3     42.713       86.4
+       4     8.8322        1.5       50.6        0.1    22.7907       70.1
+       5    7.70976        1.6       36.3        0.2    22.6349       53.4
+       6    5.94264        1.1       27.2        0.2    17.7309       44.5
+       7   0.888171          0       20.5          0    1.10561       23.2
+       8    1.05145        0.1       16.3          0    1.82502       20.5
+       9   0.956593          0       11.9          0    1.61088       14.5
+      10   0.616778          0       11.1          0   0.823558       14.1
+      11   0.643169        0.1        6.8          0    1.34987        7.7
+      12      0.227          0        4.1          0   0.258358        4.8
+      13   0.183779          0        4.8          0   0.154414        5.6
+      14   0.661615          0        4.7          0     1.9524        5.9
+      15  0.0395653          0        1.9          0  0.0151225          2
+      16   0.212566        0.1        2.9          0   0.401413        3.5
+      17   0.243546          0        2.4          0   0.381821        2.8
+      18   0.426524          0        3.4          0     1.2994        4.3
+      19    0.42533          0        1.7          0   0.916155        2.3
 ############################################################
 /run/dumpCouples
 
@@ -2271,5 +2281,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.81 MB
+Dynamic pools deleted: 14 / Total memory freed: 0.82 MB
 ============================================================

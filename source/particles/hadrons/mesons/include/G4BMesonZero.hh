@@ -51,7 +51,7 @@ class G4BMesonZero : public G4ParticleDefinition
  private:
    static G4BMesonZero* theInstance;
    G4BMesonZero(){}
-   ~G4BMesonZero(){}
+   ~G4BMesonZero() override= default;
 
  public:
    static G4BMesonZero* Definition();

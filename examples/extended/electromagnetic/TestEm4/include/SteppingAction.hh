@@ -27,9 +27,6 @@
 /// \brief Definition of the SteppingAction class
 //
 //
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -46,12 +43,12 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(EventAction*);
-   ~SteppingAction();
+   ~SteppingAction() override = default;
 
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*) override;
     
   private:
-    EventAction* fEventAction;
+    EventAction* fEventAction = nullptr;
 };
 
 #endif

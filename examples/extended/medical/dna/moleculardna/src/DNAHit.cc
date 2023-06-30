@@ -33,31 +33,25 @@
 
 G4ThreadLocal G4Allocator<DNAHit>* MolecularDNAHitAllocator = nullptr;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DNAHit::DNAHit()
-  : G4VHit()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAHit::DNAHit(const molecule& mol, const G4int& placement_idx,  // ORG
-               const G4int& chain, const G4int& strand,          // ORG
-               const int64_t& bp, G4ThreeVector pos,
-               G4ThreeVector localpos,  // dousatsu
-               const G4double& energy, const G4double& d, G4String chromo,
+DNAHit::DNAHit(const molecule& mol, G4int placement_idx,  // ORG
+               G4int chain, G4int strand,          // ORG
+               int64_t bp, const G4ThreeVector& pos,
+               const G4ThreeVector& localpos,  // dousatsu
+               const G4double& energy, const G4double& d, const G4String& chromo,
                const G4MolecularConfiguration* radical)
-  : G4VHit()
-  , fMoleculeEnum(mol)
+  : fMoleculeEnum(mol)
   , fPlacementIdx(placement_idx)
   , fChainIdx(chain)
   , fStrandIdx(strand)
   , fBasePairIdx(bp)
-  , fPosition(std::move(pos))
-  , fLocalPosition(std::move(localpos))
+  , fPosition(pos)
+  , fLocalPosition(localpos)
   , fEnergy(energy)
   , fDistance(d)
-  , fChromosome(std::move(chromo))
+  , fChromosome(chromo)
   , fRadical(radical)
 {
   // Computed quantities
@@ -65,13 +59,13 @@ DNAHit::DNAHit(const molecule& mol, const G4int& placement_idx,  // ORG
   {
     if((fMoleculeEnum == SUGAR) || (fMoleculeEnum == PHOSPHATE))
     {
-      fStrand1Rad    = fRadical;
+      fStrand1Rad = fRadical;
       fStrand1Energy = fEnergy;
     }
     else if((fMoleculeEnum == CYTOSINE) || (fMoleculeEnum == GUANINE) ||
             (fMoleculeEnum == ADENINE) || (fMoleculeEnum == THYMINE))
     {
-      fBase1Rad  = fRadical;
+      fBase1Rad = fRadical;
       fBP1Energy = fEnergy;
     }
     else
@@ -84,13 +78,13 @@ DNAHit::DNAHit(const molecule& mol, const G4int& placement_idx,  // ORG
   {
     if((fMoleculeEnum == SUGAR) || (fMoleculeEnum == PHOSPHATE))
     {
-      fStrand2Rad    = fRadical;
+      fStrand2Rad = fRadical;
       fStrand2Energy = fEnergy;
     }
     else if((fMoleculeEnum == CYTOSINE) || (fMoleculeEnum == GUANINE) ||
             (fMoleculeEnum == ADENINE) || (fMoleculeEnum == THYMINE))
     {
-      fBase2Rad  = fRadical;
+      fBase2Rad = fRadical;
       fBP2Energy = fEnergy;
     }
     else
@@ -100,10 +94,6 @@ DNAHit::DNAHit(const molecule& mol, const G4int& placement_idx,  // ORG
     }
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DNAHit::~DNAHit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -136,7 +126,6 @@ void DNAHit::AddHit(const DNAHit& right)
 }
 
 DNAHit::DNAHit(const DNAHit& right)
-  : G4VHit()
 {
   this->SetPlacementIdx(right.GetPlacementIdx());
   this->SetMolecule(right.GetMolecule());
@@ -153,12 +142,12 @@ DNAHit::DNAHit(const DNAHit& right)
   // Computed Quantities, no setters.
   this->fStrand1Energy = right.GetStrand1Energy();
   this->fStrand2Energy = right.GetStrand2Energy();
-  this->fBP1Energy     = right.GetBP1Energy();
-  this->fBP2Energy     = right.GetBP2Energy();
-  this->fStrand1Rad    = right.GetStrand1Rad();
-  this->fBase1Rad      = right.GetBase1Rad();
-  this->fStrand2Rad    = right.GetStrand2Rad();
-  this->fBase2Rad      = right.GetBase2Rad();
+  this->fBP1Energy = right.GetBP1Energy();
+  this->fBP2Energy = right.GetBP2Energy();
+  this->fStrand1Rad = right.GetStrand1Rad();
+  this->fBase1Rad = right.GetBase1Rad();
+  this->fStrand2Rad = right.GetStrand2Rad();
+  this->fBase2Rad = right.GetBase2Rad();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -179,12 +168,12 @@ const DNAHit& DNAHit::operator=(const DNAHit& right)
 
   this->fStrand1Energy = right.GetStrand1Energy();
   this->fStrand2Energy = right.GetStrand2Energy();
-  this->fBP1Energy     = right.GetBP1Energy();
-  this->fBP2Energy     = right.GetBP2Energy();
-  this->fStrand1Rad    = right.GetStrand1Rad();
-  this->fBase1Rad      = right.GetBase1Rad();
-  this->fStrand2Rad    = right.GetStrand2Rad();
-  this->fBase2Rad      = right.GetBase2Rad();
+  this->fBP1Energy = right.GetBP1Energy();
+  this->fBP2Energy = right.GetBP2Energy();
+  this->fStrand1Rad = right.GetStrand1Rad();
+  this->fBase1Rad = right.GetBase1Rad();
+  this->fStrand2Rad = right.GetStrand2Rad();
+  this->fBase2Rad = right.GetBase2Rad();
   return *this;
 }
 

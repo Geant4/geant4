@@ -45,12 +45,12 @@ class G4ErrorTanPlaneTarget : public G4ErrorTarget
   public:
 
     G4ErrorTanPlaneTarget();
-    virtual ~G4ErrorTanPlaneTarget() = default;
+    ~G4ErrorTanPlaneTarget() override = default;
 
     virtual G4Plane3D GetTangentPlane( const G4ThreeVector& point ) const = 0;
       // Get tangent plane at point
 
-    virtual void Dump( const G4String& msg ) const = 0;
+    void Dump( const G4String& msg ) const override = 0;
       // Dump surface
 };
 

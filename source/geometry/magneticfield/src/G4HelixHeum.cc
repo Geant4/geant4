@@ -43,9 +43,7 @@ G4HelixHeum::G4HelixHeum(G4Mag_EqRhs* EqRhs)
 {
 }
 
-G4HelixHeum::~G4HelixHeum()
-{
-}
+G4HelixHeum::~G4HelixHeum() = default;
   
 void
 G4HelixHeum::DumbStepper( const G4double  yIn[],

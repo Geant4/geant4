@@ -107,6 +107,10 @@ public:
   void SetElasticProcess(G4HadronicProcess*);
   void SetCaptureProcess(G4HadronicProcess*);
 
+  // access methods to cross sections and processes
+  G4VCrossSectionDataSet* GetXSection(G4int type);  
+  G4HadronicProcess* GetHadronicProcess(G4int type);  
+
   inline const G4VProcess* GetSelectedProcess() const;
 
   inline void SetTimeLimit(G4double val);
@@ -145,9 +149,9 @@ private:
   static const size_t nTables = 5;
   static G4String nameT[nTables];
 
-  G4HadronicProcess* fInelastic = nullptr;
-  G4HadronicProcess* fElastic = nullptr;
-  G4HadronicProcess* fCapture = nullptr;
+  G4HadronicProcess* fInelasticP = nullptr;
+  G4HadronicProcess* fElasticP = nullptr;
+  G4HadronicProcess* fCaptureP = nullptr;
   G4HadronicProcess* fSelectedProc = nullptr;
 
   G4VCrossSectionDataSet* fInelasticXS = nullptr;

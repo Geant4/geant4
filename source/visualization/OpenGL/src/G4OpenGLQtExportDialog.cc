@@ -68,7 +68,7 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 
   // global layout
   QVBoxLayout* globalVLayout = new QVBoxLayout(this);
-  globalVLayout->setMargin(10);
+  globalVLayout->setContentsMargins(10,10,10,10);
   globalVLayout->setSpacing(10);
 
 
@@ -78,14 +78,14 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 
   QWidget * sizeWidget = new QWidget(this); // widget containing group button
   QVBoxLayout * sizeWidgetLayout = new QVBoxLayout(sizeWidget);
-  sizeWidgetLayout->setMargin (10);
+  sizeWidgetLayout->setContentsMargins(10,10,10,10);
 
   // original and modify radiobuttons
 
   sizeGroupBox = new QGroupBox(tr("Size"));
   QVBoxLayout *sizeGroupBoxLayout = new QVBoxLayout(sizeGroupBox);
   QButtonGroup * sizeButtonGroupBox = new QButtonGroup();
-  sizeGroupBoxLayout->setMargin (15);
+  sizeGroupBoxLayout->setContentsMargins(15,15,15,15);
 
   original = new QRadioButton("Original");
   modify = new QRadioButton("Modify");
@@ -157,7 +157,7 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 
 
     QVBoxLayout * EPSGroupBoxLayout = new QVBoxLayout(EPSWidgetGroupBox);
-     EPSGroupBoxLayout->setMargin (15);
+     EPSGroupBoxLayout->setContentsMargins(15,15,15,15);
 
 //     colorButton = new QRadioButton("Color",EPSWidgetGroupBox);
 //     BWButton = new QRadioButton("Grayscale",EPSWidgetGroupBox);
@@ -187,7 +187,7 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
 
     QGroupBox *imageGroupBox = new QGroupBox(tr("Image quality"),this);
     QHBoxLayout *hSliderLayout = new QHBoxLayout(imageGroupBox);
-    hSliderLayout->setMargin (15);
+    hSliderLayout->setContentsMargins(15,15,15,15);
 
     qualitySlider= new QSlider(Qt::Horizontal,imageGroupBox);
     qualitySlider->setMinimum(0);

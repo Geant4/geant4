@@ -104,7 +104,7 @@ G4ReflectedSolid& G4ReflectedSolid::operator=(const G4ReflectedSolid& rhs)
 
 G4GeometryType G4ReflectedSolid::GetEntityType() const 
 {
-  return G4String("G4ReflectedSolid");
+  return {"G4ReflectedSolid"};
 }
 
 const G4ReflectedSolid* G4ReflectedSolid::GetReflectedSolidPtr() const   

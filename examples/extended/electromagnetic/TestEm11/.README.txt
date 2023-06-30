@@ -163,11 +163,12 @@ Idle> exit
     - 7 : step size of charged secondary tracks      
     - 8 : longitudinal energy profile (in MeV.cm2/g), as a function of x/r0
           where r0 is the range of the primary particle 
-
-    - 11 : energy deposited in absorber 1
-    - 12 : energy deposited in absorber 2
+    - 9 : total energy leakage
+   - 10 : total energy : Edep + Eleak
+   - 11 : energy deposited in absorber 1
+   - 12 : energy deposited in absorber 2
       ...etc........
-
+      
    The histograms are managed by G4Analysis classes;
    The histos can be individually activated with the command :
 \verbatim

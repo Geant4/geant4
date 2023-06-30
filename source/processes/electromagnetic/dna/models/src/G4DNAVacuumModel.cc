@@ -26,71 +26,60 @@
 //
 
 #include "G4DNAVacuumModel.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
 
-G4DNAVacuumModel::G4DNAVacuumModel(const G4String& applyToMaterial, const G4ParticleDefinition*,
-                                   const G4String& nam)
-    : G4VDNAModel(nam, applyToMaterial)
+G4DNAVacuumModel::G4DNAVacuumModel(
+  const G4String& applyToMaterial, const G4ParticleDefinition*, const G4String& nam)
+  : G4VDNAModel(nam, applyToMaterial)
 {
-    verboseLevel = 0;
+  verboseLevel = 0;
 
-    if( verboseLevel>0 )
-    {
-        G4cout << "G4DNAVacuumModel is constructed " << G4endl;
-    }
+  if (verboseLevel > 0) {
+    G4cout << "G4DNAVacuumModel is constructed " << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAVacuumModel::~G4DNAVacuumModel()
-{ 
-    if (verboseLevel > 3)
-        G4cout << "Calling G4DNAVacuumModel::Initialise()" << G4endl;
-
+{
+  if (verboseLevel > 3) G4cout << "Calling G4DNAVacuumModel::Initialise()" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAVacuumModel::Initialise(const G4ParticleDefinition* particle,
-                                  const G4DataVector& /*cuts*/, G4ParticleChangeForGamma*)
+void G4DNAVacuumModel::Initialise(
+  const G4ParticleDefinition* particle, const G4DataVector& /*cuts*/)
 {
-
-    if (verboseLevel > 3)
-        G4cout << "Calling G4DNAVacuumModel::Initialise()" << G4endl;
-
-    EnableForMaterialAndParticle("G4_Galactic", particle->GetParticleName() );
+  if (verboseLevel > 3) {
+    G4cout << "Calling G4DNAVacuumModel::Initialise()" << G4endl;
+  }
+  if(G4Material::GetMaterial("G4_Galactic",false) != nullptr)
+  {
+    auto index = (G4int)G4Material::GetMaterial("G4_Galactic")->GetIndex();
+    EnableForMaterialAndParticle(index, particle);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAVacuumModel::CrossSectionPerVolume(const G4Material* /*material*/,
-                                                 const G4String& /*materialName*/,
-                                                 const G4ParticleDefinition* /*particleDefinition*/,
-                                                 G4double /*ekin*/,
-                                                 G4double /*emin*/,
-                                                 G4double /*emax*/)
+G4double G4DNAVacuumModel::CrossSectionPerVolume(const G4Material* /*material*/, const G4ParticleDefinition* /*particleDefinition*/,
+  G4double /*ekin*/, G4double /*emin*/, G4double /*emax*/)
 {
-    if (verboseLevel > 3)
-        G4cout << "Calling CrossSectionPerVolume() of G4DNAVacuumModel" << G4endl;
+  if (verboseLevel > 3) {
+    G4cout << "Calling CrossSectionPerVolume() of G4DNAVacuumModel" << G4endl;
+  }
 
-    return 0;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNAVacuumModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
-                                         const G4MaterialCutsCouple* /*couple*/,
-                                         const G4String& /*materialName*/,
-                                         const G4DynamicParticle* /*aDynamicParticle*/,
-                                         G4ParticleChangeForGamma* /*particleChangeForGamma*/,
-                                         G4double /*tmin*/,
-                                         G4double /*tmax*/)
+  const G4MaterialCutsCouple* /*couple*/,
+  const G4DynamicParticle* /*aDynamicParticle*/, G4double /*tmin*/, G4double /*tmax*/)
 {
-
-    if (verboseLevel > 3)
-        G4cout << "Calling SampleSecondaries() of G4DNAVacuumModel" << G4endl;
-
+  if (verboseLevel > 3) {
+    G4cout << "Calling SampleSecondaries() of G4DNAVacuumModel" << G4endl;
+  }
 }
-

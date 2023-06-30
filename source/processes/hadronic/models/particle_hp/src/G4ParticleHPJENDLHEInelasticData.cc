@@ -32,10 +32,11 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPJENDLHEInelasticData.hh"
+
 #include "G4Neutron.hh"
 
 G4ParticleHPJENDLHEInelasticData::G4ParticleHPJENDLHEInelasticData()
-:G4ParticleHPJENDLHEData( "Inelastic" , G4Neutron::Neutron() ) 
+  : G4ParticleHPJENDLHEData("Inelastic", G4Neutron::Neutron())
 {
-   ;
+  ;
 }

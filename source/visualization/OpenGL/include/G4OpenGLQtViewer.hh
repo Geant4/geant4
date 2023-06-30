@@ -49,7 +49,15 @@ class G4UImanager;
 class G4Text;
 class G4UIcommand;
 
-class QGLWidget;
+#include <QtGlobal>
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#include <QGLWidget>
+using G4QGLWidgetType = QGLWidget;
+#else
+#include <QOpenGLWidget>
+using G4QGLWidgetType = QOpenGLWidget;
+#endif
+
 class QDialog;
 class QTextEdit;
 class QContextMenuEvent;
@@ -72,9 +80,6 @@ class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 class QLineEdit;
-#if QT_VERSION < 0x050600
-class QSignalMapper;
-#endif
 class G4UIQt;
 class QTableWidget;
 class QTableWidgetItem;
@@ -166,7 +171,7 @@ public:
 
 protected:
   void CreateGLQtContext ();
-  virtual void CreateMainWindow (QGLWidget*,const QString&);
+  virtual void CreateMainWindow (G4QGLWidgetType*,const QString&);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void rotateQtScene(float, float);
   void rotateQtSceneToggle(float, float);
@@ -184,6 +189,7 @@ protected:
   bool isCurrentWidget();
 
 protected:
+  G4UIQt* fUiQt;
   QWidget* fGLWidget;
   void savePPMToTemp();
   int fRecordFrameNumber;
@@ -307,7 +313,7 @@ private:
   G4OpenGLQtMovieDialog* fMovieParametersDialog;
   RECORDING_STEP fRecordingStep;
   QProcess *fProcess;
-#if QT_VERSION < 0x050e00
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
   QTime *fLastEventTime;
 #else
   QElapsedTimer *fLastEventTime;
@@ -358,12 +364,7 @@ private:
   QTreeWidgetItem* fModelShortNameItem;
   int fNumber;
   int fMaxPOindexInserted;
-  G4UIQt* fUiQt;
-#if QT_VERSION < 0x050600
-  QSignalMapper *fSignalMapperMouse;
-  QSignalMapper *fSignalMapperSurface;
-  QSignalMapper *fSignalMapperPicking;
-#endif
+
   // quick map index to find next item
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIteratorEnd;

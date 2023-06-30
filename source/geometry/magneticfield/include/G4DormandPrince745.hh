@@ -50,30 +50,30 @@ class G4DormandPrince745 : public G4MagIntegratorStepper
     G4DormandPrince745(G4EquationOfMotion* equation,
                        G4int numberOfVariables = 6);
 
-    virtual void Stepper(const G4double yInput[],
-                         const G4double dydx[],
-                         G4double hstep,
-                         G4double yOutput[],
-                         G4double yError[]) override;
+    void Stepper(const G4double yInput[],
+                 const G4double dydx[],
+                       G4double hstep,
+                       G4double yOutput[],
+                       G4double yError[]) override;
 
     void Stepper(const G4double yInput[],
                  const G4double dydx[],
-                 G4double hstep,
-                 G4double yOutput[],
-                 G4double yError[],
-                 G4double dydxOutput[]);
+                       G4double hstep,
+                       G4double yOutput[],
+                       G4double yError[],
+                       G4double dydxOutput[]);
 
     inline void SetupInterpolation() {}
 
     inline void Interpolate(G4double tau, G4double yOut[]) const
     {
-        Interpolate4thOrder(yOut, tau);
+      Interpolate4thOrder(yOut, tau);
     }
       // For calculating the output at the tau fraction of Step
 
-    virtual G4double DistChord() const override;
+    G4double DistChord() const override;
 
-    virtual G4int IntegratorOrder() const override { return 4; }
+    G4int IntegratorOrder() const override { return 4; }
 
     const G4String& StepperType() const        { return gStepperType; }
     const G4String& StepperDescription() const { return gStepperDescription; }
@@ -86,16 +86,18 @@ class G4DormandPrince745 : public G4MagIntegratorStepper
     void Interpolate5thOrder(G4double yOut[], G4double tau) const;
 
     G4EquationOfMotion* GetSpecificEquation() { return GetEquationOfMotion(); }
-   
+
   private:
-    // Name and description of this steppers - plus details of its implementation
+
     static const G4String gStepperType;
     static const G4String gStepperDescription;
-    // const unsigned int fIntegratorOrder = 4;  // Should it not be 5 ? 
+      // Name and description of this steppers
+      // plus details of its implementation
 
     field_utils::State ak2, ak3, ak4, ak5, ak6, ak7, ak8, ak9;
     field_utils::State fyIn, fyOut, fdydxIn;
 
     G4double fLastStepLength = -1.0;
 };
+
 #endif

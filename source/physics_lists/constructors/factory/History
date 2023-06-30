@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-05-15 Alberto Ribon (phys-ctor-fact-V11-01-00)
+- Added G4StoppingPhysicsWithINCLXX in G4RegisterPhysicsConstructors .
+
 ## 2021-12-10 Ben Morgan (phys-ctor-fact-V11-00-00)
 - Change to new Markdown History format
 

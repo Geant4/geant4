@@ -91,7 +91,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   tlimitminfix2 = 1.*CLHEP::nm;
   stepmin       = tlimitminfix;
   smallstep     = 1.e10;
-  currentRange  = 0. ;
+  currentRange  = 0.;
   rangeinit     = 0.;
   tlimit        = 1.e10*CLHEP::mm;
   tlimitmin     = 10.*tlimitminfix;            
@@ -99,20 +99,13 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   geombig       = tgeom;
   geommin       = 1.e-3*CLHEP::mm;
   geomlimit     = geombig;
-  presafety     = 0.*CLHEP::mm;
-
-  particle      = nullptr;
+  presafety     = 0.;
 
   positron      = G4Positron::Positron();
   rndmEngineMod = G4Random::getTheEngine();
 
-  firstStep     = true; 
-  insideskin    = false;
-  latDisplasmentbackup = false;
-  dispAlg96 = true;
-
-  drr      = 0.35;
-  finalr   = 10.*CLHEP::um;
+  drr = 0.35;
+  finalr = 10.*CLHEP::um;
 
   tlow = 5.*CLHEP::keV;
   invmev = 1.0/CLHEP::MeV;
@@ -124,10 +117,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   currentKinEnergy = currentRadLength = lambda0 = lambdaeff = tPathLength 
     = zPathLength = par1 = par2 = par3 = rndmarray[0] = rndmarray[1] = 0;
   currentLogKinEnergy = LOG_EKIN_MIN;
-
-  idx = 0;
-  fParticleChange = nullptr;
-  couple = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,8 +140,12 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   InitialiseParameters(p);
 
   latDisplasmentbackup = latDisplasment;
-  dispAlg96 = G4EmParameters::Instance()->LateralDisplacementAlg96();
-  fPosiCorrection = G4EmParameters::Instance()->MscPositronCorrection();
+
+  // if model is locked parameters should be defined via Set methods
+  if(!IsLocked()) {
+    dispAlg96 = G4EmParameters::Instance()->LateralDisplacementAlg96();
+    fPosiCorrection = G4EmParameters::Instance()->MscPositronCorrection();
+  }
 
   // initialise cache only once
   if(0 == msc.size()) {
@@ -461,9 +454,12 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   << " range= " <<currentRange<< " lambda= "<<lambda0
             <<G4endl;
   */
+  presafety = (stepStatus == fGeomBoundary) ? sp->GetSafety()
+              : ComputeSafety(sp->GetPosition(), tPathLength);
   
-  // stop here if small step
-  if(tPathLength < tlimitminfix) { 
+  // stop here if small step or range is less than safety
+  if((tPathLength == currentRange && tPathLength < presafety) ||
+     tPathLength < tlimitminfix) { 
     latDisplasment = false;   
     return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
   }
@@ -475,8 +471,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     // for muons, hadrons
     : currentRange*msc[idx]->doverrb;
 
-  presafety = (stepStatus == fGeomBoundary) ? sp->GetSafety()
-              : ComputeSafety(sp->GetPosition(),tPathLength);
   /*  
   G4cout << "G4Urban::StepLimit tPathLength= " 
             <<tPathLength<<" safety= " << presafety
@@ -783,6 +777,8 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
                                   G4double /*safety*/)
 {
   fDisplacement.set(0.0,0.0,0.0);
+  if(tPathLength >= currentRange) { return fDisplacement; }
+
   G4double kinEnergy = currentKinEnergy;
   if (tPathLength > currentRange*dtrl) {
     kinEnergy = GetEnergy(particle,currentRange-tPathLength,couple);

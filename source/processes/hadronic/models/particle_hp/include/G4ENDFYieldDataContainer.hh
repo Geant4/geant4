@@ -31,13 +31,12 @@
  */
 
 #ifndef G4ENDFYIELDDATACONTAINER_HH
-#define	G4ENDFYIELDDATACONTAINER_HH
-
-#include "globals.hh"
+#define G4ENDFYIELDDATACONTAINER_HH
 
 #include "G4FFGEnumerations.hh"
+#include "globals.hh"
 
-/** G4ENDFYieldDataContainer is a simple data storage class that handles 
+/** G4ENDFYieldDataContainer is a simple data storage class that handles
  *  the memory management internally. One instance stores the information
  *  for one fission product. In the event of a non-spontaneous fission, it
  *  can store the yield probabilities and errors at each of the fission-
@@ -46,35 +45,35 @@
  */
 class G4ENDFYieldDataContainer
 {
-public:
-// Constructor
+  public:
+    // Constructor
     /** Default constructor */
-    G4ENDFYieldDataContainer ( G4int YieldSlots );
+    G4ENDFYieldDataContainer(G4int YieldSlots);
 
-// Functions
+    // Functions
     /** Get the meta state */
-    G4FFGEnumerations::MetaState GetMetaState( void );
+    G4FFGEnumerations::MetaState GetMetaState();
     /** Get the product */
-    G4int GetProduct( void );
+    G4int GetProduct();
     /** Get the yield error */
-    G4double* GetYieldError( void );
+    G4double* GetYieldError();
     /** Get the yield probability */
-    G4double* GetYieldProbability( void );
+    G4double* GetYieldProbability();
     /** Get the number of yield slots */
-    G4int GetYieldSlots( void );
+    G4int GetYieldSlots();
     /** Set the meta state */
-    void SetMetaState( G4FFGEnumerations::MetaState MetaState );
+    void SetMetaState(G4FFGEnumerations::MetaState MetaState);
     /** Set the product */
-    void SetProduct( G4int Product );
+    void SetProduct(G4int Product);
     /** Set the yield error */
-    void SetYieldError( G4double* YieldError );
+    void SetYieldError(G4double* YieldError);
     /** Set the yield probability */
-    void SetYieldProbability( G4double* YieldProbability );
+    void SetYieldProbability(G4double* YieldProbability);
     /** Set the number of yield slots */
-    void SetYieldSlots( G4int NumberOfSlots );
+    void SetYieldSlots(G4int NumberOfSlots);
 
-protected:
-// Data members
+  protected:
+    // Data members
     /** The number of energy groups, or yield slots, that are stored */
     G4int YieldSlots_;
     /** ZZZAAA identifier of the stored isotope */
@@ -86,11 +85,10 @@ protected:
     /** Array of the yield probability errors, one per yield slot */
     G4double* YieldError_;
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default deconstructor */
-    ~G4ENDFYieldDataContainer( void );
+    ~G4ENDFYieldDataContainer();
 };
 
-#endif	/* G4ENDFYIELDDATACONTAINER_HH */
-
+#endif /* G4ENDFYIELDDATACONTAINER_HH */

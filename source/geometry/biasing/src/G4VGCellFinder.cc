@@ -30,10 +30,6 @@
 
 #include "G4VGCellFinder.hh"
 
-G4VGCellFinder::G4VGCellFinder()
-{
-}
+G4VGCellFinder::G4VGCellFinder() = default;
 
-G4VGCellFinder::~G4VGCellFinder()
-{
-}
+G4VGCellFinder::~G4VGCellFinder() = default;

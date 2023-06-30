@@ -33,10 +33,11 @@
 //
 
 #include "G4ParticleHPJENDLHEElasticData.hh"
+
 #include "G4Neutron.hh"
 
 G4ParticleHPJENDLHEElasticData::G4ParticleHPJENDLHEElasticData()
-:G4ParticleHPJENDLHEData( "Elastic" , G4Neutron::Neutron() ) 
+  : G4ParticleHPJENDLHEData("Elastic", G4Neutron::Neutron())
 {
-   ;
+  ;
 }

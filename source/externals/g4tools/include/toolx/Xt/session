@@ -4,19 +4,25 @@
 #ifndef toolx_Xt_session
 #define toolx_Xt_session
 
-#include <ostream>
-
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
 #include <X11/StringDefs.h>
+
+#include <ostream>
 
 namespace toolx {
 namespace Xt {
 
 class session {
 public:
+  session(std::ostream& a_out)
+  :m_out(a_out),m_app_context(0),m_app_widget(0),m_app_owner(false)
+  {}
+  session(std::ostream& a_out,XtAppContext a_app_context,Widget a_app_widget)
+  :m_out(a_out),m_app_context(a_app_context),m_app_widget(a_app_widget),m_app_owner(false)
+  {}
   session(std::ostream& a_out,int& a_argc,char** a_argv)
-  :m_out(a_out),m_app_context(0),m_app_widget(0)
+  :m_out(a_out),m_app_context(0),m_app_widget(0),m_app_owner(false)
   {
   //LookDSM_Problem();
     Arg args[1];
@@ -25,11 +31,16 @@ public:
     if(!m_app_context || !m_app_widget) {
       m_app_context = 0;
       m_app_widget = 0;
+      m_app_owner = false;
+      return;
     }
+    m_app_owner = true;
   }
   virtual ~session() {
-    if(m_app_widget) {::XtDestroyWidget(m_app_widget);m_app_widget = 0;}
-    if(m_app_context) {::XtDestroyApplicationContext(m_app_context);m_app_context = 0;}
+    if(m_app_owner) {
+      if(m_app_widget) {::XtDestroyWidget(m_app_widget);m_app_widget = 0;}
+      if(m_app_context) {::XtDestroyApplicationContext(m_app_context);m_app_context = 0;}
+    }
   }
 protected:
   session(const session& a_from)
@@ -67,11 +78,12 @@ public:
   Widget get_app_widget() {return m_app_widget;}
 protected:
   std::ostream& m_out;
-  bool m_app_owner;
   XtAppContext m_app_context;
   Widget m_app_widget;  
+  bool m_app_owner;
 };
 
 }}
+
 
 #endif

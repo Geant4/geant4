@@ -6,9 +6,26 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-05-03 Gabriele Cosmo (intercoms-V11-00-07)
+## 2023-05-03 Gabriele Cosmo (intercoms-V11-01-05)
 - Fixed compilation warning on gcc-13.1 for array subscript outside array
   bounds in G4ProfilerMessenger::SetNewValue().
+
+## 2023-03-31 Ben Morgan (intercoms-V11-01-04)
+- Factor G4UIcommand/parameter range validation functions to reduce code duplication
+
+## 2023-03-24 Ben Morgan (intercoms-V11-01-03)
+- Apply clang-tidy and format fixes plus normal ordering of docstrings/access specifications.
+- Move clear implementation detail classes to private headers.
+
+## 2023-01-09 Ben Morgan (intercoms-V11-01-02)
+- Implement ReceiveG4debug for G4UIsession et al.
+
+## 2022-12-14 Ben Morgan (intercoms-V11-01-01)
+- Replace direct access to G4cout/etc stream buffers with call to G4coutDestination
+  installer function.
+
+## 2022-12-12 Ben Morgan (intercoms-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
 ## 2022-11-18 Gabriele Cosmo (intercoms-V11-00-06)
 - More compilation warnings fixes for implicit type conversions.

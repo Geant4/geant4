@@ -54,24 +54,24 @@ class G4ReduciblePolygon
   friend class G4ReduciblePolygonIterator;
 
   public:
-    //
-    // Creator: via simple a/b arrays
-    //
+
     G4ReduciblePolygon( const G4double a[], const G4double b[], G4int n );
+      // Creator: via simple a/b arrays
   
-    //
-    // Creator: a special version for G4Polygon and G4Polycone
-    // that takes two a points at planes of b
-    // (where a==r and b==z for the GEANT3 classic PCON and PGON)
-    //
     G4ReduciblePolygon( const G4double rmin[], const G4double rmax[],
                         const G4double z[], G4int n );
-  
+      // Creator: a special version for G4Polygon and G4Polycone
+      // that takes two a points at planes of b
+      // (where a==r and b==z for the GEANT3 classic PCON and PGON)
+
+    G4ReduciblePolygon(const G4ReduciblePolygon&) = delete;
+    G4ReduciblePolygon& operator=(const G4ReduciblePolygon&) = delete;
+      // Deleted copy constructor and assignment operator.
+
     virtual ~G4ReduciblePolygon();
   
-    //
     // Queries
-    //
+
     inline G4int NumVertices() const { return numVertices; }
   
     inline G4double Amin() const { return aMin; }
@@ -81,9 +81,8 @@ class G4ReduciblePolygon
   
     void CopyVertices( G4double a[], G4double b[] ) const;
 
-    //
     // Manipulations
-    //
+
     void ScaleA( G4double scale );
     void ScaleB( G4double scale );
   
@@ -93,7 +92,6 @@ class G4ReduciblePolygon
     void ReverseOrder();
     void StartWithZMin();
 
-    //
     // Tests
     //
     G4double Area();
@@ -103,8 +101,6 @@ class G4ReduciblePolygon
    
     void Print();  // Debugging only
   
-  public:  // without description
-
     G4ReduciblePolygon(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -116,34 +112,23 @@ class G4ReduciblePolygon
   
     void CalculateMaxMin();
   
-    //
     // Below are member values that are *always* kept up to date (please!)
     //
     G4double aMin, aMax, bMin, bMax;
     G4int numVertices = 0;
   
-    //
     // A subclass which holds the vertices in a single-linked list
-    //
-    // Yeah, call me an old-fashioned c hacker, but I cannot make
-    // myself use the rogue tools for this trivial list.
     //
     struct ABVertex;              // Secret recipe for allowing
     friend struct ABVertex;       // protected nested structures
     struct ABVertex
     {
-      ABVertex() : a(0.), b(0.), next(0) {}
-      G4double a, b;
-      ABVertex *next;
+      ABVertex()  {}
+      G4double a{0.}, b{0.};
+      ABVertex *next{nullptr};
     };
   
     ABVertex* vertexHead = nullptr;
-
-    private:
-
-      G4ReduciblePolygon(const G4ReduciblePolygon&);
-      G4ReduciblePolygon& operator=(const G4ReduciblePolygon&);
-      // Private copy constructor and assignment operator.
 };
 
 // A companion class for iterating over the vertices of our polygon.
@@ -154,9 +139,12 @@ class G4ReduciblePolygonIterator
   public:
 
     G4ReduciblePolygonIterator( const G4ReduciblePolygon* theSubject )
-     { subject = theSubject; current = nullptr; }
+    {
+      subject = theSubject; current = nullptr;
+    }
   
     void  Begin() { current = subject->vertexHead; }  
+
     G4bool  Next()
     {
       if (current != nullptr) current=current->next;

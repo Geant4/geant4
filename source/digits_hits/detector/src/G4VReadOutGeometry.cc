@@ -27,61 +27,57 @@
 //
 
 #include "G4VReadOutGeometry.hh"
+
 #include "G4Navigator.hh"
 
 G4VReadOutGeometry::G4VReadOutGeometry()
-  : ROworld(nullptr)
-  , fincludeList(nullptr)
-  , fexcludeList(nullptr)
-  , touchableHistory(nullptr)
+  : ROworld(nullptr), fincludeList(nullptr), fexcludeList(nullptr), touchableHistory(nullptr)
 {
-  name        = "unknown";
+  name = "unknown";
   ROnavigator = new G4Navigator();
   G4ExceptionDescription ed;
-  ed
-    << "The concept and the functionality of Readout Geometry has been merged\n"
-    << "into Parallel World. This G4VReadOutGeometry is kept for the sake of\n"
-    << "not breaking the commonly-used interface in the sensitive detector "
-       "class.\n"
-    << "But this functionality of G4VReadOutGeometry class is no longer "
-       "tested\n"
-    << "and thus may not be working well. We strongly recommend our customers "
-       "to\n"
-    << "migrate to Parallel World scheme.";
+  ed << "The concept and the functionality of Readout Geometry has been merged\n"
+     << "into Parallel World. This G4VReadOutGeometry is kept for the sake of\n"
+     << "not breaking the commonly-used interface in the sensitive detector "
+        "class.\n"
+     << "But this functionality of G4VReadOutGeometry class is no longer "
+        "tested\n"
+     << "and thus may not be working well. We strongly recommend our customers "
+        "to\n"
+     << "migrate to Parallel World scheme.";
   G4Exception("G4VReadOutGeometry", "DIGIHIT1001", JustWarning, ed);
 }
 
 G4VReadOutGeometry::G4VReadOutGeometry(const G4VReadOutGeometry& right)
 {
-  fincludeList     = nullptr;
-  fexcludeList     = nullptr;
-  name             = right.name;
-  ROworld          = right.ROworld;
+  fincludeList = nullptr;
+  fexcludeList = nullptr;
+  name = right.name;
+  ROworld = right.ROworld;
   touchableHistory = nullptr;
-  ROnavigator      = new G4Navigator();
+  ROnavigator = new G4Navigator();
   // COPY CONSTRUCTOR NOT STRAIGHT FORWARD: need to copy the touchabelHistory
   // VALUE, same for navigator and same for the World+Geom hierachy
 }
 
 G4VReadOutGeometry::G4VReadOutGeometry(G4String n)
-  : ROworld(nullptr)
-  , fincludeList(nullptr)
-  , fexcludeList(nullptr)
-  , name(n)
-  , touchableHistory(nullptr)
+  : ROworld(nullptr),
+    fincludeList(nullptr),
+    fexcludeList(nullptr),
+    name(n),
+    touchableHistory(nullptr)
 {
   ROnavigator = new G4Navigator();
   G4ExceptionDescription ed;
-  ed
-    << "The concept and the functionality of Readout Geometry has been merged\n"
-    << "into Parallel World. This G4VReadOutGeometry is kept for the sake of\n"
-    << "not breaking the commonly-used interface in the sensitive detector "
-       "class.\n"
-    << "But this functionality of G4VReadOutGeometry class is no longer "
-       "tested\n"
-    << "and thus may not be working well. We strongly recommend our customers "
-       "to\n"
-    << "migrate to Parallel World scheme.";
+  ed << "The concept and the functionality of Readout Geometry has been merged\n"
+     << "into Parallel World. This G4VReadOutGeometry is kept for the sake of\n"
+     << "not breaking the commonly-used interface in the sensitive detector "
+        "class.\n"
+     << "But this functionality of G4VReadOutGeometry class is no longer "
+        "tested\n"
+     << "and thus may not be working well. We strongly recommend our customers "
+        "to\n"
+     << "migrate to Parallel World scheme.";
   G4Exception("G4VReadOutGeometry", "DIGIHIT1001", JustWarning, ed);
 }
 
@@ -89,27 +85,21 @@ G4VReadOutGeometry::~G4VReadOutGeometry()
 {
   // if(ROworld) delete ROworld; //should we do ? will it delete the goem tree
   // also ?
-  if(fincludeList)
-    delete fincludeList;
-  if(fexcludeList)
-    delete fexcludeList;
-  if(touchableHistory)
-    delete touchableHistory;
-  if(ROnavigator)
-    delete ROnavigator;
+  delete fincludeList;
+  delete fexcludeList;
+  delete touchableHistory;
+  delete ROnavigator;
 }
 
-G4VReadOutGeometry& G4VReadOutGeometry::operator=(
-  const G4VReadOutGeometry& right)
+G4VReadOutGeometry& G4VReadOutGeometry::operator=(const G4VReadOutGeometry& right)
 {
-  if(this == &right)
-    return *this;
+  if (this == &right) return *this;
   delete fincludeList;
   fincludeList = nullptr;
   delete fexcludeList;
   fexcludeList = nullptr;
-  name         = right.name;
-  ROworld      = right.ROworld;
+  name = right.name;
+  ROworld = right.ROworld;
   delete touchableHistory;
   touchableHistory = nullptr;
   delete ROnavigator;
@@ -119,12 +109,12 @@ G4VReadOutGeometry& G4VReadOutGeometry::operator=(
 
 G4bool G4VReadOutGeometry::operator==(const G4VReadOutGeometry& right) const
 {
-  return (this == (G4VReadOutGeometry*) &right);
+  return (this == (G4VReadOutGeometry*)&right);
 }
 
 G4bool G4VReadOutGeometry::operator!=(const G4VReadOutGeometry& right) const
 {
-  return (this != (G4VReadOutGeometry*) &right);
+  return (this != (G4VReadOutGeometry*)&right);
 }
 
 void G4VReadOutGeometry::BuildROGeometry()
@@ -133,37 +123,29 @@ void G4VReadOutGeometry::BuildROGeometry()
   ROnavigator->SetWorldVolume(ROworld);
 }
 
-G4bool G4VReadOutGeometry::CheckROVolume(G4Step* currentStep,
-                                         G4TouchableHistory*& ROhist)
+G4bool G4VReadOutGeometry::CheckROVolume(G4Step* currentStep, G4TouchableHistory*& ROhist)
 {
-  ROhist        = nullptr;
+  ROhist = nullptr;
   G4bool incFlg = true;
-  auto PV       = currentStep->GetPreStepPoint()->GetPhysicalVolume();
-  if((fexcludeList) && (fexcludeList->CheckPV(PV)))
-  {
+  auto PV = currentStep->GetPreStepPoint()->GetPhysicalVolume();
+  if (((fexcludeList) != nullptr) && (fexcludeList->CheckPV(PV))) {
     incFlg = false;
   }
-  else if((fincludeList) && (fincludeList->CheckPV(PV)))
-  {
+  else if (((fincludeList) != nullptr) && (fincludeList->CheckPV(PV))) {
     incFlg = true;
   }
-  else if((fexcludeList) && (fexcludeList->CheckLV(PV->GetLogicalVolume())))
-  {
+  else if (((fexcludeList) != nullptr) && (fexcludeList->CheckLV(PV->GetLogicalVolume()))) {
     incFlg = false;
   }
-  else if((fincludeList) && (fincludeList->CheckLV(PV->GetLogicalVolume())))
-  {
+  else if (((fincludeList) != nullptr) && (fincludeList->CheckLV(PV->GetLogicalVolume()))) {
     incFlg = true;
   }
-  if(!incFlg)
-    return false;
+  if (! incFlg) return false;
 
-  if(ROworld)
-  {
+  if (ROworld != nullptr) {
     incFlg = FindROTouchable(currentStep);
   }
-  if(incFlg)
-  {
+  if (incFlg) {
     ROhist = touchableHistory;
   }
   return incFlg;
@@ -179,19 +161,14 @@ G4bool G4VReadOutGeometry::FindROTouchable(G4Step* currentStep)
   // At first invokation, creates the touchable history. Note
   // that default value (false) of Locate method is used.
   //  ---------> But the default Value is TRUE <-------------------- J.A.
-  if(!touchableHistory)
-  {
+  if (touchableHistory == nullptr) {
     touchableHistory = new G4TouchableHistory();
-    ROnavigator->LocateGlobalPointAndUpdateTouchable(
-      currentStep->GetPreStepPoint()->GetPosition(),
+    ROnavigator->LocateGlobalPointAndUpdateTouchable(currentStep->GetPreStepPoint()->GetPosition(),
       currentStep->GetPreStepPoint()->GetMomentumDirection(), touchableHistory);
   }
-  else
-  {
-    ROnavigator->LocateGlobalPointAndUpdateTouchable(
-      currentStep->GetPreStepPoint()->GetPosition(),
-      currentStep->GetPreStepPoint()->GetMomentumDirection(), touchableHistory,
-      true);
+  else {
+    ROnavigator->LocateGlobalPointAndUpdateTouchable(currentStep->GetPreStepPoint()->GetPosition(),
+      currentStep->GetPreStepPoint()->GetMomentumDirection(), touchableHistory, true);
   }
   // Can the above be improved by the use of an isotropic safety
   // in order to avoid LocateGlobalPointAndUpdateTouchable
@@ -203,9 +180,8 @@ G4bool G4VReadOutGeometry::FindROTouchable(G4Step* currentStep)
   // checks if volume is sensitive:
   auto currentVolume = touchableHistory->GetVolume();
   // checks first if a physical volume exists here:
-  if(currentVolume)
-  {
-    return currentVolume->GetLogicalVolume()->GetSensitiveDetector() != 0;
+  if (currentVolume != nullptr) {
+    return currentVolume->GetLogicalVolume()->GetSensitiveDetector() != nullptr;
   }
   // no sensitive volume found: returns false
   return false;

@@ -6,18 +6,58 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-03-16 Gabriele Cosmo (field-V11-00-07)
+## 2023-06-14 Gabriele Cosmo (field-V11-01-04)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
+
+## 2023-06-12 John Apostolakis (field-V11-01-03)
+- Inclusion of QSS integration method.
+  Most recent changes:
+  * Fixes for issue with SetPrecision (used unitialised values of simulator->x)
+  * Updated values of parameters in G4PropagatorInField to conservative values.
+  * Withdrew interim changes that made QSS the default method for full testing.
+
+## 2023-05-26 Lucio Santi
+- Fixes for open issues: 
+  * default values for QSS made stricter dQRel=0.001, dQMin=0.0001 (QSSDriver.icc)
+    to improve behaviour in full experiment test
+  * implemented missing DistChord method -- needed to enable stepping with Chord limit
+
+## 2023-01-31 John Apostolakis
+- Initial inclusion of QSS integration method.
+  Renamed classes to include 'G4' prefix, and moved them from qss/ subdirectory.
+  Added Geant4 disclaimer / license to files.
+  Removed QSSmessenger from RunManager and G4PropagatorInField
+- Temporarily made QSS the default method for full testing.
+
+## 2023-01-30 Rodrigo Castro, Lucio Santi & Leandro Gomez Vidal
+- Included Quantum State Simulation (QSS) integration method
+  Alternative method of integration which creates approximation
+  functions for each coordinate (x,p) - changing the interpolation
+  polynomials when the deviation from exact solution is larger than
+  a threshold value.
+  Offers built-in interpolation capability - enabling faster finding
+  of the intersection of the trajectory with surfaces.
+  Currently restricted to using only with a pure magnetic field.
+  Created by Rodrigo Castro and Lucio Santi, with contributions
+  by Leandro A. Gómez Vidal (and others?)
+
+## 2023-03-16 Ben Morgan (field-V11-01-02)
 - Fixed compilation warnings on clang-15 for mismatched bounds declarations
   in input parameters for steppers.
 
-## 2022-12-09 Laurie Nevay (field-V11-00-06)
+## 2023-01-09 Ben Morgan (field-V11-01-01)
+- Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
+  scope version to ease use of Geant4 as a CMake subproject. 
+  - Fixes [GitHub PR #52](https://github.com/Geant4/geant4/pull/52)
+
+## 2022-12-09 Laurie Nevay             (field-V11-01-00)
 - Reduced printout for setting any valid value for epsilon_min / _max in
   G4FieldManager.
 
-## 2022-11-28 Gabriele Cosmo (field-V11-00-05)
+## 2022-11-28 Gabriele Cosmo           (field-V11-00-05)
 - Fixed restore of stream precision in G4FieldManager::ReportBadEpsilonValue().
 
-## 2022-11-14 John Apostolakis (field-V11-00-04)
+## 2022-11-14 John Apostolakis         (field-V11-00-04)
 - Revised G4FieldManager to ensure that epsilon_min / _max parameters
   are less than a 'maximum accepted' accuracy (now=0.02) to ensure robust
   behaviour of the integration. Improved their Set methods, adding 

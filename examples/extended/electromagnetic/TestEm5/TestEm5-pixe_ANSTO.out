@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -236,7 +236,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=75.830000s Real=76.493017s Sys=0.000000s
+  User=70.830000s Real=82.246290s Sys=0.010000s
 
  ======================== run summary ======================
 
@@ -271,7 +271,8 @@ Run Summary
   rms proj angle of transmit primary particle = 0 mrad (central part only)
   computed theta0 (Highland formula)          = 233.3 mrad
   central part defined as +- 699.8 mrad   Tail ratio = 0 %
-## Gamma process counts:
+
+ Gamma process counts:
    Photoeffect 58109
    Compton     3
    Conversion  0

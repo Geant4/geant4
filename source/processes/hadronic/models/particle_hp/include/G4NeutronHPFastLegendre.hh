@@ -29,4 +29,4 @@
 #include "G4ParticleHPFastLegendre.hh"
 using G4NeutronHPFastLegendre = G4ParticleHPFastLegendre;
 
-#endif 
+#endif

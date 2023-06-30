@@ -28,8 +28,10 @@
 //
 // Created by Joanna Weng 26.11.2004
 #include "ExGflashSensitiveDetector.hh"
+
 #include "ExGflashDetectorConstruction.hh"
 #include "ExGflashHit.hh"
+
 #include "G4GFlashSpot.hh"
 #include "G4Step.hh"
 #include "G4TouchableHistory.hh"
@@ -40,9 +42,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashSensitiveDetector::ExGflashSensitiveDetector(
-  G4String name, ExGflashDetectorConstruction* /* det */)
-  : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), fHCID(-1)
+ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name,
+                                                     ExGflashDetectorConstruction* /* det */)
+  : G4VSensitiveDetector(name)
 {
   G4String caloname = "ExGflashCollection";
   collectionName.insert(caloname);
@@ -56,11 +58,11 @@ ExGflashSensitiveDetector::~ExGflashSensitiveDetector() = default;
 
 void ExGflashSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 {
-  if ( fHCID < 0 ) {
+  if (fHCID < 0) {
     fHCID = GetCollectionID(0);
   }
-  fCaloHitsCollection = new ExGflashHitsCollection(
-    SensitiveDetectorName, collectionName[0]);  // first collection
+  fCaloHitsCollection =
+    new ExGflashHitsCollection(SensitiveDetectorName, collectionName[0]);  // first collection
   HCE->AddHitsCollection(fHCID, fCaloHitsCollection);
 }
 
@@ -70,11 +72,10 @@ void ExGflashSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExGflashSensitiveDetector::ProcessHits(
-  G4Step* aStep, G4TouchableHistory* /* ROhist */)
+G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory* /* ROhist */)
 {
   G4double e = aStep->GetTotalEnergyDeposit();
-  if ( e <= 0. ) return false;
+  if (e <= 0.) return false;
 
   auto caloHit = new ExGflashHit();
   caloHit->SetEdep(e);
@@ -87,12 +88,11 @@ G4bool ExGflashSensitiveDetector::ProcessHits(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Separate GFLASH interface
-G4bool ExGflashSensitiveDetector::ProcessHits(
-  G4GFlashSpot* aSpot, G4TouchableHistory* /* ROhist */)
+G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot* aSpot, G4TouchableHistory* /* ROhist */)
 {
   // cout<<"This is ProcessHits GFLASH"<<endl;
   G4double e = aSpot->GetEnergySpot()->GetEnergy();
-  if ( e <= 0. ) return false;
+  if (e <= 0.) return false;
 
   //  G4VPhysicalVolume* pCurrentVolume =
   //  aSpot->GetTouchableHandle()->GetVolume();

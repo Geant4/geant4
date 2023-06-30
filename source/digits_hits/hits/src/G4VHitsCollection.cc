@@ -30,27 +30,11 @@
 
 #include "G4VHitsCollection.hh"
 
-G4VHitsCollection::G4VHitsCollection()
-{
-  collectionName = "Unknown";
-  SDname         = "Unknown";
-  colID          = -1;
-}
-
 G4VHitsCollection::G4VHitsCollection(G4String detName, G4String colNam)
-{
-  collectionName = colNam;
-  SDname         = detName;
-  colID          = -1;
-}
-
-G4VHitsCollection::~G4VHitsCollection() { ; }
+  : collectionName(colNam), SDname(detName), colID(-1)
+{}
 
 G4bool G4VHitsCollection::operator==(const G4VHitsCollection& right) const
 {
   return ((collectionName == right.collectionName) && (SDname == right.SDname));
 }
-
-void G4VHitsCollection::DrawAllHits() { ; }
-
-void G4VHitsCollection::PrintAllHits() { ; }

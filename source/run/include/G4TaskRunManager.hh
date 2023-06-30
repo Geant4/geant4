@@ -35,9 +35,10 @@
 #ifndef G4TaskRunManager_hh
 #define G4TaskRunManager_hh 1
 
-#include "rundefs.hh"
+#include "G4EnvironmentUtils.hh"
 #include "G4MTBarrier.hh"
 #include "G4MTRunManager.hh"
+#include "G4Profiler.hh"
 #include "G4RNGHelper.hh"
 #include "G4RunManager.hh"
 #include "G4TBBTaskGroup.hh"
@@ -46,10 +47,9 @@
 #include "G4ThreadPool.hh"
 #include "G4Threading.hh"
 #include "G4VUserTaskQueue.hh"
-#include "G4EnvironmentUtils.hh"
-#include "G4Profiler.hh"
 
 #include "PTL/TaskRunManager.hh"
+#include "rundefs.hh"
 
 #include <list>
 #include <map>
@@ -63,181 +63,158 @@ class G4RunManagerFactory;
 
 //============================================================================//
 
-class G4TaskRunManager
-  : public G4MTRunManager
-  , public PTL::TaskRunManager
+class G4TaskRunManager : public G4MTRunManager, public PTL::TaskRunManager
 {
-  friend class G4RunManagerFactory;
+    friend class G4RunManagerFactory;
 
- public:
-  // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
-  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+  public:
+    // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
+    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+    using InitializeSeedsCallback = std::function<G4bool(G4int, G4int&, G4int&)>;
+    using RunTaskGroup = G4TaskGroup<void>;
 
- public:
-  using InitializeSeedsCallback = std::function<G4bool(G4int, G4int&, G4int&)>;
-  using RunTaskGroup            = G4TaskGroup<void>;
+  public:
+    // Returns the singleton instance of the run manager common to all threads
+    // implementing the master behavior
+    static G4TaskRunManager* GetMasterRunManager()
+    {
+      auto* _rm = G4MTRunManager::GetMasterRunManager();
+      return dynamic_cast<G4TaskRunManager*>(_rm);
+    }
 
- public:
-  // Parameters:
-  //      taskQueue     : provide a custom task queue
-  //      useTBB        : only relevant if GEANT4_USE_TBB defined
-  //      evtGrainsize  : the number of events per task
-  G4TaskRunManager(G4bool useTBB = G4GetEnv<G4bool>("G4USE_TBB", false));
-  G4TaskRunManager(G4VUserTaskQueue* taskQueue,
-                   G4bool useTBB      = G4GetEnv<G4bool>("G4USE_TBB", false),
-                   G4int evtGrainsize = 0);
-  virtual ~G4TaskRunManager();
+    // Returns the singleton instance of the run manager kernel common to all
+    // threads
+    static G4TaskRunManagerKernel* GetMTMasterRunManagerKernel();
 
- public:
-  void SetGrainsize(G4int n) { eventGrainsize = n; }
-  G4int GetGrainsize() const { return eventGrainsize; }
-  inline G4int GetNumberOfTasks() const { return numberOfTasks; }
-  inline G4int GetNumberOfEventsPerTask() const
-  {
-    return numberOfEventsPerTask;
-  }
+    // Parameters:
+    //      taskQueue     : provide a custom task queue
+    //      useTBB        : only relevant if GEANT4_USE_TBB defined
+    //      evtGrainsize  : the number of events per task
+    G4TaskRunManager(G4bool useTBB = G4GetEnv<G4bool>("G4USE_TBB", false));
+    G4TaskRunManager(G4VUserTaskQueue* taskQueue,
+                     G4bool useTBB = G4GetEnv<G4bool>("G4USE_TBB", false), G4int evtGrainsize = 0);
+    ~G4TaskRunManager() override;
 
-  virtual void SetNumberOfThreads(G4int n) override;
-  virtual G4int GetNumberOfThreads() const override
-  {
-    return PTL::TaskRunManager::GetNumberOfThreads();
-  }
-  virtual size_t GetNumberActiveThreads() const override
-  {
-    return PTL::TaskRunManager::GetNumberActiveThreads();
-  }
-  static G4ThreadId GetMasterThreadId();
+    void SetGrainsize(G4int n) { eventGrainsize = n; }
+    G4int GetGrainsize() const { return eventGrainsize; }
+    inline G4int GetNumberOfTasks() const { return numberOfTasks; }
+    inline G4int GetNumberOfEventsPerTask() const { return numberOfEventsPerTask; }
 
- public:
-  // Inherited methods to re-implement for MT case
-  virtual void Initialize() override;
-  virtual void InitializeEventLoop(G4int n_event,
-                                   const char* macroFile = nullptr,
-                                   G4int n_select        = -1) override;
-  virtual void InitializeThreadPool() override;
-  G4bool ThreadPoolIsInitialized() const { return poolInitialized; }
+    void SetNumberOfThreads(G4int n) override;
+    G4int GetNumberOfThreads() const override { return PTL::TaskRunManager::GetNumberOfThreads(); }
+    size_t GetNumberActiveThreads() const override
+    {
+      return PTL::TaskRunManager::GetNumberActiveThreads();
+    }
+    static G4ThreadId GetMasterThreadId();
 
-  virtual void Initialize(uint64_t nthreads) override
-  {
-    PTL::TaskRunManager::Initialize(nthreads);
-  }
+    // Inherited methods to re-implement for MT case
+    void Initialize() override;
+    void InitializeEventLoop(G4int n_event, const char* macroFile = nullptr,
+                             G4int n_select = -1) override;
+    void InitializeThreadPool() override;
+    G4bool ThreadPoolIsInitialized() const { return poolInitialized; }
 
-  virtual void TerminateOneEvent() override;
-  virtual void ProcessOneEvent(G4int i_event) override;
-  virtual void ConstructScoringWorlds() override;
-  virtual void RunTermination() override;
+    void Initialize(uint64_t nthreads) override { PTL::TaskRunManager::Initialize(nthreads); }
 
-  // The following method should be invoked by G4WorkerTaskRunManager for each
-  // event. False is returned if no more event to be processed. Note: G4Event
-  // object must be instantiated by a worker thread. In case no more
-  //  event remains to be processed, that worker thread must delete that G4Event
-  //  object. If a worker runs with its own random number sequence, the Boolean
-  //  flag reseedRequired should be set to false. This is *NOT* allowed for the
-  //  first event.
-  virtual G4bool SetUpAnEvent(G4Event*, G4long& s1, G4long& s2, G4long& s3,
-                              G4bool reseedRequired = true) override;
-  // Same as above method, but the seeds are set only once over "eventModulo"
-  // events. The return value shows the number of events the caller Worker has
-  // to process (between 1 and eventModulo depending on number of events yet to
-  // be processed). G4Event object has the event ID of the first event of this
-  // bunch. If zero is returned no more event needs to be processed, and worker
-  // thread must delete that G4Event.
-  virtual G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue,
-                             G4bool reseedRequired = true) override;
+    void TerminateOneEvent() override;
+    void ProcessOneEvent(G4int i_event) override;
+    void ConstructScoringWorlds() override;
+    void RunTermination() override;
 
-  // Method called by Initialize() method
+    // The following method should be invoked by G4WorkerTaskRunManager for each
+    // event. False is returned if no more event to be processed. Note: G4Event
+    // object must be instantiated by a worker thread. In case no more
+    //  event remains to be processed, that worker thread must delete that G4Event
+    //  object. If a worker runs with its own random number sequence, the Boolean
+    //  flag reseedRequired should be set to false. This is *NOT* allowed for the
+    //  first event.
+    G4bool SetUpAnEvent(G4Event*, G4long& s1, G4long& s2, G4long& s3,
+                        G4bool reseedRequired = true) override;
 
- protected:
-  virtual void ComputeNumberOfTasks();
-  // Initialize the seeds list, if derived class does not implement this method
-  // A default generation will be used (nevents*2 random seeds)
-  // Return true if initialization is done.
-  virtual G4bool InitializeSeeds(G4int /*nevts*/) override { return false; }
-  virtual void RefillSeeds() override;
-  // Adds one seed to the list of seeds
-  virtual void StoreRNGStatus(const G4String& filenamePrefix) override;
-  virtual void CreateAndStartWorkers() override;
-  // Creates worker threads and signal to start
+    // Same as above method, but the seeds are set only once over "eventModulo"
+    // events. The return value shows the number of events the caller Worker has
+    // to process (between 1 and eventModulo depending on number of events yet to
+    // be processed). G4Event object has the event ID of the first event of this
+    // bunch. If zero is returned no more event needs to be processed, and worker
+    // thread must delete that G4Event.
+    G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue, G4bool reseedRequired = true) override;
 
- protected:
-  virtual void TerminateWorkers() override;
+    // To be invoked solely from G4WorkerTaskRunManager to merge the results
+    void MergeScores(const G4ScoringManager* localScoringManager);
+    void MergeRun(const G4Run* localRun);
 
- public:  // with description
-  static G4TaskRunManager* GetMasterRunManager()
-  {
-    auto* _rm = G4MTRunManager::GetMasterRunManager();
-    return dynamic_cast<G4TaskRunManager*>(_rm);
-  }
-  // Returns the singleton instance of the run manager common to all threads
-  // implementing the master behavior
-  static G4TaskRunManagerKernel* GetMTMasterRunManagerKernel();
-  // Returns the singleton instance of the run manager kernel common to all
-  // threads
+    // Called to force workers to request and process the UI commands stack
+    // This will block untill all workers have processed UI commands
+    void RequestWorkersProcessCommandsStack() override;
 
- public:
-  // To be invoked solely from G4WorkerTaskRunManager to merge the results
-  void MergeScores(const G4ScoringManager* localScoringManager);
-  void MergeRun(const G4Run* localRun);
+    // Called by workers to signal to master it has completed processing of
+    // UI commands
+    // virtual WorkerActionRequest ThisWorkerWaitForNextAction();
+    // Worker thread barrier
+    // This method should be used by workers' run manager to wait,
+    // after an event loop for the next action to be performed
+    // (for example execute a new run)
+    // This returns the action to be performed
+    void ThisWorkerProcessCommandsStackDone() override;
 
- public:
-  virtual void RequestWorkersProcessCommandsStack() override;
-  // Called to force workers to request and process the UI commands stack
-  // This will block untill all workers have processed UI commands
-  virtual void ThisWorkerProcessCommandsStackDone() override;
-  // Called by workers to signal to master it has completed processing of
-  // UI commands
-  // virtual WorkerActionRequest ThisWorkerWaitForNextAction();
-  // Worker thread barrier
-  // This method should be used by workers' run manager to wait,
-  // after an event loop for the next action to be performed
-  // (for example execute a new run)
-  // This returns the action to be performed
-  virtual void WaitForReadyWorkers() override {}
-  virtual void WaitForEndEventLoopWorkers() override;
-  virtual void ThisWorkerReady() override {}
-  virtual void ThisWorkerEndEventLoop() override {}
-  virtual WorkerActionRequest ThisWorkerWaitForNextAction() override
-  {
-    return WorkerActionRequest::UNDEFINED;
-  }
+    void WaitForReadyWorkers() override {}
+    void WaitForEndEventLoopWorkers() override;
+    void ThisWorkerReady() override {}
+    void ThisWorkerEndEventLoop() override {}
 
- protected:
-  virtual void NewActionRequest(WorkerActionRequest) override {}
-  virtual void AddEventTask(G4int);
+    WorkerActionRequest ThisWorkerWaitForNextAction() override
+    {
+      return WorkerActionRequest::UNDEFINED;
+    }
 
- public:
-  inline void SetInitializeSeedsCallback(InitializeSeedsCallback f)
-  {
-    initSeedsCallback = f;
-  }
+    inline void SetInitializeSeedsCallback(InitializeSeedsCallback f) { initSeedsCallback = f; }
 
- public:
-  virtual void AbortRun(G4bool softAbort = false) override;
-  virtual void AbortEvent() override;
+    void AbortRun(G4bool softAbort = false) override;
+    void AbortEvent() override;
 
- private:
-  // grainsize
-  bool workersStarted                     = false;
-  G4int eventGrainsize                    = 0;
-  G4int numberOfEventsPerTask             = -1;
-  G4int numberOfTasks                     = -1;
-  CLHEP::HepRandomEngine* masterRNGEngine = nullptr;
-  // Pointer to the master thread random engine
-  G4TaskRunManagerKernel* MTkernel = nullptr;
+  protected:
+    virtual void ComputeNumberOfTasks();
 
- protected:
-  // Barriers: synch points between master and workers
-  RunTaskGroup* workTaskGroup = nullptr;
+    // Initialize the seeds list, if derived class does not implement this method
+    // A default generation will be used (nevents*2 random seeds)
+    // Return true if initialization is done.
+    G4bool InitializeSeeds(G4int /*nevts*/) override { return false; }
 
-  // aliases to inherited member values
-  G4bool& poolInitialized      = PTL::TaskRunManager::m_is_initialized;
-  G4ThreadPool*& threadPool    = PTL::TaskRunManager::m_thread_pool;
-  G4VUserTaskQueue*& taskQueue = PTL::TaskRunManager::m_task_queue;
-  G4TaskManager*& taskManager  = PTL::TaskRunManager::m_task_manager;
+    // Adds one seed to the list of seeds
+    void RefillSeeds() override;
+    void StoreRNGStatus(const G4String& filenamePrefix) override;
 
-  InitializeSeedsCallback initSeedsCallback = [](G4int, G4int&, G4int&) {
-    return false;
-  };
+    // Creates worker threads and signal to start
+    void CreateAndStartWorkers() override;
+
+    void TerminateWorkers() override;
+    void NewActionRequest(WorkerActionRequest) override {}
+    virtual void AddEventTask(G4int);
+
+  protected:
+    // Barriers: synch points between master and workers
+    RunTaskGroup* workTaskGroup = nullptr;
+
+    // aliases to inherited member values
+    G4bool& poolInitialized = PTL::TaskRunManager::m_is_initialized;
+    G4ThreadPool*& threadPool = PTL::TaskRunManager::m_thread_pool;
+    G4VUserTaskQueue*& taskQueue = PTL::TaskRunManager::m_task_queue;
+    G4TaskManager*& taskManager = PTL::TaskRunManager::m_task_manager;
+
+    InitializeSeedsCallback initSeedsCallback = [](G4int, G4int&, G4int&) {
+      return false;
+    };
+
+  private:
+    // grainsize
+    G4bool workersStarted = false;
+    G4int eventGrainsize = 0;
+    G4int numberOfEventsPerTask = -1;
+    G4int numberOfTasks = -1;
+    CLHEP::HepRandomEngine* masterRNGEngine = nullptr;
+    // Pointer to the master thread random engine
+    G4TaskRunManagerKernel* MTkernel = nullptr;
 };
 
 #endif  // G4TaskRunManager_hh

@@ -226,12 +226,11 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand* command)
       // no particle is selected. return null 
       return noName;
     }
-    else
-    {
-      return currentParticle->GetParticleName();
-    }
+    
+          return currentParticle->GetParticleName();
+   
   }
-  else if( command==verboseCmd )
+  if( command==verboseCmd )
   {
     // Command   /particle/verbose
     return verboseCmd->ConvertToString(theParticleTable->GetVerboseLevel());

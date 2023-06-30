@@ -22,26 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+// class description
 //
-// 30.11.13 V. Grichine, add array of sandia cofs for H2O lower I1
-// 15.04.02 V.Grichine, bug fixed in Pb: comma after  15.861, 
-// 09.11.98 simplified public interface; removed mixting stuf.  MMA
-// 10.06.97 created. V. Grichine
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-#include"G4SandiaTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-// class description 
-// 
-// File for static data of PhotoAbsorption cross section coefficients 
+// File for static data of PhotoAbsorption cross section coefficients
 // according to the Sandia parametrisation
 //
 // const G4double G4SandiaTable::fSandiaTable[981][5]
@@ -88,6 +72,17 @@
 // and Technology, January 1990). Here the ionization energy is the least
 // energy necessary to remove to infinity one electron from an atom of the
 // element.
+//
+//------------------------------------------------------------------------------
+//
+// 30.11.13 V. Grichine, add array of sandia cofs for H2O lower I1
+// 15.04.02 V.Grichine, bug fixed in Pb: comma after  15.861,
+// 09.11.98 simplified public interface; removed mixting stuf.  MMA
+// 10.06.97 created. V. Grichine
+
+#include "G4SandiaTable.hh"
+
+// clang-format off
 
 const G4double G4SandiaTable::fSandiaTable[981][5] = 
 {
@@ -1589,8 +1584,4 @@ const G4int G4SandiaTable::fIntervalLimit     = 100;
 const G4int G4SandiaTable::fNumberOfIntervals = 980;
 const G4int G4SandiaTable::fH2OlowerInt       = 23;
 
-//
-//
-///////////////////////////////////////////////////////////////////////////////////////
-
-
+// clang-format on

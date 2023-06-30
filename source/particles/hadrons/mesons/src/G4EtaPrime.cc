@@ -47,16 +47,16 @@
 // ###                         EtaPrime                               ###
 // ######################################################################
 
-G4EtaPrime* G4EtaPrime::theInstance = 0;
+G4EtaPrime* G4EtaPrime::theInstance = nullptr;
 
 G4EtaPrime* G4EtaPrime::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "eta_prime";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,13 +73,13 @@ G4EtaPrime* G4EtaPrime::Definition()
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         331,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,     "eta_prime",           331);
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[5];
+  auto  mode = new G4VDecayChannel*[5];
   // EtaPrime -> eta + pi+ + pi-
   mode[0] = new G4PhaseSpaceDecayChannel("eta_prime",0.429,3,"eta","pi+","pi-");
   // EtaPrime -> eta + pi0 + pi0

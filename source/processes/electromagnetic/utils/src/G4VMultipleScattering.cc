@@ -143,7 +143,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
   G4bool master = emManager->IsMaster();
   if(nullptr == firstParticle) { firstParticle = &part; }
 
-  emManager->PreparePhysicsTable(&part, this, master);
+  emManager->PreparePhysicsTable(&part, this);
   currParticle = nullptr;
 
   if(firstParticle == &part) {

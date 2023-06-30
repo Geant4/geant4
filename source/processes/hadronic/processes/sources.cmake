@@ -13,6 +13,7 @@ geant4_add_module(G4hadronic_proc
     G4NeutronCaptureProcess.hh
     G4NeutronFissionProcess.hh
     G4NeutronGeneralProcess.hh
+    G4NuVacOscProcess.hh
     G4PositronNuclearProcess.hh
     G4TauNeutrinoNucleusProcess.hh
     G4UCNProcessSubType.hh
@@ -32,6 +33,7 @@ geant4_add_module(G4hadronic_proc
     G4NeutronCaptureProcess.cc
     G4NeutronFissionProcess.cc
     G4NeutronGeneralProcess.cc
+    G4NuVacOscProcess.cc
     G4PositronNuclearProcess.cc
     G4TauNeutrinoNucleusProcess.cc
     G4UCNBoundaryProcess.cc

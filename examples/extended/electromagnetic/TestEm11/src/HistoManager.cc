@@ -38,15 +38,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-  : fFileName("testem11")
 {
   Book();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HistoManager::~HistoManager()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,8 +71,8 @@ void HistoManager::Book()
                   "true track length of charged secondaries",     //6
                   "true step size of charged secondaries",        //7
                   "Edep (MeV.cm2/g) along x/r0",                  //8
-                  "dummy",                                        //9
-                  "dummy"                                         //10
+                  "total Energy leakage",                         //9
+                  "total Energy : Edep + Eleak"                   //10
                  };
 
   // Default values (to be reset via /analysis/h1/set command)

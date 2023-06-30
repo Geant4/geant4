@@ -29,4 +29,4 @@
 #include "G4ParticleHPChannelList.hh"
 using G4NeutronHPChannelList = G4ParticleHPChannelList;
 
-#endif 
+#endif

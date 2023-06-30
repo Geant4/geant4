@@ -81,6 +81,7 @@ private:
   G4UIcmdWithABool*          fBeamCmd;
   G4UIcmdWithABool*          fBCCmd;
   G4UIcmdWithABool*          fHNCmd;
+  G4UIcmdWithABool*          fNGPCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,140 @@
+
+///\file "medical/dna/UHDR/.README.txt"
+///\brief Example (UHDR) Ultra High Dose Rate README page
+
+/*! \page UHDR Example
+			    
+
+/*! \page ExampleUHDR Example scavenger
+
+\ This example is provided by the Geant4-DNA collaboration
+  (http://geant4-dna.org).
+
+  Any report or published results obtained using the Geant4-DNA software
+  shall cite the following Geant4-DNA collaboration publications:\n
+  Med. Phys. 45 (2018) e722-e739\n
+  Phys. Med. 31 (2015) 861-874\n
+  Med. Phys. 37 (2010) 4692-4708\n
+  Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178\n
+
+
+\section UHDR_s0 INTRODUCTION
+
+ This example shows how to activate the mesoscopic model in chemistry and
+ combine with SBS model (Tran et al.,Int. J. Mol. Sci. 22 (2021) 6023).
+ It allows to simulate chemical reactions longtime (beyond 1 us) of post-irradiation.
+
+ To run the example:
+\verbatim
+mkdir UHRD-build
+cd UHRD-build
+cmake ../pathToExamples/UHRD
+make
+\endverbatim
+
+In batch mode, the macro beam.in can be used as follows:
+ \verbatim
+ ./UHRD beam.in
+ \endverbatim
+ or
+ \verbatim
+ ./UHRD beam.in 123
+ \endverbatim
+# 123 is the user's seed number
+
+\section UHDR_s1 GEOMETRY DEFINITION
+
+
+ The world volume is a simple water box 3.2 x 3.2 x 3.2 um3 for 0.01Gy of cut-off
+ absorbed dose and 1.6 x 1.6 x 1.6 um3 for 1 Gy.
+ This example is only limited at these geometries for these geometries.
+
+ Two parameters define the geometry :
+ - the material of the box for the physical stage is water.
+ - for the chemistry stage, the concentration of scavengers in [mole/l]
+   is added. This concentration is supposed to have no effect on the
+   physical stage. pH is defined as scavengers of H3O^1, OH^-1.
+   In this example, we consider that chemical molecules diffuse and react in a
+   bounded volume (that is, limited by geometrical boundaries) which is also
+   the irradiated water box volume of the physical stage.
+   The bouncing of chemical molecules on the volume border is applied
+   for both SBS and mesoscopic models.
+   The bouncing is not applied for physical stage.
+
+\section UHDR_s2 PHYSICS LIST
+
+ PhysicsList is Geant4 modular physics list using G4EmDNAPhysics_option2
+ and EmDNAChemistry constructors (the chemistry constructor uses the
+ Step-by-step method).
+
+\section UHDR_s3  CHEMISTRY WORLD
+
+ This object is controlled by DetectorContruction. It defines the chemistry volume,
+ scavengers and pH of water.
+
+\section UHDR_s4 AN EVENT: PRIMARY GENERATOR
+
+This example utilizes the G4SingleParticleSource.
+Each event consists of multiple incident particles.
+A large number has been chosen to ensure that the stack remains non-empty until the desired
+energy deposition is achieved (which is then converted to a cutoff dose).
+With each /run/beamOn command, a group of particles is emitted. The cutoff dose
+(dose threshold) determined by users.
+The actual dose is calculated based on the real energy deposited in the volume.
+
+\section UHDR_s5 DETECTOR RESPONSE : Scorer
+
+     There is one G4MultiFunctionalDetector object which computes the
+     energy deposition and the number of species along time in order to
+     extract the G-value:
+     (Number of species X) / (100 eV of deposited energy).
+
+     These two macro commands can be used to control the scoring time:
+       /scorer/species/addTimeToRecord 1 ps
+       # user can select time bin to score G values.
+       /scorer/species/nOfTimeBins
+       # or user can automatically select time bin logarithmically.
+
+\section UHDR_s6 PULSE ACTION
+
+This functionality is not available for this version.
+
+\section UHDR_s7 OUTPUT
+
+G-value
+
+\section UHDR_s8 RELEVANT MACRO COMMANDS AND MACRO FILE
+
+The user macro file is: beam.in
+
+\section UHDR_s9 - REACTION BUILDER
+
+ Reaction lists are collected by builders for specific applications.
+ ChemNO2_NO3ScavengerBuilder is to build the reaction list with NO2-/NO3-.
+ ChemPureWaterBuilder is to build the reaction list with pH.
+ ChemOxygenWaterBuilder is to build the reaction list with ROS.
+ ChemFrickeReactionBuilder is to build the reaction list of Fricke Dosimeter.
+
+\section SCAVENGER_s11 PLOT
+
+The information about all the molecular species is scored in a ROOT
+(https://root.cern) ntuple file Dose_xxx.root (xxx is seed number).
+The ROOT program plot_time.C
+can be used to plot the G values vs time for each species.
+
+Execute plot_time as:
+\verbatim
+root plot_time.C
+\endverbatim
+
+or print G values to scorer.txt
+\verbatim
+root plot_time.C > scorer.txt
+\endverbatim
+
+The results show the molecular species (G values) as a function of
+time (ns). Please correct the dose in the TTree *tree = (TTree *) dir->Get("0.010000");
+
+
+
+*/

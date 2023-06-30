@@ -164,10 +164,10 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
    G4LogicalVolume* volume;
    G4SmartVoxelHeader* head;
  
-   for (size_t n=0; n<Store->size(); ++n)
+   for (auto & n : *Store)
    {
      if (verbose) timer.Start();
-     volume=(*Store)[n];
+     volume=n;
      // For safety, check if there are any existing voxels and
      // delete before replacement
      //
@@ -177,7 +177,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
      if (    ( (volume->IsToOptimise())
             && (volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) )
           || ( (volume->GetNoDaughters()==1)
-            && (volume->GetDaughter(0)->IsReplicated()==true)
+            && (volume->GetDaughter(0)->IsReplicated())
             && (volume->GetDaughter(0)->GetRegularStructureId()!=1) ) ) 
      {
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -202,9 +202,9 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
        if (verbose)
        {
          timer.Stop();
-         stats.push_back( G4SmartVoxelStat( volume, head,
+         stats.emplace_back( volume, head,
                                             timer.GetSystemElapsed(),
-                                            timer.GetUserElapsed() ) );
+                                            timer.GetUserElapsed() );
        }
      }
      else
@@ -246,7 +246,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
    if (    ( (tVolume->IsToOptimise())
           && (tVolume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) )
         || ( (tVolume->GetNoDaughters()==1)
-          && (tVolume->GetDaughter(0)->IsReplicated()==true) ) ) 
+          && (tVolume->GetDaughter(0)->IsReplicated()) ) ) 
    {
      head = new G4SmartVoxelHeader(tVolume);
      if (head != nullptr)
@@ -276,7 +276,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
    // Scan recursively the associated logical volume tree
    //
   tVolume = pVolume->GetLogicalVolume();
-  if (tVolume->GetNoDaughters())
+  if (tVolume->GetNoDaughters() != 0)
   {
     BuildOptimisations(allOpts, tVolume->GetDaughter(0));
   }
@@ -291,9 +291,9 @@ void G4GeometryManager::DeleteOptimisations()
 {
   G4LogicalVolume* tVolume = nullptr;
   G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
-  for (size_t n=0; n<Store->size(); ++n)
+  for (auto & n : *Store)
   {
-    tVolume=(*Store)[n];
+    tVolume=n;
     delete tVolume->GetVoxelHeader();
     tVolume->SetVoxelHeader(nullptr);
   }
@@ -306,7 +306,7 @@ void G4GeometryManager::DeleteOptimisations()
 //
 void G4GeometryManager::DeleteOptimisations(G4VPhysicalVolume* pVolume)
 {
-  if (!pVolume) { return; }
+  if (pVolume == nullptr) { return; }
 
   // Retrieve the mother logical volume, if not NULL,
   // otherwise global deletion to world volume.
@@ -319,7 +319,7 @@ void G4GeometryManager::DeleteOptimisations(G4VPhysicalVolume* pVolume)
   // Scan recursively the associated logical volume tree
   //
   tVolume = pVolume->GetLogicalVolume();
-  if (tVolume->GetNoDaughters())
+  if (tVolume->GetNoDaughters() != 0)
   {
     DeleteOptimisations(tVolume->GetDaughter(0));
   }
@@ -332,7 +332,7 @@ void G4GeometryManager::DeleteOptimisations(G4VPhysicalVolume* pVolume)
 //
 void G4GeometryManager::SetWorldMaximumExtent(G4double extent)
 {
-  if (G4SolidStore::GetInstance()->size())
+  if (!G4SolidStore::GetInstance()->empty())
   {
      // Sanity check to assure that extent is fixed BEFORE creating
      // any geometry object (solids in this case)
@@ -380,7 +380,7 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
          
   G4int nPrint = nStat > 10 ? 10 : nStat;
 
-  if (nPrint)
+  if (nPrint != 0)
   {
     G4cout << "\n    Voxelisation: top CPU users:" << G4endl;
     G4cout << "    Percent   Total CPU    System CPU       Memory  Volume\n"
@@ -423,7 +423,7 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
     return a.GetMemoryUse() > b.GetMemoryUse();
   } );
  
-  if (nPrint)
+  if (nPrint != 0)
   {
     G4cout << "\n    Voxelisation: top memory users:" << G4endl;
     G4cout << "    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume\n"

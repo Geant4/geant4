@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-17 Vladimir Ivantchenko (radioactive_decay-V11-01-02)
+- G4RadioactiveDecay, G4BetaSpectrumSampler - fixed Coverity reports on
+    non-initialized class members
+
+## 2023-03-24 Dennis Wright (radioactive_decay-V11-01-01)
+- Fix coverity bug 104867: uninitialized integers in G4BetaSpectrumSampler.cc
+  Do initialization in ctor.
+  
+## 2023-03-24 Dennis Wright (radioactive_decay-V11-01-00)
+- Fix of bug #2367: stairstep beta decay spectrum
+  Create new class G4BetaSpectrumSampler to sample a sloped distribution
+  instead of a flat one. Add this to sources.cmake.
+  Change G4BetaMinusDecay and G4BetaPlusDecay to use the above sampler.
+  Add protection against very large arguments in std::exp within 
+    G4BetaDecayCorrections::ModSquared
+
 ## 2022-11-26 Gabriele Cosmo (radioactive_decay-V11-00-10)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

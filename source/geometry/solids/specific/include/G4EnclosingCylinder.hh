@@ -44,12 +44,12 @@ class G4ReduciblePolygon;
 
 class G4EnclosingCylinder
 {
-  public:  // with description
+  public:
 
     G4EnclosingCylinder( const G4ReduciblePolygon* rz,
                                G4bool phiIsOpen, 
                                G4double startPhi, G4double totalPhi );
-    ~G4EnclosingCylinder();
+    ~G4EnclosingCylinder() = default;
   
     G4bool MustBeOutside( const G4ThreeVector& p ) const;
       // Decide very rapidly if the point is outside the cylinder.
@@ -58,8 +58,6 @@ class G4EnclosingCylinder
     G4bool ShouldMiss( const G4ThreeVector& p, const G4ThreeVector& v ) const;
       // Decide very rapidly if the trajectory is going to miss the cylinder.
       // If one is not sure, return false.
-
-  public:  // without description
 
     G4EnclosingCylinder(__void__&);
       // Fake default constructor for usage restricted to direct object

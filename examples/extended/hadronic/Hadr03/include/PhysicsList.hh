@@ -40,7 +40,7 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
- ~PhysicsList() override;
+ ~PhysicsList() = default;
 
 public:
   void ConstructParticle() override;

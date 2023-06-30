@@ -89,15 +89,6 @@
 #include "G4AntiOmegabMinus.hh"
 
 
-G4BaryonConstructor::G4BaryonConstructor()
-{
-}
-
-G4BaryonConstructor::~G4BaryonConstructor()
-{
-}
-
-
 void G4BaryonConstructor::ConstructParticle()
 {
   ConstructNucleons();

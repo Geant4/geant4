@@ -31,9 +31,7 @@
 #include "G4HarmonicPolMagField.hh"
 #include "globals.hh"
 
-G4HarmonicPolMagField::G4HarmonicPolMagField()
-{
-}
+G4HarmonicPolMagField::G4HarmonicPolMagField() = default;
 
 G4HarmonicPolMagField* G4HarmonicPolMagField::Clone() const
 {
@@ -42,9 +40,7 @@ G4HarmonicPolMagField* G4HarmonicPolMagField::Clone() const
 
 // -------------------------------------------------------------------
 
-G4HarmonicPolMagField::~G4HarmonicPolMagField()
-{
-}
+G4HarmonicPolMagField::~G4HarmonicPolMagField() = default;
 
 // -------------------------------------------------------------------
 

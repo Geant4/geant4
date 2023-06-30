@@ -1,2 +1,0 @@
-# Overwrite the top-level .gitignore that wants to ignore all *.pdb files.
-!*.pdb

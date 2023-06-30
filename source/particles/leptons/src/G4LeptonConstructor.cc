@@ -47,13 +47,6 @@
 #include "G4AntiNeutrinoMu.hh"
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
-G4LeptonConstructor::G4LeptonConstructor()
-{
-}
-
-G4LeptonConstructor::~G4LeptonConstructor()
-{
-}
 
 
 void G4LeptonConstructor::ConstructParticle()

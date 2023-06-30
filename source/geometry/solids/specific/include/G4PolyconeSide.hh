@@ -94,37 +94,36 @@ class G4PolyconeSide : public G4VCSGface
                     const G4PolyconeSideRZ* nextRZ,
                           G4double phiStart, G4double deltaPhi, 
                           G4bool phiIsOpen, G4bool isAllBehind = false );
-    virtual ~G4PolyconeSide();
+    ~G4PolyconeSide() override;
   
     G4PolyconeSide( const G4PolyconeSide& source );
     G4PolyconeSide& operator=( const G4PolyconeSide& source );
   
-    G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,  
-                            G4bool outgoing, G4double surfTolerance,
-                            G4double& distance, G4double &distFromSurface,
-                            G4ThreeVector& normal, G4bool& isAllBehind );
+    G4bool Intersect(const G4ThreeVector& p, const G4ThreeVector& v,  
+                           G4bool outgoing, G4double surfTolerance,
+                           G4double& distance, G4double &distFromSurface,
+                           G4ThreeVector& normal, G4bool& isAllBehind) override;
 
-    G4double Distance( const G4ThreeVector& p, G4bool outgoing );
+    G4double Distance( const G4ThreeVector& p, G4bool outgoing ) override;
   
     EInside Inside( const G4ThreeVector& p, G4double tolerance, 
-                          G4double* bestDistance );
+                          G4double* bestDistance ) override;
   
-    G4ThreeVector Normal( const G4ThreeVector& p,  G4double* bestDistance );
+    G4ThreeVector Normal( const G4ThreeVector& p,
+                                G4double* bestDistance ) override;
 
-    G4double Extent( const G4ThreeVector axis );
+    G4double Extent( const G4ThreeVector axis ) override;
 
     void CalculateExtent( const EAxis axis, 
                           const G4VoxelLimits& voxelLimit,
                           const G4AffineTransform& tranform,
-                                G4SolidExtentList& extentList );
+                                G4SolidExtentList& extentList ) override;
 
-    G4VCSGface* Clone() { return new G4PolyconeSide( *this ); }
+    G4VCSGface* Clone() override { return new G4PolyconeSide( *this ); }
 
-    G4double SurfaceArea();
-    G4ThreeVector GetPointOnFace();
+    G4double SurfaceArea() override;
+    G4ThreeVector GetPointOnFace() override;
   
-  public:  // without description
-
     G4PolyconeSide(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for

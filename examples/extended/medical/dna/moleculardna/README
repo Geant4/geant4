@@ -11,8 +11,9 @@ A Geant4-DNA application for simulating DNA damage.
 
 AUTHORS
 
-N. Lampe, M. Karamitros, D. Sakata, W. G. Shin, M. Dordevic, K. Chatzipapas, H.
-N. Tran (*) et al.
+N. Lampe, M. Karamitros, D. Sakata, W. G. Shin, M. Dordevic, K. Chatzipapas,
+P.Dondero, R.Stanzani, H.N. Tran (*) et al.
+
 (*) contact: tran@cenbg.in2p3.fr
 
 This example is provided by the Geant4-DNA collaboration.
@@ -120,7 +121,7 @@ http://geant4-dna.org
 
     # DNA geometries are only ever placed in a chromosome
     /chromosome/add cylinder sphere 3000 0 0 0 nm
-    
+
     # For the visualisation of DNA geometries, the following line can be used
     /control/execute vis.mac
     # More specifically, start moleculardna using the command ./molecular, to
@@ -195,26 +196,39 @@ http://geant4-dna.org
     - ecoli.C : to plot damage from ecoli geometry
     - human_cell.C : to plot damage and fragments distribution from human_cell
       geometry
-    
+
     A python macro file is provided to modify ROOT output in SDD file format:
     - createSDD.py : to use it, insert the command "python3 createSDD.py".
-                     If error with root, simply 
+                     If error with root, simply
                      source /path/to/root/bin/thisroot.(c)sh,
                      do "pip install pyroot" and try again.
-    
-    A python macro file to calculate repair kinetics is located in the folder 
+
+    A python macro file to calculate repair kinetics is located in the folder
     repair_survival_models. This script can be used with the output of the mac
-    file human_cell (10^5 primaries) to reproduced data published in 
-    https://arxiv.org/abs/2210.01564 
+    file human_cell (10^5 primaries) to reproduced data published in
+    https://arxiv.org/abs/2210.01564
     - molecularDNArepair.py : to use it, insert the command "python3 molecularDNArepair.py".
-                              The molecular-dna.root is also needed to run it, as produced by 
+                              The molecular-dna.root is also needed to run it, as produced by
                               the human-cell.mac.
-    
-    A python macro file to calculate the survival probability of cells is located 
-    in the folder repair_survival_models. This script is early released and needs to be optimized 
+
+    A python macro file to calculate the survival probability of cells is located
+    in the folder repair_survival_models. This script is early released and needs to be optimized
     to fit any data.
     - molecularDNAsurvival.py : to use it, insert the command "python3 molecularDNAsurnival.py".
-                                The molecular-dna.root is needed to run it, as produced by 
+                                The molecular-dna.root is needed to run it, as produced by
                                 the human-cell.mac.
-    
-    
+
+
+6 - PHASE SPACE READING
+
+    The example can read a phase space file as source for the primary generation,
+    defined in the csv format used by the GRAS Two-Stage Analysis [1].
+    An example of phase space file and the macro to read it are provided in the
+    "/phase_space" subdirectory.
+    This simple phase space file only provides 20 electrons with an energy of
+    45 keV on a randomly shaped surface based on the cylinders.mac macro file.
+
+
+Reference
+[1] https://spitfire.estec.esa.int/trac/GRAS/wiki/GRAS/GRAS-05-02/UserGuideTwoStage
+

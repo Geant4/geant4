@@ -57,26 +57,26 @@ class G4WaterStopping
 {
 public:
 
-  explicit G4WaterStopping(G4EmCorrections* corr = nullptr, G4bool splineFlag = true);
+  explicit G4WaterStopping();
 
-  ~G4WaterStopping();
+  ~G4WaterStopping() = default;
 
   G4double GetElectronicDEDX(G4int Z, G4double energy);
-
-private:
-
-  void Initialise(G4EmCorrections*);
-
-  void AddData(const G4double* energy, const G4double* stoppower, 
-	       G4double factor);
 
   // hide assignment operator
   G4WaterStopping & operator=(const  G4WaterStopping &right) = delete;
   G4WaterStopping(const  G4WaterStopping&) = delete;
 
-  G4bool spline;
+private:
+
+  void Initialise();
+
+  void AddData(const G4double* energy, const G4double* stoppower, 
+	       G4double factor);
+
+  G4bool spline = true;
   G4double emin;
-  std::vector<G4PhysicsFreeVector*>  dedx;
+  std::vector<G4PhysicsFreeVector*> dedx;
 };
 
 #endif

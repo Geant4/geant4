@@ -42,7 +42,7 @@ inline void G4BlockingList::BlockVolume(const G4int vol)
 
 inline G4bool G4BlockingList::IsBlocked(const G4int vol) const
 {
-  return ( fBlockingList[vol]==fBlockTagNo ) ? true : false;
+  return fBlockingList[vol]==fBlockTagNo;
 }
 
 inline void G4BlockingList::Reset()

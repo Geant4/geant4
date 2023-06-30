@@ -39,12 +39,8 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPInelastic.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleHPManager.hh"
-#include "G4HadronicParameters.hh"
-#include "G4ParticleHPThermalBoost.hh"
-#include "G4Threading.hh"
 
+#include "G4HadronicParameters.hh"
 #include "G4ParticleHP2AInelasticFS.hh"
 #include "G4ParticleHP2N2AInelasticFS.hh"
 #include "G4ParticleHP2NAInelasticFS.hh"
@@ -62,6 +58,7 @@
 #include "G4ParticleHPDAInelasticFS.hh"
 #include "G4ParticleHPDInelasticFS.hh"
 #include "G4ParticleHPHe3InelasticFS.hh"
+#include "G4ParticleHPManager.hh"
 #include "G4ParticleHPN2AInelasticFS.hh"
 #include "G4ParticleHPN2PInelasticFS.hh"
 #include "G4ParticleHPN3AInelasticFS.hh"
@@ -81,262 +78,291 @@
 #include "G4ParticleHPPTInelasticFS.hh"
 #include "G4ParticleHPT2AInelasticFS.hh"
 #include "G4ParticleHPTInelasticFS.hh"
+#include "G4ParticleHPThermalBoost.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 
-G4ParticleHPInelastic::G4ParticleHPInelastic(G4ParticleDefinition* projectile,
-                                             const char* name )
-  : G4HadronicInteraction(name), theInelastic(nullptr), numEle(0)
-  , theProjectile(projectile)
+G4ParticleHPInelastic::G4ParticleHPInelastic(G4ParticleDefinition* projectile, const char* name)
+  : G4HadronicInteraction(name), theProjectile(projectile)
 {
-    G4String baseName; 
-    if ( G4FindDataDir("G4PARTICLEHPDATA") ) {
-      baseName = G4FindDataDir( "G4PARTICLEHPDATA" );
-    }
-    //const char* dataDirVariable;
-    G4String particleName;
-    if ( theProjectile == G4Neutron::Neutron() ) {
-      dataDirVariable = "G4NEUTRONHPDATA";
-    } else if( theProjectile == G4Proton::Proton() ) {
-      dataDirVariable = "G4PROTONHPDATA";
-      particleName = "Proton";
-    } else if( theProjectile == G4Deuteron::Deuteron() ) {
-      dataDirVariable = "G4DEUTERONHPDATA";
-      particleName = "Deuteron";
-    } else if( theProjectile == G4Triton::Triton() ) {
-      dataDirVariable = "G4TRITONHPDATA";
-      particleName = "Triton";
-    } else if( theProjectile == G4He3::He3() ) {
-      dataDirVariable = "G4HE3HPDATA";
-      particleName = "He3";
-    } else if( theProjectile == G4Alpha::Alpha() ) {
-      dataDirVariable = "G4ALPHAHPDATA";
-      particleName = "Alpha";
-    } else {
-      G4String message("G4ParticleHPInelastic may only be called for neutron, proton, deuteron, triton, He3 or alpha, while it is called for " + theProjectile->GetParticleName());
-      throw G4HadronicException(__FILE__, __LINE__,message.c_str());
-    }
-
-    SetMinEnergy( 0.0 );
-    SetMaxEnergy( 20.*MeV );
-
-    //G4cout << " entering G4ParticleHPInelastic constructor"<<G4endl;
-    if ( !G4FindDataDir("G4PARTICLEHPDATA") && !G4FindDataDir(dataDirVariable) ) {
-      G4String message("Please setenv G4PARTICLEHPDATA (recommended) or, at least setenv " +
-		       G4String(dataDirVariable) + " to point to the " + theProjectile->GetParticleName() + " cross-section files." );      
-      throw G4HadronicException(__FILE__, __LINE__,message.c_str());
-    }
-    if ( G4FindDataDir(dataDirVariable) ) {
-      dirName = G4FindDataDir(dataDirVariable);
-    } else {
-      dirName = baseName + "/" + particleName;
-    }
-    
-#ifdef G4VERBOSE
-    if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) G4cout << dirName << G4endl;
-#endif
-    
-    G4String tString = "/Inelastic";
-    dirName = dirName + tString;
-
-#ifdef G4VERBOSE
-    if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 )
-      G4cout << "@@@ G4ParticleHPInelastic instantiated for particle " << theProjectile->GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << dirName << G4endl;
-#endif
+  G4String baseName;
+  if (G4FindDataDir("G4PARTICLEHPDATA") != nullptr) {
+    baseName = G4FindDataDir("G4PARTICLEHPDATA");
+  }
+  // const char* dataDirVariable;
+  G4String particleName;
+  if (theProjectile == G4Neutron::Neutron()) {
+    dataDirVariable = "G4NEUTRONHPDATA";
+  }
+  else if (theProjectile == G4Proton::Proton()) {
+    dataDirVariable = "G4PROTONHPDATA";
+    particleName = "Proton";
+  }
+  else if (theProjectile == G4Deuteron::Deuteron()) {
+    dataDirVariable = "G4DEUTERONHPDATA";
+    particleName = "Deuteron";
+  }
+  else if (theProjectile == G4Triton::Triton()) {
+    dataDirVariable = "G4TRITONHPDATA";
+    particleName = "Triton";
+  }
+  else if (theProjectile == G4He3::He3()) {
+    dataDirVariable = "G4HE3HPDATA";
+    particleName = "He3";
+  }
+  else if (theProjectile == G4Alpha::Alpha()) {
+    dataDirVariable = "G4ALPHAHPDATA";
+    particleName = "Alpha";
+  }
+  else {
+    G4String message(
+      "G4ParticleHPInelastic may only be called for neutron, proton, deuteron, triton, He3 or "
+      "alpha, while it is called for "
+      + theProjectile->GetParticleName());
+    throw G4HadronicException(__FILE__, __LINE__, message.c_str());
   }
 
-  G4ParticleHPInelastic::~G4ParticleHPInelastic()
+  SetMinEnergy(0.0);
+  SetMaxEnergy(20. * MeV);
+
+  // G4cout << " entering G4ParticleHPInelastic constructor"<<G4endl;
+  if ((G4FindDataDir("G4PARTICLEHPDATA") == nullptr) && (G4FindDataDir(dataDirVariable) == nullptr))
   {
-    //Vector is shared, only master deletes
-    if ( !G4Threading::IsWorkerThread() ) {
-        if ( theInelastic != nullptr ) {
-            for ( auto it=theInelastic->cbegin(); it!=theInelastic->cend(); ++it ) {
-                delete *it;
-            }
-            theInelastic->clear();
-        }
-     }
+    G4String message("Please setenv G4PARTICLEHPDATA (recommended) or, at least setenv "
+                     + G4String(dataDirVariable) + " to point to the "
+                     + theProjectile->GetParticleName() + " cross-section files.");
+    throw G4HadronicException(__FILE__, __LINE__, message.c_str());
   }
-  
-  G4HadFinalState * G4ParticleHPInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
-  {
-    G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
-    const G4Material * theMaterial = aTrack.GetMaterial();
-    G4int n = (G4int)theMaterial->GetNumberOfElements();
-    std::size_t index = theMaterial->GetElement(0)->GetIndex();
-    G4int it=0;
-    if(n!=1)
-    {
-      G4double* xSec = new G4double[n];
-      G4double sum=0;
-      G4int i;
-      const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
-      G4double rWeight;    
-      G4ParticleHPThermalBoost aThermalE;
-      for (i=0; i<n; ++i)
-      {
-        index = theMaterial->GetElement(i)->GetIndex();
-        rWeight = NumAtomsPerVolume[i];
-	if ( aTrack.GetDefinition() == G4Neutron::Neutron() ) {
-	  xSec[i] = ((*theInelastic)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
-									      theMaterial->GetElement(i),
-									      theMaterial->GetTemperature()));
-	} else {
-	  xSec[i] = ((*theInelastic)[index])->GetXsec(aTrack.GetKineticEnergy());
-	}
-        xSec[i] *= rWeight;
-        sum+=xSec[i];
-#ifdef G4PHPDEBUG
-	#ifdef G4VERBOSE
-	if( std::getenv("G4ParticleHPDebug") && G4HadronicParameters::Instance()->GetVerboseLevel() > 0 )
-	  G4cout << " G4ParticleHPInelastic XSEC ELEM " << i << " = " << xSec[i] << G4endl;
-	#endif
+  if (G4FindDataDir(dataDirVariable) != nullptr) {
+    dirName = G4FindDataDir(dataDirVariable);
+  }
+  else {
+    dirName = baseName + "/" + particleName;
+  }
+
+#ifdef G4VERBOSE
+  if (G4HadronicParameters::Instance()->GetVerboseLevel() > 0) G4cout << dirName << G4endl;
 #endif
 
+  G4String tString = "/Inelastic";
+  dirName = dirName + tString;
+
+#ifdef G4VERBOSE
+  if (G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
+    G4cout << "@@@ G4ParticleHPInelastic instantiated for particle "
+           << theProjectile->GetParticleName() << " data directory variable is " << dataDirVariable
+           << " pointing to " << dirName << G4endl;
+#endif
+}
+
+G4ParticleHPInelastic::~G4ParticleHPInelastic()
+{
+  // Vector is shared, only master deletes
+  if (!G4Threading::IsWorkerThread()) {
+    if (theInelastic != nullptr) {
+      for (auto it = theInelastic->cbegin(); it != theInelastic->cend(); ++it) {
+        delete *it;
       }
-      G4double random = G4UniformRand();
-      G4double running = 0;
-      for (i=0; i<n; ++i)
-      {
-        running += xSec[i];
-        index = theMaterial->GetElement(i)->GetIndex();
-        it = i;
-        //if(random<=running/sum) break;
-        if( sum == 0 || random<=running/sum) break;
-      }
-      delete [] xSec;
+      theInelastic->clear();
     }
+  }
+}
+
+G4HadFinalState* G4ParticleHPInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                                      G4Nucleus& aNucleus)
+{
+  G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
+  const G4Material* theMaterial = aTrack.GetMaterial();
+  auto n = (G4int)theMaterial->GetNumberOfElements();
+  std::size_t index = theMaterial->GetElement(0)->GetIndex();
+  G4int it = 0;
+  if (n != 1) {
+    auto xSec = new G4double[n];
+    G4double sum = 0;
+    G4int i;
+    const G4double* NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+    G4double rWeight;
+    G4ParticleHPThermalBoost aThermalE;
+    for (i = 0; i < n; ++i) {
+      index = theMaterial->GetElement(i)->GetIndex();
+      rWeight = NumAtomsPerVolume[i];
+      if (aTrack.GetDefinition() == G4Neutron::Neutron()) {
+        xSec[i] = ((*theInelastic)[index])
+                    ->GetXsec(aThermalE.GetThermalEnergy(aTrack, theMaterial->GetElement(i),
+                                                         theMaterial->GetTemperature()));
+      }
+      else {
+        xSec[i] = ((*theInelastic)[index])->GetXsec(aTrack.GetKineticEnergy());
+      }
+      xSec[i] *= rWeight;
+      sum += xSec[i];
+#ifdef G4PHPDEBUG
+#  ifdef G4VERBOSE
+      if (std::getenv("G4ParticleHPDebug")
+          && G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
+        G4cout << " G4ParticleHPInelastic XSEC ELEM " << i << " = " << xSec[i] << G4endl;
+#  endif
+#endif
+    }
+    G4double random = G4UniformRand();
+    G4double running = 0;
+    for (i = 0; i < n; ++i) {
+      running += xSec[i];
+      index = theMaterial->GetElement(i)->GetIndex();
+      it = i;
+      // if(random<=running/sum) break;
+      if (sum == 0 || random <= running / sum) break;
+    }
+    delete[] xSec;
+  }
 
 #ifdef G4PHPDEBUG
-    #ifdef G4VERBOSE
-    if( std::getenv("G4ParticleHPDebug") && G4HadronicParameters::Instance()->GetVerboseLevel() > 0 )
-      G4cout << " G4ParticleHPInelastic SELECTED ELEM " << it << " = " << theMaterial->GetElement(it)->GetName() << " FROM MATERIAL " << theMaterial->GetName() << G4endl;
-    #endif
+#  ifdef G4VERBOSE
+  if (std::getenv("G4ParticleHPDebug") && G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
+    G4cout << " G4ParticleHPInelastic SELECTED ELEM " << it << " = "
+           << theMaterial->GetElement(it)->GetName() << " FROM MATERIAL " << theMaterial->GetName()
+           << G4endl;
+#  endif
 #endif
-    //return theInelastic[index].ApplyYourself(theMaterial->GetElement(it), aTrack);
-    G4HadFinalState* result = ((*theInelastic)[index])->ApplyYourself(theMaterial->GetElement(it), aTrack);
-    //
-    aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
-    const G4Element* target_element = (*G4Element::GetElementTable())[index];
-    const G4Isotope* target_isotope = nullptr;
-    G4int iele = (G4int)target_element->GetNumberOfIsotopes();
-    for ( G4int j = 0 ; j != iele ; ++j ) { 
-       target_isotope=target_element->GetIsotope( j );
-       if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break; 
-    }
-    aNucleus.SetIsotope( target_isotope );
-
-    G4ParticleHPManager::GetInstance()->CloseReactionWhiteBoard();
-
-    return result;
+  // return theInelastic[index].ApplyYourself(theMaterial->GetElement(it), aTrack);
+  G4HadFinalState* result =
+    ((*theInelastic)[index])->ApplyYourself(theMaterial->GetElement(it), aTrack);
+  //
+  aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),
+                         G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
+  const G4Element* target_element = (*G4Element::GetElementTable())[index];
+  const G4Isotope* target_isotope = nullptr;
+  auto iele = (G4int)target_element->GetNumberOfIsotopes();
+  for (G4int j = 0; j != iele; ++j) {
+    target_isotope = target_element->GetIsotope(j);
+    if (target_isotope->GetN()
+        == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA())
+      break;
   }
+  aNucleus.SetIsotope(target_isotope);
+
+  G4ParticleHPManager::GetInstance()->CloseReactionWhiteBoard();
+
+  return result;
+}
 
 const std::pair<G4double, G4double> G4ParticleHPInelastic::GetFatalEnergyCheckLevels() const
 {
   // max energy non-conservation is mass of heavy nucleus
-  return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
+  return std::pair<G4double, G4double>(10.0 * perCent, 350.0 * CLHEP::GeV);
 }
 
 G4int G4ParticleHPInelastic::GetVerboseLevel() const
 {
-   return G4ParticleHPManager::GetInstance()->GetVerboseLevel();
+  return G4ParticleHPManager::GetInstance()->GetVerboseLevel();
 }
-void G4ParticleHPInelastic::SetVerboseLevel( G4int newValue ) 
+void G4ParticleHPInelastic::SetVerboseLevel(G4int newValue)
 {
-   G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
+  G4ParticleHPManager::GetInstance()->SetVerboseLevel(newValue);
 }
 
-void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projectile) {
+void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projectile)
+{
+  G4ParticleHPManager* hpmanager = G4ParticleHPManager::GetInstance();
 
-   G4ParticleHPManager* hpmanager = G4ParticleHPManager::GetInstance();
+  theInelastic = hpmanager->GetInelasticFinalStates(&projectile);
 
-   theInelastic = hpmanager->GetInelasticFinalStates( &projectile );
+  if (G4Threading::IsMasterThread()) {
+    if (theInelastic == nullptr) theInelastic = new std::vector<G4ParticleHPChannelList*>;
 
-   if ( G4Threading::IsMasterThread() ) {
+    if (numEle == (G4int)G4Element::GetNumberOfElements()) return;
 
-      if ( theInelastic == nullptr ) theInelastic = new std::vector<G4ParticleHPChannelList*>;
-
-      if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
-
-      if ( theInelastic->size() == G4Element::GetNumberOfElements() ) {
-         numEle = (G4int)G4Element::GetNumberOfElements();
-         return;
-      }
+    if (theInelastic->size() == G4Element::GetNumberOfElements()) {
+      numEle = (G4int)G4Element::GetNumberOfElements();
+      return;
+    }
 #ifdef G4VERBOSE
-      if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
-	hpmanager->DumpSetting();
-	G4cout << "@@@ G4ParticleHPInelastic instantiated for particle " << projectile.GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << dirName << G4endl;
-      }
+    if (G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
+      hpmanager->DumpSetting();
+      G4cout << "@@@ G4ParticleHPInelastic instantiated for particle "
+             << projectile.GetParticleName() << " data directory variable is " << dataDirVariable
+             << " pointing to " << dirName << G4endl;
+    }
 #endif
-      for (G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements(); ++i)
-      {
-        theInelastic->push_back( new G4ParticleHPChannelList );
-        ((*theInelastic)[i])->Init((*(G4Element::GetElementTable()))[i], dirName, const_cast<G4ParticleDefinition*>(&projectile));
-        G4int itry = 0;
-        do
+    for (G4int i = numEle; i < (G4int)G4Element::GetNumberOfElements(); ++i) {
+      theInelastic->push_back(new G4ParticleHPChannelList);
+      ((*theInelastic)[i])
+        ->Init((*(G4Element::GetElementTable()))[i], dirName,
+               const_cast<G4ParticleDefinition*>(&projectile));
+      G4int itry = 0;
+      do {
+        ((*theInelastic)[i])->Register(new G4ParticleHPNInelasticFS, "F01");  // has
+        ((*theInelastic)[i])->Register(new G4ParticleHPNXInelasticFS, "F02");
+        ((*theInelastic)[i])->Register(new G4ParticleHP2NDInelasticFS, "F03");
+        ((*theInelastic)[i])->Register(new G4ParticleHP2NInelasticFS, "F04");  // has, E Done
+        ((*theInelastic)[i])->Register(new G4ParticleHP3NInelasticFS, "F05");  // has, E Done
+        ((*theInelastic)[i])->Register(new G4ParticleHPNAInelasticFS, "F06");
+        ((*theInelastic)[i])->Register(new G4ParticleHPN3AInelasticFS, "F07");
+        ((*theInelastic)[i])->Register(new G4ParticleHP2NAInelasticFS, "F08");
+        ((*theInelastic)[i])->Register(new G4ParticleHP3NAInelasticFS, "F09");
+        ((*theInelastic)[i])->Register(new G4ParticleHPNPInelasticFS, "F10");
+        ((*theInelastic)[i])->Register(new G4ParticleHPN2AInelasticFS, "F11");
+        ((*theInelastic)[i])->Register(new G4ParticleHP2N2AInelasticFS, "F12");
+        ((*theInelastic)[i])->Register(new G4ParticleHPNDInelasticFS, "F13");
+        ((*theInelastic)[i])->Register(new G4ParticleHPNTInelasticFS, "F14");
+        ((*theInelastic)[i])->Register(new G4ParticleHPNHe3InelasticFS, "F15");
+        ((*theInelastic)[i])->Register(new G4ParticleHPND2AInelasticFS, "F16");
+        ((*theInelastic)[i])->Register(new G4ParticleHPNT2AInelasticFS, "F17");
+        ((*theInelastic)[i])->Register(new G4ParticleHP4NInelasticFS, "F18");  // has, E Done
+        ((*theInelastic)[i])->Register(new G4ParticleHP2NPInelasticFS, "F19");
+        ((*theInelastic)[i])->Register(new G4ParticleHP3NPInelasticFS, "F20");
+        ((*theInelastic)[i])->Register(new G4ParticleHPN2PInelasticFS, "F21");
+        ((*theInelastic)[i])->Register(new G4ParticleHPNPAInelasticFS, "F22");
+        ((*theInelastic)[i])->Register(new G4ParticleHPPInelasticFS, "F23");
+        ((*theInelastic)[i])->Register(new G4ParticleHPDInelasticFS, "F24");
+        ((*theInelastic)[i])->Register(new G4ParticleHPTInelasticFS, "F25");
+        ((*theInelastic)[i])->Register(new G4ParticleHPHe3InelasticFS, "F26");
+        ((*theInelastic)[i])->Register(new G4ParticleHPAInelasticFS, "F27");
+        ((*theInelastic)[i])->Register(new G4ParticleHP2AInelasticFS, "F28");
+        ((*theInelastic)[i])->Register(new G4ParticleHP3AInelasticFS, "F29");
+        ((*theInelastic)[i])->Register(new G4ParticleHP2PInelasticFS, "F30");
+        ((*theInelastic)[i])->Register(new G4ParticleHPPAInelasticFS, "F31");
+        ((*theInelastic)[i])->Register(new G4ParticleHPD2AInelasticFS, "F32");
+        ((*theInelastic)[i])->Register(new G4ParticleHPT2AInelasticFS, "F33");
+        ((*theInelastic)[i])->Register(new G4ParticleHPPDInelasticFS, "F34");
+        ((*theInelastic)[i])->Register(new G4ParticleHPPTInelasticFS, "F35");
+        ((*theInelastic)[i])->Register(new G4ParticleHPDAInelasticFS, "F36");
+        ((*theInelastic)[i])->RestartRegistration();
+        itry++;
+      } while (!((*theInelastic)[i])->HasDataInAnyFinalState()
+               && itry < 6);  // Loop checking, 11.05.2015, T. Koi
+                              // 6 is corresponding to the value(5) of G4ParticleHPChannel. TK
+
+      if (itry == 6) {
+        // No Final State at all.
+#ifdef G4VERBOSE
+        if (G4ParticleHPManager::GetInstance()->GetVerboseLevel() > 1
+            && G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
         {
-          ((*theInelastic)[i])->Register( new G4ParticleHPNInelasticFS , "F01"); // has
-          ((*theInelastic)[i])->Register( new G4ParticleHPNXInelasticFS , "F02");
-          ((*theInelastic)[i])->Register( new G4ParticleHP2NDInelasticFS , "F03");
-          ((*theInelastic)[i])->Register( new G4ParticleHP2NInelasticFS , "F04"); // has, E Done
-          ((*theInelastic)[i])->Register( new G4ParticleHP3NInelasticFS , "F05"); // has, E Done
-          ((*theInelastic)[i])->Register( new G4ParticleHPNAInelasticFS , "F06");
-          ((*theInelastic)[i])->Register( new G4ParticleHPN3AInelasticFS , "F07");
-          ((*theInelastic)[i])->Register( new G4ParticleHP2NAInelasticFS , "F08");
-          ((*theInelastic)[i])->Register( new G4ParticleHP3NAInelasticFS , "F09");
-          ((*theInelastic)[i])->Register( new G4ParticleHPNPInelasticFS , "F10");
-          ((*theInelastic)[i])->Register( new G4ParticleHPN2AInelasticFS , "F11");
-          ((*theInelastic)[i])->Register( new G4ParticleHP2N2AInelasticFS , "F12");
-          ((*theInelastic)[i])->Register( new G4ParticleHPNDInelasticFS , "F13");
-          ((*theInelastic)[i])->Register( new G4ParticleHPNTInelasticFS , "F14");
-          ((*theInelastic)[i])->Register( new G4ParticleHPNHe3InelasticFS , "F15");
-          ((*theInelastic)[i])->Register( new G4ParticleHPND2AInelasticFS , "F16");
-          ((*theInelastic)[i])->Register( new G4ParticleHPNT2AInelasticFS , "F17");
-          ((*theInelastic)[i])->Register( new G4ParticleHP4NInelasticFS , "F18"); // has, E Done
-          ((*theInelastic)[i])->Register( new G4ParticleHP2NPInelasticFS , "F19");
-          ((*theInelastic)[i])->Register( new G4ParticleHP3NPInelasticFS , "F20");
-          ((*theInelastic)[i])->Register( new G4ParticleHPN2PInelasticFS , "F21");
-          ((*theInelastic)[i])->Register( new G4ParticleHPNPAInelasticFS , "F22");
-          ((*theInelastic)[i])->Register( new G4ParticleHPPInelasticFS , "F23");
-          ((*theInelastic)[i])->Register( new G4ParticleHPDInelasticFS , "F24");
-          ((*theInelastic)[i])->Register( new G4ParticleHPTInelasticFS , "F25");
-          ((*theInelastic)[i])->Register( new G4ParticleHPHe3InelasticFS , "F26");
-          ((*theInelastic)[i])->Register( new G4ParticleHPAInelasticFS , "F27");
-          ((*theInelastic)[i])->Register( new G4ParticleHP2AInelasticFS , "F28");
-          ((*theInelastic)[i])->Register( new G4ParticleHP3AInelasticFS , "F29");
-          ((*theInelastic)[i])->Register( new G4ParticleHP2PInelasticFS , "F30");
-          ((*theInelastic)[i])->Register( new G4ParticleHPPAInelasticFS , "F31");
-          ((*theInelastic)[i])->Register( new G4ParticleHPD2AInelasticFS , "F32");
-          ((*theInelastic)[i])->Register( new G4ParticleHPT2AInelasticFS , "F33");
-          ((*theInelastic)[i])->Register( new G4ParticleHPPDInelasticFS , "F34");
-          ((*theInelastic)[i])->Register( new G4ParticleHPPTInelasticFS , "F35");
-          ((*theInelastic)[i])->Register( new G4ParticleHPDAInelasticFS , "F36");
-          ((*theInelastic)[i])->RestartRegistration();
-          itry++;
+          G4cout << "ParticleHP::Inelastic for " << projectile.GetParticleName()
+                 << ". Do not know what to do with element of \""
+                 << (*(G4Element::GetElementTable()))[i]->GetName() << "\"." << G4endl;
+          G4cout << "The components of the element are" << G4endl;
+          for (G4int ii = 0;
+               ii < (G4int)((*(G4Element::GetElementTable()))[i]->GetNumberOfIsotopes()); ++ii)
+          {
+            G4cout << " Z: " << (*(G4Element::GetElementTable()))[i]->GetIsotope(ii)->GetZ()
+                   << ", A: " << (*(G4Element::GetElementTable()))[i]->GetIsotope(ii)->GetN()
+                   << G4endl;
+          }
+          G4cout << "No possible final state data of the element is found in " << dataDirVariable
+                 << "." << G4endl;
         }
-        while( !((*theInelastic)[i])->HasDataInAnyFinalState() && itry < 6 ); // Loop checking, 11.05.2015, T. Koi
-           // 6 is corresponding to the value(5) of G4ParticleHPChannel. TK  
-
-        if ( itry == 6 ) {
-           // No Final State at all.
-#ifdef G4VERBOSE
-           if ( G4ParticleHPManager::GetInstance()->GetVerboseLevel() > 1 &&
-		G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
-              G4cout << "ParticleHP::Inelastic for " << projectile.GetParticleName() << ". Do not know what to do with element of \"" << (*(G4Element::GetElementTable()))[i]->GetName() << "\"." << G4endl;
-              G4cout << "The components of the element are" << G4endl;
-              for ( G4int ii = 0 ; ii < (G4int)( (*(G4Element::GetElementTable()))[i]->GetNumberOfIsotopes() ) ; ++ii ) { 
- 	         G4cout << " Z: " << (*(G4Element::GetElementTable()))[i]->GetIsotope( ii )->GetZ() << ", A: " << (*(G4Element::GetElementTable()))[i]->GetIsotope( ii )->GetN() << G4endl;
-              }
-              G4cout << "No possible final state data of the element is found in " << dataDirVariable << "." << G4endl;
-           }
 #endif
-        }
       }
-      hpmanager->RegisterInelasticFinalStates( &projectile , theInelastic );
-   }
-   numEle = (G4int)G4Element::GetNumberOfElements();
+    }
+    hpmanager->RegisterInelasticFinalStates(&projectile, theInelastic);
+  }
+  numEle = (G4int)G4Element::GetNumberOfElements();
 }
 
 void G4ParticleHPInelastic::ModelDescription(std::ostream& outFile) const
 {
-   outFile << "Extension of High Precision model for inelastic reaction of proton,\n"
-           << "deuteron, triton, He3 and alpha below 20MeV\n";
+  outFile << "Extension of High Precision model for inelastic reaction of proton,\n"
+          << "deuteron, triton, He3 and alpha below 20MeV\n";
 }

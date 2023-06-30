@@ -25,6 +25,7 @@ geant4_add_module(G4graphics_reps
     G4Polyline.hh
     G4Polymarker.hh
     G4Polymarker.icc
+    G4SceneTreeItem.hh
     G4SmartFilter.hh
     G4Square.hh
     G4Square.icc
@@ -62,6 +63,7 @@ geant4_add_module(G4graphics_reps
     G4PolyhedronArbitrary.cc
     G4Polyline.cc
     G4Polymarker.cc
+    G4SceneTreeItem.cc
     G4Square.cc
     G4Text.cc
     G4Plotter.cc

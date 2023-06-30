@@ -50,11 +50,11 @@ class G4RK547FEq1 : public G4MagIntegratorStepper
     G4RK547FEq1(const G4RK547FEq1&) = delete;
     G4RK547FEq1& operator= (const G4RK547FEq1&) = delete;
 
-    virtual void Stepper( const G4double yInput[],
-                          const G4double dydx[],
-                                G4double hstep,
-                                G4double yOutput[],
-                                G4double yError[] ) override;
+    void Stepper( const G4double yInput[],
+                  const G4double dydx[],
+                        G4double hstep,
+                        G4double yOutput[],
+                        G4double yError[] ) override;
 
     void Stepper( const G4double yInput[],
                   const G4double dydx[],
@@ -63,8 +63,8 @@ class G4RK547FEq1 : public G4MagIntegratorStepper
                         G4double yError[],
                         G4double dydxOutput[] );
 
-    virtual G4double DistChord() const override;
-    virtual G4int IntegratorOrder() const override { return 4; }
+    G4double DistChord() const override;
+    G4int IntegratorOrder() const override { return 4; }
 
   private:
 

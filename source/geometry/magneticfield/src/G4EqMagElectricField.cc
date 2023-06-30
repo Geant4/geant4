@@ -44,9 +44,7 @@ G4EqMagElectricField::G4EqMagElectricField(G4ElectroMagneticField* emField )
 {
 }
 
-G4EqMagElectricField::~G4EqMagElectricField()
-{
-} 
+G4EqMagElectricField::~G4EqMagElectricField() = default; 
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4ChargeState particleCharge,

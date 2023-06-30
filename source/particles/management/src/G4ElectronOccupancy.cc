@@ -87,7 +87,7 @@ G4ElectronOccupancy::operator=(const G4ElectronOccupancy& right)
     theSizeOfOrbit = right.theSizeOfOrbit;
     
     // allocate and clear the array of theOccupancies 
-    if ( theOccupancies != nullptr ) delete [] theOccupancies;
+    delete [] theOccupancies;
     theOccupancies = new G4int[theSizeOfOrbit];
     for (G4int index = 0; index < theSizeOfOrbit; ++index)
     {
@@ -111,11 +111,11 @@ G4bool G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
     }
     else if ((index < theSizeOfOrbit ) && ( index >= right.theSizeOfOrbit))
     {
-      value = value && (theOccupancies[index] == false);
+      value = value && (!static_cast<G4bool>(theOccupancies[index]));
     }
     else if ((index >= theSizeOfOrbit ) && ( index <right.theSizeOfOrbit))
     {
-      value = value && (right.theOccupancies[index] == false);
+      value = value && (!static_cast<G4bool>(right.theOccupancies[index]));
     }
   }
   return value;

@@ -42,11 +42,11 @@
 class EllipticalChromosome : public VirtualChromosome
 {
  public:
-  EllipticalChromosome(const G4String&, G4ThreeVector, const G4double&,
+  EllipticalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
                        const G4double&, const G4double&);
 
-  EllipticalChromosome(const G4String&, G4ThreeVector, const G4double&,
-                       const G4double&, const G4double&, G4RotationMatrix);
+  EllipticalChromosome(const G4String&, const G4ThreeVector&, const G4double&,
+                       const G4double&, const G4double&, const G4RotationMatrix&);
 
   ~EllipticalChromosome() override;
 

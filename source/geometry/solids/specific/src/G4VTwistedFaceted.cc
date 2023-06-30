@@ -71,8 +71,8 @@ G4VTwistedFaceted( const G4String& pname,     // Name of instance
                          G4double  pDx4,   // half x length at +pDz,+pDy
                          G4double  pAlph ) // tilt angle 
   : G4VSolid(pname),
-    fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0)
+    fLowerEndcap(nullptr), fUpperEndcap(nullptr), fSide0(nullptr),
+    fSide90(nullptr), fSide180(nullptr), fSide270(nullptr)
 {
 
   G4double pDytmp ;
@@ -154,17 +154,17 @@ G4VTwistedFaceted( const G4String& pname,     // Name of instance
   //
   fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;
 
-  if  ( ! ( ( fDx1  > 2*kCarTolerance)
-         && ( fDx2  > 2*kCarTolerance)
-         && ( fDx3  > 2*kCarTolerance)
-         && ( fDx4  > 2*kCarTolerance)
-         && ( fDy1  > 2*kCarTolerance)
-         && ( fDy2  > 2*kCarTolerance)
-         && ( fDz   > 2*kCarTolerance) 
-         && ( std::fabs(fPhiTwist) > 2*kAngTolerance )
-         && ( std::fabs(fPhiTwist) < pi/2 )
-         && ( std::fabs(fAlph) < pi/2 )
-         && ( fTheta < pi/2 && fTheta >= 0 ) )
+  if  ( ( fDx1  <= 2*kCarTolerance)
+         || ( fDx2  <= 2*kCarTolerance)
+         || ( fDx3  <= 2*kCarTolerance)
+         || ( fDx4  <= 2*kCarTolerance)
+         || ( fDy1  <= 2*kCarTolerance)
+         || ( fDy2  <= 2*kCarTolerance)
+         || ( fDz   <= 2*kCarTolerance) 
+         || ( std::fabs(fPhiTwist) <= 2*kAngTolerance )
+         || ( std::fabs(fPhiTwist) >= pi/2 )
+         || ( std::fabs(fAlph) >= pi/2 )
+         || fTheta >= pi/2 || fTheta < 0 
       )
   {
     std::ostringstream message;
@@ -189,12 +189,8 @@ G4VTwistedFaceted( const G4String& pname,     // Name of instance
 
 G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
   : G4VSolid(a),
-    fTheta(0.), fPhi(0.), fDy1(0.),
-    fDx1(0.), fDx2(0.), fDy2(0.), fDx3(0.), fDx4(0.),
-    fDz(0.), fDx(0.), fDy(0.), fAlph(0.),
-    fTAlph(0.), fdeltaX(0.), fdeltaY(0.), fPhiTwist(0.),
-    fLowerEndcap(0), fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0),
-    fSide270(0)
+    fLowerEndcap(nullptr), fUpperEndcap(nullptr),
+    fSide0(nullptr), fSide90(nullptr), fSide180(nullptr), fSide270(nullptr)
 {
 }
 
@@ -204,14 +200,14 @@ G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
 
 G4VTwistedFaceted::~G4VTwistedFaceted()
 {
-  if (fLowerEndcap) { delete fLowerEndcap ; }
-  if (fUpperEndcap) { delete fUpperEndcap ; }
+  delete fLowerEndcap ; 
+  delete fUpperEndcap ; 
 
-  if (fSide0)       { delete fSide0   ; }
-  if (fSide90)      { delete fSide90  ; }
-  if (fSide180)     { delete fSide180 ; }
-  if (fSide270)     { delete fSide270 ; }
-  if (fpPolyhedron) { delete fpPolyhedron; fpPolyhedron = nullptr; }
+  delete fSide0   ; 
+  delete fSide90  ; 
+  delete fSide180 ; 
+  delete fSide270 ; 
+  delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 
@@ -220,13 +216,13 @@ G4VTwistedFaceted::~G4VTwistedFaceted()
 
 G4VTwistedFaceted::G4VTwistedFaceted(const G4VTwistedFaceted& rhs)
   : G4VSolid(rhs),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     fTheta(rhs.fTheta), fPhi(rhs.fPhi),
     fDy1(rhs.fDy1), fDx1(rhs.fDx1), fDx2(rhs.fDx2), fDy2(rhs.fDy2),
     fDx3(rhs.fDx3), fDx4(rhs.fDx4), fDz(rhs.fDz), fDx(rhs.fDx), fDy(rhs.fDy),
     fAlph(rhs.fAlph), fTAlph(rhs.fTAlph), fdeltaX(rhs.fdeltaX),
-    fdeltaY(rhs.fdeltaY), fPhiTwist(rhs.fPhiTwist), fLowerEndcap(0),
-    fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0), fSide270(0),
-    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fdeltaY(rhs.fdeltaY), fPhiTwist(rhs.fPhiTwist), fLowerEndcap(nullptr),
+    fUpperEndcap(nullptr), fSide0(nullptr), fSide90(nullptr), fSide180(nullptr), fSide270(nullptr),
     fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
     fLastDistanceToIn(rhs.fLastDistanceToIn),
     fLastDistanceToOut(rhs.fLastDistanceToOut),
@@ -256,8 +252,8 @@ G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs)
    fDy1= rhs.fDy1; fDx1= rhs.fDx1; fDx2= rhs.fDx2; fDy2= rhs.fDy2;
    fDx3= rhs.fDx3; fDx4= rhs.fDx4; fDz= rhs.fDz; fDx= rhs.fDx; fDy= rhs.fDy;
    fAlph= rhs.fAlph; fTAlph= rhs.fTAlph; fdeltaX= rhs.fdeltaX;
-   fdeltaY= rhs.fdeltaY; fPhiTwist= rhs.fPhiTwist; fLowerEndcap= 0;
-   fUpperEndcap= 0; fSide0= 0; fSide90= 0; fSide180= 0; fSide270= 0;
+   fdeltaY= rhs.fdeltaY; fPhiTwist= rhs.fPhiTwist; fLowerEndcap= nullptr;
+   fUpperEndcap= nullptr; fSide0= nullptr; fSide90= nullptr; fSide180= nullptr; fSide270= nullptr;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
    fRebuildPolyhedron = false;
    delete fpPolyhedron; fpPolyhedron = nullptr;
@@ -437,10 +433,9 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
      return fLastNormal.vec;
    } 
    
-   G4ThreeVector* tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
-   G4ThreeVector* tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VTwistSurface** tmpsurface
-                     = const_cast<G4VTwistSurface**>(fLastNormal.surface);
+   auto tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
+   auto tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
+   auto tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
    G4double distance = kInfinity;
@@ -550,12 +545,12 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   for (auto i=0; i < 6 ; ++i)
+   for (const auto & surface : surfaces)
    {
 #ifdef G4TWISTDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
 #endif
-      G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
+      G4double tmpdistance = surface->DistanceToIn(p, v, xx);
 #ifdef G4TWISTDEBUG
       G4cout << "Solid DistanceToIn : distance = " << tmpdistance << G4endl ; 
       G4cout << "intersection point = " << xx << G4endl ;
@@ -641,9 +636,9 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
 
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (auto i=0; i< 6; ++i)
+         for (const auto & surface : surfaces)
          {
-            G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
+            G4double tmpdistance = surface->DistanceTo(p, xx);
             if (tmpdistance < distance)
             {
                distance = tmpdistance;
@@ -851,9 +846,9 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
 
         G4ThreeVector xx;
         G4ThreeVector bestxx;
-        for (auto i=0; i<6; ++i)
+        for (const auto & surface : surfaces)
         {
-          G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
+          G4double tmpdistance = surface->DistanceTo(p, xx);
           if (tmpdistance < distance)
           {
             distance = tmpdistance;
@@ -931,9 +926,9 @@ G4VisExtent G4VTwistedFaceted::GetExtent() const
 {
   G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
-  return G4VisExtent(-maxRad, maxRad ,
-                     -maxRad, maxRad ,
-                     -fDz, fDz );
+  return { -maxRad, maxRad ,
+           -maxRad, maxRad ,
+           -fDz, fDz };
 }
 
 
@@ -1103,7 +1098,7 @@ G4double G4VTwistedFaceted::GetSurfaceArea()
 
 G4GeometryType G4VTwistedFaceted::GetEntityType() const
 {
-  return G4String("G4VTwistedFaceted");
+  return {"G4VTwistedFaceted"};
 }
 
 
@@ -1143,7 +1138,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 
   G4double phi = z/(2*fDz)*fPhiTwist ;
 
-  return G4ThreeVector(fdeltaX * phi/fPhiTwist, fdeltaY * phi/fPhiTwist, z ) ;
+  return { fdeltaX * phi/fPhiTwist, fdeltaY * phi/fPhiTwist, z };
 }
 
 
@@ -1249,11 +1244,11 @@ G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
   const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;
 
-  G4Polyhedron* ph = new G4Polyhedron;
+  auto  ph = new G4Polyhedron;
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
-  G4double3* xyz = new G4double3[nnodes];  // number of nodes 
-  G4int4*  faces = new G4int4[nfaces] ;    // number of faces
+  auto xyz = new G4double3[nnodes];  // number of nodes 
+  auto faces = new G4int4[nfaces] ;  // number of faces
 
   fLowerEndcap->GetFacets(k,k,xyz,faces,0) ;
   fUpperEndcap->GetFacets(k,k,xyz,faces,1) ;

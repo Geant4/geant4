@@ -31,8 +31,7 @@
 #include "G4UIcmdWithABool.hh"
 
 // --------------------------------------------------------------------
-G4UIcmdWithABool::G4UIcmdWithABool(const char* theCommandPath,
-                                   G4UImessenger* theMessenger)
+G4UIcmdWithABool::G4UIcmdWithABool(const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
   auto* blParam = new G4UIparameter('b');

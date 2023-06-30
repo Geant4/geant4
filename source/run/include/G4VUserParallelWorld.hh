@@ -47,26 +47,22 @@ class G4VSensitiveDetector;
 class G4VUserParallelWorld
 {
   public:
-
     G4VUserParallelWorld(const G4String& worldName);
-    virtual ~G4VUserParallelWorld();
+    virtual ~G4VUserParallelWorld() = default;
 
     virtual void Construct() = 0;
-    virtual void ConstructSD();
+    virtual void ConstructSD() {}
 
     inline const G4String& GetName() { return fWorldName; }
 
   protected:
-
     G4VPhysicalVolume* GetWorld();
 
-    void SetSensitiveDetector(const G4String& logVolName,
-                              G4VSensitiveDetector* aSD, G4bool multi = false);
-    void SetSensitiveDetector(G4LogicalVolume* logVol,
-                              G4VSensitiveDetector* aSD);
+    void SetSensitiveDetector(const G4String& logVolName, G4VSensitiveDetector* aSD,
+                              G4bool multi = false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol, G4VSensitiveDetector* aSD);
 
   protected:
-
     G4String fWorldName = "ParallelWorld";
 };
 

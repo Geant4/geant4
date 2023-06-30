@@ -45,8 +45,8 @@ class G4NucleiProperties
 {
   public: 
 
-    G4NucleiProperties() {}
-   ~G4NucleiProperties() {}
+    G4NucleiProperties() = default;
+   ~G4NucleiProperties() = default;
 
     static G4double GetNuclearMass(const G4double A, const G4double Z);
     static G4double GetNuclearMass(const G4int A, const G4int Z);

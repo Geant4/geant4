@@ -43,16 +43,16 @@
 // ######################################################################
 // ###                           GenericIon                           ###
 // ######################################################################
-G4GenericIon* G4GenericIon::theInstance = 0;
+G4GenericIon* G4GenericIon::theInstance = nullptr;
 
 G4GenericIon* G4GenericIon::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4GenericIon* G4GenericIon::Definition()
                     1,              +1,             0,          
                     1,              +1,             0,             
 	    "nucleus",               0,            +1,           0,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
 		 false,      "generic",             0,
 		 0.0 
               );

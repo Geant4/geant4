@@ -33,7 +33,7 @@
 #include "TETRun.hh"
 
 TETRun::TETRun()
-:G4Run()
+:G4Run(), fCollID(-1)
 {}
 
 TETRun::~TETRun()
@@ -43,19 +43,17 @@ TETRun::~TETRun()
 
 void TETRun::RecordEvent(const G4Event* event)
 {
- auto  fCollID
-	= G4SDManager::GetSDMpointer()->GetCollectionID("PhantomSD/eDep");
+ if(fCollID<0)
+  fCollID = G4SDManager::GetSDMpointer()->GetCollectionID("PhantomSD/eDep");
 
-// Hits collections
-//
-G4HCofThisEvent* HCE = event->GetHCofThisEvent();
-if(!HCE) return;
-
-//G4THitsMap<G4double>* evtMap =
-//			static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
-auto* evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
-// sum up the energy deposition and the square of it
-for (auto itr : *evtMap->GetMap()) {
+ // Hits collections
+ //
+ G4HCofThisEvent* HCE = event->GetHCofThisEvent();
+ if(!HCE) return;
+ 
+ auto* evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
+ // sum up the energy deposition and the square of it
+ for (auto itr : *evtMap->GetMap()) {
 		fEdepMap[itr.first].first  += *itr.second;                   //sum
 		fEdepMap[itr.first].second += (*itr.second) * (*itr.second); //sum square
 	}
@@ -71,7 +69,7 @@ void TETRun::Merge(const G4Run* run)
          fEdepMap[itr.first].second += itr.second.second;
 	}
 
-G4Run::Merge(run);
+ G4Run::Merge(run);
 }
 
 

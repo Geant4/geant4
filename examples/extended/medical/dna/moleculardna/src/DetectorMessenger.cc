@@ -36,10 +36,10 @@
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* detConstruction)
   : fpDetectorConstruction(detConstruction)
-  , fpWorldGeometryDirectory(0)
-  , fpWorldSideLength(0)
-  , fpCellGeometryDirectory(0)
-  , fpCellRadius(0)
+  , fpWorldGeometryDirectory(nullptr)
+  , fpWorldSideLength(nullptr)
+  , fpCellGeometryDirectory(nullptr)
+  , fpCellRadius(nullptr)
 {
   // World geometry
   fpWorldGeometryDirectory = new G4UIdirectory("/world/");

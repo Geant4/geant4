@@ -43,9 +43,7 @@ G4HelixSimpleRunge::G4HelixSimpleRunge(G4Mag_EqRhs* EqRhs)
 {
 }
 
-G4HelixSimpleRunge::~G4HelixSimpleRunge()
-{
-}
+G4HelixSimpleRunge::~G4HelixSimpleRunge() = default;
 
 void
 G4HelixSimpleRunge::DumbStepper( const G4double      yIn[],

@@ -91,7 +91,7 @@ void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
                  FatalException, "Volume must be centered on the origin.");
   }
   const G4RotationMatrix* rm = pWorld->GetRotation();
-  if ( rm && (!rm->isIdentity()) )
+  if ( (rm != nullptr) && (!rm->isIdentity()) )
   {
     G4Exception ("G4Navigator::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must not be rotated.");
@@ -326,7 +326,7 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchable(
                            const G4bool               RelativeSearch )
 {
   G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
+  pPhysVol = LocateGlobalPointAndSetup( position, nullptr, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
 }
 
@@ -353,7 +353,7 @@ void G4Navigator::SetVerboseLevel(G4int level)
   fparamNav.SetVerboseLevel(level);
   freplicaNav.SetVerboseLevel(level);
   fregularNav.SetVerboseLevel(level);
-  if (fpExternalNav != nullptr) fpExternalNav->SetVerboseLevel(level);
+  if (fpExternalNav != nullptr) { fpExternalNav->SetVerboseLevel(level); }
 }
 
 // ********************************************************************
@@ -411,7 +411,7 @@ void  G4Navigator::CheckMode(G4bool mode)
   fparamNav.CheckMode(mode);
   freplicaNav.CheckMode(mode);
   fregularNav.CheckMode(mode);
-  if (fpExternalNav != nullptr) fpExternalNav->CheckMode(mode);
+  if (fpExternalNav != nullptr) { fpExternalNav->CheckMode(mode); }
 }
 
 // ********************************************************************
@@ -445,7 +445,7 @@ inline
 G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const 
 {
   G4int severity = 0, noZeros = fNumberZeroSteps;
-  if( noZeroSteps )
+  if( noZeroSteps != nullptr )
   {
     *noZeroSteps = fNumberZeroSteps;
   }
@@ -522,7 +522,7 @@ void G4Navigator::SetExternalNavigation(G4VExternalNavigation* externalNav)
 inline
 G4Navigator* G4Navigator::Clone() const
 {
-  G4Navigator* clone_nav = new G4Navigator();
+  auto  clone_nav = new G4Navigator();
   clone_nav->SetWorldVolume(fTopPhysical);
   if( fpExternalNav != nullptr )
   {

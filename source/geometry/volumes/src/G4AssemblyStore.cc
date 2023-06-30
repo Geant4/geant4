@@ -51,7 +51,6 @@ G4ThreadLocal G4bool G4AssemblyStore::locked = false;
 // ***************************************************************************
 //
 G4AssemblyStore::G4AssemblyStore()
-  : std::vector<G4AssemblyVolume*>()
 {
   reserve(20);
 }
@@ -87,10 +86,10 @@ void G4AssemblyStore::Clean()
 
   G4AssemblyStore* store = GetInstance();
 
-  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
+  for(const auto & pos : *store)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    if (*pos) { delete *pos; }
+    if (pos != nullptr) { delete pos; }
   }
 
   locked = false;
@@ -158,9 +157,9 @@ G4AssemblyStore* G4AssemblyStore::GetInstance()
 G4AssemblyVolume*
 G4AssemblyStore::GetAssembly(unsigned int id, G4bool verbose) const
 {
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
+  for (const auto & i : *GetInstance())
   {
-    if ((*i)->GetAssemblyID() == id) { return *i; }
+    if (i->GetAssemblyID() == id) { return i; }
   }
   if (verbose)
   {
@@ -171,5 +170,5 @@ G4AssemblyStore::GetAssembly(unsigned int id, G4bool verbose) const
     G4Exception("G4AssemblyStore::GetAssembly()",
                 "GeomVol1001", JustWarning, message);
   }
-  return 0;
+  return nullptr;
 }

@@ -51,12 +51,12 @@ class G4NuclideTableMessenger : public G4UImessenger
   public:
 
     G4NuclideTableMessenger(G4NuclideTable* nuclideTable = nullptr);
-    virtual ~G4NuclideTableMessenger();
+    ~G4NuclideTableMessenger() override;
 
     G4NuclideTableMessenger(const G4NuclideTableMessenger&) = delete;
     G4NuclideTableMessenger& operator=(const G4NuclideTableMessenger&) = delete;
 
-    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
   private:
 

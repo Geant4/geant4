@@ -96,7 +96,8 @@ geant4_module_link_libraries(G4vis_management
     G4run
     G4navigation
     G4digits
-    G4heprandom)
+    G4heprandom
+    G4UIcore)
 
 if(GEANT4_BUILD_MULTITHREADED)
   geant4_module_link_libraries(G4vis_management PRIVATE G4volumes)

@@ -43,8 +43,8 @@ class G4VProcess;
 class EventAction : public G4UserEventAction
 {
 public:
-  EventAction();
-  ~EventAction() = default;
+  EventAction() = default;
+ ~EventAction() override = default;
 
   void BeginOfEventAction(const G4Event*) override;
   void   EndOfEventAction(const G4Event*) override;
@@ -63,11 +63,11 @@ public:
                                              
         
 private:
-  G4double fEnergyDeposit;
-  G4double fTrakLenCharged, fTrakLenNeutral;
-  G4int fNbStepsCharged, fNbStepsNeutral;
-  G4int fTransmitFlag, fReflectFlag;
-  G4int fTypes[4];
+  G4double fEnergyDeposit = 0.;
+  G4double fTrakLenCharged = 0., fTrakLenNeutral = 0.;
+  G4int fNbStepsCharged = 0, fNbStepsNeutral = 0;
+  G4int fTransmitFlag = 0, fReflectFlag = 0;
+  G4int fTypes[4] = {0,0,0,0};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

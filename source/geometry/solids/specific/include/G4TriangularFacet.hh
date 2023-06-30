@@ -59,51 +59,52 @@
 
 class G4TriangularFacet : public G4VFacet
 {
-  public:  // with desctiption
+  public:
 
     G4TriangularFacet ();
-   ~G4TriangularFacet ();
+   ~G4TriangularFacet () override;
 
     G4TriangularFacet (const G4ThreeVector& vt0, const G4ThreeVector& vt1,
                        const G4ThreeVector& vt2, G4FacetVertexType);
     G4TriangularFacet (const G4TriangularFacet& right);
-    G4TriangularFacet (      G4TriangularFacet&& right);
+    G4TriangularFacet (      G4TriangularFacet&& right) noexcept ;
 
     G4TriangularFacet& operator=(const G4TriangularFacet& right);    
-    G4TriangularFacet& operator=(      G4TriangularFacet&& right);    
+    G4TriangularFacet& operator=(      G4TriangularFacet&& right) noexcept ;    
 
-    G4VFacet* GetClone ();
+    G4VFacet* GetClone () override;
     G4TriangularFacet* GetFlippedFacet ();
 
     G4ThreeVector Distance (const G4ThreeVector& p);
-    G4double Distance (const G4ThreeVector& p, G4double minDist);
+    G4double Distance (const G4ThreeVector& p, G4double minDist) override;
     G4double Distance (const G4ThreeVector& p, G4double minDist,
-                       const G4bool outgoing);
-    G4double Extent   (const G4ThreeVector axis);
+                       const G4bool outgoing) override;
+    G4double Extent   (const G4ThreeVector axis) override;
     G4bool Intersect  (const G4ThreeVector& p, const G4ThreeVector& v,
                        const G4bool outgoing, G4double& distance,
-                             G4double& distFromSurface, G4ThreeVector& normal);
-    G4double GetArea () const;
-    G4ThreeVector GetPointOnFace () const;
+                             G4double& distFromSurface,
+                             G4ThreeVector& normal) override;
+    G4double GetArea () const override;
+    G4ThreeVector GetPointOnFace () const override;
 
-    G4ThreeVector GetSurfaceNormal () const;
-    void SetSurfaceNormal (G4ThreeVector normal);
+    G4ThreeVector GetSurfaceNormal () const override;
+    void SetSurfaceNormal (const G4ThreeVector& normal);
 
-    G4GeometryType GetEntityType () const;
+    G4GeometryType GetEntityType () const override;
 
-    inline G4bool IsDefined () const;
-    inline G4int GetNumberOfVertices () const;
-    inline G4ThreeVector GetVertex (G4int i) const;
-    inline void SetVertex (G4int i, const G4ThreeVector& val);
+    inline G4bool IsDefined () const override;
+    inline G4int GetNumberOfVertices () const override;
+    inline G4ThreeVector GetVertex (G4int i) const override;
+    inline void SetVertex (G4int i, const G4ThreeVector& val) override;
 
-    inline G4ThreeVector GetCircumcentre () const;
-    inline G4double GetRadius () const;
+    inline G4ThreeVector GetCircumcentre () const override;
+    inline G4double GetRadius () const override;
 
-    inline G4int AllocatedMemory();
+    inline G4int AllocatedMemory() override;
 
-    inline G4int GetVertexIndex (G4int i) const;
-    inline void SetVertexIndex (G4int i, G4int j);
-    inline void SetVertices(std::vector<G4ThreeVector>* v);
+    inline G4int GetVertexIndex (G4int i) const override;
+    inline void SetVertexIndex (G4int i, G4int j) override;
+    inline void SetVertices(std::vector<G4ThreeVector>* v) override;
 
   private:
 
@@ -179,7 +180,7 @@ inline void G4TriangularFacet::SetVertexIndex (G4int i, G4int j)
 
 inline void G4TriangularFacet::SetVertices(std::vector<G4ThreeVector>* v)
 {
-  if (fIndices[0] < 0 && fVertices)
+  if (fIndices[0] < 0 && (fVertices != nullptr))
   {
     delete fVertices;
     fVertices = nullptr;

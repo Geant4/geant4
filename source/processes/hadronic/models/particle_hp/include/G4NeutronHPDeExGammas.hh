@@ -29,4 +29,4 @@
 #include "G4ParticleHPDeExGammas.hh"
 using G4NeutronHPDeExGammas = G4ParticleHPDeExGammas;
 
-#endif 
+#endif

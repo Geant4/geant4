@@ -39,11 +39,6 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
-G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel()
-  : G4VDecayChannel()
-{
-}
-
 G4NeutronBetaDecayChannel::
 G4NeutronBetaDecayChannel(const G4String& theParentName, 
                                 G4double  theBR)
@@ -79,10 +74,6 @@ G4NeutronBetaDecayChannel(const G4String& theParentName,
     }
 #endif
   }
-}
-
-G4NeutronBetaDecayChannel::~G4NeutronBetaDecayChannel()
-{
 }
 
 G4NeutronBetaDecayChannel::
@@ -150,11 +141,11 @@ G4DecayProducts* G4NeutronBetaDecayChannel::DecayIt(G4double)
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
 
   // create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
+  auto products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // calculate daughter momentum
@@ -192,7 +183,7 @@ G4DecayProducts* G4NeutronBetaDecayChannel::DecayIt(G4double)
   daughtermomentum[0] = p;
   G4ThreeVector direction0(0.0, 0.0, 1.0);
   direction0 = rm * direction0;
-  G4DynamicParticle* daughterparticle0 
+  auto  daughterparticle0 
     = new G4DynamicParticle(G4MT_daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle0);
 
@@ -207,7 +198,7 @@ G4DecayProducts* G4NeutronBetaDecayChannel::DecayIt(G4double)
 
   G4ThreeVector direction1(sinn*std::cos(phin), sinn*std::sin(phin), cosn);
   direction1 = rm * direction1;
-  G4DynamicParticle* daughterparticle1 
+  auto  daughterparticle1 
     = new G4DynamicParticle( G4MT_daughters[1], direction1*eNu);
   products->PushProducts(daughterparticle1);
 
@@ -220,7 +211,7 @@ G4DecayProducts* G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4ThreeVector direction2(pPx/pP*std::cos(phin),
                            pPx/pP*std::sin(phin), pPz/pP);
   direction2 = rm * direction2;
-  G4DynamicParticle* daughterparticle2 
+  auto  daughterparticle2 
     = new G4DynamicParticle( G4MT_daughters[2], direction2*pP);
   products->PushProducts(daughterparticle2);
 

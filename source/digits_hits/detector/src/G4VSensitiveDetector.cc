@@ -27,28 +27,22 @@
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
+
 #include "G4SDManager.hh"
 
 G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
-  : verboseLevel(0)
-  , active(true)
-  , ROgeometry(nullptr)
-  , filter(nullptr)
 {
   size_t sLast = name.rfind('/');
-  if(sLast == std::string::npos)
-  {  // detector name only
+  if (sLast == std::string::npos) {  // detector name only
     SensitiveDetectorName = name;
-    thePathName           = "/";
+    thePathName = "/";
   }
-  else
-  {  // name conatin the directory path
+  else {  // name conatin the directory path
     SensitiveDetectorName = name;
     SensitiveDetectorName.erase(0, sLast + 1);
     thePathName = name;
     thePathName.erase(sLast + 1);
-    if(thePathName[0] != '/')
-      thePathName.insert(0, "/");
+    if (thePathName[0] != '/') thePathName.insert(0, "/");
   }
   fullPathName = thePathName + SensitiveDetectorName;
 }
@@ -56,15 +50,13 @@ G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
 G4VSensitiveDetector::G4VSensitiveDetector(const G4VSensitiveDetector& right)
 {
   SensitiveDetectorName = right.SensitiveDetectorName;
-  thePathName           = right.thePathName;
-  fullPathName          = right.fullPathName;
-  verboseLevel          = right.verboseLevel;
-  active                = right.active;
-  ROgeometry            = right.ROgeometry;
-  filter                = right.filter;
+  thePathName = right.thePathName;
+  fullPathName = right.fullPathName;
+  verboseLevel = right.verboseLevel;
+  active = right.active;
+  ROgeometry = right.ROgeometry;
+  filter = right.filter;
 }
-
-G4VSensitiveDetector::~G4VSensitiveDetector() {}
 
 G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
 {
@@ -76,18 +68,16 @@ G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
   return nullptr;
 }
 
-G4VSensitiveDetector& G4VSensitiveDetector::operator=(
-  const G4VSensitiveDetector& right)
+G4VSensitiveDetector& G4VSensitiveDetector::operator=(const G4VSensitiveDetector& right)
 {
-  if(this == &right)
-    return *this;
+  if (this == &right) return *this;
   SensitiveDetectorName = right.SensitiveDetectorName;
-  thePathName           = right.thePathName;
-  fullPathName          = right.fullPathName;
-  verboseLevel          = right.verboseLevel;
-  active                = right.active;
-  ROgeometry            = right.ROgeometry;
-  filter                = right.filter;
+  thePathName = right.thePathName;
+  fullPathName = right.fullPathName;
+  verboseLevel = right.verboseLevel;
+  active = right.active;
+  ROgeometry = right.ROgeometry;
+  filter = right.filter;
   return *this;
 }
 
@@ -103,19 +93,6 @@ G4bool G4VSensitiveDetector::operator!=(const G4VSensitiveDetector& right) const
 
 G4int G4VSensitiveDetector::GetCollectionID(G4int i)
 {
-  return G4SDManager::GetSDMpointer()->GetCollectionID(SensitiveDetectorName +
-                                                       "/" + collectionName[i]);
+  return G4SDManager::GetSDMpointer()->GetCollectionID(
+    SensitiveDetectorName + "/" + collectionName[i]);
 }
-
-//----- following methoods are abstract methods to be
-//----- implemented in the concrete classes
-
-void G4VSensitiveDetector::Initialize(G4HCofThisEvent*) {}
-
-void G4VSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {}
-
-void G4VSensitiveDetector::clear() {}
-
-void G4VSensitiveDetector::DrawAll() {}
-
-void G4VSensitiveDetector::PrintAll() {}

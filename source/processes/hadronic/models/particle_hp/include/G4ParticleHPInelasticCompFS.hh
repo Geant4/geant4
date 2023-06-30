@@ -55,42 +55,42 @@ class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
       LR.resize(51);
       for (G4int i = 0; i < 51; i++) {
         hasXsec = true;
-        theXsection[i] = 0;
-        theEnergyDistribution[i] = 0;
-        theAngularDistribution[i] = 0;
-        theEnergyAngData[i] = 0;
-        theFinalStatePhotons[i] = 0;
+        theXsection[i] = nullptr;
+        theEnergyDistribution[i] = nullptr;
+        theAngularDistribution[i] = nullptr;
+        theEnergyAngData[i] = nullptr;
+        theFinalStatePhotons[i] = nullptr;
         QI[i] = 0.0;
         LR[i] = 0;
       }
     }
 
-    virtual ~G4ParticleHPInelasticCompFS()
+    ~G4ParticleHPInelasticCompFS() override
     {
       for (G4int i = 0; i < 51; i++) {
-        if (theXsection[i] != 0) delete theXsection[i];
-        if (theEnergyDistribution[i] != 0) delete theEnergyDistribution[i];
-        if (theAngularDistribution[i] != 0) delete theAngularDistribution[i];
-        if (theEnergyAngData[i] != 0) delete theEnergyAngData[i];
-        if (theFinalStatePhotons[i] != 0) delete theFinalStatePhotons[i];
+        if (theXsection[i] != nullptr) delete theXsection[i];
+        if (theEnergyDistribution[i] != nullptr) delete theEnergyDistribution[i];
+        if (theAngularDistribution[i] != nullptr) delete theAngularDistribution[i];
+        if (theEnergyAngData[i] != nullptr) delete theEnergyAngData[i];
+        if (theFinalStatePhotons[i] != nullptr) delete theFinalStatePhotons[i];
       }
     }
 
     void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aSFType,
-              G4ParticleDefinition*);
+              G4ParticleDefinition*) override;
 
     void InitGammas(G4double AR, G4double ZR);
 
-    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) = 0;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override = 0;
 
-    virtual G4ParticleHPFinalState* New() = 0;
+    G4ParticleHPFinalState* New() override = 0;
 
-    virtual G4double GetXsec(G4double anEnergy)
+    G4double GetXsec(G4double anEnergy) override
     {
       return std::max(0., theXsection[50]->GetY(anEnergy));
     }
 
-    virtual G4ParticleHPVector* GetXsec() { return theXsection[50]; }
+    G4ParticleHPVector* GetXsec() override { return theXsection[50]; }
 
     G4int SelectExitChannel(G4double eKinetic);
 
@@ -99,12 +99,12 @@ class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
     inline void InitDistributionInitialState(G4ReactionProduct& anIncidentPart,
                                              G4ReactionProduct& aTarget, G4int it)
     {
-      if (theAngularDistribution[it] != 0) {
+      if (theAngularDistribution[it] != nullptr) {
         theAngularDistribution[it]->SetTarget(aTarget);
         theAngularDistribution[it]->SetProjectileRP(anIncidentPart);
       }
 
-      if (theEnergyAngData[it] != 0) {
+      if (theEnergyAngData[it] != nullptr) {
         theEnergyAngData[it]->SetTarget(aTarget);
         theEnergyAngData[it]->SetProjectileRP(anIncidentPart);
       }

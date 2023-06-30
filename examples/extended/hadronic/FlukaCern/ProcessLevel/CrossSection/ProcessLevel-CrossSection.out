@@ -1,0 +1,38 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT_HP>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT_HP
+
+
+/process/had/verbose 0
+/process/em/verbose 0
+/allXS/outputFileName all_XS
+/allXS/particleName neutron
+/allXS/elementName Pb
+/allXS/numBins 1000
+/allXS/minKineticEnergy 1. keV
+/allXS/maxKineticEnergy 10. TeV
+/run/initialize
+/run/beamOn 0
+### XSHistoManager::Book: Successfully opened file all_XS.root for dumping profiles.
+### XSHistoManager::EndOfRun: Compute & fill XS for neutron in Pb
+### All profiles saved to all_XS.root
+### All profiles saved to all_XS.hist

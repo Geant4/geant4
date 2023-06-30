@@ -63,9 +63,7 @@ G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis,
 
 // Destructor
 //
-G4SolidExtentList::~G4SolidExtentList()
-{
-}
+G4SolidExtentList::~G4SolidExtentList() = default;
 
 // AddSurface
 //
@@ -146,7 +144,7 @@ G4bool G4SolidExtentList::GetExtent( G4double& emin, G4double& emax ) const
   }
   else
   {
-    G4double sMin, sMax;
+    G4double sMin=0., sMax=0.;
     maxSurface.GetExtent( axis, sMin, sMax );
     emax = ( (sMax > maxLimit) ? maxLimit : sMax ) + kCarTolerance;
   }

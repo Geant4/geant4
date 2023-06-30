@@ -29,12 +29,14 @@
 //                                from automatic MT conversion.
 // --------------------------------------------------------------------
 
-#include <stdlib.h>
-
 #include "G4PDefManager.hh"
-#include "globals.hh"
-#include "pwdefs.hh"
+
 #include "G4AutoLock.hh"
+#include "globals.hh"
+
+#include "pwdefs.hh"
+
+#include <cstdlib>
 
 void G4PDefData::initialize()
 {
@@ -54,7 +56,7 @@ G4PDefData*& G4PDefManager::offset()
   return _instance;
 }
 
-G4PDefManager::G4PDefManager() : totalobj(0)
+G4PDefManager::G4PDefManager() 
 {
   G4MUTEXINIT(mutex);
 }

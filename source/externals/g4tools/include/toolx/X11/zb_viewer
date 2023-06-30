@@ -1,0 +1,151 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_X11_zb_viewer
+#define toolx_X11_zb_viewer
+
+#include "base_session"
+#include "pixwin"
+#include "simple_dispatcher"
+
+#include <tools/sg/zb_viewer>
+#include <tools/sg/device_interactor>
+
+namespace toolx {
+namespace X11 {
+
+class zb_viewer
+:public tools::sg::zb_viewer, protected pixwin {
+  typedef tools::sg::zb_viewer parent;
+  typedef pixwin parent_pixwin;
+private:
+  class dispatcher : public simple_dispatcher {
+    typedef simple_dispatcher parent;
+  public:
+    virtual bool dispatch(XEvent& a_event) {
+      if(parent::dispatch(a_event)) return true;
+      if(a_event.type==ButtonPress && a_event.xbutton.button==1) {
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::mouse_down_event event(a_event.xbutton.x,a_event.xbutton.y);
+        m_viewer.device_interactor()->mouse_press(event);
+        return true;
+      } else if(a_event.type==ButtonRelease && a_event.xbutton.button==1) {
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::mouse_up_event event(a_event.xbutton.x,a_event.xbutton.y);
+        m_viewer.device_interactor()->mouse_release(event);
+        return true;
+      } else if(a_event.type==MotionNotify) {
+        if(!m_viewer.device_interactor()) return false;
+        if((a_event.xmotion.state & Button1MotionMask)==Button1MotionMask) {
+          tools::sg::mouse_move_event event(a_event.xmotion.x,a_event.xmotion.y,0,0,false);
+          m_viewer.device_interactor()->mouse_move(event);
+        }
+      } else if((a_event.type==ButtonPress)&&(a_event.xbutton.button==4)) { // mouse scrollwheel down :
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::wheel_rotate_event event(8);  //8=cooking.
+        m_viewer.device_interactor()->wheel_rotate(event);
+        return true;
+      } else if((a_event.type==ButtonPress)&&(a_event.xbutton.button==5)) { // mouse scrollwheel up :
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::wheel_rotate_event event(-8);  //8=cooking.
+        m_viewer.device_interactor()->wheel_rotate(event);
+        return true;
+      }
+      return false;
+    }
+    virtual void win_render() {m_viewer.win_render();}
+    virtual void set_size(unsigned int a_width,unsigned int a_height) {m_viewer.set_size(a_width,a_height);}
+    virtual dispatcher* copy() const {return new dispatcher(*this);}
+  public:
+    dispatcher(zb_viewer& a_viewer)
+    :parent(a_viewer.m_session,a_viewer.m_win)
+    ,m_viewer(a_viewer){}
+    virtual ~dispatcher(){}
+  protected:
+    dispatcher(const dispatcher& a_from)
+    :parent(a_from)
+    ,m_viewer(a_from.m_viewer)
+    {}
+    dispatcher& operator=(const dispatcher& a_from) {
+      parent::operator=(a_from);
+      return *this;
+    }
+  protected:
+    zb_viewer& m_viewer;
+  };
+
+public:
+  virtual void set_size(unsigned int a_w,unsigned int a_h) {
+    parent::set_size(a_w,a_h);
+    free_XImage();
+    alloc_XImage(a_w,a_h);
+  }
+public:
+  zb_viewer(base_session& a_session,
+            int a_x = 0,int a_y = 0,
+            unsigned int a_width = 500,unsigned int a_height = 500,
+            const std::string& a_win_title = "")
+  :parent(a_session.out(),a_width,a_height)
+  ,parent_pixwin(a_session.out(),a_session.monitor(),a_session.display())
+  ,m_session(a_session)
+  ,m_win(0)
+  ,m_interactor(0)
+  {
+    if(!m_session.display()) return; //throw
+    m_win = m_session.create_window(a_win_title.c_str(),a_x,a_y,a_width,a_height);
+    if(!m_win) return; //throw
+    m_session.add_dispatcher(new dispatcher(*this));
+  }
+  virtual ~zb_viewer() {
+    if(m_win) {
+      m_session.remove_dispatchers_with_window(m_win);
+      m_session.delete_window(m_win);
+      m_session.sync();
+    }
+  }
+protected:
+  zb_viewer(const zb_viewer& a_from)
+  :parent(a_from)
+  ,parent_pixwin(a_from)
+  ,m_session(a_from.m_session)
+  ,m_win(a_from.m_win)
+  ,m_interactor(0)
+  {}
+  zb_viewer& operator=(const zb_viewer& a_from){
+    parent::operator=(a_from);
+    parent_pixwin::operator=(a_from);
+    m_win = a_from.m_win;
+    return *this;
+  }
+public:
+  bool has_window() const {return m_win?true:false;} //for SWIG
+
+  Window window() const {return m_win;}
+
+  bool show() {
+    if(!m_win) return false;
+    m_session.show_window(m_win);
+    return true;
+  }
+
+  void win_render() {
+    if(!m_win) return;
+    if(!render(get_rgbas,false)) return;
+    put_buffer(m_win,m_ww,m_wh,tools::vec_data(m_out_buffer));
+    m_out_buffer.clear();
+  }
+
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;}
+public:
+  tools::sg::device_interactor* device_interactor() {return m_interactor;}
+protected:
+  base_session& m_session;
+  Window m_win;  
+  tools::sg::device_interactor* m_interactor;
+};
+
+}}
+
+
+#endif
+

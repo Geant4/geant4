@@ -40,8 +40,8 @@
 
 class G4ParticleHPJENDLHEElasticData : public G4ParticleHPJENDLHEData
 {
-   public:
-      G4ParticleHPJENDLHEElasticData();
+  public:
+    G4ParticleHPJENDLHEElasticData();
 };
 
 #endif

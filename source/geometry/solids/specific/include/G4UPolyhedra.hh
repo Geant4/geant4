@@ -53,7 +53,7 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
   using Shape_t = vecgeom::UnplacedPolyhedron;
   using Base_t  = G4UAdapter<vecgeom::UnplacedPolyhedron>;
 
-  public:  // with description
+  public:
 
     G4UPolyhedra( const G4String& name, 
                      G4double phiStart,    // initial phi starting angle
@@ -72,13 +72,13 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
                const G4double r[],         // r coordinate of these corners
                const G4double z[]       ); // z coordinate of these corners
 
-   ~G4UPolyhedra();
+   ~G4UPolyhedra() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4int GetNumSide()        const;
     G4double GetStartPhi()    const;
@@ -96,9 +96,7 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
 
     G4bool Reset();
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:  // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UPolyhedra(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -109,14 +107,14 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
     G4UPolyhedra& operator=( const G4UPolyhedra& source );
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;
+                           G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   protected:
 

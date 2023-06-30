@@ -60,6 +60,8 @@
   | Transition radiation     			| Em8			  |
   |-----------------------------------------------------------------------|
   | Photo-absorption-ionization model     	| Em10			  |
+  |-----------------------------------------------------------------------|
+  | Gamma Conversion Bethe - Heitler 5D model   | Em15			  |
   -------------------------------------------------------------------------
 
 
@@ -107,8 +109,8 @@
    TestEm14 - how to compute cross sections of EM processes from direct 
               evaluation of the mean-free path. How to plot final state
 	  
-   TestEm15 - compute and plot final state of Multiple Scattering as an 
-              isolated process
+   TestEm15 - compute and plot final state of Multiple Scattering
+              or Gamma Conversion as an isolated process
 	  
    TestEm16 - simulation of synchrotron radiation
 	  	 	  	  	  

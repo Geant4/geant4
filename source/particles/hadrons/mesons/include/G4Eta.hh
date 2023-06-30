@@ -51,7 +51,7 @@ class G4Eta : public G4ParticleDefinition
  private:
    static G4Eta* theInstance;
    G4Eta(){}
-   ~G4Eta(){}
+   ~G4Eta() override= default;
 
  public:
    static G4Eta* Definition();

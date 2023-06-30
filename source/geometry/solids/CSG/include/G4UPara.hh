@@ -56,7 +56,7 @@ class G4UPara : public G4UAdapter<vecgeom::UnplacedParallelepiped>
     G4UPara(const G4String& pName,
             const G4ThreeVector pt[8]);
 
-   ~G4UPara();
+   ~G4UPara() override;
 
     // Accessors
 
@@ -85,20 +85,20 @@ class G4UPara : public G4UAdapter<vecgeom::UnplacedParallelepiped>
 
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
+                                 G4double& pMin, G4double& pMax) const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    G4Polyhedron* CreatePolyhedron   () const;
+    G4Polyhedron* CreatePolyhedron   () const override;
 
   public:  // without description
 

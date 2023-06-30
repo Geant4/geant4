@@ -35,6 +35,7 @@
 #ifndef MolecularDNAHashing_h
 #define MolecularDNAHashing_h
 
+#include <cstdint>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -112,7 +113,7 @@ namespace G4::hashing
     template <size_t len>
     constexpr uint32_t Hash(const char (&str)[len])
     {
-      return detail::Crc32<len - 2>(str) ^ 0xFFFFFFFF;
+      return (detail::Crc32<len - 2>(str)) ^ 0xFFFFFFFF;
     }
 
     //--------------------------------------------------------------------------

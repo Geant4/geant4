@@ -46,10 +46,6 @@
 G4ThreadLocal G4bool  G4NucleiPropertiesTableAME12::isIntialized = false;
 G4ThreadLocal G4double G4NucleiPropertiesTableAME12::electronMass[ZMax];
 
-G4NucleiPropertiesTableAME12::G4NucleiPropertiesTableAME12()
-{
-}
-
 // Determine the table index for a Nuclide with Z protons and A nucleons.
 //
 G4int G4NucleiPropertiesTableAME12::GetIndex(G4int Z, G4int A) 
@@ -61,14 +57,14 @@ G4int G4NucleiPropertiesTableAME12::GetIndex(G4int Z, G4int A)
                 EventMustBeAborted,"Nucleon number larger than 293");
     return -1;
   }
-  else if(A<1)
+  if(A<1)
   {
     G4Exception("G4NucleiPropertiesTableAME12::GetIndex",
                 "Illegal arguemntPART201",
                 EventMustBeAborted," Nucleon number is negative"); 
     return -1;
   }
-  else if(Z>A)
+  if(Z>A)
   {
     G4Exception("G4NucleiPropertiesTableAME12::GetIndex",
                 "PART201",
@@ -126,10 +122,9 @@ G4double G4NucleiPropertiesTableAME12::GetMassExcess(G4int Z, G4int A)
   {
     return MassExcess[i]*keV;
   }
-  else
-  {
-    return 0.0;
-  }
+  
+      return 0.0;
+ 
 }
 
 G4double G4NucleiPropertiesTableAME12::GetBindingEnergy(G4int Z, G4int A)
@@ -140,10 +135,10 @@ G4double G4NucleiPropertiesTableAME12::GetBindingEnergy(G4int Z, G4int A)
       return (G4double(A-Z)*MassExcess[0]
             + G4double(Z)*MassExcess[1] - MassExcess[i])*keV;
   }
-  else
-  { 
+  
+  
     return 0.0;
-  }
+ 
 }
 
 G4double  G4NucleiPropertiesTableAME12::GetBetaDecayEnergy(G4int Z, G4int A)
@@ -153,10 +148,10 @@ G4double  G4NucleiPropertiesTableAME12::GetBetaDecayEnergy(G4int Z, G4int A)
     {
       return BetaEnergy[i]*keV;
     }
-    else
-    { 
+    
+    
       return 0.0;
-    }
+   
 }
 
 G4double  G4NucleiPropertiesTableAME12::GetAtomicMass(G4int Z, G4int A)
@@ -166,10 +161,10 @@ G4double  G4NucleiPropertiesTableAME12::GetAtomicMass(G4int Z, G4int A)
   {
     return MassExcess[i]*keV + G4double(A)*amu_c2;
   }
-  else
-  { 
+  
+  
     return 0.0;
-  }
+ 
 }
 
 G4bool G4NucleiPropertiesTableAME12::IsInTable(G4int Z, G4int A)

@@ -388,10 +388,10 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   fpCommandSpecialMeshRenderingOption = new G4UIcmdWithAString
   ("/vis/viewer/set/specialMeshRenderingOption",this);
   fpCommandSpecialMeshRenderingOption->SetGuidance
-  ("Set special mesh rendering option - \"dots\" or \"surfaces\".");
+  ("Set special mesh rendering option - \"default\", \"dots\" or \"surfaces\".");
   fpCommandSpecialMeshRenderingOption->SetParameterName ("option",omitable = true);
-  fpCommandSpecialMeshRenderingOption->SetCandidates("dots surfaces");
-  fpCommandSpecialMeshRenderingOption->SetDefaultValue("dots");
+  fpCommandSpecialMeshRenderingOption->SetCandidates("default dots surfaces");
+  fpCommandSpecialMeshRenderingOption->SetDefaultValue("default");
 
   fpCommandSpecialMeshVolumes = new G4UIcommand
   ("/vis/viewer/set/specialMeshVolumes",this);
@@ -1274,8 +1274,11 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandSpecialMeshRenderingOption) {
-    G4ViewParameters::SMROption option = G4ViewParameters::meshAsDots;
-    if (newValue == "surfaces") {
+    G4ViewParameters::SMROption option = G4ViewParameters::meshAsDefault;
+    if (newValue == "dots") {
+      option = G4ViewParameters::meshAsDots;
+    }
+    else if(newValue == "surfaces") {
       option = G4ViewParameters::meshAsSurfaces;
     }
     vp.SetSpecialMeshRenderingOption(option);

@@ -22,8 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 // File name:     G4NistMessenger
 //
 // Author:        Vladimir Ivanchenko
@@ -57,53 +56,42 @@
 //    printElement   name        output element  parameters
 //    printMaterial  name        output material parameters
 
-// -------------------------------------------------------------------
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef G4NistMessenger_h
 #define G4NistMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4NistManager;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class G4NistMessenger: public G4UImessenger
+class G4NistMessenger : public G4UImessenger
 {
-public:
-
-  explicit G4NistMessenger(G4NistManager* );
+ public:
+  explicit G4NistMessenger(G4NistManager*);
   ~G4NistMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) final;
 
-private:
+ private:
+  G4NistManager* manager;
 
-  G4NistManager*             manager;
-  
-  G4UIdirectory*             matDir;
-  G4UIcmdWithAnInteger*      verCmd;
-    
-  G4UIdirectory*             nistDir;
-  G4UIcmdWithAString*        prtElmCmd;  
-  G4UIcmdWithAnInteger*      przElmCmd;
-  G4UIcmdWithAString*        lisMatCmd;
-    
-  G4UIdirectory*             g4Dir;
-  G4UIcmdWithAString*        g4ElmCmd;   
-  G4UIcmdWithAString*        g4MatCmd;
-  G4UIcmdWithAString*        g4DensCmd;
-  G4UIcmdWithAString*        densCmd;
-  G4UIcmdWithAString*        adensCmd;
+  G4UIdirectory* matDir;
+  G4UIcmdWithAnInteger* verCmd;
+
+  G4UIdirectory* nistDir;
+  G4UIcmdWithAString* prtElmCmd;
+  G4UIcmdWithAnInteger* przElmCmd;
+  G4UIcmdWithAString* lisMatCmd;
+
+  G4UIdirectory* g4Dir;
+  G4UIcmdWithAString* g4ElmCmd;
+  G4UIcmdWithAString* g4MatCmd;
+  G4UIcmdWithAString* g4DensCmd;
+  G4UIcmdWithAString* densCmd;
+  G4UIcmdWithAString* adensCmd;
 };
 
 #endif
-

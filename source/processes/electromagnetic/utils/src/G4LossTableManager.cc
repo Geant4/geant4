@@ -97,26 +97,14 @@ G4LossTableManager* G4LossTableManager::Instance()
 
 G4LossTableManager::~G4LossTableManager()
 {
-  for (G4int i=0; i<n_loss; ++i) {
-    delete loss_vector[i]; 
-  }
-  std::size_t msc = msc_vector.size();
-  for (std::size_t j=0; j<msc; ++j) {
-    delete msc_vector[j];
-  }
-  std::size_t emp = emp_vector.size();
-  for (std::size_t k=0; k<emp; ++k) {
-    delete emp_vector[k];
-  }
-  emp = p_vector.size();
-  for (std::size_t k=0; k<emp; ++k) {
-    delete p_vector[k];
-  }
+  for (auto const & p : loss_vector) { delete p; }
+  for (auto const & p : msc_vector) { delete p; }
+  for (auto const & p : emp_vector) { delete p; }
+  for (auto const & p : p_vector) { delete p; }
+
   std::size_t mod = mod_vector.size();
   std::size_t fmod = fmod_vector.size();
-  //G4cout << "   Nmod" << mod << "  Nfluc= " << fmod << G4endl;
   for (std::size_t a=0; a<mod; ++a) {
-    //G4cout << "Delete model #" << a << "  " <<  mod_vector[a] << G4endl;
     if( nullptr != mod_vector[a] ) { 
       for (std::size_t b=0; b<fmod; ++b) {
         if((G4VEmModel*)(fmod_vector[b]) == mod_vector[a]) {
@@ -127,9 +115,8 @@ G4LossTableManager::~G4LossTableManager()
       mod_vector[a] = nullptr;
     }
   }
-  for (std::size_t b=0; b<fmod; ++b) {
-    delete fmod_vector[b];
-  }
+  for (auto const & p : fmod_vector) { delete p; }
+
   Clear();
   delete tableBuilder;
   delete emCorrections;
@@ -145,30 +132,29 @@ G4LossTableManager::~G4LossTableManager()
 G4LossTableManager::G4LossTableManager()
 {
   theParameters = G4EmParameters::Instance();
-  n_loss = 0;
-  run = -1;
-  startInitialisation = false;
-  all_tables_are_built = false;
-  currentLoss = nullptr;
-  currentParticle = nullptr;
-  firstParticle = nullptr;
-  isMaster = true;
   verbose = theParameters->Verbose();
-  theElectron  = G4Electron::Electron();
+  theElectron = G4Electron::Electron();
   theGenericIon= nullptr;
   if(G4Threading::IsWorkerThread()) { 
     verbose = theParameters->WorkerVerbose();
     isMaster = false;
-  }  
+  }
   tableBuilder = new G4LossTableBuilder(isMaster);
-  emCorrections= new G4EmCorrections(verbose);
-  emConfigurator = nullptr;
-  emElectronIonPair = nullptr;
-  atomDeexcitation = nullptr;
-  subcutProducer = nullptr;
-  nielCalculator = nullptr; 
-  gGeneral = nullptr;
-  eGeneral = pGeneral = nullptr;
+  emCorrections = new G4EmCorrections(verbose, isMaster);
+
+  std::size_t n = 70;
+  loss_vector.reserve(n);
+  part_vector.reserve(n);
+  base_part_vector.reserve(n);
+  dedx_vector.reserve(n);
+  range_vector.reserve(n);
+  inv_range_vector.reserve(n);
+  tables_are_built.reserve(n);
+  isActive.reserve(n);
+  msc_vector.reserve(10);
+  emp_vector.reserve(16);
+  mod_vector.reserve(150);
+  fmod_vector.reserve(60);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -436,8 +422,7 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-                                        G4VEnergyLossProcess* p,
-                                        G4bool theMaster)
+                                        G4VEnergyLossProcess* p)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
@@ -445,8 +430,6 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
            << " and " << p->GetProcessName() << " run= " << run 
            << "   loss_vector " << loss_vector.size() << G4endl;
   }
-
-  isMaster = theMaster;
 
   if(!startInitialisation) { 
     ResetParameters();
@@ -477,14 +460,13 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-                                        G4VEmProcess* p, G4bool theMaster)
+                                        G4VEmProcess* p)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
            << particle->GetParticleName() 
            << " and " << p->GetProcessName() << G4endl;
   }
-  isMaster = theMaster;
 
   if(!startInitialisation) { 
     ResetParameters(); 
@@ -505,16 +487,13 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-                                        G4VMultipleScattering* p,
-                                        G4bool theMaster)
+                                        G4VMultipleScattering* p)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
            << particle->GetParticleName() 
            << " and " << p->GetProcessName() << G4endl;
   }
-
-  isMaster = theMaster;
 
   if(!startInitialisation) { 
     ResetParameters();
@@ -589,8 +568,6 @@ void G4LossTableManager::LocalPhysicsTables(
       inv_range_vector[i] = p->InverseRangeTable();
       if(0 == run && p->IsIonisationProcess()) {
         loss_map[part_vector[i]] = p;
-        //G4cout << "G4LossTableManager::LocalPhysicsTable " << part_vector[i]->GetParticleName()
-        //     << " added to map " << p << G4endl;
       }
 
       if(1 < verbose) { 
@@ -666,7 +643,7 @@ void G4LossTableManager::BuildPhysicsTable(
         isActive[i] = true;
         base_part_vector[i] = el->BaseParticle(); 
         tables_are_built[i] = false;
-        all_tables_are_built= false;
+        all_tables_are_built= false;  
         if(1 < verbose) { 
           G4cout << i <<".   "<< el->GetProcessName();
           if(el->Particle()) {
@@ -819,8 +796,8 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
         if (!tables_are_built[i]) {
           val = true;
           dedx = p->BuildDEDXTable(fRestricted);
-          //G4cout << "Build DEDX table for " << p->GetProcessName()
-          // << " idx= " << i << dedx << " " << dedx->length() << G4endl;
+          //G4cout << "===Build DEDX table for " << p->GetProcessName()
+          // << " idx= " << i << " dedx:" << dedx << " " << dedx->length() << G4endl;
           p->SetDEDXTable(dedx,fRestricted);
           tables_are_built[i] = true;
         } else {
@@ -913,7 +890,6 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   if(theParameters->BuildCSDARange()) {
     G4PhysicsTable* dedxCSDA = em->DEDXunRestrictedTable();
     if (1 < n_dedx) {
-      dedxCSDA = nullptr;
       dedxCSDA = G4PhysicsTableHelper::PreparePhysicsTable(dedxCSDA);
       tableBuilder->BuildDEDXTable(dedxCSDA, listCSDA);
       em->SetDEDXTable(dedxCSDA,fTotal);

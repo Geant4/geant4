@@ -51,7 +51,7 @@ class G4DsMesonMinus : public G4ParticleDefinition
  private:
    static G4DsMesonMinus* theInstance;
    G4DsMesonMinus(){}
-   ~G4DsMesonMinus(){}
+   ~G4DsMesonMinus() override= default;
 
  public:
    static G4DsMesonMinus* Definition();

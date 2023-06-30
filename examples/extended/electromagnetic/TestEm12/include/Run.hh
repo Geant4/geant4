@@ -46,7 +46,7 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction* detector);
-   ~Run();
+   ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
@@ -59,21 +59,21 @@ class Run : public G4Run
     void     SetCsdaRange (G4double value);                                 
     G4double GetCsdaRange();
             
-    virtual void Merge(const G4Run*);
+    void Merge(const G4Run*) override;
     void EndOfRun();
     
   private:
-    DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin; 
+    DetectorConstruction*  fDetector = nullptr;
+    G4ParticleDefinition*  fParticle = nullptr;
+    G4double  fEkin = 0.; 
        
-    G4double   fEdeposit,  fEdeposit2;
-    G4double   fTrackLen,  fTrackLen2;
-    G4double   fProjRange, fProjRange2;
-    G4int      fNbOfSteps, fNbOfSteps2;
-    G4double   fStepSize,  fStepSize2;
+    G4double   fEdeposit  = 0., fEdeposit2  = 0.;
+    G4double   fTrackLen  = 0., fTrackLen2  = 0.;
+    G4double   fProjRange = 0., fProjRange2 = 0.;
+    G4int      fNbOfSteps = 0,  fNbOfSteps2 = 0;
+    G4double   fStepSize  = 0., fStepSize2  = 0.;
     
-    G4double   fCsdaRange;
+    G4double   fCsdaRange = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

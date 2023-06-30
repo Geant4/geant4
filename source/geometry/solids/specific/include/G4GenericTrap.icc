@@ -49,7 +49,7 @@ G4TwoVector G4GenericTrap::GetVertex(G4int index) const
   {
     G4Exception ("G4GenericTrap::GetVertex()", "GeomSolids0003",
                  FatalException, "Index outside range.");
-    return G4TwoVector();
+    return {};
   }
   return fVertices[index];
 }  

@@ -37,7 +37,7 @@
 //
 // Class Description:
 //
-// Wrapper of proton and neutron inelastic cross-sections using Barashenkov 
+// Wrapper of proton and neutron inelastic cross-sections using Barashenkov
 // parametersation below 100 GeV and Glauber-Gribov model above
 //
 // -------------------------------------------------------------------
@@ -48,10 +48,10 @@
 #ifndef G4ParticleHPBGGNucleonInelasticXS_h
 #define G4ParticleHPBGGNucleonInelasticXS_h
 
-#include "globals.hh"
-#include "G4VCrossSectionDataSet.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4VCrossSectionDataSet.hh"
+#include "globals.hh"
 /*
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
@@ -62,25 +62,22 @@ class G4Material;
 class G4Element;
 class G4Isotope;
 
-class G4ParticleHPBGGNucleonInelasticXS : public G4BGGNucleonInelasticXS 
+class G4ParticleHPBGGNucleonInelasticXS : public G4BGGNucleonInelasticXS
 {
-public:
+  public:
+    G4ParticleHPBGGNucleonInelasticXS(const G4ParticleDefinition*);
 
-  G4ParticleHPBGGNucleonInelasticXS (const G4ParticleDefinition*);
+    ~G4ParticleHPBGGNucleonInelasticXS() override;
 
-  virtual ~G4ParticleHPBGGNucleonInelasticXS();
-   
-  virtual
-  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
-			     const G4Material* mat = 0);
+    G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+                               const G4Material* mat = nullptr) override;
 
-  virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,  
-			 const G4Element* elm = 0,
-			 const G4Material* mat = 0);
+    G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
+                           const G4Element* elm = nullptr,
+                           const G4Material* mat = nullptr) override;
 
-private:
-  G4double fLowEnergyLimitForHPN; 
+  private:
+    G4double fLowEnergyLimitForHPN;
 };
 
 #endif

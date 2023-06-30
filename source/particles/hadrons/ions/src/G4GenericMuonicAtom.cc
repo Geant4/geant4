@@ -50,7 +50,7 @@ G4GenericMuonicAtom* G4GenericMuonicAtom::Definition()
   const G4String name = "GenericMuonicAtom";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4MuonicAtom* anInstance = static_cast<G4MuonicAtom*>(pTable->FindParticle(name));
+  auto  anInstance = static_cast<G4MuonicAtom*>(pTable->FindParticle(name));
   if (anInstance == nullptr)
   {
   // create particle
@@ -73,7 +73,7 @@ G4GenericMuonicAtom* G4GenericMuonicAtom::Definition()
                     1,              +1,             0,             
 	 "MuonicAtom",               0,            +1,           0,
 		 true,            -1.0,          nullptr,
-                false,       "generic",             0,         
+                false,       "generic",             nullptr,         
                   0.0 
               );
   }

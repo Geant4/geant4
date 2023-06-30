@@ -47,24 +47,22 @@
 
 class G4VTwistSurface
 {
- public:  // without description
+ public:
 
    enum EValidate { kDontValidate = 0, kValidateWithTol = 1, 
                     kValidateWithoutTol = 2, kUninitialized = 3 };
 
- public:  // with description
-
    G4VTwistSurface (const G4String& name);
    G4VTwistSurface (const G4String& name,
-               const G4RotationMatrix& rot,
-               const G4ThreeVector&    tlate,
-                     G4int             handedness,
-               const EAxis             axis1,
-               const EAxis             axis2,
-                     G4double          axis0min = -kInfinity,
-                     G4double          axis1min = -kInfinity,
-                     G4double          axis0max = kInfinity,
-                     G4double          axis1max = kInfinity);
+                    const G4RotationMatrix& rot,
+                    const G4ThreeVector&    tlate,
+                          G4int             handedness,
+                    const EAxis             axis1,
+                    const EAxis             axis2,
+                          G4double          axis0min = -kInfinity,
+                          G4double          axis1min = -kInfinity,
+                          G4double          axis0max = kInfinity,
+                          G4double          axis1max = kInfinity);
 
    virtual ~G4VTwistSurface();
 
@@ -99,8 +97,6 @@ class G4VTwistSurface
                                              G4int         areacode[]) = 0;
                                              
    void              DebugPrint() const;
-
-   // get methods
 
    virtual G4ThreeVector GetNormal(const G4ThreeVector& xx,G4bool isGlobal) = 0;
    
@@ -169,25 +165,19 @@ class G4VTwistSurface
    G4int GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n,
                             G4int number, G4int orientation) ;
 
- public:  // without description
-
    G4VTwistSurface(__void__&);
      // Fake default constructor for usage restricted to direct object
      // persistency for clients requiring preallocation of memory for
      // persistifiable objects.
 
- protected:  // with description
+ protected:
  
-   // get methods
-
    inline G4VTwistSurface** GetNeighbours() { return fNeighbours; } 
    inline G4int GetNeighbours(G4int areacode, G4VTwistSurface* surfaces[]);
    inline G4ThreeVector GetCorner(G4int areacode) const;
-          void GetBoundaryAxis(G4int areacode, EAxis axis[]) const;
-          void GetBoundaryLimit(G4int areacode, G4double limit[]) const;
+   void GetBoundaryAxis(G4int areacode, EAxis axis[]) const;
+   void GetBoundaryLimit(G4int areacode, G4double limit[]) const;
    virtual G4int GetAreaCode(const G4ThreeVector& xx, G4bool withtol=true) = 0;
-      
-   // set methods
 
    virtual void SetBoundary(const G4int&         axiscode, 
                             const G4ThreeVector& direction,
@@ -238,7 +228,7 @@ class G4VTwistSurface
  
    class CurrentStatus 
    {
-    public:
+     public:
 
       CurrentStatus();
       virtual ~CurrentStatus();
@@ -267,7 +257,7 @@ class G4VTwistSurface
 
       void DebugPrint() const;
 
-    private:
+     private:
 
       G4double             fDistance[G4VSURFACENXX];
       G4ThreeVector        fXX[G4VSURFACENXX];
@@ -282,7 +272,8 @@ class G4VTwistSurface
       
    class Boundary 
    {
-    public:
+     public:
+
       Boundary();
       virtual ~Boundary();
       
@@ -298,11 +289,12 @@ class G4VTwistSurface
                                          G4ThreeVector& x0, 
                                          G4int&         boundarytype) const;
 
-    private:
-      G4int          fBoundaryAcode;
+     private:
+
+      G4int          fBoundaryAcode{-1};
       G4ThreeVector  fBoundaryDirection;
       G4ThreeVector  fBoundaryX0;
-      G4int          fBoundaryType;
+      G4int          fBoundaryType{0};
    };
 
    EAxis               fAxis[2];
@@ -316,6 +308,7 @@ class G4VTwistSurface
    class G4SurfCurNormal
    {
      public:
+
        G4ThreeVector p;
        G4ThreeVector normal;
    };
@@ -334,6 +327,7 @@ class G4VTwistSurface
    class G4SurfSideQuery
    {
      public:
+
        G4ThreeVector me;
        G4ThreeVector vec;
        G4bool        withTol;

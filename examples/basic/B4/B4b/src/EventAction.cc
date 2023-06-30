@@ -45,7 +45,7 @@ namespace B4b
 void EventAction::PrintEventStatistics(
                               G4double absoEdep, G4double absoTrackLength,
                               G4double gapEdep, G4double gapTrackLength) const
-{
+{  
   // print event statistics
   G4cout
      << "   Absorber: total energy: "
@@ -84,13 +84,12 @@ void EventAction::EndOfEventAction(const G4Event* event)
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;
-
     PrintEventStatistics(
       runData->GetEdep(kAbs),
       runData->GetTrackLength(kAbs),
       runData->GetEdep(kGap),
       runData->GetTrackLength(kGap));
+    G4cout << "--> End of event " << eventID << "\n" << G4endl;      
   }
 }
 

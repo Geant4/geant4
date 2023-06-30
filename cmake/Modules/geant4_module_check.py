@@ -34,11 +34,13 @@ def initdb(filename):
         for row in reader:
             db['modules'][row[0]] = {'location': row[1],
                                      'headers': set(row[2].split(';')) - set(['']),
-                                     'public_deps': set(row[3].split(';')) - set(['']),
-                                     'private_deps': set(row[4].split(';')) - set(['']),
-                                     'interface_deps': set(row[5].split(';')) - set(['']),
-                                     'parent_target': row[6]}
-            db['build_settings'].add(row[7])
+                                     'private_headers': set(row[3].split(';')) - set(['']),
+                                     'sources': set(row[4].split(';')) - set(['']),
+                                     'public_deps': set(row[5].split(';')) - set(['']),
+                                     'private_deps': set(row[6].split(';')) - set(['']),
+                                     'interface_deps': set(row[7].split(';')) - set(['']),
+                                     'parent_target': row[8]}
+            db['build_settings'].add(row[9])
 
     return db
 
@@ -55,8 +57,43 @@ def get_location(name, db):
     return get_module(name, db)['location']
 
 
+def get_header_path(name, db):
+    return os.path.join(get_location(name, db), 'include')
+
+
+def get_private_header_path(name, db):
+    return os.path.join(get_location(name, db), 'include/private')
+
+
+def get_source_path(name, db):
+    return os.path.join(get_location(name, db), 'src')
+
+
 def get_headers(name, db):
     return get_module(name, db)['headers']
+
+
+def get_headers_absolute(name, db):
+    base_path = get_header_path(name, db)
+    return set(os.path.join(base_path, h) for h in get_headers(name, db))
+
+
+def get_private_headers(name, db):
+    return get_module(name, db)['private_headers']
+
+
+def get_private_headers_absolute(name, db):
+    base_path = get_private_header_path(name, db)
+    return set(os.path.join(base_path, h) for h in get_private_headers(name, db))
+
+
+def get_sources(name, db):
+    return get_module(name, db)['sources']
+
+
+def get_sources_absolute(name, db):
+    base_path = get_source_path(name, db)
+    return set(os.path.join(base_path, h) for h in get_sources(name, db))
 
 
 def get_public_deps(name, db):
@@ -77,6 +114,18 @@ def get_parent_target(name, db):
 
 def what_provides(h, db):
     return set([m for m in get_modules(db) if h in get_headers(m, db)])
+
+
+def what_provides_private(h, db):
+    return set([m for m in get_modules(db) if h in get_private_headers(m, db)])
+
+
+def what_requires(m, db):
+    return set([om for om in get_modules(db) if m in get_public_deps(om, db)])
+
+
+def what_requires_private(m, db):
+    return set([om for om in get_modules(db) if m in get_private_deps(om, db)])
 
 
 def has_setting(setting, build_settings):
@@ -108,52 +157,122 @@ def scan_includes(input_file, settings):
     return result
 
 
-def scan_files(input_path, settings):
+def scan_files(files, settings):
     used_headers = set()
-    with os.scandir(input_path) as hdr_it:
-        for entry in hdr_it:
-            used_headers |= scan_includes(entry.path, settings)
+    for f in files:
+        used_headers |= scan_includes(f, settings)
 
     return used_headers
 
 
+def scan_module_headers(name, db, full_scan):
+    if full_scan:
+        # NB: know that will have private/ subdir, so only consider files
+        header_list = [e.path for e in os.scandir(
+            get_header_path(name, db)) if e.is_file()]
+    else:
+        header_list = get_headers_absolute(name, db)
+
+    return scan_files(header_list, db['build_settings'])
+
+
+def scan_module_private_headers(name, db, full_scan):
+    if full_scan:
+        header_list = [e.path for e in os.scandir(
+            get_private_header_path(name, db))]
+    else:
+        header_list = get_private_headers_absolute(name, db)
+
+    return scan_files(header_list, db['build_settings'])
+
+
+def scan_module_sources(name, db, full_scan):
+    if full_scan:
+        source_list = [e.path for e in os.scandir(get_source_path(name, db))]
+    else:
+        source_list = get_sources_absolute(name, db)
+
+    return scan_files(source_list, db['build_settings'])
+
+
 def find_modules(list_of_headers, module_db):
     found_modules = set()
+    blame_headers = defaultdict(set)
     orphan_hdrs = set()
     for h in list_of_headers:
         ms = what_provides(h, module_db)
         found_modules |= ms
         if not ms:
             orphan_hdrs.add(h)
+        else:
+            blame_headers[ms.pop()].add(h)
 
-    return {'modules': found_modules, 'headers': orphan_hdrs}
+    return {'modules': found_modules, 'blame': {k: sorted(v) for k, v in blame_headers.items()}, 'headers': orphan_hdrs}
 
 
-def usage_requirements(module_name, module_db):
+def find_modules_private(list_of_headers, module_db):
+    found_modules = set()
+    blame_headers = defaultdict(set)
+    orphan_hdrs = set()
+    for h in list_of_headers:
+        ms = what_provides_private(h, module_db)
+        found_modules |= ms
+        if not ms:
+            orphan_hdrs.add(h)
+        else:
+            blame_headers[ms.pop()].add(h)
+
+    return {'modules': found_modules, 'blame': {k: sorted(v) for k, v in blame_headers.items()}, 'headers': orphan_hdrs}
+
+
+def usage_requirements(module_name, module_db, full_scan):
     """ Find modules needed publically and privately by input module
     """
     try:
         module_path = get_location(module_name, module_db)
         module_headers = get_headers(module_name, module_db)
+        module_private_headers = get_private_headers(module_name, module_db)
     except KeyError as err:
         print(f'No module named \'{module_name}\'', file=sys.stderr)
         sys.exit(1)
 
     # Determine public usage reqs
-    includes_from_headers = scan_files(os.path.join(module_path, "include"), module_db['build_settings'])
+    includes_from_headers = scan_module_headers(
+        module_name, module_db, full_scan)
     includes_from_headers -= module_headers
     public_deps = find_modules(includes_from_headers, module_db)
+    access_violation_public = find_modules_private(
+        includes_from_headers, module_db)
 
-    # The same for private, if module has srcs
+    # Determine private usage reqs
+    # private headers...
     try:
-        includes_from_srcs = scan_files(os.path.join(module_path, "src"), module_db['build_settings'])
-        includes_from_srcs -= module_headers
-        private_deps = find_modules(includes_from_srcs, module_db)
-        # Public deps are higher priority
-        private_deps['modules'] -= public_deps['modules']
-        private_deps['headers'] -= public_deps['headers']
+        includes_from_private_headers = scan_module_private_headers(
+            module_name, module_db, full_scan)
+        includes_from_private_headers -= module_headers
+        includes_from_private_headers -= module_private_headers
     except FileNotFoundError:
-        private_deps = {'modules': set(), 'headers': set()}
+        includes_from_private_headers = set()
+
+    # ... and sources if they exist
+    try:
+        includes_from_srcs = scan_module_sources(
+            module_name, module_db, full_scan)
+        includes_from_srcs -= module_headers
+        includes_from_srcs -= module_private_headers
+    except FileNotFoundError:
+        includes_from_srcs = set()
+
+    # Join private/src and remove public deps, which are higher priority
+    # We don't do this for blames as these can be unique
+    private_deps = find_modules(
+        includes_from_private_headers | includes_from_srcs, module_db)
+    private_deps['modules'] -= public_deps['modules']
+    private_deps['headers'] -= public_deps['headers']
+
+    # Determine any access violations
+    access_violation_private = find_modules_private(
+        includes_from_private_headers | includes_from_srcs, module_db)
 
     # Transform results to output dict
     d = {'module': module_name,
@@ -161,22 +280,30 @@ def usage_requirements(module_name, module_db):
              'public': sorted(public_deps['modules']),
              'private': sorted(private_deps['modules'])
          },
+         'blame': {
+             'public': OrderedDict(sorted(public_deps['blame'].items())),
+             'private': OrderedDict(sorted(private_deps['blame'].items()))
+         },
          'external_headers': {
              'public': sorted(public_deps['headers']),
              'private': sorted(private_deps['headers'])
+         },
+         'access_violations': {
+             'public': sorted(access_violation_public['modules']),
+             'private': sorted(access_violation_private['modules'])
          }
          }
     return d
 
 
-def check_consistency(module_name, module_db):
+def check_consistency(module_name, module_db, full_scan):
     """ Check module declared/apparent dependencies for consistency
     """
     # NB: Can have false positives from externals G4expat, G4clhep, G4zlib, G4tools (plus imported :: targets and stdlib)
     def filter_dependencies(dep_list, module_name):
         return set([x for x in dep_list if not re.match("^.+::.+", x)]) - set(['G4expat', 'G4clhep', 'G4zlib', 'G4tools', 'G4ptl', 'stdc++fs'])
 
-    ur = usage_requirements(module_name, module_db)
+    ur = usage_requirements(module_name, module_db, full_scan)
     apparent_public_deps = filter_dependencies(
         ur['dependencies']['public'], module_name)
     apparent_private_deps = filter_dependencies(
@@ -188,6 +315,11 @@ def check_consistency(module_name, module_db):
         get_interface_deps(module_name, module_db), module_name)
     declared_private_deps = filter_dependencies(
         get_private_deps(module_name, module_db), module_name)
+
+    public_access_violations = filter_dependencies(
+        ur['access_violations']['public'], module_name)
+    private_access_violations = filter_dependencies(
+        ur['access_violations']['private'], module_name)
 
     # Collate any consistency errors
     report = []
@@ -221,6 +353,16 @@ def check_consistency(module_name, module_db):
         report.append(
             f'  - may not require PRIVATE dependencies: {overdeclared_private_deps}')
 
+    # - Module exposes a header that's declared private locally or in another module
+    if public_access_violations:
+        report.append(
+            f'  ! public interface #include-s PRIVATE headers from modules: {public_access_violations}')
+
+    # - Module uses a header that's declared private
+    if private_access_violations:
+        report.append(
+            f'  ! implementation uses PRIVATE headers from modules: {private_access_violations}')
+
     return report
 
 
@@ -238,9 +380,45 @@ def do_provides(header_name, module_db, verbose):
     print(mods.pop())
 
 
-def do_check_consistency(module_name, module_db):
+def do_requires(module_name, module_db):
+    """find all modules that use module_name
+    """
     try:
-        cc = check_consistency(module_name, module_db)
+        public_users = sorted(what_requires(module_name, module_db))
+        private_users = sorted(what_requires_private(module_name, module_db))
+    except KeyError as err:
+        print(f'No module named \'{module_name}\'', file=sys.stderr)
+        sys.exit(1)
+
+    print(f'{module_name} is required by:')
+
+    if len(public_users) != 0:
+        print('- PUBLIC:')
+        print("  -", "\n  - ".join(public_users))
+
+    if len(private_users) != 0:
+        print('PRIVATE:')
+        print("  -", "\n  - ".join(private_users))
+
+
+def do_count_usage(module_db, verbose):
+    """print modules ordered by number of modules linking to them"""
+    reqcount = dict.fromkeys(get_modules(module_db), 0)
+
+    for m in get_modules(module_db):
+        reqcount[m] += len(what_requires(m, module_db))
+        reqcount[m] += len(what_requires_private(m, module_db))
+
+    for m in sorted(reqcount, key=reqcount.get, reverse=True):
+        if verbose:
+            print(m, f'({reqcount[m]} users)')
+        else:
+            print(m)
+
+
+def do_check_consistency(module_name, module_db, full_scan):
+    try:
+        cc = check_consistency(module_name, module_db, full_scan)
         if cc:
             print(f'{module_name} has inconsistent dependencies:', file=sys.stderr)
             print("\n".join(cc), file=sys.stderr)
@@ -292,10 +470,10 @@ def do_find_cycles(module_db, verbose):
         sys.exit(1)
 
 
-def do_find_inconsistencies(db, verbose):
+def do_find_inconsistencies(db, verbose, full_scan):
     inconsistent = {}
     for m in get_modules(db):
-        cc = check_consistency(m, db)
+        cc = check_consistency(m, db, full_scan)
         if cc:
             inconsistent[m] = "\n".join(cc)
 
@@ -327,6 +505,9 @@ if __name__ == "__main__":
                         metavar="FILE", help="module interface map file")
     parser.add_argument("-v", "--verbose",
                         action="store_true", help="verbose output")
+    parser.add_argument("--all-files",
+                        action="store_true",
+                        help="consider all files in source tree for consistency checks")
 
     query_group = parser.add_mutually_exclusive_group(required=True)
 
@@ -353,7 +534,17 @@ if __name__ == "__main__":
     query_group.add_argument(
         "-u", "--usage-requirements",
         metavar="<module>",
-        help="determine and print usage requirements of module"
+        help="print usage requirements of module"
+    )
+    query_group.add_argument(
+        "-r", "--requires",
+        metavar="<module>",
+        help="print modules linking to this module"
+    )
+    query_group.add_argument(
+        "--count-usage",
+        action="store_true",
+        help="print modules from most to least linked to"
     )
     query_group.add_argument(
         "-c", "--check-consistency",
@@ -408,14 +599,18 @@ if __name__ == "__main__":
     elif args.provides:
         do_provides(args.provides, db, args.verbose)
     elif args.usage_requirements:
-        ur = usage_requirements(args.usage_requirements, db)
+        ur = usage_requirements(args.usage_requirements, db, args.all_files)
         print(json.dumps(ur, indent=2))
+    elif args.count_usage:
+        do_count_usage(db, args.verbose)
+    elif args.requires:
+        do_requires(args.requires, db)
     elif args.check_consistency:
-        do_check_consistency(args.check_consistency, db)
+        do_check_consistency(args.check_consistency, db, args.all_files)
     elif args.find_cycles:
         do_find_cycles(db, args.verbose)
     elif args.find_inconsistencies:
-        do_find_inconsistencies(db, args.verbose)
+        do_find_inconsistencies(db, args.verbose, args.all_files)
     elif args.library:
         try:
             print(get_parent_target(args.library, db))

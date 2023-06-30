@@ -43,9 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fMessenger(0), 
-  fEmPhysicsList(0)
+PhysicsList::PhysicsList()
 {
   G4LossTableManager::Instance();
   fMessenger = new PhysicsListMessenger(this); 

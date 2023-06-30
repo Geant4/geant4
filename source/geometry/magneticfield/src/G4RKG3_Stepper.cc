@@ -37,9 +37,7 @@ G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs* EqRhs)
 {
 }
 
-G4RKG3_Stepper::~G4RKG3_Stepper()
-{
-}
+G4RKG3_Stepper::~G4RKG3_Stepper() = default;
 
 void G4RKG3_Stepper::Stepper( const G4double yInput[], // [8]
                               const G4double dydx[],   // [6]

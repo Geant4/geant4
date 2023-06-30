@@ -74,7 +74,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   // global layout
   QVBoxLayout* globalVLayout = new QVBoxLayout(this);
-  globalVLayout->setMargin(10);
+  globalVLayout->setContentsMargins(10,10,10,10);
   globalVLayout->setSpacing(10);
 
   // Encoder group box
@@ -92,7 +92,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   fEncoderStatus = new QLabel(encoderGroupBox);
 
   fEncoderStatus->setWordWrap(true);
-  encoderVGroupBoxLayout->setMargin(15);
+  encoderVGroupBoxLayout->setContentsMargins(15,15,15,15);
 
   fEncoderStatus->setText("");
 
@@ -122,7 +122,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   fTempFolderStatus = new QLabel(tempFolderGroupBox);
   fTempFolderStatus->setWordWrap(true);
-  tempFolderVGroupBoxLayout->setMargin(15);
+  tempFolderVGroupBoxLayout->setContentsMargins(15,15,15,15);
   fTempFolderStatus->setText("");
 
   tempFolderHBoxLayout->addWidget(fTempFolderPath);
@@ -153,7 +153,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
 
   fSaveFileStatus = new QLabel(saveFileGroupBox);
   fSaveFileStatus->setWordWrap(true);
-  saveFileVGroupBoxLayout->setMargin(15);
+  saveFileVGroupBoxLayout->setContentsMargins(15,15,15,15);
   fSaveFileStatus->setText("");
 
   saveFileHBoxLayout->addWidget(fSaveFileName);
@@ -177,7 +177,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   QVBoxLayout *statusVGroupBoxLayout = new QVBoxLayout(statusGroupBox);
 
   fRecordingStatus = new QLabel(statusGroupBox);
-  statusVGroupBoxLayout->setMargin(15);
+  statusVGroupBoxLayout->setContentsMargins(15,15,15,15);
   fRecordingStatus->setWordWrap(true);
   QPalette mypalette( fRecordingStatus->palette() );
   mypalette.setColor( QPalette::Text, Qt::green);

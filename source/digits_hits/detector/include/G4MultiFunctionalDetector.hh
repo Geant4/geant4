@@ -29,13 +29,13 @@
 #ifndef G4MultiFunctionalDetector_h
 #define G4MultiFunctionalDetector_h 1
 
-#include "G4VSensitiveDetector.hh"
-#include "G4VHit.hh"
-#include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4VReadOutGeometry.hh"
+#include "G4Step.hh"
 #include "G4TouchableHistory.hh"
-#include "G4CollectionNameVector.hh"
+#include "G4VHit.hh"
+#include "G4VReadOutGeometry.hh"
+#include "G4VSensitiveDetector.hh"
+
 #include <vector>
 class G4VPrimitiveScorer;
 
@@ -46,34 +46,28 @@ class G4VPrimitiveScorer;
 
 class G4MultiFunctionalDetector : public G4VSensitiveDetector
 {
- public:  // with description
+ public:
   G4MultiFunctionalDetector(G4String);
+  ~G4MultiFunctionalDetector() override;
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
-  std::vector<G4VPrimitiveScorer*> primitives;
-
- public:  // with description
   G4bool RegisterPrimitive(G4VPrimitiveScorer*);
+
   G4bool RemovePrimitive(G4VPrimitiveScorer*);
-  inline G4int GetNumberOfPrimitives() const
-  {
-    return G4int(primitives.size());
-  }
+
+  inline G4int GetNumberOfPrimitives() const { return G4int(primitives.size()); }
+
   G4VPrimitiveScorer* GetPrimitive(G4int id) const { return primitives[id]; }
 
- public:
-  virtual ~G4MultiFunctionalDetector();
+  void Initialize(G4HCofThisEvent*) override;
+  void EndOfEvent(G4HCofThisEvent*) override;
+  void clear() override;
+  void DrawAll() override;
+  void PrintAll() override;
 
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
- public:
-  virtual void DrawAll();
-  virtual void PrintAll();
+  std::vector<G4VPrimitiveScorer*> primitives;
 };
 
 #endif

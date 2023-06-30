@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (copied from B1EventAction)
 
 #ifndef EventAction_h
@@ -39,20 +38,19 @@ class RunAction;
 
 class EventAction : public G4UserEventAction
 {
-  public:
-    EventAction(RunAction* runAction);
-    virtual ~EventAction();
+public:
+  explicit EventAction(RunAction* runAction);
+  virtual ~EventAction()=default;
 
-    virtual void BeginOfEventAction(const G4Event* event);
-    virtual void EndOfEventAction(const G4Event* event);
+  virtual void BeginOfEventAction(const G4Event* event) override;
+  virtual void EndOfEventAction(const G4Event* event) override;
 
-    void AddEdep(G4double edep) { fEdep += edep; }
+  void AddEdep(G4double edep) { fEdep += edep; }
 
-  private:
-    RunAction* fRunAction;
-    G4double     fEdep;
+private:
+  RunAction* fRunAction;
+  G4double   fEdep;
 };
-
 #endif
 
     

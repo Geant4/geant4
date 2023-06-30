@@ -47,9 +47,7 @@ G4RegularNavigation::G4RegularNavigation()
 
 
 //------------------------------------------------------------------
-G4RegularNavigation::~G4RegularNavigation()
-{
-}
+G4RegularNavigation::~G4RegularNavigation() = default;
 
 
 //------------------------------------------------------------------
@@ -91,8 +89,8 @@ G4double G4RegularNavigation::
   motherLogical = motherPhysical->GetLogicalVolume();
   daughterPhysical = motherLogical->GetDaughter(0);
 
-  G4PhantomParameterisation * daughterParam =
-        (G4PhantomParameterisation*)(daughterPhysical->GetParameterisation());
+  auto daughterParam =
+       (G4PhantomParameterisation*)(daughterPhysical->GetParameterisation());
   G4int copyNo = daughterParam ->GetReplicaNo(localPoint,localDirection);
 
   G4ThreeVector voxelTranslation = daughterParam->GetTranslation( copyNo );
@@ -132,7 +130,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 {
   G4RegularNavigationHelper::Instance()->ClearStepLengths();
 
-  G4PhantomParameterisation *param =
+  auto param =
     (G4PhantomParameterisation*)(pCurrentPhysical->GetParameterisation());
 
   if( !param->SkipEqualMaterials() )
@@ -156,7 +154,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   // To get replica No: transform local point to the reference system of the
   // param container volume
   //
-  G4int ide = (G4int)history.GetDepth();
+  auto  ide = (G4int)history.GetDepth();
   G4ThreeVector containerPoint = history.GetTransform(ide)
                                  .InverseTransformPoint(localPoint);
 
@@ -309,11 +307,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
         AddStepLength(copyNo, newStep-totalNewStep+currentProposedStepLength);
       return currentProposedStepLength;
     }
-    else
-    {
-      G4RegularNavigationHelper::Instance()->AddStepLength( copyNo, newStep );
-    }
-
+    G4RegularNavigationHelper::Instance()->AddStepLength( copyNo, newStep );
 
     // Move container point until wall of voxel
     //
@@ -395,7 +389,7 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   
   // Get local direction
   //
-  if( globalDirection )
+  if( globalDirection != nullptr )
   {
     localDir = history.GetTopTransform().TransformAxis(*globalDirection);
   }

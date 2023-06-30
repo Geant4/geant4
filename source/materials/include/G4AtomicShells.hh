@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+
 // class description
 //
 // Class consists of atomic subshell binding energies for first 100 elements.
@@ -36,48 +36,35 @@
 //
 //		a) CRC, Handbook of Chemistry and Physics, 73rd Edition,
 //	        	1992-1993
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
+//
 // 24-04-98, implementation of the first version, V. Grichine
 // 16-11-98, GetBindingEnergy(Z,ShellNb), M.Maire
 // 11-02-05, GetNumberOfElectrons(Z,ShellNb), V.Ivanchenko
 // 30-04-10, added fIndexOfShells, V.Ivanchenko
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #ifndef G4ATOMICSHELLS_H
 #define G4ATOMICSHELLS_H
 
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-class G4AtomicShells 
+class G4AtomicShells
 {
-public :  //with description
-
-  static G4int    GetNumberOfShells(G4int Z);
-  static G4int    GetNumberOfElectrons(G4int Z, G4int SubshellNb);
-  static G4int    GetNumberOfFreeElectrons(G4int Z, G4double th);
+ public:  // with description
+  static G4int GetNumberOfShells(G4int Z);
+  static G4int GetNumberOfElectrons(G4int Z, G4int SubshellNb);
+  static G4int GetNumberOfFreeElectrons(G4int Z, G4double th);
   static G4double GetBindingEnergy(G4int Z, G4int SubshellNb);
   static G4double GetTotalBindingEnergy(G4int Z);
 
-private :
-
+ private:
 #ifdef G4VERBOSE
   static G4int PrintErrorZ(G4int Z, const G4String&);
   static G4int PrintErrorShell(G4int Z, G4int SubshellNb, const G4String&);
 #endif
-
-  G4AtomicShells(const G4AtomicShells&) = delete;
-  const G4AtomicShells& operator=(const G4AtomicShells&) = delete;
-
-  static const G4int    fNumberOfShells[105];
-  static const G4int    fIndexOfShells[105];
-  static const G4int    fNumberOfElectrons[1650];
+  static const G4int fNumberOfShells[105];
+  static const G4int fIndexOfShells[105];
+  static const G4int fNumberOfElectrons[1650];
   static const G4double fBindingEnergies[1650];
-
 };
 
 /*   *********************************************************
@@ -87,14 +74,14 @@ The data were given from:
 I	from	Janni J.F. 1982 (I for F from estimation with formula).
 
 I(i)	from	T.A.Carlson, Photoelectron and Auger Spectroscopy,
-		Plenum, New York, 1976, p.337.
+    Plenum, New York, 1976, p.337.
 
-		a) CRC, Handbook of Chemistry and Physics, 73rd Edition,
-	        	1992-1993
+    a) CRC, Handbook of Chemistry and Physics, 73rd Edition,
+            1992-1993
 
 
-	  Free Atom Subshells Binding Energies - I(i)
-	----------------------------------------------
+    Free Atom Subshells Binding Energies - I(i)
+  ----------------------------------------------
 
 El      A  Z     I    err I     Z(i)   I(i)   comments
                 eV     %               eV
@@ -1787,4 +1774,4 @@ FM 253.   100   00.0   0.00  K   2 143090.   1S		a)
  535.0    448.0   319.0   190.0   171.0  26.0   22.8   82.0
 **********************************************************       */
 
-#endif   // end of G4AtomicShells.hh 
+#endif  // end of G4AtomicShells.hh

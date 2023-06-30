@@ -42,9 +42,7 @@ G4HelixExplicitEuler::G4HelixExplicitEuler(G4Mag_EqRhs* EqRhs)
 {
 }
  
-G4HelixExplicitEuler::~G4HelixExplicitEuler()
-{
-}
+G4HelixExplicitEuler::~G4HelixExplicitEuler() = default;
 
 void G4HelixExplicitEuler::Stepper( const G4double  yInput[],  // [7]
                                     const G4double*,

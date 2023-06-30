@@ -37,8 +37,14 @@
 
 #include "globals.hh"
 
+#include "G4SceneTreeItem.hh"
+
 #include "G4ViewParameters.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4PseudoScene.hh"
+
+#include <vector>
+#include <list>
 
 class G4VSceneHandler;
 
@@ -132,6 +138,57 @@ public: // With description
 #endif
 
   //////////////////////////////////////////////////////////////
+  // Stuff for scene tree.
+  /**
+   - The scene tree is a tree of G4SceneTreeItem objects (see graphics-reps).
+   - Its root is a data member fSceneTree of all viewers by virtue of
+   G4VViewer inheritance,
+   - G4SceneTreeItem is an aggregate of data members that represent
+   properties of objects in the scene (G4Scene). Its data members are
+   low-level types - G4String, G4VisAttributes and G4AttDef/Value - so
+   that it can be used across categories, avoiding coupling.
+   - The root item has children that represent the models (G4VModel
+   sub-classes) in the scene.
+   - For a G4PhysicalVolumeModel (detector components), its children and
+   children's children, etc., imitate the geometry hierarchy of that
+   model. These descendants are called "touchables".
+   - There may be more than one G4PhysicalVolumeModel, depending how
+   the user creates his/her scene.
+   - The scene tree is reviewed, and updated if necessary, at every pass
+   of G4VSceneHandler::ProcessScene.  This is called a "kernel visit".
+   - A kernel visit is triggered by some vis commands (e.g.,
+   /vis/viewer/rebuild) and by a viewer if it deems necessary. For
+   example, a kernel visit may not be required for a rotation, zoom, etc.,
+   but required for a change from surface to wireframe.
+   - The idea is that the scene tree can be passed to a GUI, the GUI can
+   create a tree widget, and interactions with it raise UI commands such as
+   /vis/scene/activateModel, /vis/set/touchable and /vis/touchable/set/...
+   The viewer decides if this requires a kernel visit, otherwise it
+   must update fSceneTree itself (utilities are provided -
+   G4VViewer::TouchableSetVisibility/Colour).
+  */
+  class SceneTreeScene: public G4PseudoScene {
+    // G4PhysicalVolumeModel sends touchables to this scene
+  public:
+    SceneTreeScene() = default;
+    ~SceneTreeScene() = default;
+    void SetViewer(G4VViewer* pViewer) {fpViewer = pViewer;}
+    void SetModel(G4VModel* pModel);
+  private:
+    void ProcessVolume(const G4VSolid& solid) override;
+    std::list<G4SceneTreeItem>::iterator FindOrInsertModel
+    (const G4String& modelType,const G4String& modelID);
+    std::list<G4SceneTreeItem>::iterator FindOrInsertTouchable
+    (const G4String& modelID, G4SceneTreeItem& mother,
+     G4int depth, const G4String& partialPathString, const G4String& fullPathString);
+    G4VViewer* fpViewer = nullptr;
+    G4VModel* fpModel = nullptr;
+  };
+  SceneTreeScene& AccessSceneTreeScene() {return fSceneTreeScene;}
+  G4SceneTreeItem& AccessSceneTree() {return fSceneTree;}
+  void UpdateGUISceneTree();  // A utility
+
+  //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&         GetName           () const;
   const G4String&         GetShortName      () const;
@@ -221,6 +278,8 @@ protected:
   G4ViewParameters fDefaultVP; // Default view parameters.
   G4double         fKernelVisitElapsedTimeSeconds = 999.;  // Default to a large number
   // Note: fKernelVisitElapsedTimeSeconds is measured in ProcessView().
+  SceneTreeScene   fSceneTreeScene;  // G4PhysicalVolumeModel sends touchables to this scene
+  G4SceneTreeItem  fSceneTree;
 
   //////////////////////////////////////////////////////////////
   // Other parameters.

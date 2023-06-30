@@ -62,12 +62,14 @@
 #include "G4HelixHeum.hh"
 #include "G4BFieldIntegrationDriver.hh"
 
+#include "G4QSSDriverCreator.hh"
+
 #include "G4CachedMagneticField.hh"
 
 #include <cassert>
+#include <memory>
 
-static G4bool gVerboseCtor = false; // true;
-
+G4bool G4ChordFinder::gVerboseCtor = false;
 // ..........................................................................
 
 G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
@@ -75,11 +77,12 @@ G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
 {
   // Simple constructor -- it does not create equation
   if( gVerboseCtor )
+  {
     G4cout << "G4ChordFinder: Simple constructor -- it uses pre-existing driver." << G4endl;
+  }
    
   fDeltaChord = fDefaultDeltaChord;       // Parameters
 }
-
 
 // ..........................................................................
 
@@ -95,13 +98,20 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   
   fDeltaChord = fDefaultDeltaChord;       // Parameters
 
-  // stepperDriverId = 2;
-  
-  G4bool useFSALstepper=      (stepperDriverId == 1);
-  G4bool useTemplatedStepper= (stepperDriverId == 2);
-  G4bool useRegularStepper  = (stepperDriverId == 3);
-  // G4bool useBFieldDriver    = !useRegularStepper && !useFSALstepper && !useTemplatedStepper;
-  
+  G4cout << " G4ChordFinder: stepperDriverId: " << stepperDriverId  << G4endl;
+
+  G4bool useFSALstepper=      (stepperDriverId == kFSALStepperType);       // Was 1
+  G4bool useTemplatedStepper= (stepperDriverId == kTemplatedStepperType);  // Was 2 
+  G4bool useRegularStepper  = (stepperDriverId == kRegularStepperType);    // Was 3
+  G4bool useBfieldDriver    = (stepperDriverId == kBfieldDriverType);      // Was 4 
+  G4bool useG4QSSDriver       = (stepperDriverId == kQss2DriverType) || (stepperDriverId == kQss3DriverType);
+
+  // --- REINSTATE after QSS testing -- to impose DEFAULT 
+  // G4bool useDefault= (stepperDriverId == kDefaultDriverType )
+  //   || ( !useRegularStepper && !useFSALstepper && !useTemplatedStepper && !useG4QSSDriver );
+  //
+  // useBfieldDriver |= useDefault; // Was default in release 10.6, used for 'unknown' since 10.7
+
   // G4bool useRegularStepper  = !stepperDriverId != 3) && !useFSALStepper && !useTemplatedStepper;
   // If it's not 0, 1 or 2 then 'BFieldDriver' which combines DoPri5 (short) and helix is used.
   
@@ -150,7 +160,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
   // useHigherStepper = forceHigherEffiencyStepper || useHigherStepper;
 
-  EquationType* pEquation = new G4Mag_UsualEqRhs(theMagField);
+  auto  pEquation = new G4Mag_UsualEqRhs(theMagField);
   fEquation = pEquation;                            
 
   // G4MagIntegratorStepper* regularStepper = nullptr;
@@ -164,13 +174,28 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   if( pItsStepper != nullptr )
   {
      if( gVerboseCtor )
+     {
        G4cout << " G4ChordFinder: Creating G4IntegrationDriver<G4MagIntegratorStepper> with "
               << " stepMinimum = " << stepMinimum
               << " numVar= " << pItsStepper->GetNumberOfVariables() << G4endl;
-     // Stepper type is not known - so must use base class G4MagIntegratorStepper
-     fIntgrDriver = new G4IntegrationDriver<G4MagIntegratorStepper>(
-        stepMinimum, pItsStepper, pItsStepper->GetNumberOfVariables());
+     }
 
+     // Stepper type is not known - so must use base class G4MagIntegratorStepper
+      if(pItsStepper->isQSS())
+      {
+         // fIntgrDriver = pItsStepper->build_driver(stepMinimum, true);
+         G4Exception("G4ChordFinder::G4ChordFinder()",
+                      "GeomField1001", FatalException,
+                      "Cannot provide  QSS stepper in constructor. User c-tor with Driver instead.");
+      }
+      else
+      {
+         fIntgrDriver = new G4IntegrationDriver<G4MagIntegratorStepper>( stepMinimum,
+                                  pItsStepper, pItsStepper->GetNumberOfVariables() );
+         // Stepper type is not known - so must use base class G4MagIntegratorStepper      
+         // Non-interpolating driver used by default.
+         // WAS:  fIntgrDriver = pItsStepper->build_driver(stepMinimum);  // QSS introduction -- axed
+      }
      // -- Older:
      // G4cout << " G4ChordFinder: Creating G4MagInt_Driver with " ...
      // Type is not known - so must use old class     
@@ -180,8 +205,10 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   else if ( useTemplatedStepper )
   {
      if( gVerboseCtor )
+     {
         G4cout << " G4ChordFinder: Creating Templated Stepper of type> "
                << TemplatedStepperName << G4endl;
+     }
      // RegularStepperType* regularStepper = nullptr; // To check the exception
      auto templatedStepper = new TemplatedStepperType(pEquation);
      //                    *** ******************
@@ -201,7 +228,9 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
         fIntgrDriver = new G4IntegrationDriver<TemplatedStepperType>(
            stepMinimum, templatedStepper, nVar6 );
         if( gVerboseCtor )
+        {
            G4cout << " G4ChordFinder: Using G4IntegrationDriver. " << G4endl;
+        }
      }
      
   }
@@ -212,7 +241,9 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      fRegularStepperOwned = regularStepper;
 
      if( gVerboseCtor )
+     {
         G4cout << " G4ChordFinder: Creating Driver for regular stepper.";
+     }
      
      if( regularStepper == nullptr )
      {
@@ -224,20 +255,27 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      else
      {
         auto dp5= dynamic_cast<G4DormandPrince745*>(regularStepper);
-        if( dp5 ) {
+        if( dp5 != nullptr )
+        {
            fIntgrDriver = new G4InterpolationDriver<G4DormandPrince745>(
                                   stepMinimum, dp5, nVar6 );           
            if( gVerboseCtor )
+           {
               G4cout << " Using InterpolationDriver<DoPri5> " << G4endl;
-        } else {
+           }
+        }
+        else
+        {
            fIntgrDriver = new G4IntegrationDriver<RegularStepperType>(
                                   stepMinimum, regularStepper, nVar6 );
            if( gVerboseCtor )
+           {
               G4cout << " Using IntegrationDriver<DoPri5> " << G4endl;
+           }
         }
      }
   }
-  else if ( !useFSALstepper )
+  else if ( useBfieldDriver )
   {
      auto regularStepper = new G4DormandPrince745(pEquation);
      //                    *** ******************
@@ -248,13 +286,13 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
         using SmallStepDriver = G4InterpolationDriver<G4DormandPrince745>;
         using LargeStepDriver = G4IntegrationDriver<G4HelixHeum>;
 
-        fLongStepper = std::unique_ptr<G4HelixHeum>(new G4HelixHeum(pEquation));
+        fLongStepper = std::make_unique<G4HelixHeum>(pEquation);
         
         fIntgrDriver = new G4BFieldIntegrationDriver(
-          std::unique_ptr<SmallStepDriver>(new SmallStepDriver(stepMinimum,
-              regularStepper, regularStepper->GetNumberOfVariables())),
-          std::unique_ptr<LargeStepDriver>(new LargeStepDriver(stepMinimum,
-              fLongStepper.get(), regularStepper->GetNumberOfVariables())) );
+          std::make_unique<SmallStepDriver>(stepMinimum,
+              regularStepper, regularStepper->GetNumberOfVariables()),
+          std::make_unique<LargeStepDriver>(stepMinimum,
+              fLongStepper.get(), regularStepper->GetNumberOfVariables()) );
         
         if( fIntgrDriver == nullptr)
         {        
@@ -264,6 +302,31 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
            G4Exception("G4ChordFinder::G4ChordFinder()",
                        "GeomField1001", JustWarning, message);
         }
+     }
+  }
+  else if( useG4QSSDriver )
+  {
+     if( stepperDriverId == kQss2DriverType )
+     {
+       auto qssStepper2 = G4QSSDriverCreator::CreateQss2Stepper(pEquation);
+       if( gVerboseCtor )
+       {
+         G4cout << "-- Created QSS-2 stepper" << G4endl;
+       }
+       fIntgrDriver = G4QSSDriverCreator::CreateDriver(qssStepper2);
+     }
+     else
+     {
+       auto qssStepper3 = G4QSSDriverCreator::CreateQss3Stepper(pEquation);
+       if( gVerboseCtor )
+       {
+         G4cout << "-- Created QSS-3 stepper" << G4endl;
+       }
+       fIntgrDriver = G4QSSDriverCreator::CreateDriver(qssStepper3);        
+     }
+     if( gVerboseCtor )
+     {
+       G4cout << "-- G4ChordFinder: Using QSS Driver." << G4endl;
      }
   }
   else
@@ -345,10 +408,10 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   assert(    ( pItsStepper != nullptr ) 
           || ( fRegularStepperOwned != nullptr )
           || ( fNewFSALStepperOwned != nullptr )
+          || useG4QSSDriver
      );
   assert( fIntgrDriver != nullptr );
 }
-
 
 // ......................................................................
 

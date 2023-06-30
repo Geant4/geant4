@@ -57,7 +57,7 @@ G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() - 1;
-  G4int daughterA = theParentNucleus->GetAtomicMass(); 
+  G4int daughterA = theParentNucleus->GetAtomicMass();
   SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetUpBetaSpectrumSampler(daughterZ, daughterA, betaType);
   SetDaughter(1, "e+");
@@ -67,7 +67,7 @@ G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
 
 G4BetaPlusDecay::~G4BetaPlusDecay()
 {
-  delete spectrumSampler;
+  delete betaSampler;
 }
 
 
@@ -88,9 +88,9 @@ G4DecayProducts* G4BetaPlusDecay::DecayIt(G4double)
   G4DynamicParticle parentParticle(G4MT_parent, G4ThreeVector(0,0,0), 0.0);
   G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
-  if (spectrumSampler) {
+  if (betaSampler) {
     // Generate positron isotropic in angle, with energy from stored spectrum
-    G4double eKE = endpointEnergy*spectrumSampler->shoot(G4Random::getTheEngine() );
+    G4double eKE = endpointEnergy*betaSampler->shoot();
     G4double eMomentum = std::sqrt(eKE*(eKE + 2.*eMass) );
 
     G4double cosTheta = 2.*G4UniformRand() - 1.0;
@@ -164,31 +164,32 @@ G4BetaPlusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
 {
   G4double e0 = endpointEnergy/CLHEP::electron_mass_c2;
   G4BetaDecayCorrections corrections(-daughterZ, daughterA);
-  spectrumSampler = 0;
+  betaSampler = 0;
 
   // Check for cases in which Q < 2Me (e.g. z67.a162) 
   if (e0 > 0.) {
     // Array to store spectrum pdf
-    G4int npti = 100;
+    G4int npti = 101;
     G4double* pdf = new G4double[npti];
 
-    G4double e;  // Total positron energy in units of electron mass
-    G4double p;  // Positron momentum in units of electron mass
-    G4double f;  // Spectral shap function
-    for (G4int ptn = 0; ptn < npti; ptn++) {
-      // Calculate simple phase space
-      e = 1. + e0*(ptn + 0.5)/G4double(npti);
-      p = std::sqrt(e*e - 1.);
-      f = p*e*(e0 - e + 1.)*(e0 - e + 1.);
+    G4double ex;
+    G4double p;   // Positron momentum in units of electron mass
+    G4double f;   // Spectral shape function
+
+    for (G4int i = 0; i < npti; i++) {
+      ex = e0*std::max(1.e-6, G4double(i)/G4double(npti-1) );
+      p = std::sqrt(ex*(ex+2.) );
+      f = p*(1. + ex)*(e0 - ex)*(e0 - ex);
 
       // Apply Fermi factor to get allowed shape
-      f *= corrections.FermiFunction(e);
+      f *= corrections.FermiFunction(1. + ex);
 
       // Apply shape factor for forbidden transitions
-      f *= corrections.ShapeFactor(betaType, p, e0-e+1.);
-      pdf[ptn] = f;
+      f *= corrections.ShapeFactor(betaType, p, e0-ex);
+      pdf[i] = f;
     }
-    spectrumSampler = new G4RandGeneral(pdf, npti);
+    betaSampler = new G4BetaSpectrumSampler(pdf, npti, e0);
+
     delete[] pdf;
   }
 }

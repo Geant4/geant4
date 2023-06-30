@@ -54,7 +54,7 @@ G4ThreadLocal G4bool G4PhysicalVolumeStore::locked = false;
 // ***************************************************************************
 //
 G4PhysicalVolumeStore::G4PhysicalVolumeStore()
-  : std::vector<G4VPhysicalVolume*>()
+   
 {
   reserve(100);
 }
@@ -159,7 +159,7 @@ void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
     std::vector<G4VPhysicalVolume*> vol_vec { pVolume };
     store->bmap.insert(std::make_pair(vol_name, vol_vec));
   }
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
   store->mvalid = true;
 }
 

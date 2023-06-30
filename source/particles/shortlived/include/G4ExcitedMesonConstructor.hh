@@ -52,7 +52,7 @@ class G4ExcitedMesonConstructor
 
   public:
     G4ExcitedMesonConstructor(G4int nStates = 0, G4int isoSpin=0);
-    virtual  ~G4ExcitedMesonConstructor();
+    virtual  ~G4ExcitedMesonConstructor() = default;
   
   public:
     virtual  void Construct(G4int indexOfState = -1);
@@ -81,8 +81,8 @@ class G4ExcitedMesonConstructor
 
   protected:    
     const G4String type;
-    const G4int    leptonNumber;
-    const G4int    baryonNumber;
+    const G4int    leptonNumber{0};
+    const G4int    baryonNumber{0};
 
     G4bool Exist(G4int idxState, G4int idxType);
     G4double GetCharge(G4int iIsoSpin3, G4int idxType);

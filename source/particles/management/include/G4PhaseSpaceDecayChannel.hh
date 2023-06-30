@@ -56,7 +56,7 @@ class G4PhaseSpaceDecayChannel : public G4VDecayChannel
                              const G4String& theDaughterName5 = "" );
       // Constructors 
 
-    virtual ~G4PhaseSpaceDecayChannel();
+    ~G4PhaseSpaceDecayChannel() override = default;
       // Destructor
 
     G4bool SetDaughterMasses( G4double masses[]);
@@ -65,8 +65,8 @@ class G4PhaseSpaceDecayChannel : public G4VDecayChannel
   
     G4bool SampleDaughterMasses();
 
-    virtual G4DecayProducts* DecayIt(G4double);   
-    G4bool IsOKWithParentMass(G4double parentMass);
+    G4DecayProducts* DecayIt(G4double) override;   
+    G4bool IsOKWithParentMass(G4double parentMass) override;
 
     static G4double Pmx(G4double e, G4double p1, G4double p2);
  

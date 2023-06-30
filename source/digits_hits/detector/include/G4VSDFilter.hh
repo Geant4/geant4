@@ -39,20 +39,16 @@ class G4Step;
 
 class G4VSDFilter
 {
- public:  // with description
-  G4VSDFilter(G4String name);
-
  public:
+  G4VSDFilter(G4String name);
   virtual ~G4VSDFilter();
 
- public:  // with description
   virtual G4bool Accept(const G4Step*) const = 0;
+
+  inline G4String GetName() const { return filterName; }
 
  protected:
   G4String filterName;
-
- public:
-  inline G4String GetName() const { return filterName; }
 };
 
 #endif

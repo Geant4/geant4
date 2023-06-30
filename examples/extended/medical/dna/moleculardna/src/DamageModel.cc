@@ -40,48 +40,68 @@ DamageModel::DamageModel()
 
 G4bool DamageModel::IsDirectStrandBreak(const G4double& d) const
 {
-  if(d < fDirectDmgLower){
-    return false;
+  G4bool bool_val = false;
+  if(d < fDirectDmgLower)
+  {
+    bool_val = false;
   }
-  else if(d >= fDirectDmgUpper){
-    return true;
+  else if(d >= fDirectDmgUpper)
+  {
+    bool_val = true;
   }
-  else {
-    return (G4UniformRand() <
-            ((d - fDirectDmgLower) / (fDirectDmgUpper - fDirectDmgLower)));
+  else 
+  {
+    bool_val = (G4UniformRand() < ((d - fDirectDmgLower) / (fDirectDmgUpper - fDirectDmgLower)));
   }
+  return bool_val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool DamageModel::IsIndirectBaseDamage(
-    const G4MolecularConfiguration* mol) const
+G4bool DamageModel::IsIndirectBaseDamage(const G4MolecularConfiguration* mol) const
 {
-  if(mol->GetDefinition() == fOH){
-    return G4UniformRand() < fBaseOH;
-  }else if(mol->GetDefinition() == fH){
-    return G4UniformRand() < fBaseH;
-  }else if(mol->GetDefinition() == fe_aq){
-    return G4UniformRand() < fBaseEaq;
-  }else{
-    return false;
+  G4bool bool_val = false;
+  if(mol->GetDefinition() == fOH)
+  {
+    bool_val = (G4UniformRand() < fBaseOH); 
   }
+  else if(mol->GetDefinition() == fH)
+  {
+    bool_val = (G4UniformRand() < fBaseH);
+  }
+  else if(mol->GetDefinition() == fe_aq)
+  {
+    bool_val = (G4UniformRand() < fBaseEaq);
+  }
+  else
+  {
+    bool_val = false;
+  }
+  return bool_val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool DamageModel::IsIndirectStrandDamage(
-    const G4MolecularConfiguration* mol) const
+G4bool DamageModel::IsIndirectStrandDamage(const G4MolecularConfiguration* mol) const
 {
-  if(mol->GetDefinition() == fOH){
-    return G4UniformRand() < fStrandOH;
-  }else if(mol->GetDefinition() == G4Hydrogen::Definition()){
-    return G4UniformRand() < fStrandH;
-  }else if(mol->GetDefinition() == G4Electron_aq::Definition()){
-    return G4UniformRand() < fStrandEaq;
-  }else{
-    return false;
+  G4bool bool_val = false;
+  if(mol->GetDefinition() == fOH)
+  {
+    bool_val = (G4UniformRand() < fStrandOH);
   }
+  else if(mol->GetDefinition() == G4Hydrogen::Definition())
+  {
+    bool_val = (G4UniformRand() < fStrandH);
+  }
+  else if(mol->GetDefinition() == G4Electron_aq::Definition())
+  {
+    bool_val = (G4UniformRand() < fStrandEaq);
+  }
+  else
+  {
+    bool_val = false;
+  }
+  return bool_val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,15 +109,24 @@ G4bool DamageModel::IsIndirectStrandDamage(
 G4bool DamageModel::IsInducedStrandBreak(
     const G4MolecularConfiguration* mol) const
 {
-  if(mol->GetDefinition() == fOH){
-    return G4UniformRand() < fInductionOH;
-  }else if(mol->GetDefinition() == G4Hydrogen::Definition()){
-    return G4UniformRand() < fInductionH;
-  }else if(mol->GetDefinition() == G4Electron_aq::Definition()){
-    return G4UniformRand() < fInductionEaq;
-  }else{
-    return false;
+  G4bool bool_val = false;
+  if(mol->GetDefinition() == fOH)
+  {
+    bool_val = (G4UniformRand() < fInductionOH);
   }
+  else if(mol->GetDefinition() == G4Hydrogen::Definition())
+  {
+    bool_val = (G4UniformRand() < fInductionH);
+  }
+  else if(mol->GetDefinition() == G4Electron_aq::Definition())
+  {
+    bool_val = (G4UniformRand() < fInductionEaq);
+  }
+  else
+  {
+    bool_val = false;
+  }
+  return bool_val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

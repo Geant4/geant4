@@ -50,6 +50,7 @@
 #define G4VGLOBALFASTSIMULATIONMANAGER_HH 1
 
 #include "G4Types.hh"
+
 #include "icomsdefs.hh"
 
 class G4VFlavoredParallelWorld;
@@ -58,25 +59,22 @@ class G4ParticleDefinition;
 class G4VGlobalFastSimulationManager
 {
   public:
-
+    // Returns pointer to the actual Global Fast Simulation manager if
+    // at least a parameterisation envelope exists
     static G4VGlobalFastSimulationManager* GetConcreteInstance();
-      // Returns pointer to the actual Global Fast Simulation manager if
-      // at least a parameterisation envelope exists
 
     virtual ~G4VGlobalFastSimulationManager() = default;
 
-    virtual G4VFlavoredParallelWorld* GetFlavoredWorldForThis(
-                                                     G4ParticleDefinition*) = 0;
-      // VGlobalFastSimulationManager interface for visualisation
+    // VGlobalFastSimulationManager interface for visualisation
+    virtual G4VFlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition*) = 0;
 
   protected:
-
+    // Sets the pointer to the actual Global Fast Simulation manager
     static void SetConcreteInstance(G4VGlobalFastSimulationManager*);
-      // Sets the pointer to the actual Global Fast Simulation manager
 
+    // Pointer to real G4GlobalFastSimulationManager
     G4ICOMS_DLL
     static G4ThreadLocal G4VGlobalFastSimulationManager* fpConcreteInstance;
-      // Pointer to real G4GlobalFastSimulationManager
 };
 
 #endif

@@ -35,22 +35,10 @@
 // ######################################################################
 
 #include "G4IsotopeProperty.hh"
-#include "G4VIsotopeTable.hh"
-
-// --------------------------------------------------------------------
-G4VIsotopeTable::G4VIsotopeTable()
-{
-}
 
 // --------------------------------------------------------------------
 G4VIsotopeTable::G4VIsotopeTable(const G4String& name)
   : fName(name)
-{
-}
-
-// --------------------------------------------------------------------
-G4VIsotopeTable::G4VIsotopeTable(const G4VIsotopeTable& right)
-  : fName(right.fName), verboseLevel(right.verboseLevel)
 {
 }
 
@@ -66,17 +54,12 @@ G4VIsotopeTable& G4VIsotopeTable::operator=(const G4VIsotopeTable& right)
 }
 
 // --------------------------------------------------------------------
-G4VIsotopeTable::~G4VIsotopeTable()
-{
-}
-
-// --------------------------------------------------------------------
 G4IsotopeProperty*
 G4VIsotopeTable::GetIsotopeByIsoLvl(G4int Z, G4int A, G4int level)
 {
   // temporal implementation
   if (level==0) return GetIsotope(Z, A, 0.0);
-  else          return nullptr;
+           return nullptr;
 }
 
 // --------------------------------------------------------------------

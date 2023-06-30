@@ -43,36 +43,13 @@ using namespace std;
 
 G4DNADingfelderChargeIncreaseModel::G4DNADingfelderChargeIncreaseModel(const G4ParticleDefinition*,
                                                                        const G4String& nam) :
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam)
 {
-  fpMolWaterDensity = 0;
-
-  numberOfPartialCrossSections[0] = 0;
-  numberOfPartialCrossSections[1] = 0;
-
-  verboseLevel = 0;
-  // Verbosity scale:
-  // 0 = nothing
-  // 1 = warning for energy non-conservation
-  // 2 = details of energy budget
-  // 3 = calculation of cross sections, file openings, sampling of atoms
-  // 4 = entering in methods
-
   if (verboseLevel > 0)
   {
     G4cout << "Dingfelder charge increase model is constructed " << G4endl;
   }
-  fParticleChangeForGamma = 0;
-
-  // Selection of stationary mode
-
-  statCode = false;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4DNADingfelderChargeIncreaseModel::~G4DNADingfelderChargeIncreaseModel()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -340,7 +317,7 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<
         FatalException,"Final kinetic energy is negative.");
   }
 
-  G4DynamicParticle* dp = new G4DynamicParticle(OutgoingParticleDefinition(definition,finalStateIndex),
+  auto dp = new G4DynamicParticle(OutgoingParticleDefinition(definition,finalStateIndex),
       aDynamicParticle->GetMomentumDirection(),
       outK);
 
@@ -432,8 +409,8 @@ G4double G4DNADingfelderChargeIncreaseModel::IncomingParticleBindingEnergyConsta
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(G4double k,
-                                                                 G4int index,
+G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(const G4double& k,
+                                                                 const G4int& index,
                                                                  const G4ParticleDefinition* particleDefinition)
 {
   G4int particleTypeIndex = 0;
@@ -507,7 +484,7 @@ G4double G4DNADingfelderChargeIncreaseModel::PartialCrossSection(G4double k,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4DNADingfelderChargeIncreaseModel::RandomSelect(G4double k,
+G4int G4DNADingfelderChargeIncreaseModel::RandomSelect(const G4double& k,
                                                        const G4ParticleDefinition* particleDefinition)
 {
   G4int particleTypeIndex = 0;
@@ -522,7 +499,7 @@ G4int G4DNADingfelderChargeIncreaseModel::RandomSelect(G4double k,
     particleTypeIndex = 1;
 
   const G4int n = numberOfPartialCrossSections[particleTypeIndex];
-  G4double* values(new G4double[n]);
+  auto values(new G4double[n]);
   G4double value = 0;
   G4int i = n;
 
@@ -553,7 +530,7 @@ G4int G4DNADingfelderChargeIncreaseModel::RandomSelect(G4double k,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNADingfelderChargeIncreaseModel::Sum(G4double k,
+G4double G4DNADingfelderChargeIncreaseModel::Sum(const G4double& k,
                                                  const G4ParticleDefinition* particleDefinition)
 {
   G4int particleTypeIndex = 0;

@@ -29,4 +29,4 @@
 #include "G4ParticleHPContEnergyAngular.hh"
 using G4NeutronHPContEnergyAngular = G4ParticleHPContEnergyAngular;
 
-#endif 
+#endif

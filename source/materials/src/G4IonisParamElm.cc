@@ -22,28 +22,22 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-//
+
 // 09-07-98, data moved from G4Element. M.Maire
-// 22-11-00, tabulation of ionisation potential from 
+// 22-11-00, tabulation of ionisation potential from
 //           the ICRU Report N#37. V.Ivanchenko
 // 08-03-01, correct handling of fShellCorrectionVector. M.Maire
 // 17-10-02, Fix excitation energy interpolation. V.Ivanchenko
-// 06-09-04, Update calculated values after any change of ionisation 
+// 06-09-04, Update calculated values after any change of ionisation
 //           potential change. V.Ivanchenko
 // 29-04-10, Using G4Pow and mean ionisation energy from NIST V.Ivanchenko
 // 27.10.11: new scheme for G4Exception  (mma)
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4IonisParamElm.hh"
+
 #include "G4NistManager.hh"
-#include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Pow.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -52,19 +46,18 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 {
   G4int Z = G4lrint(AtomNumber);
   if (Z < 1) {
-    G4Exception("G4IonisParamElm::G4IonisParamElm()",  "mat501", FatalException,
-                "It is not allowed to create an Element with Z<1");
+    G4Exception("G4IonisParamElm::G4IonisParamElm()", "mat501", FatalException,
+      "It is not allowed to create an Element with Z<1");
   }
   G4Pow* g4pow = G4Pow::GetInstance();
 
   // some basic functions of the atomic number
-  fZ     = Z;
-  fZ3    = g4pow->Z13(Z);
-  fZZ3   = fZ3*g4pow->Z13(Z+1);
-  flogZ3 = g4pow->logZ(Z)/3.;
-   
-  fMeanExcitationEnergy = 
-    G4NistManager::Instance()->GetMeanIonisationEnergy(Z);
+  fZ = Z;
+  fZ3 = g4pow->Z13(Z);
+  fZZ3 = fZ3 * g4pow->Z13(Z + 1);
+  flogZ3 = g4pow->logZ(Z) / 3.;
+
+  fMeanExcitationEnergy = G4NistManager::Instance()->GetMeanIonisationEnergy(Z);
 
   // compute parameters for ion transport
   // The aproximation from:
@@ -74,8 +67,11 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
   // Fast ions or hadrons
 
   G4int iz = Z - 1;
-  if(91 < iz) { iz = 91; }
+  if (91 < iz) {
+    iz = 91;
+  }
 
+  // clang-format off
   static const G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
     0.45259, 0.71074, 0.90519, 0.97411, 0.97184, 0.89852, 0.70827, 0.39816, 0.36552, 0.62712,
@@ -99,53 +95,35 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
     1.08, 1.08, 1.09, 1.09, 1.1,  1.11, 1.12, 1.13, 1.14, 1.15,
     1.17, 1.2,  1.18, 1.17, 1.17, 1.16, 1.16, 1.16, 1.16, 1.16,
     1.16, 1.16} ;
+  // clang-format on
 
-  fVFermi  = vFermi[iz];
+  fVFermi = vFermi[iz];
   fLFactor = lFactor[iz];
 
   // obsolete parameters for ionisation
-  fTau0 = 0.1*fZ3*MeV/proton_mass_c2;
-  fTaul = 2.*MeV/proton_mass_c2;
+  fTau0 = 0.1 * fZ3 * MeV / proton_mass_c2;
+  fTaul = 2. * MeV / proton_mass_c2;
 
   // compute the Bethe-Bloch formula for energy = fTaul*particle mass
-  G4double rate = fMeanExcitationEnergy/electron_mass_c2 ;
-  G4double w = fTaul*(fTaul+2.) ;
-  fBetheBlochLow = (fTaul+1.)*(fTaul+1.)*std::log(2.*w/rate)/w - 1. ;
-  fBetheBlochLow = 2.*fZ*twopi_mc2_rcl2*fBetheBlochLow ; 
-  
-  fClow = std::sqrt(fTaul)*fBetheBlochLow;
-  fAlow = 6.458040 * fClow/fTau0;
-  G4double Taum = 0.035*fZ3*MeV/proton_mass_c2;
-  fBlow =-3.229020*fClow/(fTau0*std::sqrt(Taum));
+  G4double rate = fMeanExcitationEnergy / electron_mass_c2;
+  G4double w = fTaul * (fTaul + 2.);
+  fBetheBlochLow = (fTaul + 1.) * (fTaul + 1.) * std::log(2. * w / rate) / w - 1.;
+  fBetheBlochLow = 2. * fZ * twopi_mc2_rcl2 * fBetheBlochLow;
+
+  fClow = std::sqrt(fTaul) * fBetheBlochLow;
+  fAlow = 6.458040 * fClow / fTau0;
+  G4double Taum = 0.035 * fZ3 * MeV / proton_mass_c2;
+  fBlow = -3.229020 * fClow / (fTau0 * std::sqrt(Taum));
 
   // Shell correction parameterization
-  fShellCorrectionVector = new G4double[3]; //[3]
-  rate = 0.001*fMeanExcitationEnergy/eV;
-  G4double rate2 = rate*rate;
-    /*    
-    fShellCorrectionVector[0] = ( 1.10289e5 + 5.14781e8*rate)*rate2 ;
-    fShellCorrectionVector[1] = ( 7.93805e3 - 2.22565e7*rate)*rate2 ;
-    fShellCorrectionVector[2] = (-9.92256e1 + 2.10823e5*rate)*rate2 ;
-    */
-  fShellCorrectionVector[0] = ( 0.422377   + 3.858019*rate)*rate2 ;
-  fShellCorrectionVector[1] = ( 0.0304043  - 0.1667989*rate)*rate2 ;
-  fShellCorrectionVector[2] = (-0.00038106 + 0.00157955*rate)*rate2 ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency
-
-G4IonisParamElm::G4IonisParamElm(__void__&)
-  : fShellCorrectionVector(nullptr)
-{
-  fZ=fZ3=fZZ3=flogZ3=fTau0=fTaul=fBetheBlochLow=fAlow=fBlow=fClow
-    =fMeanExcitationEnergy=fVFermi=fLFactor=0.0;
+  fShellCorrectionVector = new G4double[3];  //[3]
+  rate = 0.001 * fMeanExcitationEnergy / eV;
+  G4double rate2 = rate * rate;
+  fShellCorrectionVector[0] = (0.422377 + 3.858019 * rate) * rate2;
+  fShellCorrectionVector[1] = (0.0304043 - 0.1667989 * rate) * rate2;
+  fShellCorrectionVector[2] = (-0.00038106 + 0.00157955 * rate) * rate2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm::~G4IonisParamElm() { delete[] fShellCorrectionVector; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

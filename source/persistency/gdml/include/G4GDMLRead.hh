@@ -131,6 +131,11 @@ class G4GDMLRead
     //
     // Strip off pointers from entity IDs.
 
+    const G4String& GetSchemaFile() const;
+    void SetSchemaFile(const G4String& schemaFile);
+    //
+    // Set/Get alternative XML schema path/file for parsing validation.
+
     void OverlapCheck(G4bool);
     //
     // Activate/de-activate surface check for overlaps (default is off).
@@ -157,6 +162,7 @@ class G4GDMLRead
     G4bool validate = true;
     G4bool check = false;
     G4bool dostrip = true;
+    G4String schema = "";
 
   private:
 

@@ -230,11 +230,11 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
   G4int HadronEncoding = aPart->GetPDGEncoding();
   if (aPart->GetBaryonNumber() == 0)
   {
-    theMesonSplitter.SplitMeson(HadronEncoding, &aEnd, &bEnd);
+    theMesonSplitter.SplitMeson(HadronEncoding, aEnd, bEnd);
   }
   else
   {
-    theBaryonSplitter.SplitBarion(HadronEncoding, &aEnd, &bEnd);
+    theBaryonSplitter.SplitBarion(HadronEncoding, aEnd, bEnd);
   }
 
   Parton1 = new G4Parton(aEnd);

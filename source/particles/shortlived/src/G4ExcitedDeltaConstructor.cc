@@ -50,10 +50,6 @@ G4ExcitedDeltaConstructor::G4ExcitedDeltaConstructor():
 
 }
 
-G4ExcitedDeltaConstructor::~G4ExcitedDeltaConstructor()
-{
-}
-
 G4int G4ExcitedDeltaConstructor::GetEncoding(G4int iIsoSpin3, G4int idxState)
 {
   G4int encoding;
@@ -89,7 +85,7 @@ G4DecayTable* G4ExcitedDeltaConstructor::CreateDecayTable(
 						 G4bool fAnti)
 {
   // create decay table
-  G4DecayTable* decayTable =  new G4DecayTable();
+  auto  decayTable =  new G4DecayTable();
 
   G4double br;
   if ( (br=bRatio[iState][NGamma]) >0.0) {

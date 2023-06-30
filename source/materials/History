@@ -6,7 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2022-12-09 Vladimir Ivanchenko (materials-V11-00-20)
+## 2023-02-09 Ben Morgan (materials-V11-01-02)
+- Housekeeping: apply standard and extended clang-tidy fixes, normal order access specifiers
+  and docstrings, apply clang-format.
+
+## 2022-12-12 Ben Morgan (materials-V11-01-01)
+- Remove obsolete GNUmakefile scripts
+
+## 2022-12-09 Vladimir Ivanchenko (materials-V11-01-00)
 - G4Material - allowed recursive search for based material (fix problem #2520)
 
 ## 2022-11-16 Gabriele Cosmo (materials-V11-00-19)

@@ -45,9 +45,11 @@
 #include "G4INCLHFB.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLGlobals.hh"
-#include "G4Threading.hh"
 #include <algorithm>
 #include <istream>
+#ifdef INCLXX_IN_GEANT4_MODE
+ #include "G4Threading.hh"
+#endif
 
 namespace G4INCL {
 

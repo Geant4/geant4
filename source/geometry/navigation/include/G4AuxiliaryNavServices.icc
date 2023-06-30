@@ -41,7 +41,7 @@ CheckPointOnSurface( const G4VSolid* sampleSolid,
   EInside insideSolid = sampleSolid->Inside(localPoint); 
   if ( insideSolid!=kOutside ) 
   {
-    G4bool checkDirection = locatedOnEdge && (globalDirection!=0);
+    G4bool checkDirection = locatedOnEdge && (globalDirection!=nullptr);
     if( (insideSolid==kSurface) && checkDirection)
     {
       // We are probably located on an edge.
@@ -109,7 +109,7 @@ CheckPointExiting( const G4VSolid* sampleSolid,
                    const G4ThreeVector* globalDirection, 
                    const G4AffineTransform& sampleTransform )
 {
-  if( !globalDirection )  { return false; }
+  if( globalDirection == nullptr )  { return false; }
 
   G4ThreeVector localDirection, sampleNormal;
   G4bool exiting = false;

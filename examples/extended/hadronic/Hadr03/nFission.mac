@@ -1,5 +1,5 @@
 #
-# Macro file for "Hadr03.cc"
+# Macro for "Hadr03.cc"
 #
 # NB. for neutronHP, do not forget to activate the fission fragment model
 #     via one, and only one, of the following two UI commands:
@@ -9,18 +9,21 @@
 # - To use the alternative Wendt fission model:
 #/process/had/particle_hp/use_Wendt_fission_model true
 #
+# alternatively, this is done in Hadr03.cc
+#
 /control/verbose 2
 /run/verbose 2
 #
 /testhadr/det/setIsotopeMat U235 92 235 19.05 g/cm3
 /testhadr/det/setSize 10 m
 #
+/process/had/verbose 1
+#
 /run/initialize
 #
 /gun/particle neutron
 /gun/energy 1 eV
 #
-/process/list
 /process/inactivate hadElastic
 ###/process/inactivate neutronInelastic
 /process/inactivate nCapture
@@ -32,7 +35,8 @@
 /analysis/h1/set 11 100  150 250 MeV	#Q
 /analysis/h1/set 13 200  1   200 none   #A
 #
-/run/printProgress 1000
+# optional, to avoid excessive printing.
 /testhadr/run/printStat false
 #
+/run/printProgress 1000
 /run/beamOn 10000

@@ -105,7 +105,7 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
   {
     fPtrSolid = ((G4DisplacedSolid*)pSolid)->GetConstituentMovedSolid();
     G4AffineTransform t1 = ((G4DisplacedSolid*)pSolid)->GetDirectTransform();
-    G4AffineTransform t2 = G4AffineTransform(directTransform);
+    auto  t2 = G4AffineTransform(directTransform);
     fDirectTransform = new G4AffineTransform(t1*t2);
   }
   else
@@ -471,7 +471,7 @@ G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
 
 G4GeometryType G4DisplacedSolid::GetEntityType() const 
 {
-  return G4String("G4DisplacedSolid");
+  return {"G4DisplacedSolid"};
 }
 
 //////////////////////////////////////////////////////////////////////////

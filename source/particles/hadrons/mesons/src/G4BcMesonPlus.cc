@@ -41,16 +41,16 @@
 // ###                         BcMesonPlus                            ###
 // ######################################################################
 
-G4BcMesonPlus* G4BcMesonPlus::theInstance = 0;
+G4BcMesonPlus* G4BcMesonPlus::theInstance = nullptr;
 
 G4BcMesonPlus* G4BcMesonPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "Bc+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -67,7 +67,7 @@ G4BcMesonPlus* G4BcMesonPlus::Definition()
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,         541,
-                false,     0.507e-3*ns,          NULL,
+                false,     0.507e-3*ns,          nullptr,
                 false,       "Bc");
   }
   theInstance = static_cast<G4BcMesonPlus*>(anInstance);

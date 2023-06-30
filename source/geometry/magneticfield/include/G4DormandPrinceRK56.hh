@@ -45,7 +45,7 @@ class G4DormandPrinceRK56 : public G4MagIntegratorStepper
                          G4int numberOfVariables = 6,
                          G4bool primary = true ) ;
     
-    ~G4DormandPrinceRK56() ;
+    ~G4DormandPrinceRK56() override ;
     
     G4DormandPrinceRK56(const G4DormandPrinceRK56&) = delete;
     G4DormandPrinceRK56& operator=(const G4DormandPrinceRK56&) = delete;
@@ -54,10 +54,10 @@ class G4DormandPrinceRK56 : public G4MagIntegratorStepper
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] ) ;
+                        G4double yerr[] ) override ;
     
-    G4double  DistChord()   const;
-    G4int IntegratorOrder() const { return 5; }
+    G4double  DistChord()   const override;
+    G4int IntegratorOrder() const override { return 5; }
     
     void SetupInterpolate_low( const G4double yInput[],
                                const G4double dydx[],
@@ -126,4 +126,3 @@ class G4DormandPrinceRK56 : public G4MagIntegratorStepper
 };
 
 #endif /* G4DormandPrinceRK56 */
-

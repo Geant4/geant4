@@ -62,10 +62,12 @@
 #include <cstdlib>
 #include <sstream>
 // #include <cassert>
+#include "G4INCLPbarAtrestEntryChannel.hh"
 
 namespace G4INCL {
   
-  Nucleus::Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius)
+  Nucleus::Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius, 
+                   AnnihilationType AType) //D
     : Cluster(charge,mass,strangess,true),
      theInitialZ(charge), theInitialA(mass), theInitialS(strangess),
      theNpInitial(0), theNnInitial(0), 
@@ -81,7 +83,8 @@ namespace G4INCL {
      isNucleusNucleus(false),
      theProjectileRemnant(NULL),
      theDensity(NULL),
-     thePotential(NULL)
+     thePotential(NULL),
+     theAType(AType)
   {
     PotentialType potentialType;
     G4bool pionPotential;
@@ -99,6 +102,9 @@ namespace G4INCL {
     ParticleTable::setProtonSeparationEnergy(thePotential->getSeparationEnergy(Proton));
     ParticleTable::setNeutronSeparationEnergy(thePotential->getSeparationEnergy(Neutron));
 
+    if (theAType==PType) theDensity = NuclearDensityFactory::createDensity(theA+1, theZ+1, theS);
+    else if (theAType==NType) theDensity = NuclearDensityFactory::createDensity(theA+1, theZ, theS);
+    else
     theDensity = NuclearDensityFactory::createDensity(theA, theZ, theS);
 
     theParticleSampler->setPotential(thePotential);
@@ -122,8 +128,8 @@ namespace G4INCL {
     // Reset the variables connected with the projectile remnant
     delete theProjectileRemnant;
     theProjectileRemnant = NULL;
-
     Cluster::initializeParticles();
+
     for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
       updatePotentialEnergy(*i);
     }
@@ -223,7 +229,7 @@ namespace G4INCL {
         totalEnergy += (*p)->getKineticEnergy() - (*p)->getPotentialEnergy();
       else if((*p)->isResonance())
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::effectiveNucleonMass;
-      else if((*p)->isHyperon())
+      else if((*p)->isHyperon() || (*p)->isAntiNucleon())
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::getRealMass((*p)->getType());
       else
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy();
@@ -1010,7 +1016,6 @@ namespace G4INCL {
   void Nucleus::fillEventInfo(EventInfo *eventInfo) {
     eventInfo->nParticles = 0;
     G4bool isNucleonAbsorption = false;
-
     G4bool isPionAbsorption = false;
     // It is possible to have pion absorption event only if the
     // projectile is pion.
@@ -1061,8 +1066,10 @@ namespace G4INCL {
       eventInfo->theta[eventInfo->nParticles] = Math::toDegrees(mom.theta());
       eventInfo->phi[eventInfo->nParticles] = Math::toDegrees(mom.phi());
       eventInfo->origin[eventInfo->nParticles] = -1;
+#ifdef INCLXX_IN_GEANT4_MODE
       eventInfo->parentResonancePDGCode[eventInfo->nParticles] = (*i)->getParentResonancePDGCode();
       eventInfo->parentResonanceID[eventInfo->nParticles] = (*i)->getParentResonanceID();
+#endif 
       eventInfo->history.push_back("");
       if ((*i)->getType() != Composite) {
         ParticleSpecies pt((*i)->getType());
@@ -1154,13 +1161,16 @@ namespace G4INCL {
     eventInfo->nEnergyViolationInteraction = theBook.getEnergyViolationInteraction();
   }
 
+
+
   Nucleus::ConservationBalance Nucleus::getConservationBalance(const EventInfo &theEventInfo, const G4bool afterRecoil) const {
     ConservationBalance theBalance;
     // Initialise balance variables with the incoming values
+    INCL_DEBUG("theEventInfo " << theEventInfo.Zt << "   " << theEventInfo.At << '\n');
     theBalance.Z = theEventInfo.Zp + theEventInfo.Zt;
     theBalance.A = theEventInfo.Ap + theEventInfo.At;
     theBalance.S = theEventInfo.Sp + theEventInfo.St;
-
+    INCL_DEBUG("theBalance Z and A " << theBalance.Z << "   " << theBalance.A << '\n');
     theBalance.energy = getInitialEnergy();
     theBalance.momentum = getIncomingMomentum();
 
@@ -1175,7 +1185,6 @@ namespace G4INCL {
       theBalance.energy -= (*i)->getEnergy(); // Note that outgoing particles should have the real mass
       theBalance.momentum -= (*i)->getMomentum();
     }
-
     // Projectile-like remnant contribution, if present
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
       theBalance.Z -= theProjectileRemnant->getZ();

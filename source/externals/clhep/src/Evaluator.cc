@@ -52,7 +52,7 @@ struct Struct {
 
 #define REMOVE_BLANKS \
 for(pointer=name;;pointer++) if (!isspace(*pointer)) break; \
-for(n=strlen(pointer);n>0;n--) if (!isspace(*(pointer+n-1))) break
+for(n=(int)strlen(pointer);n>0;n--) if (!isspace(*(pointer+n-1))) break
 
 #define SKIP_BLANKS                      \
 for(;;pointer++) {                       \
@@ -126,7 +126,7 @@ static int function(const string & name, stack<double> & par,
  *                                                                     *
  ***********************************************************************/
 {
-  int npar = par.size();
+  unsigned long npar = par.size();
   if (npar > MAX_N_PAR) return EVAL::ERROR_UNKNOWN_FUNCTION;
 
   dic_type::const_iterator iter = dictionary.find(sss[npar]+name);
@@ -134,7 +134,7 @@ static int function(const string & name, stack<double> & par,
   Item item = iter->second;
 
   double pp[MAX_N_PAR] = {0.0};
-  for(int i=0; i<npar; i++) { pp[i] = par.top(); par.pop(); }
+  for(unsigned long i=0; i<npar; ++i) { pp[i] = par.top(); par.pop(); }
   errno = 0;
   if (item.function == 0)       return EVAL::ERROR_CALCULATION_ERROR;
   switch (npar) {
@@ -639,7 +639,7 @@ int Evaluator::status() const {
 
 //---------------------------------------------------------------------------
 int Evaluator::error_position() const {
-  return ((Struct *)(p))->thePosition - ((Struct *)(p))->theExpression;
+  return int(((Struct *)(p))->thePosition - ((Struct *)(p))->theExpression);
 }
 
 //---------------------------------------------------------------------------

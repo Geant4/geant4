@@ -34,15 +34,16 @@
 //               and binding energies for atoms from Z = 1 to Z = 120.        //
 //               Most entries are taken from the X-ray Data Book, with        //
 //               unmeasured values supplied by Kibedi.  See documentation     //
-//               file in G4EMLOW7.3 or later, directory fluor/                //  
+//               file in G4EMLOW7.3 or later, directory fluor/                //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4AtomicShells_XDB_EADL.hh"
+
 #include "G4SystemOfUnits.hh"
 
-const G4int
-G4AtomicShells_XDB_EADL::fNumberOfShells[121] =
+// clang-format off
+const G4int G4AtomicShells_XDB_EADL::fNumberOfShells[121] =
 {
   1,   // nonexistent zero element
   1,  1,  2,  2,  3,   3,  4,  4,  4,  4, //   1 - 10
@@ -59,8 +60,7 @@ G4AtomicShells_XDB_EADL::fNumberOfShells[121] =
  29, 29, 30, 30, 31,  31, 31, 31, 32, 32  // 111 - 120
 };
 
-const G4int
-G4AtomicShells_XDB_EADL::fIndexOfShells[121] =
+const G4int G4AtomicShells_XDB_EADL::fIndexOfShells[121] =
 {
     0,   // nonexistent zero element
     1,    2,    3,    5,    7,     10,   13,   17,   21,   25, //   1 - 10
@@ -77,8 +77,7 @@ G4AtomicShells_XDB_EADL::fIndexOfShells[121] =
  1865, 1894, 1923, 1953, 1983,   2014, 2045, 2076, 2107, 2139  // 111 - 120
 };
 
-const G4double
-G4AtomicShells_XDB_EADL::fBindingEnergies[2171] =
+const G4double G4AtomicShells_XDB_EADL::fBindingEnergies[2171] =
 {
   0.0,  // nonexistent zero element
 
@@ -683,8 +682,7 @@ G4AtomicShells_XDB_EADL::fBindingEnergies[2171] =
   0.0396,  0.0251,  0.0113,  0.0042
 };
 
-const G4int
-G4AtomicShells_XDB_EADL::fNumberOfElectrons[2171] =
+const G4int G4AtomicShells_XDB_EADL::fNumberOfElectrons[2171] =
 {
   0,  // nonexistent zero element
 
@@ -1198,38 +1196,39 @@ G4AtomicShells_XDB_EADL::fNumberOfElectrons[2171] =
   6,   6,   8,   2,   2,   4,   4,   6,   2,   2,
   4,   2
 };
+// clang-format on
 
-
-G4int
-G4AtomicShells_XDB_EADL::GetNumberOfShells(G4int Z)
+G4int G4AtomicShells_XDB_EADL::GetNumberOfShells(G4int Z)
 {
 #ifdef G4VERBOSE
-  if (Z < 0 || Z > 120) { Z = PrintErrorZ(Z, "GetNumberOfShells"); }
+  if (Z < 0 || Z > 120) {
+    Z = PrintErrorZ(Z, "GetNumberOfShells");
+  }
 #endif
   return fNumberOfShells[Z];
 }
 
-
-G4double
-G4AtomicShells_XDB_EADL::GetBindingEnergy(G4int Z, G4int ShellNb)
+G4double G4AtomicShells_XDB_EADL::GetBindingEnergy(G4int Z, G4int ShellNb)
 {
 #ifdef G4VERBOSE
-  if (Z < 0 || Z > 120) { Z = PrintErrorZ(Z, "GetBindingEnergy"); }
-  if(ShellNb < 0 || ShellNb >= fNumberOfShells[Z]) {
-  ShellNb = PrintErrorShell(Z, ShellNb, "GetBindingEnergy");
+  if (Z < 0 || Z > 120) {
+    Z = PrintErrorZ(Z, "GetBindingEnergy");
+  }
+  if (ShellNb < 0 || ShellNb >= fNumberOfShells[Z]) {
+    ShellNb = PrintErrorShell(Z, ShellNb, "GetBindingEnergy");
   }
 #endif
-  return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*CLHEP::keV;
+  return fBindingEnergies[fIndexOfShells[Z] + ShellNb] * CLHEP::keV;
 }
 
-
-G4int
-G4AtomicShells_XDB_EADL::GetNumberOfElectrons(G4int Z, G4int ShellNb)
+G4int G4AtomicShells_XDB_EADL::GetNumberOfElectrons(G4int Z, G4int ShellNb)
 {
 #ifdef G4VERBOSE
-  if (Z < 0 || Z > 120) { Z = PrintErrorZ(Z, "GetNumberOfElectrons"); }
-  if(ShellNb < 0 || ShellNb >= fNumberOfShells[Z]) {
-  ShellNb = PrintErrorShell(Z, ShellNb, "GetNumberOfElectrons");
+  if (Z < 0 || Z > 120) {
+    Z = PrintErrorZ(Z, "GetNumberOfElectrons");
+  }
+  if (ShellNb < 0 || ShellNb >= fNumberOfShells[Z]) {
+    ShellNb = PrintErrorShell(Z, ShellNb, "GetNumberOfElectrons");
   }
 #endif
   return fNumberOfElectrons[fIndexOfShells[Z] + ShellNb];
@@ -1237,17 +1236,20 @@ G4AtomicShells_XDB_EADL::GetNumberOfElectrons(G4int Z, G4int ShellNb)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int  
-G4AtomicShells_XDB_EADL::GetNumberOfFreeElectrons(G4int Z, G4double th)
+G4int G4AtomicShells_XDB_EADL::GetNumberOfFreeElectrons(G4int Z, G4double th)
 {
 #ifdef G4VERBOSE
-  if(Z<0 || Z>120) { Z = PrintErrorZ(Z, "GetNumberOfFreeElectrons"); }
+  if (Z < 0 || Z > 120) {
+    Z = PrintErrorZ(Z, "GetNumberOfFreeElectrons");
+  }
 #endif
   G4int idx = fIndexOfShells[Z];
-  G4int idxmax = idx +  fNumberOfShells[Z];
+  G4int idxmax = idx + fNumberOfShells[Z];
   G4int n = 0;
-  for (G4int i=idx; i<idxmax; ++i) {
-    if(fBindingEnergies[i]*CLHEP::keV <= th) { n += fNumberOfElectrons[i]; } 
+  for (G4int i = idx; i < idxmax; ++i) {
+    if (fBindingEnergies[i] * CLHEP::keV <= th) {
+      n += fNumberOfElectrons[i];
+    }
   }
   return n;
 }
@@ -1255,36 +1257,36 @@ G4AtomicShells_XDB_EADL::GetNumberOfFreeElectrons(G4int Z, G4double th)
 G4double G4AtomicShells_XDB_EADL::GetTotalBindingEnergy(G4int Z)
 {
 #ifdef G4VERBOSE
-  if ( Z < 0 || Z > 120) { Z = PrintErrorZ(Z, "GetTotalBindingEnergy"); }
+  if (Z < 0 || Z > 120) {
+    Z = PrintErrorZ(Z, "GetTotalBindingEnergy");
+  }
 #endif
   G4int idx = fIndexOfShells[Z];
-  G4int idxmax = idx +  fNumberOfShells[Z];
+  G4int idxmax = idx + fNumberOfShells[Z];
   G4double energy = 0.0;
-  for (G4int i=idx; i<idxmax; ++i) {energy += fBindingEnergies[i];}
-  return energy*CLHEP::keV;
+  for (G4int i = idx; i < idxmax; ++i) {
+    energy += fBindingEnergies[i];
+  }
+  return energy * CLHEP::keV;
 }
-
 
 #ifdef G4VERBOSE
 
 G4int G4AtomicShells_XDB_EADL::PrintErrorZ(G4int Z, const G4String& ss)
 {
-  G4String sss = "G4AtomicShells::"+ss+"()";
+  G4String sss = "G4AtomicShells::" + ss + "()";
   G4ExceptionDescription ed;
   ed << "Atomic number out of range Z= " << Z;
-  G4Exception(sss,"mat060",FatalException,ed,"");
+  G4Exception(sss, "mat060", FatalException, ed, "");
   return 1;
 }
 
-
-G4int
-G4AtomicShells_XDB_EADL::PrintErrorShell(G4int Z, G4int n, const G4String& ss)
+G4int G4AtomicShells_XDB_EADL::PrintErrorShell(G4int Z, G4int n, const G4String& ss)
 {
-  G4String sss = "G4AtomicShells::"+ss+"()";
+  G4String sss = "G4AtomicShells::" + ss + "()";
   G4ExceptionDescription ed;
   ed << "Shell number out of range Nshell= " << n << "  Z= " << Z;
-  G4Exception(sss,"mat061",FatalException,ed,"");
+  G4Exception(sss, "mat061", FatalException, ed, "");
   return 0;
 }
 #endif
-

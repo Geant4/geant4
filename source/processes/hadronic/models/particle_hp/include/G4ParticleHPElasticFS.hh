@@ -33,45 +33,60 @@
 #ifndef G4ParticleHPElasticFS_h
 #define G4ParticleHPElasticFS_h 1
 
-#include "globals.hh"
-#include "G4HadProjectile.hh"
 #include "G4HadFinalState.hh"
-#include "G4ParticleHPFinalState.hh"
-#include "G4ParticleHPLegendreStore.hh"
-#include "G4ParticleHPPartial.hh"
+#include "G4HadProjectile.hh"
 #include "G4ParticleHPFastLegendre.hh"
+#include "G4ParticleHPFinalState.hh"
 #include "G4ParticleHPInterpolator.hh"
+#include "G4ParticleHPLegendreStore.hh"
 #include "G4ParticleHPNames.hh"
+#include "G4ParticleHPPartial.hh"
+#include "G4ParticleHPVector.hh"
+#include "G4ReactionProduct.hh"
+#include "globals.hh"
 
 class G4ParticleHPElasticFS : public G4ParticleHPFinalState
 {
   public:
-  
-  G4ParticleHPElasticFS();
-  ~G4ParticleHPElasticFS()
-  {
-    if(theCoefficients!=0) delete theCoefficients;
-    if(theProbArray!=0) delete theProbArray;
-  }
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
-  G4ParticleHPFinalState * New() 
-  {
-   G4ParticleHPElasticFS * theNew = new G4ParticleHPElasticFS;
-   return theNew;
-  }
-  
+    G4ParticleHPElasticFS();
+    ~G4ParticleHPElasticFS() override
+    {
+      delete theCoefficients;
+      delete theProbArray;
+    }
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
+              G4ParticleDefinition*) override;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override;
+    G4ParticleHPFinalState* New() override
+    {
+      auto theNew = new G4ParticleHPElasticFS;
+      return theNew;
+    }
+
+    // New method useful for the DBRC algorithm
+    void RegisterCrossSection(G4ParticleHPVector* vec) { xsForDBRC = vec; }
+
   private:
-  G4int repFlag;    // Legendre coeff(1), or probability array(2), or isotropic(0).
+    // The following two methods and six data members are needed for the DBRC algorithm
+    void InitializeScatteringKernelParameters();
+    G4ReactionProduct GetBiasedThermalNucleus(const G4double aMass, G4ThreeVector aVelocity,
+                                              const G4double temp = -1.);
+    G4double svtEmax;
+    G4double dbrcEmax;
+    G4double dbrcEmin;
+    G4double dbrcAmin;
+    G4bool dbrcUse;
+    G4ParticleHPVector* xsForDBRC;
+
+    G4int repFlag;  // Legendre coeff(1), or probability array(2), or isotropic(0).
                     // add 3: for Legendre (Low Energy) + Probability (High Energy)
-  G4double tE_of_repFlag3; // transition energy in case of  repFlag 3:
-  G4double targetMass; // in neutronmass units.
-  G4int frameFlag;  // CMS or Lab system.
-  
-  G4ParticleHPLegendreStore * theCoefficients; // the legendre coefficients
-  G4ParticleHPPartial * theProbArray; // the probability array p,costh for energy
-  G4ParticleHPInterpolator theInt; // interpolation
-  
-  G4ParticleHPFastLegendre theLegend; // fast look-up for leg-integrals
+    G4double tE_of_repFlag3;  // transition energy in case of  repFlag 3:
+    G4double targetMass;  // in neutronmass units.
+    G4int frameFlag;  // CMS or Lab system.
+
+    G4ParticleHPLegendreStore* theCoefficients;  // the legendre coefficients
+    G4ParticleHPPartial* theProbArray;  // the probability array p,costh for energy
+
+    G4ParticleHPFastLegendre theLegend;  // fast look-up for leg-integrals
 };
 #endif

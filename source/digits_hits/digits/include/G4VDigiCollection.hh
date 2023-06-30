@@ -29,8 +29,9 @@
 #ifndef G4VDigiCollection_h
 #define G4VDigiCollection_h 1
 
-class G4VDigi;
 #include "globals.hh"
+
+class G4VDigi;
 
 // class description:
 //
@@ -44,29 +45,27 @@ class G4VDigi;
 class G4VDigiCollection
 {
  public:
-  G4VDigiCollection();
+  G4VDigiCollection() = default;
   G4VDigiCollection(G4String DMnam, G4String colNam);
-  virtual ~G4VDigiCollection();
+  virtual ~G4VDigiCollection() = default;
   G4bool operator==(const G4VDigiCollection& right) const;
 
-  virtual void DrawAllDigi();
-  virtual void PrintAllDigi();
+  virtual void DrawAllDigi(){};
+  virtual void PrintAllDigi(){};
 
- protected:
-  // Collection name
-  G4String collectionName;
-  G4String DMname;
-
- public:
   inline const G4String& GetName() const { return collectionName; }
   inline const G4String& GetDMname() const { return DMname; }
 
- public:
   // GetDigi and GetSize are given a default implementation here so
   // that the template G4TDigiCollection can be used, but they
   // are re-implemented in G4TDigiCollection.
-  virtual G4VDigi* GetDigi(size_t) const { return 0; }
+  virtual G4VDigi* GetDigi(size_t) const { return nullptr; }
   virtual size_t GetSize() const { return 0; }
+
+ protected:
+  // Collection name
+  G4String collectionName = "Unknown";
+  G4String DMname = "Unknown";
 };
 
 #endif

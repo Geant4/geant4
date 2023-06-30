@@ -43,7 +43,7 @@
 //  and so on, *before* creating the run-manager. After the run-manager
 //  has been created, one should disable the signals:
 //
-//    G4Backtrace::Disable(G4BackTrace::DefaultSignals());
+//    G4Backtrace::Disable(G4Backtrace::DefaultSignals());
 //
 //  Additionally, at runtime, the environment variable "G4BACKTRACE" can
 //  be set to select a specific set of signals or none, e.g. in bash:

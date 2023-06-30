@@ -64,5 +64,6 @@ public:
 
 private:
  EDEPMAP fEdepMap;
+ G4int fCollID;
 };
 #endif

@@ -49,7 +49,7 @@ G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
                          DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
-  G4Para* msol = (G4Para*)(msolid);
+  auto msol = (G4Para*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     // Get constituent solid  
@@ -59,7 +59,7 @@ G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
     fmotherSolid = msol;
 
     // Create a new solid with inversed parameters
-    G4Para* newSolid
+    auto newSolid
       = new G4Para(msol->GetName(),
                    msol->GetXHalfLength(), 
                    msol->GetYHalfLength(),
@@ -76,9 +76,7 @@ G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
 }
 
 //------------------------------------------------------------------------
-G4VParameterisationPara::~G4VParameterisationPara()
-{
-}
+G4VParameterisationPara::~G4VParameterisationPara() = default;
 
 //------------------------------------------------------------------------
 G4ParameterisationParaX::
@@ -90,7 +88,7 @@ G4ParameterisationParaX( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionParaX" );
 
-  G4Para* mpara = (G4Para*)(fmotherSolid);
+  auto mpara = (G4Para*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*mpara->GetXHalfLength(), width, offset );
@@ -114,21 +112,19 @@ G4ParameterisationParaX( EAxis axis, G4int nDiv,
 //------------------------------------------------------------------------
 G4double G4ParameterisationParaX::GetMaxParameter() const
 {
-  G4Para* msol = (G4Para*)(fmotherSolid);
+  auto msol = (G4Para*)(fmotherSolid);
   return 2*msol->GetXHalfLength();
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationParaX::~G4ParameterisationParaX()
-{
-}
+G4ParameterisationParaX::~G4ParameterisationParaX() = default;
 
 //------------------------------------------------------------------------
 void
 G4ParameterisationParaX::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 {
-  G4Para* msol = (G4Para*)(fmotherSolid );
+  auto msol = (G4Para*)(fmotherSolid );
   G4double mdx = msol->GetXHalfLength( );
 
   //----- translation 
@@ -156,7 +152,7 @@ ComputeDimensions(G4Para& para, const G4int,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along X of a Para will result a Para
-  G4Para* msol = (G4Para*)(fmotherSolid);
+  auto msol = (G4Para*)(fmotherSolid);
 
   //---- Get
   G4double pDx = fwidth/2. - fhgap;
@@ -190,7 +186,7 @@ G4ParameterisationParaY( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionParaY" );
 
-  G4Para* mpara = (G4Para*)(fmotherSolid);
+  auto mpara = (G4Para*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*mpara->GetYHalfLength(), width, offset );
@@ -212,14 +208,12 @@ G4ParameterisationParaY( EAxis axis, G4int nDiv,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationParaY::~G4ParameterisationParaY()
-{
-}
+G4ParameterisationParaY::~G4ParameterisationParaY() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationParaY::GetMaxParameter() const
 {
-  G4Para* msol = (G4Para*)(fmotherSolid);
+  auto msol = (G4Para*)(fmotherSolid);
   return 2*msol->GetYHalfLength();
 }
 
@@ -228,7 +222,7 @@ void
 G4ParameterisationParaY::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 {
-  G4Para* msol = (G4Para*)(fmotherSolid );
+  auto msol = (G4Para*)(fmotherSolid );
   G4double mdy = msol->GetYHalfLength( );
 
   //----- translation 
@@ -258,7 +252,7 @@ ComputeDimensions(G4Para& para, const G4int,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along Y of a Para will result a Para
-  G4Para* msol = (G4Para*)(fmotherSolid);
+  auto msol = (G4Para*)(fmotherSolid);
 
   //---- Get
   G4double pDx = msol->GetXHalfLength();
@@ -292,7 +286,7 @@ G4ParameterisationParaZ( EAxis axis, G4int nDiv,
   CheckParametersValidity();
   SetType( "DivisionParaZ" );
 
-  G4Para* mpara = (G4Para*)(fmotherSolid);
+  auto mpara = (G4Para*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*mpara->GetZHalfLength(), width, offset );
@@ -314,14 +308,12 @@ G4ParameterisationParaZ( EAxis axis, G4int nDiv,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationParaZ::~G4ParameterisationParaZ()
-{
-}
+G4ParameterisationParaZ::~G4ParameterisationParaZ() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationParaZ::GetMaxParameter() const
 {
-  G4Para* msol = (G4Para*)(fmotherSolid);
+  auto msol = (G4Para*)(fmotherSolid);
   return 2*msol->GetZHalfLength();
 }
 
@@ -330,7 +322,7 @@ void
 G4ParameterisationParaZ::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 {
-  G4Para* msol = (G4Para*)(fmotherSolid );
+  auto msol = (G4Para*)(fmotherSolid );
   G4double mdz = msol->GetZHalfLength( );
 
   //----- translation 
@@ -358,7 +350,7 @@ ComputeDimensions(G4Para& para, const G4int,
                   const G4VPhysicalVolume*) const
 {
   //---- The division along Z of a Para will result a Para
-  G4Para* msol = (G4Para*)(fmotherSolid);
+  auto msol = (G4Para*)(fmotherSolid);
 
   //---- Get
   G4double pDx = msol->GetXHalfLength();

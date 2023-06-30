@@ -53,7 +53,7 @@ G4ThreadLocal G4bool G4SolidStore::locked = false;
 // ***************************************************************************
 //
 G4SolidStore::G4SolidStore()
-  : std::vector<G4VSolid*>()
+   
 {
   reserve(100);
 }
@@ -156,7 +156,7 @@ void G4SolidStore::Register(G4VSolid* pSolid)
     std::vector<G4VSolid*> sol_vec { pSolid };
     store->bmap.insert(std::make_pair(sol_name, sol_vec));
   }
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
   store->mvalid = true;
 }
 

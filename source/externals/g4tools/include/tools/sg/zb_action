@@ -250,8 +250,6 @@ protected:
     return *this;
   }
 public:
-  void reset() {}
-
   void clear_color_buffer(float a_r,float a_g,float a_b,float a_a){
     clear_color(a_r,a_g,a_b,a_a);
   }
@@ -269,40 +267,12 @@ protected:
 public:
   zb::buffer::ZPixel* get_color_buffer(unsigned int& a_width,unsigned int& a_height) const {return m_zb.get_color_buffer(a_width,a_height);}
 
-  unsigned char* get_rgbas(size_t& a_sz,bool a_top_to_bottom = true) {
-    if(!m_ww || !m_wh) {a_sz = 0;return 0;}
-    a_sz = 4 * m_ww * m_wh;
-    uchar* rgbas = new uchar[a_sz];
-    if(!rgbas) {a_sz = 0;return 0;}
-    uchar* pos = rgbas;
-    zb::buffer::ZPixel pix;
-    uchar* _pix = 0;
-    for(unsigned int row=0;row<m_wh;row++) {
-      for(unsigned int col=0;col<m_ww;col++) {
-        if(!m_zb.get_clipped_pixel(col,a_top_to_bottom?row:m_wh-1-row,pix)){
-          m_out << "tools::sg::zb_action::get_rgbas : can't get zbuffer pixel" << std::endl;
-          *pos = 0xFF;pos++;
-          *pos = 0x00;pos++;
-          *pos = 0x00;pos++;
-          *pos = 0xFF;pos++;
-        } else {
-          _pix = (uchar*)&pix;
-          *pos = *_pix;_pix++;pos++;
-          *pos = *_pix;_pix++;pos++;
-          *pos = *_pix;_pix++;pos++;
-          *pos = *_pix;_pix++;pos++;
-        }
-      }
-    }
-    return rgbas;
-  }
-
-  unsigned char* get_rgbs(size_t& a_sz,bool a_top_to_bottom = true) {
-    if(!m_ww || !m_wh) {a_sz = 0;return 0;}
-    a_sz = 3 * m_ww * m_wh;
-    uchar* rgbs = new uchar[a_sz];
-    if(!rgbs) {a_sz = 0;return 0;}
-    uchar* pos = rgbs;
+  bool get_rgbs(bool a_top_to_bottom,std::vector<uchar>& a_buffer) {
+    a_buffer.clear();
+    if(!m_ww || !m_wh) return false;
+    size_t sz = 3 * m_ww * m_wh;
+    a_buffer.resize(sz);
+    uchar* pos = vec_data(a_buffer);
     zb::buffer::ZPixel pix;
     uchar* _pix = 0;
     for(unsigned int row=0;row<m_wh;row++) {
@@ -320,9 +290,91 @@ public:
         }
       }
     }
-    return rgbs;
+    return true;
   }
 
+  bool get_rgbas(bool a_top_to_bottom,std::vector<uchar>& a_buffer) {
+    a_buffer.clear();
+    if(!m_ww || !m_wh) return false;
+    size_t sz = 4 * m_ww * m_wh;
+    a_buffer.resize(sz);
+    if(a_top_to_bottom) {
+      ::memcpy(vec_data(a_buffer),m_zb.zimage(),sz);
+      return true;
+    }
+    size_t stride = m_ww*4;
+    uchar* zpos = ((uchar*)m_zb.zimage())+sz-stride;
+    uchar* pos = vec_data(a_buffer);
+    for(unsigned int row=0;row<m_wh;row++,pos+=stride,zpos-=stride) ::memcpy(pos,zpos,stride);
+    return true;
+  }
+  bool get_rgbas_cocoa(unsigned int a_factor,std::vector<uchar>& a_buffer) {
+    a_buffer.clear();
+    if(!m_ww || !m_wh) return false;
+    if(!a_factor) return false;
+    size_t bpp = 4;
+    a_buffer.resize(a_factor* m_ww * a_factor * m_wh * bpp);
+    uchar* zbuffer = (uchar*)m_zb.zimage();
+    uchar* abuffer = vec_data(a_buffer);
+    size_t zstride = m_ww*bpp;
+    size_t astride = a_factor*m_ww*bpp;
+    size_t i,j,ar,ac,ipix;
+    uchar* zpos;uchar* apos;
+    for(j=0;j<m_wh;j++) {
+      for(i=0;i<m_ww;i++) {
+        //position in the original image.
+        zpos = zbuffer + (m_wh-1-j) * zstride + i*bpp;  //top_to_bottom.
+
+        for(ar=0;ar<a_factor;ar++) {
+          for(ac=0;ac<a_factor;ac++) {
+            //position in the new image.
+            apos = abuffer + (j*a_factor+ar) * astride + (i*a_factor+ac)*bpp;
+            for(ipix=0;ipix<bpp;ipix++) {
+              *(apos+ipix) = *(zpos+ipix);
+            }
+          }
+        }
+
+      }
+    }
+
+    return true;
+  }
+
+  bool get_bgras(bool a_top_to_bottom,std::vector<uchar>& a_buffer) {
+    a_buffer.clear();
+    if(!m_ww || !m_wh) return false;
+    size_t sz = 4 * m_ww * m_wh;
+    a_buffer.resize(sz);
+    if(a_top_to_bottom) {
+      uchar* pos = vec_data(a_buffer);
+      uchar* zpos = ((uchar*)m_zb.zimage());
+      for(size_t count=0;count<sz;count+=4,pos+=4,zpos+=4) {
+        *(pos+0) = *(zpos+2);
+        *(pos+1) = *(zpos+1);
+        *(pos+2) = *(zpos+0);
+        *(pos+3) = *(zpos+3);
+      }
+    } else {
+      size_t stride = m_ww*4;
+      uchar* pos_line = vec_data(a_buffer);
+      uchar* zpos_line = ((uchar*)m_zb.zimage())+sz-stride;
+      uchar* pos;
+      uchar* zpos;
+      size_t count;
+      for(unsigned int row=0;row<m_wh;row++,pos_line+=stride,zpos_line-=stride) {
+        pos = pos_line;
+        zpos = zpos_line;
+        for(count=0;count<m_ww;count++,pos+=4,zpos+=4) {
+          *(pos+0) = *(zpos+2);
+          *(pos+1) = *(zpos+1);
+          *(pos+2) = *(zpos+0);
+          *(pos+3) = *(zpos+3);
+        }
+      }
+    }
+    return true;
+  }
 public:
   static bool get_rgb(void* a_tag,unsigned int a_col,unsigned int a_row,float& a_r,float& a_g,float& a_b){
     //used with wps.
@@ -339,21 +391,6 @@ public:
     zb::buffer::pix2rgba(pix,a_r,a_g,a_b,a);
     return true;
   }
-  static bool get_rgba(void* a_tag,unsigned int a_col,unsigned int a_row,float& a_r,float& a_g,float& a_b,float& a_a){
-    zb_action* rzb = (zb_action*)a_tag;
-    zb::buffer::ZPixel pix;
-    if(!rzb->m_zb.get_clipped_pixel(a_col,rzb->wh()-1-a_row,pix)){
-      rzb->out() << "tools::sg;:zb_action::get_rgba : can't get zbuffer pixel" << std::endl;
-      a_r = 1;
-      a_g = 0;
-      a_b = 0;
-      a_a = 1;
-      return false;
-    }
-    zb::buffer::pix2rgba(pix,a_r,a_g,a_b,a_a);
-    return true;
-  }
-
 protected:
   void set_normal_matrix() {
     mat4f tmp(m_model);
@@ -366,8 +403,8 @@ protected:
   
   bool project_point(float& a_x,float& a_y,float& a_z,float& a_w) {
     a_w = 1;
-    m_model.mul_4f(a_x,a_y,a_z,a_w);
-    m_proj.mul_4f(a_x,a_y,a_z,a_w);
+    m_model.mul_4f_opt(a_x,a_y,a_z,a_w,m_tmp);
+    m_proj.mul_4f_opt(a_x,a_y,a_z,a_w,m_tmp);
     if(a_w==0) return false;
     a_x /= a_w;
     a_y /= a_w;
@@ -386,19 +423,18 @@ protected:
       return m_this.project_point(a_x,a_y,a_z,a_w);
     }
     virtual bool add_point(float a_x,float a_y,float a_z,float) {
-      return _add_point(a_x,a_y,a_z,m_this.m_rgba);
+      return _add_point(a_x,a_y,a_z,m_this.m_rgba.r(),m_this.m_rgba.g(),m_this.m_rgba.b(),m_this.m_rgba.a());
     }
 
     virtual bool add_point(float a_x,float a_y,float a_z,float,
                            float a_r,float a_g,float a_b,float a_a) {
-      colorf c(a_r,a_g,a_b,a_a);
-      return _add_point(a_x,a_y,a_z,c);
+      return _add_point(a_x,a_y,a_z,a_r,a_g,a_b,a_a);
     }
 
     virtual bool add_line(float a_bx,float a_by,float a_bz,float,
                           float a_ex,float a_ey,float a_ez,float) {
-      m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
-      m_this.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
+      m_this.m_vp_mtx.mul_3f_opt(a_bx,a_by,a_bz,m_tmp);
+      m_this.m_vp_mtx.mul_3f_opt(a_ex,a_ey,a_ez,m_tmp);
       a_bz *= -1;
       a_ez *= -1;
 
@@ -422,8 +458,8 @@ protected:
                           float a_br,float a_bg,float a_bb,float a_ba,
                           float a_ex,float a_ey,float a_ez,float,
                           float,float,float,float) {
-      m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
-      m_this.m_vp_mtx.mul_3f(a_ex,a_ey,a_ez);
+      m_this.m_vp_mtx.mul_3f_opt(a_bx,a_by,a_bz,m_tmp);
+      m_this.m_vp_mtx.mul_3f_opt(a_ex,a_ey,a_ez,m_tmp);
       a_bz *= -1;
       a_ez *= -1;
 
@@ -598,18 +634,18 @@ protected:
       return num_2;
     }
 
-    bool _add_point(float a_x,float a_y,float a_z,const colorf& a_color){
+    bool _add_point(float a_x,float a_y,float a_z,float a_r,float a_g,float a_b,float a_a){
       m_this.m_zb.set_depth_test(m_this.m_DEPTH_TEST);
       m_this.m_zb.set_blend(m_this.m_blend);
 
-      m_this.m_vp_mtx.mul_3f(a_x,a_y,a_z);
+      m_this.m_vp_mtx.mul_3f_opt(a_x,a_y,a_z,m_tmp);
       a_z *= -1;
 
       zb::point p;
       zinit(p,a_x,a_y,a_z);
 
       zb::buffer::ZPixel pix;
-      color2pix(a_color,pix);
+      zb::buffer::rgba2pix(a_r,a_g,a_b,a_a,pix);
       m_this.m_zb.draw_point(p,pix,npix(m_this.m_point_size));
 
       return true;
@@ -627,9 +663,9 @@ protected:
       float p2x = a_p2x;float p2y = a_p2y;float p2z = a_p2z;//float p2w = a_p2w;
       float p3x = a_p3x;float p3y = a_p3y;float p3z = a_p3z;//float p3w = a_p3w;
 
-      m_this.m_vp_mtx.mul_3f(p1x,p1y,p1z);
-      m_this.m_vp_mtx.mul_3f(p2x,p2y,p2z);
-      m_this.m_vp_mtx.mul_3f(p3x,p3y,p3z);
+      m_this.m_vp_mtx.mul_3f_opt(p1x,p1y,p1z,m_tmp);
+      m_this.m_vp_mtx.mul_3f_opt(p2x,p2y,p2z,m_tmp);
+      m_this.m_vp_mtx.mul_3f_opt(p3x,p3y,p3z,m_tmp);
       p1z *= -1;
       p2z *= -1;
       p3z *= -1;
@@ -688,7 +724,7 @@ protected:
         float ny = (a_n1y+a_n2y+a_n3y)/3.0f;
         float nz = (a_n1z+a_n2z+a_n3z)/3.0f;
 
-        m_this.m_normal_matrix.mul_dir_3f(nx,ny,nz);
+        m_this.m_normal_matrix.mul_dir_3f_opt(nx,ny,nz,m_tmp);
 
         vec3f _normal(nx,ny,nz);_normal.normalize();
 
@@ -721,6 +757,8 @@ protected:
     }
   protected:
     zb_action& m_this;
+  private:  //optimize:
+    float m_tmp[3];
   };
 
 protected:
@@ -748,6 +786,8 @@ protected:
   bool m_light_on;
   bool m_DEPTH_TEST;
   bool m_blend;
+private:  //optimize:
+  float m_tmp[4];
 };
 
 }}

@@ -67,9 +67,7 @@ G4USphere::G4USphere( __void__& a )
 //
 // Destructor
 
-G4USphere::~G4USphere()
-{
-}
+G4USphere::~G4USphere() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //

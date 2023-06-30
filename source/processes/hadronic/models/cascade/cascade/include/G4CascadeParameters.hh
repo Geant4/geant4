@@ -52,6 +52,7 @@ public:
   static G4int verbose()              { return Instance()->VERBOSE_LEVEL; }
   static G4bool checkConservation()   { return Instance()->CHECK_ECONS; }
   static G4bool usePreCompound()      { return Instance()->USE_PRECOMPOUND; }
+  static G4bool useAbla()             { return Instance()->USE_ABLA; }
   static G4bool doCoalescence()       { return Instance()->DO_COALESCENCE; }
   static G4bool showHistory()         { return Instance()->SHOW_HISTORY; }
   static G4bool use3BodyMom()	      { return Instance()->USE_3BODYMOM; }
@@ -80,6 +81,7 @@ private:	// Environment variable values, null pointers mean not set
   const char* G4CASCADE_VERBOSE;
   const char* G4CASCADE_CHECK_ECONS;
   const char* G4CASCADE_USE_PRECOMPOUND;
+  const char* G4CASCADE_USE_ABLA;
   const char* G4CASCADE_DO_COALESCENCE;
   const char* G4CASCADE_SHOW_HISTORY;
   const char* G4CASCADE_USE_3BODYMOM;
@@ -104,6 +106,7 @@ private:	// Environment variable values, null pointers mean not set
   G4int VERBOSE_LEVEL;		// Top-level configuration flags
   G4bool CHECK_ECONS;
   G4bool USE_PRECOMPOUND;
+  G4bool USE_ABLA;
   G4bool DO_COALESCENCE;
   G4bool SHOW_HISTORY;
   G4bool USE_3BODYMOM;

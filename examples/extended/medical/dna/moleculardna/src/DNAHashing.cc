@@ -75,7 +75,7 @@ namespace G4::hashing
       size_t Hash(const char* str, unsigned int seed)
       {
         size_t hash = seed;
-        while(*str)
+        while(*str != 0)
         {
           hash = hash * 101 + *str++;
         }

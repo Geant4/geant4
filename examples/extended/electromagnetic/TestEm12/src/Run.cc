@@ -43,20 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* detector)
-: G4Run(),
-  fDetector(detector),
-  fParticle(0), fEkin(0.),  
-  fEdeposit(0.),  fEdeposit2(0.),
-  fTrackLen(0.),  fTrackLen2(0.),
-  fProjRange(0.), fProjRange2(0.),
-  fNbOfSteps(0), fNbOfSteps2(0),
-  fStepSize(0.),  fStepSize2(0.),
-  fCsdaRange(0.)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
+: fDetector(detector)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

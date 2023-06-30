@@ -31,17 +31,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4ParticleGun.hh"
 
+#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
- : G4UserRunAction()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetDefaultFileType("root");
@@ -51,12 +54,6 @@ RunAction::RunAction()
   // Creating histograms
   //
   analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,13 +75,51 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run*)
-{  
+void RunAction::EndOfRunAction(const G4Run* run)
+{
+  G4int nofEvents = run->GetNumberOfEvent();
+  if (nofEvents == 0) return;
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+  if (isMaster) {
+    // Run conditions
+    //  note: There is no primary generator action object for "master"
+    //        run manager for multi-threaded mode.
+    PrimaryGeneratorAction* generatorAction = (PrimaryGeneratorAction*)
+      (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+    G4String runCondition = " ";
+    if (generatorAction)
+    {
+      G4ParticleGun* particleGun = generatorAction->GetParticleGun();
+      runCondition  = particleGun->GetParticleDefinition()->GetParticleName();
+      runCondition += " of ";
+      G4double particleEnergy = particleGun->GetParticleEnergy();
+      runCondition += G4BestUnit(particleEnergy,"Energy");
+      runCondition += " in a volume of C6F6 ";
+    }
+
+    G4cout
+     << G4endl
+     << "--------------------End of Global Run------------------------";
+    G4cout
+     << G4endl
+     << " The run consists of " << nofEvents << " " << runCondition << G4endl;
+    if ( analysisManager->GetH1(1) ) {
+      G4cout << " Energy deposit per event:  mean = "
+             << G4BestUnit(analysisManager->GetH1(1)->mean(), "Energy")
+             << "    rms = "
+             << G4BestUnit(analysisManager->GetH1(1)->rms(),  "Energy")
+	     << G4endl
+             << "------------------------------------------------------------"
+             << G4endl;
+    }
+  }
+
   // show Rndm status
-  if (isMaster) G4Random::showEngineStatus();         
+  if (isMaster) G4Random::showEngineStatus();
 
   //save histograms      
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
   analysisManager->CloseFile();
 }

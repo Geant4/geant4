@@ -112,6 +112,8 @@ protected:
   const G4ParticleDefinition*       fThePositron;
   G4ParticleChangeForGamma*         fParticleChange;
 
+  G4bool isFirstInstance{false};
+
   static std::vector<ElementData*>  gElementData;
 };
 

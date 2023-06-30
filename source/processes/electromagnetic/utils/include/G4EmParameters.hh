@@ -385,6 +385,8 @@ public:
   void DefineRegParamForEM(G4VEmProcess*) const;
   void DefineRegParamForDeex(G4VAtomDeexcitation*) const;
 
+  const G4String& GetDirLEDATA() const;
+
   G4EmParameters(G4EmParameters &) = delete;
   G4EmParameters & operator=(const G4EmParameters &right) = delete;  
 
@@ -463,6 +465,8 @@ private:
   G4NuclearFormfactorType nucFormfactor;
   G4eSingleScatteringType fSStype;
   G4EmFluctuationType fFluct;
+
+  G4String fDirLEDATA;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

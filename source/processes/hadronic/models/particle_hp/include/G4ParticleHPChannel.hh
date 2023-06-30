@@ -31,174 +31,176 @@
 // 070612 Fix memory leaking by T. Koi
 //
 // 080520 Delete unnecessary dependencies by T. Koi
- 
+
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPChannel_h
 #define G4ParticleHPChannel_h 1
 
-#include "globals.hh"
-#include "G4ParticleHPIsoData.hh"
-#include "G4ParticleHPVector.hh"
-#include "G4Material.hh"
+#include "G4Element.hh"
 #include "G4HadProjectile.hh"
-#include "G4StableIsotopes.hh"
+#include "G4Material.hh"
 #include "G4ParticleHPCaptureFS.hh"
 #include "G4ParticleHPFinalState.hh"
-#include "G4Element.hh"
-#include "G4WendtFissionFragmentGenerator.hh"
+#include "G4ParticleHPIsoData.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4ParticleHPVector.hh"
+#include "G4StableIsotopes.hh"
+#include "G4WendtFissionFragmentGenerator.hh"
+#include "globals.hh"
 
 class G4ParticleDefinition;
 
-
 class G4ParticleHPChannel
 {
-public:
-
-  G4ParticleHPChannel(G4ParticleDefinition* projectile) :
-    wendtFissionGenerator( G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel() ?
-			   G4WendtFissionFragmentGenerator::GetInstance() : nullptr )
-  {
-    if ( G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel() ) {
-      // Make sure both fission fragment models are not active at same time
-      G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( false );
-    }
-    theProjectile = const_cast<G4ParticleDefinition*>(projectile);
-    theChannelData = new G4ParticleHPVector; 
-    theBuffer = 0;
-    theIsotopeWiseData = 0;
-    theFinalStates = 0;
-    active = 0;
-    registerCount = -1;
-    niso = -1;
-    theElement = NULL;
-  }
-
-  G4ParticleHPChannel() : wendtFissionGenerator( G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel() ?
-						 G4WendtFissionFragmentGenerator::GetInstance() : nullptr )
-  {
-    if ( G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel() ) {
-      // Make sure both fission fragment models are not active at same time
-      G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( false );
-    }
-    theProjectile = G4Neutron::Neutron();
-    theChannelData = new G4ParticleHPVector; 
-    theBuffer = 0;
-    theIsotopeWiseData = 0;
-    theFinalStates = 0;
-    active = 0;
-    registerCount = -1;
-    niso = -1;
-    theElement = NULL;
-  }
-
-  ~G4ParticleHPChannel()
-  {
-    delete theChannelData; 
-    // Following statement disabled to avoid SEGV
-    // theBuffer is also deleted as "theChannelData" in
-    // ~G4ParticleHPIsoData.  FWJ 06-Jul-1999
-    //if(theBuffer != 0) delete theBuffer; 
-    if(theIsotopeWiseData != 0) delete [] theIsotopeWiseData;
-    // Deletion of FinalStates disabled to avoid endless looping
-    // in the destructor heirarchy.  FWJ 06-Jul-1999
-    //if(theFinalStates != 0)
-    //{
-    //  for(i=0; i<niso; i++)
-    //  {
-    //    delete theFinalStates[i];
-    //  }
-    //  delete [] theFinalStates;
-    //}
-    // FWJ experiment
-    //if(active!=0) delete [] active;
-    // T.K. 
-    if ( theFinalStates != 0 )
+  public:
+    G4ParticleHPChannel(G4ParticleDefinition* projectile)
+      : wendtFissionGenerator(G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel()
+                                ? G4WendtFissionFragmentGenerator::GetInstance()
+                                : nullptr)
     {
-      for ( G4int i = 0 ; i < niso ; i++ )
-      {
-         delete theFinalStates[i];
+      if (G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel()) {
+        // Make sure both fission fragment models are not active at same time
+        G4ParticleHPManager::GetInstance()->SetProduceFissionFragments(false);
       }
-      delete [] theFinalStates;
+      theProjectile = const_cast<G4ParticleDefinition*>(projectile);
+      theChannelData = new G4ParticleHPVector;
+      theBuffer = nullptr;
+      theIsotopeWiseData = nullptr;
+      theFinalStates = nullptr;
+      active = nullptr;
+      registerCount = -1;
+      niso = -1;
+      theElement = nullptr;
     }
-    if ( active != 0 ) delete [] active;
-  }
-  
-  G4double GetXsec(G4double energy);
-  
-  G4double GetWeightedXsec(G4double energy, G4int isoNumber);
-  
-  G4double GetFSCrossSection(G4double energy, G4int isoNumber);
-  
-  inline G4bool IsActive(G4int isoNumber) { return active[isoNumber]; }
-  
-  inline G4bool HasFSData(G4int isoNumber) { return theFinalStates[isoNumber]->HasFSData(); }
-  
-  inline G4bool HasAnyData(G4int isoNumber) { return theFinalStates[isoNumber]->HasAnyData(); }
-  
-  G4bool Register(G4ParticleHPFinalState *theFS);
-  
-  void Init(G4Element * theElement, const G4String dirName); 
 
-  void Init(G4Element * theElement, const G4String dirName, const G4String fsType); 
-  
-  //void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
-  void UpdateData(G4int A, G4int Z, G4int index, G4double abundance, G4ParticleDefinition* projectile) { G4int M = 0; UpdateData( A, Z, M, index, abundance, projectile); };
-  void UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance, G4ParticleDefinition* projectile);
-  
-  void Harmonise(G4ParticleHPVector *& theStore, G4ParticleHPVector * theNew);
-
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack, G4int isoNumber=-1);
-    
-  inline G4int GetNiso() {return niso;}
-  
-  inline G4double GetN(G4int i) {return theFinalStates[i]->GetN();}
-  inline G4double GetZ(G4int i) {return theFinalStates[i]->GetZ();}
-  inline G4double GetM(G4int i) {return theFinalStates[i]->GetM();}
-  
-  inline G4bool HasDataInAnyFinalState()
-  {
-    G4bool result = false;
-    G4int i;
-    for(i=0; i<niso; i++)
+    G4ParticleHPChannel()
+      : wendtFissionGenerator(G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel()
+                                ? G4WendtFissionFragmentGenerator::GetInstance()
+                                : nullptr)
     {
-      if(theFinalStates[i]->HasAnyData()) result = true;
+      if (G4ParticleHPManager::GetInstance()->GetUseWendtFissionModel()) {
+        // Make sure both fission fragment models are not active at same time
+        G4ParticleHPManager::GetInstance()->SetProduceFissionFragments(false);
+      }
+      theProjectile = G4Neutron::Neutron();
+      theChannelData = new G4ParticleHPVector;
+      theBuffer = nullptr;
+      theIsotopeWiseData = nullptr;
+      theFinalStates = nullptr;
+      active = nullptr;
+      registerCount = -1;
+      niso = -1;
+      theElement = nullptr;
     }
-    return result;
-  }
 
-  void DumpInfo();
+    ~G4ParticleHPChannel()
+    {
+      delete theChannelData;
+      // Following statement disabled to avoid SEGV
+      // theBuffer is also deleted as "theChannelData" in
+      // ~G4ParticleHPIsoData.  FWJ 06-Jul-1999
+      // if(theBuffer != 0) delete theBuffer;
+      delete[] theIsotopeWiseData;
+      // Deletion of FinalStates disabled to avoid endless looping
+      // in the destructor heirarchy.  FWJ 06-Jul-1999
+      // if(theFinalStates != 0)
+      //{
+      //  for(i=0; i<niso; i++)
+      //  {
+      //    delete theFinalStates[i];
+      //  }
+      //  delete [] theFinalStates;
+      //}
+      // FWJ experiment
+      // if(active!=0) delete [] active;
+      // T.K.
+      if (theFinalStates != nullptr) {
+        for (G4int i = 0; i < niso; i++) {
+          delete theFinalStates[i];
+        }
+        delete[] theFinalStates;
+      }
+      delete[] active;
+    }
 
-  G4String GetFSType() const {
-    return theFSType;
-  }
+    G4double GetXsec(G4double energy);
 
-  G4ParticleHPFinalState ** GetFinalStates() const {
-    return theFinalStates; 
-  }
-  
-private:
-  G4ParticleDefinition* theProjectile;
+    G4double GetWeightedXsec(G4double energy, G4int isoNumber);
 
-  G4ParticleHPVector * theChannelData;  // total (element) cross-section for this channel
-  G4ParticleHPVector * theBuffer;
-  
-  G4ParticleHPIsoData * theIsotopeWiseData; // these are the isotope-wise cross-sections for each final state.
-  G4ParticleHPFinalState ** theFinalStates; // also these are isotope-wise pionters, parallel to the above.
-  G4bool * active;
-  G4int niso;
+    G4double GetFSCrossSection(G4double energy, G4int isoNumber);
 
-  G4StableIsotopes theStableOnes;
-  
-  G4String theDir;
-  G4String theFSType;
-  G4Element * theElement;
-  
-  G4int registerCount;
+    inline G4bool IsActive(G4int isoNumber) { return active[isoNumber]; }
 
-  G4WendtFissionFragmentGenerator* const wendtFissionGenerator;
-    
+    inline G4bool HasFSData(G4int isoNumber) { return theFinalStates[isoNumber]->HasFSData(); }
+
+    inline G4bool HasAnyData(G4int isoNumber) { return theFinalStates[isoNumber]->HasAnyData(); }
+
+    G4bool Register(G4ParticleHPFinalState* theFS);
+
+    void Init(G4Element* theElement, const G4String dirName);
+
+    void Init(G4Element* theElement, const G4String dirName, const G4String fsType);
+
+    // void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
+    void UpdateData(G4int A, G4int Z, G4int index, G4double abundance,
+                    G4ParticleDefinition* projectile)
+    {
+      G4int M = 0;
+      UpdateData(A, Z, M, index, abundance, projectile);
+    };
+    void UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance,
+                    G4ParticleDefinition* projectile);
+
+    void Harmonise(G4ParticleHPVector*& theStore, G4ParticleHPVector* theNew);
+
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack, G4int isoNumber = -1,
+                                   G4bool isElastic = false);
+
+    inline G4int GetNiso() { return niso; }
+
+    inline G4double GetN(G4int i) { return theFinalStates[i]->GetN(); }
+    inline G4double GetZ(G4int i) { return theFinalStates[i]->GetZ(); }
+    inline G4double GetM(G4int i) { return theFinalStates[i]->GetM(); }
+
+    inline G4bool HasDataInAnyFinalState()
+    {
+      G4bool result = false;
+      G4int i;
+      for (i = 0; i < niso; i++) {
+        if (theFinalStates[i]->HasAnyData()) result = true;
+      }
+      return result;
+    }
+
+    void DumpInfo();
+
+    G4String GetFSType() const { return theFSType; }
+
+    G4ParticleHPFinalState** GetFinalStates() const { return theFinalStates; }
+
+  private:
+    G4ParticleDefinition* theProjectile;
+
+    G4ParticleHPVector* theChannelData;  // total (element) cross-section for this channel
+    G4ParticleHPVector* theBuffer;
+
+    G4ParticleHPIsoData*
+      theIsotopeWiseData;  // these are the isotope-wise cross-sections for each final state.
+    G4ParticleHPFinalState**
+      theFinalStates;  // also these are isotope-wise pionters, parallel to the above.
+    G4bool* active;
+    G4int niso;
+
+    G4StableIsotopes theStableOnes;
+
+    G4String theDir;
+    G4String theFSType;
+    G4Element* theElement;
+
+    G4int registerCount;
+
+    G4WendtFissionFragmentGenerator* const wendtFissionGenerator;
 };
 
 #endif

@@ -5,7 +5,7 @@
 # Software Management
 /CMakeLists.txt @bmorgan
 /cmake/         @bmorgan @gunter
-/config/        @gcosmo
+/config/        @gcosmo @bmorgan
 /ReleaseNotes/  @gcosmo
 /source/global/ @gcosmo @bmorgan @gunter
 
@@ -29,6 +29,9 @@
 # Generic Processes and Materials
 /source/materials/ @maire @vnivanch @mverderi @dsawkey @asaim @ebagli
 /source/parameterisations/ @mverderi
+/source/parameterisations/channeling/ @pandola
+/source/parameterisations/gflash/ @azaborow
+/source/parameterisations/ @mverderi
 /source/processes/biasing/ @mverderi @vnivanch @asaim
 /source/processes/biasing/generic/ @mverderi
 /source/processes/biasing/importance/ @ahoward
@@ -36,10 +39,12 @@
 /source/processes/parameterisation/ @mverderi @vnivanch @asaim
 
 # Electromagnetic Standard Physics
+/source/processes/electromagnetic/              @vnivanch @mnovak
+/source/processes/electromagnetic/adjoint       @vnivanch @ldesorgh
 /source/processes/electromagnetic/highenergy/   @vnivanch @dsawkey
 /source/processes/electromagnetic/muons/        @vnivanch @dsawkey
 /source/processes/electromagnetic/polarisation/ @vnivanch @dsawkey
-/source/processes/electromagnetic/standard/     @vnivanch @dsawkey
+/source/processes/electromagnetic/standard/     @vnivanch @dsawkey @mnovak
 /source/processes/electromagnetic/xrays/        @vnivanch @dsawkey
 /source/processes/optical/                      @vnivanch @dsawkey
 
@@ -77,12 +82,11 @@
 /source/persistency/gdml/  @gcosmo @witoldp
 /source/analysis/          @ihrivnac
 /source/analysis/g4tools/  @gybarran @ihrivnac
-/source/analysis/test/     @gybarran @ihrivnac
 
 # User and Category Interfaces
-/source/intercoms/  @asaim @hajime @kmura
-/source/interfaces/ @hajime @kmura @lgarnier
-/environments/      @hajime @kmura
+/source/intercoms/  @asaim @kmura
+/source/interfaces/ @kmura @lgarnier
+/environments/      @bmorgan @kmura
 
 # Visualization
 /source/graphics_reps/               @allison @lgarnier @perl
@@ -95,13 +99,18 @@
 /source/visualization/RayTracer/     @asaim @allison @lgarnier @perl
 /source/visualization/Tree/          @allison @lgarnier @perl
 /source/visualization/VRML/          @stanaka @lgarnier @perl
+/source/visualization/Vtk/           @allison @sboogert
 /source/visualization/gMocren/       @akimura @lgarnier @perl
 
 # Physics Lists
-/source/physics_lists/ @gunter @wenzel
+/source/physics_lists/               @gunter @wenzel @ribon @vnivanch
 
 # Other
-/source/error_propagation @arce
+/source/error_propagation/           @arce
+/source/externals/                   @gcosmo @bmorgan @gunter
+
+# Advanced Examples (Can be extended with responsibles per example)
+/examples/advanced/ @guatelli @fromano @pandola
 
 # Novice+Extended Examples (Individual Examples assigned to Responsibles)
 /examples/basic/    @ihrivnac @ahoward
@@ -184,6 +193,7 @@
 /examples/extended/geometry/vecGeomNavigation/ @japost @ihrivnac
 
 /examples/extended/hadronic/FissionFragment/ @bwendt @ihrivnac
+/examples/extended/hadronic/FlukaCern/       @ribon @ghugo @ihrivnac
 /examples/extended/hadronic/Hadr00/          @vnivanch @ihrivnac
 /examples/extended/hadronic/Hadr01/          @vnivanch @ihrivnac
 /examples/extended/hadronic/Hadr02/          @vnivanch @ihrivnac
@@ -193,12 +203,15 @@
 /examples/extended/hadronic/Hadr07/          @maire @ihrivnac
 /examples/extended/hadronic/Hadr08/          @ribon @ihrivnac
 /examples/extended/hadronic/Hadr09/          @ribon @ihrivnac
+/examples/extended/hadronic/Hadr10/          @ribon @ihrivnac
 /examples/extended/hadronic/NeutronSource/   @maire @ihrivnac
 /examples/extended/hadronic/ParticleFluence/ @ribon @ihrivnac
 
 /examples/extended/medical/DICOM/  @arce @ihrivnac
 /examples/extended/medical/DICOM2/ @jmadsen @ihrivnac
 
+/examples/extended/medical/dna/AuNP/            @dsakata @ihrivnac
+/examples/extended/medical/dna/UHDR/            @ngoc @ihrivnac
 /examples/extended/medical/dna/chem1/           @matkara @ihrivnac
 /examples/extended/medical/dna/chem2/           @matkara @ihrivnac
 /examples/extended/medical/dna/chem3/           @matkara @ihrivnac
@@ -207,6 +220,7 @@
 /examples/extended/medical/dna/chem6/           @wshin @ihrivnac
 /examples/extended/medical/dna/clustering/      @matkara @ihrivnac
 /examples/extended/medical/dna/dnadamage1/      @ngoc @ihrivnac
+/examples/extended/medical/dna/dnadamage2/      @ngoc @ihrivnac
 /examples/extended/medical/dna/dnaphysics/      @sincerti @ihrivnac
 /examples/extended/medical/dna/icsd/            @cvillagr @ihrivnac
 /examples/extended/medical/dna/jetcounter/      @ngoc @ihrivnac
@@ -237,11 +251,12 @@
 /examples/extended/optical/LXe/       @dsawkey @ihrivnac
 /examples/extended/optical/wls/       @dsawkey @ihrivnac
 
+/examples/extended/parallel/MPI/               @kmura @ihrivnac
 /examples/extended/parallel/MPI/exMPI01/       @kmura @ihrivnac
 /examples/extended/parallel/MPI/exMPI02/       @kmura @ihrivnac
 /examples/extended/parallel/MPI/exMPI03/       @kmura @ihrivnac
 /examples/extended/parallel/MPI/exMPI04/       @ihrivnac
-/examples/extended/parallel/TBB/               @dotti @ihrivnac
+/examples/extended/parallel/TBB/               @jmadsen @ihrivnac
 /examples/extended/parallel/ThreadsafeScorers/ @jmadsen @ihrivnac
 /examples/extended/parallel/TopC/              @cooperma @ihrivnac
 
@@ -251,7 +266,7 @@
 /examples/extended/parameterisations/Par03/  @azaborow @ihrivnac
 /examples/extended/parameterisations/Par04/  @azaborow @ihrivnac
 
-/examples/extended/persistency/gdml/ @witoldp @ihrivnac
+/examples/extended/persistency/gdml/ @witoldp @gcosmo @ihrivnac
 /examples/extended/persistency/P01/  @witoldp @ihrivnac
 /examples/extended/persistency/P02/  @witoldp @ihrivnac
 /examples/extended/persistency/P03/  @arce @ihrivnac
@@ -279,9 +294,6 @@
 /examples/extended/visualization/perspective/   @allison @ihrivnac
 /examples/extended/visualization/standalone/    @allison @ihrivnac
 /examples/extended/visualization/userVisAction/ @allison @ihrivnac
-
-# Advanced Examples (Can be extended with responsibles per example)
-/examples/advanced/ @guatelli @fromano @pandola
 
 # Testing
 /tests/ @gunter @syjun

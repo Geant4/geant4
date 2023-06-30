@@ -111,16 +111,16 @@ class G4PVPlacement : public G4VPhysicalVolume
 
   public:  // with description
 
-    virtual ~G4PVPlacement();
+    ~G4PVPlacement() override;
       // Default destructor.
 
-    inline G4int GetCopyNo() const  { return fcopyNo; }
+    inline G4int GetCopyNo() const override  { return fcopyNo; }
 
-    void SetCopyNo(G4int CopyNo);
+    void SetCopyNo(G4int CopyNo) override;
       // Gets and sets the copy number of the volume.
 
     G4bool CheckOverlaps(G4int res = 1000, G4double tol = 0.,
-                         G4bool verbose = true, G4int maxErr = 1);
+                         G4bool verbose = true, G4int maxErr = 1) override;
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.
@@ -140,19 +140,19 @@ class G4PVPlacement : public G4VPhysicalVolume
     G4PVPlacement& operator=(const G4PVPlacement&) = delete;
       // Copy constructor and assignment operator not allowed.
 
-    G4bool IsMany() const;
-    G4bool IsReplicated() const;
-    G4bool IsParameterised() const;
-    G4VPVParameterisation* GetParameterisation() const;
+    G4bool IsMany() const override;
+    G4bool IsReplicated() const override;
+    G4bool IsParameterised() const override;
+    G4VPVParameterisation* GetParameterisation() const override;
     void GetReplicationData(EAxis& axis,
                             G4int& nReplicas,
                             G4double& width,
                             G4double& offset,
-                            G4bool& consuming) const;
-    G4bool IsRegularStructure() const; 
-    G4int GetRegularStructureId() const; 
+                            G4bool& consuming) const override;
+    G4bool IsRegularStructure() const override; 
+    G4int GetRegularStructureId() const override; 
 
-    EVolume VolumeType() const;
+    EVolume VolumeType() const override;
    
   private:
 

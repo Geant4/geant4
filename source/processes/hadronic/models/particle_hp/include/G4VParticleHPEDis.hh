@@ -29,31 +29,26 @@
 #ifndef G4VParticleHPEDis_h
 #define G4VParticleHPEDis_h 1
 
-#include <fstream>
-
-#include "globals.hh"
+#include "G4ParticleHPVector.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4ParticleHPVector.hh"
+#include "globals.hh"
+
+#include <fstream>
 
 class G4VParticleHPEDis
 {
   public:
-  G4VParticleHPEDis()
-  {
-  }
-  virtual ~G4VParticleHPEDis()
-  {
-  }
-  
-  virtual void Init(std::istream & theData) = 0;
-  
-  virtual G4double GetFractionalProbability(G4double anEnergy) = 0;
-  
-  virtual G4double Sample(G4double anEnergy) = 0; 
-  
+    G4VParticleHPEDis() = default;
+    virtual ~G4VParticleHPEDis() = default;
+
+    virtual void Init(std::istream& theData) = 0;
+
+    virtual G4double GetFractionalProbability(G4double anEnergy) = 0;
+
+    virtual G4double Sample(G4double anEnergy) = 0;
+
   private:
-    
 };
 
 #endif

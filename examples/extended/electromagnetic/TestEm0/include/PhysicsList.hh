@@ -58,10 +58,10 @@ class PhysicsList: public G4VModularPhysicsList
     void AddPhysicsList(const G4String& name);
     
   private:
-    G4VPhysicsConstructor*  fEmPhysicsList;
-    G4String                fEmName;
+    G4VPhysicsConstructor*  fEmPhysicsList = nullptr;
+    G4String                fEmName = " ";
     
-    PhysicsListMessenger*   fMessenger;         
+    PhysicsListMessenger*   fMessenger = nullptr;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

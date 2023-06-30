@@ -60,7 +60,7 @@ ConstructMuonicAtom(const G4String& name, G4int encoding, G4Ions const* baseion)
     (G4ParticleTable::GetParticleTable()->FindParticle("mu-"))->GetPDGMass() +
     baseion->GetPDGMass() - GetKShellEnergy(G4double(Z)); //fixme check
 
-  G4DecayTable* decayTable = new G4DecayTable();
+  auto  decayTable = new G4DecayTable();
   auto muatom = new G4MuonicAtom(name, mass, 0.0, charge,
                                  baseion->GetPDGiSpin(),
                                  baseion->GetPDGiParity(),

@@ -72,7 +72,7 @@ G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList()
 {
   fMessenger = new PhysicsListMessenger(this);
 
@@ -249,9 +249,16 @@ void PhysicsList::AddDecay()
 void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+
+  G4bool armFlag = false;  
+  radioactiveDecay->SetARM(armFlag);                //Atomic Rearangement
   
-  radioactiveDecay->SetARM(true);                //Atomic Rearangement
-  
+  // atomic de-excitation module, if needed
+  if (armFlag) {
+    G4EmParameters::Instance()->SetAuger(true);
+    G4EmParameters::Instance()->SetDeexcitationIgnoreCut(true);
+  }
+
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
   

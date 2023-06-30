@@ -36,15 +36,11 @@
 #include "G4SystemOfUnits.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-  : G4EquationOfMotion( emField ), charge(0.), mass(0.), magMoment(0.),
-    spin(0.), fElectroMagCof(0.), fMassCof(0.), omegac(0.), 
-    anomaly(0.0011659208), beta(0.), gamma(0.)
+  : G4EquationOfMotion( emField ) 
 {
 }
 
-G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin()
-{
-} 
+G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin() = default; 
 
 void  
 G4EqEMFieldWithSpin::SetChargeMomentumMass(G4ChargeState particleCharge,
@@ -64,8 +60,14 @@ G4EqEMFieldWithSpin::SetChargeMomentumMass(G4ChargeState particleCharge,
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
-   else g_BMT = 2.;
+   if ( spin != 0. )
+   {
+     g_BMT = (std::abs(magMoment)/muB)/spin;
+   }
+   else
+   {
+     g_BMT = 2.;
+   }
 
    anomaly = (g_BMT - 2.)/2.;
 

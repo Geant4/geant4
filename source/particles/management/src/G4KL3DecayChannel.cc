@@ -38,12 +38,6 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
-G4KL3DecayChannel::G4KL3DecayChannel()
-  : G4VDecayChannel()
-{
-}
-
-
 G4KL3DecayChannel::
 G4KL3DecayChannel(const G4String& theParentName, 
                         G4double        theBR,
@@ -106,17 +100,6 @@ G4KL3DecayChannel(const G4String& theParentName,
   }
 }
 
-G4KL3DecayChannel::~G4KL3DecayChannel()
-{
-}
-
-G4KL3DecayChannel::G4KL3DecayChannel(const G4KL3DecayChannel& right)
-  : G4VDecayChannel(right),
-    pLambda(right.pLambda), 
-    pXi0(right.pXi0)
-{
-}
-
 G4KL3DecayChannel& G4KL3DecayChannel::operator=(const G4KL3DecayChannel& right)
 {
   if (this != &right)
@@ -135,7 +118,7 @@ G4KL3DecayChannel& G4KL3DecayChannel::operator=(const G4KL3DecayChannel& right)
     numberOfDaughters = right.numberOfDaughters;
     if ( numberOfDaughters >0 )
     {
-      if (daughters_name !=0) ClearDaughtersName();
+      if (daughters_name !=nullptr) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       //copy daughters name
       for (G4int index=0; index<numberOfDaughters; ++index)
@@ -198,13 +181,13 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 #endif
 
   // create parent G4DynamicParticle at rest
-  G4ThreeVector* direction = new G4ThreeVector(1.0,0.0,0.0);
-  G4DynamicParticle* parentparticle
+  auto  direction = new G4ThreeVector(1.0,0.0,0.0);
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, *direction, 0.0);
   delete direction;
 
   // create G4Decayproducts
-  G4DecayProducts *products
+  auto products
     = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
@@ -220,7 +203,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   cosphi = std::cos(phi);
   direction = new G4ThreeVector(sintheta*cosphi,sintheta*sinphi,costheta);
   G4ThreeVector momentum0 =  (*direction)*daughterP[0]; 
-  G4DynamicParticle * daughterparticle 
+  auto  daughterparticle 
     = new G4DynamicParticle(G4MT_daughters[0], momentum0);
   products->PushProducts(daughterparticle);
 

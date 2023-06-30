@@ -43,9 +43,7 @@ G4RepleteEofM::G4RepleteEofM( G4Field* field, G4int nvar )
    fGfield = field->IsGravityActive();
 }
 
-G4RepleteEofM::~G4RepleteEofM()
-{
-}
+G4RepleteEofM::~G4RepleteEofM() = default;
 
 void  
 G4RepleteEofM::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
@@ -63,8 +61,14 @@ G4RepleteEofM::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
-   else g_BMT = 2.;
+   if ( spin != 0. )
+   {
+     g_BMT = (std::abs(magMoment)/muB)/spin;
+   }
+   else
+   {
+     g_BMT = 2.;
+   }
 
    anomaly = (g_BMT - 2.)/2.;
 
@@ -273,8 +277,14 @@ G4RepleteEofM::EvaluateRhsGivenB( const G4double y[],
       G4ThreeVector Spin(y[9],y[10],y[11]);
 
       G4double pcharge;
-      if (charge == 0.) pcharge = 1.;
-      else pcharge = charge;
+      if (charge == 0.)
+      {
+        pcharge = 1.;
+      }
+      else
+      {
+        pcharge = charge;
+      }
 
       G4ThreeVector dSpin(0.,0.,0);
       if (Spin.mag2() != 0.)

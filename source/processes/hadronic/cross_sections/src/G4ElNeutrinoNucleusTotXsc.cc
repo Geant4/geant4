@@ -85,7 +85,7 @@ G4ElNeutrinoNucleusTotXsc::~G4ElNeutrinoNucleusTotXsc()
 
 //////////////////////////////////////////////////////
 
-/*
+
 G4bool 
 G4ElNeutrinoNucleusTotXsc::IsIsoApplicable( const G4DynamicParticle* aPart, G4int, G4int, const G4Element*, const G4Material*)
 {
@@ -135,7 +135,7 @@ G4double G4ElNeutrinoNucleusTotXsc::GetElementCrossSection(const G4DynamicPartic
   if( fact > 0.0) { xsec /= fact; }
   return xsec;
 }
-*/
+
 
 ////////////////////////////////////////////////////
 //

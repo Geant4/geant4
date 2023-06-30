@@ -350,7 +350,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
   {
     pDaughterLogical->SetFieldManager(G4MT_fmanager, false);
   }
-  if (fRegion)
+  if (fRegion != nullptr)
   {
     PropagateRegion();
     fRegion->RegionModified(true);
@@ -371,7 +371,7 @@ void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
       break;
     }
   }
-  if (fRegion)
+  if (fRegion != nullptr)
   {
     fRegion->RegionModified(true);
   }
@@ -565,12 +565,12 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
 {
   // Return the cached non-zero value, if not forced
   //
-  if ( (G4MT_mass) && (!forced) )  { return G4MT_mass; }
+  if ( ((G4MT_mass) != 0.0) && (!forced) )  { return G4MT_mass; }
 
   // Global density and computed mass associated to the logical
   // volume without considering its daughters
   //
-  G4Material* logMaterial = parMaterial ? parMaterial : GetMaterial();
+  G4Material* logMaterial = parMaterial != nullptr ? parMaterial : GetMaterial();
   if (logMaterial == nullptr)
   {
     std::ostringstream message;
@@ -614,7 +614,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
     for (auto i=0; i<physDaughter->GetMultiplicity(); ++i)
     {
       G4VPVParameterisation* physParam = physDaughter->GetParameterisation();
-      if (physParam)
+      if (physParam != nullptr)
       {
         daughterSolid = physParam->ComputeSolid(i, physDaughter);
         daughterSolid->ComputeDimensions(physParam, i, physDaughter);

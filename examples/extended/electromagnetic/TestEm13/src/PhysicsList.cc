@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,9 +53,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() 
-: G4VModularPhysicsList(),
-  fEmPhysicsList(0), fMessenger(0)
+PhysicsList::PhysicsList()
 {
   
   //add new units for cross sections

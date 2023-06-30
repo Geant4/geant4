@@ -65,9 +65,7 @@ G4UTrd::G4UTrd( __void__& a )
 //
 // Destructor
 //
-G4UTrd::~G4UTrd()
-{
-}
+G4UTrd::~G4UTrd() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -253,7 +251,7 @@ G4UTrd::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent

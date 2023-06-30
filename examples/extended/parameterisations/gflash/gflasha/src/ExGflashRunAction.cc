@@ -27,13 +27,13 @@
 /// \brief Implementation of the ExGflashRunAction class
 //
 #include "ExGflashRunAction.hh"
+
 #include "G4Run.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashRunAction::ExGflashRunAction(ExGflashDetectorConstruction* det)
-  : G4UserRunAction(), fDetector(det)
+ExGflashRunAction::ExGflashRunAction(ExGflashDetectorConstruction* det) : fDetector(det)
 {
   fHistoManager = new ExGflashHistoManager(fDetector);
 }
@@ -53,11 +53,11 @@ void ExGflashRunAction::BeginOfRunAction(const G4Run* aRun)
 
   // histograms file
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
-  if ( analysis->IsActive() ) {
+  if (analysis->IsActive()) {
     analysis->OpenFile();
   }
 
-  if ( IsMaster() ) {
+  if (IsMaster()) {
     fRunTimer.Start();
   }
 }
@@ -66,7 +66,7 @@ void ExGflashRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void ExGflashRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  if ( IsMaster() ) {
+  if (IsMaster()) {
     // For MT we need Timer Merge
     fRunTimer.Stop();
     G4cout << G4endl;
@@ -84,7 +84,7 @@ void ExGflashRunAction::EndOfRunAction(const G4Run* aRun)
   }
   // save histograms
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
-  if ( analysis->IsActive() ) {
+  if (analysis->IsActive()) {
     analysis->Write();
     analysis->CloseFile();
   }

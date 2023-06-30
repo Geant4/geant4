@@ -56,9 +56,12 @@ public:
 public: //backward compatibility
   void mul_2f(float& a_x,float& a_y) const {parent::mul_2(a_x,a_y);}
   void mul_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_3(a_x,a_y,a_z);}
+  void mul_3f_opt(float& a_x,float& a_y,float& a_z,float a_tmp[3]) const {parent::mul_3_opt(a_x,a_y,a_z,a_tmp);}
   void mul_dir_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_dir_3(a_x,a_y,a_z);}
+  void mul_dir_3f_opt(float& a_x,float& a_y,float& a_z,float a_tmp[3]) const {parent::mul_dir_3_opt(a_x,a_y,a_z,a_tmp);}
   void mul_trans_3f(float& a_x,float& a_y,float& a_z) const {parent::mul_trans_3(a_x,a_y,a_z);}
   void mul_4f(float& a_x,float& a_y,float& a_z,float& a_w) const {parent::mul_4(a_x,a_y,a_z,a_w);}
+  void mul_4f_opt(float& a_x,float& a_y,float& a_z,float& a_w,float a_tmp[4]) const {parent::mul_4_opt(a_x,a_y,a_z,a_w,a_tmp);}
   void mul_dir_3d(double& a_x,double& a_y,double& a_z) const { //used in sg::healpix
     float x = float(a_x);
     float y = float(a_y);

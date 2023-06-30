@@ -48,20 +48,18 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
   using Shape_t = vecgeom::UnplacedExtruded;
   using Base_t  = G4UAdapter<vecgeom::UnplacedExtruded>;
 
-  public:  // without description
+  public:
 
     struct ZSection
     {
       ZSection() : fZ(0.), fOffset(0.,0.), fScale(1.) {}
-      ZSection(G4double z, G4TwoVector offset, G4double scale)
+      ZSection(G4double z, const G4TwoVector& offset, G4double scale)
         : fZ(z), fOffset(offset), fScale(scale) {}
 
       G4double    fZ;
       G4TwoVector fOffset;
       G4double    fScale;
     };
-
-  public:  // with description
 
     G4UExtrudedSolid(const G4String&                 pName,
                      const std::vector<G4TwoVector>& polygon,
@@ -77,7 +75,7 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
                            G4double scale2 = 1. );
     // Special constructor for solid with 2 z-sections
 
-   ~G4UExtrudedSolid();
+   ~G4UExtrudedSolid() override;
 
     G4int GetNofVertices() const;
     G4TwoVector GetVertex(G4int index) const;
@@ -86,9 +84,7 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
     ZSection GetZSection(G4int index) const;
     std::vector<ZSection> GetZSections() const;
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:  // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UExtrudedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -99,13 +95,13 @@ class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
     G4UExtrudedSolid &operator=(const G4UExtrudedSolid& source);
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;  
+                                 G4double& pMin, G4double& pMax) const override;  
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 };
 
 // --------------------------------------------------------------------

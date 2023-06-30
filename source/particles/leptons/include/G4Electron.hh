@@ -51,7 +51,7 @@ class G4Electron : public G4ParticleDefinition
  private:
    static G4Electron* theInstance;
    G4Electron(){}
-   ~G4Electron(){}
+   ~G4Electron() override= default;
 
  public:
    static G4Electron* Definition();

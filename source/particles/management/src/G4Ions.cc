@@ -60,8 +60,7 @@ G4Ions::G4Ions(
                           lepton,baryon,encoding,stable,lifetime,decaytable,
 			  shortlived, subType, anti_encoding),
     theExcitationEnergy(excitation),
-    theIsomerLevel(isomer),
-    floatLevelBase(G4FloatLevelBase::no_Float)
+    theIsomerLevel(isomer)
 {
    if ((aName == "proton") || (aName == "neutron")) { 
      isGeneralIon = false ;
@@ -97,14 +96,6 @@ G4Ions::G4Ions(
      SetAtomicNumber( std::abs(G4int(GetPDGCharge()/eplus)) );
      SetAtomicMass( std::abs(GetBaryonNumber()) );
    }
-}
-
-G4Ions::G4Ions()
-{
-}
-
-G4Ions::~G4Ions()
-{
 }
 
 G4Ions::G4FloatLevelBase G4Ions::FloatLevelBase(char flbChar)
@@ -166,7 +157,7 @@ G4Ions::G4FloatLevelBase G4Ions::FloatLevelBase(G4int flbIdx)
   { noFloat,
     plusX, plusY, plusZ, plusU, plusV, plusW, 
     plusR, plusS, plusT, plusA, plusB, plusC, plusD, plusE };
-  return flb[flbIdx];
+  return (flbIdx >=0 && flbIdx < 15) ? flb[flbIdx] : flb[0];
 }
 
 char G4Ions::FloatLevelBaseChar(G4Ions::G4FloatLevelBase flb)

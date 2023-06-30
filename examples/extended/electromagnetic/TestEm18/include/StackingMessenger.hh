@@ -45,13 +45,13 @@ class StackingMessenger: public G4UImessenger
 {
   public:
     StackingMessenger(StackingAction*);
-   ~StackingMessenger();
+   ~StackingMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
-    StackingAction*     fStackAction;
-    G4UIcmdWithABool*   fTrackCmd;
+    StackingAction*     fStackAction = nullptr;
+    G4UIcmdWithABool*   fTrackCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

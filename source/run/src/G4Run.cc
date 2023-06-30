@@ -29,6 +29,7 @@
 // --------------------------------------------------------------------
 
 #include "G4Run.hh"
+
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include "G4StatAnalysis.hh"
@@ -44,14 +45,10 @@ G4Run::G4Run()
 G4Run::~G4Run()
 {
   // Objects made by local thread should not be deleted by the master thread
-  G4RunManager::RMType rmType =
-    G4RunManager::GetRunManager()->GetRunManagerType();
-  if(rmType != G4RunManager::masterRM)
-  {
-    for(auto itr = eventVector->cbegin();
-             itr != eventVector->cend(); ++itr)
-    {
-      delete *itr;
+  G4RunManager::RMType rmType = G4RunManager::GetRunManager()->GetRunManagerType();
+  if (rmType != G4RunManager::masterRM) {
+    for (const auto& itr : *eventVector) {
+      delete itr;
     }
   }
   delete eventVector;
@@ -67,10 +64,8 @@ void G4Run::RecordEvent(const G4Event*)
 void G4Run::Merge(const G4Run* right)
 {
   numberOfEvent += right->numberOfEvent;
-  for(auto itr = right->eventVector->cbegin();
-           itr != right->eventVector->cend(); ++itr)
-  {
-    eventVector->push_back(*itr);
+  for (const auto& itr : *right->eventVector) {
+    eventVector->push_back(itr);
   }
 }
 

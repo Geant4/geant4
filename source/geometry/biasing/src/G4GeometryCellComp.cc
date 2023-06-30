@@ -31,9 +31,8 @@
 #include "G4GeometryCellComp.hh"
 #include "G4GeometryCell.hh"
 
-G4GeometryCellComp::G4GeometryCellComp()
-{
-}
+G4GeometryCellComp::G4GeometryCellComp() = default;
+
 
 G4bool G4GeometryCellComp::operator() (const G4GeometryCell& k1,
                                        const G4GeometryCell& k2) const

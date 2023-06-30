@@ -34,27 +34,25 @@
 #ifndef G4MSSteppingAction_hh
 #define G4MSSteppingAction_hh 1
 
-#include "globals.hh"
 #include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
 class G4Region;
 
 class G4MSSteppingAction : public G4UserSteppingAction
 {
   public:
-
-    G4MSSteppingAction();
-    virtual ~G4MSSteppingAction();
+    G4MSSteppingAction() = default;
+    ~G4MSSteppingAction() override = default;
 
     void Initialize(G4bool rSens, G4Region* reg);
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*) override;
 
     inline G4double GetTotalStepLength() const { return length; }
     inline G4double GetX0() const { return x0; }
     inline G4double GetLambda0() const { return lambda; }
 
   private:
-
     G4bool regionSensitive = false;
     G4Region* theRegion = nullptr;
     G4double length = 0.0;

@@ -194,6 +194,8 @@ public:
 
    ~G4OpenInventorQtExaminerViewer();
 
+   G4UIQt* GetUIQt() {return uiQt;}
+
    template <class T> void parseString(T &t, const std::string &s, bool &error);
 
    // In case the viewer is embedded and then detached:

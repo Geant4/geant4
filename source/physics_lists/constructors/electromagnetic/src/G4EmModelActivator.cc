@@ -67,6 +67,7 @@
 #include "G4EmProcessSubType.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4EmParticleList.hh"
+#include "G4EmUtility.hh"
 
 #include "G4MicroElecElastic.hh"
 #include "G4MicroElecElasticModel.hh"
@@ -88,6 +89,7 @@
 #include "G4ionIonisation.hh"
 #include "G4KleinNishinaModel.hh"
 
+#include "G4GammaGeneralProcess.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
@@ -149,7 +151,7 @@ void G4EmModelActivator::ActivateEmOptions()
   const std::vector<G4String>& regnamesPhys = theParameters->RegionsPhysics();
   std::size_t nreg = regnamesPhys.size();
   if(0 == nreg) { return; }
-  G4int verbose = theParameters->Verbose() - 1; 
+  G4int verbose = theParameters->Verbose() - 1;
   if(verbose > 0) {
     G4cout << "### G4EmModelActivator::ActivateEmOptions for " << nreg << " regions"
            << G4endl;
@@ -165,7 +167,8 @@ void G4EmModelActivator::ActivateEmOptions()
   G4EmConfigurator* em_config = man->EmConfigurator();
   G4VAtomDeexcitation* adeexc = man->AtomDeexcitation(); 
   G4ParticleTable* table = G4ParticleTable::GetParticleTable();
-  G4VEmModel* mod;
+  G4VEmModel* mod = nullptr;
+  G4VEmProcess* proc = nullptr;
 
   // high energy limit for low-energy e+- model of msc
   G4double mscEnergyLimit = theParameters->MscEnergyLimit();
@@ -177,12 +180,13 @@ void G4EmModelActivator::ActivateEmOptions()
   G4double highEnergy = theParameters->MaxKinEnergy();
 
   for(std::size_t i=0; i<nreg; ++i) {
-    G4String reg = regnamesPhys[i];
+    const G4String reg = regnamesPhys[i];
+    auto region = G4EmUtility::FindRegion(reg);
     if(verbose > 0) {
-      G4cout << i << ". region <" << reg << ">; type <" << typesPhys[i] << "> " 
-	     << G4endl;
+      G4cout << i << ". region <" << reg << ">; physics type <"
+	     << typesPhys[i] << "> region ptr: " << region << G4endl;
     }
-   
+
     if(baseName == typesPhys[i]) { continue; }
 
     if("G4EmStandard" == typesPhys[i]) {
@@ -205,35 +209,30 @@ void G4EmModelActivator::ActivateEmOptions()
       G4UrbanMscModel* msc = new G4UrbanMscModel();
       SetMscParameters(elec, msc, typesPhys[i]);
       em_config->SetExtraEmModel("e-", "msc", msc, reg);
-      FindOrAddProcess(elec, "CoulombScat");
-      em_config->SetExtraEmModel("e-", "CoulombScat", dummy, reg);
+      proc = FindOrAddProcess(elec, "CoulombScat");
+      proc->AddEmModel(-1, dummy, region);
 
       msc = new G4UrbanMscModel();
       SetMscParameters(posi, msc, typesPhys[i]);
       em_config->SetExtraEmModel("e+", "msc", msc, reg);
-      FindOrAddProcess(posi, "CoulombScat");
-      em_config->SetExtraEmModel("e+", "CoulombScat", dummy, reg);
+      proc = FindOrAddProcess(posi, "CoulombScat");
+      proc->AddEmModel(-1, dummy, region);
 
       msc = new G4UrbanMscModel();
       SetMscParameters(prot, msc, typesPhys[i]);
       em_config->SetExtraEmModel("proton", "msc", msc, reg);
-      FindOrAddProcess(prot, "CoulombScat");
-      em_config->SetExtraEmModel("proton", "CoulombScat", dummy, reg);
+      proc = FindOrAddProcess(prot, "CoulombScat");
+      proc->AddEmModel(-1, dummy, region);
 
       theParameters->SetNumberOfBinsPerDecade(20);
       if(G4Threading::IsMasterThread()) {
         theParameters->SetDeexActiveRegion(reg, true, false, false);
       }
       theParameters->DefineRegParamForDeex(adeexc);
-      FindOrAddProcess(phot, "Rayl");
-      mod = new G4LivermoreRayleighModel();
-      em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
-      FindOrAddProcess(phot, "phot");
-      mod = new G4LivermorePhotoElectricModel();
-      em_config->SetExtraEmModel("gamma", "phot", mod, reg);
-      FindOrAddProcess(phot, "compt");
-      mod = new G4KleinNishinaModel();
-      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
+      proc = FindOrAddProcess(phot, "Rayl");
+      proc->AddEmModel(-1, new G4LivermoreRayleighModel(), region);
+      proc = FindOrAddProcess(phot, "compt");
+      proc->AddEmModel(-1, new G4KleinNishinaModel(), region);
 
     } else if("G4EmStandard_opt4" == typesPhys[i]) {
       G4VMscModel* msc = new G4GoudsmitSaundersonMscModel();
@@ -249,20 +248,15 @@ void G4EmModelActivator::ActivateEmOptions()
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
-      FindOrAddProcess(phot, "Rayl");
-      mod = new G4LivermoreRayleighModel();
-      em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
-      FindOrAddProcess(phot, "phot");
-      mod = new G4LivermorePhotoElectricModel();
-      FindOrAddProcess(phot, "compt");
-      mod = new G4KleinNishinaModel();
-      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
+      proc = FindOrAddProcess(phot, "Rayl");
+      proc->AddEmModel(-1, new G4LivermoreRayleighModel(), region);
+      proc = FindOrAddProcess(phot, "compt");
+      proc->AddEmModel(-1, new G4KleinNishinaModel(), region);
       mod = new G4LowEPComptonModel();
       mod->SetHighEnergyLimit(20*MeV);
-      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
-      FindOrAddProcess(phot, "conv");
-      mod = new G4BetheHeitler5DModel();
-      em_config->SetExtraEmModel("gamma", "conv", mod, reg);
+      proc->AddEmModel(-2, mod, region);
+      proc = FindOrAddProcess(phot, "conv");
+      proc->AddEmModel(-1, new G4BetheHeitler5DModel(), region);
 
     } else if("G4EmStandardGS" == typesPhys[i]) {
       G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();
@@ -285,17 +279,31 @@ void G4EmModelActivator::ActivateEmOptions()
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
-    } else if("G4EmStandardSS" == typesPhys[i] && 
-	      baseName != "G4EmStandard_opt3") {
+    } else if("G4EmStandardSS" == typesPhys[i]) {
       G4EmParticleList emList;
-      for(const auto& particleName : emList.PartNames()) {
+      for(const auto& particleName : emList.EmChargedPartNames()) {
 	G4ParticleDefinition* particle = table->FindParticle(particleName);
-        if(particle && 0.0 != particle->GetPDGCharge()) {
-	  FindOrAddProcess(particle, "CoulombScat");
-	  G4eCoulombScatteringModel* sc = new G4eCoulombScatteringModel();
-	  sc->SetPolarAngleLimit(0.0);
-	  sc->SetLocked(true);
-	  em_config->SetExtraEmModel(particleName, "CoulombScat", sc, reg);
+        if(nullptr != particle && 0.0 != particle->GetPDGCharge()) {
+	  proc = FindOrAddProcess(particle, "CoulombScat");
+          if(nullptr != proc) {
+	    proc->AddEmModel(-1, new G4DummyModel(), region);
+	  }
+	  auto pm = particle->GetProcessManager();
+          proc = new G4CoulombScattering("SingleCoulombScat", false);
+	  pm->AddDiscreteProcess(proc);
+          proc->SetEmModel(new G4DummyModel());
+          G4VEmModel* scmod = nullptr;
+          if(particle->GetPDGMass() > CLHEP::GeV ||
+             particle->GetParticleType() == "nucleus") {
+	    scmod = new G4IonCoulombScatteringModel();
+	  } else {
+	    scmod = new G4eCoulombScatteringModel(false);
+	  }
+	  scmod->SetPolarAngleLimit(0.0);
+	  scmod->SetLocked(true);
+	  proc->AddEmModel(-1, scmod, region);
+
+	  // multiple scattering should be disabled
           if(particleName == "mu+" || particleName == "mu-") {
 	    em_config->SetExtraEmModel(particleName, "muMsc", 
 				       new G4DummyModel(), reg);
@@ -753,24 +761,31 @@ void G4EmModelActivator::SetMscParameters(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmModelActivator::FindOrAddProcess(const G4ParticleDefinition* part, 
-					  const G4String& name)
+G4VEmProcess* 
+G4EmModelActivator::FindOrAddProcess(const G4ParticleDefinition* part, 
+				     const G4String& name)
 {
-  G4ProcessManager* pm = part->GetProcessManager();
-  G4ProcessVector* pv = pm->GetProcessList();
-  G4int nproc = pm->GetProcessListLength();
-  for(G4int i = 0; i<nproc; ++i) {
-    if(((*pv)[i])->GetProcessName() == name) { return; }
+  G4VEmProcess* proc = nullptr;
+  auto pm = part->GetProcessManager();
+  auto emproc = pm->GetProcessList();
+  G4int n = (G4int)emproc->size();
+  for(auto i=0; i<n; ++i) {
+    auto ptr = (*emproc)[i];
+    if(part->GetPDGEncoding() == 22 && 
+       ptr->GetProcessSubType() == fGammaGeneralProcess) {
+      proc = (static_cast<G4GammaGeneralProcess*>(ptr))->GetEmProcess(name);
+    } else if(ptr->GetProcessName() == name) {
+      proc = dynamic_cast<G4VEmProcess*>(ptr);
+    }
+    if(nullptr != proc) { return proc; }
   }
-  if(name == "CoulombScat") {
-    G4CoulombScattering* cs = new G4CoulombScattering();
-    cs->SetEmModel(new G4DummyModel());
-    pm->AddDiscreteProcess(cs);
-  } else if(name == "Rayl") {
+  if(name == "Rayl") {
     G4RayleighScattering* rs = new G4RayleighScattering();
     rs->SetEmModel(new G4DummyModel());
     pm->AddDiscreteProcess(rs);
+    return rs;
   }
+  return proc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

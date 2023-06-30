@@ -37,7 +37,7 @@
 #include "G4ReactionProduct.hh"
 #include "G4SystemOfUnits.hh"
 
-G4ParticleHPDeExGammas::G4ParticleHPDeExGammas() {}
+G4ParticleHPDeExGammas::G4ParticleHPDeExGammas() = default;
 
 G4ParticleHPDeExGammas::~G4ParticleHPDeExGammas()
 {
@@ -110,7 +110,7 @@ G4ReactionProductVector* G4ParticleHPDeExGammas::GetDecayGammas(G4int i) const
 {
   G4int idx = i;
   if (idx >= nLevels || idx <= 0) return nullptr;
-  G4ReactionProductVector* result = new G4ReactionProductVector();
+  auto result = new G4ReactionProductVector();
 
   for (;;) {
     if (idx <= 0) {

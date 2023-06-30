@@ -69,9 +69,9 @@ G4TransportationParameters* G4TransportationParameters::Instance()
 
 G4bool G4TransportationParameters::IsLocked() const
 {
-  auto fStateManager = G4StateManager::GetStateManager();
+  auto stateManager = G4StateManager::GetStateManager();
 
-  auto state = fStateManager->GetCurrentState();
+  auto state = stateManager->GetCurrentState();
   bool goodState = state == G4State_PreInit
                    || state == G4State_Init
                    || state == G4State_Idle ;
@@ -82,7 +82,7 @@ G4bool G4TransportationParameters::IsLocked() const
 
 G4bool  G4TransportationParameters::SetNumberOfTrials( G4int val )
 {
-   if(IsLocked()) { return false; }
+   if(IsLocked()) { ReportLockError(__func__); return false; }
    fNumberOfTrials = val;
    return true;
 }
@@ -91,13 +91,17 @@ G4bool  G4TransportationParameters::SetNumberOfTrials( G4int val )
 
 G4bool  G4TransportationParameters::SetWarningEnergy( double val )
 {
-   if(IsLocked()) { return false; }
+   if(IsLocked()) { ReportLockError(__func__); return false; }
    fWarningEnergy = val;
 
    // Consistency check -- and trial fix
-   if( fWarningEnergy > fImportantEnergy   )
+   if( fWarningEnergy > fImportantEnergy   ) {
+      G4cerr << "G4TransportationParameters::GetWarningEnergy enforcing warning-E <= important-E "
+             << "  resetting important energy from " << fImportantEnergy
+             << " to " << val << G4endl;
+      // "Enforcing Important Energy >= Warning Energy"
       fImportantEnergy = fWarningEnergy;
-   
+   }
    return true;      
 }
 
@@ -105,16 +109,77 @@ G4bool  G4TransportationParameters::SetWarningEnergy( double val )
 
 G4bool  G4TransportationParameters::SetImportantEnergy( double val )
 {
-   if(IsLocked()) { return false; }
+   if(IsLocked()) { ReportLockError(__func__); return false; }
    fImportantEnergy = val;
 
    // Consistency check -- and trial fix   
-   if( fImportantEnergy < fWarningEnergy )
+   if( fImportantEnergy < fWarningEnergy ) {
+      G4String mthd= G4String("G4TransportationParameters")+G4String(__func__);
+      G4ExceptionDescription ed;
+      ed<<"enforcing hierarchy (warning-E <= important-E): resetting important"
+        <<" energy from " << fImportantEnergy << " to " << val << G4endl;
+      G4Exception( mthd, "Enforcing Warning Energy <= Important Energy",
+                   JustWarning, ed );
+
       fWarningEnergy = fImportantEnergy;
-   
+   }
    return true;
 }
-    
+
+//------------------------------------------------------------------------------
+
+G4bool G4TransportationParameters::SetWarningAndImportantEnergies( G4double warnE,
+                                                                   G4double importE )
+{
+   if(IsLocked()) {
+      ReportLockError(__func__);
+      return false;
+   }
+
+   if( warnE <= importE )
+   {
+     fWarningEnergy = warnE;
+     fImportantEnergy = importE;
+   }
+   else
+   {
+     fWarningEnergy = importE;
+     fImportantEnergy = warnE;
+
+     G4String mthd= G4String("G4TransportationParameters")+G4String(__func__);
+     G4ExceptionDescription ed;
+     ed << "To enforce hierarchy (warning-E <= important-E): "
+        << " using smaller value= " <<  importE << " as Warning Energy "
+        << " and larger value= " <<  warnE << " as Important Energy." << G4endl;
+      G4Exception( mthd, "Enforcing Warning Energy <= Important Energy",
+                   JustWarning, ed );
+   }
+   return true;
+}
+
+//------------------------------------------------------------------------------
+
+void G4TransportationParameters::ReportLockError(G4String methodName, G4bool verbose) const
+{
+  // Report Incompatible States: GeomClosed , EventProc, (also Quit, Abort)
+  G4String namesMethodClass= G4String("G4TransportationParameters") + methodName;
+
+  auto stateManager = G4StateManager::GetStateManager();
+  auto state    = stateManager->GetCurrentState();
+
+  G4ExceptionDescription ed;
+  ed << "Cannot change values of G4TransportationParameters when G4State is "
+     << stateManager->GetStateString(state) << G4endl;
+  ed << "Only the following Geant4 state are compatible: Pre_Init, Init and Idle." << G4endl;
+  if( verbose ) {
+     ed << G4endl << "Values remain as follows:" << G4endl;
+     StreamInfo( ed );
+  }
+  G4Exception( namesMethodClass,
+               "Locked, due to incompatible G4state: it not possible to change its parameters.",
+               JustWarning, ed );
+}
+
 //------------------------------------------------------------------------------
 
 void G4TransportationParameters::StreamInfo(std::ostream& os) const
@@ -188,7 +253,7 @@ G4bool G4TransportationParameters::SetLowLooperThresholds() // Values for low-E 
 
 G4bool G4TransportationParameters::EnableUseOfMagneticMoment(G4bool useMoment)
 {
-  if(IsLocked()) { return false; }   
+  if(IsLocked()) { return false; }
   fUseMagneticMoment= useMoment;
   return true;
 }

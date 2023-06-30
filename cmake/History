@@ -5,20 +5,87 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2023-06-21 Ben Morgan (cmake-V11-01-21)
+- Remobe obsolete and confusing GEANT4_BUILD_TESTS option and configuration
 
-## 2023-02-06 Ben Morgan (cmake-V11-00-53)
+## 2023-06-14 Gunter Folger (cmake-V11-01-20)
+- Update to use G4EMLOW 8.4, as provoded by Vladimir
+
+## 2023-05-31 Ben Morgan (cmake-V11-01-19)
+- Require Qt5 >= 5.9 if Qt5 support is selected
+  - Version chosen as current system version on oldest support OS (CentOS7)  
+
+## 2023-05-29 Guy Barrand (cmake-V11-01-18)
+- Templates/Geant4Config.cmake.inm Modules/G4InterfaceOptions.cmake: handle the TOOLSSG_[X11,XT,WINDOWS,QT]_ZB vis drivers.
+
+## 2023-05-23 Ben Morgan (cmake-V11-01-17)
+- Add capabilities to geant4_module_check.py:
+  - Given a module, print list of modules that depend on it
+  - Print all modules sorted in descending order of the number of modules using them
+  - Show which headers from linked modules are included by a module in its
+    usage requirements output
+
+## 2023-05-12 Ben Morgan (cmake-V11-01-16)
+- Make linking a source code module to a final Geant4 library a cmake-time error
+  - Fixes #161
+
+## 2023-05-10 Ben Morgan (cmake-V11-01-15)
+- Update config scripts for split of G4persistency library
+
+## 2023-05-10 Gunter Folger (cmake-V11-01-14)
+- Update to use G4INCL 1.1
+
+## 2023-04-28 Ben Morgan (cmake-V11-01-13)
+- Export VTK_DIR and QtX_DIR to package cache to assist in refinding both.
+
+## 2023-04-27 Ben Morgan (cmake-V11-01-12)
+- Find and refind Qt6OpenGLWidgets module in Qt6 for use by Qt/OpenGL consumers.
+
+## 2023-04-26 Ben Morgan (cmake-V11-01-11)
+- Support finding and use of Qt6 on request for beta testing.
+
+## 2023-04-02 Ben Morgan (cmake-V11-01-10)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+
+## 2023-03-28 Gunter Folger (cmake-V11-01-09)
+- Update to use G4ABLA 3.3
+
+## 2023-03-22 Ben Morgan (cmake-V11-01-08)
+- Remove setting of -D flags in Geant4Config to enable vis drivers. Libraries
+  now export compile definitions for what they support to move to a "use on link"
+  model.
+
+## 2023-02-16 Gunter Folger (cmake-V11-01-07)
+- Update to use G4EMLOW 8.3
+
+## 2023-02-13 Stewart Boogert (cmake-V11-01-06)
+- streamlined VTK cmake components.
+
+## 2023-02-06 Ben Morgan (cmake-V11-01-05)
 - Remove no longer required G4VecGeomShim module.
   - VecGeom supports/supplies full imported targets since 1.1.18
   - Use of VECGEOM_LIBRARIES variable required to allow build against CUDA-enabled VecGeom
 
-## 2023-01-18 Ben Morgan (cmake-V11-00-52)
+## 2023-01-30 Ben Morgan (cmake-V11-01-04)
+- Update Qt MOC application for G4UIimplementation in place of G4UIbasic/G4UIcommon
+
+## 2023-01-25 Ben Morgan (cmake-V11-01-03)
+- Initial support for declaring headers of a source code module private.
+  - Headers declared private are not installed
+  - geant4_module_check reports an inconsistency if a private header is used
+    non-privately
+
+## 2023-01-18 Ben Morgan (cmake-V11-01-02)
 - Fix configuration/use of G4ToolsSG in geant4-config
   - Addresses issue reported on [Geant4 Forum](https://geant4-forum.web.cern.ch/t/missing-g4toolssg-in-geant4-config-in-pre-compiled-geant4-11-1-for-linux/9738)
 
-## 2023-01-09 Ben Morgan (cmake-V11-00-51)
+## 2023-01-09 Ben Morgan (cmake-V11-01-01)
 - Use PROJECT_ or Geant4_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
   scope version to ease use of Geant4 as a CMake subproject. 
   - Fixes [GitHub PR #52](https://github.com/Geant4/geant4/pull/52)
+
+## 2022-12-20 Gunter Folger (cmake-V11-01-00)
+- Use new dataset G4ABLA 3.2
 
 ## 2022-12-05 Ben Morgan (cmake-V11-00-50)
 - Revert VecGeom minimum version to 1.2.0 due to issues with 1.2.1 reported by

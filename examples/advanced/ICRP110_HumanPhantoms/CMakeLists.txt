@@ -34,11 +34,14 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(ICRP110phantoms ICRP110phantoms.cc ${sources} ${headers})
+add_executable(ICRP110standalone ICRP110standalone.cc ${sources} ${headers})
 
 target_link_libraries(ICRP110phantoms ${Geant4_LIBRARIES} )
+target_link_libraries(ICRP110standalone ${Geant4_LIBRARIES} )
 
 # Depend on data for runtime
 add_dependencies(ICRP110phantoms ICRPdata)
+add_dependencies(ICRP110standalone ICRPdata)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -46,7 +49,7 @@ add_dependencies(ICRP110phantoms ICRPdata)
 # relies on these scripts being in the current working directory.
 #
 set(ICRPphantoms_SCRIPTS
-     female.in female_head.in female_trunk.in male.in male_head.in male_trunk.in vis.mac primary.mac ColourMap.dat openGLVis.mac g4views/g4_00.g4view g4views/g4_01.g4view
+     female.in female_head.in female_trunk.in male.in male_head.in male_trunk.in vis.mac primary.mac ColourMap.dat openGLVis.mac g4views/g4_00.g4view g4views/g4_01.g4view standalone.mac
 #    ICRPdata/Data.dat 
 #    "ICRPdata/ICRP110_g4dat/AF/*.g4dat"
 #    "ICRPdata/ICRP110_g4dat/AM/*.g4dat"
@@ -82,9 +85,11 @@ ExternalProject_Add(ICRPdata
 # (this avoids the need of typing the program name after make)
 #
 add_custom_target(ICRPphantoms DEPENDS phantom)
+add_custom_target(ICRPstandalone DEPENDS phantom)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS ICRP110phantoms DESTINATION bin)
+install(TARGETS ICRP110standalone DESTINATION bin)
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (adapted from B1PrimaryGeneratorAction)
 // Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
@@ -39,61 +38,59 @@
 #include "Randomize.hh"
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-: G4VUserPrimaryGeneratorAction(),
-	fParticleGun(0), 
-	fWorldBox(0)
+: G4VUserPrimaryGeneratorAction(), fParticleGun(nullptr), fWorldBox(nullptr)
 {
-	G4int n_particle = 1;
-	fParticleGun  = new G4ParticleGun(n_particle);
+ G4int n_particle = 1;
+ fParticleGun  = new G4ParticleGun(n_particle);
 
-	// default particle kinematic
-	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-	G4String particleName;
-	G4ParticleDefinition* particle
+ // default particle kinematic
+ G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+ G4String particleName;
+ G4ParticleDefinition* particle
 		= particleTable->FindParticle(particleName="proton");
-	fParticleGun->SetParticleDefinition(particle);
-	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-	fParticleGun->SetParticleEnergy(50.*MeV);
+ fParticleGun->SetParticleDefinition(particle);
+ fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+ fParticleGun->SetParticleEnergy(50.*MeV);
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-	delete fParticleGun;
+ delete fParticleGun;
 }
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-	G4double worldSizeXY = 0;
-	G4double worldSizeZ = 0;
+ G4double worldSizeXY = 0;
+ G4double worldSizeZ = 0;
 
-	if (!fWorldBox)
-	{
-		G4LogicalVolume* worldLV
-			= G4LogicalVolumeStore::GetInstance()->GetVolume("World");
-		if ( worldLV ) fWorldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
-	}
-
-	if ( fWorldBox ) {
-		worldSizeXY = fWorldBox->GetXHalfLength()*2.;
-		worldSizeZ = fWorldBox->GetZHalfLength()*2.;
-	}  
-	else  {
-		G4ExceptionDescription msg;
-		msg << "World volume of box shape not found.\n"; 
-		msg << "Perhaps you have changed geometry.\n";
-		msg << "The gun will be place at the center.";
-		G4Exception("PrimaryGeneratorAction::GeneratePrimaries()",
+ if (!fWorldBox)
+ {
+  G4LogicalVolume* worldLV
+		= G4LogicalVolumeStore::GetInstance()->GetVolume("World");
+  if ( worldLV ) fWorldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
+ }
+ if ( fWorldBox ) 
+  {
+    worldSizeXY = fWorldBox->GetXHalfLength()*2.;
+    worldSizeZ = fWorldBox->GetZHalfLength()*2.;
+   }  
+  else
+   {
+   G4ExceptionDescription msg;
+   msg << "World volume of box shape not found.\n"; 
+   msg << "Perhaps you have changed geometry.\n";
+   msg << "The gun will be place at the center.";
+   G4Exception("PrimaryGeneratorAction::GeneratePrimaries()",
 		 "MyCode0002",JustWarning,msg);
-	}
+   }
 
-	// shoot on XY disk centered on Z-axis behind the cloud
-	G4double sigma = worldSizeXY/10.0;			// spread in x and y
-	G4double x0 = G4RandGauss::shoot(0,sigma);
-	G4double y0 = G4RandGauss::shoot(0,sigma);
-	G4double z0 = 0.95 * (-0.5) * worldSizeZ;
+   // shoot on XY disk centered on Z-axis behind the cloud
+   G4double sigma = worldSizeXY/10.0;			// spread in x and y
+   G4double x0 = G4RandGauss::shoot(0,sigma);
+   G4double y0 = G4RandGauss::shoot(0,sigma);
+   G4double z0 = 0.95 * (-0.5) * worldSizeZ;
 	
-	fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-
-	fParticleGun->GeneratePrimaryVertex(anEvent);
+   fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

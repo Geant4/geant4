@@ -35,14 +35,12 @@
 #include "G4OpenGLImmediateViewer.hh"
 #include "G4OpenGLQtViewer.hh"
 
-#include <qgl.h> // include <qglwidget.h>
-
 #include "globals.hh"
 
 class G4OpenGLImmediateSceneHandler;
 
 class G4OpenGLImmediateQtViewer:
-  public G4OpenGLQtViewer, public G4OpenGLImmediateViewer, public QGLWidget {
+  public G4OpenGLQtViewer, public G4OpenGLImmediateViewer, public G4QGLWidgetType {
   
 public:
   G4OpenGLImmediateQtViewer (G4OpenGLImmediateSceneHandler& scene,

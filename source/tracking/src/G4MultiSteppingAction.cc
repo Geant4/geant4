@@ -29,18 +29,17 @@
 // --------------------------------------------------------------------
 
 #include <G4MultiSteppingAction.hh>
+
 #include <algorithm>
 
 void G4MultiSteppingAction::UserSteppingAction(const G4Step* step)
 {
-  std::for_each( begin(), end(),
-    [step](G4UserSteppingActionUPtr& e) { e->UserSteppingAction(step); }
-  );
+  std::for_each(
+    begin(), end(), [step](G4UserSteppingActionUPtr& e) { e->UserSteppingAction(step); });
 }
 
 void G4MultiSteppingAction::SetSteppingManagerPointer(G4SteppingManager* pVal)
 {
-  std::for_each( begin(), end(),
-    [pVal](G4UserSteppingActionUPtr& e) { e->SetSteppingManagerPointer(pVal); }
-  );
+  std::for_each(
+    begin(), end(), [pVal](G4UserSteppingActionUPtr& e) { e->SetSteppingManagerPointer(pVal); });
 }

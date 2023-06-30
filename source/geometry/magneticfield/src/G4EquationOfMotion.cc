@@ -35,6 +35,4 @@ G4EquationOfMotion::G4EquationOfMotion(G4Field* pField)
 {
 }
 
-G4EquationOfMotion::~G4EquationOfMotion()
-{
-}
+G4EquationOfMotion::~G4EquationOfMotion() = default;

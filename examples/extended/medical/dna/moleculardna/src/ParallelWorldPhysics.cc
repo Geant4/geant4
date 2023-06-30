@@ -48,10 +48,6 @@ ParallelWorldPhysics::ParallelWorldPhysics(const G4String& name,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ParallelWorldPhysics::~ParallelWorldPhysics() = default;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ParallelWorldPhysics::ConstructParticle()
 {
   // stub

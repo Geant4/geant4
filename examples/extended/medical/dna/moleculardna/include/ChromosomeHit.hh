@@ -41,11 +41,11 @@
 class ChromosomeHit : public G4VHit
 {
  public:
-  explicit ChromosomeHit(G4String  key);
+  explicit ChromosomeHit(const G4String& key);
 
   ChromosomeHit(const ChromosomeHit&);
 
-  ~ChromosomeHit() override;
+  ~ChromosomeHit() override = default;
 
   // operators
   inline void* operator new(size_t);

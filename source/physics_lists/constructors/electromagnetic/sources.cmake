@@ -39,6 +39,8 @@ geant4_add_module(G4phys_ctor_em
     G4EmStandardPhysics_option4.hh
     G4GammaGeneralProcess.hh
     G4OpticalPhysics.hh
+    G4ChemDissociationChannels.hh
+    G4ChemDissociationChannels_option1.hh
   SOURCES
     G4EmBuilder.cc
     G4EmDNABuilder.cc
@@ -75,7 +77,9 @@ geant4_add_module(G4phys_ctor_em
     G4EmStandardPhysics_option3.cc
     G4EmStandardPhysics_option4.cc
     G4GammaGeneralProcess.cc
-    G4OpticalPhysics.cc)
+    G4OpticalPhysics.cc
+    G4ChemDissociationChannels.cc
+    G4ChemDissociationChannels_option1.cc)
 
 geant4_module_link_libraries(G4phys_ctor_em
   PUBLIC

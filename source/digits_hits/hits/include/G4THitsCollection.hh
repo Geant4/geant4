@@ -29,10 +29,10 @@
 #ifndef G4THitsCollection_h
 #define G4THitsCollection_h 1
 
-#include "G4VHitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4VHitsCollection.hh"
 #include "globals.hh"
-//#include "g4rw/tpordvec.h"
+
 #include <vector>
 
 // class description:
@@ -48,13 +48,12 @@
 class G4HitsCollection : public G4VHitsCollection
 {
  public:
-  G4HitsCollection();
-  G4HitsCollection(G4String detName, G4String colNam);
-  virtual ~G4HitsCollection();
+  using G4VHitsCollection::G4VHitsCollection;
+  ~G4HitsCollection() override = default;
   G4bool operator==(const G4HitsCollection& right) const;
 
  protected:
-  void* theCollection;
+  void* theCollection = nullptr;
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
@@ -68,99 +67,85 @@ class G4THitsCollection : public G4HitsCollection
 {
  public:
   G4THitsCollection();
-
- public:  // with description
   G4THitsCollection(G4String detName, G4String colNam);
-  // constructor.
- public:
-  virtual ~G4THitsCollection();
+  ~G4THitsCollection() override;
+
   G4bool operator==(const G4THitsCollection<T>& right) const;
 
   inline void* operator new(size_t);
   inline void operator delete(void* anHC);
 
- public:  // with description
-  virtual void DrawAllHits();
-  virtual void PrintAllHits();
-  //  These two methods invokes Draw() and Print() methods of all of
-  // hit objects stored in this collection, respectively.
+  // Invoke Draw() method on all hit objects in collection
+  void DrawAllHits() override;
 
- public:  // with description
-  inline T* operator[](size_t i) const
-  {
-    return (*((std::vector<T*>*) theCollection))[i];
-  }
-  //  Returns a pointer to a concrete hit object.
-  inline std::vector<T*>* GetVector() const
-  {
-    return (std::vector<T*>*) theCollection;
-  }
-  //  Returns a collection vector.
+  // Invoke Print() method on all hit objects in collection
+  void PrintAllHits() override;
+
+  //  Returns a pointer to the concrete hit object
+  // Returns pointer to the concrete hit object at given index
+  // Not bounds checked
+  inline T* operator[](size_t i) const { return (*((std::vector<T*>*)theCollection))[i]; }
+
+  // Return pointer to hit collection
+  inline std::vector<T*>* GetVector() const { return (std::vector<T*>*)theCollection; }
+
+  // Insert a hit object in the collection, taking onwenership
+  // Returns the total number of hit objects stored after insertion
   inline size_t insert(T* aHit)
   {
-    std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
+    auto theHitsCollection = (std::vector<T*>*)theCollection;
     theHitsCollection->push_back(aHit);
     return theHitsCollection->size();
   }
-  //  Insert a hit object. Total number of hit objects stored in this
-  // collection is returned.
+
+  // Returns the number of hit objects stored in this collection.
   inline size_t entries() const
   {
-    std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
+    auto theHitsCollection = (std::vector<T*>*)theCollection;
     return theHitsCollection->size();
   }
-  //  Returns the number of hit objects stored in this collection
 
- public:
-  virtual G4VHit* GetHit(size_t i) const
-  {
-    return (*((std::vector<T*>*) theCollection))[i];
-  }
-  virtual size_t GetSize() const
-  {
-    return ((std::vector<T*>*) theCollection)->size();
-  }
+  G4VHit* GetHit(size_t i) const override { return (*((std::vector<T*>*)theCollection))[i]; }
+
+  size_t GetSize() const override { return ((std::vector<T*>*)theCollection)->size(); }
 };
 
 template <class T>
 inline void* G4THitsCollection<T>::operator new(size_t)
 {
-  if(anHCAllocator_G4MT_TLS_() == nullptr)
-  {
+  if (anHCAllocator_G4MT_TLS_() == nullptr) {
     anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   }
-  return (void*) anHCAllocator_G4MT_TLS_()->MallocSingle();
+  return (void*)anHCAllocator_G4MT_TLS_()->MallocSingle();
 }
 
 template <class T>
 inline void G4THitsCollection<T>::operator delete(void* anHC)
 {
-  anHCAllocator_G4MT_TLS_()->FreeSingle((G4HitsCollection*) anHC);
+  anHCAllocator_G4MT_TLS_()->FreeSingle((G4HitsCollection*)anHC);
 }
 
 template <class T>
 G4THitsCollection<T>::G4THitsCollection()
 {
-  std::vector<T*>* theHitsCollection = new std::vector<T*>;
-  theCollection                      = (void*) theHitsCollection;
+  auto theHitsCollection = new std::vector<T*>;
+  theCollection = (void*)theHitsCollection;
 }
 
 template <class T>
 G4THitsCollection<T>::G4THitsCollection(G4String detName, G4String colNam)
   : G4HitsCollection(detName, colNam)
 {
-  std::vector<T*>* theHitsCollection = new std::vector<T*>;
-  theCollection                      = (void*) theHitsCollection;
+  auto theHitsCollection = new std::vector<T*>;
+  theCollection = (void*)theHitsCollection;
 }
 
 template <class T>
 G4THitsCollection<T>::~G4THitsCollection()
 {
-  std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
-  // theHitsCollection->clearAndDestroy();
-  for(size_t i = 0; i < theHitsCollection->size(); ++i)
-  {
-    delete(*theHitsCollection)[i];
+  auto theHitsCollection = (std::vector<T*>*)theCollection;
+  for (const auto* hit : *theHitsCollection) {
+    delete hit;
   }
   theHitsCollection->clear();
   delete theHitsCollection;
@@ -175,22 +160,18 @@ G4bool G4THitsCollection<T>::operator==(const G4THitsCollection<T>& right) const
 template <class T>
 void G4THitsCollection<T>::DrawAllHits()
 {
-  std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
-  size_t n                           = theHitsCollection->size();
-  for(size_t i = 0; i < n; ++i)
-  {
-    (*theHitsCollection)[i]->Draw();
+  auto theHitsCollection = (std::vector<T*>*)theCollection;
+  for (auto* hit : *theHitsCollection) {
+    hit->Draw();
   }
 }
 
 template <class T>
 void G4THitsCollection<T>::PrintAllHits()
 {
-  std::vector<T*>* theHitsCollection = (std::vector<T*>*) theCollection;
-  size_t n                           = theHitsCollection->size();
-  for(size_t i = 0; i < n; ++i)
-  {
-    (*theHitsCollection)[i]->Print();
+  auto theHitsCollection = (std::vector<T*>*)theCollection;
+  for (auto* hit : *theHitsCollection) {
+    hit->Print();
   }
 }
 

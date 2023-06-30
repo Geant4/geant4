@@ -4,7 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
-## 2022-04-01 mma (exhadr6-V11-00-01)
+## 2023-06-04 Michel Maire (exhadr06-V11-01-01)
+- revision of all headers
+
+## 2022-12-19 mma (exhadr06-V11-01-00)
+- Run.hh, Run.cc, EventAction.cc, HistoManager.cc :
+     compute and plot total energy released
+
+## 2022-04-01 mma (exhadr06-V11-00-01)
 - PhysicsList: add G4NuclideTable::SetThresholdOfHalfLife(1ns*log2)
 - TrackingAction: print ions with meanLife = 0
 

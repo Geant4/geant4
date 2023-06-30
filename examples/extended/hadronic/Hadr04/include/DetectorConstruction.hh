@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorConstruction class
 //
 // 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,11 +47,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+   ~DetectorConstruction() override;
 
   public:
   
-    virtual G4VPhysicalVolume* Construct();
+    G4VPhysicalVolume* Construct() override;
 
     G4Material* 
     MaterialWithSingleIsotope(G4String, G4String, G4double, G4int, G4int);
@@ -72,13 +71,13 @@ class DetectorConstruction : public G4VUserDetectorConstruction
                        
   private:
   
-     G4VPhysicalVolume* fPBox;
-     G4LogicalVolume*   fLBox;
+     G4VPhysicalVolume* fPBox = nullptr;
+     G4LogicalVolume*   fLBox = nullptr;
      
-     G4double           fBoxSize;
-     G4Material*        fMaterial;     
+     G4double           fBoxSize = 0.;
+     G4Material*        fMaterial = nullptr;     
      
-     DetectorMessenger* fDetectorMessenger;
+     DetectorMessenger* fDetectorMessenger = nullptr;
 
   private:
     

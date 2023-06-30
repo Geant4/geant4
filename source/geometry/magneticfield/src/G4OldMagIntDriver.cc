@@ -136,16 +136,14 @@ G4OldMagIntDriver::AccurateAdvance(G4FieldTrack& y_current,
                   "GeomField1001", JustWarning, message);
       return succeeded; 
     }
-    else
-    { 
-      std::ostringstream message;
-      message << "Invalid run condition." << G4endl
-              << "Proposed step is negative; hstep = " << hstep << "." << G4endl
-              << "Requested step cannot be negative! Aborting event.";
-      G4Exception("G4OldMagIntDriver::AccurateAdvance()", 
-                  "GeomField0003", EventMustBeAborted, message);
-      return false;
-    }
+
+    std::ostringstream message;
+    message << "Invalid run condition." << G4endl
+            << "Proposed step is negative; hstep = " << hstep << "." << G4endl
+            << "Requested step cannot be negative! Aborting event.";
+    G4Exception("G4OldMagIntDriver::AccurateAdvance()", 
+                "GeomField0003", EventMustBeAborted, message);
+    return false;
   }
 
   y_current.DumpToArray( ystart );
@@ -455,7 +453,7 @@ G4OldMagIntDriver::WarnEndPointTooFar (G4double endPointDist,
   prNewMax = endPointDist > (1.0 + 1.05 * maxRelError) * h;
   if( isNewMax ) { maxRelError= endPointDist / h - 1.0; }
 
-  if( dbg && (h > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) 
+  if( (dbg != 0) && (h > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) 
           && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) )
   { 
     static G4ThreadLocal G4int noWarnings = 0;

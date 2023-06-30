@@ -63,7 +63,3 @@ G4MuonicAtom::G4MuonicAtom(
   isGeneralIon = false;
   isMuonicAtom = true;
 }
-
-G4MuonicAtom::~G4MuonicAtom()
-{
-}

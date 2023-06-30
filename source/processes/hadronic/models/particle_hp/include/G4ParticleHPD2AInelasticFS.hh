@@ -29,25 +29,25 @@
 #ifndef G4ParticleHPD2AInelasticFS_h
 #define G4ParticleHPD2AInelasticFS_h 1
 
-#include "globals.hh"
-#include "G4HadProjectile.hh"
 #include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
 #include "G4ParticleHPInelasticBaseFS.hh"
+#include "globals.hh"
 
 class G4ParticleHPD2AInelasticFS : public G4ParticleHPInelasticBaseFS
 {
   public:
-  
-  G4ParticleHPD2AInelasticFS();
-  ~G4ParticleHPD2AInelasticFS(){}
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
-  G4ParticleHPFinalState * New() 
-  {
-   G4ParticleHPD2AInelasticFS * theNew = new G4ParticleHPD2AInelasticFS;
-   return theNew;
-  }
-  
+    G4ParticleHPD2AInelasticFS();
+    ~G4ParticleHPD2AInelasticFS() override = default;
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
+              G4ParticleDefinition*) override;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override;
+    G4ParticleHPFinalState* New() override
+    {
+      auto theNew = new G4ParticleHPD2AInelasticFS;
+      return theNew;
+    }
+
   private:
 };
 #endif

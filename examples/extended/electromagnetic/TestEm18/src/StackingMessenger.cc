@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:G4UImessenger(),fStackAction(stack),fTrackCmd(nullptr)
+: fStackAction(stack)
 {
   fTrackCmd = new G4UIcmdWithABool("/testem/trackSecondaries",this);
   fTrackCmd->SetGuidance(" kill or keep secondary tracks");

@@ -38,12 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* det)
- : G4VUserActionInitialization(),fDetector(det)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
+ :fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +62,7 @@ void ActionInitialization::Build() const
   EventAction* event = new EventAction(fDetector);
   SetUserAction(event);
 
-  SetUserAction(new TrackingAction(fDetector));
+  SetUserAction(new TrackingAction(fDetector,event));
 
   SetUserAction(new SteppingAction(fDetector,event));
 }  

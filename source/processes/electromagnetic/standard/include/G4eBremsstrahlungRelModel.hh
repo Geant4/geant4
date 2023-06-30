@@ -143,6 +143,8 @@ private:
 private:
 
   G4bool                      fIsUseCompleteScreening = false;
+  G4bool                      fIsFirstInstance = false;
+  G4bool                      fUseLPM = true;
 
 protected:
 

@@ -81,10 +81,12 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 , fpCurrentMaterial  (fpCurrentLV? fpCurrentLV->GetMaterial(): 0)
 , fCurrentTransform  (modelTransform)
 , fBaseFullPVPath    (baseFullPVPath)
+, fFullPVPath        (fBaseFullPVPath)
 , fAbort             (false)
 , fCurtailDescent    (false)
 , fpClippingSolid    (0)
 , fClippingMode      (subtraction)
+, fNClippers         (0)
 {
   fType = "G4PhysicalVolumeModel";
 
@@ -130,6 +132,16 @@ G4ModelingParameters::PVNameCopyNoPath G4PhysicalVolumeModel::GetPVNameCopyNoPat
      (node.GetPhysicalVolume()->GetName(),node.GetCopyNo()));
   }
   return PVNameCopyNoPath;
+}
+
+G4String G4PhysicalVolumeModel::GetPVNamePathString
+(const std::vector<G4PhysicalVolumeNodeID>& path)
+// Converts to path string, e.g., " World 0 Envelope 0 Shape1 0".
+// Note leading space character.
+{
+  std::ostringstream oss;
+  oss << path;
+  return oss.str();
 }
 
 void G4PhysicalVolumeModel::CalculateExtent ()
@@ -181,13 +193,34 @@ void G4PhysicalVolumeModel::CalculateExtent ()
 void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler)
 {
-  if (!fpTopPV) G4Exception
+  if (!fpTopPV) {
+    G4Exception
     ("G4PhysicalVolumeModel::DescribeYourselfTo",
      "modeling0012", FatalException, "No model.");
+    return;  // Should never reach here, but keeps Coverity happy.
+  }
 
-  if (!fpMP) G4Exception
+  if (!fpMP) {
+    G4Exception
     ("G4PhysicalVolumeModel::DescribeYourselfTo",
-     "modeling0003", FatalException, "No modeling parameters.");
+     "modeling0013", FatalException, "No modeling parameters.");
+    return;  // Should never reach here, but keeps Coverity happy.
+  }
+
+  fNClippers = 0;
+  G4DisplacedSolid* pSectionSolid = fpMP->GetSectionSolid();
+  G4DisplacedSolid* pCutawaySolid = fpMP->GetCutawaySolid();
+  if (fpClippingSolid) fNClippers++;
+  if (pSectionSolid)   fNClippers++;
+  if (pCutawaySolid)   fNClippers++;
+  if (fNClippers > 1) {
+    G4ExceptionDescription ed;
+    ed << "More than one solid cutter/clipper:";
+    if (fpClippingSolid) ed << "\nclipper in force";
+    if (pSectionSolid)   ed << "\nsectioner in force";
+    if (pCutawaySolid)   ed << "\ncutaway in force";
+    G4Exception("G4PhysicalVolumeModel::DescribeSolid", "modeling0016", JustWarning, ed);
+  }
 
   G4Transform3D startingTransformation = fTransform;
 
@@ -736,6 +769,49 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   }
 }
 
+namespace
+{
+  G4bool SubtractionBoundingLimits(const G4VSolid* target)
+  {
+    // Algorithm from G4SubtractionSolid::BoundingLimits
+    // Since it is unclear how the shape of the first solid will be changed
+    // after subtraction, just return its original bounding box.
+    G4ThreeVector pMin, pMax;
+    const auto& pSolA = target;
+    pSolA->BoundingLimits(pMin,pMax);
+    // Check correctness of the bounding box
+    if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z()) {
+      // Bad bounding box (min >= max)
+      // This signifies a subtraction of non-intersecting volumes
+      return false;
+    }
+    return true;
+  }
+
+  G4bool IntersectionBoundingLimits(const G4VSolid* target, const G4DisplacedSolid* intersector)
+  {
+    // Algorithm from G4IntersectionSolid::BoundingLimits
+    G4ThreeVector pMin, pMax;
+    G4ThreeVector minA,maxA, minB,maxB;
+    const auto& pSolA = target;
+    const auto& pSolB = intersector;
+    pSolA->BoundingLimits(minA,maxA);
+    pSolB->BoundingLimits(minB,maxB);
+    pMin.set(std::max(minA.x(),minB.x()),
+             std::max(minA.y(),minB.y()),
+             std::max(minA.z(),minB.z()));
+    pMax.set(std::min(maxA.x(),maxB.x()),
+             std::min(maxA.y(),maxB.y()),
+             std::min(maxA.z(),maxB.z()));
+    if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z()) {
+      // Bad bounding box (min >= max)
+      // This signifies a subtraction of non-intersecting volumes
+      return false;
+    }
+    return true;
+  }
+}
+
 void G4PhysicalVolumeModel::DescribeSolid
 (const G4Transform3D& theAT,
  G4VSolid* pSol,
@@ -745,45 +821,65 @@ void G4PhysicalVolumeModel::DescribeSolid
   G4DisplacedSolid* pSectionSolid = fpMP->GetSectionSolid();
   G4DisplacedSolid* pCutawaySolid = fpMP->GetCutawaySolid();
 
-  if (!fpClippingSolid && !pSectionSolid && !pCutawaySolid) {
+  if (fNClippers <= 0 || fNClippers > 1) {
 
+    // Normal case - no clipping, etc. - or, illegally, more than one of those
     sceneHandler.PreAddSolid (theAT, *pVisAttribs);
     pSol -> DescribeYourselfTo (sceneHandler);  // Standard treatment.
     sceneHandler.PostAddSolid ();
 
-  } else {
+  } else {  // fNClippers == 1
 
-    G4VSolid* pResultantSolid = nullptr;
+    G4VSolid*         pResultantSolid = nullptr;
+    G4DisplacedSolid* pDisplacedSolid = nullptr;
 
     if (fpClippingSolid) {
+      pDisplacedSolid = new G4DisplacedSolid("clipper", fpClippingSolid, theAT.inverse());
       switch (fClippingMode) {
-        default:
         case subtraction:
-          pResultantSolid = new G4SubtractionSolid
-          ("subtracted_clipped_solid", pSol, fpClippingSolid, theAT.inverse());
+          if (SubtractionBoundingLimits(pSol)) {
+            pResultantSolid = new G4SubtractionSolid
+            ("subtracted_clipped_solid", pSol, pDisplacedSolid);
+          }
           break;
         case intersection:
-          pResultantSolid = new G4IntersectionSolid
-          ("intersected_clipped_solid", pSol, fpClippingSolid, theAT.inverse());
+          if (IntersectionBoundingLimits(pSol, pDisplacedSolid)) {
+            pResultantSolid = new G4IntersectionSolid
+            ("intersected_clipped_solid", pSol, pDisplacedSolid);
+          }
+          break;
+      }
+
+    } else if (pSectionSolid) {
+      pDisplacedSolid = new G4DisplacedSolid("intersector", pSectionSolid, theAT.inverse());
+      if (IntersectionBoundingLimits(pSol, pDisplacedSolid)) {
+        pResultantSolid = new G4IntersectionSolid("sectioned_solid", pSol, pDisplacedSolid);
+      }
+
+    } else if (pCutawaySolid) {
+      pDisplacedSolid = new G4DisplacedSolid("cutaway", pCutawaySolid, theAT.inverse());
+      switch (fpMP->GetCutawayMode()) {
+        case G4ModelingParameters::cutawayUnion:
+          if (SubtractionBoundingLimits(pSol)) {
+            pResultantSolid = new G4SubtractionSolid("cutaway_solid", pSol, pDisplacedSolid);
+          }
+          break;
+        case G4ModelingParameters::cutawayIntersection:
+          if (IntersectionBoundingLimits(pSol, pDisplacedSolid)) {
+            pResultantSolid = new G4IntersectionSolid("cutaway_solid", pSol, pDisplacedSolid);
+          }
           break;
       }
     }
 
-    if (pSectionSolid) {
-      pResultantSolid = new G4IntersectionSolid
-      ("sectioned_solid", pSol, pSectionSolid, theAT.inverse());
+    if (pResultantSolid) {
+      sceneHandler.PreAddSolid (theAT, *pVisAttribs);
+      pResultantSolid -> DescribeYourselfTo (sceneHandler);
+      sceneHandler.PostAddSolid ();
     }
-
-    if (pCutawaySolid) {
-      pResultantSolid = new G4SubtractionSolid
-      ("cutaway_solid", pSol, pCutawaySolid, theAT.inverse());
-    }
-
-    sceneHandler.PreAddSolid (theAT, *pVisAttribs);
-    pResultantSolid -> DescribeYourselfTo (sceneHandler);
-    sceneHandler.PostAddSolid ();
 
     delete pResultantSolid;
+    delete pDisplacedSolid;
   }
 }
 

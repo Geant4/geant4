@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-04-22 Michel Maire (exhadr03-V11-01-01)
+- continue revision of all header files
+- add a comment in nFission.mac
+
+## 2023-01-03 Michel Maire (exhadr03-V11-01-00)
+- Hadr03.cc : set ProduceFissionFragments = true
+- PhysicsList: go back to QGSP_BIC_HP
+- SteppingAction: add a protection against secondaries
+- Run::EndOfRun(): format adjustement, line 334.
+- revision of all header files
 
 ## 2022-11-17 V. Ivanchenko (exhadr03-V11-00-02)
 - Hadr03.cc - removed RanecuEngine

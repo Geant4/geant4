@@ -58,16 +58,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),
- fDetectorMessenger(0)
 {
   // default parameter values of the absorbers
   fNbOfAbsor = 1;
-  fAbsorThickness[0] = 0*mm;        //dummy, for initialization   
-  fAbsorThickness[1] = 1*mm;  
+  fAbsorThickness[0] = 0.*mm;       //dummy, for initialization
+  fAbsorThickness[1] = 1.*mm;
   fAbsorSizeYZ       = 1.*mm;
   for (G4int iAbs=0; iAbs<kMaxAbsor; iAbs++) {
-    fNbOfDivisions[iAbs]  = 1;
+    fNbOfDivisions[iAbs] = 1;
   }  
   ComputeParameters();
 
@@ -244,7 +242,7 @@ void DetectorConstruction::PrintParameters()
          << "\n ---> The Absorber is " << fNbOfAbsor << " layers of:";
   for (G4int i=1; i<=fNbOfAbsor; i++)
      {
-      G4cout << "\n \t" << std::setw(12) << fAbsorMaterial[i]->GetName() <<": "
+      G4cout << "\n \t" << std::setw(16) << fAbsorMaterial[i]->GetName() <<": "
               << std::setw(6) << G4BestUnit(fAbsorThickness[i],"Length")
               << "  divided in " << fNbOfDivisions[i] << " slices";
      }

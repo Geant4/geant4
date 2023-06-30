@@ -29,4 +29,4 @@
 #include "G4ParticleHPEnergyDistribution.hh"
 using G4NeutronHPEnergyDistribution = G4ParticleHPEnergyDistribution;
 
-#endif 
+#endif

@@ -37,6 +37,21 @@ namespace
 }
 
 // --------------------------------------------------------------------
+G4int G4MasterForwardcoutDestination::ReceiveG4debug(const G4String& msg)
+{
+  // If a master destination is set check that we are not in a recursive
+  // situation, send the message to the master, using a lock to serialize calls
+  // Master is probably a (G)UI that is not thread-safe
+
+  if((masterG4coutDestination != nullptr) && this != masterG4coutDestination)
+  {
+    G4AutoLock l(&out_mutex);
+    return masterG4coutDestination->ReceiveG4debug_(msg);
+  }
+  return 0;
+}
+
+// --------------------------------------------------------------------
 G4int G4MasterForwardcoutDestination::ReceiveG4cout(const G4String& msg)
 {
   // If a master destination is set check that we are not in a recursive

@@ -6,16 +6,39 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-04-17 Alberto Ribon (hadr-casc-V11-00-06)
+## 2023-04-17 Alberto Ribon (hadr-casc-V11-01-02)
 - G4BigBanger : added protection in the method  G4BigBanger::generateBangInSCM
   to avoid very rare cases of unphysical negative energy of one of the
   secondaries produced by the Bertini model.
   (Note: this problem was never reproduced in our tests, but was reported by
          ATLAS with Geant4 10.6; the secondaries with negative - both total
-         and kinetic - energy were always neutrons, produced by the internal
-         Bertini nuclear de-excitation, after the intra-nuclear cascade.
-         Many thanks to Mihaly Novak for providing detailed debugging
-         information!)
+	 and kinetic - energy were always neutrons, produced by the internal
+	 Bertini nuclear de-excitation, after the intra-nuclear cascade.
+	 Many thanks to Mihaly Novak for providing detailed debugging
+	 information!)
+
+## 2023-04-05 Dennis Wright (hadr-casc-V11-01-01)
+- Fix coverity bug 60840: incorrect integer divide in fission part of 
+  G4EquilibriumEvaporator::deExcite.  Changed RHS to G4double.
+
+## 2023-03-14 Alberto Ribon (hadr-casc-V11-01-00)
+Extended Bertini model to allow the use of Abla as alternative post-cascade
+nuclear de-excitation (the default de-excitation remains unchanged).
+There are two ways to set Abla as de-excitation for Bertini:
+via C++ interface, by calling G4CascadeInterface::useAblaDeexcitation();
+via environmental variable, by setting G4CASCADE_USE_ABLA=1.
+- G4AblaDeexcitation : new class that does the nuclear de-excitation,
+  after the Bertini cascade, by using the Abla model, and then tranform
+  the secondaries in Bertini objects.
+- G4CascadeInterface : added the new method  useAblaDeexcitation()  which sets
+  Abla as nuclear de-excitation; this method can be called directly by the
+  user, or automatically in the constructor of the class when the flag
+  G4CascadeParameters::useAbla() is enabled.
+- G4InuclCollider : added new method  useAblaDeexcitation()  which creates
+  an instance of the new class G4AblaDeexcitation.
+- G4CascadeParameters : added a boolean flag that enables the Abla
+  de-dexcitation model in the case that the new environmental variable
+  G4CASCADE_USE_ABLA is set.
 
 ## 2022-11-26 Gabriele Cosmo (hadr-casc-V11-00-05)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.

@@ -101,6 +101,8 @@ class G4ParticleGun : public G4VPrimaryGenerator
       { particle_polarization = aVal; }
     inline void SetNumberOfParticles(G4int i)
       { NumberOfParticlesToBeGenerated = i; }
+    inline void SetParticleWeight(G4double w)
+      { particle_weight = w; }
 
     inline G4ParticleDefinition* GetParticleDefinition() const
       { return particle_definition; }

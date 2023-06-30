@@ -35,11 +35,13 @@
 
 #include "globals.hh"
 
+// --------------------------------------------------------------------
 G4SafetyHelper::G4SafetyHelper()
   : fLastSafetyPosition(0.0,0.0,0.0)
 {
 }
 
+// --------------------------------------------------------------------
 void G4SafetyHelper::InitialiseNavigator()
 {
   fpPathFinder = G4PathFinder::GetInstance();
@@ -60,6 +62,7 @@ void G4SafetyHelper::InitialiseNavigator()
   }
 }
 
+// --------------------------------------------------------------------
 void G4SafetyHelper::InitialiseHelper()
 {
   fLastSafetyPosition = G4ThreeVector(0.0,0.0,0.0);
@@ -68,9 +71,7 @@ void G4SafetyHelper::InitialiseHelper()
   fFirstCall = false;
 }
 
-G4SafetyHelper::~G4SafetyHelper()
-{
-}
+G4SafetyHelper::~G4SafetyHelper() = default;
 
 G4double   
 G4SafetyHelper::CheckNextStep(const G4ThreeVector& position, 
@@ -93,6 +94,7 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector& position,
   return linstep;
 }
 
+// --------------------------------------------------------------------
 G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position,
                                               G4double maxLength )
 {
@@ -138,6 +140,7 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position,
   return newSafety;
 }
 
+// --------------------------------------------------------------------
 void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector& newPosition )
 {
 #ifdef G4VERBOSE
@@ -172,6 +175,7 @@ void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector& newPosition )
   }
 }
 
+// --------------------------------------------------------------------
 void  G4SafetyHelper::Locate( const G4ThreeVector& newPosition, 
                               const G4ThreeVector& newDirection)
 {

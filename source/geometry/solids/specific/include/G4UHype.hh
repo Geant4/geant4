@@ -47,7 +47,7 @@ class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
   using Shape_t = vecgeom::GenericUnplacedHype;
   using Base_t  = G4UAdapter<vecgeom::GenericUnplacedHype>;
 
-  public:  // with description
+  public:
 
     G4UHype(const G4String& name,
                   G4double  newInnerRadius,
@@ -55,13 +55,13 @@ class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
                   G4double  newInnerStereo,
                   G4double  newOuterStereo,
                   G4double  newHalfLenZ);
-   ~G4UHype();
+   ~G4UHype() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetInnerRadius () const;
     G4double GetOuterRadius () const;
@@ -75,9 +75,7 @@ class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
     void SetInnerStereo (G4double newISte);
     void SetOuterStereo (G4double newOSte);
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:  // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UHype(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -88,12 +86,12 @@ class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
     G4UHype& operator=( const G4UHype& source );
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pmin, G4double& pmax) const;
-    G4Polyhedron* CreatePolyhedron() const;
+                           G4double& pmin, G4double& pmax) const override;
+    G4Polyhedron* CreatePolyhedron() const override;
 };
 
 // --------------------------------------------------------------------

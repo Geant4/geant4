@@ -6,27 +6,96 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-06-13 V.Ivanchenko (emstand-V11-00-24)
-- G4LindhardSorensenIonModel - do not try to use ICRU73 data for projectile Z>80
+## 2023-06-13 V.Ivanchenko (emstand-V11-01-16)
+- G4LindHardSorensenIonModel - do not try to use ICRU73 data for projectile Z>80
 
-## 2023-04-20 V.Ivanchenko (emstand-V11-00-23)
-- G4LindhardSorensenIonModel - updated effective charge of an ion at each
+## 2023-06-05 V.Ivanchenko (emstand-V11-01-15)
+- G4eBremsstrahlung, G4SeltzerBergerModel - do not change LPM flag at
+    initialisation, do not repeat base class initialisation,
+    improve code comments
+- G4eBremsstrahlungRelModel - improved comments to the code
+
+## 2023-06-04 V.Ivanchenko (emstand-V11-01-14)
+- G4eBremsstrahlungRelModel - use LPM flag from G4EmParameters
+
+## 2023-06-03 V.Ivanchenko (emstand-V11-01-13)
+- G4BetheHeitlerModel, G4PairProductionRelModel, G4eBremsstrahlungRelModel,
+  G4SeltzerBergerModel - reorganized initialisation to address bug report #2543.
+    Initialisation of static element data is performamed only once for the first
+    object independently on how many objects of this kind is created in a thread.
+    Results of simulation are identical, only data race is excluded.
+
+## 2023-05-09 V.Ivanchenko (emstand-V11-01-12)
+- updated hadron/ion ionisation models; initialise stopping power data
+  once: PSTAR and ICRU90 in G4BraggModel, ASTAR - in G4BraggIonModel, 
+  ICRU73 and ICRU90 ion (Z>2) data in G4LindHardSorensenIonModel;
+  G4BraggIonModel inherit from G4Bragg model; fixed stopping power
+  of heavy ions at moderate energies
+
+## 2023-05-03 V.Ivanchenko (emstand-V11-01-11)
+- G4LindhardSorensenIonModel - use G4BraggModel for preliminary computation
+    of DEDX at initialisation for G4GenericIon instead of G4BraggIonModel,
+    which fix problem of low-energy ion tracking in 11.1ref04
+
+## 2023-04-20 V.Ivanchenko (emstand-V11-01-10)
+- G4BetheBlochModel, G4BraggIonModel, G4BraggModel,
+  G4LindhardSorensenIonModel - updated effective charge of an ion at each
     step of simulation or at each call to G4EmCalculator
+  G4WaterStopping, G4hIonisation - clean-up the code
+  G4ionIonisation - do not use G4WaterStopping, code clean-up
 
-## 2023-04-17 V.Ivanchenko
+## 2023-04-17 V.Ivanchenko (emstand-V11-01-09)
+- G4BraggModel, G4BraggIonModel - use proton stopping data for for all ions
+    except alpha, make datasets ponters static, address problem #2532
 - G4LinhardSorensenModel - added extra protection and improved debug printout
 
-## 2023-02-24 V.Ivanchenko
+## 2023-03-11 V.Ivanchenko (emstand-V11-01-08)
+- G4UrbanMscModel - optimisation of the code without any change of the 
+    results (L. Urban)
+
+## 2023-03-05 V.Ivanchenko (emstand-V11-01-07)
+- G4CoulombScattering - fixed typo
+- G4PAIModel, G4PAIPhotModel, G4PAIModelData, G4PAIPhotData, G4PAIxSection,
+  G4PAIySection - fixed problem in tests and code clean-up 
+
+## 2023-03-04 V.Ivanchenko (emstand-V11-01-06)
+- G4CoulombScattering - added extra constructor to address all existing 
+    cases, for pure single scattering integral method type is changed 
+    from fOnePeak to fEmDecreasing and spline interpolation is used. 
+    This is needed for the fix of #2530.
+
+## 2023-02-24 V.Ivanchenko (emstand-V11-01-05)
 - G4WentzelOKandVIxSection - fix numeric instability for the extreme case of 
     very small kinetic energy (< 1 eV)
 
-## 2023-02-21 V.Ivanchenko
+## 2023-02-21 V.Ivanchenko (emstand-V11-01-04)
 - G4WentzelOKandVIxSection - fix #2530, improved comments
+- G4CoulombScattering - added constructor with changed signature, which
+    used flag "isCombined" instead of process name, improved initialisation
+    and comments to the code
+- G4eCoulombScatterinModel - improve initialisation and code comments
 
-## 2022-12-21 V.Ivanchenko (emstand-V11-00-22)
+## 2023-02-14 V.Ivanchenko (emstand-V11-01-03)
+- Preparation for the fix of the problem #2530 - fix apply single 
+    scattering per region
+- G4UrbanMscModel - check IsLocked() method before definition of 
+    lateral displacement algorithm and positron correction;
+    improve formatting
+- G4CoulombScattering - added SetCombined(G4bool) method allowing
+    user to configuer the process; improve formatting and initialisation
+- G4eCoulombScatterinModel - improve formatting
+
+## 2023-01-13 V.Ivanchenko (emstand-V11-01-02)
+- G4ESTARStopping, G4GoudsmitSaundersonTable, G4GSPWACorrections, 
+  G4GSMottCorrection, G4SeltzerBergerModel, G4SBBremTable, G4IonICRU73Data, 
+  G4eDPWAElasticDCS - do not call std::getenv from model classes, instead
+    use G4EmParameters, do not check if G4LEDATA environment variable
+    defined correctly - this is responsibility of the global utility
+
+## 2022-12-21 V.Ivanchenko (emstand-V11-01-01)
 - G4GoudsmithSoundersonMscModel - fixed warning when build CMSSW
 
-## 2022-12-11 V.Ivanchenko
+## 2022-12-11 V.Ivanchenko (emstand-V11-01-00)
 - G4UrbanMscModel - added flag MscPositronCorrection
 
 ## 2022-11-23 Gabriele Cosmo (emstand-V11-00-21)

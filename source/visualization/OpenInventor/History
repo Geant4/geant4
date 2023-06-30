@@ -6,6 +6,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-04-27 Ben Morgan (openinventor-V11-01-05)
+- Support compilation against Qt5 and Qt6.
+
+## 2023-04-14 John Allison (openinventor-V11-01-04)
+- Co-working: visman-V11-01-04, greps-V11-01-03, interfaces-V11-01-11,
+  opengl-V11-01-06, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- Revert earlier changes for the new scene tree.
+  - After the introduction of virtual G4VInteractiveSession::UpdateSceneTree
+    they are no loner necessary.
+
+## 2023-04-02 Ben Morgan (openinventor-V11-01-03)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+
+## 2023-03-28 John Allison (openinventor-V11-01-02)
+- Add code for scene tree.
+- G4OpenInventorViewer:
+  - Call UpdateGUISceneTree in DrawView.
+- G4OpenInventorQtExaminerViewer:
+  - Add GetUIQt.
+- G4OpenInventorQtViewer:
+  - Implement virtual void UpdateGUISceneTree() {
+    - if (fUIQt) fUIQt->UpdateSceneTree(fSceneTree);
+
+## 2023-03-22 Ben Morgan (openinventor-V11-01-01)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-01-30 Ben Morgan (openinventor-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
 ## 2022-11-25 Gabriele Cosmo (openinventor-V11-00-18)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

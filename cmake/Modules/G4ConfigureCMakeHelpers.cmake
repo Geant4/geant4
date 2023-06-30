@@ -51,9 +51,6 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
 set(Geant4_BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
 endif()
 
-# Core compile definitions...
-set(GEANT4_CORE_DEFINITIONS )
-
 # Third party includes (libraries *should* be handled by the imports)
 set(GEANT4_THIRD_PARTY_INCLUDES )
 
@@ -194,7 +191,7 @@ configure_file(
 )
 
 
-foreach(_mod HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
+foreach(_mod FLUKAInterface HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake

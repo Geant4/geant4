@@ -37,15 +37,15 @@ class ExGflashDetectorConstruction;
 
 class ExGflashEventAction : public G4UserEventAction
 {
- public:
-  ExGflashEventAction(ExGflashDetectorConstruction* det);
-  ~ExGflashEventAction() override;
+  public:
+    ExGflashEventAction(ExGflashDetectorConstruction* det);
+    ~ExGflashEventAction() override;
 
-  void BeginOfEventAction(const G4Event*) override;
-  void EndOfEventAction(const G4Event*) override;
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
 
- private:
-  G4int fCalorimeterCollectionId;
-  ExGflashDetectorConstruction* fDet;
+  private:
+    G4int fCalorimeterCollectionId{-1};
+    ExGflashDetectorConstruction* fDet;
 };
 #endif

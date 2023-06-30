@@ -60,7 +60,7 @@ class G4GeometryWorkspace
     using pool_type = G4TWorkspacePool<G4GeometryWorkspace>;
 
     G4GeometryWorkspace();
-   ~G4GeometryWorkspace();
+   ~G4GeometryWorkspace() = default;
 
     void UseWorkspace();     // Take ownership
     void ReleaseWorkspace(); // Release ownership

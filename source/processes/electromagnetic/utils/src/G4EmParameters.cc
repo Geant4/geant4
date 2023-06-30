@@ -172,6 +172,8 @@ void G4EmParameters::Initialise()
   nucFormfactor = fExponentialNF;
   fSStype = fWVI;
   fFluct = fUniversalFluctuation;
+
+  fDirLEDATA = G4String(G4FindDataDir("G4LEDATA"));
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
@@ -1289,6 +1291,11 @@ G4double G4EmParameters::GetDirectionalSplittingRadius()
 void G4EmParameters::DefineRegParamForDeex(G4VAtomDeexcitation* ptr) const
 {
   fCParameters->DefineRegParamForDeex(ptr); 
+}
+
+const G4String& G4EmParameters::GetDirLEDATA() const
+{
+  return fDirLEDATA;
 }
 
 void G4EmParameters::StreamInfo(std::ostream& os) const

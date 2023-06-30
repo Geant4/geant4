@@ -40,43 +40,43 @@
 
 class G4CachedMagneticField : public G4MagneticField
 {
-  public:  // with description
+  public:
 
-     G4CachedMagneticField(G4MagneticField*, G4double distanceConst);
-     virtual ~G4CachedMagneticField();
-       // Constructor and destructor. No actions.
+    G4CachedMagneticField(G4MagneticField*, G4double distanceConst);
+    ~G4CachedMagneticField() override;
+      // Constructor and destructor. No actions.
 
-     G4CachedMagneticField(const G4CachedMagneticField& r);
-     G4CachedMagneticField& operator = (const G4CachedMagneticField& p);
-       // Copy constructor & assignment operator.
+    G4CachedMagneticField(const G4CachedMagneticField& r);
+    G4CachedMagneticField& operator = (const G4CachedMagneticField& p);
+      // Copy constructor & assignment operator.
 
-     virtual void  GetFieldValue( const G4double Point[4],
-                                        G4double* Bfield ) const;
+    void GetFieldValue( const G4double Point[4],
+                              G4double* Bfield ) const override;
      
-     G4double GetConstDistance() const         { return fDistanceConst; } 
-     void     SetConstDistance( G4double dist ){ fDistanceConst= dist;}
+    G4double GetConstDistance() const { return fDistanceConst; } 
+    void SetConstDistance( G4double dist ) { fDistanceConst= dist;}
 
-     G4int GetCountCalls() const { return fCountCalls; }
-     G4int GetCountEvaluations() const { return fCountEvaluations; } 
-     void  ClearCounts() { fCountCalls = 0; fCountEvaluations=0; }
-     void  ReportStatistics();
+    G4int GetCountCalls() const { return fCountCalls; }
+    G4int GetCountEvaluations() const { return fCountEvaluations; } 
+    void ClearCounts() { fCountCalls = 0; fCountEvaluations=0; }
+    void ReportStatistics();
     
-    virtual G4Field* Clone() const;
+    G4Field* Clone() const override;
 
   protected:
 
-     mutable G4int fCountCalls = 0, fCountEvaluations = 0;  
+    mutable G4int fCountCalls = 0, fCountEvaluations = 0;  
 
   private:
 
-     G4MagneticField* fpMagneticField = nullptr;
-     G4double fDistanceConst;
-       // When the field is evaluated within this distance it will not change
+    G4MagneticField* fpMagneticField = nullptr;
+    G4double fDistanceConst;
+      // When the field is evaluated within this distance it will not change
 
-     // Caching state
-     //
-     mutable G4ThreeVector fLastLocation;
-     mutable G4ThreeVector fLastValue;
+    // Caching state
+    //
+    mutable G4ThreeVector fLastLocation;
+    mutable G4ThreeVector fLastValue;
 };
 
 #endif /* G4CACHED_MAGNETIC_FIELD_DEF */

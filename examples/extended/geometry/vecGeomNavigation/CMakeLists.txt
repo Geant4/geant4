@@ -23,7 +23,7 @@ if(BUILTIN_G4VECGEOMNAV)
   FetchContent_Declare(
     g4vecgeomnav
     GIT_REPOSITORY https://gitlab.cern.ch/VecGeom/g4vecgeomnav.git
-    GIT_TAG 0.2.1
+    GIT_TAG master
   )
 
   FetchContent_GetProperties(g4vecgeomnav)

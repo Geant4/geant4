@@ -65,44 +65,43 @@ namespace G4INCL {
             pion = particle1;
         }
 
-		G4int iso=ParticleTable::getIsospin(nucleon->getType())+ParticleTable::getIsospin(pion->getType());
+	G4int iso=ParticleTable::getIsospin(nucleon->getType())+ParticleTable::getIsospin(pion->getType());
 // assert(iso == 1 || iso == -1);
-		if (iso == 1) {
+	if (iso == 1) {
 			nucleon->setType(Proton);
-		}
-		else if (iso == -1) {
+	}
+	else if (iso == -1) {
 			nucleon->setType(Neutron);
         }
-		pion->setType(Eta);
-
-                // Erase the parent resonance information of the nucleon and pion
-	        nucleon->setParentResonancePDGCode(0);
-	        nucleon->setParentResonanceID(0);
-                pion->setParentResonancePDGCode(0);
-                pion->setParentResonanceID(0);
-
-		G4double sh=nucleon->getEnergy()+pion->getEnergy();
-		G4double mn=nucleon->getMass();
-		G4double me=pion->getMass();
-		G4double en=(sh*sh+mn*mn-me*me)/(2*sh);
-		nucleon->setEnergy(en);
-		G4double ee=std::sqrt(en*en-mn*mn+me*me);
-		pion->setEnergy(ee);
-		G4double pn=std::sqrt(en*en-mn*mn);
+	pion->setType(Eta);
+#ifdef INCLXX_IN_GEANT4_MODE
+        // Erase the parent resonance information of the nucleon and pion
+        nucleon->setParentResonancePDGCode(0);
+        nucleon->setParentResonanceID(0);
+        pion->setParentResonancePDGCode(0);
+        pion->setParentResonanceID(0);
+#endif
+	G4double sh=nucleon->getEnergy()+pion->getEnergy();
+	G4double mn=nucleon->getMass();
+	G4double me=pion->getMass();
+	G4double en=(sh*sh+mn*mn-me*me)/(2*sh);
+	nucleon->setEnergy(en);
+	G4double ee=std::sqrt(en*en-mn*mn+me*me);
+	pion->setEnergy(ee);
+	G4double pn=std::sqrt(en*en-mn*mn);
 
 // real distribution (from PRC 78, 025204 (2008))
  
+	G4double ECM=G4INCL::KinematicsUtils::totalEnergyInCM(particle1,particle2);
 
-		G4double ECM=G4INCL::KinematicsUtils::totalEnergyInCM(particle1,particle2);
+	const G4double pi=std::acos(-1.0);
+	G4double x1;
+	G4double u1;
+	G4double fteta;
+	G4double teta;
+	G4double fi;
 
-		const G4double pi=std::acos(-1.0);
-		G4double x1;
-		G4double u1;
-		G4double fteta;
-		G4double teta;
-		G4double fi;
-
-		if (ECM < 1650.) {
+	if (ECM < 1650.) {
 // below 1650 MeV - angular distribution (x=cos(theta): ax^2+bx+c		
         
 		G4double f1= -0.0000288627*ECM*ECM+0.09155289*ECM-72.25436;  // f(1) that is the maximum (fit on experimental data)
@@ -155,22 +154,22 @@ namespace G4INCL {
 				passe2=1;
 			}
 		}
- }
+	}
 				   
-		fi=(2.0*pi)*Random::shoot();		
+	fi=(2.0*pi)*Random::shoot();		
 
-		ThreeVector mom_nucleon(
+	ThreeVector mom_nucleon(
                                 pn*std::sin(teta)*std::cos(fi),
                                 pn*std::sin(teta)*std::sin(fi),
                                 pn*std::cos(teta)
-                                );
+                               );
 // end real distribution			
 		
-		nucleon->setMomentum(-mom_nucleon);
-		pion->setMomentum(mom_nucleon);
+	nucleon->setMomentum(-mom_nucleon);
+	pion->setMomentum(mom_nucleon);
         
-		fs->addModifiedParticle(nucleon);
-		fs->addModifiedParticle(pion);
-		}
+	fs->addModifiedParticle(nucleon);
+	fs->addModifiedParticle(pion);
+    }
 
 }

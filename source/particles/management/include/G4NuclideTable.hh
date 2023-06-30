@@ -55,7 +55,7 @@ class G4NuclideTable : public G4VIsotopeTable
 
     using G4IsotopeList = std::vector<G4IsotopeProperty*>;
 
-    virtual ~G4NuclideTable();
+    ~G4NuclideTable() override;
 
     G4NuclideTable (const G4NuclideTable&) = delete;
     G4NuclideTable& operator = (const G4NuclideTable&) = delete;
@@ -83,10 +83,10 @@ class G4NuclideTable : public G4VIsotopeTable
 
     inline std::size_t GetSizeOfIsotopeList();
   
-    virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float);
-    virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A,
-            G4int lvl=0);
+    G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
+            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) override;
+    G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A,
+            G4int lvl=0) override;
       // It will replace the pure virtual one in the abstract base class.
       //   Z: Atomic Number
       //   A: Atomic Mass
@@ -171,20 +171,20 @@ G4double G4NuclideTable::GetLevelTolerance()
 inline
 std::size_t G4NuclideTable::GetSizeOfIsotopeList()
 {
-  return (fIsotopeList ? fIsotopeList->size() : static_cast<size_t>(0) );
+  return (fIsotopeList != nullptr ? fIsotopeList->size() : static_cast<size_t>(0) );
 }
 
 inline
 std::size_t G4NuclideTable::entries() const
 {
-  return (fIsotopeList ? fIsotopeList->size() : std::size_t(0) );
+  return (fIsotopeList != nullptr ? fIsotopeList->size() : std::size_t(0) );
 }
 
 inline
 G4IsotopeProperty* G4NuclideTable::GetIsotopeByIndex(std::size_t idx) const
 {
-  if (fIsotopeList && idx<fIsotopeList->size() ) return (*fIsotopeList)[idx];
-  else return nullptr;
+  if ((fIsotopeList != nullptr) && idx<fIsotopeList->size() ) return (*fIsotopeList)[idx];
+  return nullptr;
 }
 
 #endif

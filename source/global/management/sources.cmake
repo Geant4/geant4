@@ -79,15 +79,12 @@ geant4_add_module(G4globman
     G4Profiler.icc
     G4ReferenceCountedHandle.hh
     G4RotationMatrix.hh
-    G4SIunits.hh
     G4SliceTimer.hh
     G4SliceTimer.icc
     G4StateManager.hh
     G4StateManager.icc
     G4String.hh
     G4String.icc
-    G4strstreambuf.hh
-    G4strstreambuf.icc
     G4SystemOfUnits.hh
     G4TaskGroup.hh
     G4Task.hh

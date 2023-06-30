@@ -1,9 +1,14 @@
 # Example G01 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2023-04-26 Gabriele Cosmo (G01-V11-01-00)
+- Added comment in main() to demonstrate how to set alternative schema file
+  for validation while parsing a GDML document.
 
 ## 2021-12-10 Ben Morgan (G01-V11-00-00)
 - Change to new Markdown History format

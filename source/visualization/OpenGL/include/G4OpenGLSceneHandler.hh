@@ -103,31 +103,6 @@ public:
   static void SetFlushAction(FlushAction action)
   {fFlushAction = action;}
 
-#ifdef G4OPENGL_VERSION_2
-  private :
-  // vertex vector to be given to the graphic card
-  std::vector<double> fOglVertex;
-  // indices vector to be given to the graphic card
-  std::vector<unsigned short> fOglIndices;
-  // before, drawyType (as GL_QUADS, GL_TRIANGLES...) was
-  // given in glBegin. Now it has to be given in glDrawArray (at the end)
-  GLenum fDrawArrayType;
-  // emulate GL_QUADS behaviour by inverting two last positions
-  bool fEmulate_GL_QUADS;
-  // Try to optimize a bit the pipeline
-  void OptimizeVBOForTrd();
-  void OptimizeVBOForCons(G4int aNoFacet);
-  // emulating glEnd and glBegin
-  void glEndVBO();
-  void glBeginVBO(GLenum type);
-  void drawVBOArray(std::vector<double> vertices);
-  
-  // Buffers used to access vertex and indices elements
-  GLuint fVertexBufferObject;
-  GLuint fIndicesBufferObject;
-  
-#endif //G4OPENGL_VERSION_2
-  
 protected:
   
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
@@ -140,19 +115,6 @@ protected:
   G4DisplacedSolid* CreateCutawaySolid ();
   
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
-  
-#ifdef G4OPENGL_VERSION_2
-  // Special case for VBO, we want to have acces to the VBO drawer everywhere
-  // because instead of OpenGL call which are static, VBO openGL functions :
-  // - Are functions of an WGLWidget object(G4OpenGLImmediateViewer in our case)
-  // - Needs an access to the QGLSHader
-  // - Have to be redefined in a VBO way
-
-  inline void setVboDrawer(G4OpenGLVboDrawer* drawer) {
-    fVboDrawer = drawer;
-  }
-  G4OpenGLVboDrawer* fVboDrawer;
-#endif // G4OPENGL_VERSION_2
   
   GLuint fPickName;
   std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.

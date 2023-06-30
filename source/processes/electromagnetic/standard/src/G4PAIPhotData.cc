@@ -141,11 +141,11 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
   const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
   G4double deltaCutInKineticEnergyNow  = (*deltaCutInKineticEnergy)[jMatCC];
   G4double photonCutInKineticEnergyNow = (*photonCutInKineticEnergy)[jMatCC];
-
+  /*
   G4cout<<"G4PAIPhotData::Initialise: "<<"cut = "<<cut/keV<<" keV; cutEl = "
         <<deltaCutInKineticEnergyNow/keV<<" keV; cutPh = "
 	<<photonCutInKineticEnergyNow/keV<<" keV"<<G4endl;
-
+  */
   // if( deltaCutInKineticEnergyNow != cut ) deltaCutInKineticEnergyNow = cut; // exception??
 
   auto dEdxCutVector =
@@ -222,10 +222,7 @@ void G4PAIPhotData::Initialise(const G4MaterialCutsCouple* couple,
     }
     // G4cout << *transferVector << G4endl;
 
-    G4double ionloss = fPAIxSection.GetMeanEnergyLoss();//  total <dE/dx>
-
-    if(ionloss < 0.0) ionloss = 0.0; 
-
+    G4double ionloss = std::max(fPAIxSection.GetMeanEnergyLoss(), 0.0);//  total <dE/dx>
     dEdxMeanVector->PutValue(i,ionloss);
 
     G4double dNdxCut = transferVector->Value(deltaCutInKineticEnergyNow)/deltaCutInKineticEnergyNow;

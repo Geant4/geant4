@@ -49,14 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-  : G4UserRunAction(), fDetector(det), fPrimary(kin)
+:fDetector(det), fPrimary(kin)
 { }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{ }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
@@ -192,13 +186,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   sigma2.push_back(Sigtot/density);          
     
   //print cross sections
-  G4cout << "\n \n  compCrossSectionPerVolume: ";
+  G4cout << "\n  compCrossSectionPerVolume: ";
   for (size_t j=0; j<sigma0.size(); ++j) {             
-    G4cout << "\t" << std::setw(9) << sigma0[j]*cm << std::setw(6) << " cm^-1";
+    G4cout << "\t" << std::setw(9) << sigma0[j]*cm << " cm^-1\t";
   }
   G4cout << "\n  cross section per volume : ";
   for (size_t j=0; j<sigma1.size(); ++j) {             
-    G4cout << "\t" << std::setw(9) << sigma1[j]*cm << std::setw(6) << " cm^-1";
+    G4cout << "\t" << std::setw(9) << sigma1[j]*cm << " cm^-1\t";
   }
   
   G4cout << "\n  cross section per mass   : ";
@@ -215,7 +209,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   for (size_t j=0; j<sigma1.size(); ++j) {
     lambda = DBL_MAX; 
     if (sigma1[j] > 0.) lambda = 1/sigma1[j];
-    G4cout << "\t" << std::setw(9) << G4BestUnit( lambda, "Length");
+    G4cout << "\t" << std::setw(9) << G4BestUnit( lambda, "Length") << "   ";
   }
   
   //mean free path (g/cm2)
@@ -252,13 +246,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //print stopping power
   G4cout << "\n \n  restricted dE/dx         : ";
   for (size_t j=0; j<=nproc;  ++j) {             
-    G4cout << "\t" << std::setw(14) 
+    G4cout << "\t" << std::setw(9)     
            << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
   G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j=0; j<=nproc;  ++j) {
-    G4cout << "\t" << std::setw(14) 
+    G4cout << "\t" << std::setw(9) 
            << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   dedxtot = 0.;
@@ -275,12 +269,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //print stopping power
   G4cout << "\n \n  unrestricted dE/dx       : ";
   for (size_t j=0; j<=nproc;  ++j) {             
-    G4cout << "\t" << std::setw(14) << G4BestUnit(dedx1[j],"Energy/Length");
+    G4cout << "\t" << std::setw(9) << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
   G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j=0; j<=nproc;  ++j) {
-    G4cout << "\t" << std::setw(14) 
+    G4cout << "\t" << std::setw(9) 
            << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   

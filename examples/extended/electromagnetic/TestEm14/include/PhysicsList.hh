@@ -27,7 +27,6 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
@@ -50,18 +49,18 @@ class PhysicsList: public G4VModularPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList();
+   ~PhysicsList() override;
 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess()  override;
     void AddPhysicsList(const G4String& name);
-    virtual void SetCuts();
+    void SetCuts() override;
          
   private:    
-    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fEmPhysicsList = nullptr;
     G4String               fEmName;
     
-    PhysicsListMessenger*  fMessenger;         
+    PhysicsListMessenger*  fMessenger = nullptr;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

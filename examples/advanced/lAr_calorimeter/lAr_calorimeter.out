@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -50,7 +50,9 @@ Registered graphics systems are:
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -214,7 +216,7 @@ eBrem:  for e-  XStype:4  SubType=3
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -246,7 +248,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -278,7 +280,7 @@ hPairProd:  for proton  XStype:1  SubType=4
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -291,7 +293,6 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -337,7 +338,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -369,7 +370,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -401,7 +402,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -433,7 +434,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -465,7 +466,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -497,7 +498,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -529,7 +530,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -915,12 +916,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 ================================================================
 ### G4LevelReader: broken transition 0 from level 24 to 24 for isotope Z= 89 A= 219 - use ground level
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
@@ -1050,13 +1060,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.32 seconds
+    Total CPU time elapsed for geometry optimisation: 0.26 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      50.00         0.16         0.00          152k EmModuleLogical
-      50.00         0.16         0.00          238k HadModuleLogical
+      50.00         0.13         0.00          152k EmModuleLogical
+      50.00         0.13         0.00          238k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -1067,8 +1077,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.17        238k      1385     2370       3792         0.16    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.16    EmModuleLogical
+      60.17        238k      1385     2370       3792         0.13    HadModuleLogical
+      38.50        152k      1129     1152       2426         0.13    EmModuleLogical
        0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
@@ -1086,352 +1096,352 @@ Read 2001 events from file data-tracks/tracks-20GeV.dat
 ---> Begin of event: 1
  ****  Primary : 1
  Vertex : (5.55552,7.16569,32740)
+Number of F1 Tiles with Positive energy : 59
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.71231 2.9493 3.44161 
+ Visible Energy in Hole Counter  (MeV) 
+0 32.0741
+ Visible Energy in Upstream Dead Materials 
+1372.65
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 61
+N Secondaries 86
+EmEdep is=17610.5 MeV 
+HadEdep is=13.7131 MeV
+Edep in FCAL1 FCAl2 : 17610.5 13.7131
+ ****  Primary : 2
+ Vertex : (-3.76032,10.9751,32740)
 Number of F1 Tiles with Positive energy : 55
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.71231 2.98995 3.52679 
+1.52701 1.90627 1.52244 
  Visible Energy in Hole Counter  (MeV) 
-0 59.2601
+0 137.097
  Visible Energy in Upstream Dead Materials 
-1744.46
+1303.18
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 51
-N Secondaries 86
-EmEdep is=17318.5 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 17318.5 0
- ****  Primary : 2
- Vertex : (-3.76032,10.9751,32740)
-Number of F1 Tiles with Positive energy : 49
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.87162 1.92888 1.72147 
- Visible Energy in Hole Counter  (MeV) 
-0 114.393
- Visible Energy in Upstream Dead Materials 
-2341.52
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 95
-N Secondaries 113
-EmEdep is=16041 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 16041 0
+N Tracks out of world 58
+N Secondaries 128
+EmEdep is=17359.5 MeV 
+HadEdep is=0.770403 MeV
+Edep in FCAL1 FCAl2 : 17359.5 0.770403
  ****  Primary : 3
  Vertex : (13.1951,2.677,32740)
-Number of F1 Tiles with Positive energy : 47
+Number of F1 Tiles with Positive energy : 43
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.82234 1.64612 1.57421 
+1.85161 1.72217 1.54485 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-30.6329
+7.78697
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 5
-N Secondaries 287
-EmEdep is=19697.6 MeV 
-HadEdep is=6.17895 MeV
-Edep in FCAL1 FCAl2 : 19697.6 6.17895
+N Tracks out of world 1
+N Secondaries 209
+EmEdep is=19900 MeV 
+HadEdep is=1.8511 MeV
+Edep in FCAL1 FCAl2 : 19900 1.8511
  ****  Primary : 4
  Vertex : (-8.66148,-8.80731,32740)
-Number of F1 Tiles with Positive energy : 48
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.24023 1.5691 1.99345 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-6.62809
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 6
-N Secondaries 298
-EmEdep is=19854.6 MeV 
-HadEdep is=2.18466 MeV
-Edep in FCAL1 FCAl2 : 19854.6 2.18466
- ****  Primary : 5
- Vertex : (4.75859,7.01622,32740)
 Number of F1 Tiles with Positive energy : 44
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.71216 1.57322 1.81781 
+1.74477 1.72368 1.57059 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-7.393
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 3
-N Secondaries 193
-EmEdep is=19779.2 MeV 
-HadEdep is=7.92109 MeV
-Edep in FCAL1 FCAl2 : 19779.2 7.92109
- ****  Primary : 6
- Vertex : (1.94335,14.9228,32740)
-Number of F1 Tiles with Positive energy : 40
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.80826 1.83647 1.71984 
- Visible Energy in Hole Counter  (MeV) 
-0 56.4375
- Visible Energy in Upstream Dead Materials 
-591.166
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 24
-N Secondaries 216
-EmEdep is=18665.4 MeV 
-HadEdep is=2.03402 MeV
-Edep in FCAL1 FCAl2 : 18665.4 2.03402
- ****  Primary : 7
- Vertex : (-10.9878,-6.7949,32740)
-Number of F1 Tiles with Positive energy : 42
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.5804 1.96594 1.88546 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-8.46772
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 5
-N Secondaries 128
-EmEdep is=19800.9 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19800.9 0
- ****  Primary : 8
- Vertex : (10.9757,-1.49585,32740)
-Number of F1 Tiles with Positive energy : 44
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.57833 1.6999 1.67647 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-3.29726
+6.52953
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
 N Tracks out of world 2
-N Secondaries 298
-EmEdep is=19874.7 MeV 
+N Secondaries 203
+EmEdep is=19703 MeV 
 HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19874.7 0
- ****  Primary : 9
- Vertex : (-27.7734,3.36444,32740)
-Number of F1 Tiles with Positive energy : 59
+Edep in FCAL1 FCAl2 : 19703 0
+ ****  Primary : 5
+ Vertex : (4.75859,7.01622,32740)
+Number of F1 Tiles with Positive energy : 54
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.93688 2.49148 1.68114 
+1.55138 4.94933 1.7509 
  Visible Energy in Hole Counter  (MeV) 
-0 69.3636
+0 73.5589
  Visible Energy in Upstream Dead Materials 
-7002.76
+821.666
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 191
-N Secondaries 152
-EmEdep is=10752.3 MeV 
-HadEdep is=0.652787 MeV
-Edep in FCAL1 FCAl2 : 10752.3 0.652787
- ****  Primary : 10
- Vertex : (-22.5474,4.1006,32740)
-Number of F1 Tiles with Positive energy : 51
+N Tracks out of world 34
+N Secondaries 73
+EmEdep is=17927.8 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 17927.8 0
+ ****  Primary : 6
+ Vertex : (1.94335,14.9228,32740)
+Number of F1 Tiles with Positive energy : 57
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.67064 2.37068 4.58452 
+1.54202 2.68524 1.85422 
+ Visible Energy in Hole Counter  (MeV) 
+0 144.546
+ Visible Energy in Upstream Dead Materials 
+1011.66
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 65
+N Secondaries 133
+EmEdep is=17463.2 MeV 
+HadEdep is=6.00078 MeV
+Edep in FCAL1 FCAl2 : 17463.2 6.00078
+ ****  Primary : 7
+ Vertex : (-10.9878,-6.7949,32740)
+Number of F1 Tiles with Positive energy : 75
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.90567 3.40503 2.48706 
+ Visible Energy in Hole Counter  (MeV) 
+0 139.211
+ Visible Energy in Upstream Dead Materials 
+5765.37
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 184
+N Secondaries 251
+EmEdep is=11968 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 11968 0
+ ****  Primary : 8
+ Vertex : (10.9757,-1.49585,32740)
+Number of F1 Tiles with Positive energy : 47
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.66122 2.81189 3.22355 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-4.37874
+3.07205
  Visible Energy in Tail Catcher Scintillator
-0.0548004 0 0 0 0 0 0 
+0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
-0.00228468 0 0 0 0 0 
-N Tracks out of world 7
-N Secondaries 268
-EmEdep is=19709.1 MeV 
-HadEdep is=2.32481 MeV
-Edep in FCAL1 FCAl2 : 19709.1 2.32481
+0 0 0 0 0 0 
+N Tracks out of world 1
+N Secondaries 294
+EmEdep is=19819 MeV 
+HadEdep is=8.67455 MeV
+Edep in FCAL1 FCAl2 : 19819 8.67455
+ ****  Primary : 9
+ Vertex : (-27.7734,3.36444,32740)
+Number of F1 Tiles with Positive energy : 67
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.52472 2.44428 1.84001 
+ Visible Energy in Hole Counter  (MeV) 
+0 129.115
+ Visible Energy in Upstream Dead Materials 
+8699.4
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 251
+N Secondaries 320
+EmEdep is=8992.89 MeV 
+HadEdep is=2.55865 MeV
+Edep in FCAL1 FCAl2 : 8992.89 2.55865
+ ****  Primary : 10
+ Vertex : (-22.5474,4.1006,32740)
+Number of F1 Tiles with Positive energy : 42
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.56407 1.53001 1.82565 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+4.49519
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 0
+N Secondaries 195
+EmEdep is=19800.3 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19800.3 0
 
 ---> Begin of event: 11
  ****  Primary : 11
  Vertex : (-6.31939,21.5056,32740)
-Number of F1 Tiles with Positive energy : 76
+Number of F1 Tiles with Positive energy : 71
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.81065 1.66862 1.8954 
+1.54164 1.71126 1.59721 
  Visible Energy in Hole Counter  (MeV) 
-0 96.6734
+0 176.532
  Visible Energy in Upstream Dead Materials 
-6898.98
+6686.54
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 169
-N Secondaries 72
-EmEdep is=10591.5 MeV 
-HadEdep is=1.08337 MeV
-Edep in FCAL1 FCAl2 : 10591.5 1.08337
+0.118848 0 0 0 0 0 
+N Tracks out of world 242
+N Secondaries 113
+EmEdep is=10533.2 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 10533.2 0
  ****  Primary : 12
  Vertex : (17.1015,6.30557,32740)
-Number of F1 Tiles with Positive energy : 53
+Number of F1 Tiles with Positive energy : 45
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.63468 1.58395 1.68024 
+1.48206 1.52776 1.68422 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-7.32858
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 5
-N Secondaries 210
-EmEdep is=19821.1 MeV 
-HadEdep is=0.715842 MeV
-Edep in FCAL1 FCAl2 : 19821.1 0.715842
- ****  Primary : 13
- Vertex : (-24.9484,11.8659,32740)
-Number of F1 Tiles with Positive energy : 6
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.57473 2.597 2.02058 
- Visible Energy in Hole Counter  (MeV) 
-0 41.2781
- Visible Energy in Upstream Dead Materials 
-19234.2
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 156
-N Secondaries 270
-EmEdep is=154.305 MeV 
-HadEdep is=0.74704 MeV
-Edep in FCAL1 FCAl2 : 154.305 0.74704
- ****  Primary : 14
- Vertex : (-0.133696,18.3151,32740)
-Number of F1 Tiles with Positive energy : 46
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.28961 3.49663 2.25446 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-21.9865
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 3
-N Secondaries 202
-EmEdep is=19696.6 MeV 
-HadEdep is=15.3392 MeV
-Edep in FCAL1 FCAl2 : 19696.6 15.3392
- ****  Primary : 15
- Vertex : (17.3196,17.6617,32740)
-Number of F1 Tiles with Positive energy : 48
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.78029 2.20745 1.84498 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-4.84631
+3.81244
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
 N Tracks out of world 2
-N Secondaries 196
-EmEdep is=19832.6 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19832.6 0
+N Secondaries 159
+EmEdep is=19848.9 MeV 
+HadEdep is=0.219479 MeV
+Edep in FCAL1 FCAl2 : 19848.9 0.219479
+ ****  Primary : 13
+ Vertex : (-24.9484,11.8659,32740)
+Number of F1 Tiles with Positive energy : 58
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+2.44751 1.90267 1.66902 
+ Visible Energy in Hole Counter  (MeV) 
+0 178.901
+ Visible Energy in Upstream Dead Materials 
+8717.33
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 212
+N Secondaries 76
+EmEdep is=9371.29 MeV 
+HadEdep is=1.80074 MeV
+Edep in FCAL1 FCAl2 : 9371.29 1.80074
+ ****  Primary : 14
+ Vertex : (-0.133696,18.3151,32740)
+Number of F1 Tiles with Positive energy : 44
+Number of F2 tiles with Positive energy : 1
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+2.66622 1.59886 1.54882 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+11.1094
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 3
+N Secondaries 170
+EmEdep is=19724.8 MeV 
+HadEdep is=12.2943 MeV
+Edep in FCAL1 FCAl2 : 19724.8 12.2943
+ ****  Primary : 15
+ Vertex : (17.3196,17.6617,32740)
+Number of F1 Tiles with Positive energy : 47
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.55148 1.77448 1.57078 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+10.0732
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 7
+N Secondaries 220
+EmEdep is=19809.2 MeV 
+HadEdep is=0.799317 MeV
+Edep in FCAL1 FCAl2 : 19809.2 0.799317
  ****  Primary : 16
  Vertex : (-20.8489,10.8988,32740)
-Number of F1 Tiles with Positive energy : 49
+Number of F1 Tiles with Positive energy : 70
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.90825 1.84779 1.53285 
+1.49907 1.65655 1.60126 
  Visible Energy in Hole Counter  (MeV) 
-0 42.9954
+0 104.195
  Visible Energy in Upstream Dead Materials 
-765.322
+4855.68
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 37
-N Secondaries 165
-EmEdep is=18342.9 MeV 
-HadEdep is=4.41746 MeV
-Edep in FCAL1 FCAl2 : 18342.9 4.41746
+N Tracks out of world 149
+N Secondaries 224
+EmEdep is=12949.8 MeV 
+HadEdep is=0.927821 MeV
+Edep in FCAL1 FCAl2 : 12949.8 0.927821
  ****  Primary : 17
  Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 40
+Number of F1 Tiles with Positive energy : 37
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.64259 1.91545 1.68632 
+1.53181 1.74553 1.50282 
  Visible Energy in Hole Counter  (MeV) 
-0 13.568
+0 0
  Visible Energy in Upstream Dead Materials 
-124.717
+13.3302
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 5
-N Secondaries 222
-EmEdep is=19688.5 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19688.5 0
+N Tracks out of world 2
+N Secondaries 135
+EmEdep is=19856.1 MeV 
+HadEdep is=4.95649 MeV
+Edep in FCAL1 FCAl2 : 19856.1 4.95649
  ****  Primary : 18
  Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 63
+Number of F1 Tiles with Positive energy : 45
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.58896 2.0655 2.17158 
+2.45427 1.57577 2.00021 
  Visible Energy in Hole Counter  (MeV) 
-0 122.447
+0 0.546005
  Visible Energy in Upstream Dead Materials 
-3752.91
+5.05385
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 140
-N Secondaries 234
-EmEdep is=14452.3 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 14452.3 0
+N Tracks out of world 8
+N Secondaries 102
+EmEdep is=19752.8 MeV 
+HadEdep is=38.8907 MeV
+Edep in FCAL1 FCAl2 : 19752.8 38.8907
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=7.310000s Real=7.367683s Sys=0.010000s
+  User=6.520000s Real=6.567476s Sys=0.010000s
 There are 4 h1 histograms
   0 with      0 entries: Number of Out Of World
   1 with      0 entries: Number of Secondaries
@@ -1454,25 +1464,25 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 44
+Total navigation history collections cleaned: 42
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0615 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0606 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.103 MB
+Pool ID '17G4DynamicParticle', size : 0.0856 MB
 Pool ID '16G4SmartVoxelNode', size : 0.112 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.0942 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.206 MB
-Pool ID '18G4TouchableHistory', size : 0.00577 MB
+Pool ID '7G4Track', size : 0.17 MB
+Pool ID '18G4TouchableHistory', size : 0.00481 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.59 MB
+Dynamic pools deleted: 14 / Total memory freed: 0.54 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

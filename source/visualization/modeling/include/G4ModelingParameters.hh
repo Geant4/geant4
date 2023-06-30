@@ -62,6 +62,11 @@ public: // With description
     cloud       // Draw as a cloud of points
   };
 
+  enum CutawayMode {
+    cutawayUnion,       // Union (addition) of result of each cutaway plane.
+    cutawayIntersection // Intersection (multiplication).
+  };
+
   // enums and nested class for communicating a modification to the vis
   // attributes for a specfic touchable defined by PVNameCopyNoPath.
   enum VisAttributesSignifier {
@@ -174,6 +179,7 @@ public: // With description
   const G4Point3D& GetExplodeCentre              () const;
   G4int            GetNoOfSides                  () const;
   G4DisplacedSolid* GetSectionSolid              () const;
+  CutawayMode      GetCutawayMode                () const;
   G4DisplacedSolid* GetCutawaySolid              () const;
   const G4Event*   GetEvent                      () const;
   const std::vector<VisAttributesModifier>& GetVisAttributesModifiers() const;
@@ -196,6 +202,7 @@ public: // With description
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
   void SetSectionSolid         (G4DisplacedSolid* pSectionSolid);
+  void SetCutawayMode          (CutawayMode);
   void SetCutawaySolid         (G4DisplacedSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
   void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>&);
@@ -234,6 +241,7 @@ private:
   G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
   G4DisplacedSolid* fpSectionSolid;  // For generic section (DCUT).
+  CutawayMode  fCutawayMode;     // Cutaway mode.
   G4DisplacedSolid* fpCutawaySolid;  // For generic cutaways.
   const G4Event* fpEvent;        // Event being processed.
   std::vector<VisAttributesModifier> fVisAttributesModifiers;

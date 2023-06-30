@@ -67,9 +67,9 @@ G4BoundingEnvelope(const std::vector<const G4ThreeVectorList*>& polygons)
   //
   G4double xmin =  kInfinity, ymin =  kInfinity, zmin =  kInfinity;
   G4double xmax = -kInfinity, ymax = -kInfinity, zmax = -kInfinity;
-  for (auto ibase = fPolygons->cbegin(); ibase != fPolygons->cend(); ++ibase)
+  for (const auto & polygon : *fPolygons)
   {
-    for (auto ipoint = (*ibase)->cbegin(); ipoint != (*ibase)->cend(); ++ipoint)
+    for (auto ipoint = polygon->cbegin(); ipoint != polygon->cend(); ++ipoint)
     {
       G4double x = ipoint->x();
       if (x < xmin) xmin = x;
@@ -394,9 +394,9 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
     }
     else
     {
-      for (auto ibase=fPolygons->cbegin(); ibase!=fPolygons->cend(); ++ibase)
+      for (const auto & polygon : *fPolygons)
       {
-        for (auto ipoint=(*ibase)->cbegin(); ipoint!=(*ibase)->cend(); ++ipoint)
+        for (auto ipoint=polygon->cbegin(); ipoint!=polygon->cend(); ++ipoint)
         {
           G4double coor = ipoint->x()*cx + ipoint->y()*cy + ipoint->z()*cz + cd;
           if (coor < emin) emin = coor;
@@ -430,15 +430,15 @@ G4BoundingEnvelope::CalculateExtent(const EAxis pAxis,
   // delta, kCarTolerance multiplied by max scale factor of
   // the transformation
   //
-  EAxis axis[] = { kXAxis, kYAxis, kZAxis };
+  EAxis axes[] = { kXAxis, kYAxis, kZAxis };
   G4VoxelLimits limits; // default is unlimited
-  for (auto i=0; i<3; ++i)
+  for (const auto & iAxis : axes)
   {
-    if (pVoxelLimits.IsLimited(axis[i]))
+    if (pVoxelLimits.IsLimited(iAxis))
     {
-      G4double emin = pVoxelLimits.GetMinExtent(axis[i]) - delta;
-      G4double emax = pVoxelLimits.GetMaxExtent(axis[i]) + delta;
-      limits.AddLimit(axis[i], emin, emax);
+      G4double emin = pVoxelLimits.GetMinExtent(iAxis) - delta;
+      G4double emax = pVoxelLimits.GetMaxExtent(iAxis) + delta;
+      limits.AddLimit(iAxis, emin, emax);
     }
   }
 
@@ -600,8 +600,8 @@ TransformVertices(const G4Transform3D& pTransform3D,
   G4int index = 0;
   for (auto i = ia; i != iaend; ++i)
   {
-    G4int nv = (G4int)(*i)->size();
-    pBases.push_back(std::make_pair(index, nv));
+    auto nv = (G4int)(*i)->size();
+    pBases.emplace_back(index, nv);
     index += nv;
   }
 
@@ -614,7 +614,7 @@ TransformVertices(const G4Transform3D& pTransform3D,
     G4ThreeVector offset = pTransform3D.getTranslation();
     for (auto i = ia; i != iaend; ++i)
       for (auto k = (*i)->cbegin(); k != (*i)->cend(); ++k)
-        pVertices.push_back(G4Point3D((*k) + offset));
+        pVertices.emplace_back((*k) + offset);
   }
   else
   {
@@ -638,30 +638,30 @@ G4BoundingEnvelope::GetPrismAABB(const G4Polygon3D& pBaseA,
 
   // First base
   //
-  for (auto it1 = pBaseA.cbegin(); it1 != pBaseA.cend(); ++it1)
+  for (const auto & it1 : pBaseA)
   {
-    G4double x = it1->x();
+    G4double x = it1.x();
     if (x < xmin) xmin = x;
     if (x > xmax) xmax = x;
-    G4double y = it1->y();
+    G4double y = it1.y();
     if (y < ymin) ymin = y;
     if (y > ymax) ymax = y;
-    G4double z = it1->z();
+    G4double z = it1.z();
     if (z < zmin) zmin = z;
     if (z > zmax) zmax = z;
   }
 
   // Second base
   //
-  for (auto it2 = pBaseB.cbegin(); it2 != pBaseB.cend(); ++it2)
+  for (const auto & it2 : pBaseB)
   {
-    G4double x = it2->x();
+    G4double x = it2.x();
     if (x < xmin) xmin = x;
     if (x > xmax) xmax = x;
-    G4double y = it2->y();
+    G4double y = it2.y();
     if (y < ymin) ymin = y;
     if (y > ymax) ymax = y;
-    G4double z = it2->z();
+    G4double z = it2.z();
     if (z < zmin) zmin = z;
     if (z > zmax) zmax = z;
   }
@@ -690,9 +690,9 @@ G4BoundingEnvelope::CreateListOfEdges(const G4Polygon3D& baseA,
     std::size_t k = na - 1;
     for (std::size_t i=0; i<na; ++i)
     {
-      pEdges.push_back(G4Segment3D(baseA[i],baseB[i]));
-      pEdges.push_back(G4Segment3D(baseA[i],baseA[k]));
-      pEdges.push_back(G4Segment3D(baseB[i],baseB[k]));
+      pEdges.emplace_back(baseA[i],baseB[i]);
+      pEdges.emplace_back(baseA[i],baseA[k]);
+      pEdges.emplace_back(baseB[i],baseB[k]);
       k = i;
     }
   }
@@ -702,8 +702,8 @@ G4BoundingEnvelope::CreateListOfEdges(const G4Polygon3D& baseA,
     std::size_t k = na - 1;
     for (std::size_t i=0; i<na; ++i)
     {
-      pEdges.push_back(G4Segment3D(baseA[i],baseA[k]));
-      pEdges.push_back(G4Segment3D(baseA[i],baseB[0]));
+      pEdges.emplace_back(baseA[i],baseA[k]);
+      pEdges.emplace_back(baseA[i],baseB[0]);
       k = i;
     }
   }
@@ -713,8 +713,8 @@ G4BoundingEnvelope::CreateListOfEdges(const G4Polygon3D& baseA,
     std::size_t k = nb - 1;
     for (std::size_t i=0; i<nb; ++i)
     {
-      pEdges.push_back(G4Segment3D(baseB[i],baseB[k]));
-      pEdges.push_back(G4Segment3D(baseB[i],baseA[0]));
+      pEdges.emplace_back(baseB[i],baseB[k]);
+      pEdges.emplace_back(baseB[i],baseA[0]);
       k = i;
     }
   }
@@ -750,19 +750,19 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
       norm = (baseB[k]-baseA[i]).cross(baseA[k]-baseB[i]);
       if (norm.mag2() > kCarTolerance)
       {
-        pPlanes.push_back(G4Plane3D(norm,baseA[i]));
+        pPlanes.emplace_back(norm,baseA[i]);
       }
       k = i;
     }
     norm = (baseA[2]-baseA[0]).cross(baseA[1]-pa);
     if (norm.mag2() > kCarTolerance)
     {
-      pPlanes.push_back(G4Plane3D(norm,pa));
+      pPlanes.emplace_back(norm,pa);
     }
     norm = (baseB[2]-baseB[0]).cross(baseB[1]-pb);
     if (norm.mag2() > kCarTolerance)
     {
-      pPlanes.push_back(G4Plane3D(norm,pb));
+      pPlanes.emplace_back(norm,pb);
     }
   }
   else if (nb == 1) // baseB has one vertex
@@ -773,14 +773,14 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
       norm = (baseA[i]-baseB[0]).cross(baseA[k]-baseB[0]);
       if (norm.mag2() > kCarTolerance)
       {
-        pPlanes.push_back(G4Plane3D(norm,baseB[0]));
+        pPlanes.emplace_back(norm,baseB[0]);
       }
       k = i;
     }
     norm = (baseA[2]-baseA[0]).cross(baseA[1]-pa);
     if (norm.mag2() > kCarTolerance)
     {
-      pPlanes.push_back(G4Plane3D(norm,pa));
+      pPlanes.emplace_back(norm,pa);
     }
   }
   else if (na == 1) // baseA has one vertex
@@ -791,14 +791,14 @@ G4BoundingEnvelope::CreateListOfPlanes(const G4Polygon3D& baseA,
       norm = (baseB[i]-baseA[0]).cross(baseB[k]-baseA[0]);
       if (norm.mag2() > kCarTolerance)
       {
-        pPlanes.push_back(G4Plane3D(norm,baseA[0]));
+        pPlanes.emplace_back(norm,baseA[0]);
       }
       k = i;
     }
     norm = (baseB[2]-baseB[0]).cross(baseB[1]-pb);
     if (norm.mag2() > kCarTolerance)
     {
-      pPlanes.push_back(G4Plane3D(norm,pb));
+      pPlanes.emplace_back(norm,pb);
     }
   }
 
@@ -964,64 +964,64 @@ G4BoundingEnvelope::ClipVoxelByPlanes(G4int pBits,
 
   std::vector<G4Segment3D> edges(12);
   G4int i = 0, bits = pBits;
-  if (!(bits & 0x001))
+  if ((bits & 0x001) == 0)
   {
     edges[i  ].first.set( xmin,ymin,zmin);
     edges[i++].second.set(xmax,ymin,zmin);
   }
-  if (!(bits & 0x002))
+  if ((bits & 0x002) == 0)
   {
     edges[i  ].first.set( xmax,ymin,zmin);
     edges[i++].second.set(xmax,ymax,zmin);
   }
-  if (!(bits & 0x004))
+  if ((bits & 0x004) == 0)
   {
     edges[i  ].first.set( xmax,ymax,zmin);
     edges[i++].second.set(xmin,ymax,zmin);
   }
-  if (!(bits & 0x008))
+  if ((bits & 0x008) == 0)
   {
     edges[i  ].first.set( xmin,ymax,zmin);
     edges[i++].second.set(xmin,ymin,zmin);
   }
 
-  if (!(bits & 0x010))
+  if ((bits & 0x010) == 0)
   {
     edges[i  ].first.set( xmin,ymin,zmax);
     edges[i++].second.set(xmax,ymin,zmax);
   }
-  if (!(bits & 0x020))
+  if ((bits & 0x020) == 0)
   {
     edges[i  ].first.set( xmax,ymin,zmax);
     edges[i++].second.set(xmax,ymax,zmax);
   }
-  if (!(bits & 0x040))
+  if ((bits & 0x040) == 0)
   {
     edges[i  ].first.set( xmax,ymax,zmax);
     edges[i++].second.set(xmin,ymax,zmax);
   }
-  if (!(bits & 0x080))
+  if ((bits & 0x080) == 0)
   {
     edges[i  ].first.set( xmin,ymax,zmax);
     edges[i++].second.set(xmin,ymin,zmax);
   }
 
-  if (!(bits & 0x100))
+  if ((bits & 0x100) == 0)
   {
     edges[i  ].first.set( xmin,ymin,zmin);
     edges[i++].second.set(xmin,ymin,zmax);
   }
-  if (!(bits & 0x200))
+  if ((bits & 0x200) == 0)
   {
     edges[i  ].first.set( xmax,ymin,zmin);
     edges[i++].second.set(xmax,ymin,zmax);
   }
-  if (!(bits & 0x400))
+  if ((bits & 0x400) == 0)
   {
     edges[i  ].first.set( xmax,ymax,zmin);
     edges[i++].second.set(xmax,ymax,zmax);
   }
-  if (!(bits & 0x800))
+  if ((bits & 0x800) == 0)
   {
     edges[i  ].first.set( xmin,ymax,zmin);
     edges[i++].second.set(xmin,ymax,zmax);
@@ -1030,16 +1030,16 @@ G4BoundingEnvelope::ClipVoxelByPlanes(G4int pBits,
 
   // Clip the edges by the planes
   //
-  for (auto iedge = edges.cbegin(); iedge != edges.cend(); ++iedge)
+  for (const auto & edge : edges)
   {
     G4bool    exist = true;
-    G4Point3D p1    = iedge->first;
-    G4Point3D p2    = iedge->second;
-    for (auto iplane = pPlanes.cbegin(); iplane != pPlanes.cend(); ++iplane)
+    G4Point3D p1    = edge.first;
+    G4Point3D p2    = edge.second;
+    for (const auto & plane : pPlanes)
     {
       // Clip current edge
-      G4double d1 = iplane->distance(p1);
-      G4double d2 = iplane->distance(p2);
+      G4double d1 = plane.distance(p1);
+      G4double d2 = plane.distance(p2);
       if (d1 > 0.0)
       {
         if (d2 > 0.0) { exist = false; break; } // go to next edge

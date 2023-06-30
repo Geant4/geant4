@@ -42,11 +42,11 @@ const G4String CylindricalChromosome::fShape = "cyl";
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 CylindricalChromosome::CylindricalChromosome(const G4String& name,
-                                             G4ThreeVector pos,
+                                             const G4ThreeVector& pos,
                                              const G4double& radius,
                                              const G4double& height)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fRadius(radius)
   , fHeight(height)
   , fRotation(G4RotationMatrix())
@@ -57,15 +57,15 @@ CylindricalChromosome::CylindricalChromosome(const G4String& name,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 CylindricalChromosome::CylindricalChromosome(const G4String& name,
-                                             G4ThreeVector pos,
+                                             const G4ThreeVector& pos,
                                              const G4double& radius,
                                              const G4double& height,
-                                             G4RotationMatrix rot)
+                                             const G4RotationMatrix& rot)
   : VirtualChromosome(name)
-  , fCenter(std::move(pos))
+  , fCenter(pos)
   , fRadius(radius)
   , fHeight(height)
-  , fRotation(std::move(rot))
+  , fRotation(rot)
 {
   fInverseRotation = fRotation.inverse();
 }

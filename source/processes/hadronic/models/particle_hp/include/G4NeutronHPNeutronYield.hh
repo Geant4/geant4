@@ -29,4 +29,4 @@
 #include "G4ParticleHPNeutronYield.hh"
 using G4NeutronHPNeutronYield = G4ParticleHPNeutronYield;
 
-#endif 
+#endif

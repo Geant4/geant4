@@ -47,16 +47,16 @@
 // ###                      AntiSigmabZero                            ###
 // ######################################################################
 
-G4AntiSigmabZero* G4AntiSigmabZero::theInstance = 0;
+G4AntiSigmabZero* G4AntiSigmabZero::theInstance = nullptr;
 
 G4AntiSigmabZero* G4AntiSigmabZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_sigma_b0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (theInstance ==0)
+  if (theInstance ==nullptr)
   {
   // create particle
   //
@@ -73,14 +73,14 @@ G4AntiSigmabZero* G4AntiSigmabZero::Definition()
                     1,              +1,             0,
                     2,               0,             0,
              "baryon",               0,            -1,       -5212,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,       "sigma_b");
 
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
+  auto  mode = new G4VDecayChannel*[1];
   // anti_sigma_b0 -> lambda_b + pi0
   mode[0] = new G4PhaseSpaceDecayChannel("anti_sigma_b0",1.000,2,"anti_lambda_b","pi0");
 

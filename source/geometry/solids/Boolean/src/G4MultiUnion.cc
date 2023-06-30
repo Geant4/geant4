@@ -41,7 +41,10 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4PolyhedronArbitrary.hh"
 #include "HepPolyhedronProcessor.h"
+
+#include "G4BooleanSolid.hh"
 
 #include "G4AutoLock.hh"
 
@@ -62,8 +65,7 @@ G4MultiUnion::G4MultiUnion(const G4String& name)
 
 //______________________________________________________________________________
 G4MultiUnion::~G4MultiUnion()
-{
-}
+= default;
 
 //______________________________________________________________________________
 void G4MultiUnion::AddNode(G4VSolid& solid, const G4Transform3D& trans)
@@ -125,7 +127,7 @@ G4double G4MultiUnion::GetCubicVolume()
   // Computes the cubic volume of the "G4MultiUnion" structure using
   // random points
 
-  if (!fCubicVolume)
+  if (fCubicVolume == 0.0)
   {
     G4ThreeVector extentMin, extentMax, d, p, point;
     G4int inside = 0, generated;
@@ -218,7 +220,7 @@ G4double G4MultiUnion::DistanceToIn(const G4ThreeVector& aPoint,
   if (shift == kInfinity) return shift;
 
   G4ThreeVector currentPoint = aPoint;
-  if (shift) currentPoint += direction * shift;
+  if (shift != 0.0) currentPoint += direction * shift;
 
   G4SurfBits exclusion(fVoxels.GetBitsPerSlice());
   std::vector<G4int> candidates, curVoxel(3);
@@ -227,7 +229,7 @@ G4double G4MultiUnion::DistanceToIn(const G4ThreeVector& aPoint,
   do
   {
     {
-      if (fVoxels.GetCandidatesVoxelArray(curVoxel, candidates, &exclusion))
+      if (fVoxels.GetCandidatesVoxelArray(curVoxel, candidates, &exclusion) != 0)
       {
         G4double distance = DistanceToInCandidates(aPoint, direction,
                                                    candidates, exclusion);
@@ -261,7 +263,7 @@ G4double G4MultiUnion::DistanceToOutNoVoxels(const G4ThreeVector& aPoint,
   G4double resultDistToOut = 0;
   G4ThreeVector currentPoint = aPoint;
 
-  G4int numNodes = (G4int)fSolids.size();
+  auto numNodes = (G4int)fSolids.size();
   for (auto i = 0; i < numNodes; ++i)
   {
     if (i != ignoredSolid)
@@ -274,7 +276,7 @@ G4double G4MultiUnion::DistanceToOutNoVoxels(const G4ThreeVector& aPoint,
       if (location != EInside::kOutside)
       {
         G4double distance = solid.DistanceToOut(localPoint, localDirection,
-                                                aNormal);
+                                                false, nullptr, aNormal);
         if (distance < kInfinity)
         {
           if (resultDistToOut == kInfinity) resultDistToOut = 0;
@@ -328,7 +330,7 @@ G4double G4MultiUnion::DistanceToOutVoxels(const G4ThreeVector& aPoint,
   std::size_t numNodes = 2*fSolids.size();
   std::size_t count=0;
 
-  if (fVoxels.GetCandidatesVoxelArray(aPoint, candidates))
+  if (fVoxels.GetCandidatesVoxelArray(aPoint, candidates) != 0)
   {
     // For normal case for which we presume the point is inside
     G4ThreeVector localPoint, localDirection, localNormal;
@@ -372,7 +374,7 @@ G4double G4MultiUnion::DistanceToOutVoxels(const G4ThreeVector& aPoint,
 
           // propagate with solid.DistanceToOut
           G4double shift = solid.DistanceToOut(localPoint, localDirection,
-                                               false, 0, &localNormal);
+                                               false, nullptr, &localNormal);
           if (maxDistance < shift)
           {
             maxDistance = shift;
@@ -387,7 +389,7 @@ G4double G4MultiUnion::DistanceToOutVoxels(const G4ThreeVector& aPoint,
         const G4Transform3D& transform = fTransformObjs[maxCandidate];
 
         // convert from local normal
-        if (aNormal) *aNormal = GetGlobalVector(transform, maxNormal);
+        if (aNormal != nullptr) *aNormal = GetGlobalVector(transform, maxNormal);
 
         distance += maxDistance;
         currentPoint += maxDistance * direction;
@@ -530,7 +532,7 @@ EInside G4MultiUnion::InsideNoVoxels(const G4ThreeVector& aPoint) const
   EInside location = EInside::kOutside;
   G4int countSurface = 0;
 
-  G4int numNodes = (G4int)fSolids.size();
+  auto numNodes = (G4int)fSolids.size();
   for (auto i = 0 ; i < numNodes ; ++i)
   {
     G4VSolid& solid = *fSolids[i];
@@ -557,7 +559,7 @@ void G4MultiUnion::Extent(EAxis aAxis, G4double& aMin, G4double& aMax) const
   // Determines the bounding box for the considered instance of "UMultipleUnion"
   G4ThreeVector min, max;
 
-  G4int numNodes = (G4int)fSolids.size();
+  auto numNodes = (G4int)fSolids.size();
   for (auto i = 0 ; i < numNodes ; ++i)
   {
     G4VSolid& solid = *fSolids[i];
@@ -663,7 +665,7 @@ G4ThreeVector G4MultiUnion::SurfaceNormal(const G4ThreeVector& aPoint) const
   // on a vertice remain to be treated
 
   // determine weather we are in voxel area
-  if (fVoxels.GetCandidatesVoxelArray(aPoint, candidates))
+  if (fVoxels.GetCandidatesVoxelArray(aPoint, candidates) != 0)
   {
     std::size_t limit = candidates.size();
     for (std::size_t i = 0 ; i < limit ; ++i)
@@ -814,7 +816,7 @@ G4double G4MultiUnion::DistanceToIn(const G4ThreeVector& point) const
 //______________________________________________________________________________
 G4double G4MultiUnion::GetSurfaceArea()
 {
-  if (!fSurfaceArea)
+  if (fSurfaceArea == 0.0)
   {
     fSurfaceArea = EstimateSurfaceArea(1000000, 0.001);
   }
@@ -971,26 +973,56 @@ G4MultiUnion::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 //______________________________________________________________________________
 G4Polyhedron* G4MultiUnion::CreatePolyhedron() const
 {
-  HepPolyhedronProcessor processor;
-  HepPolyhedronProcessor::Operation operation = HepPolyhedronProcessor::UNION;
-
-  G4VSolid* solidA = GetSolid(0);
-  const G4Transform3D transform0=GetTransformation(0);
-  G4DisplacedSolid dispSolidA("placedA",solidA,transform0);
-
-  G4Polyhedron* top = new G4Polyhedron(*dispSolidA.GetPolyhedron());
-    
-  for(G4int i=1; i<GetNumberOfSolids(); ++i)
+  if (G4BooleanSolid::GetExternalBooleanProcessor() == nullptr)
   {
-    G4VSolid* solidB = GetSolid(i);
-    const G4Transform3D transform=GetTransformation(i);
-    G4DisplacedSolid dispSolidB("placedB",solidB,transform);
-    G4Polyhedron* operand = dispSolidB.GetPolyhedron();
-    processor.push_back (operation, *operand);
+    HepPolyhedronProcessor processor;
+    HepPolyhedronProcessor::Operation operation = HepPolyhedronProcessor::UNION;
+
+    G4VSolid* solidA = GetSolid(0);
+    const G4Transform3D transform0 = GetTransformation(0);
+    G4DisplacedSolid dispSolidA("placedA", solidA, transform0);
+
+    auto top = new G4Polyhedron(*dispSolidA.GetPolyhedron());
+
+    for (G4int i = 1; i < GetNumberOfSolids(); ++i)
+    {
+      G4VSolid* solidB = GetSolid(i);
+      const G4Transform3D transform = GetTransformation(i);
+      G4DisplacedSolid dispSolidB("placedB", solidB, transform);
+      G4Polyhedron* operand = dispSolidB.GetPolyhedron();
+      processor.push_back(operation, *operand);
+    }
+
+    if (processor.execute(*top))
+    {
+      return top;
+    }
+    else
+    {
+      return nullptr;
+    }
   }
-   
-  if (processor.execute(*top)) { return top; }
-  else { return 0; } 
+  else
+  {
+    G4VSolid* solidA = GetSolid(0);
+    auto solidAPolyhedron =
+      dynamic_cast<G4PolyhedronArbitrary*>(solidA->GetPolyhedron());
+
+    const G4Transform3D transform0 = GetTransformation(0);
+    G4DisplacedSolid dispSolidA("placedA", solidA, transform0);
+
+    // dispSolidA.GetPolyhedron()
+    for (G4int i = 1; i < GetNumberOfSolids(); ++i)
+    {
+      G4VSolid* solidB = GetSolid(i);
+      const G4Transform3D transform = GetTransformation(i);
+      G4DisplacedSolid dispSolidB("placedB", solidB, transform);
+      solidAPolyhedron = G4BooleanSolid::GetExternalBooleanProcessor()
+                       ->Union(solidAPolyhedron, dispSolidB.GetPolyhedron());
+    }
+
+    return solidAPolyhedron;
+  }
 }
 
 //______________________________________________________________________________
@@ -1000,12 +1032,12 @@ G4Polyhedron* G4MultiUnion::GetPolyhedron() const
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
-    {
-      G4AutoLock l(&polyhedronMutex);
-      delete fpPolyhedron;
-      fpPolyhedron = CreatePolyhedron();
-      fRebuildPolyhedron = false;
-      l.unlock();
-    }
+  {
+    G4AutoLock l(&polyhedronMutex);
+    delete fpPolyhedron;
+    fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
+  }
   return fpPolyhedron;
 }

@@ -45,16 +45,16 @@
 // ###                       ANTIPROTON                               ###
 // ######################################################################
 
-G4AntiProton* G4AntiProton::theInstance = 0;
+G4AntiProton* G4AntiProton::theInstance = nullptr;
 
 G4AntiProton* G4AntiProton::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_proton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4AntiProton* G4AntiProton::Definition()
 		    1,              +1,             0,         
 		    1,              -1,             0,             
 	     "baryon",               0,            -1,       -2212,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
 		 false,      "nucleon",          2212
               );
     // Magnetic Moment

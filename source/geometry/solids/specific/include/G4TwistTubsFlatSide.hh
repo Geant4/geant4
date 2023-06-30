@@ -40,71 +40,69 @@
 
 class G4TwistTubsFlatSide : public G4VTwistSurface
 {
-  public:  // with description
+  public:
 
-   G4TwistTubsFlatSide(const G4String&   name,
-                 const G4RotationMatrix& rot,
-                 const G4ThreeVector&    tlate,
-                 const G4ThreeVector&    n,
-                 const EAxis             axis1 = kRho, // RHO axis !
-                 const EAxis             axis2 = kPhi, // PHI axis !
-                       G4double          axis0min = -kInfinity,
-                       G4double          axis1min = -kInfinity,
-                       G4double          axis0max = kInfinity,
-                       G4double          axis1max = kInfinity );
-                       
-   G4TwistTubsFlatSide( const G4String&  name,
-                        G4double         EndInnerRadius[2],
-                        G4double         EndOuterRadius[2],
-                        G4double         DPhi,
-                        G4double         EndPhi[2],
-                        G4double         EndZ[2], 
-                        G4int            handedness ) ;
+    G4TwistTubsFlatSide(const G4String&   name,
+                        const G4RotationMatrix& rot,
+                        const G4ThreeVector&    tlate,
+                        const G4ThreeVector&    n,
+                        const EAxis             axis1 = kRho, // RHO axis !
+                        const EAxis             axis2 = kPhi, // PHI axis !
+                              G4double          axis0min = -kInfinity,
+                              G4double          axis1min = -kInfinity,
+                              G4double          axis0max = kInfinity,
+                              G4double          axis1max = kInfinity);
 
-   virtual ~G4TwistTubsFlatSide();
-   virtual G4ThreeVector  GetNormal(const G4ThreeVector& /* xx */ ,
-                                          G4bool isGlobal = false);
-   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
-                                   const G4ThreeVector& gv,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[],
-                                         G4bool         isvalid[],
-                                         EValidate validate = kValidateWithTol);
-                                                  
-   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[]);
-                                                  
-  virtual G4ThreeVector SurfacePoint(G4double, G4double,
-                                     G4bool isGlobal = false) ;  
-  virtual G4double GetBoundaryMin(G4double phi) ;
-  virtual G4double GetBoundaryMax(G4double phi) ;
-  virtual G4double GetSurfaceArea() { return fSurfaceArea ; }
-  virtual void GetFacets( G4int m, G4int n, G4double xyz[][3],
-                          G4int faces[][4], G4int iside ) ;
+    G4TwistTubsFlatSide(const G4String&  name,
+                              G4double         EndInnerRadius[2],
+                              G4double         EndOuterRadius[2],
+                              G4double         DPhi,
+                              G4double         EndPhi[2],
+                              G4double         EndZ[2], 
+                              G4int            handedness);
 
-  public:  // without description
+   ~G4TwistTubsFlatSide() override;
+    G4ThreeVector  GetNormal(const G4ThreeVector& /* xx */ ,
+                                   G4bool isGlobal = false) override;
+    G4int DistanceToSurface(const G4ThreeVector& gp,
+                            const G4ThreeVector& gv,
+                                  G4ThreeVector  gxx[],
+                                  G4double       distance[],
+                                  G4int          areacode[],
+                                  G4bool         isvalid[],
+                            EValidate validate = kValidateWithTol) override;
 
-   G4TwistTubsFlatSide(__void__&);
-     // Fake default constructor for usage restricted to direct object
-     // persistency for clients requiring preallocation of memory for
-     // persistifiable objects.
+    G4int DistanceToSurface(const G4ThreeVector& gp,
+                                  G4ThreeVector  gxx[],
+                                  G4double       distance[],
+                                  G4int          areacode[]) override;
 
-  protected:  // with description
+    inline G4ThreeVector SurfacePoint(G4double, G4double,
+                                      G4bool isGlobal = false) override;  
+    inline G4double GetBoundaryMin(G4double phi) override;
+    inline G4double GetBoundaryMax(G4double phi) override;
+    inline G4double GetSurfaceArea() override { return fSurfaceArea ; }
+    void GetFacets( G4int m, G4int n, G4double xyz[][3],
+                    G4int faces[][4], G4int iside ) override;
 
-   virtual G4int GetAreaCode(const G4ThreeVector& xx, 
-                                   G4bool withTol = true) ;
+    G4TwistTubsFlatSide(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
+
+  protected:
+
+    G4int GetAreaCode(const G4ThreeVector& xx, 
+                            G4bool withTol = true) override ;
 
   private:
 
-   virtual void SetCorners();
-   virtual void SetBoundaries();
+    void SetCorners() override;
+    void SetBoundaries() override;
 
   private:
 
-   G4double fSurfaceArea = 0.0;
+    G4double fSurfaceArea = 0.0;
 };
 
 inline G4ThreeVector G4TwistTubsFlatSide::

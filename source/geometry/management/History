@@ -6,11 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-03-22 Gabriele Cosmo (geommng-V11-00-11)
+## 2023-05-08 Gabriele Cosmo (geommng-V11-01-02)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
+
+## 2023-03-22 Gabriele Cosmo (geommng-V11-01-01)
 - G4Region: issue fatal exception if attempting to add a root logical volume
   which is already set as root for another region.
 
-## 2023-01-09 Gabriele Cosmo (geommng-V11-00-10)
+## 2023-01-09 Gabriele Cosmo (geommng-V11-01-00)
 - G4LogicalVolume: use std::shared_ptr for handling visualization attributes.
   Ignore calls to SetVisAttributes() from worker threads.
 

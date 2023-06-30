@@ -50,17 +50,17 @@ class G4BrentLocator : public G4VIntersectionLocator
  
     G4BrentLocator(G4Navigator *theNavigator);
       // Constructor
-    ~G4BrentLocator();
+    ~G4BrentLocator() override;
       // Default destructor
 
     G4bool EstimateIntersectionPoint( 
-         const  G4FieldTrack&       curveStartPointTangent,  // A
-         const  G4FieldTrack&       curveEndPointTangent,    // B
-         const  G4ThreeVector&      trialPoint,              // E
-                G4FieldTrack&       intersectPointTangent,   // Output
-                G4bool&             recalculatedEndPoint,    // Out
-                G4double&           fPreviousSafety,         // In/Out
-                G4ThreeVector&      fPreviousSftOrigin);     // In/Out
+         const  G4FieldTrack&       curveStartPointTangent,           // A
+         const  G4FieldTrack&       curveEndPointTangent,             // B
+         const  G4ThreeVector&      trialPoint,                       // E
+                G4FieldTrack&       intersectPointTangent,            // Output
+                G4bool&             recalculatedEndPoint,             // Out
+                G4double&           fPreviousSafety,                  // In/Out
+                G4ThreeVector&      fPreviousSftOrigin) override;     // In/Out
       // If such an intersection exists, this function calculates the
       // intersection point of the true path of the particle with the surface
       // of the current volume (or of one of its daughters). 

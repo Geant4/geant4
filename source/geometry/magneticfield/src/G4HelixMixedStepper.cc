@@ -216,72 +216,73 @@ G4MagIntegratorStepper*
 G4HelixMixedStepper::SetupStepper(G4Mag_EqRhs* pE, G4int StepperNumber)
 {
   G4MagIntegratorStepper* pStepper;
-  if (fVerbose>0) G4cout << " G4HelixMixedStepper: ";
+  if (fVerbose>0) { G4cout << " G4HelixMixedStepper: ";
+}
   switch ( StepperNumber )
   {
       // Robust, classic method
       case 4:
         pStepper = new G4ClassicalRK4( pE );
-        if (fVerbose>0) G4cout << "G4ClassicalRK4";
+        if (fVerbose>0) { G4cout << "G4ClassicalRK4"; }
         break;
 
       // Steppers with embedded estimation of error
       case 8:
         pStepper = new G4CashKarpRKF45( pE );
-        if (fVerbose>0) G4cout << "G4CashKarpRKF45";
+        if (fVerbose>0) { G4cout << "G4CashKarpRKF45"; }
         break;
       case 13:
         pStepper = new G4NystromRK4( pE );
-        if (fVerbose>0) G4cout << "G4NystromRK4";
+        if (fVerbose>0) { G4cout << "G4NystromRK4"; }
         break;
         
       // Lowest order RK Stepper - experimental
       case 1:
         pStepper = new G4ImplicitEuler( pE );
-        if (fVerbose>0) G4cout << "G4ImplicitEuler";
+        if (fVerbose>0) { G4cout << "G4ImplicitEuler"; }
         break;
 
       // Lower order RK Steppers - ok overall, good for uneven fields        
       case 2:
         pStepper = new G4SimpleRunge( pE );
-        if (fVerbose>0) G4cout << "G4SimpleRunge";
+        if (fVerbose>0) { G4cout << "G4SimpleRunge"; }
         break;
       case 3:
         pStepper = new G4SimpleHeum( pE );
-        if (fVerbose>0) G4cout << "G4SimpleHeum";
+        if (fVerbose>0) { G4cout << "G4SimpleHeum"; }
         break;
       case 23:
         pStepper = new G4BogackiShampine23( pE );
-        if (fVerbose>0) G4cout << "G4BogackiShampine23";
+        if (fVerbose>0) { G4cout << "G4BogackiShampine23"; }
         break;
 
       // Higher order RK Steppers
       // for smoother fields and high accuracy requirements 
       case 45:
         pStepper = new G4BogackiShampine45( pE );
-        if (fVerbose>0) G4cout << "G4BogackiShampine45";
+        if (fVerbose>0) { G4cout << "G4BogackiShampine45"; }
         break;
       case 145:
         pStepper = new G4TsitourasRK45( pE );
-        if (fVerbose>0) G4cout << "G4TsitourasRK45";
+        if (fVerbose>0) { G4cout << "G4TsitourasRK45"; }
         break;
       case 745:
         pStepper = new G4DormandPrince745( pE );
-        if (fVerbose>0) G4cout << "G4DormandPrince745";
+        if (fVerbose>0) { G4cout << "G4DormandPrince745"; }
         break;
 
       // Helical Steppers
       case 6:
         pStepper = new G4HelixImplicitEuler( pE );
-        if (fVerbose>0) G4cout << "G4HelixImplicitEuler";
+        if (fVerbose>0) { G4cout << "G4HelixImplicitEuler"; }
         break;
       case 7:
         pStepper = new G4HelixSimpleRunge( pE );
-        if (fVerbose>0) G4cout << "G4HelixSimpleRunge";
+        if (fVerbose>0) { G4cout << "G4HelixSimpleRunge"; }
         break;
       case 5:
         pStepper = new G4HelixExplicitEuler( pE );
-        if (fVerbose>0) G4cout << "G4HelixExplicitEuler";
+        if (fVerbose>0) { G4cout << "G4HelixExplicitEuler"; }
         break; //  Since Helix Explicit is used for long steps,
                // this is useful only to measure overhead.
       // Exact Helix - likely good only for cases of
@@ -289,28 +290,28 @@ G4HelixMixedStepper::SetupStepper(G4Mag_EqRhs* pE, G4int StepperNumber)
       //           ii) segmented uniform field (maybe)
       case 9:
         pStepper = new G4ExactHelixStepper( pE );
-        if (fVerbose>0) G4cout << "G4ExactHelixStepper";
+        if (fVerbose>0) { G4cout << "G4ExactHelixStepper"; }
         break;
       case 10:
         pStepper = new G4RKG3_Stepper( pE );
-        if (fVerbose>0) G4cout << "G4RKG3_Stepper";
+        if (fVerbose>0) { G4cout << "G4RKG3_Stepper"; }
         break;
 
       // Low Order Steppers - not good except for very weak fields
       case 11:
         pStepper = new G4ExplicitEuler( pE );
-        if (fVerbose>0) G4cout << "G4ExplicitEuler";
+        if (fVerbose>0) { G4cout << "G4ExplicitEuler"; }
         break;
       case 12:
         pStepper = new G4ImplicitEuler( pE );
-        if (fVerbose>0) G4cout << "G4ImplicitEuler";
+        if (fVerbose>0) { G4cout << "G4ImplicitEuler"; }
         break;
 
       case 0:
       case -1:
       default:
          pStepper = new G4DormandPrince745( pE ); // Was G4ClassicalRK4( pE );
-        if (fVerbose>0) G4cout << "G4DormandPrince745 (Default)";
+        if (fVerbose>0) { G4cout << "G4DormandPrince745 (Default)"; }
         break;
   }
 

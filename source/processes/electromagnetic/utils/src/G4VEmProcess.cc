@@ -162,7 +162,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
   if(particle != &part) { return; }
 
-  lManager->PreparePhysicsTable(&part, this, isTheMaster);
+  lManager->PreparePhysicsTable(&part, this);
 
   // for new run
   currentCouple = nullptr;

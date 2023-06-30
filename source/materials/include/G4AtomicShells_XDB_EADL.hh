@@ -22,8 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  File:   G4AtomicShells_XDB_EADL.hh                                        //
@@ -34,42 +33,36 @@
 //               and binding energies for atoms from Z = 1 to Z = 120.        //
 //               Most entries are taken from the X-ray Data Book, with        //
 //               unmeasured values supplied by Kibedi.  See documentation     //
-//               file in G4EMLOW7.3 or later, directory fluor/                //  
+//               file in G4EMLOW7.3 or later, directory fluor/                //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-
 
 #ifndef G4ATOMICSHELLS_XDB_EADL_H
 #define G4ATOMICSHELLS_XDB_EADL_H
 
 #include "globals.hh"
 
-
 class G4AtomicShells_XDB_EADL
 {
-  public :  //with description
+ public:  // with description
+  G4AtomicShells_XDB_EADL(const G4AtomicShells_XDB_EADL&) = delete;
+  const G4AtomicShells_XDB_EADL& operator=(const G4AtomicShells_XDB_EADL&) = delete;
 
-    static G4int    GetNumberOfShells    (G4int Z);
-    static G4int    GetNumberOfElectrons (G4int Z, G4int SubshellNb);
-    static G4int    GetNumberOfFreeElectrons(G4int Z, G4double th);
-    static G4double GetBindingEnergy     (G4int Z, G4int SubshellNb);
-    static G4double GetTotalBindingEnergy(G4int Z);
+  static G4int GetNumberOfShells(G4int Z);
+  static G4int GetNumberOfElectrons(G4int Z, G4int SubshellNb);
+  static G4int GetNumberOfFreeElectrons(G4int Z, G4double th);
+  static G4double GetBindingEnergy(G4int Z, G4int SubshellNb);
+  static G4double GetTotalBindingEnergy(G4int Z);
 
-  private :
-
+ private:
 #ifdef G4VERBOSE
-    static G4int PrintErrorZ(G4int Z, const G4String&);
-    static G4int PrintErrorShell(G4int Z, G4int SubshellNb, const G4String&);
+  static G4int PrintErrorZ(G4int Z, const G4String&);
+  static G4int PrintErrorShell(G4int Z, G4int SubshellNb, const G4String&);
 #endif
-
-    G4AtomicShells_XDB_EADL(const G4AtomicShells_XDB_EADL&) = delete;
-    const G4AtomicShells_XDB_EADL& operator=(const G4AtomicShells_XDB_EADL&) = delete;
-
-    static const G4int    fNumberOfShells   [121];
-    static const G4int    fIndexOfShells    [121];
-    static const G4int    fNumberOfElectrons[2171];
-    static const G4double fBindingEnergies  [2171];
+  static const G4int fNumberOfShells[121];
+  static const G4int fIndexOfShells[121];
+  static const G4int fNumberOfElectrons[2171];
+  static const G4double fBindingEnergies[2171];
 };
 
-#endif   // end of G4AtomicShells_XDB_EADL.hh
-
+#endif  // end of G4AtomicShells_XDB_EADL.hh

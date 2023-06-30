@@ -537,12 +537,12 @@ bool RanluxEngine::getState (const std::vector<unsigned long> & v) {
   for (int i=0; i<24; ++i) {
     float_seed_table[i] = v[i+1]*mantissa_bit_24();
   }
-  i_lag    = v[25];
-  j_lag    = v[26];
+  i_lag    = (int)v[25];
+  j_lag    = (int)v[26];
   carry    = v[27]*mantissa_bit_24();
-  count24  = v[28];
-  luxury   = v[29];
-  nskip    = v[30];
+  count24  = (int)v[28];
+  luxury   = (int)v[29];
+  nskip    = (int)v[30];
   return true;
 }
 

@@ -65,9 +65,7 @@ G4ReplicaNavigation::G4ReplicaNavigation()
 // Destructor
 // ********************************************************************
 //
-G4ReplicaNavigation::~G4ReplicaNavigation()
-{
-}
+G4ReplicaNavigation::~G4ReplicaNavigation() = default;
 
 // ********************************************************************
 // Inside
@@ -107,7 +105,7 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume* pVol,
       }
       break;
     case kPhi:
-      if ( localPoint.y()||localPoint.x() )
+      if ( (localPoint.y() != 0.0)||(localPoint.x() != 0.0) )
       {
         coord = std::fabs(std::atan2(localPoint.y(),localPoint.x()))-width*0.5;
         if ( coord<=-halfkAngTolerance )
@@ -142,7 +140,7 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume* pVol,
       {
         // Known to be inside outer radius
         //
-        if ( replicaNo||offset )
+        if ( (replicaNo != 0)||(offset != 0.0) )
         {
           rmin = rmax-width;
           tolRMin2 = rmin-halfkRadTolerance;
@@ -221,7 +219,7 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume* pVol,
     case kRho:
       rho = localPoint.perp();
       rmax = width*(replicaNo+1)+offset;
-      if ( replicaNo||offset )
+      if ( (replicaNo != 0)||(offset != 0.0) )
       {
         rmin  = rmax-width;
         safe1 = rho-rmin;
@@ -561,7 +559,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector& localPoint,
     {
       // Possible rmin intersection
       //
-      if (rmin)
+      if (rmin != 0.0)
       {
         deltaR = t3-rmin*rmin;
         b  = t2/t1;
@@ -803,7 +801,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
                                history.GetTopReplicaNo(),
                                localPoint);
   G4ExitNormal normalOutStc;
-  const G4int topDepth= (G4int)history.GetDepth();
+  const auto  topDepth= (G4int)history.GetDepth();
 
   ourSafety = std::min( ourSafety, sampleSafety);
 
@@ -954,9 +952,11 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
                     "Point is far outside Current Volume !" ); 
       }
       else
+      {
         G4Exception("G4ReplicaNavigation::ComputeStep()",
                     "GeomNav1002", JustWarning, message,
                     "Point is a little outside Current Volume."); 
+      }
     }
   }
 #endif
@@ -987,7 +987,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
     }
     // Transform to Grand-mother reference frame
     const G4RotationMatrix* rot = motherPhysical->GetRotation();
-    if ( rot )
+    if ( rot != nullptr )
     {
       exitNormalVector *= rot->inverse();
     }
@@ -1094,21 +1094,24 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
                       << sampleSolid->GetName() << G4endl
                       << "          Solid gave DistanceToIn = "
                       << sampleStepDistance << " yet returns " ;
-              if ( insideIntPt == kInside )
+              if ( insideIntPt == kInside ) {
                 message << "-kInside-"; 
-              else if ( insideIntPt == kOutside )
+              } else if ( insideIntPt == kOutside ) {
                 message << "-kOutside-";
-              else
+              } else {
                 message << "-kSurface-"; 
+              }
               message << " for this point !" << G4endl
                       << "          Point = " << intersectionPoint << G4endl;
-              if ( insideIntPt != kInside )
+              if ( insideIntPt != kInside ) {
                 message << "        DistanceToIn(p) = " 
                        << sampleSolid->DistanceToIn(intersectionPoint)
                        << G4endl;
-              if ( insideIntPt != kOutside ) 
+}
+              if ( insideIntPt != kOutside ) { 
                 message << "        DistanceToOut(p) = " 
                        << sampleSolid->DistanceToOut(intersectionPoint);
+}
               G4Exception("G4ReplicaNavigation::ComputeStep()", 
                           "GeomNav1002", JustWarning, message); 
               G4cout.precision(oldcoutPrec);
@@ -1304,10 +1307,7 @@ G4ReplicaNavigation::BackLocate(G4NavigationHistory& history,
         history.BackLevel(cdepth-depth);
         return insideCode;
       }
-      else
-      {
-        goodPoint = repPoint;
-      }
+      goodPoint = repPoint;
     }
     localPoint = history.GetTransform(depth).TransformPoint(globalPoint);
     insideCode = Inside(history.GetVolume(depth),

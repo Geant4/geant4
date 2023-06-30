@@ -60,19 +60,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hIonisation::G4hIonisation(const G4String& name)
-  : G4VEnergyLossProcess(name),
-    isInitialised(false)
+  : G4VEnergyLossProcess(name)
 {
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
-  mass = 0.0;
-  ratio = 0.0;
   eth = 2*CLHEP::MeV;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4hIonisation::~G4hIonisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -179,7 +172,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
 void G4hIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "  Ionisation";
+  out << "  Hadron ionisation";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

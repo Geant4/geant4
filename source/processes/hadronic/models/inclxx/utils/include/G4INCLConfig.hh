@@ -374,6 +374,12 @@ namespace G4INCL {
     /// \brief Get the bias
     G4double getBias() const { return bias; }
 
+    /// \brief Get the pbar at rest annihilation threshold
+    G4double getAtrestThreshold() const { return atrestThreshold; }
+
+    /// \brief Set the pbar at rest annihilation threshold
+    void setAtrestThreshold(const G4double t) { atrestThreshold=t; }
+
   private:
 
     G4int verbosity;
@@ -455,6 +461,8 @@ namespace G4INCL {
     G4double cutNN;
     
     G4double bias;
+
+    G4double atrestThreshold;
 
 #ifdef INCL_ROOT_USE
     std::string rootSelectionString;

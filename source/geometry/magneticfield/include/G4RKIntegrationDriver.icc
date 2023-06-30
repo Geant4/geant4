@@ -91,7 +91,7 @@ ComputeNewStepSize( G4double  errMaxNorm,    // max error  (normalised)
     {
         return ShrinkStepSize(hstepCurrent, errMaxNorm);
     }
-    else if (errMaxNorm >= 0)
+    if (errMaxNorm >= 0)
     {
         return GrowStepSize(hstepCurrent, errMaxNorm);
     }

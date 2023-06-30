@@ -55,13 +55,13 @@ class G4UTrd : public G4UAdapter<vecgeom::GenericUnplacedTrd>
                  G4double pdz);
       // Constructs a trapezoid with name, and half lengths
 
-   ~G4UTrd();
+   ~G4UTrd() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetXHalfLength1() const;
     G4double GetXHalfLength2() const;
@@ -78,16 +78,16 @@ class G4UTrd : public G4UAdapter<vecgeom::GenericUnplacedTrd>
     void SetAllParameters(G4double pdx1, G4double pdx2,
                           G4double pdy1, G4double pdy2, G4double pdz);
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;
+                           G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   public:  // without description
 

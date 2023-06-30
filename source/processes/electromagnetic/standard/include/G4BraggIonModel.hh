@@ -56,14 +56,11 @@
 #ifndef G4BraggIonModel_h
 #define G4BraggIonModel_h 1
 
-#include "G4VEmModel.hh"
-#include "G4ASTARStopping.hh"
+#include "G4BraggModel.hh"
 
-class G4ParticleChangeForLoss;
-class G4EmCorrections;
-class G4ICRU90StoppingData;
+class G4ASTARStopping;
 
-class G4BraggIonModel : public G4VEmModel
+class G4BraggIonModel : public G4BraggModel
 {
 
 public:
@@ -75,15 +72,6 @@ public:
 
   void Initialise(const G4ParticleDefinition*, 
 		  const G4DataVector&) override;
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-			const G4MaterialCutsCouple* couple) override;
-
-  G4double ComputeCrossSectionPerElectron(
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double cutEnergy,
-				 G4double maxEnergy);
 
   G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
@@ -103,20 +91,10 @@ public:
                                 G4double kineticEnergy,
                                 G4double cutEnergy) override;
 
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double tmin,
-			 G4double maxEnergy) override;
-
   // Compute ion charge not applied to alpha
   G4double GetChargeSquareRatio(const G4ParticleDefinition*,
 				const G4Material*,
 				G4double kineticEnergy) override;
-
-  G4double GetParticleCharge(const G4ParticleDefinition* p,
-			     const G4Material* mat,
-			     G4double kineticEnergy) override;
 
   // add correction to energy loss and ompute non-ionizing energy loss
   void CorrectionsAlongStep(const G4MaterialCutsCouple*,
@@ -128,55 +106,28 @@ public:
   G4BraggIonModel & operator=(const  G4BraggIonModel &right) = delete;
   G4BraggIonModel(const  G4BraggIonModel&) = delete;
 
-protected:
-
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kinEnergy) final;
-
 private:
-
-  void SetParticle(const G4ParticleDefinition* p);
 
   G4double HeEffChargeSquare(const G4double z, 
                              const G4double kinEnergyInMeV) const;
 
-  G4int HasMaterial(const G4Material* material) const;
+  G4int HasMaterialForHe(const G4Material* material) const;
 
-  G4double StoppingPower(const G4Material* material, 
-                         const G4double kinEnergy) const;
+  G4double HeStoppingPower(const G4double kinEnergy) const;
 
-  G4double ElectronicStoppingPower(const G4double z, 
-                                   const G4double kinEnergy) const;
+  G4double HeElectronicStoppingPower(const G4int z, const G4double kinEnergy) const;
 
-  G4double DEDX(const G4Material* material, const G4double kinEnergy);
-
-  G4EmCorrections*            corr = nullptr;
-  const G4ParticleDefinition* particle = nullptr;
-  const G4ParticleDefinition* theElectron;
-  G4ParticleChangeForLoss*    fParticleChange = nullptr;
-  G4ICRU90StoppingData*       fICRU90 = nullptr;
-
-  const G4Material* currentMaterial = nullptr;
-  const G4Material* baseMaterial = nullptr;
+  G4double HeDEDX(const G4Material* material, const G4double kinEnergy);
 
   static G4ASTARStopping* fASTAR;
 
-  G4double mass = 0.0;
-  G4double spin = 0.0;
-  G4double chargeSquare = 1.0;
   G4double heChargeSquare = 4.0;
-  G4double massRate = 1.0;
-  G4double ratio = 1.0;
   G4double HeMass;
   G4double massFactor;
-  G4double rateMassHe2p;
-  G4double theZieglerFactor;
-  G4double lowestKinEnergy;
 
-  G4int    iMolecula = -1; // index in the molecula's table
-  G4int    iASTAR = -1;    // index in ASTAR
-  G4int    iICRU90 = -1;
-  G4bool   isAlpha = false;
+  G4int iASTAR = -1;    // index in ASTAR
+  G4bool isAlpha = false;
+  G4bool isFirstAlpha = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

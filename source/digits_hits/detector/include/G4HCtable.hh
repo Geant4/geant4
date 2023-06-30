@@ -31,7 +31,7 @@
 
 class G4VSensitiveDetector;
 #include "globals.hh"
-//#include "g4rw/tvordvec.h"
+
 #include <vector>
 
 // class description:
@@ -49,32 +49,31 @@ class G4VSensitiveDetector;
 class G4HCtable
 {
  public:
-  G4HCtable();
-  ~G4HCtable();
+  G4HCtable() = default;
+  ~G4HCtable() = default;
 
  public:
   G4int Registor(G4String SDname, G4String HCname);
   G4int GetCollectionID(G4String HCname) const;
   G4int GetCollectionID(G4VSensitiveDetector* aSD) const;
 
+  inline G4int entries() const { return G4int(HClist.size()); }
+
+  inline G4String GetSDname(G4int i) const
+  {
+    if (i < 0 || i > entries()) return "***Not Defined***";
+    return SDlist[i];
+  }
+
+  inline G4String GetHCname(G4int i) const
+  {
+    if (i < 0 || i > entries()) return "***Not Defined***";
+    return HClist[i];
+  }
+
  private:
   std::vector<G4String> SDlist;
   std::vector<G4String> HClist;
-
- public:
-  inline G4int entries() const { return G4int(HClist.size()); }
-  inline G4String GetSDname(G4int i) const
-  {
-    if(i < 0 || i > entries())
-      return "***Not Defined***";
-    return SDlist[i];
-  }
-  inline G4String GetHCname(G4int i) const
-  {
-    if(i < 0 || i > entries())
-      return "***Not Defined***";
-    return HClist[i];
-  }
 };
 
 #endif

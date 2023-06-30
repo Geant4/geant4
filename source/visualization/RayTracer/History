@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-03-22 Ben Morgan (raytracer-V11-01-01)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-02-06 Ben Morgan (raytracer-V11-01-00)
+- Isolate private headers and update dependencies
+
 ## 2022-11-25 Gabriele Cosmo (raytracer-V11-00-06)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

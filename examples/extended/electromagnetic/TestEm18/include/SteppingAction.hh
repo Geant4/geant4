@@ -45,13 +45,13 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
    SteppingAction(RunAction*,EventAction* );
-  ~SteppingAction();
+  ~SteppingAction() override = default;
 
-   virtual void UserSteppingAction(const G4Step*);
+   void UserSteppingAction(const G4Step*) override;
 
   private:
-    RunAction*            fRunaction;    
-    EventAction*          fEventaction;
+    RunAction*    fRunaction   = nullptr;    
+    EventAction*  fEventaction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

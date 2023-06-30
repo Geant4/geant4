@@ -270,14 +270,14 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
   // Consistency check: pVolume should contain single replicated volume
   //
   if ( (pVolume->GetNoDaughters()==1)
-    && (pVolume->GetDaughter(0)->IsReplicated()==true) )
+    && (pVolume->GetDaughter(0)->IsReplicated()) )
   {
     // Obtain replication data
     //
     pDaughter = pVolume->GetDaughter(0);
     pDaughter->GetReplicationData(axis,nReplicas,width,offset,consuming);
     fparamAxis = axis;
-    if ( consuming == false )
+    if ( !consuming )
     {
       G4VoxelLimits limits;   // Create `unlimited' limits object
       G4VolumeNosVector targetList;
@@ -415,7 +415,7 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
   for (nNode=0; nNode<nReplicas; ++nNode)
   {
     pProxyNode = new G4SmartVoxelProxy(nodeList[nNode]);
-    if (!pProxyNode)
+    if (pProxyNode == nullptr)
     {
       G4Exception("G4SmartVoxelHeader::BuildConsumedNodes()", "GeomMgt0003",
                   FatalException, "Proxy node allocation error.");
@@ -467,7 +467,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
     {
       pTestSlices = BuildNodes(pVolume,pLimits,pCandidates,testAxis);
       testSliceScore = CalculateQuality(pTestSlices);
-      if ( (!pGoodSlices) || (testSliceScore<goodSliceScore) )
+      if ( (pGoodSlices == nullptr) || (testSliceScore<goodSliceScore) )
       {
         goodSliceAxis  = testAxis;
         goodSliceScore = testSliceScore;
@@ -475,7 +475,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
         pGoodSlices    = pTestSlices;
         pTestSlices    = tmpSlices;
       }
-      if (pTestSlices)
+      if (pTestSlices != nullptr)
       {
         // Destroy pTestSlices and all its contents
         //
@@ -485,7 +485,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
           delete (*pTestSlices)[node]->GetNode();
         }
         G4SmartVoxelProxy* tmpProx;
-        while (pTestSlices->size()>0)  // Loop checking, 06.08.2015, G.Cosmo
+        while (!pTestSlices->empty())  // Loop checking, 06.08.2015, G.Cosmo
         {
           tmpProx = pTestSlices->back();
           pTestSlices->pop_back();
@@ -500,7 +500,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
               ++i;
             }
           }
-          if ( tmpProx ) { delete tmpProx; }
+          delete tmpProx; 
         }
         delete pTestSlices;
       }
@@ -509,7 +509,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
   // Check for error case.. when limits already 3d,
   // so cannot select a new axis
   //
-  if (!pGoodSlices)
+  if (pGoodSlices == nullptr)
   {
     G4Exception("G4SmartVoxelHeader::BuildVoxelsWithinLimits()",
                 "GeomMgt0002", FatalException,
@@ -776,7 +776,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   G4VolumeExtentVector maxExtents(nCandidates,0.);
 
   if ( (pVolume->GetNoDaughters() == 1)
-    && (pVolume->GetDaughter(0)->IsReplicated() == true) )
+    && (pVolume->GetDaughter(0)->IsReplicated()) )
   {
     // Replication data not required: only parameterisation object 
     // and volume no. List used
@@ -809,7 +809,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   for (nVol=0; nVol<nCandidates; ++nVol)
   {
     targetVolNo = (*pCandidates)[nVol];
-    if (replicated == false)
+    if (!replicated)
     {
       pDaughter = pVolume->GetDaughter(targetVolNo);
 
@@ -930,7 +930,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
   G4double smartless = (smartlessComputed <= smartlessUser)
                        ? smartlessComputed : smartlessUser;
   G4double noNodesSmart = smartless*nCandidates;
-  G4int    noNodesExactI = G4int(noNodesSmart);
+  auto     noNodesExactI = G4int(noNodesSmart);
   G4long   noNodes = ((noNodesSmart-noNodesExactI)>=0.5)
                      ? noNodesExactI+1 : noNodesExactI;
   if( noNodes == 0 ) { noNodes=1; }
@@ -1076,7 +1076,7 @@ G4double G4SmartVoxelHeader::CalculateQuality(G4ProxyVector *pSlice)
       //
       node = (*pSlice)[i]->GetNode();
       noContained = node->GetNoContained();
-      if (noContained)
+      if (noContained != 0)
       {
         ++sumNonEmptyNodes;
         sumContained += noContained;
@@ -1098,7 +1098,7 @@ G4double G4SmartVoxelHeader::CalculateQuality(G4ProxyVector *pSlice)
 
   // Calculate quality with protection against no non-empty nodes
   //
-  if (sumNonEmptyNodes)
+  if (sumNonEmptyNodes != 0)
   {
     quality = sumContained/sumNonEmptyNodes;
   }

@@ -41,11 +41,6 @@ G4Allocator<G4PrimaryVertex>*& aPrimaryVertexAllocator()
 }
 
 // --------------------------------------------------------------------
-G4PrimaryVertex::G4PrimaryVertex()
-{
-}
-
-// --------------------------------------------------------------------
 G4PrimaryVertex::
 G4PrimaryVertex(G4double x0, G4double y0, G4double z0, G4double t0)
   : X0(x0), Y0(y0), Z0(z0), T0(t0)
@@ -101,7 +96,7 @@ G4PrimaryVertex& G4PrimaryVertex::operator=(const G4PrimaryVertex& right)
     Weight0  = right.Weight0;
     numberOfParticle = right.numberOfParticle;
 
-    if (theParticle != nullptr) delete theParticle;
+    delete theParticle;
     theParticle = nullptr;
     theTail     = nullptr;
     if (right.theParticle != nullptr )
@@ -116,7 +111,7 @@ G4PrimaryVertex& G4PrimaryVertex::operator=(const G4PrimaryVertex& right)
       }
     }
     
-    if (nextVertex != nullptr ) delete nextVertex;
+    delete nextVertex;
     nextVertex = nullptr;
     tailVertex = nullptr;
     if (right.nextVertex != nullptr )
@@ -162,10 +157,10 @@ G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
     }
     return particle;
   }
-  else
-  { 
+  
+  
     return nullptr; 
-  }
+ 
 }
 
 // --------------------------------------------------------------------

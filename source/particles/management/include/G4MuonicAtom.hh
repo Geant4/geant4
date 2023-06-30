@@ -56,7 +56,7 @@ class G4MuonicAtom : public G4Ions
                G4double            NCLifeTime = -1.0
                );
 
-    virtual                      ~G4MuonicAtom();
+                         ~G4MuonicAtom() override = default;
     G4MuonicAtom*                MuonicAtomDefinition();
     G4MuonicAtom*                MuonicAtom();
     G4Ions const*                GetBaseIon() const;

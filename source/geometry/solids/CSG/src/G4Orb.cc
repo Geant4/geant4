@@ -72,19 +72,13 @@ G4Orb::G4Orb( __void__& a )
 //
 // Destructor
 
-G4Orb::~G4Orb()
-{
-}
+G4Orb::~G4Orb() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
-G4Orb::G4Orb(const G4Orb& rhs)
-  : G4CSGSolid(rhs), fRmax(rhs.fRmax), halfRmaxTol(rhs.halfRmaxTol),
-    sqrRmaxPlusTol(rhs.sqrRmaxPlusTol), sqrRmaxMinusTol(rhs.sqrRmaxMinusTol)
-{
-}
+G4Orb::G4Orb(const G4Orb&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -191,7 +185,7 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Find bounding envelope and calculate extent
@@ -215,9 +209,9 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
   G4TwoVector xy[NPHI];
   G4double sinCurPhi = sinHalfPhi;
   G4double cosCurPhi = cosHalfPhi;
-  for (G4int k=0; k<NPHI; ++k)
+  for (auto & k : xy)
   {
-    xy[k].set(cosCurPhi,sinCurPhi);
+    k.set(cosCurPhi,sinCurPhi);
     G4double sinTmpPhi = sinCurPhi;
     sinCurPhi = sinCurPhi*cosStepPhi + cosCurPhi*sinStepPhi;
     cosCurPhi = cosCurPhi*cosStepPhi - sinTmpPhi*sinStepPhi;
@@ -225,17 +219,17 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
   
   // set bounding circles
   G4ThreeVectorList circles[NTHETA];
-  for (G4int i=0; i<NTHETA; ++i) { circles[i].resize(NPHI); }
+  for (auto & circle : circles) { circle.resize(NPHI); }
 
   G4double sinCurTheta = sinHalfTheta;
   G4double cosCurTheta = cosHalfTheta;
-  for (G4int i=0; i<NTHETA; ++i)
+  for (auto & circle : circles)
   {
     G4double z = rtheta*cosCurTheta;
     G4double rho = rphi*sinCurTheta;
     for (G4int k=0; k<NPHI; ++k)
     {
-      circles[i][k].set(rho*xy[k].x(),rho*xy[k].y(),z);
+      circle[k].set(rho*xy[k].x(),rho*xy[k].y(),z);
     }
     G4double sinTmpTheta = sinCurTheta;
     sinCurTheta = sinCurTheta*cosStepTheta + cosCurTheta*sinStepTheta;
@@ -405,7 +399,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4Orb::GetEntityType() const
 {
-  return G4String("G4Orb");
+  return {"G4Orb"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -455,7 +449,7 @@ void G4Orb::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 G4VisExtent G4Orb::GetExtent() const
 {
-  return G4VisExtent (-fRmax, fRmax, -fRmax, fRmax, -fRmax, fRmax);
+  return {-fRmax, fRmax, -fRmax, fRmax, -fRmax, fRmax};
 }
 
 G4Polyhedron* G4Orb::CreatePolyhedron () const

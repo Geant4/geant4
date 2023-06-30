@@ -40,24 +40,25 @@ class StackingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingAction : public G4UserStackingAction
-{
+class StackingAction : public G4UserStackingAction {
 public:
   StackingAction();
-  ~StackingAction();
-   
-  inline void SetKillStatus(G4bool value) { fKillSecondary = value; };
-     
-  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
-private:
-    
-  G4bool              fKillSecondary;
-  StackingMessenger*  fStackMessenger;
+  ~StackingAction() override;
 
+  inline void SetKillStatus(G4bool value) {
+    fKillSecondary = value;
+  };
+
+  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track *) override;
+
+  StackingAction &operator = (const StackingAction &right) = delete;
+  StackingAction(const StackingAction &) = delete;
+
+private:
+  G4bool fKillSecondary = false;
+  StackingMessenger *fStackMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

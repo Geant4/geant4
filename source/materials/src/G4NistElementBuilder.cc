@@ -22,8 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -35,10 +34,10 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-// 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI) 
-// 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
-// 17.10.2006 Add natiral abundances flag to element and 
-//            use G4 units for isotope mass vector (VI) 
+// 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI)
+// 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI)
+// 17.10.2006 Add natiral abundances flag to element and
+//            use G4 units for isotope mass vector (VI)
 // 10.05.2007 Add protection agains Z>101 (VI)
 // 26.07.2007 Create one and only one Nist element with given Z and
 //            allow users to create there own elements with the same Z (VI)
@@ -49,33 +48,29 @@
 //
 // Element data from the NIST DB on Atomic Weights and Isotope Compositions
 // http://physics.nist.gov/PhysRefData/Compositions/index.html
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4NistElementBuilder.hh"
+
+#include "G4AutoLock.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <sstream>
 
-#include "G4NistElementBuilder.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4AutoLock.hh"
-
 namespace
 {
-  G4Mutex nistElementMutex = G4MUTEX_INITIALIZER;
+G4Mutex nistElementMutex = G4MUTEX_INITIALIZER;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4NistElementBuilder::G4NistElementBuilder(G4int vb):
-  verbose(vb)
+G4NistElementBuilder::G4NistElementBuilder(G4int vb) : verbose(vb)
 {
   nFirstIsotope[0] = 0;
   nIsotopes[0] = 0;
   relAbundance[0] = 0.0;
   Initialise();
-  for(int& i : elmIndex)
-  {
+  for (int& i : elmIndex) {
     i = -1;
   }
 }
@@ -86,7 +81,9 @@ G4int G4NistElementBuilder::GetZ(const G4String& name) const
 {
   G4int Z = maxNumElements;
   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-  do {--Z;} while( Z>0 && elmSymbol[Z] != name);
+  do {
+    --Z;
+  } while (Z > 0 && elmSymbol[Z] != name);
   return Z;
 }
 
@@ -96,7 +93,9 @@ G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name) const
 {
   G4int Z = maxNumElements;
   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-  do {--Z;} while( Z>0 && elmSymbol[Z] != name);
+  do {
+    --Z;
+  } while (Z > 0 && elmSymbol[Z] != name);
   return GetAtomicMassAmu(Z);
 }
 
@@ -105,7 +104,7 @@ G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name) const
 G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
 {
   G4Element* anElement = FindElement(Z);
-  if(anElement == nullptr && Z > 0 && Z < maxNumElements) {
+  if (anElement == nullptr && Z > 0 && Z < maxNumElements) {
     anElement = BuildElement(Z);
   }
   return anElement;
@@ -113,23 +112,22 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* 
-G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
+G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
 {
   G4Element* elm = nullptr;
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
-  for(size_t i=0; i<nelm; ++i) {
-    if(symb == ((*theElementTable)[i])->GetSymbol()) {
+  for (size_t i = 0; i < nelm; ++i) {
+    if (symb == ((*theElementTable)[i])->GetSymbol()) {
       elm = (*theElementTable)[i];
       break;
     }
   }
-  if(nullptr == elm) {
-    for(G4int Z = 1; Z<maxNumElements; ++Z) {
-      if(symb == elmSymbol[Z]) { 
-	elm = BuildElement(Z);
-	break;
+  if (nullptr == elm) {
+    for (G4int Z = 1; Z < maxNumElements; ++Z) {
+      if (symb == elmSymbol[Z]) {
+        elm = BuildElement(Z);
+        break;
       }
     }
   }
@@ -141,53 +139,55 @@ G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
 G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 {
   G4Element* theElement = nullptr;
-  if(Z<1 || Z>=maxNumElements) { return theElement; }
+  if (Z < 1 || Z >= maxNumElements) {
+    return theElement;
+  }
 
   G4AutoLock l(&nistElementMutex);
-  if(0 <= elmIndex[Z]) {
+  if (0 <= elmIndex[Z]) {
     // Nist element was already built
     const G4ElementTable* theTable = G4Element::GetElementTable();
-    theElement = (*theTable)[elmIndex[Z]]; 
-  } else {
+    theElement = (*theTable)[elmIndex[Z]];
+  }
+  else {
     G4double Aeff = atomicMass[Z];
     if (verbose > 1) {
-      G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z]
-	     << ">  Z= " << Z << "  Aeff= " << Aeff;
-      G4cout << "  with natural isotope composition" << G4endl; 
+      G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z] << ">  Z= " << Z
+             << "  Aeff= " << Aeff;
+      G4cout << "  with natural isotope composition" << G4endl;
     }
-  
-    //build Element with its Isotopes
+
+    // build Element with its Isotopes
     //
-    G4int nc  = nIsotopes[Z];
-    G4int n0  = nFirstIsotope[Z];
+    G4int nc = nIsotopes[Z];
+    G4int n0 = nFirstIsotope[Z];
     G4int idx = idxIsotopes[Z];
     std::vector<G4Isotope*> iso;
     G4Isotope* ist;
-    for (G4int i=0; i<nc; ++i) {
+    for (G4int i = 0; i < nc; ++i) {
       if (relAbundance[idx + i] > 0.0) {
-	std::ostringstream os; 
-	os << elmSymbol[Z] << n0 + i;
-	ist = new G4Isotope(os.str(), Z, n0 + i, 
-			    GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
-	/*
-	  G4cout << " Z= " << Z << " N= " << n0 + i
-	  << " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
-	  << " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
-	*/
-	iso.push_back(ist);
+        std::ostringstream os;
+        os << elmSymbol[Z] << n0 + i;
+        ist = new G4Isotope(os.str(), Z, n0 + i, GetAtomicMass(Z, n0 + i) * g / (mole * amu_c2));
+        /*
+          G4cout << " Z= " << Z << " N= " << n0 + i
+          << " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
+          << " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
+        */
+        iso.push_back(ist);
       }
     }
-    G4int ni = (G4int)iso.size();
+    auto ni = (G4int)iso.size();
     G4double w;
-    theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
-    for(G4int j=0; j<ni; ++j) {
+    theElement = new G4Element(elmSymbol[Z], elmSymbol[Z], ni);
+    for (G4int j = 0; j < ni; ++j) {
       w = relAbundance[idx + (iso[j])->GetN() - n0];
       ist = iso[j];
       theElement->AddIsotope(ist, w);
     }
     theElement->SetNaturalAbundanceFlag(true);
     elmIndex[Z] = (G4int)theElement->GetIndex();
-  }  
+  }
   l.unlock();
   return theElement;
 }
@@ -197,93 +197,95 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 void G4NistElementBuilder::PrintElement(G4int Z) const
 {
   G4int imin = Z;
-  G4int imax = Z+1;
+  G4int imax = Z + 1;
   if (Z == 0) {
     imin = 1;
     imax = maxNumElements;
   }
-  if(imax > maxNumElements) { imax = maxNumElements; }
+  if (imax > maxNumElements) {
+    imax = maxNumElements;
+  }
 
-  for(G4int i=imin; i<imax; ++i) {
+  for (G4int i = imin; i < imax; ++i) {
     G4int nc = nIsotopes[i];
-    G4cout << "Nist Element: <" << elmSymbol[i]
-           << ">  Z= " << i
-	   << "  Aeff(amu)= " << atomicMass[i] << "  "
-	   << nc << " isotopes:"
-           << G4endl;
+    G4cout << "Nist Element: <" << elmSymbol[i] << ">  Z= " << i << "  Aeff(amu)= " << atomicMass[i]
+           << "  " << nc << " isotopes:" << G4endl;
     G4int j;
     G4int idx = idxIsotopes[i];
-    G4int n0  = nFirstIsotope[i];
+    G4int n0 = nFirstIsotope[i];
     G4cout << "             N: ";
-    for(j=0; j<nc; ++j) {G4cout << n0 + j << "  ";}
+    for (j = 0; j < nc; ++j) {
+      G4cout << n0 + j << "  ";
+    }
     G4cout << G4endl;
     G4cout << "          mass(amu): ";
-    for(j=0; j<nc; ++j) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
+    for (j = 0; j < nc; ++j) {
+      G4cout << GetAtomicMass(i, n0 + j) << " ";
+    }
     G4cout << G4endl;
     G4cout << "     abundance: ";
-    for(j=0; j<nc; ++j) {G4cout << relAbundance[idx + j] << " ";}
+    for (j = 0; j < nc; ++j) {
+      G4cout << relAbundance[idx + j] << " ";
+    }
     G4cout << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
-				      const G4int& N, const G4double& A,
-				      const G4double& sA, const G4double& W)
+void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc, const G4int& N,
+  const G4double& A, const G4double& sA, const G4double& W)
 {
-  if (verbose > 1) { 
+  if (verbose > 1) {
     G4cout << "AddElement " << name << " Z= " << Z << " nc= " << nc << G4endl;
   }
   if (Z >= maxNumElements) {
-    G4cout << "G4NistElementBuilder::AddElement: Warning! Z= " << Z 
-           << " is too big" << G4endl;
+    G4cout << "G4NistElementBuilder::AddElement: Warning! Z= " << Z << " is too big" << G4endl;
     return;
   }
-  
-  if (index+nc >= maxAbundance) {
-    G4cout << "G4NistElementBuilder::AddElement: ERROR index= " << index
-	   << " + nc= " << nc  
+
+  if (index + nc >= maxAbundance) {
+    G4cout << "G4NistElementBuilder::AddElement: ERROR index= " << index << " + nc= " << nc
            << " is above array size " << maxAbundance << G4endl;
     return;
   }
 
-  elmSymbol[Z]   = name;
-  atomicMass[Z]  = 0.0;
+  elmSymbol[Z] = name;
+  atomicMass[Z] = 0.0;
   idxIsotopes[Z] = index;
-  nIsotopes[Z]   = nc;
+  nIsotopes[Z] = nc;
 
   nFirstIsotope[Z] = (&N)[0];
   G4double ww = 0.0;
   G4double www;
 
-  for(G4int i=0; i<nc; ++i) {
-    www = 0.01*(&W)[i];
+  for (G4int i = 0; i < nc; ++i) {
+    www = 0.01 * (&W)[i];
     // mass of the isotope in G4 units
-    massIsotopes[index] = 
-      (&A)[i]*amu_c2 - Z*electron_mass_c2 + bindingEnergy[Z]; 
-    sigMass[index]      = (&sA)[i]*amu_c2;
+    massIsotopes[index] = (&A)[i] * amu_c2 - Z * electron_mass_c2 + bindingEnergy[Z];
+    sigMass[index] = (&sA)[i] * amu_c2;
     relAbundance[index] = www;
 
     // computation of mean atomic mass of the element in atomic units
-    atomicMass[Z] += www*(&A)[i];
+    atomicMass[Z] += www * (&A)[i];
     ww += www;
     ++index;
   }
 
-  if(ww != 1.0) {
+  if (ww != 1.0) {
     G4int idx = idxIsotopes[Z];
     atomicMass[Z] /= ww;
-    for(G4int j=0; j<nc; ++j) {relAbundance[idx + j] /= ww;}
+    for (G4int j = 0; j < nc; ++j) {
+      relAbundance[idx + j] /= ww;
+    }
   }
 
-  if (verbose > 1) { PrintElement(Z); }
-  else if(1 == verbose) {
-    G4cout << "Nist Element  " << elmSymbol[Z]
-           << "  Z= " << Z
-	   << "  Aeff(amu)= " << atomicMass[Z] << "  "
-	   << nIsotopes[Z] << " isotopes:"
-           << G4endl;
+  if (verbose > 1) {
+    PrintElement(Z);
+  }
+  else if (1 == verbose) {
+    G4cout << "Nist Element  " << elmSymbol[Z] << "  Z= " << Z << "  Aeff(amu)= " << atomicMass[Z]
+           << "  " << nIsotopes[Z] << " isotopes:" << G4endl;
   }
 }
 
@@ -291,2227 +293,1710 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
 
 void G4NistElementBuilder::Initialise()
 {
-  // Parameterisation from D.Lunney,J.M.Pearson,C.Thibault, 
-  // Rev.Mod.Phys. 75 (2003) 1021 
+  // Parameterisation from D.Lunney,J.M.Pearson,C.Thibault,
+  // Rev.Mod.Phys. 75 (2003) 1021
   bindingEnergy[0] = 0.0;
-  for(G4int i=1; i<maxNumElements; ++i) {
-    G4double Z = G4double(i);
-    bindingEnergy[i] = (14.4381*std::pow(Z,2.39) + 1.55468e-6*std::pow(Z,5.35))*eV;
+  for (G4int i = 1; i < maxNumElements; ++i) {
+    auto Z = G4double(i);
+    bindingEnergy[i] = (14.4381 * std::pow(Z, 2.39) + 1.55468e-6 * std::pow(Z, 5.35)) * eV;
   }
 
   // NIST data
-  index    = 0;
-   
+  index = 0;
+
   // Z = 1 ---------------------------------------------------------------------
-  G4int HN[6] = 
-  {1, 2, 3, 4, 5, 6};
-  
-  G4double HA[6] = 
-  {1.00783, 2.0141, 3.01605, 4.02783, 5.03954, 6.04494};
+  G4int HN[6] = {1, 2, 3, 4, 5, 6};
+
+  G4double HA[6] = {1.00783, 2.0141, 3.01605, 4.02783, 5.03954, 6.04494};
 
   // Garantee consistence with G4 masses
-  HA[0] = (proton_mass_c2 + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
-  HA[1] = (1.875613*GeV   + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
-  HA[2] = (2.80925*GeV    + electron_mass_c2 - bindingEnergy[1])/amu_c2; 
-  
-  G4double HS[6] = 
-  {4, 4, 11, 12, 102, 28};
-  
-  G4double HW[6] = 
-  {99.9885, 0.0115, 0, 0, 0, 0};
-  
-  AddElement("H", 1, 6, *HN , *HA , *HS , *HW);
-   
+  HA[0] = (proton_mass_c2 + electron_mass_c2 - bindingEnergy[1]) / amu_c2;
+  HA[1] = (1.875613 * GeV + electron_mass_c2 - bindingEnergy[1]) / amu_c2;
+  HA[2] = (2.80925 * GeV + electron_mass_c2 - bindingEnergy[1]) / amu_c2;
+
+  G4double HS[6] = {4, 4, 11, 12, 102, 28};
+
+  G4double HW[6] = {99.9885, 0.0115, 0, 0, 0, 0};
+
+  AddElement("H", 1, 6, *HN, *HA, *HS, *HW);
+
   // Z = 2 ---------------------------------------------------------------------
-  G4int HeN[8] = 
-  {3, 4, 5, 6, 7, 8, 9, 10};
-  
-  G4double HeA[8] = 
-  {3.01603, 4.0026, 5.01222, 6.01889, 7.02803, 8.03392, 9.04382, 10.0524};
+  G4int HeN[8] = {3, 4, 5, 6, 7, 8, 9, 10};
+
+  G4double HeA[8] = {3.01603, 4.0026, 5.01222, 6.01889, 7.02803, 8.03392, 9.04382, 10.0524};
 
   // Garantee consistence with G4 masses
-  HeA[0] = (2.80923*GeV  + 2.0*electron_mass_c2 - bindingEnergy[2])/amu_c2; 
-  HeA[1] = (3.727417*GeV + 2.0*electron_mass_c2 - bindingEnergy[2])/amu_c2; 
-  
-  G4double HeS[8] = 
-  {9, 10, 50, 11, 30, 8, 70, 80};
-  
-  G4double HeW[8] = 
-  {0.000137, 99.9999, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("He", 2, 8, *HeN , *HeA , *HeS , *HeW);
-   
+  HeA[0] = (2.80923 * GeV + 2.0 * electron_mass_c2 - bindingEnergy[2]) / amu_c2;
+  HeA[1] = (3.727417 * GeV + 2.0 * electron_mass_c2 - bindingEnergy[2]) / amu_c2;
+
+  G4double HeS[8] = {9, 10, 50, 11, 30, 8, 70, 80};
+
+  G4double HeW[8] = {0.000137, 99.9999, 0, 0, 0, 0, 0, 0};
+
+  AddElement("He", 2, 8, *HeN, *HeA, *HeS, *HeW);
+
   // Z = 3 ---------------------------------------------------------------------
-  G4int LiN[9] = 
-  {4, 5, 6, 7, 8, 9, 10, 11, 12};
-  G4double LiA[9] = 
-  {4.02718, 5.01254, 6.01512, 7.016, 8.02249, 9.02679, 10.0355, 11.0438,
-   12.0538};
-   
-  G4double LiS[9] = 
-  {23, 50, 5, 5, 5, 21, 16, 29, 107};
-  
-  G4double LiW[9] =
-  {0, 0, 7.59, 92.41, 0, 0, 0, 0, 0};
-  
-  AddElement("Li", 3, 9, *LiN , *LiA , *LiS , *LiW);
-   
+  G4int LiN[9] = {4, 5, 6, 7, 8, 9, 10, 11, 12};
+  G4double LiA[9] = {4.02718, 5.01254, 6.01512, 7.016, 8.02249, 9.02679, 10.0355, 11.0438, 12.0538};
+
+  G4double LiS[9] = {23, 50, 5, 5, 5, 21, 16, 29, 107};
+
+  G4double LiW[9] = {0, 0, 7.59, 92.41, 0, 0, 0, 0, 0};
+
+  AddElement("Li", 3, 9, *LiN, *LiA, *LiS, *LiW);
+
   // Z = 4 ---------------------------------------------------------------------
-  G4int BeN[10] = 
-  {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-  
-  G4double BeA[10] = 
-  {5.04079, 6.01973, 7.01693, 8.00531, 9.01218, 10.0135, 11.0217, 12.0269,
-   13.0361, 14.0428};
-   
-  G4double BeS[10] = 
-  {429, 6, 5, 4, 4, 4, 7, 16, 54, 12};
-  
-  G4double BeW[10] = 
-  {0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
-  
-  AddElement("Be", 4, 10, *BeN , *BeA , *BeS , *BeW);
-   
+  G4int BeN[10] = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+
+  G4double BeA[10] = {
+    5.04079, 6.01973, 7.01693, 8.00531, 9.01218, 10.0135, 11.0217, 12.0269, 13.0361, 14.0428};
+
+  G4double BeS[10] = {429, 6, 5, 4, 4, 4, 7, 16, 54, 12};
+
+  G4double BeW[10] = {0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
+
+  AddElement("Be", 4, 10, *BeN, *BeA, *BeS, *BeW);
+
   // Z = 5 ---------------------------------------------------------------------
-  G4int BN[13] = 
-  {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
-  
-  G4double BA[13] = 
-  {7.02992, 8.02461, 9.01333, 10.0129, 11.0093, 12.0144, 13.0178, 14.0254,
-   15.0311, 16.0398, 17.0469, 18.0562, 19.0637};
-   
-  G4double BS[13] = 
-  {80, 12, 11, 4, 5, 15, 12, 23, 24, 60, 15, 86, 43};
-  
-  G4double BW[13] =
-  {0, 0, 0, 19.9, 80.1, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("B", 5, 13, *BN , *BA , *BS , *BW); 
-   
+  G4int BN[13] = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+
+  G4double BA[13] = {7.02992, 8.02461, 9.01333, 10.0129, 11.0093, 12.0144, 13.0178, 14.0254,
+    15.0311, 16.0398, 17.0469, 18.0562, 19.0637};
+
+  G4double BS[13] = {80, 12, 11, 4, 5, 15, 12, 23, 24, 60, 15, 86, 43};
+
+  G4double BW[13] = {0, 0, 0, 19.9, 80.1, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("B", 5, 13, *BN, *BA, *BS, *BW);
+
   // Z = 6 ---------------------------------------------------------------------
-  G4int CN[15] = 
-  {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
-  
-  G4double CA[15] = 
-  {8.03768, 9.03104, 10.0169, 11.0114, 12.    , 13.0034, 14.0032, 15.0106,
-   16.0147, 17.0226, 18.0268, 19.0353, 20.0403, 21.0493, 22.0565};
-   
-  G4double CS[15] = 
-  {25, 23, 4, 10, 0, 10, 4, 9, 4, 19, 30, 12, 22, 54, 97};
-  
-  G4double CW[15] = 
-  {0, 0, 0, 0, 98.93, 1.07, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("C", 6, 15, *CN , *CA , *CS , *CW);
-   
+  G4int CN[15] = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+
+  G4double CA[15] = {8.03768, 9.03104, 10.0169, 11.0114, 12., 13.0034, 14.0032, 15.0106, 16.0147,
+    17.0226, 18.0268, 19.0353, 20.0403, 21.0493, 22.0565};
+
+  G4double CS[15] = {25, 23, 4, 10, 0, 10, 4, 9, 4, 19, 30, 12, 22, 54, 97};
+
+  G4double CW[15] = {0, 0, 0, 0, 98.93, 1.07, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("C", 6, 15, *CN, *CA, *CS, *CW);
+
   // Z = 7 ---------------------------------------------------------------------
-  G4int NN[15] = 
-  {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
-  
-  G4double NA[15] = 
-  {10.0426, 11.0268, 12.0186, 13.0057, 14.0031, 15.0001, 16.0061, 17.0084,
-   18.0141, 19.017 , 20.0234, 21.0271, 22.0344, 23.0405, 24.0505};
-   
-  G4double NS[15] = 
-  {43, 19, 11, 29, 9, 9, 28, 16, 21, 18, 60, 10, 21, 76, 54};
-  
-  G4double NW[15] = 
-  {0, 0, 0, 0, 99.632, 0.368, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("N", 7, 15, *NN , *NA , *NS , *NW); 
-   
+  G4int NN[15] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
+
+  G4double NA[15] = {10.0426, 11.0268, 12.0186, 13.0057, 14.0031, 15.0001, 16.0061, 17.0084,
+    18.0141, 19.017, 20.0234, 21.0271, 22.0344, 23.0405, 24.0505};
+
+  G4double NS[15] = {43, 19, 11, 29, 9, 9, 28, 16, 21, 18, 60, 10, 21, 76, 54};
+
+  G4double NW[15] = {0, 0, 0, 0, 99.632, 0.368, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("N", 7, 15, *NN, *NA, *NS, *NW);
+
   // Z = 8 ---------------------------------------------------------------------
-  G4int ON[15] = 
-  {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
-  
-  G4double OA[15] = 
-  {12.0344, 13.0248, 14.0086, 15.0031, 15.9949, 16.9991, 17.9992, 19.0036,
-   20.0041, 21.0087, 22.01  , 23.0157, 24.0204, 25.0291, 26.0377};
-   
-  G4double Os[15] = 
-  {20, 10, 8, 5, 15, 22, 9, 3, 13, 13, 60, 11, 33, 40, 46};
-  
-  G4double OW[15] = 
-  {0, 0, 0, 0, 99.757, 0.038, 0.205, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("O", 8, 15, *ON , *OA , *Os , *OW);
-   
+  G4int ON[15] = {12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+
+  G4double OA[15] = {12.0344, 13.0248, 14.0086, 15.0031, 15.9949, 16.9991, 17.9992, 19.0036,
+    20.0041, 21.0087, 22.01, 23.0157, 24.0204, 25.0291, 26.0377};
+
+  G4double Os[15] = {20, 10, 8, 5, 15, 22, 9, 3, 13, 13, 60, 11, 33, 40, 46};
+
+  G4double OW[15] = {0, 0, 0, 0, 99.757, 0.038, 0.205, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("O", 8, 15, *ON, *OA, *Os, *OW);
+
   // Z = 9 ---------------------------------------------------------------------
-  G4int FN[16] = 
-  {14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};
-  
-  G4double FA[16] = 
-  {14.0361, 15.018 , 16.0115, 17.0021, 18.0009, 18.9984, 20     , 20.9999,
-   22.003 , 23.0036, 24.0081, 25.0121, 26.0196, 27.0269, 28.0357, 29.0433};
-   
-  G4double FS[16] = 
-  {43, 14, 9, 27, 6, 7, 9, 19, 13, 90, 70, 80, 13, 45, 55, 62};
-  
-  G4double FW[16] = 
-  {0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("F", 9, 16, *FN , *FA , *FS , *FW); 
-   
+  G4int FN[16] = {14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};
+
+  G4double FA[16] = {14.0361, 15.018, 16.0115, 17.0021, 18.0009, 18.9984, 20, 20.9999, 22.003,
+    23.0036, 24.0081, 25.0121, 26.0196, 27.0269, 28.0357, 29.0433};
+
+  G4double FS[16] = {43, 14, 9, 27, 6, 7, 9, 19, 13, 90, 70, 80, 13, 45, 55, 62};
+
+  G4double FW[16] = {0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("F", 9, 16, *FN, *FA, *FS, *FW);
+
   // Z = 10 --------------------------------------------------------------------
-  G4int NeN[17] = 
-  {16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
-  
-  G4double NeA[17] = 
-  {16.0258, 17.0177, 18.0057, 19.0019, 19.9924, 20.9938, 21.9914, 22.9945,
-   23.9936, 24.9978, 26.0005, 27.0076, 28.0121, 29.0193, 30.0239, 31.0331, 
-   32.0399};
-   
-  G4double NeS[17] = 
-  {22, 50, 16, 6, 20, 4, 23, 26, 11, 50, 60, 10, 12, 32, 88, 97, 94};
-  
-  G4double NeW[17] = 
-  {0, 0, 0, 0, 90.48, 0.27, 9.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Ne", 10, 17, *NeN , *NeA , *NeS , *NeW); 
-   
+  G4int NeN[17] = {16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
+
+  G4double NeA[17] = {16.0258, 17.0177, 18.0057, 19.0019, 19.9924, 20.9938, 21.9914, 22.9945,
+    23.9936, 24.9978, 26.0005, 27.0076, 28.0121, 29.0193, 30.0239, 31.0331, 32.0399};
+
+  G4double NeS[17] = {22, 50, 16, 6, 20, 4, 23, 26, 11, 50, 60, 10, 12, 32, 88, 97, 94};
+
+  G4double NeW[17] = {0, 0, 0, 0, 90.48, 0.27, 9.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ne", 10, 17, *NeN, *NeA, *NeS, *NeW);
+
   // Z = 11 --------------------------------------------------------------------
-  G4int NaN[18] = 
-  {18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-  
-  G4double NaA[18] = 
-  {18.0272, 19.0139, 20.0073, 20.9977, 21.9944, 22.9898, 23.991 , 24.99  ,
-   25.9926, 26.994 , 27.9989, 29.0028, 30.0092, 31.0136, 32.0196, 33.0274, 
-   34.0349, 35.0442};
-   
-  G4double NaS[18] = 
-  {43, 13, 7, 8, 5, 23, 23, 13, 15, 40, 80, 10, 10, 18, 52, 160, 113, 166};
-  
-  G4double NaW[18] = 
-  {0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Na", 11, 18, *NaN , *NaA , *NaS , *NaW); 
-   
+  G4int NaN[18] = {18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+
+  G4double NaA[18] = {18.0272, 19.0139, 20.0073, 20.9977, 21.9944, 22.9898, 23.991, 24.99, 25.9926,
+    26.994, 27.9989, 29.0028, 30.0092, 31.0136, 32.0196, 33.0274, 34.0349, 35.0442};
+
+  G4double NaS[18] = {43, 13, 7, 8, 5, 23, 23, 13, 15, 40, 80, 10, 10, 18, 52, 160, 113, 166};
+
+  G4double NaW[18] = {0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Na", 11, 18, *NaN, *NaA, *NaS, *NaW);
+
   // Z = 12 --------------------------------------------------------------------
-  G4int MgN[18] = 
-  {20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
-  
-  G4double MgA[18] = 
-  {20.0189, 21.0117, 21.9996, 22.9941, 23.985 , 24.9858, 25.9826, 26.9843,
-   27.9839, 28.9886, 29.9905, 30.9965, 31.9992, 33.0056, 34.0091, 35.0175, 
-   36.0224, 37.0312};
-   
-  G4double MgS[18] = 
-  {29, 18, 15, 13, 20, 20, 21, 21, 22, 30, 70, 80, 10, 16, 28, 47, 97, 97};
-  
-  G4double MgW[18] = 
-  {0, 0, 0, 0, 78.99, 10, 11.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Mg", 12, 18, *MgN , *MgA , *MgS , *MgW);
-   
+  G4int MgN[18] = {20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
+
+  G4double MgA[18] = {20.0189, 21.0117, 21.9996, 22.9941, 23.985, 24.9858, 25.9826, 26.9843,
+    27.9839, 28.9886, 29.9905, 30.9965, 31.9992, 33.0056, 34.0091, 35.0175, 36.0224, 37.0312};
+
+  G4double MgS[18] = {29, 18, 15, 13, 20, 20, 21, 21, 22, 30, 70, 80, 10, 16, 28, 47, 97, 97};
+
+  G4double MgW[18] = {0, 0, 0, 0, 78.99, 10, 11.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Mg", 12, 18, *MgN, *MgA, *MgS, *MgW);
+
   // Z = 13 --------------------------------------------------------------------
-  G4int AlN[19] = 
-  {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39};
-  
-  G4double AlA[19] = 
-  {21.028 , 22.0195, 23.0073, 23.9999, 24.9904, 25.9869, 26.9815, 27.9819,
-   28.9804, 29.983 , 30.9839, 31.9881, 32.9909, 33.9969, 34.9999, 36.0063, 
-   37.0103, 38.0169, 39.0219};
-   
-  G4double AlS[19] = 
-  {32, 10, 27, 4, 7, 21, 14, 15, 13, 15, 22, 90, 70, 10, 15, 29, 58, 60, 64};
-  
-  G4double AlW[19] = 
-  {0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Al", 13, 19, *AlN , *AlA , *AlS , *AlW); 
-   
+  G4int AlN[19] = {21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39};
+
+  G4double AlA[19] = {21.028, 22.0195, 23.0073, 23.9999, 24.9904, 25.9869, 26.9815, 27.9819,
+    28.9804, 29.983, 30.9839, 31.9881, 32.9909, 33.9969, 34.9999, 36.0063, 37.0103, 38.0169,
+    39.0219};
+
+  G4double AlS[19] = {32, 10, 27, 4, 7, 21, 14, 15, 13, 15, 22, 90, 70, 10, 15, 29, 58, 60, 64};
+
+  G4double AlW[19] = {0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Al", 13, 19, *AlN, *AlA, *AlS, *AlW);
+
   // Z = 14 --------------------------------------------------------------------
-  G4int SiN[21] = 
-  {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-   41, 42};
-   
-  G4double SiA[21] = 
-  {22.0345, 23.0255, 24.0115, 25.0041, 25.9923, 26.9867, 27.9769, 28.9765,
-   29.9738, 30.9754, 31.9741, 32.978 , 33.9786, 34.9846, 35.9867, 36.993 , 
-   37.996 , 39.0023, 40.0058, 41.0127, 42.0161};
-   
-  G4double SiS[21] = 
-  {22, 21, 21, 11, 3, 17, 20, 3, 5, 7, 23, 17, 15, 40, 11, 13, 29, 43, 54, 64,
-   75};
-   
-  G4double SiW[21] = 
-  {0, 0, 0, 0, 0, 0, 92.2297, 4.6832, 3.0872, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0};
-   
-  AddElement("Si", 14, 21, *SiN , *SiA , *SiS , *SiW); 
-   
+  G4int SiN[21] = {
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42};
+
+  G4double SiA[21] = {22.0345, 23.0255, 24.0115, 25.0041, 25.9923, 26.9867, 27.9769, 28.9765,
+    29.9738, 30.9754, 31.9741, 32.978, 33.9786, 34.9846, 35.9867, 36.993, 37.996, 39.0023, 40.0058,
+    41.0127, 42.0161};
+
+  G4double SiS[21] = {
+    22, 21, 21, 11, 3, 17, 20, 3, 5, 7, 23, 17, 15, 40, 11, 13, 29, 43, 54, 64, 75};
+
+  G4double SiW[21] = {
+    0, 0, 0, 0, 0, 0, 92.2297, 4.6832, 3.0872, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Si", 14, 21, *SiN, *SiA, *SiS, *SiW);
+
   // Z = 15 --------------------------------------------------------------------
-  G4int PN[23] = 
-  {24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
-   43, 44, 45, 46};
-   
-  G4double PA[23] = 
-  {24.0343, 25.0203, 26.0118, 26.9992, 27.9923, 28.9818, 29.9783, 30.9738,
-   31.9739, 32.9717, 33.9736, 34.9733, 35.9783, 36.9796, 37.9845, 38.9864,
-   39.9911, 40.9948, 42.0001, 43.0033, 44.0099, 45.0151, 46.0238};
-   
-  G4double PS[23] = 
-  {54, 21, 21, 40, 4, 8, 4, 20, 20, 12, 5, 20, 14, 40, 15, 16, 21, 50, 54, 54,
-   75, 86, 97};
-   
-  G4double PW[23] = 
-  {0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("P", 15, 23, *PN , *PA , *PS , *PW); 
-   
+  G4int PN[23] = {
+    24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46};
+
+  G4double PA[23] = {24.0343, 25.0203, 26.0118, 26.9992, 27.9923, 28.9818, 29.9783, 30.9738,
+    31.9739, 32.9717, 33.9736, 34.9733, 35.9783, 36.9796, 37.9845, 38.9864, 39.9911, 40.9948,
+    42.0001, 43.0033, 44.0099, 45.0151, 46.0238};
+
+  G4double PS[23] = {
+    54, 21, 21, 40, 4, 8, 4, 20, 20, 12, 5, 20, 14, 40, 15, 16, 21, 50, 54, 54, 75, 86, 97};
+
+  G4double PW[23] = {0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("P", 15, 23, *PN, *PA, *PS, *PW);
+
   // Z = 16 --------------------------------------------------------------------
-  G4int SN[24] = 
-  {26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
-   45, 46, 47, 48, 49};
-   
-  G4double SA[24] = 
-  {26.0279, 27.0188, 28.0044, 28.9966, 29.9849, 30.9796, 31.9721, 32.9715,
-   33.9679, 34.969 , 35.9671, 36.9711, 37.9712, 38.9751, 39.9755, 40.98  , 
-   41.9815, 42.9866, 43.9883, 44.9948, 45.9996, 47.0076, 48.013 , 49.022 };
-   
-  G4double SS[24] = 
-  {32, 22, 17, 50,  3, 16, 12, 12, 11, 10, 25, 27,  8, 50, 25, 23, 35, 90, 54,
-   64, 75, 86, 97, 107};
-   
-  G4double SW[24] = 
-  {0, 0, 0, 0, 0, 0, 94.93, 0.76, 4.29, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0};
-   
-  AddElement("S", 16, 24, *SN , *SA , *SS , *SW);
-   
+  G4int SN[24] = {
+    26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
+
+  G4double SA[24] = {26.0279, 27.0188, 28.0044, 28.9966, 29.9849, 30.9796, 31.9721, 32.9715,
+    33.9679, 34.969, 35.9671, 36.9711, 37.9712, 38.9751, 39.9755, 40.98, 41.9815, 42.9866, 43.9883,
+    44.9948, 45.9996, 47.0076, 48.013, 49.022};
+
+  G4double SS[24] = {
+    32, 22, 17, 50, 3, 16, 12, 12, 11, 10, 25, 27, 8, 50, 25, 23, 35, 90, 54, 64, 75, 86, 97, 107};
+
+  G4double SW[24] = {
+    0, 0, 0, 0, 0, 0, 94.93, 0.76, 4.29, 0, 0.02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("S", 16, 24, *SN, *SA, *SS, *SW);
+
   // Z = 17 --------------------------------------------------------------------
-  G4int ClN[24] = 
-  {28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
-   47, 48, 49, 50, 51};
-   
-  G4double ClA[24] = 
-  {28.0285, 29.0141, 30.0048, 30.9924, 31.9857, 32.9775, 33.9738, 34.9689,
-   35.9683, 36.9659, 37.968 , 38.968 , 39.9704, 40.9706, 41.9732, 42.9742, 
-   43.9785, 44.9797, 45.9841, 46.9879, 47.9948, 48.9999, 50.0077, 51.0135};
-   
-  G4double ClS[24] = 
-  {54, 21, 21, 50, 7, 6, 13, 4, 8, 5, 12, 19, 30, 70, 12, 17, 24, 70, 54,
-   64, 75, 86, 97, 107};
-   
-  G4double ClW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 75.78, 0, 24.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0};
-   
-  AddElement("Cl", 17, 24, *ClN , *ClA , *ClS , *ClW); 
-   
+  G4int ClN[24] = {
+    28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51};
+
+  G4double ClA[24] = {28.0285, 29.0141, 30.0048, 30.9924, 31.9857, 32.9775, 33.9738, 34.9689,
+    35.9683, 36.9659, 37.968, 38.968, 39.9704, 40.9706, 41.9732, 42.9742, 43.9785, 44.9797, 45.9841,
+    46.9879, 47.9948, 48.9999, 50.0077, 51.0135};
+
+  G4double ClS[24] = {
+    54, 21, 21, 50, 7, 6, 13, 4, 8, 5, 12, 19, 30, 70, 12, 17, 24, 70, 54, 64, 75, 86, 97, 107};
+
+  G4double ClW[24] = {
+    0, 0, 0, 0, 0, 0, 0, 75.78, 0, 24.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Cl", 17, 24, *ClN, *ClA, *ClS, *ClW);
+
   // Z = 18 --------------------------------------------------------------------
-  G4int ArN[24] = 
-  {30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
-   49, 50, 51, 52, 53};
-   
-  G4double ArA[24] = 
-  {30.0216, 31.0121, 31.9977, 32.9899, 33.9803, 34.9753, 35.9675, 36.9668,
-   37.9627, 38.9643, 39.9624, 40.9645, 41.9631, 42.9657, 43.9654, 44.9681, 
-   45.9681, 46.9722, 47.9751, 48.9822, 49.9859, 50.9932, 51.9982, 53.0062};
-   
-  G4double ArS[24] = 
-  {32, 22, 50, 30, 3, 8, 27, 3, 5, 5, 3, 7, 40, 80, 22, 60, 40, 11, 32, 54, 75,
-   75, 97, 107};
-   
-  G4double ArW[24] = 
-  {0, 0, 0, 0, 0, 0, 0.3365, 0, 0.0632, 0, 99.6003, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0};
-   
-  AddElement("Ar", 18, 24, *ArN , *ArA , *ArS , *ArW); 
-   
+  G4int ArN[24] = {
+    30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+
+  G4double ArA[24] = {30.0216, 31.0121, 31.9977, 32.9899, 33.9803, 34.9753, 35.9675, 36.9668,
+    37.9627, 38.9643, 39.9624, 40.9645, 41.9631, 42.9657, 43.9654, 44.9681, 45.9681, 46.9722,
+    47.9751, 48.9822, 49.9859, 50.9932, 51.9982, 53.0062};
+
+  G4double ArS[24] = {
+    32, 22, 50, 30, 3, 8, 27, 3, 5, 5, 3, 7, 40, 80, 22, 60, 40, 11, 32, 54, 75, 75, 97, 107};
+
+  G4double ArW[24] = {
+    0, 0, 0, 0, 0, 0, 0.3365, 0, 0.0632, 0, 99.6003, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ar", 18, 24, *ArN, *ArA, *ArS, *ArW);
+
   // Z = 19 --------------------------------------------------------------------
-  G4int KN[24] = 
-  {32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-   51, 52, 53, 54, 55};
-   
-  G4double KA[24] = 
-  {32.0219, 33.0073, 33.9984, 34.988 , 35.9813, 36.9734, 37.9691, 38.9637,
-   39.964 , 40.9618, 41.9624, 42.9607, 43.9616, 44.9607, 45.962 , 46.9617, 
-   47.9655, 48.9674, 49.9728, 50.9764, 51.9826, 52.9871, 53.994 , 54.9994};
-   
-  G4double KS[24] = 
-  {54, 21, 32, 21, 8, 29, 8, 3, 29, 28, 3, 10, 40, 11, 17, 9, 26, 80, 30, 54,
-   75, 75, 97, 107};
-   
-  G4double KW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 93.2581, 0.0117, 6.7302, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0};
-   
-  AddElement("K", 19, 24, *KN , *KA , *KS , *KW); 
-   
+  G4int KN[24] = {
+    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55};
+
+  G4double KA[24] = {32.0219, 33.0073, 33.9984, 34.988, 35.9813, 36.9734, 37.9691, 38.9637, 39.964,
+    40.9618, 41.9624, 42.9607, 43.9616, 44.9607, 45.962, 46.9617, 47.9655, 48.9674, 49.9728,
+    50.9764, 51.9826, 52.9871, 53.994, 54.9994};
+
+  G4double KS[24] = {
+    54, 21, 32, 21, 8, 29, 8, 3, 29, 28, 3, 10, 40, 11, 17, 9, 26, 80, 30, 54, 75, 75, 97, 107};
+
+  G4double KW[24] = {
+    0, 0, 0, 0, 0, 0, 0, 93.2581, 0.0117, 6.7302, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("K", 19, 24, *KN, *KA, *KS, *KW);
+
   // Z = 20 --------------------------------------------------------------------
-  G4int CaN[24] = 
-  {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
-   53, 54, 55, 56, 57};
-   
-  G4double CaA[24] = 
-  {34.0141, 35.0048, 35.9931, 36.9859, 37.9763, 38.9707, 39.9626, 40.9623,
-   41.9586, 42.9588, 43.9555, 44.9562, 45.9537, 46.9545, 47.9525, 48.9557, 
-   49.9575, 50.9615, 51.9651, 52.9701, 53.9747, 54.9806, 55.9858, 56.9924};
-   
-  G4double CaS[24] = 
-  {32, 70, 40, 24, 5, 19, 3, 4, 4, 5, 9, 10, 25, 25, 4, 4, 10, 10, 50, 54, 75,
-   75, 97, 107};
-   
-  G4double CaW[24] = 
-  {0, 0, 0, 0, 0, 0, 96.941, 0, 0.647, 0.135, 2.086, 0, 0.004, 0, 0.187, 0, 0,
-   0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ca", 20, 24, *CaN , *CaA , *CaS , *CaW);
-  
+  G4int CaN[24] = {
+    34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57};
+
+  G4double CaA[24] = {34.0141, 35.0048, 35.9931, 36.9859, 37.9763, 38.9707, 39.9626, 40.9623,
+    41.9586, 42.9588, 43.9555, 44.9562, 45.9537, 46.9545, 47.9525, 48.9557, 49.9575, 50.9615,
+    51.9651, 52.9701, 53.9747, 54.9806, 55.9858, 56.9924};
+
+  G4double CaS[24] = {
+    32, 70, 40, 24, 5, 19, 3, 4, 4, 5, 9, 10, 25, 25, 4, 4, 10, 10, 50, 54, 75, 75, 97, 107};
+
+  G4double CaW[24] = {0, 0, 0, 0, 0, 0, 96.941, 0, 0.647, 0.135, 2.086, 0, 0.004, 0, 0.187, 0, 0, 0,
+    0, 0, 0, 0, 0, 0};
+
+  AddElement("Ca", 20, 24, *CaN, *CaA, *CaS, *CaW);
+
   // Z = 21 --------------------------------------------------------------------
-  G4int ScN[24] = 
-  {36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54,
-   55, 56, 57, 58, 59};
-   
-  G4double ScA[24] = 
-  {36.0149, 37.0031, 37.9947, 38.9848, 39.978, 40.9693, 41.9655, 42.9612,
-   43.9594, 44.9559, 45.9552, 46.9524, 47.9522, 48.95 , 49.9522, 50.9536, 
-   51.9567, 52.9592, 53.963 , 54.9674, 55.9727, 56.977, 57.9831, 58.988 };
-   
-  G4double ScS[24] = 
-  {54, 32, 32, 26, 4, 3, 4, 20, 19, 12, 12, 22, 6, 4, 17, 22, 25, 32, 50, 110,
-   75, 75, 86, 97};
-   
-  G4double ScW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Sc", 21, 24, *ScN , *ScA , *ScS , *ScW); 
-  
+  G4int ScN[24] = {
+    36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59};
+
+  G4double ScA[24] = {36.0149, 37.0031, 37.9947, 38.9848, 39.978, 40.9693, 41.9655, 42.9612,
+    43.9594, 44.9559, 45.9552, 46.9524, 47.9522, 48.95, 49.9522, 50.9536, 51.9567, 52.9592, 53.963,
+    54.9674, 55.9727, 56.977, 57.9831, 58.988};
+
+  G4double ScS[24] = {
+    54, 32, 32, 26, 4, 3, 4, 20, 19, 12, 12, 22, 6, 4, 17, 22, 25, 32, 50, 110, 75, 75, 86, 97};
+
+  G4double ScW[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Sc", 21, 24, *ScN, *ScA, *ScS, *ScW);
+
   // Z = 22 --------------------------------------------------------------------
-  G4int TiN[24] = 
-  {38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
-   57, 58, 59, 60, 61};
-   
-  G4double TiA[24] = 
-  {38.0098, 39.0013, 39.9905, 40.9831, 41.973 , 42.9685, 43.9597, 44.9581,
-   45.9526, 46.9518, 47.9479, 48.9479, 49.9448, 50.9466, 51.9469, 52.9497, 
-   53.9509, 54.9551, 55.958 , 56.9629, 57.9661, 58.972 , 59.9756, 60.982 };
-   
-  G4double TiS[24] = 
-  {27, 11, 17, 40, 6, 7, 8, 13, 12, 10, 10, 10, 11, 14, 8, 11, 25, 26, 30, 100,
-   75, 75, 86, 97};
-   
-  G4double TiW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 8.25, 7.44, 73.72, 5.41, 5.18, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0};
-   
-  AddElement("Ti", 22, 24, *TiN , *TiA , *TiS , *TiW); 
-  
+  G4int TiN[24] = {
+    38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61};
+
+  G4double TiA[24] = {38.0098, 39.0013, 39.9905, 40.9831, 41.973, 42.9685, 43.9597, 44.9581,
+    45.9526, 46.9518, 47.9479, 48.9479, 49.9448, 50.9466, 51.9469, 52.9497, 53.9509, 54.9551,
+    55.958, 56.9629, 57.9661, 58.972, 59.9756, 60.982};
+
+  G4double TiS[24] = {
+    27, 11, 17, 40, 6, 7, 8, 13, 12, 10, 10, 10, 11, 14, 8, 11, 25, 26, 30, 100, 75, 75, 86, 97};
+
+  G4double TiW[24] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 8.25, 7.44, 73.72, 5.41, 5.18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ti", 22, 24, *TiN, *TiA, *TiS, *TiW);
+
   // Z = 23 --------------------------------------------------------------------
-  G4int VN[24] = 
-  {40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
-   59, 60, 61, 62, 63};
-   
-  G4double VA[24] = 
-  {40.0111, 40.9997, 41.9912, 42.9806, 43.9744, 44.9658, 45.9602, 46.9549, 
-   47.9523, 48.9485, 49.9472, 50.944 , 51.9448, 52.9443, 53.9464, 54.9472, 
-   55.9504, 56.9524, 57.9567, 58.9593, 59.9645, 60.9674, 61.9731, 62.9768};
-   
-  G4double VS[24] = 
-  {54, 27, 21, 25, 90, 18, 16, 12, 28, 14, 14, 14, 14, 4, 16, 11, 26, 27, 28,
-   35, 60, 75, 75, 97};
-   
-  G4double VW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.25, 99.75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0};
-   
-  AddElement("V", 23, 24, *VN , *VA , *VS , *VW); 
-  
+  G4int VN[24] = {
+    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63};
+
+  G4double VA[24] = {40.0111, 40.9997, 41.9912, 42.9806, 43.9744, 44.9658, 45.9602, 46.9549,
+    47.9523, 48.9485, 49.9472, 50.944, 51.9448, 52.9443, 53.9464, 54.9472, 55.9504, 56.9524,
+    57.9567, 58.9593, 59.9645, 60.9674, 61.9731, 62.9768};
+
+  G4double VS[24] = {
+    54, 27, 21, 25, 90, 18, 16, 12, 28, 14, 14, 14, 14, 4, 16, 11, 26, 27, 28, 35, 60, 75, 75, 97};
+
+  G4double VW[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.25, 99.75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("V", 23, 24, *VN, *VA, *VS, *VW);
+
   // Z = 24 --------------------------------------------------------------------
-  G4int CrN[24] = 
-  {42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-   61, 62, 63, 64, 65};
-   
-  G4double CrA[24] = 
-  {42.0064, 42.9977, 43.9855, 44.9792, 45.9684, 46.9629, 47.954 , 48.9513,
-   49.946 , 50.9448, 51.9405, 52.9407, 53.9389, 54.9408, 55.9406, 56.9438, 
-   57.9442, 58.9486, 59.9497, 60.9541, 61.9558, 62.9619, 63.9642, 64.9704};
-   
-  G4double CrS[24] = 
-  {32, 90, 14, 11, 22, 15, 8, 28, 14, 14, 15, 15, 15, 16, 10, 10, 26, 27, 28,
-   30, 40, 75, 75, 97};
-   
-  G4double CrW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 4.345, 0, 83.789, 9.501, 2.365, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0};
-   
-  AddElement("Cr", 24, 24, *CrN , *CrA , *CrS , *CrW);
-  
+  G4int CrN[24] = {
+    42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65};
+
+  G4double CrA[24] = {42.0064, 42.9977, 43.9855, 44.9792, 45.9684, 46.9629, 47.954, 48.9513, 49.946,
+    50.9448, 51.9405, 52.9407, 53.9389, 54.9408, 55.9406, 56.9438, 57.9442, 58.9486, 59.9497,
+    60.9541, 61.9558, 62.9619, 63.9642, 64.9704};
+
+  G4double CrS[24] = {
+    32, 90, 14, 11, 22, 15, 8, 28, 14, 14, 15, 15, 15, 16, 10, 10, 26, 27, 28, 30, 40, 75, 75, 97};
+
+  G4double CrW[24] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 4.345, 0, 83.789, 9.501, 2.365, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Cr", 24, 24, *CrN, *CrA, *CrS, *CrW);
+
   // Z = 25 --------------------------------------------------------------------
-  G4int MnN[24] = 
-  {44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
-   63, 64, 65, 66, 67};
-   
-  G4double MnA[24] = 
-  {44.0069, 44.9945, 45.9867, 46.9761, 47.9689, 48.9596, 49.9542, 50.9482,
-   51.9456, 52.9413, 53.9404, 54.938 , 55.9389, 56.9383, 57.94  , 58.9404, 
-   59.9432, 60.9445, 61.948 , 62.9498, 63.9537, 64.9561, 65.9608, 66.9638};
-   
-  G4double MnS[24] = 
-  {54, 32, 12, 17, 80, 26, 15, 14, 25, 15, 18, 14, 15, 4, 30, 30, 29, 28, 28,
-   30, 35, 60, 75, 86};
-   
-  G4double MnW[24] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Mn", 25, 24, *MnN , *MnA , *MnS , *MnW); 
-  
+  G4int MnN[24] = {
+    44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67};
+
+  G4double MnA[24] = {44.0069, 44.9945, 45.9867, 46.9761, 47.9689, 48.9596, 49.9542, 50.9482,
+    51.9456, 52.9413, 53.9404, 54.938, 55.9389, 56.9383, 57.94, 58.9404, 59.9432, 60.9445, 61.948,
+    62.9498, 63.9537, 64.9561, 65.9608, 66.9638};
+
+  G4double MnS[24] = {
+    54, 32, 12, 17, 80, 26, 15, 14, 25, 15, 18, 14, 15, 4, 30, 30, 29, 28, 28, 30, 35, 60, 75, 86};
+
+  G4double MnW[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Mn", 25, 24, *MnN, *MnA, *MnS, *MnW);
+
   // Z = 26 --------------------------------------------------------------------
-  G4int FeN[25] = 
-  {45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
-   64, 65, 66, 67, 68, 69};
-   
-  G4double FeA[25] = 
-  {45.0146, 46.0008, 46.9929, 47.9806, 48.9736, 49.963 , 50.9568, 51.9481,
-   52.9453, 53.9396, 54.9383, 55.9349, 56.9354, 57.9333, 58.9349, 59.9341, 
-   60.9367, 61.9368, 62.9401, 63.9409, 64.9449, 65.946 , 66.95  , 67.9525, 
-   68.9577};
-   
-  G4double FeS[25] = 
-  {43, 38, 28, 11, 17, 60, 16, 11, 23, 14, 14, 15, 15, 15, 15, 4, 22, 16, 20,
-   30, 30, 35, 50, 75, 86};
-   
-  G4double FeW[25] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 5.845, 0, 91.754, 2.119, 0.282, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0};
-   
-  AddElement("Fe", 26, 25, *FeN , *FeA , *FeS , *FeW); 
-  
+  G4int FeN[25] = {45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64,
+    65, 66, 67, 68, 69};
+
+  G4double FeA[25] = {45.0146, 46.0008, 46.9929, 47.9806, 48.9736, 49.963, 50.9568, 51.9481,
+    52.9453, 53.9396, 54.9383, 55.9349, 56.9354, 57.9333, 58.9349, 59.9341, 60.9367, 61.9368,
+    62.9401, 63.9409, 64.9449, 65.946, 66.95, 67.9525, 68.9577};
+
+  G4double FeS[25] = {43, 38, 28, 11, 17, 60, 16, 11, 23, 14, 14, 15, 15, 15, 15, 4, 22, 16, 20, 30,
+    30, 35, 50, 75, 86};
+
+  G4double FeW[25] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 5.845, 0, 91.754, 2.119, 0.282, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Fe", 26, 25, *FeN, *FeA, *FeS, *FeW);
+
   // Z = 27 --------------------------------------------------------------------
-  G4int CoN[25] = 
-  {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66,
-   67, 68, 69, 70, 71, 72};
-   
-  G4double CoA[25] = 
-  {48.0018, 48.9897, 49.9815, 50.9707, 51.9636, 52.9542, 53.9485, 54.942,
-   55.9398, 56.9363, 57.9358, 58.9332, 59.9338, 60.9325, 61.9341, 62.9336, 
-   63.9358, 64.9365, 65.9398, 66.9406, 67.9444, 68.9452, 69.9498, 70.9517, 
-   71.9564};
-   
-  G4double CoS[25] = 
-  {43, 28, 18, 16, 70, 19, 14, 15, 26, 15, 19, 15, 15, 17, 22, 22, 22, 14, 29,
-   30, 35, 40, 75, 86, 86};
-   
-  G4double CoW[25] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Co", 27, 25, *CoN , *CoA , *CoS , *CoW);
-  
+  G4int CoN[25] = {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67,
+    68, 69, 70, 71, 72};
+
+  G4double CoA[25] = {48.0018, 48.9897, 49.9815, 50.9707, 51.9636, 52.9542, 53.9485, 54.942,
+    55.9398, 56.9363, 57.9358, 58.9332, 59.9338, 60.9325, 61.9341, 62.9336, 63.9358, 64.9365,
+    65.9398, 66.9406, 67.9444, 68.9452, 69.9498, 70.9517, 71.9564};
+
+  G4double CoS[25] = {43, 28, 18, 16, 70, 19, 14, 15, 26, 15, 19, 15, 15, 17, 22, 22, 22, 14, 29,
+    30, 35, 40, 75, 86, 86};
+
+  G4double CoW[25] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Co", 27, 25, *CoN, *CoA, *CoS, *CoW);
+
   // Z = 28 --------------------------------------------------------------------
-  G4int NiN[29] = 
-  {50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
-   69, 70, 71, 72, 73, 74, 75, 76, 77, 78};
-   
-  G4double NiA[29] = 
-  {49.9959, 50.9877, 51.9757, 52.9685, 53.9579, 54.9513, 55.9421, 56.9398,
-   57.9353, 58.9344, 59.9308, 60.9311, 61.9283, 62.9297, 63.928 , 64.9301, 
-   65.9291, 66.9316, 67.9318, 68.9352, 69.9361, 70.94  , 71.9413, 72.9461, 
-   73.9479, 74.953 , 75.9553, 76.9608, 77.9638};
-   
-  G4double NiS[29] = 
-  {28, 28, 90, 17, 50, 12, 12, 3, 15, 15, 15, 15, 15, 15, 16, 16, 17, 20, 18,
-   15, 35, 40, 50, 64, 75, 86, 97, 107, 118};
-   
-  G4double NiW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 68.0769, 0, 26.2231, 1.1399, 3.6345, 0, 0.9256, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ni", 28, 29, *NiN , *NiA , *NiS , *NiW); 
-  
+  G4int NiN[29] = {50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69,
+    70, 71, 72, 73, 74, 75, 76, 77, 78};
+
+  G4double NiA[29] = {49.9959, 50.9877, 51.9757, 52.9685, 53.9579, 54.9513, 55.9421, 56.9398,
+    57.9353, 58.9344, 59.9308, 60.9311, 61.9283, 62.9297, 63.928, 64.9301, 65.9291, 66.9316,
+    67.9318, 68.9352, 69.9361, 70.94, 71.9413, 72.9461, 73.9479, 74.953, 75.9553, 76.9608, 77.9638};
+
+  G4double NiS[29] = {28, 28, 90, 17, 50, 12, 12, 3, 15, 15, 15, 15, 15, 15, 16, 16, 17, 20, 18, 15,
+    35, 40, 50, 64, 75, 86, 97, 107, 118};
+
+  G4double NiW[29] = {0, 0, 0, 0, 0, 0, 0, 0, 68.0769, 0, 26.2231, 1.1399, 3.6345, 0, 0.9256, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ni", 28, 29, *NiN, *NiA, *NiS, *NiW);
+
   // Z = 29 --------------------------------------------------------------------
-  G4int CuN[29] = 
-  {52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
-   71, 72, 73, 74, 75, 76, 77, 78, 79, 80};
-   
-  G4double CuA[29] = 
-  {51.9972, 52.9856, 53.9767, 54.9661, 55.9586, 56.9492, 57.9445, 58.9395,
-   59.9374, 60.9335, 61.9326, 62.9296, 63.9298, 64.9278, 65.9289, 66.9278, 
-   67.9296, 68.9294, 69.9324, 70.9326, 71.9355, 72.9365, 73.9402, 74.9417, 
-   75.946 , 76.948 , 77.9528, 78.9553, 79.9619};
-   
-  G4double CuS[29] = 
-  {28, 28, 23, 32, 15, 17, 27, 18, 27, 19, 4, 15, 15, 19, 19, 9, 50, 9, 16, 40,
-   21, 32, 43, 54, 64, 75, 86, 97, 97};
-   
-  G4double CuW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69.17, 0, 30.83, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0};
-   
-  AddElement("Cu", 29, 29, *CuN , *CuA , *CuS , *CuW); 
-  
+  G4int CuN[29] = {52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
+    72, 73, 74, 75, 76, 77, 78, 79, 80};
+
+  G4double CuA[29] = {51.9972, 52.9856, 53.9767, 54.9661, 55.9586, 56.9492, 57.9445, 58.9395,
+    59.9374, 60.9335, 61.9326, 62.9296, 63.9298, 64.9278, 65.9289, 66.9278, 67.9296, 68.9294,
+    69.9324, 70.9326, 71.9355, 72.9365, 73.9402, 74.9417, 75.946, 76.948, 77.9528, 78.9553,
+    79.9619};
+
+  G4double CuS[29] = {28, 28, 23, 32, 15, 17, 27, 18, 27, 19, 4, 15, 15, 19, 19, 9, 50, 9, 16, 40,
+    21, 32, 43, 54, 64, 75, 86, 97, 97};
+
+  G4double CuW[29] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69.17, 0, 30.83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Cu", 29, 29, *CuN, *CuA, *CuS, *CuW);
+
   // Z = 30 --------------------------------------------------------------------
-  G4int ZnN[29] = 
-  {54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72,
-   73, 74, 75, 76, 77, 78, 79, 80, 81, 82};
-   
-  G4double ZnA[29] = 
-  {53.993 , 54.984 , 55.9724, 56.9649, 57.9546, 58.9493, 59.9418, 60.9395,
-   61.9343, 62.9332, 63.9291, 64.9292, 65.926 , 66.9271, 67.9248, 68.9266, 
-   69.9253, 70.9277, 71.9269, 72.9298, 73.9295, 74.9329, 75.9334, 76.9371, 
-   77.9386, 78.9427, 79.9444, 80.9505, 81.9548};
-   
-  G4double ZnS[29] = 
-  {43, 27, 28, 15, 50, 40, 11, 18, 11, 23, 18, 18, 16, 17, 17, 18, 4, 11, 7,
-   40, 50, 80, 13, 14, 17, 29, 18, 43, 43};
-   
-  G4double ZnW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48.63, 0, 27.9, 4.1, 18.75, 0, 0.62, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Zn", 30, 29, *ZnN , *ZnA , *ZnS , *ZnW); 
-  
+  G4int ZnN[29] = {54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+    74, 75, 76, 77, 78, 79, 80, 81, 82};
+
+  G4double ZnA[29] = {53.993, 54.984, 55.9724, 56.9649, 57.9546, 58.9493, 59.9418, 60.9395, 61.9343,
+    62.9332, 63.9291, 64.9292, 65.926, 66.9271, 67.9248, 68.9266, 69.9253, 70.9277, 71.9269,
+    72.9298, 73.9295, 74.9329, 75.9334, 76.9371, 77.9386, 78.9427, 79.9444, 80.9505, 81.9548};
+
+  G4double ZnS[29] = {43, 27, 28, 15, 50, 40, 11, 18, 11, 23, 18, 18, 16, 17, 17, 18, 4, 11, 7, 40,
+    50, 80, 13, 14, 17, 29, 18, 43, 43};
+
+  G4double ZnW[29] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48.63, 0, 27.9, 4.1, 18.75, 0, 0.62, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Zn", 30, 29, *ZnN, *ZnA, *ZnS, *ZnW);
+
   // Z = 31 --------------------------------------------------------------------
-  G4int GaN[29] = 
-  {56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
-   75, 76, 77, 78, 79, 80, 81, 82, 83, 84};
-   
-  G4double GaA[29] = 
-  {55.9949, 56.9829, 57.9742, 58.9634, 59.9571, 60.9492, 61.9442, 62.9391,
-   63.9368, 64.9327, 65.9316, 66.9282, 67.928 , 68.9256, 69.926 , 70.9247, 
-   71.9264, 72.9252, 73.9269, 74.9265, 75.9289, 76.9293, 77.9317, 78.9329, 
-   79.9366, 80.9377, 81.9432, 82.9469, 83.9523};
-   
-  G4double GaS[29] = 
-  {28, 28, 23, 18, 12, 21, 30, 11, 4, 19, 4, 19, 22, 3, 3, 19, 22, 7, 80, 7, 10,
-   60, 90, 13, 13, 21, 32, 54, 64};
-   
-  G4double GaW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60.108, 0, 39.892, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ga", 31, 29, *GaN , *GaA , *GaS , *GaW);
-  
+  G4int GaN[29] = {56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,
+    76, 77, 78, 79, 80, 81, 82, 83, 84};
+
+  G4double GaA[29] = {55.9949, 56.9829, 57.9742, 58.9634, 59.9571, 60.9492, 61.9442, 62.9391,
+    63.9368, 64.9327, 65.9316, 66.9282, 67.928, 68.9256, 69.926, 70.9247, 71.9264, 72.9252, 73.9269,
+    74.9265, 75.9289, 76.9293, 77.9317, 78.9329, 79.9366, 80.9377, 81.9432, 82.9469, 83.9523};
+
+  G4double GaS[29] = {28, 28, 23, 18, 12, 21, 30, 11, 4, 19, 4, 19, 22, 3, 3, 19, 22, 7, 80, 7, 10,
+    60, 90, 13, 13, 21, 32, 54, 64};
+
+  G4double GaW[29] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60.108, 0, 39.892, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0};
+
+  AddElement("Ga", 31, 29, *GaN, *GaA, *GaS, *GaW);
+
   // Z = 32 --------------------------------------------------------------------
-  G4int GeN[29] = 
-  {58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
-   77, 78, 79, 80, 81, 82, 83, 84, 85, 86};
-   
-  G4double GeA[29] = 
-  {57.991 , 58.9817, 59.9702, 60.9638, 61.9547, 62.9496, 63.9416, 64.9394,
-   65.9339, 66.9327, 67.9281, 68.928 , 69.9243, 70.925 , 71.9221, 72.9235, 
-   73.9212, 74.9229, 75.9214, 76.9235, 77.9229, 78.9254, 79.9254, 80.9288, 
-   81.9296, 82.9345, 83.9373, 84.9427, 85.9463};
-   
-  G4double GeS[29] = 
-  {34, 30, 25, 32, 15, 21, 27, 11, 30, 5, 7, 3, 19, 19, 16, 16, 16, 16, 16, 20,
+  G4int GeN[29] = {58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77,
+    78, 79, 80, 81, 82, 83, 84, 85, 86};
+
+  G4double GeA[29] = {57.991, 58.9817, 59.9702, 60.9638, 61.9547, 62.9496, 63.9416, 64.9394,
+    65.9339, 66.9327, 67.9281, 68.928, 69.9243, 70.925, 71.9221, 72.9235, 73.9212, 74.9229, 75.9214,
+    76.9235, 77.9229, 78.9254, 79.9254, 80.9288, 81.9296, 82.9345, 83.9373, 84.9427, 85.9463};
+
+  G4double GeS[29] = {34, 30, 25, 32, 15, 21, 27, 11, 30, 5, 7, 3, 19, 19, 16, 16, 16, 16, 16, 20,
     4, 10, 25, 13, 26, 32, 43, 54, 64};
-    
-  G4double GeW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20.84, 0, 27.54, 7.73, 36.28, 0, 7.61,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ge", 32, 29, *GeN , *GeA , *GeS , *GeW); 
-  
+
+  G4double GeW[29] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20.84, 0, 27.54, 7.73, 36.28, 0, 7.61, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ge", 32, 29, *GeN, *GeA, *GeS, *GeW);
+
   // Z = 33 --------------------------------------------------------------------
-  G4int AsN[30] = 
-  {60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78,
-   79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89};
-   
-  G4double AsA[30] = 
-  {59.9931, 60.9806, 61.9732, 62.9637, 63.9576, 64.9495, 65.9444, 66.9392,
-   67.9368, 68.9323, 69.9309, 70.9271, 71.9268, 72.9238, 73.9239, 74.9216, 
-   75.9224, 76.9206, 77.9218, 78.9209, 79.9226, 80.9221, 81.9245, 82.925 , 
-   83.9291, 84.9318, 85.9362, 86.9396, 87.9446, 88.9492};
-   
-  G4double AsS[30] = 
-  {64, 64, 32, 54, 38, 42, 22, 11, 11, 30, 50, 5, 5, 4, 24, 18, 18, 23, 11, 6,
-   23, 6, 21, 24, 32, 32, 43, 54, 64, 64};
-   
-  G4double AsW[30] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0};
-   
-  AddElement("As", 33, 30, *AsN , *AsA , *AsS , *AsW); 
-  
+  G4int AsN[30] = {60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+    80, 81, 82, 83, 84, 85, 86, 87, 88, 89};
+
+  G4double AsA[30] = {59.9931, 60.9806, 61.9732, 62.9637, 63.9576, 64.9495, 65.9444, 66.9392,
+    67.9368, 68.9323, 69.9309, 70.9271, 71.9268, 72.9238, 73.9239, 74.9216, 75.9224, 76.9206,
+    77.9218, 78.9209, 79.9226, 80.9221, 81.9245, 82.925, 83.9291, 84.9318, 85.9362, 86.9396,
+    87.9446, 88.9492};
+
+  G4double AsS[30] = {64, 64, 32, 54, 38, 42, 22, 11, 11, 30, 50, 5, 5, 4, 24, 18, 18, 23, 11, 6,
+    23, 6, 21, 24, 32, 32, 43, 54, 64, 64};
+
+  G4double AsW[30] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("As", 33, 30, *AsN, *AsA, *AsS, *AsW);
+
   // Z = 34 --------------------------------------------------------------------
-  G4int SeN[28] = 
-  {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
-   84, 85, 86, 87, 88, 89, 90, 91, 92};
-   
-  G4double SeA[28] = 
-  {64.9647, 65.9552, 66.9501, 67.9419, 68.9396, 69.9335, 70.9323, 71.9271,
-   72.9268, 73.9225, 74.9225, 75.9192, 76.9199, 77.9173, 78.9185, 79.9165,
-   80.918 , 81.9167, 82.9191, 83.9185, 84.9222, 85.9243, 86.9285, 87.9314, 
-   88.936 , 89.9394, 90.9454, 91.9493};
-   
-  G4double SeS[28] = 
-  {64, 32, 21, 32, 40, 22, 22, 13, 12, 16, 16, 16, 16, 16, 16, 20, 21, 22, 4,
-   16, 30, 17, 40, 50, 32, 43, 54, 64};
-   
-  G4double SeW[28] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0.89, 0, 9.37, 7.63, 23.77, 0, 49.61, 0, 8.73,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Se", 34, 28, *SeN , *SeA , *SeS , *SeW);
-  
+  G4int SeN[28] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84,
+    85, 86, 87, 88, 89, 90, 91, 92};
+
+  G4double SeA[28] = {64.9647, 65.9552, 66.9501, 67.9419, 68.9396, 69.9335, 70.9323, 71.9271,
+    72.9268, 73.9225, 74.9225, 75.9192, 76.9199, 77.9173, 78.9185, 79.9165, 80.918, 81.9167,
+    82.9191, 83.9185, 84.9222, 85.9243, 86.9285, 87.9314, 88.936, 89.9394, 90.9454, 91.9493};
+
+  G4double SeS[28] = {64, 32, 21, 32, 40, 22, 22, 13, 12, 16, 16, 16, 16, 16, 16, 20, 21, 22, 4, 16,
+    30, 17, 40, 50, 32, 43, 54, 64};
+
+  G4double SeW[28] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0.89, 0, 9.37, 7.63, 23.77, 0, 49.61, 0, 8.73, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Se", 34, 28, *SeN, *SeA, *SeS, *SeW);
+
   // Z = 35 --------------------------------------------------------------------
-  G4int BrN[28] = 
-  {67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85,
-   86, 87, 88, 89, 90, 91, 92, 93, 94};
-   
-  G4double BrA[28] = 
-  {66.9648, 67.9583, 68.9502, 69.9446, 70.9393, 71.9365, 72.9318, 73.9299,
-   74.9258, 75.9245, 76.9214, 77.9211, 78.9183, 79.9185, 80.9163, 81.9168, 
-   82.9152, 83.9165, 84.9156, 85.9188, 86.9207, 87.9241, 88.9264, 89.9306, 
-   90.934 , 91.9393, 92.9431, 93.9487};
-   
-  G4double BrS[28] = 
-  {54, 58, 34, 39, 32, 28, 14, 16, 15, 10, 3, 4, 20, 20, 3, 3, 5, 27, 21, 12,
-   19, 40, 60, 80, 80, 50, 32, 43};
-   
-  G4double BrW[28] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50.69, 0, 49.31, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0};
-   
-  AddElement("Br", 35, 28, *BrN , *BrA , *BrS , *BrW);
-  
+  G4int BrN[28] = {67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86,
+    87, 88, 89, 90, 91, 92, 93, 94};
+
+  G4double BrA[28] = {66.9648, 67.9583, 68.9502, 69.9446, 70.9393, 71.9365, 72.9318, 73.9299,
+    74.9258, 75.9245, 76.9214, 77.9211, 78.9183, 79.9185, 80.9163, 81.9168, 82.9152, 83.9165,
+    84.9156, 85.9188, 86.9207, 87.9241, 88.9264, 89.9306, 90.934, 91.9393, 92.9431, 93.9487};
+
+  G4double BrS[28] = {54, 58, 34, 39, 32, 28, 14, 16, 15, 10, 3, 4, 20, 20, 3, 3, 5, 27, 21, 12, 19,
+    40, 60, 80, 80, 50, 32, 43};
+
+  G4double BrW[28] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50.69, 0, 49.31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Br", 35, 28, *BrN, *BrA, *BrS, *BrW);
+
   // Z = 36 --------------------------------------------------------------------
-  G4int KrN[29] = 
-  {69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
-   88, 89, 90, 91, 92, 93, 94, 95, 96, 97};
-   
-  G4double KrA[29] = 
-  {68.9653, 69.956 , 70.9505, 71.9419, 72.9389, 73.9333, 74.931 , 75.9259,
-   76.9247, 77.9204, 78.9201, 79.9164, 80.9166, 81.9135, 82.9141, 83.9115, 
-   84.9125, 85.9106, 86.9134, 87.9144, 88.9176, 89.9195, 90.9234, 91.9262, 
-   92.9313, 93.9344, 94.9398, 95.9431, 96.9486};
-   
-  G4double KrS[29] = 
-  {54, 43, 32, 29, 15, 60, 17, 11, 9, 7, 4, 4, 3, 28, 3, 3, 3, 12, 14, 14, 60,
-   20, 60, 13, 11, 32, 43, 54, 54};
-   
-  G4double KrW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0.35, 0, 2.28, 0, 11.58, 11.49, 57, 0, 17.3, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Kr", 36, 29, *KrN , *KrA , *KrS , *KrW); 
-  
+  G4int KrN[29] = {69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88,
+    89, 90, 91, 92, 93, 94, 95, 96, 97};
+
+  G4double KrA[29] = {68.9653, 69.956, 70.9505, 71.9419, 72.9389, 73.9333, 74.931, 75.9259, 76.9247,
+    77.9204, 78.9201, 79.9164, 80.9166, 81.9135, 82.9141, 83.9115, 84.9125, 85.9106, 86.9134,
+    87.9144, 88.9176, 89.9195, 90.9234, 91.9262, 92.9313, 93.9344, 94.9398, 95.9431, 96.9486};
+
+  G4double KrS[29] = {54, 43, 32, 29, 15, 60, 17, 11, 9, 7, 4, 4, 3, 28, 3, 3, 3, 12, 14, 14, 60,
+    20, 60, 13, 11, 32, 43, 54, 54};
+
+  G4double KrW[29] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0.35, 0, 2.28, 0, 11.58, 11.49, 57, 0, 17.3, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Kr", 36, 29, *KrN, *KrA, *KrS, *KrW);
+
   // Z = 37 --------------------------------------------------------------------
-  G4int RbN[32] = 
-  {71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-   90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102};
-   
-  G4double RbA[32] = 
-  {70.9653, 71.9591, 72.9504, 73.9445, 74.9386, 75.9351, 76.9304, 77.9281,
-   78.924 , 79.9225, 80.919 , 81.9182, 82.9151, 83.9144, 84.9118, 85.9112, 
-   86.9092, 87.9113, 88.9123, 89.9148, 90.9165, 91.9197, 92.922 , 93.9264, 
-   94.9293, 95.9343, 96.9373, 97.9417, 98.9454, 99.9499, 100.953, 101.959};
-   
-  G4double RbS[32] = 
-  {54, 54, 52, 77, 8, 8, 8, 8, 7, 8, 7, 8, 7, 3, 25, 25, 27, 5, 6, 9, 9, 7, 8,
-    9, 21, 27, 30, 40, 16, 32, 18, 54};
-    
-  G4double RbW[32] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72.17, 0, 27.83, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Rb", 37, 32, *RbN , *RbA , *RbS , *RbW);
-  
+  G4int RbN[32] = {71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
+    91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102};
+
+  G4double RbA[32] = {70.9653, 71.9591, 72.9504, 73.9445, 74.9386, 75.9351, 76.9304, 77.9281,
+    78.924, 79.9225, 80.919, 81.9182, 82.9151, 83.9144, 84.9118, 85.9112, 86.9092, 87.9113, 88.9123,
+    89.9148, 90.9165, 91.9197, 92.922, 93.9264, 94.9293, 95.9343, 96.9373, 97.9417, 98.9454,
+    99.9499, 100.953, 101.959};
+
+  G4double RbS[32] = {54, 54, 52, 77, 8, 8, 8, 8, 7, 8, 7, 8, 7, 3, 25, 25, 27, 5, 6, 9, 9, 7, 8, 9,
+    21, 27, 30, 40, 16, 32, 18, 54};
+
+  G4double RbW[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 72.17, 0, 27.83, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Rb", 37, 32, *RbN, *RbA, *RbS, *RbW);
+
   // Z = 38 --------------------------------------------------------------------
-  G4int SrN[32] = 
-  {73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91,
-   92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104};
-   
-  G4double SrA[32] = 
-  {72.966 , 73.9563, 74.9499, 75.9416, 76.9378, 77.9322, 78.9297, 79.9245,
-   80.9232, 81.9184, 82.9176, 83.9134, 84.9129, 85.9093, 86.9089, 87.9056, 
-   88.9075, 89.9077, 90.9102, 91.911 , 92.914 , 93.9154, 94.9194, 95.9217, 
-   96.9261, 97.9285, 98.9333, 99.9353, 100.941, 101.943, 102.949, 103.952};
-   
-  G4double SrS[32] = 
-  {64, 54, 32, 32, 16, 8, 9, 8, 8, 6, 9, 4, 4, 24, 24, 24, 24, 29, 6, 7, 8, 8,
-   8, 26, 20, 27, 15, 14, 13, 12, 54, 75};
-   
-  G4double SrW[32] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.56, 0, 9.86, 7, 82.58, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Sr", 38, 32, *SrN , *SrA , *SrS , *SrW); 
-  
+  G4int SrN[32] = {73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92,
+    93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104};
+
+  G4double SrA[32] = {72.966, 73.9563, 74.9499, 75.9416, 76.9378, 77.9322, 78.9297, 79.9245,
+    80.9232, 81.9184, 82.9176, 83.9134, 84.9129, 85.9093, 86.9089, 87.9056, 88.9075, 89.9077,
+    90.9102, 91.911, 92.914, 93.9154, 94.9194, 95.9217, 96.9261, 97.9285, 98.9333, 99.9353, 100.941,
+    101.943, 102.949, 103.952};
+
+  G4double SrS[32] = {64, 54, 32, 32, 16, 8, 9, 8, 8, 6, 9, 4, 4, 24, 24, 24, 24, 29, 6, 7, 8, 8, 8,
+    26, 20, 27, 15, 14, 13, 12, 54, 75};
+
+  G4double SrW[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.56, 0, 9.86, 7, 82.58, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Sr", 38, 32, *SrN, *SrA, *SrS, *SrW);
+
   // Z = 39 --------------------------------------------------------------------
-  G4int YN[30] = 
-  {77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95,
-   96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106};
-   
-  G4double YA[30] = 
-  {76.9496, 77.9435, 78.9373, 79.9343, 80.9291, 81.9268, 82.9223, 83.9204,
-   84.9164, 85.9149, 86.9109, 87.9095, 88.9058, 89.9072, 90.9073, 91.9089, 
-   92.9096, 93.9116, 94.9128, 95.9159, 96.9181, 97.9222, 98.9246, 99.9278, 
-   100.93 , 101.934, 102.937, 103.941, 104.945, 105.95};
-   
-  G4double YS[30] = 
-  {32, 43, 48, 43, 70, 11, 50, 10, 27, 15, 28, 29, 25, 25, 3, 10, 11, 8, 8, 23,
-   13, 26, 26, 80, 10, 90, 32, 43, 54, 75};
-   
-  G4double YW[30] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0};
-   
-  AddElement("Y", 39, 30, *YN , *YA , *YS , *YW);
-  
+  G4int YN[30] = {77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96,
+    97, 98, 99, 100, 101, 102, 103, 104, 105, 106};
+
+  G4double YA[30] = {76.9496, 77.9435, 78.9373, 79.9343, 80.9291, 81.9268, 82.9223, 83.9204,
+    84.9164, 85.9149, 86.9109, 87.9095, 88.9058, 89.9072, 90.9073, 91.9089, 92.9096, 93.9116,
+    94.9128, 95.9159, 96.9181, 97.9222, 98.9246, 99.9278, 100.93, 101.934, 102.937, 103.941,
+    104.945, 105.95};
+
+  G4double YS[30] = {32, 43, 48, 43, 70, 11, 50, 10, 27, 15, 28, 29, 25, 25, 3, 10, 11, 8, 8, 23,
+    13, 26, 26, 80, 10, 90, 32, 43, 54, 75};
+
+  G4double YW[30] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Y", 39, 30, *YN, *YA, *YS, *YW);
+
   // Z = 40 --------------------------------------------------------------------
-  G4int ZrN[30] = 
-  {79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
-   98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108};
-   
-  G4double ZrA[30] = 
-  {78.9492, 79.9406, 80.9368, 81.9311, 82.9287, 83.9232, 84.9215, 85.9165,
-   86.9148, 87.9102, 88.9089, 89.9047, 90.9056, 91.905 , 92.9065, 93.9063, 
-   94.908 , 95.9083, 96.911 , 97.9127, 98.9165, 99.9178, 100.921, 101.923, 
-   102.927, 103.929, 104.933, 105.936, 106.941, 107.944};
-   
-  G4double ZrS[30] = 
-  {43, 32, 32, 55, 10, 21, 11, 30, 9, 11, 4, 23, 23, 23, 23, 25, 25, 3, 3, 21, 
-   21, 40, 30, 50, 12, 43, 43, 54, 64, 75};
-   
-  G4double ZrW[30] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51.45, 11.22, 17.15, 0, 17.38, 0, 2.8, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Zr", 40, 30, *ZrN , *ZrA , *ZrS , *ZrW); 
-  
+  G4int ZrN[30] = {79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98,
+    99, 100, 101, 102, 103, 104, 105, 106, 107, 108};
+
+  G4double ZrA[30] = {78.9492, 79.9406, 80.9368, 81.9311, 82.9287, 83.9232, 84.9215, 85.9165,
+    86.9148, 87.9102, 88.9089, 89.9047, 90.9056, 91.905, 92.9065, 93.9063, 94.908, 95.9083, 96.911,
+    97.9127, 98.9165, 99.9178, 100.921, 101.923, 102.927, 103.929, 104.933, 105.936, 106.941,
+    107.944};
+
+  G4double ZrS[30] = {43, 32, 32, 55, 10, 21, 11, 30, 9, 11, 4, 23, 23, 23, 23, 25, 25, 3, 3, 21,
+    21, 40, 30, 50, 12, 43, 43, 54, 64, 75};
+
+  G4double ZrW[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51.45, 11.22, 17.15, 0, 17.38, 0, 2.8, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Zr", 40, 30, *ZrN, *ZrA, *ZrS, *ZrW);
+
   // Z = 41 --------------------------------------------------------------------
-  G4int NbN[30] = 
-  {81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99,
-   100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110};
-   
-  G4double NbA[30] = 
-  {80.949 , 81.9431, 82.9367, 83.9336, 84.9279, 85.925 , 86.9204, 87.918 ,
-   88.9135, 89.9113, 90.907 , 91.9072, 92.9064, 93.9073, 94.9068, 95.9081, 
-   96.9081, 97.9103, 98.9116, 99.9142, 100.915, 101.918, 102.919, 103.922, 
-   104.924, 105.928, 106.93 , 107.935, 108.938, 109.943};
-   
-  G4double NbS[30] = 
-  {43, 32, 34, 32, 24, 90, 70, 22, 40, 5, 3, 29, 24, 24, 20, 4, 28, 6, 14, 28,
-   20, 40, 70, 12, 11, 32, 43, 54, 54, 64};
-   
-  G4double NbW[30] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0};
-   
-  AddElement("Nb", 41, 30, *NbN , *NbA , *NbS , *NbW); 
-  
+  G4int NbN[30] = {81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
+    101, 102, 103, 104, 105, 106, 107, 108, 109, 110};
+
+  G4double NbA[30] = {80.949, 81.9431, 82.9367, 83.9336, 84.9279, 85.925, 86.9204, 87.918, 88.9135,
+    89.9113, 90.907, 91.9072, 92.9064, 93.9073, 94.9068, 95.9081, 96.9081, 97.9103, 98.9116,
+    99.9142, 100.915, 101.918, 102.919, 103.922, 104.924, 105.928, 106.93, 107.935, 108.938,
+    109.943};
+
+  G4double NbS[30] = {43, 32, 34, 32, 24, 90, 70, 22, 40, 5, 3, 29, 24, 24, 20, 4, 28, 6, 14, 28,
+    20, 40, 70, 12, 11, 32, 43, 54, 54, 64};
+
+  G4double NbW[30] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Nb", 41, 30, *NbN, *NbA, *NbS, *NbW);
+
   // Z = 42 --------------------------------------------------------------------
-  G4int MoN[31] = 
-  {83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101,
-   102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113};
-   
-  G4double MoA[31] = 
-  {82.9487, 83.9401, 84.9366, 85.9307, 86.9273, 87.922 , 88.9195, 89.9139,
-   90.9118, 91.9068, 92.9068, 93.9051, 94.9058, 95.9047, 96.906 , 97.9054, 
-   98.9077, 99.9075, 100.91 , 101.91 , 102.913, 103.914, 104.917, 105.918, 
-   106.922, 107.924, 108.928, 109.93 , 110.935, 111.937, 112.942};
-   
-  G4double MoS[31] = 
-  {54, 43, 43, 47, 24, 22, 17, 7, 12, 4, 4, 20, 20, 20, 20, 20, 20, 6, 6, 22,
-   70, 70, 80, 23, 17, 21, 32, 43, 54, 64, 64};
-   
-  G4double MoW[31] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 14.84, 0, 9.25, 15.92, 16.68, 9.55, 24.13, 0,
-   9.63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Mo", 42, 31, *MoN , *MoA , *MoS , *MoW); 
-  
+  G4int MoN[31] = {83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101,
+    102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113};
+
+  G4double MoA[31] = {82.9487, 83.9401, 84.9366, 85.9307, 86.9273, 87.922, 88.9195, 89.9139,
+    90.9118, 91.9068, 92.9068, 93.9051, 94.9058, 95.9047, 96.906, 97.9054, 98.9077, 99.9075, 100.91,
+    101.91, 102.913, 103.914, 104.917, 105.918, 106.922, 107.924, 108.928, 109.93, 110.935, 111.937,
+    112.942};
+
+  G4double MoS[31] = {54, 43, 43, 47, 24, 22, 17, 7, 12, 4, 4, 20, 20, 20, 20, 20, 20, 6, 6, 22, 70,
+    70, 80, 23, 17, 21, 32, 43, 54, 64, 64};
+
+  G4double MoW[31] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 14.84, 0, 9.25, 15.92, 16.68, 9.55, 24.13, 0, 9.63,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Mo", 42, 31, *MoN, *MoA, *MoS, *MoW);
+
   // Z = 43 --------------------------------------------------------------------
-  G4int TcN[31] = 
-  {85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102,
-   103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115};
-   
-  G4double TcA[31] = 
-  {84.9489, 85.9429, 86.9365, 87.9328, 88.9275, 89.9236, 90.9184, 91.9153,
-   92.9102, 93.9097, 94.9077, 95.9079, 96.9064, 97.9072, 98.9063, 99.9077, 
-   100.907, 101.909, 102.909, 103.911, 104.912, 105.914, 106.915, 107.918, 
-   108.92 , 109.923, 110.925, 111.929, 112.931, 113.936, 114.938};
-   
-  G4double TcS[31] = 
-  {54, 32, 32, 32, 23, 26, 22, 28, 4, 5, 6, 6, 5, 4, 21, 23, 26, 10, 11, 50,
-   60, 15, 16, 14, 23, 43, 43, 54, 64, 64, 75};
-   
-  G4double TcW[31] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Tc", 43, 31, *TcN , *TcA , *TcS , *TcW); 
-  
+  G4int TcN[31] = {85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
+    104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115};
+
+  G4double TcA[31] = {84.9489, 85.9429, 86.9365, 87.9328, 88.9275, 89.9236, 90.9184, 91.9153,
+    92.9102, 93.9097, 94.9077, 95.9079, 96.9064, 97.9072, 98.9063, 99.9077, 100.907, 101.909,
+    102.909, 103.911, 104.912, 105.914, 106.915, 107.918, 108.92, 109.923, 110.925, 111.929,
+    112.931, 113.936, 114.938};
+
+  G4double TcS[31] = {54, 32, 32, 32, 23, 26, 22, 28, 4, 5, 6, 6, 5, 4, 21, 23, 26, 10, 11, 50, 60,
+    15, 16, 14, 23, 43, 43, 54, 64, 64, 75};
+
+  G4double TcW[31] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Tc", 43, 31, *TcN, *TcA, *TcS, *TcW);
+
   // Z = 44 --------------------------------------------------------------------
-  G4int RuN[32] = 
-  {87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104,
-   105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118};
-   
-  G4double RuA[32] = 
-  {86.9492, 87.9404, 88.9361, 89.9298, 90.9264, 91.9201, 92.9171, 93.9114,
-   94.9104, 95.9076, 96.9076, 97.9053, 98.9059, 99.9042, 100.906, 101.904,
-   102.906, 103.905, 104.908, 105.907, 106.91 , 107.91 , 108.913, 109.914, 
-   110.918, 111.919, 112.923, 113.924, 114.928, 115.93 , 116.935, 117.937};
-   
-  G4double RuS[32] = 
-  {64, 54, 54, 43, 54, 32, 90, 14, 13, 8, 9, 7, 21, 22, 22, 22, 22, 4, 4, 8,
-   13, 13, 70, 25, 32, 58, 54, 39, 64, 75, 86, 97};
-   
-  G4double RuW[32] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 5.54, 0, 1.87, 12.76, 12.6, 17.06, 31.55, 0,
-   18.62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ru", 44, 32, *RuN , *RuA , *RuS , *RuW); 
-  
+  G4int RuN[32] = {87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+    106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118};
+
+  G4double RuA[32] = {86.9492, 87.9404, 88.9361, 89.9298, 90.9264, 91.9201, 92.9171, 93.9114,
+    94.9104, 95.9076, 96.9076, 97.9053, 98.9059, 99.9042, 100.906, 101.904, 102.906, 103.905,
+    104.908, 105.907, 106.91, 107.91, 108.913, 109.914, 110.918, 111.919, 112.923, 113.924, 114.928,
+    115.93, 116.935, 117.937};
+
+  G4double RuS[32] = {64, 54, 54, 43, 54, 32, 90, 14, 13, 8, 9, 7, 21, 22, 22, 22, 22, 4, 4, 8, 13,
+    13, 70, 25, 32, 58, 54, 39, 64, 75, 86, 97};
+
+  G4double RuW[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 5.54, 0, 1.87, 12.76, 12.6, 17.06, 31.55, 0, 18.62,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ru", 44, 32, *RuN, *RuA, *RuS, *RuW);
+
   // Z = 45 --------------------------------------------------------------------
-  G4int RhN[33] = 
-  {89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
-   106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 
-   121};
-   
-  G4double RhA[33] = 
-  {88.9494, 89.9429, 90.9365, 91.932 , 92.9257, 93.9217, 94.9159, 95.9145,
-   96.9113, 97.9107, 98.9081, 99.9081, 100.906, 101.907, 102.906, 103.907, 
-   104.906, 105.907, 106.907, 107.909, 108.909, 109.911, 110.912, 111.915, 
-   112.915, 113.919, 114.92 , 115.924, 116.925, 117.929, 118.931, 119.936, 
-   120.938};
-   
-  G4double RhS[33] = 
-  {54, 54, 43, 43, 43, 48, 16, 14, 40, 13, 8, 22, 19, 5, 3, 3, 5, 8, 13, 11,
-   13, 24, 22, 54, 43, 32, 54, 54, 64, 75, 86, 86, 97};
-  G4double RhW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Rh", 45, 33, *RhN , *RhA , *RhS , *RhW); 
-  
+  G4int RhN[33] = {89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106,
+    107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121};
+
+  G4double RhA[33] = {88.9494, 89.9429, 90.9365, 91.932, 92.9257, 93.9217, 94.9159, 95.9145,
+    96.9113, 97.9107, 98.9081, 99.9081, 100.906, 101.907, 102.906, 103.907, 104.906, 105.907,
+    106.907, 107.909, 108.909, 109.911, 110.912, 111.915, 112.915, 113.919, 114.92, 115.924,
+    116.925, 117.929, 118.931, 119.936, 120.938};
+
+  G4double RhS[33] = {54, 54, 43, 43, 43, 48, 16, 14, 40, 13, 8, 22, 19, 5, 3, 3, 5, 8, 13, 11, 13,
+    24, 22, 54, 43, 32, 54, 54, 64, 75, 86, 86, 97};
+  G4double RhW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Rh", 45, 33, *RhN, *RhA, *RhS, *RhW);
+
   // Z = 46 --------------------------------------------------------------------
-  G4int PdN[33] = 
-  {91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107,
-   108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 
-   123};
-   
-  G4double PdA[33] = 
-  {90.9495, 91.9404, 92.9359, 93.9288, 94.9247, 95.9182, 96.9165, 97.9127,
-   98.9118, 99.9085, 100.908, 101.906, 102.906, 103.904, 104.905, 105.903, 
-   106.905, 107.904, 108.906, 109.905, 110.908, 111.907, 112.91 , 113.91 , 
-   114.914, 115.914, 116.918, 117.919, 118.923, 119.924, 120.928, 121.93 , 
-   122.934};
-   
-  G4double PdS[33] = 
-  {64, 54, 43, 43, 43, 16, 32, 23, 16, 12, 19, 3, 3, 5, 5, 5, 7, 4, 4, 12, 40,
-   19, 40, 26, 70, 60, 32, 23, 32, 43, 54, 54, 64};
-   
-  G4double PdW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.02, 0, 11.14, 22.33, 27.33, 0, 26.46, 0,
-   11.72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Pd", 46, 33, *PdN , *PdA , *PdS , *PdW);
-  
+  G4int PdN[33] = {91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
+    109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123};
+
+  G4double PdA[33] = {90.9495, 91.9404, 92.9359, 93.9288, 94.9247, 95.9182, 96.9165, 97.9127,
+    98.9118, 99.9085, 100.908, 101.906, 102.906, 103.904, 104.905, 105.903, 106.905, 107.904,
+    108.906, 109.905, 110.908, 111.907, 112.91, 113.91, 114.914, 115.914, 116.918, 117.919, 118.923,
+    119.924, 120.928, 121.93, 122.934};
+
+  G4double PdS[33] = {64, 54, 43, 43, 43, 16, 32, 23, 16, 12, 19, 3, 3, 5, 5, 5, 7, 4, 4, 12, 40,
+    19, 40, 26, 70, 60, 32, 23, 32, 43, 54, 54, 64};
+
+  G4double PdW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.02, 0, 11.14, 22.33, 27.33, 0, 26.46, 0,
+    11.72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Pd", 46, 33, *PdN, *PdA, *PdS, *PdW);
+
   // Z = 47 --------------------------------------------------------------------
-  G4int AgN[34] = 
-  {94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109,
-   110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 
-   125, 126, 127};
-   
-  G4double AgA[34] = 
-  {93.9428, 94.9355, 95.9307, 96.924 , 97.9218, 98.9176, 99.9161, 100.913,
-   101.912, 102.909, 103.909, 104.907, 105.907, 106.905, 107.906, 108.905, 
-   109.906, 110.905, 111.907, 112.907, 113.909, 114.909, 115.911, 116.912, 
-   117.915, 118.916, 119.919, 120.92 , 121.923, 122.925, 123.929, 124.931, 
-   125.934, 126.937};
-   
-  G4double AgS[34] = 
-  {54, 43, 43, 43, 16, 16, 80, 11, 80, 18, 7, 12, 6, 6, 6, 3, 3, 4, 18, 18, 28,
-   40, 50, 50, 70, 10, 80, 16, 22, 32, 43, 43, 43, 54};
-   
-  G4double AgW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51.839, 0, 48.161, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ag", 47, 34, *AgN , *AgA , *AgS , *AgW); 
-  
+  G4int AgN[34] = {94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+    111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127};
+
+  G4double AgA[34] = {93.9428, 94.9355, 95.9307, 96.924, 97.9218, 98.9176, 99.9161, 100.913,
+    101.912, 102.909, 103.909, 104.907, 105.907, 106.905, 107.906, 108.905, 109.906, 110.905,
+    111.907, 112.907, 113.909, 114.909, 115.911, 116.912, 117.915, 118.916, 119.919, 120.92,
+    121.923, 122.925, 123.929, 124.931, 125.934, 126.937};
+
+  G4double AgS[34] = {54, 43, 43, 43, 16, 16, 80, 11, 80, 18, 7, 12, 6, 6, 6, 3, 3, 4, 18, 18, 28,
+    40, 50, 50, 70, 10, 80, 16, 22, 32, 43, 43, 43, 54};
+
+  G4double AgW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51.839, 0, 48.161, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ag", 47, 34, *AgN, *AgA, *AgS, *AgW);
+
   // Z = 48 --------------------------------------------------------------------
-  G4int CdN[35] = 
-  {96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-   112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 
-   127, 128, 129, 130};
-   
-  G4double CdA[35] = 
-  {95.9398, 96.9349, 97.9276, 98.925 , 99.9202, 100.919, 101.915, 102.913,
-   103.91 , 104.909, 105.906, 106.907, 107.904, 108.905, 109.903, 110.904, 
-   111.903, 112.904, 113.903, 114.905, 115.905, 116.907, 117.907, 118.91 , 
-   119.91 , 120.913, 121.913, 122.917, 123.918, 124.921, 125.922, 126.926, 
-   127.928, 128.932, 129.934};
-   
-  G4double CdS[35] = 
-  {54, 43, 22, 22, 10, 16, 80, 17, 10, 12, 6, 7, 6, 4, 3, 3, 30, 30, 30, 3, 3,
-    4, 22, 90, 20, 90, 22, 40, 70, 70, 60, 80, 32, 43, 43};
-    
-  G4double CdW[35] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.25, 0, 0.89, 0, 12.49, 12.8, 24.13, 12.22,
-   28.73, 0, 7.49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Cd", 48, 35, *CdN , *CdA , *CdS , *CdW); 
-  
+  G4int CdN[35] = {96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
+    113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130};
+
+  G4double CdA[35] = {95.9398, 96.9349, 97.9276, 98.925, 99.9202, 100.919, 101.915, 102.913, 103.91,
+    104.909, 105.906, 106.907, 107.904, 108.905, 109.903, 110.904, 111.903, 112.904, 113.903,
+    114.905, 115.905, 116.907, 117.907, 118.91, 119.91, 120.913, 121.913, 122.917, 123.918, 124.921,
+    125.922, 126.926, 127.928, 128.932, 129.934};
+
+  G4double CdS[35] = {54, 43, 22, 22, 10, 16, 80, 17, 10, 12, 6, 7, 6, 4, 3, 3, 30, 30, 30, 3, 3, 4,
+    22, 90, 20, 90, 22, 40, 70, 70, 60, 80, 32, 43, 43};
+
+  G4double CdW[35] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.25, 0, 0.89, 0, 12.49, 12.8, 24.13, 12.22,
+    28.73, 0, 7.49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Cd", 48, 35, *CdN, *CdA, *CdS, *CdW);
+
   // Z = 49 --------------------------------------------------------------------
-  G4int InN[37] = 
-  {98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
-   113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-   128, 129, 130, 131, 132, 133, 134};
-   
-  G4double InA[37] = 
-  {97.9422, 98.9346, 99.9312, 100.927, 101.925, 102.92 , 103.918, 104.915,
-   105.913, 106.91 , 107.91 , 108.907, 109.907, 110.905, 111.906, 112.904, 
-   113.905, 114.904, 115.905, 116.905, 117.906, 118.906, 119.908, 120.908, 
-   121.91 , 122.91 , 123.913, 124.914, 125.916, 126.917, 127.92 , 128.922, 
-   129.925, 130.927, 131.933, 132.938, 133.945};
-   
-  G4double InS[37] = 
-  {54, 54, 41, 32, 41, 27, 15, 19, 15, 14, 40, 6, 13, 6, 6, 4, 3, 5, 5, 6, 9,
-    8, 40, 29, 50, 26, 50, 30, 40, 40, 50, 14, 50, 80, 70, 43, 54};
-    
-  G4double InW[37] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.29, 0, 95.71, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("In", 49, 37, *InN , *InA , *InS , *InW); 
-  
+  G4int InN[37] = {98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113,
+    114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
+    133, 134};
+
+  G4double InA[37] = {97.9422, 98.9346, 99.9312, 100.927, 101.925, 102.92, 103.918, 104.915,
+    105.913, 106.91, 107.91, 108.907, 109.907, 110.905, 111.906, 112.904, 113.905, 114.904, 115.905,
+    116.905, 117.906, 118.906, 119.908, 120.908, 121.91, 122.91, 123.913, 124.914, 125.916, 126.917,
+    127.92, 128.922, 129.925, 130.927, 131.933, 132.938, 133.945};
+
+  G4double InS[37] = {54, 54, 41, 32, 41, 27, 15, 19, 15, 14, 40, 6, 13, 6, 6, 4, 3, 5, 5, 6, 9, 8,
+    40, 29, 50, 26, 50, 30, 40, 40, 50, 14, 50, 80, 70, 43, 54};
+
+  G4double InW[37] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.29, 0, 95.71, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("In", 49, 37, *InN, *InA, *InS, *InW);
+
   // Z = 50 --------------------------------------------------------------------
-  G4int SnN[38] = 
-  {100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114,
-   115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 
-   130, 131, 132, 133, 134, 135, 136, 137};
-   
-  G4double SnA[38] = 
-  {99.939 , 100.936, 101.93 , 102.928, 103.923, 104.921, 105.917, 106.916,
-   107.912, 108.911, 109.908, 110.908, 111.905, 112.905, 113.903, 114.903, 
-   115.902, 116.903, 117.902, 118.903, 119.902, 120.904, 121.903, 122.906, 
-   123.905, 124.908, 125.908, 126.91 , 127.911, 128.913, 129.914, 130.917, 
-   131.918, 132.924, 133.928, 134.935, 135.939, 136.946};
-   
-  G4double SnS[38] = 
-  {46, 54, 43, 32, 16, 10, 50, 90, 50, 11, 17, 8, 5, 4, 3, 3, 3, 3, 3, 3, 27,
-   27, 29, 29, 15, 16, 11, 27, 29, 13, 30, 80, 28, 90, 11, 43, 54, 64};
-   
-  G4double SnW[38] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, 0.66, 0.34, 14.54, 7.68, 24.22,
-   8.59, 32.58, 0, 4.63, 0, 5.79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Sn", 50, 38, *SnN , *SnA , *SnS , *SnW);
-  
+  G4int SnN[38] = {100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115,
+    116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134,
+    135, 136, 137};
+
+  G4double SnA[38] = {99.939, 100.936, 101.93, 102.928, 103.923, 104.921, 105.917, 106.916, 107.912,
+    108.911, 109.908, 110.908, 111.905, 112.905, 113.903, 114.903, 115.902, 116.903, 117.902,
+    118.903, 119.902, 120.904, 121.903, 122.906, 123.905, 124.908, 125.908, 126.91, 127.911,
+    128.913, 129.914, 130.917, 131.918, 132.924, 133.928, 134.935, 135.939, 136.946};
+
+  G4double SnS[38] = {46, 54, 43, 32, 16, 10, 50, 90, 50, 11, 17, 8, 5, 4, 3, 3, 3, 3, 3, 3, 27, 27,
+    29, 29, 15, 16, 11, 27, 29, 13, 30, 80, 28, 90, 11, 43, 54, 64};
+
+  G4double SnW[38] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, 0.66, 0.34, 14.54, 7.68, 24.22,
+    8.59, 32.58, 0, 4.63, 0, 5.79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Sn", 50, 38, *SnN, *SnA, *SnS, *SnW);
+
   // Z = 51 --------------------------------------------------------------------
-  G4int SbN[37] = 
-  {103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117,
-   118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 
-   133, 134, 135, 136, 137, 138, 139};
-   
-  G4double SbA[37] = 
-  {102.94 , 103.936, 104.932, 105.929, 106.924, 107.922, 108.918, 109.917,
-   110.913, 111.912, 112.909, 113.909, 114.907, 115.907, 116.905, 117.906, 
-   118.904, 119.905, 120.904, 121.905, 122.904, 123.906, 124.905, 125.907, 
-   126.907, 127.909, 128.909, 129.912, 130.912, 131.914, 132.915, 133.921, 
-   134.925, 135.931, 136.935, 137.941, 138.946};
-   
-  G4double SbS[37] = 
-  {54, 39, 17, 34, 32, 22, 20, 22, 22, 25, 24, 22, 22, 6, 10, 4, 9, 8, 24, 24,
-   22, 22, 3, 30, 6, 27, 23, 27, 80, 25, 80, 60, 11, 32, 43, 54, 64};
-   
-  G4double SbW[37] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57.21, 0, 42.79, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Sb", 51, 37, *SbN , *SbA , *SbS , *SbW); 
-  
+  G4int SbN[37] = {103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118,
+    119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137,
+    138, 139};
+
+  G4double SbA[37] = {102.94, 103.936, 104.932, 105.929, 106.924, 107.922, 108.918, 109.917,
+    110.913, 111.912, 112.909, 113.909, 114.907, 115.907, 116.905, 117.906, 118.904, 119.905,
+    120.904, 121.905, 122.904, 123.906, 124.905, 125.907, 126.907, 127.909, 128.909, 129.912,
+    130.912, 131.914, 132.915, 133.921, 134.925, 135.931, 136.935, 137.941, 138.946};
+
+  G4double SbS[37] = {54, 39, 17, 34, 32, 22, 20, 22, 22, 25, 24, 22, 22, 6, 10, 4, 9, 8, 24, 24,
+    22, 22, 3, 30, 6, 27, 23, 27, 80, 25, 80, 60, 11, 32, 43, 54, 64};
+
+  G4double SbW[37] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57.21, 0, 42.79, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Sb", 51, 37, *SbN, *SbA, *SbS, *SbW);
+
   // Z = 52 --------------------------------------------------------------------
-  G4int TeN[37] = 
-  {106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120,
-   121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 
-   136, 137, 138, 139, 140, 141, 142};
-   
-  G4double TeA[37] = 
-  {105.938, 106.935, 107.929, 108.927, 109.922, 110.921, 111.917, 112.916,
-   113.912, 114.912, 115.908, 116.909, 117.906, 118.906, 119.904, 120.905, 
-   121.903, 122.904, 123.903, 124.904, 125.903, 126.905, 127.904, 128.907, 
-   129.906, 130.909, 131.909, 132.911, 133.912, 134.916, 135.92 , 136.925, 
-   137.929, 138.935, 139.939, 140.944, 141.948};
-   
-  G4double TeS[37] = 
-  {43, 32, 16, 80, 60, 80, 18, 22, 22, 11, 10, 20, 17, 9, 11, 27, 20, 19, 16,
-   20, 20, 4, 19, 3, 21, 22, 12, 80, 40, 10, 50, 13, 22, 43, 54, 54, 64};
-   
-  G4double TeW[37] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 0, 2.55, 0.89, 4.74, 7.07,
-   18.84, 0, 31.74, 0, 34.08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Te", 52, 37, *TeN , *TeA , *TeS , *TeW); 
-  
+  G4int TeN[37] = {106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+    122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140,
+    141, 142};
+
+  G4double TeA[37] = {105.938, 106.935, 107.929, 108.927, 109.922, 110.921, 111.917, 112.916,
+    113.912, 114.912, 115.908, 116.909, 117.906, 118.906, 119.904, 120.905, 121.903, 122.904,
+    123.903, 124.904, 125.903, 126.905, 127.904, 128.907, 129.906, 130.909, 131.909, 132.911,
+    133.912, 134.916, 135.92, 136.925, 137.929, 138.935, 139.939, 140.944, 141.948};
+
+  G4double TeS[37] = {43, 32, 16, 80, 60, 80, 18, 22, 22, 11, 10, 20, 17, 9, 11, 27, 20, 19, 16, 20,
+    20, 4, 19, 3, 21, 22, 12, 80, 40, 10, 50, 13, 22, 43, 54, 54, 64};
+
+  G4double TeW[37] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 0, 2.55, 0.89, 4.74, 7.07,
+    18.84, 0, 31.74, 0, 34.08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Te", 52, 37, *TeN, *TeA, *TeS, *TeW);
+
   // Z = 53 --------------------------------------------------------------------
-  G4int IN[37] = 
-  {108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
-   123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 
-   138, 139, 140, 141, 142, 143, 144};
-   
-  G4double IA[37] = 
-  {107.943, 108.938, 109.935, 110.93 , 111.928, 112.924, 113.922, 114.918,
-   115.917, 116.914, 117.913, 118.91 , 119.91 , 120.907, 121.908, 122.906, 
-   123.906, 124.905, 125.906, 126.904, 127.906, 128.905, 129.907, 130.906, 
-   131.908, 132.908, 133.91 , 134.91 , 135.915, 136.918, 137.922, 138.926, 
-   139.931, 140.935, 141.94, 142.944, 143.95};
-   
-  G4double IS[37] = 
-  {39, 16, 33, 32, 23, 60, 32, 50, 15, 80, 80, 70, 20, 12, 6, 4, 26, 20, 4, 4,
-   4, 4, 4, 12, 11, 28, 16, 25, 50, 30, 90, 30, 23, 32, 43, 43, 54};
-   
-  G4double IW[37] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("I", 53, 37, *IN , *IA , *IS , *IW); 
-  
+  G4int IN[37] = {108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
+    124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
+    143, 144};
+
+  G4double IA[37] = {107.943, 108.938, 109.935, 110.93, 111.928, 112.924, 113.922, 114.918, 115.917,
+    116.914, 117.913, 118.91, 119.91, 120.907, 121.908, 122.906, 123.906, 124.905, 125.906, 126.904,
+    127.906, 128.905, 129.907, 130.906, 131.908, 132.908, 133.91, 134.91, 135.915, 136.918, 137.922,
+    138.926, 139.931, 140.935, 141.94, 142.944, 143.95};
+
+  G4double IS[37] = {39, 16, 33, 32, 23, 60, 32, 50, 15, 80, 80, 70, 20, 12, 6, 4, 26, 20, 4, 4, 4,
+    4, 4, 12, 11, 28, 16, 25, 50, 30, 90, 30, 23, 32, 43, 43, 54};
+
+  G4double IW[37] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("I", 53, 37, *IN, *IA, *IS, *IW);
+
   // Z = 54 --------------------------------------------------------------------
-  G4int XeN[38] = 
-  {110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124,
-   125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 
-   140, 141, 142, 143, 144, 145, 146, 147};
-   
-  G4double XeA[38] = 
-  {109.944, 110.942, 111.936, 112.933, 113.928, 114.927, 115.922, 116.921,
-   117.917, 118.916, 119.912, 120.911, 121.909, 122.908, 123.906, 124.906, 
-   125.904, 126.905, 127.904, 128.905, 129.904, 130.905, 131.904, 132.906, 
-   133.905, 134.907, 135.907, 136.912, 137.914, 138.919, 139.922, 140.927, 
-   141.93 , 142.935, 143.938, 144.944, 145.947, 146.953};
-   
-  G4double XeS[38] = 
-  {43, 33, 16, 10, 22, 26, 26, 19, 107, 13, 50, 26, 90, 17, 21, 21, 7, 4, 15,
-    9, 10, 10, 12, 4, 9, 11, 8, 8, 40, 23, 70, 10, 11, 24, 34, 43, 43, 54};
-    
-  G4double XeW[38] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 0, 0.09, 0, 1.92, 26.44,
-   4.08, 21.18, 26.89, 0, 10.44, 0, 8.87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Xe", 54, 38, *XeN , *XeA , *XeS , *XeW);
-  
+  G4int XeN[38] = {110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,
+    126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144,
+    145, 146, 147};
+
+  G4double XeA[38] = {109.944, 110.942, 111.936, 112.933, 113.928, 114.927, 115.922, 116.921,
+    117.917, 118.916, 119.912, 120.911, 121.909, 122.908, 123.906, 124.906, 125.904, 126.905,
+    127.904, 128.905, 129.904, 130.905, 131.904, 132.906, 133.905, 134.907, 135.907, 136.912,
+    137.914, 138.919, 139.922, 140.927, 141.93, 142.935, 143.938, 144.944, 145.947, 146.953};
+
+  G4double XeS[38] = {43, 33, 16, 10, 22, 26, 26, 19, 107, 13, 50, 26, 90, 17, 21, 21, 7, 4, 15, 9,
+    10, 10, 12, 4, 9, 11, 8, 8, 40, 23, 70, 10, 11, 24, 34, 43, 43, 54};
+
+  G4double XeW[38] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 0, 0.09, 0, 1.92, 26.44, 4.08,
+    21.18, 26.89, 0, 10.44, 0, 8.87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Xe", 54, 38, *XeN, *XeA, *XeS, *XeW);
+
   // Z = 55 --------------------------------------------------------------------
-  G4int CsN[40] = 
-  {112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126,
-   127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141,
-   142, 143, 144, 145, 146, 147, 148, 149, 150, 151};
-   
-  G4double CsA[40] = 
-  {111.95 , 112.945, 113.941, 114.936, 115.933, 116.929, 117.927, 118.922,
-   119.921, 120.917, 121.916, 122.913, 123.912, 124.91 , 125.909, 126.907, 
-   127.908, 128.906, 129.907, 130.905, 131.906, 132.905, 133.907, 134.906, 
-   135.907, 136.907, 137.911, 138.913, 139.917, 140.92 , 141.924, 142.927, 
-   143.932, 144.935, 145.94 , 146.944, 147.949, 148.953, 149.958, 150.962};
-   
-  G4double CsS[40] = 
-  {33, 16, 33, 46, 38, 60, 14, 15, 11, 15, 18, 13, 13, 8, 13, 9, 6, 5, 9, 6, 4,
+  G4int CsN[40] = {112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+    147, 148, 149, 150, 151};
+
+  G4double CsA[40] = {111.95, 112.945, 113.941, 114.936, 115.933, 116.929, 117.927, 118.922,
+    119.921, 120.917, 121.916, 122.913, 123.912, 124.91, 125.909, 126.907, 127.908, 128.906,
+    129.907, 130.905, 131.906, 132.905, 133.907, 134.906, 135.907, 136.907, 137.911, 138.913,
+    139.917, 140.92, 141.924, 142.927, 143.932, 144.935, 145.94, 146.944, 147.949, 148.953, 149.958,
+    150.962};
+
+  G4double CsS[40] = {33, 16, 33, 46, 38, 60, 14, 15, 11, 15, 18, 13, 13, 8, 13, 9, 6, 5, 9, 6, 4,
     3, 3, 3, 4, 3, 10, 5, 9, 11, 11, 24, 30, 50, 90, 16, 63, 32, 54, 75};
-    
-  G4double CsW[40] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Cs", 55, 40, *CsN , *CsA , *CsS , *CsW); 
-  
+
+  G4double CsW[40] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Cs", 55, 40, *CsN, *CsA, *CsS, *CsW);
+
   // Z = 56 --------------------------------------------------------------------
-  G4int BaN[40] = 
-  {114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128,
-   129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153};
-    
-  G4double BaA[40] = 
-  {113.951, 114.948, 115.942, 116.939, 117.933, 118.931, 119.926, 120.924,
-   121.92 , 122.919, 123.915, 124.915, 125.911, 126.911, 127.908, 128.909, 
-   129.906, 130.907, 131.905, 132.906, 133.905, 134.906, 135.905, 136.906, 
-   137.905, 138.909, 139.911, 140.914, 141.916, 142.921, 143.923, 144.927, 
-   145.93 , 146.934, 147.938, 148.942, 149.946, 150.951, 151.954, 152.96};
-   
-  G4double BaS[40] = 
-  {48, 64, 54, 70, 54, 109, 32, 33, 32, 32, 15, 27, 15, 11, 12, 12, 7, 7, 3, 3,
+  G4int BaN[40] = {114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129,
+    130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148,
+    149, 150, 151, 152, 153};
+
+  G4double BaA[40] = {113.951, 114.948, 115.942, 116.939, 117.933, 118.931, 119.926, 120.924,
+    121.92, 122.919, 123.915, 124.915, 125.911, 126.911, 127.908, 128.909, 129.906, 130.907,
+    131.905, 132.906, 133.905, 134.906, 135.905, 136.906, 137.905, 138.909, 139.911, 140.914,
+    141.916, 142.921, 143.923, 144.927, 145.93, 146.934, 147.938, 148.942, 149.946, 150.951,
+    151.954, 152.96};
+
+  G4double BaS[40] = {48, 64, 54, 70, 54, 109, 32, 33, 32, 32, 15, 27, 15, 11, 12, 12, 7, 7, 3, 3,
     3, 3, 3, 3, 3, 3, 9, 9, 7, 14, 15, 60, 80, 10, 15, 43, 54, 64, 75, 97};
-    
-  G4double BaW[40] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.106, 0, 0.101, 0, 2.417,
-   6.592, 7.854, 11.232, 71.698, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ba", 56, 40, *BaN , *BaA , *BaS , *BaW); 
-  
+
+  G4double BaW[40] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.106, 0, 0.101, 0, 2.417,
+    6.592, 7.854, 11.232, 71.698, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ba", 56, 40, *BaN, *BaA, *BaS, *BaW);
+
   // Z = 57 --------------------------------------------------------------------
-  G4int LaN[39] = 
-  {117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131,
-   132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
-    147, 148, 149, 150, 151, 152, 153, 154, 155};
-    
-  G4double LaA[39] = 
-  {116.95 , 117.947, 118.941, 119.938, 120.933, 121.931, 122.926, 123.925,
-   124.921, 125.919, 126.916, 127.915, 128.913, 129.912, 130.91 , 131.91 ,
-   132.908, 133.908, 134.907, 135.908, 136.906, 137.907, 138.906, 139.909, 
-   140.911, 141.914, 142.916, 143.92 , 144.922, 145.926, 146.928, 147.932, 
-   148.934, 149.939, 150.942, 151.946, 152.949, 153.954, 154.958};
-   
-  G4double LaS[39] = 
-  {96, 86, 75, 64, 54, 54, 43, 32, 32, 32, 24, 43, 60, 22, 11, 50, 21, 28, 11,
-   80, 50, 4, 3, 3, 5, 6, 16, 60, 70, 80, 80, 14, 32, 43, 54, 64, 75, 86, 97};
-   
-  G4double LaW[39] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 99.91,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("La", 57, 39, *LaN , *LaA , *LaS , *LaW); 
-  
+  G4int LaN[39] = {117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
+    133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151,
+    152, 153, 154, 155};
+
+  G4double LaA[39] = {116.95, 117.947, 118.941, 119.938, 120.933, 121.931, 122.926, 123.925,
+    124.921, 125.919, 126.916, 127.915, 128.913, 129.912, 130.91, 131.91, 132.908, 133.908, 134.907,
+    135.908, 136.906, 137.907, 138.906, 139.909, 140.911, 141.914, 142.916, 143.92, 144.922,
+    145.926, 146.928, 147.932, 148.934, 149.939, 150.942, 151.946, 152.949, 153.954, 154.958};
+
+  G4double LaS[39] = {96, 86, 75, 64, 54, 54, 43, 32, 32, 32, 24, 43, 60, 22, 11, 50, 21, 28, 11,
+    80, 50, 4, 3, 3, 5, 6, 16, 60, 70, 80, 80, 14, 32, 43, 54, 64, 75, 86, 97};
+
+  G4double LaW[39] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 99.91, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("La", 57, 39, *LaN, *LaA, *LaS, *LaW);
+
   // Z = 58 --------------------------------------------------------------------
-  G4int CeN[39] = 
-  {119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
-   134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148,
-   149, 150, 151, 152, 153, 154, 155, 156, 157};
-   
-  G4double CeA[39] = 
-  {118.953, 119.947, 120.944, 121.938, 122.936, 123.931, 124.929, 125.924,
-   126.923, 127.919, 128.918, 129.915, 130.914, 131.911, 132.912, 133.909, 
-   134.909, 135.907, 136.908, 137.906, 138.907, 139.905, 140.908, 141.909, 
-   142.912, 143.914, 144.917, 145.919, 146.923, 147.924, 148.928, 149.93 , 
-   150.934, 151.936, 152.941, 153.943, 154.948, 155.951, 156.956};
-   
-  G4double CeS[39] = 
-  {97, 86, 75, 64, 54, 54, 43, 43, 32, 32, 22, 66, 44, 21, 21, 22, 12, 50, 50,
-   11, 8, 3, 3, 4, 4, 4, 40, 70, 60, 13, 80, 13, 32, 43, 54, 64, 75, 86, 97};
-   
-  G4double CeW[39] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.185, 0, 0.251, 0,
-   88.45, 0, 11.114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ce", 58, 39, *CeN , *CeA , *CeS , *CeW);
-  
+  G4int CeN[39] = {119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134,
+    135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153,
+    154, 155, 156, 157};
+
+  G4double CeA[39] = {118.953, 119.947, 120.944, 121.938, 122.936, 123.931, 124.929, 125.924,
+    126.923, 127.919, 128.918, 129.915, 130.914, 131.911, 132.912, 133.909, 134.909, 135.907,
+    136.908, 137.906, 138.907, 139.905, 140.908, 141.909, 142.912, 143.914, 144.917, 145.919,
+    146.923, 147.924, 148.928, 149.93, 150.934, 151.936, 152.941, 153.943, 154.948, 155.951,
+    156.956};
+
+  G4double CeS[39] = {97, 86, 75, 64, 54, 54, 43, 43, 32, 32, 22, 66, 44, 21, 21, 22, 12, 50, 50,
+    11, 8, 3, 3, 4, 4, 4, 40, 70, 60, 13, 80, 13, 32, 43, 54, 64, 75, 86, 97};
+
+  G4double CeW[39] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.185, 0, 0.251, 0, 88.45,
+    0, 11.114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ce", 58, 39, *CeN, *CeA, *CeS, *CeW);
+
   // Z = 59 --------------------------------------------------------------------
-  G4int PrN[39] = 
-  {121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
-   136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150,
-   151, 152, 153, 154, 155, 156, 157, 158, 159};
-   
-  G4double PrA[39] = 
-  {120.955, 121.952, 122.946, 123.943, 124.938, 125.935, 126.931, 127.929,
-   128.925, 129.923, 130.92 , 131.919, 132.916, 133.916, 134.913, 135.913, 
-   136.911, 137.911, 138.909, 139.909, 140.908, 141.91 , 142.911, 143.913, 
-   144.915, 145.918, 146.919, 147.922, 148.924, 149.927, 150.928, 151.932, 
-   152.934, 153.937, 154.94 , 155.944, 156.947, 157.952, 158.955};
-   
-  G4double PrS[39] = 
-  {86, 86, 75, 64, 54, 54, 43, 43, 32, 32, 47, 21, 21, 32, 16, 50, 50, 16, 9,
-    7, 3, 3, 3, 4, 8, 60, 40, 10, 11, 90, 40, 32, 32, 43, 54, 64, 75, 86, 97};
-    
-  G4double PrW[39] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Pr", 59, 39, *PrN , *PrA , *PrS , *PrW); 
-  
+  G4int PrN[39] = {121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136,
+    137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155,
+    156, 157, 158, 159};
+
+  G4double PrA[39] = {120.955, 121.952, 122.946, 123.943, 124.938, 125.935, 126.931, 127.929,
+    128.925, 129.923, 130.92, 131.919, 132.916, 133.916, 134.913, 135.913, 136.911, 137.911,
+    138.909, 139.909, 140.908, 141.91, 142.911, 143.913, 144.915, 145.918, 146.919, 147.922,
+    148.924, 149.927, 150.928, 151.932, 152.934, 153.937, 154.94, 155.944, 156.947, 157.952,
+    158.955};
+
+  G4double PrS[39] = {86, 86, 75, 64, 54, 54, 43, 43, 32, 32, 47, 21, 21, 32, 16, 50, 50, 16, 9, 7,
+    3, 3, 3, 4, 8, 60, 40, 10, 11, 90, 40, 32, 32, 43, 54, 64, 75, 86, 97};
+
+  G4double PrW[39] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Pr", 59, 39, *PrN, *PrA, *PrS, *PrW);
+
   // Z = 60 --------------------------------------------------------------------
-  G4int NdN[36] = 
-  {126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140,
-   141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 
-   156, 157, 158, 159, 160, 161};
-   
-  G4double NdA[36] = 
-  {125.943, 126.941, 127.935, 128.933, 129.929, 130.927, 131.923, 132.922,
-   133.919, 134.918, 135.915, 136.915, 137.912, 138.912, 139.909, 140.91 , 
-   141.908, 142.91 , 143.91 , 144.913, 145.913, 146.916, 147.917, 148.92 , 
-   149.921, 150.924, 151.925, 152.928, 153.929, 154.933, 155.935, 156.939, 
-   157.942, 158.946, 159.949, 160.954};
-   
-  G4double NdS[36] = 
-  {75, 64, 64, 39, 54, 50, 32, 32, 36, 22, 60, 80, 22, 50, 21, 4, 3, 3, 3, 3,
-    3, 3, 3, 3, 4, 4, 30, 29, 12, 16, 43, 54, 64, 75, 86, 97};
-    
-  G4double NdW[36] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27.2, 12.2, 23.8, 8.3, 17.2,
-   0, 5.7, 0, 5.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Nd", 60, 36, *NdN , *NdA , *NdS , *NdW); 
-   
+  G4int NdN[36] = {126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141,
+    142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160,
+    161};
+
+  G4double NdA[36] = {125.943, 126.941, 127.935, 128.933, 129.929, 130.927, 131.923, 132.922,
+    133.919, 134.918, 135.915, 136.915, 137.912, 138.912, 139.909, 140.91, 141.908, 142.91, 143.91,
+    144.913, 145.913, 146.916, 147.917, 148.92, 149.921, 150.924, 151.925, 152.928, 153.929,
+    154.933, 155.935, 156.939, 157.942, 158.946, 159.949, 160.954};
+
+  G4double NdS[36] = {75, 64, 64, 39, 54, 50, 32, 32, 36, 22, 60, 80, 22, 50, 21, 4, 3, 3, 3, 3, 3,
+    3, 3, 3, 4, 4, 30, 29, 12, 16, 43, 54, 64, 75, 86, 97};
+
+  G4double NdW[36] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27.2, 12.2, 23.8, 8.3, 17.2,
+    0, 5.7, 0, 5.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Nd", 60, 36, *NdN, *NdA, *NdS, *NdW);
+
   // Z = 61 --------------------------------------------------------------------
-  G4int PmN[36] = 
-  {128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142,
-   143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 
-   158, 159, 160, 161, 162, 163};
-   
-  G4double PmA[36] = 
-  {127.948, 128.943, 129.94 , 130.936, 131.934, 132.93 , 133.928, 134.925,
-   135.923, 136.921, 137.919, 138.917, 139.916, 140.914, 141.913, 142.911, 
-   143.913, 144.913, 145.915, 146.915, 147.917, 148.918, 149.921, 150.921, 
-   151.923, 152.924, 153.927, 154.928, 155.931, 156.933, 157.937, 158.939, 
-   159.943, 160.946, 161.95 , 162.954};
-   
-  G4double PmS[36] = 
-  {97, 86, 75, 64, 54, 54, 42, 35, 22, 15, 34, 60, 30, 29, 50, 4, 4, 4, 5, 3,
-    7, 5, 22, 6, 80, 12, 80, 30, 40, 32, 43, 54, 64, 75, 86, 97};
-    
-  G4double PmW[36] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Pm", 61, 36, *PmN , *PmA , *PmS , *PmW);
-  
+  G4int PmN[36] = {128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162,
+    163};
+
+  G4double PmA[36] = {127.948, 128.943, 129.94, 130.936, 131.934, 132.93, 133.928, 134.925, 135.923,
+    136.921, 137.919, 138.917, 139.916, 140.914, 141.913, 142.911, 143.913, 144.913, 145.915,
+    146.915, 147.917, 148.918, 149.921, 150.921, 151.923, 152.924, 153.927, 154.928, 155.931,
+    156.933, 157.937, 158.939, 159.943, 160.946, 161.95, 162.954};
+
+  G4double PmS[36] = {97, 86, 75, 64, 54, 54, 42, 35, 22, 15, 34, 60, 30, 29, 50, 4, 4, 4, 5, 3, 7,
+    5, 22, 6, 80, 12, 80, 30, 40, 32, 43, 54, 64, 75, 86, 97};
+
+  G4double PmW[36] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Pm", 61, 36, *PmN, *PmA, *PmS, *PmW);
+
   // Z = 62 --------------------------------------------------------------------
-  G4int SmN[36] = 
-  {130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144,
-   145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165};
-    
-  G4double SmA[36] = 
-  {129.949, 130.946, 131.941, 132.939, 133.934, 134.932, 135.928, 136.927,
-   137.924, 138.922, 139.919, 140.918, 141.915, 142.915, 143.912, 144.913,
-   145.913, 146.915, 147.915, 148.917, 149.917, 150.92 , 151.92 , 152.922, 
-   153.922, 154.925, 155.926, 156.928, 157.93 , 158.933, 159.935, 160.939, 
-   161.941, 162.945, 163.948, 164.953};
-   
-  G4double SmS[36] = 
-  {97, 97, 75, 64, 54, 54, 43, 12, 32, 16, 16, 13, 11, 4, 4, 4, 4, 3, 3, 3, 3,
-    3, 3, 3, 3, 3, 10, 50, 80, 32, 43, 54, 64, 75, 86, 97};
-    
-  G4double SmW[36] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.07, 0, 0, 14.99, 11.24, 13.82,
-   7.38, 0, 26.75, 0, 22.75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Sm", 62, 36, *SmN , *SmA , *SmS , *SmW);
-  
+  G4int SmN[36] = {130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145,
+    146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164,
+    165};
+
+  G4double SmA[36] = {129.949, 130.946, 131.941, 132.939, 133.934, 134.932, 135.928, 136.927,
+    137.924, 138.922, 139.919, 140.918, 141.915, 142.915, 143.912, 144.913, 145.913, 146.915,
+    147.915, 148.917, 149.917, 150.92, 151.92, 152.922, 153.922, 154.925, 155.926, 156.928, 157.93,
+    158.933, 159.935, 160.939, 161.941, 162.945, 163.948, 164.953};
+
+  G4double SmS[36] = {97, 97, 75, 64, 54, 54, 43, 12, 32, 16, 16, 13, 11, 4, 4, 4, 4, 3, 3, 3, 3, 3,
+    3, 3, 3, 3, 10, 50, 80, 32, 43, 54, 64, 75, 86, 97};
+
+  G4double SmW[36] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.07, 0, 0, 14.99, 11.24, 13.82,
+    7.38, 0, 26.75, 0, 22.75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Sm", 62, 36, *SmN, *SmA, *SmS, *SmW);
+
   // Z = 63 --------------------------------------------------------------------
-  G4int EuN[36] = 
-  {132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
-   147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 
-   162, 163, 164, 165, 166, 167};
-   
-  G4double EuA[36] = 
-  {131.954, 132.949, 133.946, 134.942, 135.94 , 136.935, 137.933, 138.93 ,
-   139.928, 140.925, 141.923, 142.92 , 143.919, 144.916, 145.917, 146.917,
-   147.918, 148.918, 149.92 , 150.92 , 151.922, 152.921, 153.923, 154.923, 
-   155.925, 156.925, 157.928, 158.929, 159.932, 160.934, 161.937, 162.939, 
-   163.943, 164.946, 165.95 , 166.953};
-   
-  G4double EuS[36] = 
-  {97, 97, 75, 64, 54, 54, 43, 16, 60, 30, 30, 14, 19, 5, 8, 4, 19, 5, 8, 3,
-    3, 3, 3, 3, 6, 7, 80, 9, 22, 32, 43, 54, 64, 75, 86, 97};
-    
-  G4double EuW[36] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47.81, 0, 52.19,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Eu", 63, 36, *EuN , *EuA , *EuS , *EuW);
-  
+  G4int EuN[36] = {132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147,
+    148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166,
+    167};
+
+  G4double EuA[36] = {131.954, 132.949, 133.946, 134.942, 135.94, 136.935, 137.933, 138.93, 139.928,
+    140.925, 141.923, 142.92, 143.919, 144.916, 145.917, 146.917, 147.918, 148.918, 149.92, 150.92,
+    151.922, 152.921, 153.923, 154.923, 155.925, 156.925, 157.928, 158.929, 159.932, 160.934,
+    161.937, 162.939, 163.943, 164.946, 165.95, 166.953};
+
+  G4double EuS[36] = {97, 97, 75, 64, 54, 54, 43, 16, 60, 30, 30, 14, 19, 5, 8, 4, 19, 5, 8, 3, 3,
+    3, 3, 3, 6, 7, 80, 9, 22, 32, 43, 54, 64, 75, 86, 97};
+
+  G4double EuW[36] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47.81, 0, 52.19, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Eu", 63, 36, *EuN, *EuA, *EuS, *EuW);
+
   // Z = 64 --------------------------------------------------------------------
-  G4int GdN[34] = 
-  {136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150,
-   151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 
-   166, 167, 168, 169};
-   
-  G4double GdA[34] = 
-  {135.947, 136.945, 137.94 , 138.938, 139.934, 140.932, 141.928, 142.927,
-   143.923, 144.922, 145.918, 146.919, 147.918, 148.919, 149.919, 150.92 , 
-   151.92 , 152.922, 153.921, 154.923, 155.922, 156.924, 157.924, 158.926, 
-   159.927, 160.93 , 161.931, 162.934, 163.936, 164.939, 165.942, 166.946, 
-   167.948, 168.953};
-   
-  G4double GdS[34] = 
-  {75, 64, 54, 54, 43, 32, 32, 22, 22, 40, 6, 4, 4, 5, 7, 4, 3, 3, 3, 3, 3, 3,
-    3, 3, 3, 3, 5, 32, 43, 54, 64, 64, 75, 86};
-    
-  G4double GdW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0, 2.18, 14.8, 20.47,
-   15.65, 24.84, 0, 21.86, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Gd", 64, 34, *GdN , *GdA , *GdS , *GdW);
-  
+  G4int GdN[34] = {136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151,
+    152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169};
+
+  G4double GdA[34] = {135.947, 136.945, 137.94, 138.938, 139.934, 140.932, 141.928, 142.927,
+    143.923, 144.922, 145.918, 146.919, 147.918, 148.919, 149.919, 150.92, 151.92, 152.922, 153.921,
+    154.923, 155.922, 156.924, 157.924, 158.926, 159.927, 160.93, 161.931, 162.934, 163.936,
+    164.939, 165.942, 166.946, 167.948, 168.953};
+
+  G4double GdS[34] = {75, 64, 54, 54, 43, 32, 32, 22, 22, 40, 6, 4, 4, 5, 7, 4, 3, 3, 3, 3, 3, 3, 3,
+    3, 3, 3, 5, 32, 43, 54, 64, 64, 75, 86};
+
+  G4double GdW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0, 2.18, 14.8, 20.47,
+    15.65, 24.84, 0, 21.86, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Gd", 64, 34, *GdN, *GdA, *GdS, *GdW);
+
   // Z = 65 --------------------------------------------------------------------
-  G4int TbN[34] = 
-  {138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152,
-   153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
-   168, 169, 170, 171};
-   
-  G4double TbA[34] = 
-  {137.953, 138.948, 139.946, 140.941, 141.939, 142.935, 143.933, 144.929,
-   145.927, 146.924, 147.924, 148.923, 149.924, 150.923, 151.924, 152.923, 
-   153.925, 154.923, 155.925, 156.924, 157.925, 158.925, 159.927, 160.928, 
-   161.929, 162.931, 163.933, 164.935, 165.938, 166.94 , 167.944, 168.946, 
-   169.95 , 170.953};
-   
-  G4double TbS[34] = 
-  {86, 75, 96, 64, 82, 43, 32, 24, 50, 13, 30, 5, 9, 5, 40, 5, 50, 13, 5, 3,
-    3, 3, 3, 3, 40, 5, 11, 21, 32, 43, 54, 64, 75, 86};
-    
-  G4double TbW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Tb", 65, 34, *TbN , *TbA , *TbS , *TbW);
-  
+  G4int TbN[34] = {138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153,
+    154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171};
+
+  G4double TbA[34] = {137.953, 138.948, 139.946, 140.941, 141.939, 142.935, 143.933, 144.929,
+    145.927, 146.924, 147.924, 148.923, 149.924, 150.923, 151.924, 152.923, 153.925, 154.923,
+    155.925, 156.924, 157.925, 158.925, 159.927, 160.928, 161.929, 162.931, 163.933, 164.935,
+    165.938, 166.94, 167.944, 168.946, 169.95, 170.953};
+
+  G4double TbS[34] = {86, 75, 96, 64, 82, 43, 32, 24, 50, 13, 30, 5, 9, 5, 40, 5, 50, 13, 5, 3, 3,
+    3, 3, 3, 40, 5, 11, 21, 32, 43, 54, 64, 75, 86};
+
+  G4double TbW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Tb", 65, 34, *TbN, *TbA, *TbS, *TbW);
+
   // Z = 66 --------------------------------------------------------------------
-  G4int DyN[34] = 
-  {140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154,
-   155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 
-   170, 171, 172, 173};
-   
-  G4double DyA[34] = 
-  {139.954, 140.951, 141.946, 142.944, 143.939, 144.937, 145.933, 146.931,
-   147.927, 148.927, 149.926, 150.926, 151.925, 152.926, 153.924, 154.926, 
-   155.924, 156.925, 157.924, 158.926, 159.925, 160.927, 161.927, 162.929, 
-   163.929, 164.932, 165.933, 166.936, 167.937, 168.94 , 169.943, 170.946, 
-   171.949, 172.953};
-   
-  G4double DyS[34] = 
-  {97, 75, 85, 54, 43, 32, 12, 60, 30, 12, 6, 5, 6, 5, 9, 13, 7, 7, 4, 3, 3, 3,
+  G4int DyN[34] = {140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155,
+    156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173};
+
+  G4double DyA[34] = {139.954, 140.951, 141.946, 142.944, 143.939, 144.937, 145.933, 146.931,
+    147.927, 148.927, 149.926, 150.926, 151.925, 152.926, 153.924, 154.926, 155.924, 156.925,
+    157.924, 158.926, 159.925, 160.927, 161.927, 162.929, 163.929, 164.932, 165.933, 166.936,
+    167.937, 168.94, 169.943, 170.946, 171.949, 172.953};
+
+  G4double DyS[34] = {97, 75, 85, 54, 43, 32, 12, 60, 30, 12, 6, 5, 6, 5, 9, 13, 7, 7, 4, 3, 3, 3,
     3, 3, 3, 3, 3, 60, 32, 32, 43, 54, 64, 75};
-    
-  G4double DyW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.06, 0, 0.1, 0, 2.34,
-   18.91, 25.51, 24.9, 28.18, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Dy", 66, 34, *DyN , *DyA , *DyS , *DyW);
-  
+
+  G4double DyW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.06, 0, 0.1, 0, 2.34, 18.91,
+    25.51, 24.9, 28.18, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Dy", 66, 34, *DyN, *DyA, *DyS, *DyW);
+
   // Z = 67 --------------------------------------------------------------------
-  G4int HoN[34] = 
-  {142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156,
-   157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 
-   172, 173, 174, 175};
-   
-  G4double HoA[34] = 
-  {141.96 , 142.955, 143.952, 144.947, 145.944, 146.94 , 147.937, 148.934,
-   149.933, 150.932, 151.932, 152.93 , 153.931, 154.929, 155.93 , 156.928, 
-   157.929, 158.928, 159.929, 160.928, 161.929, 162.929, 163.93 , 164.93 , 
-   165.932, 166.933, 167.935, 168.937, 169.94 , 170.941, 171.945, 172.947, 
-   173.951, 174.954};
-   
-  G4double HoS[34] = 
-  {107, 75, 64, 64, 54, 43, 29, 23, 11, 13, 30, 6, 10, 25, 22, 50, 30, 4, 16,
-     4, 5, 3, 3, 3, 3, 6, 30, 22, 50, 64, 43, 43, 54, 64};
-     
-  G4double HoW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ho", 67, 34, *HoN , *HoA , *HoS , *HoW); 
-  
+  G4int HoN[34] = {142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157,
+    158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175};
+
+  G4double HoA[34] = {141.96, 142.955, 143.952, 144.947, 145.944, 146.94, 147.937, 148.934, 149.933,
+    150.932, 151.932, 152.93, 153.931, 154.929, 155.93, 156.928, 157.929, 158.928, 159.929, 160.928,
+    161.929, 162.929, 163.93, 164.93, 165.932, 166.933, 167.935, 168.937, 169.94, 170.941, 171.945,
+    172.947, 173.951, 174.954};
+
+  G4double HoS[34] = {107, 75, 64, 64, 54, 43, 29, 23, 11, 13, 30, 6, 10, 25, 22, 50, 30, 4, 16, 4,
+    5, 3, 3, 3, 3, 6, 30, 22, 50, 64, 43, 43, 54, 64};
+
+  G4double HoW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ho", 67, 34, *HoN, *HoA, *HoS, *HoW);
+
   // Z = 68 --------------------------------------------------------------------
-  G4int ErN[34] = 
-  {144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158,
-   159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 
-   174, 175, 176, 177};
-   
-  G4double ErA[34] = 
-  {143.961, 144.957, 145.952, 146.949, 147.944, 148.942, 149.938, 150.937,
-   151.935, 152.935, 153.933, 154.933, 155.931, 156.932, 157.93 , 158.931, 
-   159.929, 160.93 , 161.929, 162.93 , 163.929, 164.931, 165.93 , 166.932, 
-   167.932, 168.935, 169.935, 170.938, 171.939, 172.942, 173.944, 174.948, 
-   175.95 , 176.954};
-   
-  G4double ErS[34] = 
-  {86, 75, 64, 54, 43, 51, 11, 32, 30, 12, 6, 50, 80, 90, 11, 5, 50, 10, 4, 6,
-    4, 4, 3, 3, 3, 3, 3, 3, 5, 21, 32, 43, 43, 64};
-    
-  G4double ErW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.14, 0, 1.61, 0,
-   33.61, 22.93, 26.78, 0, 14.93, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Er", 68, 34, *ErN , *ErA , *ErS , *ErW); 
-  
+  G4int ErN[34] = {144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177};
+
+  G4double ErA[34] = {143.961, 144.957, 145.952, 146.949, 147.944, 148.942, 149.938, 150.937,
+    151.935, 152.935, 153.933, 154.933, 155.931, 156.932, 157.93, 158.931, 159.929, 160.93, 161.929,
+    162.93, 163.929, 164.931, 165.93, 166.932, 167.932, 168.935, 169.935, 170.938, 171.939, 172.942,
+    173.944, 174.948, 175.95, 176.954};
+
+  G4double ErS[34] = {86, 75, 64, 54, 43, 51, 11, 32, 30, 12, 6, 50, 80, 90, 11, 5, 50, 10, 4, 6, 4,
+    4, 3, 3, 3, 3, 3, 3, 5, 21, 32, 43, 43, 64};
+
+  G4double ErW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.14, 0, 1.61, 0, 33.61,
+    22.93, 26.78, 0, 14.93, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Er", 68, 34, *ErN, *ErA, *ErS, *ErW);
+
   // Z = 69 --------------------------------------------------------------------
-  G4int TmN[34] = 
-  {146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160,
-   161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 
-   176, 177, 178, 179};
-   
-  G4double TmA[34] = 
-  {145.966, 146.961, 147.958, 148.953, 149.95 , 150.945, 151.944, 152.942,
-   153.941, 154.939, 155.939, 156.937, 157.937, 158.935, 159.935, 160.933, 
-   161.934, 162.933, 163.933, 164.932, 165.934, 166.933, 167.934, 168.934, 
-   169.936, 170.936, 171.938, 172.94 , 173.942, 174.944, 175.947, 176.949, 
-   177.953, 178.955};
-   
-  G4double TmS[34] = 
-  {75, 64, 75, 64, 54, 15, 32, 23, 12, 14, 60, 11, 13, 70, 33, 10, 30, 7, 20,
-    4, 12, 3, 4, 3, 3, 3, 7, 6, 50, 50, 11, 32, 43, 54};
-    
-  G4double TmW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
-   0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Tm", 69, 34, *TmN , *TmA , *TmS , *TmW); 
-  
+  G4int TmN[34] = {146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
+    162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179};
+
+  G4double TmA[34] = {145.966, 146.961, 147.958, 148.953, 149.95, 150.945, 151.944, 152.942,
+    153.941, 154.939, 155.939, 156.937, 157.937, 158.935, 159.935, 160.933, 161.934, 162.933,
+    163.933, 164.932, 165.934, 166.933, 167.934, 168.934, 169.936, 170.936, 171.938, 172.94,
+    173.942, 174.944, 175.947, 176.949, 177.953, 178.955};
+
+  G4double TmS[34] = {75, 64, 75, 64, 54, 15, 32, 23, 12, 14, 60, 11, 13, 70, 33, 10, 30, 7, 20, 4,
+    12, 3, 4, 3, 3, 3, 7, 6, 50, 50, 11, 32, 43, 54};
+
+  G4double TmW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Tm", 69, 34, *TmN, *TmA, *TmS, *TmW);
+
   // Z = 70 --------------------------------------------------------------------
-  G4int YbN[34] = 
-  {148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162,
-   163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 
-   178, 179, 180, 181};
-   
-  G4double YbA[34] = 
-  {147.967, 148.963, 149.958, 150.955, 151.95 , 152.949, 153.946, 154.946,
-   155.943, 156.943, 157.94 , 158.94 , 159.938, 160.938, 161.936, 162.936, 
-   163.935, 164.935, 165.934, 166.935, 167.934, 168.935, 169.935, 170.936, 
-   171.936, 172.938, 173.939, 174.941, 175.943, 176.945, 177.947, 178.95, 
-   179.952, 180.956};
-   
-  G4double YbS[34] = 
-  {86, 75, 64, 34, 38, 32, 11, 32, 40, 60, 11, 10, 22, 24, 22, 11, 11, 22, 9,
-    5, 5, 5, 3, 3, 30, 30, 30, 30, 3, 3, 11, 32, 43, 43};
-    
-  G4double YbW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.13, 0, 3.04,
-   14.28, 21.83, 16.13, 31.83, 0, 12.76, 0, 0, 0, 0, 0};
-   
-  AddElement("Yb", 70, 34, *YbN , *YbA , *YbS , *YbW); 
-  
+  G4int YbN[34] = {148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163,
+    164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181};
+
+  G4double YbA[34] = {147.967, 148.963, 149.958, 150.955, 151.95, 152.949, 153.946, 154.946,
+    155.943, 156.943, 157.94, 158.94, 159.938, 160.938, 161.936, 162.936, 163.935, 164.935, 165.934,
+    166.935, 167.934, 168.935, 169.935, 170.936, 171.936, 172.938, 173.939, 174.941, 175.943,
+    176.945, 177.947, 178.95, 179.952, 180.956};
+
+  G4double YbS[34] = {86, 75, 64, 34, 38, 32, 11, 32, 40, 60, 11, 10, 22, 24, 22, 11, 11, 22, 9, 5,
+    5, 5, 3, 3, 30, 30, 30, 30, 3, 3, 11, 32, 43, 43};
+
+  G4double YbW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.13, 0, 3.04,
+    14.28, 21.83, 16.13, 31.83, 0, 12.76, 0, 0, 0, 0, 0};
+
+  AddElement("Yb", 70, 34, *YbN, *YbA, *YbS, *YbW);
+
   // Z = 71 --------------------------------------------------------------------
-  G4int LuN[35] = 
-  {150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164,
-   165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 
-   180, 181, 182, 183, 184};
-   
-  G4double LuA[35] = 
-  {149.973, 150.967, 151.964, 152.959, 153.957, 154.954, 155.953, 156.95 ,
-   157.949, 158.947, 159.946, 160.944, 161.943, 162.941, 163.941, 164.94 , 
-   165.94 , 166.938, 167.939, 168.938, 169.938, 170.938, 171.939, 172.939, 
-   173.94 , 174.941, 175.943, 176.944, 177.946, 178.947, 179.95 , 180.952, 
-   181.955, 182.958, 183.961};
-   
-  G4double LuS[35] = 
-  {75, 65, 75, 64, 54, 14, 32, 23, 13, 50, 25, 26, 24, 24, 13, 90, 17, 11, 90,
-    6, 20, 3, 4, 3, 30, 28, 28, 28, 3, 6, 80, 32, 32, 32, 43};
-    
-  G4double LuW[35] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   97.41, 2.59, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Lu", 71, 35, *LuN , *LuA , *LuS , *LuW);
-  
+  G4int LuN[35] = {150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165,
+    166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184};
+
+  G4double LuA[35] = {149.973, 150.967, 151.964, 152.959, 153.957, 154.954, 155.953, 156.95,
+    157.949, 158.947, 159.946, 160.944, 161.943, 162.941, 163.941, 164.94, 165.94, 166.938, 167.939,
+    168.938, 169.938, 170.938, 171.939, 172.939, 173.94, 174.941, 175.943, 176.944, 177.946,
+    178.947, 179.95, 180.952, 181.955, 182.958, 183.961};
+
+  G4double LuS[35] = {75, 65, 75, 64, 54, 14, 32, 23, 13, 50, 25, 26, 24, 24, 13, 90, 17, 11, 90, 6,
+    20, 3, 4, 3, 30, 28, 28, 28, 3, 6, 80, 32, 32, 32, 43};
+
+  G4double LuW[35] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    97.41, 2.59, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Lu", 71, 35, *LuN, *LuA, *LuS, *LuW);
+
   // Z = 72 --------------------------------------------------------------------
-  G4int HfN[33] = 
-  {154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168,
-   169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 
-   184, 185, 186};
-   
-  G4double HfA[33] = 
-  {153.964, 154.963, 155.959, 156.958, 157.955, 158.954, 159.951, 160.95 ,
-   161.947, 162.947, 163.944, 164.945, 165.942, 166.943, 167.941, 168.941, 
-   169.94 , 170.94 , 171.939, 172.941, 173.94 , 174.942, 175.941, 176.943, 
-   177.944, 178.946, 179.947, 180.949, 181.951, 182.954, 183.955, 184.959, 
-   185.961};
-   
-  G4double HfS[33] = 
-  {75, 64, 38, 32, 11, 32, 40, 80, 12, 34, 21, 40, 32, 22, 11, 90, 21, 21, 50,
-   11, 3, 3, 29, 27, 27, 27, 27, 28, 7, 30, 40, 32, 32};
-   
-  G4double HfW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.16, 0, 5.26,
-   18.6, 27.28, 13.62, 35.08, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Hf", 72, 33, *HfN , *HfA , *HfS , *HfW);
-  
+  G4int HfN[33] = {154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
+    170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186};
+
+  G4double HfA[33] = {153.964, 154.963, 155.959, 156.958, 157.955, 158.954, 159.951, 160.95,
+    161.947, 162.947, 163.944, 164.945, 165.942, 166.943, 167.941, 168.941, 169.94, 170.94, 171.939,
+    172.941, 173.94, 174.942, 175.941, 176.943, 177.944, 178.946, 179.947, 180.949, 181.951,
+    182.954, 183.955, 184.959, 185.961};
+
+  G4double HfS[33] = {75, 64, 38, 32, 11, 32, 40, 80, 12, 34, 21, 40, 32, 22, 11, 90, 21, 21, 50,
+    11, 3, 3, 29, 27, 27, 27, 27, 28, 7, 30, 40, 32, 32};
+
+  G4double HfW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.16, 0, 5.26,
+    18.6, 27.28, 13.62, 35.08, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Hf", 72, 33, *HfN, *HfA, *HfS, *HfW);
+
   // Z = 73 --------------------------------------------------------------------
-  G4int TaN[33] = 
-  {156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170,
-   171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 
-   186, 187, 188};
-   
-  G4double TaA[33] = 
-  {155.972, 156.968, 157.966, 158.963, 159.961, 160.958, 161.957, 162.954,
-   163.954, 164.951, 165.95 , 166.948, 167.948, 168.946, 169.946, 170.944, 
-   171.945, 172.944, 173.944, 174.944, 175.945, 176.944, 177.946, 178.946, 
-   179.947, 180.948, 181.95 , 182.951, 183.954, 184.956, 185.959, 186.96 , 
-   187.964};
-   
-  G4double TaS[33] = 
-  {64, 64, 54, 13, 33, 60, 14, 80, 43, 24, 32, 46, 39, 22, 21, 22, 20, 24, 90,
-   11, 11, 4, 11, 6, 3, 3, 3, 3, 28, 15, 60, 32, 32};
-   
-  G4double TaW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   0.012, 99.988, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ta", 73, 33, *TaN , *TaA , *TaS , *TaW); 
-  
+  G4int TaN[33] = {156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171,
+    172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188};
+
+  G4double TaA[33] = {155.972, 156.968, 157.966, 158.963, 159.961, 160.958, 161.957, 162.954,
+    163.954, 164.951, 165.95, 166.948, 167.948, 168.946, 169.946, 170.944, 171.945, 172.944,
+    173.944, 174.944, 175.945, 176.944, 177.946, 178.946, 179.947, 180.948, 181.95, 182.951,
+    183.954, 184.956, 185.959, 186.96, 187.964};
+
+  G4double TaS[33] = {64, 64, 54, 13, 33, 60, 14, 80, 43, 24, 32, 46, 39, 22, 21, 22, 20, 24, 90,
+    11, 11, 4, 11, 6, 3, 3, 3, 3, 28, 15, 60, 32, 32};
+
+  G4double TaW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.012,
+    99.988, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ta", 73, 33, *TaN, *TaA, *TaS, *TaW);
+
   // Z = 74 --------------------------------------------------------------------
-  G4int WN[33] = 
-  {158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172,
-   173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 
-   188, 189, 190};
-   
-  G4double WA[33] = 
-  {157.974, 158.972, 159.968, 160.967, 161.963, 162.963, 163.959, 164.958,
-   165.955, 166.955, 167.952, 168.952, 169.949, 170.949, 171.947, 172.948, 
-   173.946, 174.947, 175.946, 176.947, 177.946, 178.947, 179.947, 180.948, 
-   181.948, 182.95 , 183.951, 184.953, 185.954, 186.957, 187.958, 188.962, 
-   189.963};
-   
-  G4double WS[33] = 
-  {75, 64, 38, 33, 11, 33, 40, 90, 13, 33, 21, 34, 51, 30, 29, 40, 32, 21, 21,
-   32, 11, 17, 5, 6, 3, 29, 29, 30, 3, 3, 4, 21, 24};
-   
-  G4double WW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.12, 0,
-   26.5, 14.31, 30.64, 0, 28.43, 0, 0, 0, 0};
-   
-  AddElement("W", 74, 33, *WN , *WA , *WS , *WW);
-  
+  G4int WN[33] = {158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173,
+    174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190};
+
+  G4double WA[33] = {157.974, 158.972, 159.968, 160.967, 161.963, 162.963, 163.959, 164.958,
+    165.955, 166.955, 167.952, 168.952, 169.949, 170.949, 171.947, 172.948, 173.946, 174.947,
+    175.946, 176.947, 177.946, 178.947, 179.947, 180.948, 181.948, 182.95, 183.951, 184.953,
+    185.954, 186.957, 187.958, 188.962, 189.963};
+
+  G4double WS[33] = {75, 64, 38, 33, 11, 33, 40, 90, 13, 33, 21, 34, 51, 30, 29, 40, 32, 21, 21, 32,
+    11, 17, 5, 6, 3, 29, 29, 30, 3, 3, 4, 21, 24};
+
+  G4double WW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.12, 0,
+    26.5, 14.31, 30.64, 0, 28.43, 0, 0, 0, 0};
+
+  AddElement("W", 74, 33, *WN, *WA, *WS, *WW);
+
   // Z = 75 --------------------------------------------------------------------
-  G4int ReN[33] = 
-  {160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174,
-   175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 
-   190, 191, 192};
-   
-  G4double ReA[33] = 
-  {159.981, 160.978, 161.976, 162.972, 163.97 , 164.967, 165.966, 166.963,
-   167.962, 168.959, 169.958, 170.956, 171.955, 172.953, 173.953, 174.951, 
-   175.952, 176.95 , 177.951, 178.95 , 179.951, 180.95 , 181.951, 182.951, 
-   183.953, 184.953, 185.955, 186.956, 187.958, 188.959, 189.962, 190.963,
-   191.966};
-    
-  G4double ReS[33] = 
-  {64, 64, 55, 12, 33, 80, 15, 14, 43, 22, 43, 37, 33, 48, 44, 48, 21, 21, 22,
-   60, 40, 15, 11, 9, 6, 30, 3, 30, 30, 9, 23, 11, 21};
-   
-  G4double ReW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   37.4, 0, 62.6, 0, 0, 0, 0, 0};
-   
-  AddElement("Re", 75, 33, *ReN , *ReA , *ReS , *ReW); 
+  G4int ReN[33] = {160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192};
+
+  G4double ReA[33] = {159.981, 160.978, 161.976, 162.972, 163.97, 164.967, 165.966, 166.963,
+    167.962, 168.959, 169.958, 170.956, 171.955, 172.953, 173.953, 174.951, 175.952, 176.95,
+    177.951, 178.95, 179.951, 180.95, 181.951, 182.951, 183.953, 184.953, 185.955, 186.956, 187.958,
+    188.959, 189.962, 190.963, 191.966};
+
+  G4double ReS[33] = {64, 64, 55, 12, 33, 80, 15, 14, 43, 22, 43, 37, 33, 48, 44, 48, 21, 21, 22,
+    60, 40, 15, 11, 9, 6, 30, 3, 30, 30, 9, 23, 11, 21};
+
+  G4double ReW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    37.4, 0, 62.6, 0, 0, 0, 0, 0};
+
+  AddElement("Re", 75, 33, *ReN, *ReA, *ReS, *ReW);
 
   // Z = 76 --------------------------------------------------------------------
-  G4int OsN[35] = 
-  {162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 
-   177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 
-   192, 193, 194, 195, 196};
-		    
-  G4double OsA[35] = 
-  {161.984, 162.982, 163.978, 164.976, 165.973, 166.972, 167.968, 168.967,
-   169.964, 170.963, 171.96 , 172.96 , 173.957, 174.957, 175.955, 176.955, 
-   177.953, 178.954, 179.952, 180.953, 181.952, 182.953, 183.952, 184.954, 
-   185.954, 186.956, 187.956, 188.958, 189.958, 190.961, 191.961, 192.964, 
-   193.965, 194.968, 195.97};
-   
-  G4double OsS[35] = 
-  {75, 64, 38, 33, 11, 33, 40, 90, 14, 33, 21, 33, 50, 32, 22, 30, 22, 25, 20, 
-   22, 27, 11,  3,  3,  3, 30, 30, 30,  3,  3,  4,  4,  4, 54, 40};
-   
-  G4double OsW[35] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.02, 0,
-   1.59, 1.96, 13.24, 16.15, 26.26, 0, 40.78, 0, 0, 0, 0};
-   
-  AddElement("Os", 76, 35, *OsN , *OsA , *OsS , *OsW);
-   
-  // Z = 77 --------------------------------------------------------------------
-  G4int IrN[35] = 
-  {165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
-   180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194,
-   195, 196, 197, 198, 199};
-   
-  G4double IrA[35] = 
-  {164.988, 165.986, 166.982, 167.98 , 168.976, 169.975, 170.972, 171.971,
-   172.968, 173.967, 174.964, 175.964, 176.961, 177.961, 178.959, 179.959,
-   180.958, 181.958, 182.957, 183.957, 184.957, 185.958, 186.957, 187.959,
-   188.959, 189.961, 190.961, 191.963, 192.963, 193.965, 194.966, 195.968, 
-   196.97 , 197.972, 198.974};
-   
-  G4double IrS[35] = 
-  {43, 55, 11, 35, 10, 16, 14, 43, 25, 43, 37, 33, 48, 39, 43, 21, 23, 15, 15,
-   29, 21, 22,  7,  8, 14, 21,  3,  3,  3,  3,  3, 40, 22, 21, 40};
-   
-  G4double IrW[35] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   37.3, 0, 62.7, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ir", 77, 35, *IrN , *IrA , *IrS , *IrW);
-  
-  // Z = 78 --------------------------------------------------------------------
-  G4int PtN[35] = 
-  {168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 
-   183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
-   198, 199, 200, 201, 202};
-   
-  G4double PtA[35] = 
-  {167.988, 168.986, 169.982, 170.981, 171.977, 172.976, 173.973, 174.972, 
-   175.969, 176.968, 177.966, 178.965, 179.963, 180.963, 181.961, 182.962, 
-   183.96 , 184.961, 185.959, 186.961, 187.959, 188.961, 189.96 , 190.962, 
-   191.961, 192.963, 193.963, 194.965, 195.965, 196.967, 197.968, 198.971, 
-   199.971, 200.975, 201.976};
-   
-  G4double PtS[35] = 
-  {38, 34, 11, 34, 40, 11, 14, 33, 21, 33, 50, 32, 22, 30, 22, 25, 20, 22, 30,
-   20,  6, 12,  7,  5,  4,  3,  3,  3,  3,  3,  4,  5, 22, 50, 32};
-   
-  G4double PtW[35] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.014, 0,
-   0.782, 0, 32.967, 33.832, 25.242, 0, 7.163, 0, 0, 0, 0};
-   
-  AddElement("Pt", 78, 35, *PtN , *PtA , *PtS , *PtW);
-  
-  // Z = 79 --------------------------------------------------------------------
-  G4int AuN[35] = 
-  {171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185,
-   186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 
-   201, 202, 203, 204, 205};
-   
-  G4double AuA[35] = 
-  {170.992, 171.99 , 172.986, 173.985, 174.982, 175.98 , 176.977, 177.976, 
-   178.973, 179.972, 180.97 , 181.97 , 182.968, 183.967, 184.966, 185.966, 
-   186.965, 187.965, 188.964, 189.965, 190.964, 191.965, 192.964, 193.965, 
-   194.965, 195.967, 196.967, 197.968, 198.969, 199.971, 200.972, 201.974, 
-   202.975, 203.978, 204.98 };
-   
-  G4double AuS[35] = 
-  {27, 36, 11, 16, 26, 43, 25, 43, 37, 32, 48, 39, 43, 21, 23, 15, 16, 11, 22,
-   17, 50, 17, 10, 12,  3,  4,  3,  3,  3, 60,  5, 18,  5, 22, 32};
-   
-  G4double AuW[35] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   100, 0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Au", 79, 35, *AuN , *AuA , *AuS , *AuW);
-   
-  // Z = 80 --------------------------------------------------------------------
-  G4int HgN[34] = 
-  {175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 
-   190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 
-   205, 206, 207, 208};
-   
-  G4double HgA[34] = 
-  {174.991, 175.987, 176.986, 177.982, 178.982, 179.978, 180.978, 181.975,
-   182.975, 183.972, 184.972, 185.969, 186.97 , 187.968, 188.968, 189.966, 
-   190.967, 191.966, 192.967, 193.965, 194.967, 195.966, 196.967, 197.967, 
-   198.968, 199.968, 200.97 , 201.971, 202.973, 203.973, 204.976, 205.977, 
-   206.983, 207.986};
-   
-  G4double HgS[34] = 
-  {34, 40, 12, 16, 33, 21, 33, 50, 32, 22, 30, 22, 26, 19, 30, 16, 90, 30, 21,
-   25, 50,  4,  5,  3,  3,  3,  3,  3,  3,  3,  5, 22, 16, 32};
-   
-  G4double HgW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.15, 0, 9.97,
-   16.87, 23.1, 13.18, 29.86, 0, 6.87, 0, 0, 0, 0};
-   
-  AddElement("Hg", 80, 34, *HgN , *HgA , *HgS , *HgW); 
-   
-  // Z = 81 --------------------------------------------------------------------
-  G4int TlN[34] = 
-  {177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-   192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 
-   207, 208, 209, 210};
-   
-  G4double TlA[34] = 
-  {176.997, 177.995, 178.991, 179.99 , 180.987, 181.986, 182.983, 183.982,
-   184.979, 185.979, 186.976, 187.976, 188.974, 189.974, 190.972, 191.972, 
-   192.971, 193.971, 194.97 , 195.971, 196.97 , 197.97 , 198.97 , 199.971, 
-   200.971, 201.972, 202.972, 203.974, 204.974, 205.976, 206.977, 207.982, 
-   208.985, 209.99 };
-   
-  G4double TlS[34] = 
-  {24, 23, 15, 48, 41, 43, 42, 32, 43, 39, 43, 24, 37, 46, 23, 22, 27, 22, 14,
-   15, 30, 90, 11,  7, 16, 16,  3,  3,  3,  3,  6,  3, 10, 12};
-   
-  G4double TlW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   29.524, 0, 70.476, 0, 0, 0, 0, 0};
-   
-  AddElement("Tl", 81, 34, *TlN , *TlA , *TlS , *TlW); 
-   
-  // Z = 82 --------------------------------------------------------------------
-  G4int PbN[34] = 
-  {181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 
-   196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 
-   211, 212, 213, 214};
-   
-  G4double PbA[34] = 
-  {180.997, 181.993, 182.992, 183.988, 184.988, 185.984, 186.984, 187.981,
-   188.981, 189.978, 190.978, 191.976, 192.976, 193.974, 194.974, 195.973, 
-   196.973, 197.972, 198.973, 199.972, 200.973, 201.972, 202.973, 203.973, 
-   204.974, 205.974, 206.976, 207.977, 208.981, 209.984, 210.989, 211.992, 
-   212.996, 214};
-   
-  G4double PbS[34] = 
-  {17, 18, 33, 21, 33, 50, 32, 22, 29, 22, 23, 19, 20, 16, 44, 15, 11, 10, 70,
-   14, 30, 11,  7,  3,  3,  3,  3,  3,  3,  3,  3, 29, 11, 27};
-   
-  G4double PbW[34] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.4, 0,
-   24.1, 22.1, 52.4, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Pb", 82, 34, *PbN , *PbA , *PbS , *PbW); 
-   
-  // Z = 83 --------------------------------------------------------------------
-  G4int BiN[32] = 
-  {185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
-   200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 
-   215, 216};
-   
-  G4double BiA[32] = 
-  {184.998, 185.996, 186.993, 187.992, 188.99 , 189.989, 190.986, 191.985,
-   192.983, 193.983, 194.981, 195.981, 196.979, 197.979, 198.978, 199.978, 
-   200.977, 201.978, 202.977, 203.978, 204.977, 205.978, 206.978, 207.98 , 
-   208.98 , 209.984, 210.987, 211.991, 212.994, 213.999, 215.002, 216.006};
-   
-  G4double BiS[32] = 
-  {24, 48, 41, 32, 43, 39, 43, 24, 37, 46, 23, 22, 26, 19, 13, 10, 30, 60, 23,
-   28,  8,  9,  4,  4,  3,  3,  6,  3,  8, 12, 10, 11};
-   
-  G4double BiW[32] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
-   0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Bi", 83, 32, *BiN , *BiA , *BiS , *BiW);
-   
-  // Z = 84 --------------------------------------------------------------------
-  G4int PoN[29] = 
-  {190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204,
-   205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218};
-   
-  G4double PoA[29] = 
-  {189.995, 190.995, 191.992, 192.991, 193.988, 194.988, 195.986, 196.986,
-   197.983, 198.984, 199.982, 200.982, 201.981, 202.981, 203.98 , 204.981, 
-   205.98 , 206.982, 207.981, 208.982, 209.983, 210.987, 211.989, 212.993, 
-   213.995, 214.999, 216.002, 217.006, 218.009};
-   
-  G4double PoS[29] = 
-  {51, 32, 22, 30, 22, 24, 19, 21, 16, 44, 15, 11, 10, 70, 14, 30, 11, 8, 3, 3,
-    3,  3,  3,  4,  3,  3, 29, 11, 27};
-    
-  G4double PoW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0,
-   0, 0, 0, 0};
-   
-  AddElement("Po", 84, 29, *PoN , *PoA , *PoS , *PoW);
-   
-  // Z = 85 --------------------------------------------------------------------
-  G4int AtN[31] = 
-  {193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-   208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 
-   223};
-   
-  G4double AtA[31] = 
-  {193.000, 193.999, 194.997, 195.996, 196.993, 197.993, 198.991, 199.99,
-   200.988, 201.988, 202.987, 203.987, 204.986, 205.987, 206.986, 207.987, 
-   208.986, 209.987, 210.987, 211.991, 212.993, 213.996, 214.999, 216.002, 
-   217.005, 218.009, 219.011, 220.015, 221.018, 222.022, 223.025};
-   
-  G4double AtS[31] = 
-  {43, 43, 43, 25, 38, 46, 24, 22, 26, 19, 13, 10, 30, 60, 23, 28, 9, 9, 4, 4,
-    6,  5,  8,  5,  8, 13, 90, 12, 32, 32, 43};
-    
-  G4double AtW[31] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0,
-   0, 0, 0, 0, 0, 0};
-   
-  AddElement("At", 85, 31, *AtN , *AtA , *AtS , *AtW); 
-   
-  // Z = 86 --------------------------------------------------------------------
-  G4int RnN[33] = 
-  {196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
-   211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 
-   226, 227, 228};
-   
-  G4double RnA[33] = 
-  {196.002, 197.002, 197.999, 198.998, 199.996, 200.996, 201.993, 202.993,
-   203.991, 204.992, 205.99 , 206.991, 207.99 , 208.99 , 209.99 , 210.991, 
-   211.991, 212.994, 213.995, 214.999, 216.000, 217.004, 218.006, 219.009, 
-   220.011, 221.015, 222.018, 223.022, 224.024, 225.028, 226.031, 227.035, 
-   228.038};
-   
-  G4double RnS[33] = 
-  {22, 30, 22, 24, 19, 21, 16, 44, 15, 12, 10, 70, 14, 30, 11, 8, 4, 8, 10, 9,
-    8,  5,  4,  3, 29, 11, 27, 32, 32, 32, 43, 45, 50};
-    
-  G4double RnW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-   100, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Rn", 86, 33, *RnN , *RnA , *RnS , *RnW); 
-   
-  // Z = 87 --------------------------------------------------------------------
-  G4int FrN[33] = 
-  {200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214,
-   215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 
-   230, 231, 232};
-   
-  G4double FrA[33] = 
-  {200.006, 201.004, 202.003, 203.001, 204.001, 204.999, 205.998, 206.997,
-   207.997, 208.996, 209.996, 210.996, 211.996, 212.996, 213.999, 215.000, 
-   216.003, 217.005, 218.008, 219.009, 220.012, 221.014, 222.018, 223.02 , 
-   224.023, 225.026, 226.029, 227.032, 228.036, 229.038, 230.043, 231.045, 
-   232.05 };
-   
-  G4double FrS[33] = 
-  {25, 38, 46, 25, 22, 25, 19, 12, 80, 30, 23, 22, 28, 9, 10, 8, 14, 8, 6, 8, 5,
-    8, 23, 29, 50, 11, 10, 10, 22, 39, 48, 56, 69};
-    
-  G4double FrW[33] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
-   0, 0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Fr", 87, 33, *FrN , *FrA , *FrS , *FrW); 
-   
-  // Z = 88 --------------------------------------------------------------------
-  G4int RaN[32] = 
-  {203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217,
-   218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 
-   233, 234};
-   
-  G4double RaA[32] = 
-  {203.009, 204.006, 205.006, 206.004, 207.004, 208.002, 209.002, 210    ,
-   211.001, 212    , 213    , 214    , 215.003, 216.004, 217.006, 218.007, 
-   219.01 , 220.011, 221.014, 222.015, 223.018, 224.02 , 225.024, 226.025, 
-   227.029, 228.031, 229.035, 230.037, 231.041, 232.044, 233.048, 234.051};
-   
-  G4double RaS[32] = 
-  {25, 19, 22, 16, 45, 15, 13, 10, 70, 15, 30, 12, 9, 10, 10, 12, 9, 11, 8, 5,
-    3, 29,  3, 27, 27, 27, 70, 40, 32, 39, 50, 58};
-    
-  G4double RaW[32] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
-   0, 0, 0, 0, 0, 0, 0};
-   
-  AddElement("Ra", 88, 32, *RaN , *RaA , *RaS , *RaW); 
-   
-  // Z = 89 --------------------------------------------------------------------
-  G4int AcN[30] = 
-  {207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221,
-   222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236};
-   
-  G4double AcA[30] = 
-  {207.012, 208.011, 209.01 , 210.009, 211.008, 212.008, 213.007, 214.007,
-   215.006, 216.009, 217.009, 218.012, 219.012, 220.015, 221.016, 222.018, 
-   223.019, 224.022, 225.023, 226.026, 227.028, 228.031, 229.033, 230.036, 
-   231.039, 232.042, 233.045, 234.048, 235.051, 236.055};
-   
-  G4double AcS[30] = 
-  {25, 22, 26, 20, 14, 10, 60, 60, 60, 29, 14, 50, 50, 60, 50, 6, 8, 5, 8, 4,
-   29, 28, 50, 11, 11, 11, 32, 43, 45, 54};
-   
-  G4double AcW[30] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0,
-   0, 0, 0, 0, 0};
-   
-  AddElement("Ac", 89, 30, *AcN , *AcA , *AcS , *AcW); 
-   
-  // Z = 90 --------------------------------------------------------------------
-  G4int ThN[29] = 
-  {210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224,
-   225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238};
-   
-  G4double ThA[29] = 
-  {210.015, 211.015, 212.013, 213.013, 214.011, 215.012, 216.011, 217.013,
-   218.013, 219.016, 220.016, 221.018, 222.018, 223.021, 224.021, 225.024,
-   226.025, 227.028, 228.029, 229.032, 230.033, 231.036, 232.038, 233.042, 
-   234.044, 235.048, 236.05 , 237.054, 238.056};
-   
-  G4double ThS[29] = 
-  {17, 45, 15, 14, 10, 70, 17, 30, 15, 50, 24, 11, 14, 10, 13, 8, 5, 3, 29, 3,
-   22, 22, 22, 22,  4, 50, 32, 39, 39};
-   
-  G4double ThW[29] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0,
-   0, 0, 0, 0};
-   
-  AddElement("Th", 90, 29, *ThN , *ThA , *ThS , *ThW); 
-   
-  // Z = 91 --------------------------------------------------------------------
-  G4int PaN[28] = 
-  {213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227,
-   228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240};
-   
-  G4double PaA[28] = 
-  {213.021, 214.021, 215.019, 216.019, 217.018, 218.02 , 219.02 , 220.022,
-   221.022, 222.024, 223.024, 224.026, 225.026, 226.028, 227.029, 228.031, 
-   229.032, 230.035, 231.036, 232.039, 233.04 , 234.043, 235.045, 236.049, 
-   237.051, 238.054, 239.057, 240.061};
-   
-  G4double PaS[28] = 
-  {27, 21, 15, 11, 80, 80, 80, 60, 60, 80, 80, 60, 80, 13, 8, 5, 10, 4, 28, 8,
-   24,  5, 50, 21, 11, 60, 32, 32};
-   
-  G4double PaW[28] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0,
-   0, 0, 0};
-   
-  AddElement("Pa", 91, 28, *PaN , *PaA , *PaS , *PaW); 
-   
-  // Z = 92 --------------------------------------------------------------------
-  G4int UN[25] = 
-  {218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232,
-   233, 234, 235, 236, 237, 238, 239, 240, 241, 242};
-   
-  G4double UA[25] = 
-  {218.023, 219.025, 220.025, 221.026, 222.026, 223.028, 224.028, 225.029,
-   226.029, 227.031, 228.031, 229.033, 230.034, 231.036, 232.037, 233.04 , 
-   234.041, 235.044, 236.046, 237.049, 238.051, 239.054, 240.057, 241.06 , 
-   242.063};
-   
-  G4double US[25] = 
-  {10, 90, 22, 11, 11, 80, 27, 50, 20, 18, 17, 9, 5, 4, 29, 3, 21, 21, 21, 21,
-   21, 21,  6, 32, 22};
-   
-  G4double UW[25] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0055, 0.72, 0, 0, 99.2745,
-   0, 0, 0, 0};
-   
-  AddElement("U", 92, 25, *UN , *UA , *US , *UW); 
-   
-  // Z = 93 --------------------------------------------------------------------
-  G4int NpN[20] = 
-  {225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-   240, 241, 242, 243, 244};
-   
-  G4double NpA[20] = 
-  {225.034, 226.035, 227.035, 228.036, 229.036, 230.038, 231.038, 232.04 ,
-   233.041, 234.043, 235.044, 236.047, 237.048, 238.051, 239.053, 240.056, 
-   241.058, 242.062, 243.064, 244.068};
-   
-  G4double NpS[20] = 
-  {80, 10, 80, 21, 90, 60, 50, 11, 60, 9, 23, 50, 21, 21, 23, 16, 80, 22, 30,
-   32};
-   
-  G4double NpW[20] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Np", 93, 20, *NpN , *NpA , *NpS , *NpW); 
-   
-  // Z = 94 --------------------------------------------------------------------
-  G4int PuN[20] = 
-  {228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242,
-   243, 244, 245, 246, 247};
-   
-  G4double PuA[20] = 
-  {228.039, 229.04 , 230.04 , 231.041, 232.041, 233.043, 234.043, 235.045,
-   236.046, 237.048, 238.05 , 239.052, 240.054, 241.057, 242.059, 243.062,
-   244.064, 245.068, 246.07 , 247.074};
-   
-  G4double PuS[20] = 
-  {30, 80, 26, 11, 20, 50, 8, 22, 29, 25, 21, 21, 21, 21, 21, 3, 5, 15, 16, 32};
-  
-  G4double PuW[20] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
-  
-  AddElement("Pu", 94, 20, *PuN , *PuA , *PuS , *PuW); 
-   
-  // Z = 95 --------------------------------------------------------------------
-  G4int AmN[19] = 
-  {231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245,
-   246, 247, 248, 249};
-   
-  G4double AmA[19] = 
-  {231.046, 232.047, 233.046, 234.048, 235.048, 236.05 , 237.05 , 238.052,
-   239.053, 240.055, 241.057, 242.06 , 243.061, 244.064, 245.066, 246.07 , 
-   247.072, 248.076, 249.078};
-   
-  G4double AmS[19] = 
-  {32, 32, 23, 22, 22, 11, 60, 50, 3, 15, 21, 21, 23, 23, 4, 20, 11, 22, 32};
-  
-  G4double AmW[19] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Am", 95, 19, *AmN , *AmA , *AmS , *AmW); 
-   
-  // Z = 96 --------------------------------------------------------------------
-  G4int CmN[20] = 
-  {233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247,
-   248, 249, 250, 251, 252};
-   
-  G4double CmA[20] = 
-  {233.051, 234.05 , 235.052, 236.051, 237.053, 238.053, 239.055, 240.056,
-   241.058, 242.059, 243.061, 244.063, 245.065, 246.067, 247.07 , 248.072, 
-   249.076, 250.078, 251.082, 252.085};
-   
-  G4double CmS[20] = 
-  {43, 32, 24, 22, 22, 40, 11, 29, 24, 21, 24, 21, 29, 24, 5, 5, 5, 12, 24, 32};
-  
-  G4double CmW[20] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
-  
-  AddElement("Cm", 96, 20, *CmN , *CmA , *CmS , *CmW);
-   
-  // Z = 97 --------------------------------------------------------------------
-  G4int BkN[20] = 
-  {235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
-   250, 251, 252, 253, 254};
-   
-  G4double BkA[20] = 
-  {235.057, 236.057, 237.057, 238.058, 239.058, 240.06 , 241.06 , 242.062,
-   243.063, 244.065, 245.066, 246.069, 247.07 , 248.073, 249.075, 250.078, 
-   251.081, 252.084, 253.087, 254.091};
-   
-  G4double BkS[20] = 
-  {43, 43, 32, 31, 31, 16, 22, 22, 5, 16, 26, 60, 6, 80, 3, 4, 12, 22, 39, 32};
-  
-  G4double BkW[20] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0};
-  
-  AddElement("Bk", 97, 20, *BkN , *BkA , *BkS , *BkW); 
-   
-  // Z = 98 --------------------------------------------------------------------
-  G4int CfN[20] = 
-  {237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
-   252, 253, 254, 255, 256};
-   
-  G4double CfA[20] = 
-  {237.062, 238.061, 239.063, 240.062, 241.064, 242.064, 243.065, 244.066,
-   245.068, 246.069, 247.071, 248.072, 249.075, 250.076, 251.08 , 252.082, 
-   253.085, 254.087, 255.091, 256.093};
-   
-  G4double CfS[20] = 
-  {54, 43, 25, 22, 27, 40, 15, 4, 11, 24, 9, 6, 3, 24, 5, 5, 7, 13, 22, 32};
-  
-  G4double CfW[20] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
-  
-  AddElement("Cf", 98, 20, *CfN , *CfA , *CfS , *CfW);
-   
-  // Z = 99 --------------------------------------------------------------------
-  G4int EsN[18] = 
-  {240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254,
-   255, 256, 257};
-   
-  G4double EsA[18] = 
-  {240.069, 241.069, 242.07 , 243.07 , 244.071, 245.071, 246.073, 247.074,
-   248.075, 249.076, 250.079, 251.08 , 252.083, 253.085, 254.088, 255.09 , 
-   256.094, 257.096};
-   
-  G4double EsS[18] = 
-  {43, 32, 35, 31, 20, 22, 24, 30, 60, 30, 11, 7, 50, 3, 5, 12, 11, 44};
-  
-  G4double EsW[18] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
-  
-  AddElement("Es", 99, 18, *EsN , *EsA , *EsS , *EsW); 
-   
-  // Z = 100 -------------------------------------------------------------------
-  G4int FmN[18] = 
-  {242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256,
-   257, 258, 259};
-   
-  G4double FmA[18] = 
-  {242.073, 243.075, 244.074, 245.075, 246.075, 247.077, 248.077, 249.079,
-   250.08 , 251.082, 252.082, 253.085, 254.087, 255.09 , 256.092, 257.095, 
-   258.097, 259.101};
-   
-  G4double FmS[18] = 
-  {43, 25, 31, 30, 40, 16, 13, 15, 13, 9, 6, 5, 3, 5, 8, 7, 22, 30};
-  
-  G4double FmW[18] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0};
-  
-  AddElement("Fm", 100, 18, *FmN , *FmA , *FmS , *FmW); 
-   
-  // Z = 101 -------------------------------------------------------------------
-  G4int MdN[16] = 
-  {245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259,
-   260};
-   
-  G4double MdA[16] = 
-  {245.081, 246.082, 247.082, 248.083, 249.083, 250.084, 251.085, 252.087,
-   253.087, 254.09 , 255.091, 256.094, 257.096, 258.098, 259.101, 260.104};
-   
-  G4double MdS[16] = 
-  {40, 41, 39, 26, 24, 32, 22, 21, 22, 11, 8, 60, 4, 5, 22, 34};
-  
-  G4double MdW[16] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0};
-  
-  AddElement("Md", 101, 16, *MdN , *MdA , *MdS , *MdW); 
-   
-  // Z = 102 -------------------------------------------------------------------
-  G4int NoN[14] = 
-  {249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262};
-  
-  G4double NoA[14] = 
-  {249.088, 250.087, 251.089, 252.089, 253.091, 254.091, 255.093, 256.094,
-   257.097, 258.098, 259.101, 260.103, 261.106, 262.108};
-   
-  G4double NoS[14] = 
-  {37, 22, 19, 14, 26, 19, 13, 9, 30, 22, 11, 22, 32, 58};
-  
-  G4double NoW[14] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
-  
-  AddElement("No", 102, 14, *NoN , *NoA , *NoS , *NoW); 
-   
-  // Z = 103 -------------------------------------------------------------------
-  G4int LrN[13] = 
-  {251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263};
-  
-  G4double LrA[13] = 
-  {251.094, 252.095, 253.095, 254.097, 255.097, 256.099, 257.1  , 258.102,
-   259.103, 260.106, 261.107, 262.11 , 263.111};
-   
-  G4double LrS[13] = 
-  {32, 32, 24, 36, 22, 24, 22, 11, 80, 12, 22, 32, 39};
-  
-  G4double LrW[13] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0};
-  
-  AddElement("Lr", 103, 13, *LrN , *LrA , *LrS , *LrW);
-   
-  // Z = 104 -------------------------------------------------------------------
-  G4int RfN[12] = 
-  {253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264};
-  
-  G4double RfA[12] = 
-  {253.101, 254.1  , 255.101, 256.101, 257.103, 258.104, 259.106, 260.106,
-   261.109, 262.11 , 263.113, 264.114};
-   
-  G4double RfS[12] = 
-  {49, 31, 22, 29, 29, 22, 80, 22, 11, 30, 20, 48};
-  
-  G4double RfW[12] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
-  
-  AddElement("Rf", 104, 12, *RfN , *RfA , *RfS , *RfW); 
-   
-  // Z = 105 -------------------------------------------------------------------
-  G4int DbN[11] = 
-  {255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265};
-  
-  G4double DbA[11] = 
-  {255.107, 256.108, 257.108, 258.109, 259.11 , 260.111, 261.112, 262.114,
-   263.115, 264.117, 265.119};
-   
-  G4double DbS[11] = 
-  {45, 39, 25, 37, 31, 25, 25, 20, 18, 25, 30};
-  
-  G4double DbW[11] = 
-  {0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
-  
-  AddElement("Db", 105, 11, *DbN , *DbA , *DbS , *DbW); 
-   
-  // Z = 106 -------------------------------------------------------------------
-  G4int SgN[9] = 
-  {258, 259, 260, 261, 262, 263, 264, 265, 266};
-  
-  G4double SgA[9] = 
-  {258.113, 259.115, 260.114, 261.116, 262.116, 263.118, 264.119, 265.121,
-   266.122};
-   
-  G4double SgS[9] = 
-  {45, 23, 40, 30, 30, 13, 30, 15, 31};
-  
-  G4double SgW[9] = 
-  {0, 0, 0, 0, 0, 0, 0, 0, 100};
-  
-  AddElement("Sg", 106, 9, *SgN , *SgA , *SgS , *SgW); 
-   
-  // Z = 107 -------------------------------------------------------------------
-  G4int BhN[8] = 
-  {260, 261, 262, 263, 264, 265, 266, 267};
-  
-  G4double BhA[8] = 
-  {260.122, 261.122, 262.123, 263.123, 264.125, 265.125, 266.127, 267.128};
-  
-  G4double BhS[8] = 
-  {66, 26, 40, 45, 30, 41, 38, 37};
-  
-  G4double BhW[8] = 
-  {0, 0, 0, 0, 100, 0, 0, 0};
-  
-  AddElement("Bh", 107, 8, *BhN , *BhA , *BhS , *BhW);
+  G4int OsN[35] = {162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177,
+    178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196};
 
-  for(auto& i : elmSymbol)
-  {
+  G4double OsA[35] = {161.984, 162.982, 163.978, 164.976, 165.973, 166.972, 167.968, 168.967,
+    169.964, 170.963, 171.96, 172.96, 173.957, 174.957, 175.955, 176.955, 177.953, 178.954, 179.952,
+    180.953, 181.952, 182.953, 183.952, 184.954, 185.954, 186.956, 187.956, 188.958, 189.958,
+    190.961, 191.961, 192.964, 193.965, 194.968, 195.97};
+
+  G4double OsS[35] = {75, 64, 38, 33, 11, 33, 40, 90, 14, 33, 21, 33, 50, 32, 22, 30, 22, 25, 20,
+    22, 27, 11, 3, 3, 3, 30, 30, 30, 3, 3, 4, 4, 4, 54, 40};
+
+  G4double OsW[35] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.02, 0,
+    1.59, 1.96, 13.24, 16.15, 26.26, 0, 40.78, 0, 0, 0, 0};
+
+  AddElement("Os", 76, 35, *OsN, *OsA, *OsS, *OsW);
+
+  // Z = 77 --------------------------------------------------------------------
+  G4int IrN[35] = {165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180,
+    181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199};
+
+  G4double IrA[35] = {164.988, 165.986, 166.982, 167.98, 168.976, 169.975, 170.972, 171.971,
+    172.968, 173.967, 174.964, 175.964, 176.961, 177.961, 178.959, 179.959, 180.958, 181.958,
+    182.957, 183.957, 184.957, 185.958, 186.957, 187.959, 188.959, 189.961, 190.961, 191.963,
+    192.963, 193.965, 194.966, 195.968, 196.97, 197.972, 198.974};
+
+  G4double IrS[35] = {43, 55, 11, 35, 10, 16, 14, 43, 25, 43, 37, 33, 48, 39, 43, 21, 23, 15, 15,
+    29, 21, 22, 7, 8, 14, 21, 3, 3, 3, 3, 3, 40, 22, 21, 40};
+
+  G4double IrW[35] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    37.3, 0, 62.7, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ir", 77, 35, *IrN, *IrA, *IrS, *IrW);
+
+  // Z = 78 --------------------------------------------------------------------
+  G4int PtN[35] = {168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183,
+    184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202};
+
+  G4double PtA[35] = {167.988, 168.986, 169.982, 170.981, 171.977, 172.976, 173.973, 174.972,
+    175.969, 176.968, 177.966, 178.965, 179.963, 180.963, 181.961, 182.962, 183.96, 184.961,
+    185.959, 186.961, 187.959, 188.961, 189.96, 190.962, 191.961, 192.963, 193.963, 194.965,
+    195.965, 196.967, 197.968, 198.971, 199.971, 200.975, 201.976};
+
+  G4double PtS[35] = {38, 34, 11, 34, 40, 11, 14, 33, 21, 33, 50, 32, 22, 30, 22, 25, 20, 22, 30,
+    20, 6, 12, 7, 5, 4, 3, 3, 3, 3, 3, 4, 5, 22, 50, 32};
+
+  G4double PtW[35] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.014, 0,
+    0.782, 0, 32.967, 33.832, 25.242, 0, 7.163, 0, 0, 0, 0};
+
+  AddElement("Pt", 78, 35, *PtN, *PtA, *PtS, *PtW);
+
+  // Z = 79 --------------------------------------------------------------------
+  G4int AuN[35] = {171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
+    187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205};
+
+  G4double AuA[35] = {170.992, 171.99, 172.986, 173.985, 174.982, 175.98, 176.977, 177.976, 178.973,
+    179.972, 180.97, 181.97, 182.968, 183.967, 184.966, 185.966, 186.965, 187.965, 188.964, 189.965,
+    190.964, 191.965, 192.964, 193.965, 194.965, 195.967, 196.967, 197.968, 198.969, 199.971,
+    200.972, 201.974, 202.975, 203.978, 204.98};
+
+  G4double AuS[35] = {27, 36, 11, 16, 26, 43, 25, 43, 37, 32, 48, 39, 43, 21, 23, 15, 16, 11, 22,
+    17, 50, 17, 10, 12, 3, 4, 3, 3, 3, 60, 5, 18, 5, 22, 32};
+
+  G4double AuW[35] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    100, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Au", 79, 35, *AuN, *AuA, *AuS, *AuW);
+
+  // Z = 80 --------------------------------------------------------------------
+  G4int HgN[34] = {175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190,
+    191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208};
+
+  G4double HgA[34] = {174.991, 175.987, 176.986, 177.982, 178.982, 179.978, 180.978, 181.975,
+    182.975, 183.972, 184.972, 185.969, 186.97, 187.968, 188.968, 189.966, 190.967, 191.966,
+    192.967, 193.965, 194.967, 195.966, 196.967, 197.967, 198.968, 199.968, 200.97, 201.971,
+    202.973, 203.973, 204.976, 205.977, 206.983, 207.986};
+
+  G4double HgS[34] = {34, 40, 12, 16, 33, 21, 33, 50, 32, 22, 30, 22, 26, 19, 30, 16, 90, 30, 21,
+    25, 50, 4, 5, 3, 3, 3, 3, 3, 3, 3, 5, 22, 16, 32};
+
+  G4double HgW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.15, 0, 9.97,
+    16.87, 23.1, 13.18, 29.86, 0, 6.87, 0, 0, 0, 0};
+
+  AddElement("Hg", 80, 34, *HgN, *HgA, *HgS, *HgW);
+
+  // Z = 81 --------------------------------------------------------------------
+  G4int TlN[34] = {177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192,
+    193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210};
+
+  G4double TlA[34] = {176.997, 177.995, 178.991, 179.99, 180.987, 181.986, 182.983, 183.982,
+    184.979, 185.979, 186.976, 187.976, 188.974, 189.974, 190.972, 191.972, 192.971, 193.971,
+    194.97, 195.971, 196.97, 197.97, 198.97, 199.971, 200.971, 201.972, 202.972, 203.974, 204.974,
+    205.976, 206.977, 207.982, 208.985, 209.99};
+
+  G4double TlS[34] = {24, 23, 15, 48, 41, 43, 42, 32, 43, 39, 43, 24, 37, 46, 23, 22, 27, 22, 14,
+    15, 30, 90, 11, 7, 16, 16, 3, 3, 3, 3, 6, 3, 10, 12};
+
+  G4double TlW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    29.524, 0, 70.476, 0, 0, 0, 0, 0};
+
+  AddElement("Tl", 81, 34, *TlN, *TlA, *TlS, *TlW);
+
+  // Z = 82 --------------------------------------------------------------------
+  G4int PbN[34] = {181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196,
+    197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214};
+
+  G4double PbA[34] = {180.997, 181.993, 182.992, 183.988, 184.988, 185.984, 186.984, 187.981,
+    188.981, 189.978, 190.978, 191.976, 192.976, 193.974, 194.974, 195.973, 196.973, 197.972,
+    198.973, 199.972, 200.973, 201.972, 202.973, 203.973, 204.974, 205.974, 206.976, 207.977,
+    208.981, 209.984, 210.989, 211.992, 212.996, 214};
+
+  G4double PbS[34] = {17, 18, 33, 21, 33, 50, 32, 22, 29, 22, 23, 19, 20, 16, 44, 15, 11, 10, 70,
+    14, 30, 11, 7, 3, 3, 3, 3, 3, 3, 3, 3, 29, 11, 27};
+
+  G4double PbW[34] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.4, 0,
+    24.1, 22.1, 52.4, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Pb", 82, 34, *PbN, *PbA, *PbS, *PbW);
+
+  // Z = 83 --------------------------------------------------------------------
+  G4int BiN[32] = {185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200,
+    201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216};
+
+  G4double BiA[32] = {184.998, 185.996, 186.993, 187.992, 188.99, 189.989, 190.986, 191.985,
+    192.983, 193.983, 194.981, 195.981, 196.979, 197.979, 198.978, 199.978, 200.977, 201.978,
+    202.977, 203.978, 204.977, 205.978, 206.978, 207.98, 208.98, 209.984, 210.987, 211.991, 212.994,
+    213.999, 215.002, 216.006};
+
+  G4double BiS[32] = {24, 48, 41, 32, 43, 39, 43, 24, 37, 46, 23, 22, 26, 19, 13, 10, 30, 60, 23,
+    28, 8, 9, 4, 4, 3, 3, 6, 3, 8, 12, 10, 11};
+
+  G4double BiW[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
+    0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Bi", 83, 32, *BiN, *BiA, *BiS, *BiW);
+
+  // Z = 84 --------------------------------------------------------------------
+  G4int PoN[29] = {190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205,
+    206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218};
+
+  G4double PoA[29] = {189.995, 190.995, 191.992, 192.991, 193.988, 194.988, 195.986, 196.986,
+    197.983, 198.984, 199.982, 200.982, 201.981, 202.981, 203.98, 204.981, 205.98, 206.982, 207.981,
+    208.982, 209.983, 210.987, 211.989, 212.993, 213.995, 214.999, 216.002, 217.006, 218.009};
+
+  G4double PoS[29] = {51, 32, 22, 30, 22, 24, 19, 21, 16, 44, 15, 11, 10, 70, 14, 30, 11, 8, 3, 3,
+    3, 3, 3, 4, 3, 3, 29, 11, 27};
+
+  G4double PoW[29] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Po", 84, 29, *PoN, *PoA, *PoS, *PoW);
+
+  // Z = 85 --------------------------------------------------------------------
+  G4int AtN[31] = {193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208,
+    209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223};
+
+  G4double AtA[31] = {193.000, 193.999, 194.997, 195.996, 196.993, 197.993, 198.991, 199.99,
+    200.988, 201.988, 202.987, 203.987, 204.986, 205.987, 206.986, 207.987, 208.986, 209.987,
+    210.987, 211.991, 212.993, 213.996, 214.999, 216.002, 217.005, 218.009, 219.011, 220.015,
+    221.018, 222.022, 223.025};
+
+  G4double AtS[31] = {43, 43, 43, 25, 38, 46, 24, 22, 26, 19, 13, 10, 30, 60, 23, 28, 9, 9, 4, 4, 6,
+    5, 8, 5, 8, 13, 90, 12, 32, 32, 43};
+
+  G4double AtW[31] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("At", 85, 31, *AtN, *AtA, *AtS, *AtW);
+
+  // Z = 86 --------------------------------------------------------------------
+  G4int RnN[33] = {196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211,
+    212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228};
+
+  G4double RnA[33] = {196.002, 197.002, 197.999, 198.998, 199.996, 200.996, 201.993, 202.993,
+    203.991, 204.992, 205.99, 206.991, 207.99, 208.99, 209.99, 210.991, 211.991, 212.994, 213.995,
+    214.999, 216.000, 217.004, 218.006, 219.009, 220.011, 221.015, 222.018, 223.022, 224.024,
+    225.028, 226.031, 227.035, 228.038};
+
+  G4double RnS[33] = {22, 30, 22, 24, 19, 21, 16, 44, 15, 12, 10, 70, 14, 30, 11, 8, 4, 8, 10, 9, 8,
+    5, 4, 3, 29, 11, 27, 32, 32, 32, 43, 45, 50};
+
+  G4double RnW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    100, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Rn", 86, 33, *RnN, *RnA, *RnS, *RnW);
+
+  // Z = 87 --------------------------------------------------------------------
+  G4int FrN[33] = {200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215,
+    216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232};
+
+  G4double FrA[33] = {200.006, 201.004, 202.003, 203.001, 204.001, 204.999, 205.998, 206.997,
+    207.997, 208.996, 209.996, 210.996, 211.996, 212.996, 213.999, 215.000, 216.003, 217.005,
+    218.008, 219.009, 220.012, 221.014, 222.018, 223.02, 224.023, 225.026, 226.029, 227.032,
+    228.036, 229.038, 230.043, 231.045, 232.05};
+
+  G4double FrS[33] = {25, 38, 46, 25, 22, 25, 19, 12, 80, 30, 23, 22, 28, 9, 10, 8, 14, 8, 6, 8, 5,
+    8, 23, 29, 50, 11, 10, 10, 22, 39, 48, 56, 69};
+
+  G4double FrW[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
+    0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Fr", 87, 33, *FrN, *FrA, *FrS, *FrW);
+
+  // Z = 88 --------------------------------------------------------------------
+  G4int RaN[32] = {203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218,
+    219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234};
+
+  G4double RaA[32] = {203.009, 204.006, 205.006, 206.004, 207.004, 208.002, 209.002, 210, 211.001,
+    212, 213, 214, 215.003, 216.004, 217.006, 218.007, 219.01, 220.011, 221.014, 222.015, 223.018,
+    224.02, 225.024, 226.025, 227.029, 228.031, 229.035, 230.037, 231.041, 232.044, 233.048,
+    234.051};
+
+  G4double RaS[32] = {25, 19, 22, 16, 45, 15, 13, 10, 70, 15, 30, 12, 9, 10, 10, 12, 9, 11, 8, 5, 3,
+    29, 3, 27, 27, 27, 70, 40, 32, 39, 50, 58};
+
+  G4double RaW[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
+    0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ra", 88, 32, *RaN, *RaA, *RaS, *RaW);
+
+  // Z = 89 --------------------------------------------------------------------
+  G4int AcN[30] = {207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222,
+    223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236};
+
+  G4double AcA[30] = {207.012, 208.011, 209.01, 210.009, 211.008, 212.008, 213.007, 214.007,
+    215.006, 216.009, 217.009, 218.012, 219.012, 220.015, 221.016, 222.018, 223.019, 224.022,
+    225.023, 226.026, 227.028, 228.031, 229.033, 230.036, 231.039, 232.042, 233.045, 234.048,
+    235.051, 236.055};
+
+  G4double AcS[30] = {25, 22, 26, 20, 14, 10, 60, 60, 60, 29, 14, 50, 50, 60, 50, 6, 8, 5, 8, 4, 29,
+    28, 50, 11, 11, 11, 32, 43, 45, 54};
+
+  G4double AcW[30] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Ac", 89, 30, *AcN, *AcA, *AcS, *AcW);
+
+  // Z = 90 --------------------------------------------------------------------
+  G4int ThN[29] = {210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225,
+    226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238};
+
+  G4double ThA[29] = {210.015, 211.015, 212.013, 213.013, 214.011, 215.012, 216.011, 217.013,
+    218.013, 219.016, 220.016, 221.018, 222.018, 223.021, 224.021, 225.024, 226.025, 227.028,
+    228.029, 229.032, 230.033, 231.036, 232.038, 233.042, 234.044, 235.048, 236.05, 237.054,
+    238.056};
+
+  G4double ThS[29] = {17, 45, 15, 14, 10, 70, 17, 30, 15, 50, 24, 11, 14, 10, 13, 8, 5, 3, 29, 3,
+    22, 22, 22, 22, 4, 50, 32, 39, 39};
+
+  G4double ThW[29] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Th", 90, 29, *ThN, *ThA, *ThS, *ThW);
+
+  // Z = 91 --------------------------------------------------------------------
+  G4int PaN[28] = {213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228,
+    229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240};
+
+  G4double PaA[28] = {213.021, 214.021, 215.019, 216.019, 217.018, 218.02, 219.02, 220.022, 221.022,
+    222.024, 223.024, 224.026, 225.026, 226.028, 227.029, 228.031, 229.032, 230.035, 231.036,
+    232.039, 233.04, 234.043, 235.045, 236.049, 237.051, 238.054, 239.057, 240.061};
+
+  G4double PaS[28] = {27, 21, 15, 11, 80, 80, 80, 60, 60, 80, 80, 60, 80, 13, 8, 5, 10, 4, 28, 8,
+    24, 5, 50, 21, 11, 60, 32, 32};
+
+  G4double PaW[28] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Pa", 91, 28, *PaN, *PaA, *PaS, *PaW);
+
+  // Z = 92 --------------------------------------------------------------------
+  G4int UN[25] = {218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233,
+    234, 235, 236, 237, 238, 239, 240, 241, 242};
+
+  G4double UA[25] = {218.023, 219.025, 220.025, 221.026, 222.026, 223.028, 224.028, 225.029,
+    226.029, 227.031, 228.031, 229.033, 230.034, 231.036, 232.037, 233.04, 234.041, 235.044,
+    236.046, 237.049, 238.051, 239.054, 240.057, 241.06, 242.063};
+
+  G4double US[25] = {
+    10, 90, 22, 11, 11, 80, 27, 50, 20, 18, 17, 9, 5, 4, 29, 3, 21, 21, 21, 21, 21, 21, 6, 32, 22};
+
+  G4double UW[25] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0055, 0.72, 0, 0, 99.2745, 0, 0, 0, 0};
+
+  AddElement("U", 92, 25, *UN, *UA, *US, *UW);
+
+  // Z = 93 --------------------------------------------------------------------
+  G4int NpN[20] = {225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240,
+    241, 242, 243, 244};
+
+  G4double NpA[20] = {225.034, 226.035, 227.035, 228.036, 229.036, 230.038, 231.038, 232.04,
+    233.041, 234.043, 235.044, 236.047, 237.048, 238.051, 239.053, 240.056, 241.058, 242.062,
+    243.064, 244.068};
+
+  G4double NpS[20] = {
+    80, 10, 80, 21, 90, 60, 50, 11, 60, 9, 23, 50, 21, 21, 23, 16, 80, 22, 30, 32};
+
+  G4double NpW[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Np", 93, 20, *NpN, *NpA, *NpS, *NpW);
+
+  // Z = 94 --------------------------------------------------------------------
+  G4int PuN[20] = {228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243,
+    244, 245, 246, 247};
+
+  G4double PuA[20] = {228.039, 229.04, 230.04, 231.041, 232.041, 233.043, 234.043, 235.045, 236.046,
+    237.048, 238.05, 239.052, 240.054, 241.057, 242.059, 243.062, 244.064, 245.068, 246.07,
+    247.074};
+
+  G4double PuS[20] = {30, 80, 26, 11, 20, 50, 8, 22, 29, 25, 21, 21, 21, 21, 21, 3, 5, 15, 16, 32};
+
+  G4double PuW[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
+
+  AddElement("Pu", 94, 20, *PuN, *PuA, *PuS, *PuW);
+
+  // Z = 95 --------------------------------------------------------------------
+  G4int AmN[19] = {
+    231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249};
+
+  G4double AmA[19] = {231.046, 232.047, 233.046, 234.048, 235.048, 236.05, 237.05, 238.052, 239.053,
+    240.055, 241.057, 242.06, 243.061, 244.064, 245.066, 246.07, 247.072, 248.076, 249.078};
+
+  G4double AmS[19] = {32, 32, 23, 22, 22, 11, 60, 50, 3, 15, 21, 21, 23, 23, 4, 20, 11, 22, 32};
+
+  G4double AmW[19] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Am", 95, 19, *AmN, *AmA, *AmS, *AmW);
+
+  // Z = 96 --------------------------------------------------------------------
+  G4int CmN[20] = {233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+    249, 250, 251, 252};
+
+  G4double CmA[20] = {233.051, 234.05, 235.052, 236.051, 237.053, 238.053, 239.055, 240.056,
+    241.058, 242.059, 243.061, 244.063, 245.065, 246.067, 247.07, 248.072, 249.076, 250.078,
+    251.082, 252.085};
+
+  G4double CmS[20] = {43, 32, 24, 22, 22, 40, 11, 29, 24, 21, 24, 21, 29, 24, 5, 5, 5, 12, 24, 32};
+
+  G4double CmW[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
+
+  AddElement("Cm", 96, 20, *CmN, *CmA, *CmS, *CmW);
+
+  // Z = 97 --------------------------------------------------------------------
+  G4int BkN[20] = {235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250,
+    251, 252, 253, 254};
+
+  G4double BkA[20] = {235.057, 236.057, 237.057, 238.058, 239.058, 240.06, 241.06, 242.062, 243.063,
+    244.065, 245.066, 246.069, 247.07, 248.073, 249.075, 250.078, 251.081, 252.084, 253.087,
+    254.091};
+
+  G4double BkS[20] = {43, 43, 32, 31, 31, 16, 22, 22, 5, 16, 26, 60, 6, 80, 3, 4, 12, 22, 39, 32};
+
+  G4double BkW[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0};
+
+  AddElement("Bk", 97, 20, *BkN, *BkA, *BkS, *BkW);
+
+  // Z = 98 --------------------------------------------------------------------
+  G4int CfN[20] = {237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252,
+    253, 254, 255, 256};
+
+  G4double CfA[20] = {237.062, 238.061, 239.063, 240.062, 241.064, 242.064, 243.065, 244.066,
+    245.068, 246.069, 247.071, 248.072, 249.075, 250.076, 251.08, 252.082, 253.085, 254.087,
+    255.091, 256.093};
+
+  G4double CfS[20] = {54, 43, 25, 22, 27, 40, 15, 4, 11, 24, 9, 6, 3, 24, 5, 5, 7, 13, 22, 32};
+
+  G4double CfW[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
+
+  AddElement("Cf", 98, 20, *CfN, *CfA, *CfS, *CfW);
+
+  // Z = 99 --------------------------------------------------------------------
+  G4int EsN[18] = {
+    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257};
+
+  G4double EsA[18] = {240.069, 241.069, 242.07, 243.07, 244.071, 245.071, 246.073, 247.074, 248.075,
+    249.076, 250.079, 251.08, 252.083, 253.085, 254.088, 255.09, 256.094, 257.096};
+
+  G4double EsS[18] = {43, 32, 35, 31, 20, 22, 24, 30, 60, 30, 11, 7, 50, 3, 5, 12, 11, 44};
+
+  G4double EsW[18] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0};
+
+  AddElement("Es", 99, 18, *EsN, *EsA, *EsS, *EsW);
+
+  // Z = 100 -------------------------------------------------------------------
+  G4int FmN[18] = {
+    242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259};
+
+  G4double FmA[18] = {242.073, 243.075, 244.074, 245.075, 246.075, 247.077, 248.077, 249.079,
+    250.08, 251.082, 252.082, 253.085, 254.087, 255.09, 256.092, 257.095, 258.097, 259.101};
+
+  G4double FmS[18] = {43, 25, 31, 30, 40, 16, 13, 15, 13, 9, 6, 5, 3, 5, 8, 7, 22, 30};
+
+  G4double FmW[18] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0};
+
+  AddElement("Fm", 100, 18, *FmN, *FmA, *FmS, *FmW);
+
+  // Z = 101 -------------------------------------------------------------------
+  G4int MdN[16] = {245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260};
+
+  G4double MdA[16] = {245.081, 246.082, 247.082, 248.083, 249.083, 250.084, 251.085, 252.087,
+    253.087, 254.09, 255.091, 256.094, 257.096, 258.098, 259.101, 260.104};
+
+  G4double MdS[16] = {40, 41, 39, 26, 24, 32, 22, 21, 22, 11, 8, 60, 4, 5, 22, 34};
+
+  G4double MdW[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0};
+
+  AddElement("Md", 101, 16, *MdN, *MdA, *MdS, *MdW);
+
+  // Z = 102 -------------------------------------------------------------------
+  G4int NoN[14] = {249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262};
+
+  G4double NoA[14] = {249.088, 250.087, 251.089, 252.089, 253.091, 254.091, 255.093, 256.094,
+    257.097, 258.098, 259.101, 260.103, 261.106, 262.108};
+
+  G4double NoS[14] = {37, 22, 19, 14, 26, 19, 13, 9, 30, 22, 11, 22, 32, 58};
+
+  G4double NoW[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
+
+  AddElement("No", 102, 14, *NoN, *NoA, *NoS, *NoW);
+
+  // Z = 103 -------------------------------------------------------------------
+  G4int LrN[13] = {251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263};
+
+  G4double LrA[13] = {251.094, 252.095, 253.095, 254.097, 255.097, 256.099, 257.1, 258.102, 259.103,
+    260.106, 261.107, 262.11, 263.111};
+
+  G4double LrS[13] = {32, 32, 24, 36, 22, 24, 22, 11, 80, 12, 22, 32, 39};
+
+  G4double LrW[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0};
+
+  AddElement("Lr", 103, 13, *LrN, *LrA, *LrS, *LrW);
+
+  // Z = 104 -------------------------------------------------------------------
+  G4int RfN[12] = {253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264};
+
+  G4double RfA[12] = {253.101, 254.1, 255.101, 256.101, 257.103, 258.104, 259.106, 260.106, 261.109,
+    262.11, 263.113, 264.114};
+
+  G4double RfS[12] = {49, 31, 22, 29, 29, 22, 80, 22, 11, 30, 20, 48};
+
+  G4double RfW[12] = {0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
+
+  AddElement("Rf", 104, 12, *RfN, *RfA, *RfS, *RfW);
+
+  // Z = 105 -------------------------------------------------------------------
+  G4int DbN[11] = {255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265};
+
+  G4double DbA[11] = {255.107, 256.108, 257.108, 258.109, 259.11, 260.111, 261.112, 262.114,
+    263.115, 264.117, 265.119};
+
+  G4double DbS[11] = {45, 39, 25, 37, 31, 25, 25, 20, 18, 25, 30};
+
+  G4double DbW[11] = {0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0};
+
+  AddElement("Db", 105, 11, *DbN, *DbA, *DbS, *DbW);
+
+  // Z = 106 -------------------------------------------------------------------
+  G4int SgN[9] = {258, 259, 260, 261, 262, 263, 264, 265, 266};
+
+  G4double SgA[9] = {
+    258.113, 259.115, 260.114, 261.116, 262.116, 263.118, 264.119, 265.121, 266.122};
+
+  G4double SgS[9] = {45, 23, 40, 30, 30, 13, 30, 15, 31};
+
+  G4double SgW[9] = {0, 0, 0, 0, 0, 0, 0, 0, 100};
+
+  AddElement("Sg", 106, 9, *SgN, *SgA, *SgS, *SgW);
+
+  // Z = 107 -------------------------------------------------------------------
+  G4int BhN[8] = {260, 261, 262, 263, 264, 265, 266, 267};
+
+  G4double BhA[8] = {260.122, 261.122, 262.123, 263.123, 264.125, 265.125, 266.127, 267.128};
+
+  G4double BhS[8] = {66, 26, 40, 45, 30, 41, 38, 37};
+
+  G4double BhW[8] = {0, 0, 0, 0, 100, 0, 0, 0};
+
+  AddElement("Bh", 107, 8, *BhN, *BhA, *BhS, *BhW);
+
+  for (auto& i : elmSymbol) {
     elmNames.push_back(i);
   }
 
-  if(0<verbose) {
-    G4cout << "G4NistElementBuilder: " << maxNumElements-1 << " Elements  "
-           << index << " Isotopes"
-	   << G4endl;
+  if (0 < verbose) {
+    G4cout << "G4NistElementBuilder: " << maxNumElements - 1 << " Elements  " << index
+           << " Isotopes" << G4endl;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

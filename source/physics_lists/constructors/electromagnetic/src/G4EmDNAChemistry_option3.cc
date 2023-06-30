@@ -33,81 +33,42 @@
 */
 
 #include "G4EmDNAChemistry_option3.hh"
-
-#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-
 #include "G4DNAWaterDissociationDisplacer.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "G4ProcessManager.hh"
-
-#include "G4DNAGenericIonsManager.hh"
-
 // *** Processes and models for Geant4-DNA
 
 #include "G4DNAElectronSolvation.hh"
 
-#include "G4DNAAttachment.hh"
 #include "G4DNAVibExcitation.hh"
 #include "G4DNASancheExcitationModel.hh"
-
-#include "G4DNAElastic.hh"
-#include "G4DNAChampionElasticModel.hh"
-#include "G4DNAScreenedRutherfordElasticModel.hh"
 #include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
-
 #include "G4DNAMolecularDissociation.hh"
 #include "G4DNABrownianTransportation.hh"
 #include "G4DNAMolecularReactionTable.hh"
-
 #include "G4DNAMolecularStepByStepModel.hh"
 #include "G4DNAMolecularIRTModel.hh"
 #include "G4DNAIndependentReactionTimeModel.hh"
-
 #include "G4VDNAReactionModel.hh"
-#include "G4DNASmoluchowskiReactionModel.hh"
-
 #include "G4DNAIRT.hh"
-
 #include "G4DNAElectronHoleRecombination.hh"
-
 // particles
-
 #include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
-
 #include "G4MoleculeTable.hh"
 #include "G4H2O.hh"
-#include "G4H2.hh"
-#include "G4Hydrogen.hh"
-#include "G4OH.hh"
-#include "G4H3O.hh"
-#include "G4Electron_aq.hh"
-
-#include "G4Oxygen.hh"
-#include "G4H2O2.hh"
-#include "G4O2.hh"
-#include "G4HO2.hh"
-#include "G4O3.hh"
 #include "G4FakeMolecule.hh"
-
 #include "G4PhysicsListHelper.hh"
-#include "G4BuilderType.hh"
 
 /****/
 #include "G4DNAMoleculeEncounterStepper.hh"
-#include "G4ProcessVector.hh"
 #include "G4ProcessTable.hh"
-#include "G4DNASecondOrderReaction.hh"
 #include "G4MolecularConfiguration.hh"
 /****/
-
-#include "G4Scheduler.hh"
-
 // factory
 #include "G4PhysicsConstructorFactory.hh"
+#include "G4ChemDissociationChannels_option1.hh"
 
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAChemistry_option3);
 
@@ -121,453 +82,16 @@ G4EmDNAChemistry_option3::G4EmDNAChemistry_option3() :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmDNAChemistry_option3::~G4EmDNAChemistry_option3()
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4EmDNAChemistry_option3::ConstructMolecule()
 {
-  //-----------------------------------
-  //  G4Electron::Definition(); // safety
-
-  //-----------------------------------
-  // Create the definition
-
-  G4H2O::Definition();
-  G4Hydrogen::Definition();
-  G4H3O::Definition();
-  G4OH::Definition();
-  G4Electron_aq::Definition();
-  G4H2O2::Definition();
-  G4H2::Definition();
-
-  G4O2::Definition();
-  G4HO2::Definition();
-  G4Oxygen::Definition();
-  G4O3::Definition();
-
-  //____________________________________________________________________________
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H3Op", G4H3O::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H3Op")->SetDiffusionCoefficient(
-                          9.46e-9 * (m2/s));
-  G4MoleculeTable::Instance()->GetConfiguration("H3Op")->SetVanDerVaalsRadius(0.25*nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("OH", G4OH::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("OH")->SetDiffusionCoefficient(
-                                                   2.2e-9 * (m2/s));
-  G4MoleculeTable::Instance()->GetConfiguration("OH")->SetVanDerVaalsRadius(0.22*nm);
-
-  G4MolecularConfiguration* OHm = G4MoleculeTable::Instance()->
-      CreateConfiguration("OHm", // just a tag to store and retrieve from
-                                 // G4MoleculeTable
-                          G4OH::Definition(),
-                          -1, // charge
-                          5.3e-9 * (m2 / s));
-  OHm->SetMass(17.0079 * g / Avogadro * c_squared);
-  OHm->SetVanDerVaalsRadius(0.33*nm);
-
-
-
-
-  G4MoleculeTable::Instance()->CreateConfiguration("e_aq",
-                                                   G4Electron_aq::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("e_aq")->SetVanDerVaalsRadius(0.50*nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H",
-                                                   G4Hydrogen::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H")->SetVanDerVaalsRadius(0.19*nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H2", G4H2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H2")->SetDiffusionCoefficient(
-                                                   4.8e-9 * (m2/s));
-  G4MoleculeTable::Instance()->GetConfiguration("H2")->SetVanDerVaalsRadius(0.14*nm);
-
-
-  G4MoleculeTable::Instance()->CreateConfiguration("H2O2", G4H2O2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("H2O2")->SetDiffusionCoefficient(
-                                                   2.3e-9 * (m2/s));
-  G4MoleculeTable::Instance()->GetConfiguration("H2O2")->SetVanDerVaalsRadius(0.21*nm);
-
-  // molecules extension (RITRACKS)
-
-  G4MoleculeTable::Instance()->CreateConfiguration("HO2",G4HO2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("HO2")->SetVanDerVaalsRadius(0.21*nm);
-
-  G4MolecularConfiguration* HO2m = G4MoleculeTable::Instance()->
-      CreateConfiguration("HO2m", // just a tag to store and retrieve from
-                                  // G4MoleculeTable
-                          G4HO2::Definition(),
-                          -1, // charge
-                          1.4e-9 * (m2 / s));
-  HO2m->SetMass(33.00396 * g / Avogadro * c_squared);
-  HO2m->SetVanDerVaalsRadius(0.25*nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("Oxy",G4Oxygen::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("Oxy")->SetVanDerVaalsRadius(0.20*nm);
-
-  G4MolecularConfiguration* Om = G4MoleculeTable::Instance()->
-      CreateConfiguration("Om", // just a tag to store and retrieve from
-                                // G4MoleculeTable
-                          G4Oxygen::Definition(),
-                          -1, // charge
-                          2.0e-9 * (m2 / s));
-  Om->SetMass(15.99829 * g / Avogadro * c_squared);
-  Om->SetVanDerVaalsRadius(0.25*nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("O2",G4O2::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("O2")->SetVanDerVaalsRadius(0.17*nm);
-
-  G4MolecularConfiguration* O2m = G4MoleculeTable::Instance()->
-      CreateConfiguration("O2m", // just a tag to store and retrieve from
-                                 // G4MoleculeTable
-                          G4O2::Definition(),
-                          -1, // charge
-                          1.75e-9 * (m2 / s));
-  O2m->SetMass(31.99602 * g / Avogadro * c_squared);
-  O2m->SetVanDerVaalsRadius(0.22*nm);
-
-  G4MoleculeTable::Instance()->CreateConfiguration("O3",G4O3::Definition());
-  G4MoleculeTable::Instance()->GetConfiguration("O3")->SetVanDerVaalsRadius(0.20*nm);
-
-  G4MolecularConfiguration* O3m = G4MoleculeTable::Instance()->
-      CreateConfiguration("O3m", // just a tag to store and retrieve from
-                                 // G4MoleculeTable
-                          G4O3::Definition(),
-                          -1, // charge
-                          2.0e-9 * (m2 / s));
-  O3m->SetMass(47.99375 * g / Avogadro * c_squared);
-  O3m->SetVanDerVaalsRadius(0.20*nm);
-
-  G4MoleculeTable::Instance()->
-        CreateConfiguration("H2O(B)", // just a tag to store and retrieve from
-                                   // G4MoleculeTable
-                         G4H2O::Definition(),
-                         0, // charge
-                         0 * (m2 / s));
-
-  G4MoleculeTable::Instance()->
-        CreateConfiguration("H3Op(B)", // just a tag to store and retrieve from
-                                       // G4MoleculeTable
-                            G4H3O::Definition(),
-                            1, // charge
-                            0 * (m2 / s));
-
-  G4MoleculeTable::Instance()->
-        CreateConfiguration("OHm(B)", // just a tag to store and retrieve from
-                                      // G4MoleculeTable
-                          G4OH::Definition(),
-                          -1, // charge
-                          0 * (m2 / s));
-
-  G4MoleculeTable::Instance()->CreateConfiguration("NoneM",G4FakeMolecule::Definition());
-
+  G4ChemDissociationChannels_option1::ConstructMolecule();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmDNAChemistry_option3::ConstructDissociationChannels()
 {
-  //-----------------------------------
-  //Get the molecular configuration
-  G4MolecularConfiguration* OH =
-      G4MoleculeTable::Instance()->GetConfiguration("OH");
-  G4MolecularConfiguration* OHm =
-      G4MoleculeTable::Instance()->GetConfiguration("OHm");
-  G4MolecularConfiguration* e_aq =
-      G4MoleculeTable::Instance()->GetConfiguration("e_aq");
-  G4MolecularConfiguration* H2 =
-      G4MoleculeTable::Instance()->GetConfiguration("H2");
-  G4MolecularConfiguration* H3O =
-      G4MoleculeTable::Instance()->GetConfiguration("H3Op");
-  G4MolecularConfiguration* H =
-      G4MoleculeTable::Instance()->GetConfiguration("H");
-  G4MolecularConfiguration* O =
-      G4MoleculeTable::Instance()->GetConfiguration("Oxy");
-
-  //-------------------------------------
-  //Define the decay channels
-  G4MoleculeDefinition* water = G4H2O::Definition();
-  G4MolecularDissociationChannel* decCh1;
-  G4MolecularDissociationChannel* decCh2;
-  G4MolecularDissociationChannel* decCh3;
-  G4MolecularDissociationChannel* decCh4;
-  G4MolecularDissociationChannel* decCh5;
-
-  G4ElectronOccupancy* occ = new G4ElectronOccupancy(
-      *(water->GetGroundStateElectronOccupancy()));
-
-  //////////////////////////////////////////////////////////
-  //            EXCITATIONS                               //
-  //////////////////////////////////////////////////////////
-  G4DNAWaterExcitationStructure waterExcitation;
-  //--------------------------------------------------------
-  //---------------Excitation on the fifth layer------------
-
-  decCh1 = new G4MolecularDissociationChannel("A^1B_1_Relaxation");
-  decCh2 = new G4MolecularDissociationChannel("A^1B_1_DissociativeDecay");
-  //Decay 1 : OH + H
-  decCh1->SetEnergy(waterExcitation.ExcitationEnergy(0));
-  decCh1->SetProbability(0.35);
-  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::NoDisplacement);
-
-  decCh2->AddProduct(OH);
-  decCh2->AddProduct(H);
-  decCh2->SetProbability(0.65);
-  decCh2->SetDisplacementType(
-      G4DNAWaterDissociationDisplacer::A1B1_DissociationDecay);
-
-  occ->RemoveElectron(4, 1); // this is the transition form ground state to
-  occ->AddElectron(5, 1); // the first unoccupied orbital: A^1B_1
-
-  water->NewConfigurationWithElectronOccupancy("A^1B_1", *occ);
-  water->AddDecayChannel("A^1B_1", decCh1);
-  water->AddDecayChannel("A^1B_1", decCh2);
-
-  //--------------------------------------------------------
-  //---------------Excitation on the fourth layer-----------
-  decCh1 = new G4MolecularDissociationChannel("B^1A_1_Relaxation_Channel");
-  decCh2 = new G4MolecularDissociationChannel("B^1A_1_DissociativeDecay");
-  decCh3 = new G4MolecularDissociationChannel("B^1A_1_AutoIonisation_Channel");
-  decCh4 = new G4MolecularDissociationChannel("A^1B_1_DissociativeDecay");
-  decCh5 = new G4MolecularDissociationChannel("B^1A_1_DissociativeDecay2");
-
-
-  //Decay 1 : energy
-  decCh1->SetEnergy(waterExcitation.ExcitationEnergy(1));
-  decCh1->SetProbability(0.175);
-
-  //Decay 2 : 2OH + H_2
-  decCh2->AddProduct(H2);
-  decCh2->AddProduct(OH);
-  decCh2->AddProduct(OH);
-  decCh2->SetProbability(0.0325);
-  decCh2->SetDisplacementType(
-      G4DNAWaterDissociationDisplacer::B1A1_DissociationDecay);
-
-  //Decay 3 : OH + H_3Op + e_aq
-  decCh3->AddProduct(OH);
-  decCh3->AddProduct(H3O);
-  decCh3->AddProduct(e_aq);
-  decCh3->SetProbability(0.50);
-  decCh3->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
-
-  //Decay 4 :  H + OH
-  decCh4->AddProduct(H);
-  decCh4->AddProduct(OH);
-  decCh4->SetProbability(0.2535);
-  decCh4->SetDisplacementType(G4DNAWaterDissociationDisplacer::A1B1_DissociationDecay);
-
-  //Decay 5 : 2H + O
-  decCh5->AddProduct(O);
-  decCh5->AddProduct(H);
-  decCh5->AddProduct(H);
-  decCh5->SetProbability(0.039);
-  decCh5->SetDisplacementType(G4DNAWaterDissociationDisplacer::B1A1_DissociationDecay2);
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(3); // this is the transition form ground state to
-  occ->AddElectron(5, 1); // the first unoccupied orbital: B^1A_1
-
-  water->NewConfigurationWithElectronOccupancy("B^1A_1", *occ);
-  water->AddDecayChannel("B^1A_1", decCh1);
-  water->AddDecayChannel("B^1A_1", decCh2);
-  water->AddDecayChannel("B^1A_1", decCh3);
-  water->AddDecayChannel("B^1A_1", decCh4);
-  water->AddDecayChannel("B^1A_1", decCh5);
-
-  //-------------------------------------------------------
-  //-------------------Excitation of 3rd layer-----------------
-  decCh1 = new G4MolecularDissociationChannel(
-      "Excitation3rdLayer_AutoIonisation_Channel");
-  decCh2 = new G4MolecularDissociationChannel(
-      "Excitation3rdLayer_Relaxation_Channel");
-
-  //Decay channel 1 : : OH + H_3Op + e_aq
-  decCh1->AddProduct(OH);
-  decCh1->AddProduct(H3O);
-  decCh1->AddProduct(e_aq);
-
-  decCh1->SetProbability(0.5);
-  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
-
-  //Decay channel 2 : energy
-  decCh2->SetEnergy(waterExcitation.ExcitationEnergy(2));
-  decCh2->SetProbability(0.5);
-
-  //Electronic configuration of this decay
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(2, 1);
-  occ->AddElectron(5, 1);
-
-  //Configure the water molecule
-  water->NewConfigurationWithElectronOccupancy("Excitation3rdLayer", *occ);
-  water->AddDecayChannel("Excitation3rdLayer", decCh1);
-  water->AddDecayChannel("Excitation3rdLayer", decCh2);
-
-  //-------------------------------------------------------
-  //-------------------Excitation of 2nd layer-----------------
-  decCh1 = new G4MolecularDissociationChannel(
-      "Excitation2ndLayer_AutoIonisation_Channel");
-  decCh2 = new G4MolecularDissociationChannel(
-      "Excitation2ndLayer_Relaxation_Channel");
-
-  //Decay Channel 1 : : OH + H_3Op + e_aq
-  decCh1->AddProduct(OH);
-  decCh1->AddProduct(H3O);
-  decCh1->AddProduct(e_aq);
-
-  decCh1->SetProbability(0.5);
-  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
-
-  //Decay channel 2 : energy
-  decCh2->SetEnergy(waterExcitation.ExcitationEnergy(3));
-  decCh2->SetProbability(0.5);
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(1, 1);
-  occ->AddElectron(5, 1);
-
-  water->NewConfigurationWithElectronOccupancy("Excitation2ndLayer", *occ);
-  water->AddDecayChannel("Excitation2ndLayer", decCh1);
-  water->AddDecayChannel("Excitation2ndLayer", decCh2);
-
-  //-------------------------------------------------------
-  //-------------------Excitation of 1st layer-----------------
-  decCh1 = new G4MolecularDissociationChannel(
-      "Excitation1stLayer_AutoIonisation_Channel");
-  decCh2 = new G4MolecularDissociationChannel(
-      "Excitation1stLayer_Relaxation_Channel");
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(0, 1);
-  occ->AddElectron(5, 1);
-
-  //Decay Channel 1 : : OH + H_3Op + e_aq
-  decCh1->AddProduct(OH);
-  decCh1->AddProduct(H3O);
-  decCh1->AddProduct(e_aq);
-  decCh1->SetProbability(0.5);
-  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
-
-  //Decay channel 2 : energy
-  decCh2->SetEnergy(waterExcitation.ExcitationEnergy(4));
-  decCh2->SetProbability(0.5);
-
-  water->NewConfigurationWithElectronOccupancy("Excitation1stLayer", *occ);
-  water->AddDecayChannel("Excitation1stLayer", decCh1);
-  water->AddDecayChannel("Excitation1stLayer", decCh2);
-
-  /////////////////////////////////////////////////////////
-  //                  IONISATION                         //
-  /////////////////////////////////////////////////////////
-  //--------------------------------------------------------
-  //------------------- Ionisation -------------------------
-
-  decCh1 = new G4MolecularDissociationChannel("Ionisation_Channel");
-
-  //Decay Channel 1 : : OH + H_3Op
-  decCh1->AddProduct(H3O);
-  decCh1->AddProduct(OH);
-  decCh1->SetProbability(1);
-  decCh1->SetDisplacementType(
-      G4DNAWaterDissociationDisplacer::Ionisation_DissociationDecay);
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(4, 1);
-  // this is a ionized h2O with a hole in its last orbital
-  water->NewConfigurationWithElectronOccupancy("Ionisation5", *occ);
-  water->AddDecayChannel("Ionisation5",
-                         decCh1);
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(3, 1);
-  water->NewConfigurationWithElectronOccupancy("Ionisation4", *occ);
-  water->AddDecayChannel("Ionisation4",
-                         new G4MolecularDissociationChannel(*decCh1));
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(2, 1);
-  water->NewConfigurationWithElectronOccupancy("Ionisation3", *occ);
-  water->AddDecayChannel("Ionisation3",
-                         new G4MolecularDissociationChannel(*decCh1));
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(1, 1);
-  water->NewConfigurationWithElectronOccupancy("Ionisation2", *occ);
-  water->AddDecayChannel("Ionisation2",
-                         new G4MolecularDissociationChannel(*decCh1));
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->RemoveElectron(0, 1);
-  water->NewConfigurationWithElectronOccupancy("Ionisation1", *occ);
-  water->AddDecayChannel("Ionisation1",
-                         new G4MolecularDissociationChannel(*decCh1));
-
-  //////////////////////////////////////////////////////////
-  //            Dissociative Attachment                   //
-  //////////////////////////////////////////////////////////
-  decCh1 = new G4MolecularDissociationChannel("DissociativeAttachment_ch1");
-
-  //Decay 1 : OHm + H
-  decCh1->AddProduct(H2);
-  decCh1->AddProduct(OHm);
-  decCh1->AddProduct(OH);
-  decCh1->SetProbability(1);
-  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::
-                              DissociativeAttachment);
-
-  *occ = *(water->GetGroundStateElectronOccupancy());
-  occ->AddElectron(5,1); // H_2O^-
-
-  water->NewConfigurationWithElectronOccupancy("DissociativeAttachment_ch1", *occ);
-  water->AddDecayChannel("DissociativeAttachment_ch1", decCh1);
-
-  //////////////////////////////////////////////////////////
-  //            Electron-hole recombination               //
-  //////////////////////////////////////////////////////////
-  decCh1 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay1");
-  decCh2 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay2");
-  decCh3 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay3");
-  decCh4 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay4");
-
-  //Decay 1 : 2OH + H_2
-  decCh1->AddProduct(H2);
-  decCh1->AddProduct(OH);
-  decCh1->AddProduct(OH);
-  decCh1->SetProbability(0.1365);
-  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::
-                              B1A1_DissociationDecay);
-
-  //Decay 2 : OH + H
-  decCh2->AddProduct(OH);
-  decCh2->AddProduct(H);
-  decCh2->SetProbability(0.3575);
-  decCh2->SetDisplacementType(G4DNAWaterDissociationDisplacer::
-                              A1B1_DissociationDecay);
-
-  //Decay 3 : 2H + O(3p)
-  decCh3->AddProduct(O);
-  decCh3->AddProduct(H);
-  decCh3->AddProduct(H);
-  decCh3->SetProbability(0.156);
-  decCh3->SetDisplacementType(G4DNAWaterDissociationDisplacer::
-                              B1A1_DissociationDecay2);
-
-  //Decay 4 : relaxation
-  decCh4->SetProbability(0.35);
-
-  const auto pH2Ovib = G4H2O::Definition()->NewConfiguration("H2Ovib");
-  assert(pH2Ovib != nullptr);
-
-  water->AddDecayChannel(pH2Ovib, decCh1);
-  water->AddDecayChannel(pH2Ovib, decCh2);
-  water->AddDecayChannel(pH2Ovib, decCh3);
-  water->AddDecayChannel(pH2Ovib, decCh4);
-
-  delete occ;
+  G4ChemDissociationChannels_option1::ConstructDissociationChannels();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

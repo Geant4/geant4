@@ -247,7 +247,7 @@ void RandGeneral::fireArray( const int size, double* vect )
 }
 
 std::ostream & RandGeneral::put ( std::ostream & os ) const {
-  int pr=os.precision(20);
+  long pr=os.precision(20);
   std::vector<unsigned long> t(2);
   os << " " << name() << "\n";
   os << "Uvec" << "\n";

@@ -44,16 +44,6 @@
 #include <iomanip>
 #include <fstream>       
 
-//////////////////////////////
-G4TextPPRetriever::G4TextPPRetriever():G4VParticlePropertyRetriever()
-{ 
-}
-
-////////////////////////////
-G4TextPPRetriever::~G4TextPPRetriever()
-{
-}    
-
 /////////////////////
 void G4TextPPRetriever::Retrieve(const G4String& option)
 {
@@ -147,7 +137,7 @@ G4bool  G4TextPPRetriever::ModifyPropertyTable(const G4ParticleDefinition* parti
 
   // Decay Table  
   G4DecayTable* dcyTable = particle->GetDecayTable(); 
-  if (dcyTable == 0) return true;
+  if (dcyTable == nullptr) return true;
   
   G4int idx =0;
   while (!inFile.eof() ) { // Loop checking, 09.08.2015, K.Kurashige

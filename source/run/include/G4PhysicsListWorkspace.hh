@@ -50,18 +50,23 @@
 class G4PhysicsListWorkspace
 {
   public:
-
     using pool_type = G4TWorkspacePool<G4PhysicsListWorkspace>;
 
+  public:
     G4PhysicsListWorkspace(G4bool verbose = false);
-   ~G4PhysicsListWorkspace();
+    ~G4PhysicsListWorkspace() = default;
 
-    void UseWorkspace();      // Take ownership
-    void ReleaseWorkspace();  // Release ownership
-    void DestroyWorkspace();  // Release ownership and destroy
+    // Take ownership
+    void UseWorkspace();
 
+    // Release ownership
+    void ReleaseWorkspace();
+
+    // Release ownership and destroy
+    void DestroyWorkspace();
+
+    // To be called at start of each run (especially 2nd and further runs)
     void InitialiseWorkspace();
-      // To be called at start of each run (especially 2nd and further runs)
 
     inline void SetVerbose(G4bool v) { fVerbose = v; }
     inline G4bool GetVerbose() { return fVerbose; }
@@ -69,21 +74,19 @@ class G4PhysicsListWorkspace
     static pool_type* GetPool();
 
   protected:  // Implementation methods
-
     void InitialisePhysicsList();
 
   private:  // Helper pointers - can be per instance or shared
-
+    // Store SubInstanceManager object pointers (SIM pointers)
     G4VUPLManager* fpVUPLSIM = nullptr;
     G4VPCManager* fpVPCSIM = nullptr;
     G4VMPLManager* fpVMPLSIM = nullptr;
-      // Store SubInstanceManager object pointers (SIM pointers)
 
+    // Per Instance variables
+    // The ownership of the Data Arrays is IN this object
     G4VUPLData* fpVUPLOffset = nullptr;
     G4VPCData* fpVPCOffset = nullptr;
     G4VMPLData* fpVMPLOffset = nullptr;
-      // Per Instance variables
-      // The ownership of the Data Arrays is IN this object
 
     G4bool fVerbose = false;
 };

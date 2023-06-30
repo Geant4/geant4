@@ -20,7 +20,9 @@
 #
 /analysis/setFileName bone
 /analysis/h1/set 10 300 0. 300. mm		#edep profile
+/analysis/h1/set 11 110 0. 6.1 MeV		#total edep
+/analysis/h1/set 12 110 0. 6.1 MeV		#total eleak
+/analysis/h1/set 13 110 0. 6.1 MeV		#total energy
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

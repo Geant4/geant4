@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -85,6 +85,7 @@ NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /
  ProduceFissionFragments ? 0
  UseWendtFissionModel ?    0
  UseNRESP71Model ?         0
+ UseDBRC ?                 0
 =======================================================
 
 @@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
@@ -416,12 +417,21 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
 
 ================================================================
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
@@ -476,7 +486,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.640000s Real=4.678793s Sys=0.010000s
+  User=4.090000s Real=4.116175s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -484,41 +494,45 @@ Run Summary
     1        30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-            NoProcess=  99541       Radioactivation=    170                  Rayl=   1529
-       Transportation=  58664               annihil=    141                 compt=  52959
-                 conv=    144                 eBrem=    685                 eIoni= 108206
-                hIoni=    170            hadElastic=  86087               ionIoni= 162191
-                  msc=     38      neutronInelastic=  14275                  phot=    742
+            NoProcess= 100622       Radioactivation=    160                  Rayl=   1622
+       Transportation=  58828               annihil=    131                 compt=  54278
+                 conv=    135                 eBrem=    697                 eIoni= 110574
+                hIoni=    158            hadElastic=  87130               ionIoni= 173454
+                  msc=     53              nCapture=      1      neutronInelastic=  14346
+                 phot=    747 
 
-
- Edep in absorber 1 = 6.9 MeV	(5.22 keV-->14.1 MeV)
+ Edep in absorber 1 = 6.96 MeV	(2.4 keV-->14.8 MeV)
+ Energy leakage     = 4.65 MeV	(2.54 keV-->14.1 MeV)
+ Energy total       = 11.6 MeV	(844 keV-->25.6 MeV)
 
  List of created particles in absorber 1:
-            He6:     170  Emean =    1.29 MeV	( 920 keV --> 1.34 MeV)	mean life = 1.16 s  
-            Li6:     170  Emean =     785 eV 	( 74.3 eV  --> 1.39 keV)	stable
-            Li7:   99371  Emean =     562 keV	( 64.8 meV --> 6.22 MeV)	stable
-          alpha:     260  Emean =    1.14 MeV	( 50.5 keV --> 3.75 MeV)	stable
-      anti_nu_e:     170  Emean =    1.95 MeV	( 122 keV --> 3.42 MeV)	stable
-       deuteron:     170  Emean =     430 keV	( 308 keV --> 447 keV)	stable
-             e+:     144  Emean =    1.83 MeV	( 34.9 keV --> 3.53 MeV)	stable
-             e-:   53654  Emean =     242 keV	( 100 eV  --> 4.39 MeV)	stable
-          gamma:   14219  Emean =    2.52 MeV	( 1.51 keV --> 4.63 MeV)	stable
-        neutron:   14927  Emean =    3.68 MeV	( 6.72 keV --> 13.6 MeV)	mean life = 14.7 min
+  Be8[3030.000]:       1  Emean =    10.2 keV	( 10.2 keV --> 10.2 keV)	mean life = 0 ps 
+            He6:     158  Emean =    1.29 MeV	( 955 keV --> 1.34 MeV)	mean life = 1.16 s  
+            Li6:     158  Emean =     777 eV 	( 33.4 eV  --> 1.4 keV)	stable
+            Li7:  100464  Emean =     558 keV	( 151 meV --> 6.22 MeV)	stable
+            Li8:       1  Emean =     1.5 keV	( 1.5 keV --> 1.5 keV)	mean life = 1.21 s  
+          alpha:     301  Emean =    1.16 MeV	( 57.4 keV --> 3.99 MeV)	stable
+      anti_nu_e:     159  Emean =    1.84 MeV	( 327 keV --> 5.82 MeV)	stable
+       deuteron:     158  Emean =     431 keV	( 319 keV --> 447 keV)	stable
+             e+:     135  Emean =    1.78 MeV	( 164 keV --> 3.57 MeV)	stable
+             e-:   54921  Emean =     244 keV	( 100 eV  --> 7.15 MeV)	stable
+          gamma:   14274  Emean =     2.5 MeV	( 1.52 keV --> 4.63 MeV)	stable
+        neutron:   15042  Emean =    3.62 MeV	( 5.1 keV --> 13.6 MeV)	mean life = 14.7 min
 
  List of particles emerging from absorbers :
-      anti_nu_e:     170  Emean =    1.95 MeV	( 122 keV --> 3.42 MeV)
-             e+:       3  Emean =    1.99 MeV	( 795 keV --> 3 MeV)
-             e-:     171  Emean =    1.73 MeV	( 25.7 keV --> 4.22 MeV)
-          gamma:   13333  Emean =    1.73 MeV	( 6.31 keV --> 4.63 MeV)
-        neutron:   10652  Emean =    2.19 MeV	( 7.34 eV  --> 14.1 MeV)
+      anti_nu_e:     159  Emean =    1.84 MeV	( 327 keV --> 5.82 MeV)
+             e+:       4  Emean =    2.08 MeV	( 1.55 MeV --> 2.91 MeV)
+             e-:     164  Emean =    1.91 MeV	( 46.9 keV --> 4.29 MeV)
+          gamma:   13392  Emean =    1.69 MeV	( 5.3 keV --> 4.63 MeV)
+        neutron:   10695  Emean =    2.18 MeV	( 10.2 eV  --> 14.1 MeV)
 
- Nb of events with primary absorbed = 87 %,   transmit = 6.6 %,   reflected = 6.1 %
+ Nb of events with primary absorbed = 87 %,   transmit = 6.8 %,   reflected = 6.1 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 241992494, 156324279
+ Current couple of seeds = 598463, 1277652208
 ----------------------------------------
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.039 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.043 MB
 ============================================================

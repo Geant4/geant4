@@ -46,8 +46,8 @@ class G4HyperNucleiProperties
 
   public: 
 
-    G4HyperNucleiProperties() {}
-   ~G4HyperNucleiProperties() {}
+    G4HyperNucleiProperties() = default;
+   ~G4HyperNucleiProperties() = default;
 
     static G4double GetAtomicMass(G4int A, G4int Z, G4int L);
       // Calculate Mass Excess of nucleus A, Z, L(number of Lambda)

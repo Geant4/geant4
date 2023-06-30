@@ -43,10 +43,16 @@ PlacementVolumeInfo::PlacementVolumeInfo(OctreeNode* octree,
 
 int64_t PlacementVolumeInfo::GetPairsOnChain(G4int idx) const
 {
-  if(fBasePairsInChain.find(idx) == fBasePairsInChain.end()) {
-    return 0;
-  } else {
-    return fBasePairsInChain.at(idx);}
+  int64_t val = 0;
+  if(fBasePairsInChain.find(idx) == fBasePairsInChain.end()) 
+  {
+    val = 0;
+  } 
+  else 
+  {
+    val = fBasePairsInChain.at(idx);
+  }
+  return val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

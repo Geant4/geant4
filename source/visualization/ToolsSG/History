@@ -6,6 +6,51 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-06-04 John Allison (vis_toolssg-V11-01-08)
+- IsUISessionCompatible: Remove the function where not necessary and tidy.
+
+## 2023-05-29 Guy Barrand (vis_toolssg-V11-01-07)
+- sources.cmake: declare the G4*ZB.hh, G4*ZB.cc files.
+- new ToolsSG Qt ZB sub-driver: new files: G4ToolsSGQtZB.hh, G4ToolsSGQtZB.cc, G4ToolsSGQtZBViewer.hh, G4ToolsSGQtZBViewer.cc.
+- new ToolsSG X11 sub-driver. New files: G4ToolsSGX11ZB.hh, G4ToolsSGX11ZB.cc.
+- new ToolsSG Xt sub-driver. New files: G4ToolsSGXtZB.hh, G4ToolsSGXtZB.cc.
+- new ToolsSG Windows sub-driver. New files: G4ToolsSGWindowsZB.hh, G4ToolsSGWindowsZB.cc.
+- sources.cmake: in if(GEANT4_USE_TOOLSSG_XT_GLES), PUBLIC G4VIS_USE_TOOLSSG_X11_GLES should be PUBLIC G4VIS_USE_TOOLSSG_XT_GLES.
+- src/G4ToolsSGQtGLES.cc, G4ToolsSGXtGLES.cc: avoid the "tools::argcv" logic by using the "get argcv" from G4Qt, G4Xt. This should fix a Coverity issue.
+
+## 2023-04-27 Ben Morgan (vis_toolssg-V11-01-06)
+- Link to Qt6OpenGLWidgets library when using Qt6 to access QOpenGLWidget.
+
+## 2023-04-14 John Allison (vis_toolssg-V11-01-05)
+- Co-working: visman-V11-01-04, greps-V11-01-03, interfaces-V11-01-11,
+  opengl-V11-01-06, openinventor-V11-01-04.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- Revert earlier changes for the new scene tree.
+  - After the introduction of virtual G4VInteractiveSession::UpdateSceneTree
+    they are no loner necessary.
+
+## 2023-04-02 Ben Morgan (vis_toolssg-V11-01-04)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+
+## 2023-03-28 John Allison (vis_toolssg-V11-01-03)
+- G4ToolsSGViewer.hh:
+  -  Call UpdateGUISceneTree() if (kernelVisitWasNeeded).
+- G4ToolsSGQtViewer.hh:
+  - uiQt becomes fUIQt, i.e., a data member.
+  - Implement virtual void UpdateGUISceneTree() {
+    - if (fUIQt) fUIQt->UpdateSceneTree(fSceneTree);
+
+## 2023-03-22 Ben Morgan (vis_toolssg-V11-01-02)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-02-06 Ben Morgan (vis_toolssg-V11-01-01)
+- Isolate private headers and update dependencies
+
+## 2023-01-30 Ben Morgan (vis_toolssg-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
 ## 2022-11-25 Gabriele Cosmo (vis_toolssg-V11-00-15)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

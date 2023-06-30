@@ -55,12 +55,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
-G4CoulombScattering::G4CoulombScattering(const G4String& name)
-  : G4VEmProcess(name),q2Max(CLHEP::TeV*CLHEP::TeV),isInitialised(false)
+G4CoulombScattering::G4CoulombScattering(const G4String& nam, G4bool comb)
+  : G4VEmProcess(nam),
+    q2Max(CLHEP::TeV*CLHEP::TeV),
+    isCombined(comb)
 {
-  //  G4cout << "G4CoulombScattering constructor "<< G4endl;
   SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
   SetSplineFlag(false);
@@ -69,6 +68,18 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetProcessSubType(fCoulombScattering);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4CoulombScattering::G4CoulombScattering(const G4String& nam)
+  : G4CoulombScattering(nam, true)
+{}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4CoulombScattering::G4CoulombScattering(G4bool comb)
+  : G4CoulombScattering("CoulombScat", comb)
+{}
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4CoulombScattering::~G4CoulombScattering() = default;
@@ -95,13 +106,30 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
   G4double theta = param->MscThetaLimit();
 
   // restricted or non-restricted cross section table
-  G4bool yes = false;
-  if(theta == CLHEP::pi) { 
-    yes = true;
-    // for restriced single scattering change cross section shape
-    SetCrossSectionType(fEmIncreasing);
+  if(isCombined) {
+    if(theta == CLHEP::pi) {
+      // for restriced single scattering change cross section shape
+      SetCrossSectionType(fEmIncreasing);
+      SetStartFromNullFlag(true);
+    }
+  } else {
+    SetSplineFlag(true);
+    SetCrossSectionType(fEmDecreasing);
   }
-  SetStartFromNullFlag(yes);
+  isInitialised = true;
+  G4double mass = p->GetPDGMass();
+  G4String name = p->GetParticleName();
+  
+  G4bool ion = false;
+  if (mass > CLHEP::GeV || p->GetParticleType() == "nucleus") {
+    SetBuildTableFlag(false);
+    ion = true;
+    if(name != "GenericIon") { SetVerboseLevel(0); }
+  } else {
+    if(name != "e-" && name != "e+" &&
+       name != "mu+" && name != "mu-" && name != "pi+" && 
+       name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
+  }
   /*
   G4cout << "### G4CoulombScattering::InitialiseProcess: "
   	 << p->GetParticleName()
@@ -109,28 +137,14 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 	 << " Emax(TeV)= " << MaxKinEnergy()/TeV
 	 << " nbins= " << LambdaBinning()
 	 << " theta= " << theta
+	 << " mass(MeV)= " << mass
+	 << " isCombined=" << isCombined
+	 << " ion=" << ion
 	 << G4endl;
   */
-
-  isInitialised = true;
-  G4double mass = p->GetPDGMass();
-  G4String name = p->GetParticleName();
-  //G4cout << name << "  type: " << p->GetParticleType() 
-  //<< " mass= " << mass << G4endl;
-  yes = true;
-  if (mass > CLHEP::GeV || p->GetParticleType() == "nucleus") {
-    SetBuildTableFlag(false);
-    yes = false;
-    if(name != "GenericIon") { SetVerboseLevel(0); }
-  } else {
-    if(name != "e-" && name != "e+" &&
-       name != "mu+" && name != "mu-" && name != "pi+" && 
-       name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
-  }
-
   if(nullptr == EmModel(0)) { 
-    if(yes) { SetEmModel(new G4eCoulombScatteringModel()); } 
-    else    { SetEmModel(new G4IonCoulombScatteringModel()); }
+    if(ion) { SetEmModel(new G4IonCoulombScatteringModel()); }
+    else { SetEmModel(new G4eCoulombScatteringModel(isCombined)); } 
   }
   G4VEmModel* model = EmModel(0);
   G4double emin = std::max(param->MinKinEnergy(),model->LowEnergyLimit());
@@ -153,9 +167,9 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
   G4double theta = G4EmParameters::Instance()->MscThetaLimit();
 
   if(0.0 < theta) {
-    G4double p2 = q2Max*mat->GetIonisation()->GetInvA23()/(1.0 - cos(theta));
+    G4double p2 = q2Max*mat->GetIonisation()->GetInvA23()/(1.0 - std::cos(theta));
     G4double mass = part->GetPDGMass();
-    emin = sqrt(p2 + mass*mass) - mass;
+    emin = p2/(std::sqrt(p2 + mass*mass) + mass);
   }
 
   return emin;
@@ -171,7 +185,9 @@ void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile) const
   else              { outFile << tetmin; }
   outFile << " < Theta(degree) < 180";
 
-  if(q2Max < DBL_MAX) { outFile << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }
+  if(q2Max < DBL_MAX) {
+    outFile << ", pLimit(GeV^1)= " << std::sqrt(q2Max)/GeV;
+  }
   outFile << G4endl;
 }
 

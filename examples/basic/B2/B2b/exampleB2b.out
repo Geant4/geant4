@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,7 +45,9 @@ Registered graphics systems are:
   Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -268,7 +270,7 @@ eBrem:  for e-  XStype:4  SubType=3
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -300,7 +302,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -332,7 +334,7 @@ hPairProd:  for proton  XStype:1  SubType=4
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -345,7 +347,6 @@ ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -391,7 +392,7 @@ hPairProd:  for anti_proton  XStype:1  SubType=4
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -423,7 +424,7 @@ hPairProd:  for kaon+  XStype:1  SubType=4
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -455,7 +456,7 @@ hPairProd:  for kaon-  XStype:1  SubType=4
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -487,7 +488,7 @@ muPairProd:  for mu+  XStype:1  SubType=4
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -519,7 +520,7 @@ muPairProd:  for mu-  XStype:1  SubType=4
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -551,7 +552,7 @@ hPairProd:  for pi+  XStype:1  SubType=4
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -583,7 +584,7 @@ hPairProd:  for pi-  XStype:1  SubType=4
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -968,12 +969,21 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 ================================================================
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
 Pre-compound excitation low energy                  100 keV
 Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
@@ -1223,179 +1233,179 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 12
     131 hits stored in this event
 >>> Event: 13
-    94495 hits stored in this event
+    129499 hits stored in this event
 >>> Event: 14
-    621 hits stored in this event
+    51 hits stored in this event
 >>> Event: 15
-    268 hits stored in this event
+    92 hits stored in this event
 >>> Event: 16
-    277 hits stored in this event
+    236 hits stored in this event
 >>> Event: 17
-    116 hits stored in this event
->>> Event: 18
-    194 hits stored in this event
->>> Event: 19
-    56 hits stored in this event
->>> Event: 20
-    179 hits stored in this event
->>> Event: 21
-    282 hits stored in this event
->>> Event: 22
-    1382 hits stored in this event
->>> Event: 23
-    89 hits stored in this event
->>> Event: 24
-    77 hits stored in this event
->>> Event: 25
-    477 hits stored in this event
->>> Event: 26
-    148 hits stored in this event
->>> Event: 27
-    387 hits stored in this event
->>> Event: 28
-    267 hits stored in this event
->>> Event: 29
-    131 hits stored in this event
->>> Event: 30
-    137 hits stored in this event
->>> Event: 31
-    838 hits stored in this event
->>> Event: 32
-    141 hits stored in this event
->>> Event: 33
-    122 hits stored in this event
->>> Event: 34
-    574 hits stored in this event
->>> Event: 35
-    90 hits stored in this event
->>> Event: 36
     69 hits stored in this event
->>> Event: 37
-    1099 hits stored in this event
->>> Event: 38
-    38 hits stored in this event
->>> Event: 39
-    78 hits stored in this event
->>> Event: 40
-    128 hits stored in this event
->>> Event: 41
+>>> Event: 18
+    75 hits stored in this event
+>>> Event: 19
+    61 hits stored in this event
+>>> Event: 20
+    1833 hits stored in this event
+>>> Event: 21
+    153 hits stored in this event
+>>> Event: 22
+    64 hits stored in this event
+>>> Event: 23
+    148 hits stored in this event
+>>> Event: 24
+    99 hits stored in this event
+>>> Event: 25
+    169 hits stored in this event
+>>> Event: 26
     66 hits stored in this event
->>> Event: 42
-    133 hits stored in this event
->>> Event: 43
-    550 hits stored in this event
->>> Event: 44
-    643 hits stored in this event
->>> Event: 45
-    86 hits stored in this event
->>> Event: 46
+>>> Event: 27
+    114 hits stored in this event
+>>> Event: 28
     77 hits stored in this event
+>>> Event: 29
+    135 hits stored in this event
+>>> Event: 30
+    78 hits stored in this event
+>>> Event: 31
+    88 hits stored in this event
+>>> Event: 32
+    184 hits stored in this event
+>>> Event: 33
+    2286 hits stored in this event
+>>> Event: 34
+    125 hits stored in this event
+>>> Event: 35
+    121 hits stored in this event
+>>> Event: 36
+    96 hits stored in this event
+>>> Event: 37
+    93 hits stored in this event
+>>> Event: 38
+    171 hits stored in this event
+>>> Event: 39
+    58 hits stored in this event
+>>> Event: 40
+    304 hits stored in this event
+>>> Event: 41
+    163 hits stored in this event
+>>> Event: 42
+    188 hits stored in this event
+>>> Event: 43
+    80 hits stored in this event
+>>> Event: 44
+    77 hits stored in this event
+>>> Event: 45
+    84 hits stored in this event
+>>> Event: 46
+    63 hits stored in this event
 >>> Event: 47
-    87 hits stored in this event
+    160 hits stored in this event
 >>> Event: 48
-    104 hits stored in this event
+    83 hits stored in this event
 >>> Event: 49
-    199 hits stored in this event
+    147 hits stored in this event
 >>> Event: 50
-    110 hits stored in this event
+    453 hits stored in this event
 >>> Event: 51
-    110 hits stored in this event
+    66 hits stored in this event
 >>> Event: 52
-    71 hits stored in this event
+    129 hits stored in this event
 >>> Event: 53
-    3666 hits stored in this event
+    68 hits stored in this event
 >>> Event: 54
-    329 hits stored in this event
+    78 hits stored in this event
 >>> Event: 55
     76 hits stored in this event
 >>> Event: 56
-    113 hits stored in this event
+    83 hits stored in this event
 >>> Event: 57
-    4073 hits stored in this event
+    136 hits stored in this event
 >>> Event: 58
-    113 hits stored in this event
->>> Event: 59
-    75 hits stored in this event
->>> Event: 60
-    91 hits stored in this event
->>> Event: 61
-    70 hits stored in this event
->>> Event: 62
-    94 hits stored in this event
->>> Event: 63
-    55 hits stored in this event
->>> Event: 64
-    62 hits stored in this event
->>> Event: 65
-    63 hits stored in this event
->>> Event: 66
-    101 hits stored in this event
->>> Event: 67
-    325 hits stored in this event
->>> Event: 68
-    110 hits stored in this event
->>> Event: 69
-    91 hits stored in this event
->>> Event: 70
-    85 hits stored in this event
->>> Event: 71
-    144 hits stored in this event
->>> Event: 72
     64 hits stored in this event
+>>> Event: 59
+    105 hits stored in this event
+>>> Event: 60
+    108 hits stored in this event
+>>> Event: 61
+    145 hits stored in this event
+>>> Event: 62
+    442 hits stored in this event
+>>> Event: 63
+    74 hits stored in this event
+>>> Event: 64
+    55 hits stored in this event
+>>> Event: 65
+    201 hits stored in this event
+>>> Event: 66
+    154 hits stored in this event
+>>> Event: 67
+    161 hits stored in this event
+>>> Event: 68
+    195 hits stored in this event
+>>> Event: 69
+    210 hits stored in this event
+>>> Event: 70
+    407 hits stored in this event
+>>> Event: 71
+    363 hits stored in this event
+>>> Event: 72
+    190 hits stored in this event
 >>> Event: 73
-    72 hits stored in this event
+    81 hits stored in this event
 >>> Event: 74
-    107 hits stored in this event
+    95 hits stored in this event
 >>> Event: 75
-    63 hits stored in this event
+    866 hits stored in this event
 >>> Event: 76
-    159 hits stored in this event
+    255 hits stored in this event
 >>> Event: 77
-    1405 hits stored in this event
+    248 hits stored in this event
 >>> Event: 78
-    100 hits stored in this event
+    57 hits stored in this event
 >>> Event: 79
-    89 hits stored in this event
+    391 hits stored in this event
 >>> Event: 80
-    60 hits stored in this event
+    45 hits stored in this event
 >>> Event: 81
-    85 hits stored in this event
+    76 hits stored in this event
 >>> Event: 82
-    98 hits stored in this event
+    187 hits stored in this event
 >>> Event: 83
-    41 hits stored in this event
+    66 hits stored in this event
 >>> Event: 84
-    164 hits stored in this event
+    972 hits stored in this event
 >>> Event: 85
-    253 hits stored in this event
->>> Event: 86
-    58 hits stored in this event
->>> Event: 87
-    155 hits stored in this event
->>> Event: 88
-    135 hits stored in this event
->>> Event: 89
-    129 hits stored in this event
->>> Event: 90
-    87 hits stored in this event
->>> Event: 91
-    56 hits stored in this event
->>> Event: 92
-    84 hits stored in this event
->>> Event: 93
-    78 hits stored in this event
->>> Event: 94
-    601 hits stored in this event
->>> Event: 95
-    249 hits stored in this event
->>> Event: 96
-    266 hits stored in this event
->>> Event: 97
     158 hits stored in this event
+>>> Event: 86
+    2528 hits stored in this event
+>>> Event: 87
+    124 hits stored in this event
+>>> Event: 88
+    141 hits stored in this event
+>>> Event: 89
+    1201 hits stored in this event
+>>> Event: 90
+    133 hits stored in this event
+>>> Event: 91
+    1624 hits stored in this event
+>>> Event: 92
+    491 hits stored in this event
+>>> Event: 93
+    61 hits stored in this event
+>>> Event: 94
+    137 hits stored in this event
+>>> Event: 95
+    69 hits stored in this event
+>>> Event: 96
+    157 hits stored in this event
+>>> Event: 97
+    88 hits stored in this event
 >>> Event: 98
-    155 hits stored in this event
+    84 hits stored in this event
 >>> Event: 99
-    80 hits stored in this event
+    63 hits stored in this event
 ### Run 2 starts.
 --> Event 0 starts.
 

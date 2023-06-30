@@ -43,16 +43,16 @@
 // ###                           ALPHA                                ###
 // ######################################################################
 
-G4Alpha* G4Alpha::theInstance = 0;
+G4Alpha* G4Alpha::theInstance = nullptr;
 
 G4Alpha* G4Alpha::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "alpha";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4Ions* anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -69,7 +69,7 @@ G4Alpha* G4Alpha::Definition()
                     0,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +4,  1000020040,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 		false,        "static",   -1000020040, 
                   0.0,               0
                );

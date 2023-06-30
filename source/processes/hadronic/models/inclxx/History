@@ -6,9 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023-03-17 Alberto Ribon (hadr-inclxx-V11-00-09)
-- G4INCLNNToNLK2piChannel : fixed bug in the method fillFinalState.
-  Thanks to Dmitri Konstantinov for reporting it.
+## 2023-05-15 Alberto Ribon (hadr-inclxx-V11-01-01) -
+Major extension of the INCLXX model to handle antiproton annihilation at rest.
+Work done by Demid Zharenov and Jean-Christophe David.
+
+## 2023-03-17 Alberto Ribon (hadr-inclxx-V11-01-00) -
+G4INCLNNToNLK2piChannel : fixed bug in the method fillFinalState.
+Thanks to Dmitri Konstantinov for reporting it.
 
 ## 2022-11-26 Gabriele Cosmo (hadr-inclxx-V11-00-08)
 - Fixed more compilation warnings for implicit type conversions.

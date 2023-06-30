@@ -267,6 +267,9 @@ G4_REFERENCE_PHYSCONSTR_FACTORY(G4StepLimiterPhysics);
 //#include "G4StoppingPhysics.hh"
 G4_REFERENCE_PHYSCONSTR_FACTORY(G4StoppingPhysics);
 
+//#include "G4StoppingPhysicsWithINCLXX.hh"
+G4_REFERENCE_PHYSCONSTR_FACTORY(G4StoppingPhysicsWithINCLXX);
+
 //#include "G4WeightWindowBiasing.hh"
 G4_REFERENCE_PHYSCONSTR_FACTORY(G4WeightWindowBiasing);
 

@@ -70,43 +70,43 @@ class G4PhantomParameterisation : public G4VPVParameterisation
   public:
 
     G4PhantomParameterisation();
-   ~G4PhantomParameterisation();
+   ~G4PhantomParameterisation() override;
 
-    virtual void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
+    void ComputeTransformation(const G4int, G4VPhysicalVolume *) const override;
   
-    virtual G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume *);
+    G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume *) override;
   
-    virtual G4Material* ComputeMaterial(const G4int repNo, 
+    G4Material* ComputeMaterial(const G4int repNo, 
                                              G4VPhysicalVolume* currentVol,
-                                       const G4VTouchable* parentTouch=nullptr);
+                                       const G4VTouchable* parentTouch=nullptr) override;
   // Dummy declarations ...
 
     void ComputeDimensions (G4Box &, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Tubs&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Trd&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Trap&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Cons&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Orb&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Sphere&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Ellipsoid&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Torus&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Para&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Hype&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polycone&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polyhedra&, const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
   
     void BuildContainerSolid( G4VPhysicalVolume* pPhysicalVol );
     void BuildContainerSolid( G4VSolid* pMotherSolid );

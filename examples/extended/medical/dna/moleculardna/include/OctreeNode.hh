@@ -41,9 +41,9 @@ class OctreeNode
 {
  public:
   // Uniform divisions constructor along each axis
-  OctreeNode(G4ThreeVector, G4ThreeVector, G4int, OctreeNode* parent = nullptr);
+  OctreeNode(const G4ThreeVector&, const G4ThreeVector&, G4int, OctreeNode* parent = nullptr);
 
-  virtual ~OctreeNode();
+  ~OctreeNode();
 
   inline G4bool HasChildren() const
   {

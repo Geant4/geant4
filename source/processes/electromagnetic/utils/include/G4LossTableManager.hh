@@ -90,13 +90,13 @@ public:
   //-------------------------------------------------
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-                           G4VEnergyLossProcess* p, G4bool theMaster);
+                           G4VEnergyLossProcess* p);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-                           G4VEmProcess* p, G4bool theMaster);
+                           G4VEmProcess* p);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-                           G4VMultipleScattering* p, G4bool theMaster);
+                           G4VMultipleScattering* p);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
@@ -255,49 +255,49 @@ private:
 
   typedef const G4ParticleDefinition* PD;
 
-  std::map<PD,G4VEnergyLossProcess*,std::less<PD> > loss_map;
+  // cache
+  G4VEnergyLossProcess* currentLoss{nullptr};
+  PD currentParticle{nullptr};
+  PD theElectron;
+  PD theGenericIon{nullptr};
+  PD firstParticle{nullptr};
+
+  G4LossTableBuilder* tableBuilder;
+  G4EmCorrections* emCorrections;
+  G4EmConfigurator* emConfigurator{nullptr};
+  G4ElectronIonPair* emElectronIonPair{nullptr};
+  G4NIELCalculator* nielCalculator{nullptr};
+  G4VAtomDeexcitation* atomDeexcitation{nullptr};
+  G4VSubCutProducer* subcutProducer{nullptr};
+
+  G4EmParameters* theParameters;
+  G4VEmProcess* gGeneral{nullptr};
+  G4VEmProcess* eGeneral{nullptr};
+  G4VEmProcess* pGeneral{nullptr};
+
+  G4int verbose;
+  G4int n_loss{0};
+  G4int run{-1};
+
+  G4bool all_tables_are_built{false};
+  G4bool startInitialisation{false};
+  G4bool isMaster{true};
 
   std::vector<G4VEnergyLossProcess*> loss_vector;
   std::vector<PD> part_vector;
   std::vector<PD> base_part_vector;
-  std::vector<G4bool> tables_are_built;
-  std::vector<G4bool> isActive;
   std::vector<G4PhysicsTable*> dedx_vector;
   std::vector<G4PhysicsTable*> range_vector;
   std::vector<G4PhysicsTable*> inv_range_vector;
+  std::vector<G4bool> tables_are_built;
+  std::vector<G4bool> isActive;
   std::vector<G4VMultipleScattering*> msc_vector;
   std::vector<G4VEmProcess*> emp_vector;
   std::vector<G4VEmModel*> mod_vector;
   std::vector<G4VEmFluctuationModel*> fmod_vector;
   std::vector<G4VProcess*> p_vector;
 
-  // cache
-  G4VEnergyLossProcess* currentLoss;
-  PD                    currentParticle;
-  PD                    theElectron;
-  PD                    theGenericIon;
-  PD                    firstParticle;
-
-  G4LossTableBuilder*   tableBuilder;
-  G4EmCorrections*      emCorrections;
-  G4EmConfigurator*     emConfigurator;
-  G4ElectronIonPair*    emElectronIonPair;
-  G4NIELCalculator*     nielCalculator;
-  G4VAtomDeexcitation*  atomDeexcitation;
-  G4VSubCutProducer*    subcutProducer;
-
-  G4EmParameters*       theParameters;
-  G4VEmProcess*         gGeneral;
-  G4VEmProcess*         eGeneral;
-  G4VEmProcess*         pGeneral;
-
-  G4int verbose;
-  G4int n_loss;
-  G4int run;
-
-  G4bool all_tables_are_built;
-  G4bool startInitialisation;
-  G4bool isMaster;
+  std::map<PD,G4VEnergyLossProcess*,std::less<PD> > loss_map;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

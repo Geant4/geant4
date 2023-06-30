@@ -146,23 +146,21 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTFLAGS   += -I $(QTLPATH)/Qt3DCore.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/Qt3DExtras.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/Qt3DRender.framework/Headers
-      QTFLAGS   += -I $(QTLPATH)/QtPrintSupport.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
-       QTLIBS    += -framework QtWidgets -framework QtPrintSupport
+       QTLIBS    += -framework QtWidgets
     endif   
     ifndef QT3DLIBS
        QT3DLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
        QT3DLIBS    += -framework QtWidgets
        QT3DLIBS    += -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
-       QT3DLIBS    += -framework QtPrintSupport
     endif   
     ifndef GLQTLIBS  
       GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
       GLQTLIBS    += -framework QtWidgets
-      GLQTLIBS    += -framework QtOpenGL -framework QtPrintSupport
+      GLQTLIBS    += -framework QtOpenGL
     endif   
   endif
 

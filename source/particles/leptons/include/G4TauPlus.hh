@@ -51,7 +51,7 @@ class G4TauPlus : public G4ParticleDefinition
  private:
    static G4TauPlus* theInstance;
    G4TauPlus(){}
-   ~G4TauPlus(){}
+   ~G4TauPlus() override= default;
 
  public:
    static G4TauPlus* Definition();

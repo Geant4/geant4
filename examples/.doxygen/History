@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-06-05 S. Guatelli (doxygen-V11-01-01)
+- updated link to the Advanced Examples webpage
+
+## 2023-05-22 G. Hugo (doxygen-V11-01-00)
+- Added FlukaCern extended examples in documentation (hadronic/FlukaCern).
+
 ## 2022-11-09 I. Hrivnacova (doxygen-V11-00-03)
 - Updated configuration files and generate_standalone.sh script
 - Added new extended example analysis/AnaEx03

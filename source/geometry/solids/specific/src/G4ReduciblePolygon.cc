@@ -56,8 +56,8 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[],
   //
   // Translate
   //
-  G4double *a = new G4double[n*2];
-  G4double *b = new G4double[n*2];
+  auto a = new G4double[n*2];
+  auto b = new G4double[n*2];
   
   G4double *rOut = a + n,
            *zOut = b + n,
@@ -93,7 +93,7 @@ void G4ReduciblePolygon::Create( const G4double a[],
   ABVertex* prev = nullptr;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    ABVertex *newVertex = new ABVertex;
+    auto newVertex = new ABVertex;
     newVertex->a = *anext;
     newVertex->b = *bnext;
     newVertex->next = nullptr;
@@ -494,12 +494,12 @@ G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
     
     if (cross < -tolerance)
     {
-      if (nPos) return true;
+      if (nPos != 0) return true;
       ++nNeg;
     }
     else if (cross > tolerance)
     {
-      if (nNeg) return true;
+      if (nNeg != 0) return true;
       ++nPos;
     }
     curr = curr->next;
@@ -524,7 +524,7 @@ G4double G4ReduciblePolygon::Area()
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
-    if (next==0) next = vertexHead;
+    if (next==nullptr) next = vertexHead;
     
     answer += curr->a*next->b - curr->b*next->a;
     curr = curr->next;

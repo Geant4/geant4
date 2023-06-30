@@ -48,16 +48,16 @@
 // ######################################################################
 // ###                          TAUMINUS                             ###
 // ######################################################################
-G4TauMinus* G4TauMinus::theInstance = 0;
+G4TauMinus* G4TauMinus::theInstance = nullptr;
 
 G4TauMinus* G4TauMinus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "tau-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4TauMinus* G4TauMinus::Definition()
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,          15,
-		false,     290.3e-6*ns,          NULL,
+		false,     290.3e-6*ns,          nullptr,
              false,           "tau"
               );
 
@@ -83,7 +83,7 @@ G4TauMinus* G4TauMinus::Definition()
    anInstance->SetPDGMagneticMoment( muB * 1.00118);
 
   //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create decay channels
   G4VDecayChannel* mode;

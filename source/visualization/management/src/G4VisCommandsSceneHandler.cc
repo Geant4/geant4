@@ -324,10 +324,12 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     }
   }
 
-  // If there is an existing viewer, store its view parameters
+  // If there is an existing viewer, store its view parameters and scene tree
   if (fpVisManager->GetCurrentViewer()) {
     fThereWasAViewer = true;
-    fExistingVP = fpVisManager->GetCurrentViewer()->GetViewParameters();
+    auto viewer = fpVisManager->GetCurrentViewer();
+    fExistingVP = viewer->GetViewParameters();
+    fExistingSceneTree = viewer->AccessSceneTree();
   }
 
   // Set current graphics system in preparation for

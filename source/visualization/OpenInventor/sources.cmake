@@ -33,9 +33,12 @@ geant4_add_module(G4OpenInventor
     SoTrd.cc
     SoTubs.cc )
 
+# Needed by G4VisExecutive...
+geant4_module_compile_definitions(G4OpenInventor PUBLIC G4VIS_USE_OI)
+
 geant4_module_link_libraries(G4OpenInventor
   PUBLIC
-    G4UIcommon
+    G4UIcore
     G4globman
     G4graphics_reps
     G4hepgeometry
@@ -44,7 +47,7 @@ geant4_module_link_libraries(G4OpenInventor
     G4vis_management
     Coin::Coin
   PRIVATE
-    G4UIbasic
+    G4UIimplementation
     G4csg
     G4geometrymng
     G4tools
@@ -79,7 +82,10 @@ if(GEANT4_USE_INVENTOR_XT)
       G4OpenInventorXtViewer.cc
       wheelmouse.cc )
   
-  geant4_module_compile_definitions(G4OpenInventor PRIVATE G4VIS_BUILD_OIX_DRIVER)
+  geant4_module_compile_definitions(G4OpenInventor
+    PUBLIC G4VIS_USE_OIX
+    PRIVATE G4VIS_BUILD_OIX_DRIVER)
+
   geant4_module_link_libraries(G4OpenInventor PUBLIC SoXt::SoXt Motif::Xm)
   if(APPLE)
     geant4_module_link_libraries(G4OpenInventor PUBLIC XQuartzGL::GL)
@@ -103,7 +109,9 @@ if(GEANT4_USE_INVENTOR_QT)
       G4OpenInventorQtViewer.cc
       G4SoQt.cc )
 
-  geant4_module_link_libraries(G4OpenInventor PUBLIC SoQt::SoQt OpenGL::GL Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Widgets)
+  geant4_module_compile_definitions(G4OpenInventor PUBLIC G4VIS_USE_OIQT)
+
+  geant4_module_link_libraries(G4OpenInventor PUBLIC SoQt::SoQt OpenGL::GL Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets)
 endif()
 
 # - WIN32 Only (Win32) sources
@@ -116,6 +124,8 @@ if(GEANT4_USE_INVENTOR_WIN)
     SOURCES
       G4OpenInventorWin.cc
       G4OpenInventorWinViewer.cc)
+  
+  geant4_module_compile_definitions(G4OpenInventor PUBLIC G4VIS_USE_OIWIN32)
   
   geant4_module_link_libraries(G4OpenInventor PUBLIC SoWin::SoWin OpenGL::GL)
 endif()

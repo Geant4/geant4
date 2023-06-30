@@ -29,4 +29,4 @@
 #include "G4ParticleHPPartial.hh"
 using G4NeutronHPPartial = G4ParticleHPPartial;
 
-#endif 
+#endif

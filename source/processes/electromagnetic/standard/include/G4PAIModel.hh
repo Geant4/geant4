@@ -119,14 +119,14 @@ public:
 
   inline void SetVerboseLevel(G4int verbose);
 
+  // hide assignment operator 
+  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
+  G4PAIModel(const  G4PAIModel&) = delete;
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*, 
                               G4double kinEnergy) final;
-
-  // hide assignment operator 
-  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
-  G4PAIModel(const  G4PAIModel&) = delete;
 
 private:
 

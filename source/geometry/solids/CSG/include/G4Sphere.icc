@@ -183,8 +183,7 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
     G4Exception("G4Sphere::CheckThetaAngles()", "GeomSolids0002",
                 FatalException, message);
   }
-  if ( fDTheta-fSTheta < CLHEP::pi ) { fFullThetaSphere = false; }
-  else                               { fFullThetaSphere = true ; }
+  fFullThetaSphere = fDTheta-fSTheta >= CLHEP::pi;
   fFullSphere = fFullPhiSphere && fFullThetaSphere;
 
   InitializeThetaTrigonometry();
@@ -240,7 +239,7 @@ inline
 void G4Sphere::CheckPhiAngles(G4double sPhi, G4double dPhi)
 {
   CheckDPhiAngle(dPhi);
-  if (!fFullPhiSphere && sPhi) { CheckSPhiAngle(sPhi); }
+  if (!fFullPhiSphere && (sPhi != 0.0)) { CheckSPhiAngle(sPhi); }
   fFullSphere = fFullPhiSphere && fFullThetaSphere;
 
   InitializePhiTrigonometry();
@@ -250,7 +249,7 @@ inline
 void G4Sphere::SetInnerRadius(G4double newRmin)
 {
   fRmin= newRmin;
-  fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
+  fRminTolerance = (fRmin) != 0.0 ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
   Initialize();
 }
 

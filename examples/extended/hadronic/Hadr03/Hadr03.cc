@@ -79,7 +79,7 @@ int main(int argc,char** argv) {
   G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState( true );
   G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation( true );
   G4ParticleHPManager::GetInstance()->SetNeglectDoppler( false );
-  G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( false );
+  G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( true );
   G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel( false );
   G4ParticleHPManager::GetInstance()->SetUseNRESP71Model( false );
 

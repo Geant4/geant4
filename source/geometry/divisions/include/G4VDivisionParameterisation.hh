@@ -54,12 +54,12 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4VDivisionParameterisation( EAxis axis, G4int nDiv, G4double width,
                                  G4double offset, DivisionType divType,
                                  G4VSolid* motherSolid = nullptr);
-    virtual ~G4VDivisionParameterisation();
+    ~G4VDivisionParameterisation() override;
   
-    virtual G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume*);
+    G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume*) override;
 
-    virtual void ComputeTransformation(const G4int copyNo,
-                                       G4VPhysicalVolume *physVol) const = 0;
+    void ComputeTransformation(const G4int copyNo,
+                                       G4VPhysicalVolume *physVol) const override = 0;
   
     inline const G4String& GetType() const;
     inline EAxis GetAxis() const;

@@ -53,13 +53,17 @@ public:
 
   explicit G4EmParticleList();
 
-  ~G4EmParticleList();
+  ~G4EmParticleList() = default;
 
+  // list of names of main EM particles
   const std::vector<G4String>& PartNames() const;
 
+  // minimal list of names of charged particles
+  const std::vector<G4String>& EmChargedPartNames() const;  
+
 private:
-  std::vector<G4String>  pNames; 
-  
+  std::vector<G4String> pNames; 
+  std::vector<G4String> cNames; 
 };
 
 #endif

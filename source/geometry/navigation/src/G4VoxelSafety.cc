@@ -42,8 +42,7 @@
 // ********************************************************************
 //
 G4VoxelSafety::G4VoxelSafety()
-  : fBlockList(),
-    fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
+  : fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
     fVoxelNoSlicesStack(kNavigatorVoxelStackMax,0),
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax,0.),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax,0),
@@ -56,9 +55,7 @@ G4VoxelSafety::G4VoxelSafety()
 // Destructor
 // ********************************************************************
 //
-G4VoxelSafety::~G4VoxelSafety()
-{
-}
+G4VoxelSafety::~G4VoxelSafety() = default;
 
 // ********************************************************************
 // ComputeSafety
@@ -245,7 +242,7 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
 
   G4double localCrd = localPoint(targetHeaderAxis);
 
-  const G4int candNodeNo = G4int( (localCrd-targetHeaderMin)
+  const auto  candNodeNo = G4int( (localCrd-targetHeaderMin)
                                  / targetHeaderNodeWidth );
   // Ensure that it is between 0 and targetHeader->GetMaxExtent() - 1
 
@@ -347,7 +344,7 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
      }
 #endif 
 
-     if ( sampleProxy == 0 )
+     if ( sampleProxy == nullptr )
      {
        G4ExceptionDescription ed;
        ed << " Problem for node number= " << targetNodeNo

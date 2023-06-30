@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define/>
+
+  <materials>
+    <isotope N="28" Z="14" name="Si280x7fcf5de2d730">
+      <atom unit="g/mole" value="27.9769"/>
+    </isotope>
+    <isotope N="29" Z="14" name="Si290x7fcf5de2d770">
+      <atom unit="g/mole" value="28.9765"/>
+    </isotope>
+    <isotope N="30" Z="14" name="Si300x7fcf5de2d7b0">
+      <atom unit="g/mole" value="29.9738"/>
+    </isotope>
+    <element name="Silicon0x7fcf5de2d5d0">
+      <fraction n="0.922296077703922" ref="Si280x7fcf5de2d730"/>
+      <fraction n="0.0468319531680468" ref="Si290x7fcf5de2d770"/>
+      <fraction n="0.0308719691280309" ref="Si300x7fcf5de2d7b0"/>
+    </element>
+    <material name="silicon_metal0x7fcf5de46840" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="173"/>
+      <D unit="g/cm3" value="2.33"/>
+      <fraction n="1" ref="Silicon0x7fcf5de2d5d0"/>
+    </material>
+    <isotope N="1" Z="1" name="H10x7fcf5de490a0">
+      <atom unit="g/mole" value="1.00782503081372"/>
+    </isotope>
+    <isotope N="2" Z="1" name="H20x7fcf5de496d0">
+      <atom unit="g/mole" value="2.01410199966617"/>
+    </isotope>
+    <element name="H0x7fcf5de49620">
+      <fraction n="0.999885" ref="H10x7fcf5de490a0"/>
+      <fraction n="0.000115" ref="H20x7fcf5de496d0"/>
+    </element>
+    <material name="galactic_vacuum0x7fcf5de49530" state="gas">
+      <T unit="K" value="2.73"/>
+      <P unit="pascal" value="3e-18"/>
+      <MEE unit="eV" value="19.2"/>
+      <D unit="g/cm3" value="1e-25"/>
+      <fraction n="1" ref="H0x7fcf5de49620"/>
+    </material>
+    <isotope N="1" Z="1" name="H10x7fcf5de5e940">
+      <atom unit="g/mole" value="1.00782503081372"/>
+    </isotope>
+    <isotope N="2" Z="1" name="H20x7fcf5de5ed00">
+      <atom unit="g/mole" value="2.01410199966617"/>
+    </isotope>
+    <element name="H0x7fcf5de5ec30">
+      <fraction n="0.999885" ref="H10x7fcf5de5e940"/>
+      <fraction n="0.000115" ref="H20x7fcf5de5ed00"/>
+    </element>
+    <material name="Galactic0x7fcf5de5e6e0" state="gas">
+      <T unit="K" value="2.73"/>
+      <P unit="pascal" value="3e-18"/>
+      <MEE unit="eV" value="19.2"/>
+      <D unit="g/cm3" value="1e-25"/>
+      <fraction n="1" ref="H0x7fcf5de5ec30"/>
+    </material>
+  </materials>
+
+  <solids>
+    <cone aunit="deg" deltaphi="360" lunit="mm" name="BigMotherP0x7fcf5de5ff50" rmax1="258.418" rmax2="258.964" rmin1="257.474" rmin2="258.018" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="360" lunit="mm" name="BigMotherH0x7fcf5de60040" rmax1="256.78" rmax2="258.418" rmin1="255.84" rmin2="257.474" startphi="0" z="101.504"/>
+    <union name="BigMotherSPO0x7fcf5de60180">
+      <first ref="BigMotherP0x7fcf5de5ff50"/>
+      <second ref="BigMotherH0x7fcf5de60040"/>
+      <position name="BigMotherSPO0x7fcf5de60180_pos" unit="mm" x="0" y="0" z="-101.504"/>
+    </union>
+    <sphere aunit="deg" deltaphi="360" deltatheta="180" lunit="mm" name="dummySphere0x7fcf5de61c30" rmax="1505.042" rmin="1504.042" startphi="0" starttheta="0"/>
+    <box lunit="mm" name="dummyEntrance0x7fcf5de61a30" x="0.606" y="0.83" z="1"/>
+    <box lunit="mm" name="dummyExit0x7fcf5de622f0" x="0.6" y="0.83" z="1"/>
+    <box lunit="mm" name="World0x7fcf5de5f440" x="40000" y="40000" z="40000"/>
+    <box lunit="mm" name="logplate_box" x="40000" y="40000" z="40000"/>
+
+    <cone aunit="deg" deltaphi="0.260360510305143" lunit="mm" name="cone_1_solid" rmax1="257.644" rmax2="258.188" rmin1="257.474" rmin2="258.018" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.260360510305143" lunit="mm" name="cone_2_solid" rmax1="258.418" rmax2="258.964" rmin1="258.248" rmin2="258.794" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.260360510305143" lunit="mm" name="cone_3_solid" rmax1="256.01" rmax2="257.644" rmin1="255.84" rmin2="257.474" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.260360510305143" lunit="mm" name="cone_4_solid" rmax1="256.78" rmax2="258.418" rmin1="256.61" rmin2="258.248" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.0378051983249134" lunit="mm" name="cone_5_solid" rmax1="258.248" rmax2="258.794" rmin1="257.644" rmin2="258.188" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.0378051983249134" lunit="mm" name="cone_6_solid" rmax1="258.248" rmax2="258.794" rmin1="257.644" rmin2="258.188" startphi="0.222383519558314" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.0378051983249134" lunit="mm" name="cone_7_solid" rmax1="256.61" rmax2="258.248" rmin1="256.01" rmin2="257.644" startphi="0" z="101.504"/>
+    <cone aunit="deg" deltaphi="0.0378051983249134" lunit="mm" name="cone_8_solid" rmax1="256.61" rmax2="258.248" rmin1="256.01" rmin2="257.644" startphi="0.222383519558314" z="101.504"/>
+  </solids>
+  <structure>
+    <volume name="cone_1_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_1_solid" />
+    </volume>
+    <volume name="cone_2_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_2_solid" />
+    </volume>
+    <volume name="cone_3_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_3_solid" />
+    </volume>
+    <volume name="cone_4_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_4_solid" />
+    </volume>
+    <volume name="cone_5_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_5_solid" />
+    </volume>
+    <volume name="cone_6_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_6_solid" />
+    </volume>
+    <volume name="cone_7_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_7_solid" />
+    </volume>
+    <volume name="cone_8_log">
+      <materialref ref="silicon_metal0x7fcf5de46840" />
+      <solidref ref="cone_8_solid" />
+    </volume>
+    <volume name="logBigMotherSPO0x7fcf5de60360">
+      <materialref ref="galactic_vacuum0x7fcf5de49530"/>
+      <solidref ref="BigMotherSPO0x7fcf5de60180"/>
+          <physvol name="cone_1">
+            <volumeref ref="cone_1_log"/>
+            <position name="cone_1_pos" unit="mm" x="0" y="0" z="0"/>
+      </physvol>
+      <physvol name="cone_2">
+            <volumeref ref="cone_2_log"/>
+            <position name="cone_2_pos" unit="mm" x="0" y="0" z="0"/>
+      </physvol>
+      <physvol name="cone_3">
+            <volumeref ref="cone_3_log"/>
+            <position name="cone_3_pos" unit="mm" x="0" y="0" z="-101.504"/>
+      </physvol>
+      <physvol name="cone_4">
+            <volumeref ref="cone_4_log"/>
+            <position name="cone_4_pos" unit="mm" x="0" y="0" z="-101.504"/>
+      </physvol>
+      <physvol name="cone_5">
+            <volumeref ref="cone_5_log"/>
+            <position name="cone_5_pos" unit="mm" x="0" y="0" z="0"/>
+      </physvol>
+      <physvol name="cone_6">
+            <volumeref ref="cone_6_log"/>
+            <position name="cone_6_pos" unit="mm" x="0" y="0" z="0"/>
+      </physvol>
+      <physvol name="cone_7">
+            <volumeref ref="cone_7_log"/>
+            <position name="cone_7_pos" unit="mm" x="0" y="0" z="-101.504"/>
+      </physvol>
+      <physvol name="cone_8">
+            <volumeref ref="cone_8_log"/>
+            <position name="cone_8_pos" unit="mm" x="0" y="0" z="-101.504"/>
+      </physvol>
+      <auxiliary auxtype="SensDet" auxvalue="logBigMotherSPOSD"/>
+    </volume>
+    <volume name="logDummySphere0x7fcf5de61d90">
+      <materialref ref="galactic_vacuum0x7fcf5de49530"/>
+      <solidref ref="dummySphere0x7fcf5de61c30"/>
+      <auxiliary auxtype="SensDet" auxvalue="logDummySphereSD"/>
+    </volume>
+    <volume name="logDummyEntrance0x7fcf5de62360">
+      <materialref ref="galactic_vacuum0x7fcf5de49530"/>
+      <solidref ref="dummyEntrance0x7fcf5de61a30"/>
+      <auxiliary auxtype="SensDet" auxvalue="logDummyEntranceSD"/>
+    </volume>
+    <volume name="logDummyExit0x7fcf5de62450">
+      <materialref ref="galactic_vacuum0x7fcf5de49530"/>
+      <solidref ref="dummyExit0x7fcf5de622f0"/>
+      <auxiliary auxtype="SensDet" auxvalue="logDummyExitSD"/>
+    </volume>
+    <volume name="World0x7fcf5de5f7d0">
+      <materialref ref="Galactic0x7fcf5de5e6e0"/>
+      <solidref ref="World0x7fcf5de5f440"/>
+      <physvol copynumber="500000" name="pBigMotherSPO0x7fcf5de60400">
+        <volumeref ref="logBigMotherSPO0x7fcf5de60360"/>
+        <position name="pBigMotherSPO0x7fcf5de60400_pos" unit="mm" x="0" y="0" z="50.752"/>
+      </physvol>
+      <physvol copynumber="500003" name="pDummySphere0x7fcf5de61e30">
+        <volumeref ref="logDummySphere0x7fcf5de61d90"/>
+      </physvol>
+      <physvol copynumber="500004" name="pDummyEntrance0x7fcf5de62400">
+        <volumeref ref="logDummyEntrance0x7fcf5de62360"/>
+        <position name="pDummyEntrance0x7fcf5de62400_pos" unit="mm" x="258.491" y="0.585" z="102.004"/>
+      </physvol>
+      <physvol copynumber="500005" name="pDummyExit0x7fcf5de62520">
+        <volumeref ref="logDummyExit0x7fcf5de62450"/>
+        <position name="pDummyExit0x7fcf5de62520_pos" unit="mm" x="256.31" y="0.585" z="-102.004"/>
+      </physvol>
+    </volume>
+  </structure>
+  <setup name="Default" version="1.0">
+    <world ref="World0x7fcf5de5f7d0"/>
+  </setup>
+
+</gdml>

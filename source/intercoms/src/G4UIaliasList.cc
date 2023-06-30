@@ -29,119 +29,51 @@
 // --------------------------------------------------------------------
 
 #include "G4UIaliasList.hh"
+
 #include "G4ios.hh"
-
-// --------------------------------------------------------------------
-G4UIaliasList::~G4UIaliasList()
-{
-  std::size_t n_treeEntry = alias.size();
-  for(std::size_t i = 0; i < n_treeEntry; ++i)
-  {
-    delete alias[i];
-    delete value[i];
-  }
-}
-
-// --------------------------------------------------------------------
-G4bool G4UIaliasList::operator==(const G4UIaliasList& right) const
-{
-  return (this == &right);
-}
-
-// --------------------------------------------------------------------
-G4bool G4UIaliasList::operator!=(const G4UIaliasList& right) const
-{
-  return (this != &right);
-}
 
 // --------------------------------------------------------------------
 void G4UIaliasList::AddNewAlias(const char* aliasName, const char* aliasValue)
 {
-  if(FindAlias(aliasName) != nullptr)
-  {
-    G4cerr << "Alias <" << aliasName << "> already exists. Command ignored."
-           << G4endl;
+  if (FindAlias(aliasName) != nullptr) {
+    G4cerr << "Alias <" << aliasName << "> already exists. Command ignored." << G4endl;
     return;
   }
-  G4String* newAlias = new G4String(aliasName);
-  alias.push_back(newAlias);
-  G4String* newValue = new G4String(aliasValue);
-  value.push_back(newValue);
+  aliases.emplace(aliasName, aliasValue);
 }
 
 // --------------------------------------------------------------------
 void G4UIaliasList::RemoveAlias(const char* aliasName)
 {
-  G4int i = FindAliasID(aliasName);
-  if(i < 0)
-  {
-    G4cerr << "Alias <" << aliasName << "> does not exist. Command ignored."
-           << G4endl;
+  if (FindAlias(aliasName) == nullptr) {
+    G4cerr << "Alias <" << aliasName << "> does not exist. Command ignored." << G4endl;
     return;
   }
-  alias.erase(alias.begin() + i);
-  value.erase(value.begin() + i);
+  aliases.erase(aliasName);
 }
 
 // --------------------------------------------------------------------
 void G4UIaliasList::ChangeAlias(const char* aliasName, const char* aliasValue)
 {
-  G4int i = FindAliasID(aliasName);
-  if(i < 0)
-  {
+  if (FindAlias(aliasName) == nullptr) {
     AddNewAlias(aliasName, aliasValue);
     return;
   }
-  *(value[i]) = aliasValue;
+  aliases[aliasName] = aliasValue;
 }
 
 // --------------------------------------------------------------------
-G4String* G4UIaliasList::FindAlias(const char* aliasName)
+const G4String* G4UIaliasList::FindAlias(const char* aliasName) const
 {
-  G4int i = FindAliasID(aliasName);
-  if(i < 0)
-  {
-    return nullptr;
-  }
-  return value[i];
+  auto it = aliases.find(aliasName);
+  return (it == aliases.end()) ? nullptr : &(it->second);
 }
 
 // --------------------------------------------------------------------
-G4int G4UIaliasList::FindAliasID(const char* aliasName)
+void G4UIaliasList::List() const
 {
-  std::size_t i_entry = alias.size();
-  for(std::size_t i = 0; i < i_entry; ++i)
-  {
-    if(*(alias[i]) == aliasName)
-    {
-      return (G4int)i;
-    }
-  }
-  return -1;
-}
-
-// --------------------------------------------------------------------
-void G4UIaliasList::List()
-{
-  std::size_t i_entry = alias.size();
-  for(std::size_t i1 = 0; i1 < i_entry - 1; ++i1)
-  {
-    for(std::size_t i2 = i1 + 1; i2 < i_entry; ++i2)
-    {
-      if(*(alias[i1]) > *(alias[i2]))
-      {
-        G4String* tmp = alias[i1];
-        alias[i1]     = alias[i2];
-        alias[i2]     = tmp;
-        tmp           = value[i1];
-        value[i1]     = value[i2];
-        value[i2]     = tmp;
-      }
-    }
-  }
-
-  for(std::size_t i = 0; i < i_entry; ++i)
-  {
-    G4cout << "  " << *(alias[i]) << " : " << *(value[i]) << G4endl;
+  // Aliases are already sorted by std::less<G4String>
+  for (const auto& [a, v] : aliases) {
+    G4cout << "  " << a << " : " << v << G4endl;
   }
 }

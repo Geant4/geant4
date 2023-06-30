@@ -6,9 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
-## 2022-12-20 Ivana Hrivnacova (geom-bool-V11-00-08)
+## 2023-05-10 Gabriele Cosmo (geom-bool-V11-01-03)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
+
+## 2023-03-22 Gabriele Cosmo (geom-bool-V11-01-02)
+- Minor code formatting. No functional changes.
+
+## 2023-03-21 Stewart Boogert (geom-bool-V11-01-01)
+- Added external boolean processor interface.
+
+## 2022-12-20 Ivana Hrivnacova (geom-bool-V11-01-00)
 - Fixed hang-out in G4MultiUnion, caused by oveflow of 'size-1' when 'size' value is zero
-  after changing G4int type to size_t
+  after changing G4int type to size_t.
 
 ## 2022-11-10 Gabriele Cosmo (geom-bool-V11-00-07)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.

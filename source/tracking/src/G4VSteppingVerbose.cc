@@ -32,9 +32,10 @@
 // --------------------------------------------------------------------
 
 #include "G4VSteppingVerbose.hh"
+
+#include "G4ParticleDefinition.hh"
 #include "G4SteppingManager.hh"
 #include "G4Track.hh"
-#include "G4ParticleDefinition.hh"
 
 G4ThreadLocal G4VSteppingVerbose* G4VSteppingVerbose::fInstance = nullptr;
 G4VSteppingVerbose* G4VSteppingVerbose::fMasterInstance = nullptr;
@@ -45,14 +46,12 @@ G4ThreadLocal G4int G4VSteppingVerbose::SilentStepInfo = 0;
 G4VSteppingVerbose::G4VSteppingVerbose()
 //////////////////////////////////////////////////
 {
-  if(fInstance!= nullptr)
-  {
-    G4Exception("G4VSteppingVerbose::G4VSteppingVerbose()",
-                "Tracking0014", FatalException,
-                "Only one SteppingVerbose class can be instantiated.");
+  if (fInstance != nullptr) {
+    G4Exception("G4VSteppingVerbose::G4VSteppingVerbose()", "Tracking0014", FatalException,
+      "Only one SteppingVerbose class can be instantiated.");
   }
   fInstance = this;
-  if(!fMasterInstance) fMasterInstance = this;
+  if (fMasterInstance == nullptr) fMasterInstance = this;
 }
 
 //////////////////////////////////////////////////
@@ -66,7 +65,7 @@ G4VSteppingVerbose::~G4VSteppingVerbose()
 G4VSteppingVerbose* G4VSteppingVerbose::Clone()
 //////////////////////////////////////////////////////////////////
 {
-  G4Exception("G4VSteppingVerbose::Clone","TRKING000",FatalException,
+  G4Exception("G4VSteppingVerbose::Clone", "TRKING000", FatalException,
     "Base class method must not be invoked.");
   return nullptr;
 }
@@ -97,7 +96,7 @@ void G4VSteppingVerbose::CopyState()
   sumEnergyChange = fManager->GetsumEnergyChange();
 
   fParticleChange = fManager->GetfParticleChange();
-  fTrack = fManager->GetfTrack(); 
+  fTrack = fManager->GetfTrack();
   fSecondary = fManager->GetfSecondary();
   fStep = fManager->GetfStep();
   fPreStepPoint = fManager->GetfPreStepPoint();
@@ -107,7 +106,7 @@ void G4VSteppingVerbose::CopyState()
   fSensitive = fManager->GetfSensitive();
   fCurrentProcess = fManager->GetfCurrentProcess();
 
-  fAtRestDoItVector = fManager->GetfAtRestDoItVector(); 
+  fAtRestDoItVector = fManager->GetfAtRestDoItVector();
   fAlongStepDoItVector = fManager->GetfAlongStepDoItVector();
   fPostStepDoItVector = fManager->GetfPostStepDoItVector();
 
@@ -146,35 +145,16 @@ void G4VSteppingVerbose::CopyState()
   fGPILSelection = fManager->GetfGPILSelection();
 }
 
-void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* /*Instance*/)
-{;}
+void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* /*Instance*/) {}
 
-G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
-{
-  return fInstance;
-}
+G4VSteppingVerbose* G4VSteppingVerbose::GetInstance() { return fInstance; }
 
-G4VSteppingVerbose* G4VSteppingVerbose::GetMasterInstance()
-{
-  return fMasterInstance;
-}
+G4VSteppingVerbose* G4VSteppingVerbose::GetMasterInstance() { return fMasterInstance; }
 
-G4int G4VSteppingVerbose::GetSilent()
-{
-  return Silent;
-}
+G4int G4VSteppingVerbose::GetSilent() { return Silent; }
 
-void G4VSteppingVerbose::SetSilent(G4int fSilent)
-{
-  Silent=fSilent;
-}
+void G4VSteppingVerbose::SetSilent(G4int fSilent) { Silent = fSilent; }
 
-G4int G4VSteppingVerbose::GetSilentStepInfo()
-{
-  return SilentStepInfo;
-}
+G4int G4VSteppingVerbose::GetSilentStepInfo() { return SilentStepInfo; }
 
-void G4VSteppingVerbose::SetSilentStepInfo(G4int fSilent)
-{
-  SilentStepInfo = fSilent;
-}
+void G4VSteppingVerbose::SetSilentStepInfo(G4int fSilent) { SilentStepInfo = fSilent; }

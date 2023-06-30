@@ -69,6 +69,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
   // For elastic scattering, _any_ result is considered an interaction
   theNumberOfInteractionLengthLeft = -1.0;
+  //  ClearNumberOfInteractionLengthLeft();
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double kineticEnergy = dynParticle->GetKineticEnergy();

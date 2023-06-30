@@ -208,13 +208,12 @@ G4ParticleDefinition* G4VDecayChannel::GetDaughter(G4int anIndex)
   {
     return G4MT_daughters[anIndex];
   }
-  else
-  {
-    if (verboseLevel>0)
+  
+      if (verboseLevel>0)
       G4cout << "G4VDecayChannel::GetDaughter  index out of range "
              << anIndex << G4endl;
     return nullptr;
-  }
+ 
 }
 
 inline
@@ -224,15 +223,14 @@ const G4String& G4VDecayChannel::GetDaughterName(G4int anIndex) const
   {
     return *daughters_name[anIndex];
   }
-  else
-  {
-    if (verboseLevel>0)
+  
+      if (verboseLevel>0)
     {
       G4cout << "G4VDecayChannel::GetDaughterName ";
       G4cout << "index out of range " << anIndex << G4endl;
     }
     return GetNoName();
-  }
+ 
 }
 
 inline
@@ -242,15 +240,14 @@ G4double G4VDecayChannel::GetDaughterMass(G4int anIndex) const
   {
     return G4MT_daughters_mass[anIndex];
   }
-  else
-  {
-    if (verboseLevel>0)
+  
+      if (verboseLevel>0)
     {
       G4cout << "G4VDecayChannel::GetDaughterMass ";
       G4cout << "index out of range " << anIndex << G4endl;
     }
     return 0.0;
-  }
+ 
 }
 
 inline 
@@ -277,7 +274,7 @@ G4double G4VDecayChannel::GetParentMass() const
 inline
 void G4VDecayChannel::SetParent(const G4String& particle_name)
 {
-  if (parent_name != nullptr) delete parent_name;
+  delete parent_name;
   parent_name = new G4String(particle_name);
   G4MT_parent = nullptr;
 }

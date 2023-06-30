@@ -6,7 +6,36 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2022-12-13 John Allison (modeling-V11-00-15)
+## 2023-05-30 John Allison (modeling-V11-01-05)
+- G4PhysicalVolumeModel.cc: Fix Coverity warnings.
+
+## 2023-04-24 John Allison (modeling-V11-01-04)
+- Coworks: visman-V11-01-09.
+- These two tags implement "generic cutaways"...finally...after 20 years!!!
+  - See extensive description in visualization/management/History.
+- G4PhysicalVolumeModel.cc:
+  - DescribeSolid: Improve tests for invalid Boolean solid in code for
+    section and cutaway.
+    - Algorithms based on G4SubtractionSolid::BoundingLimits and
+      G4IntersectionSolid::BoundingLimits by Evgueni Tcherniaev.
+
+## 2023-04-03 John Allison (modeling-V11-01-03)
+- Bug fix: Initialise fFullPVPath.
+
+## 2023-03-28 John Allison (modeling-V11-01-02)
+- Add static utility G4PhysicalVolumeModel::GetPVNamePathString.
+
+## 2023-02-12 John Allison (modeling-V11-01-01)
+- G4VModel.hh
+  - Remove unnecessary reference to G4PhysicalVolumeModel.
+- G4CallbackModel:
+  - Correct the description in the comments.
+- G4PseudoScene:
+  - Add G4VisAttributes.
+    - This was always available, but never previously made onward
+      available to sub-classes.
+
+## 2022-12-13 John Allison (modeling-V11-01-00)
 - G4TextModel: Fix transform.
   - The rotation part of the transform was being ignored. This impacted
     the implementation of /vis/scene/add/localAxes.

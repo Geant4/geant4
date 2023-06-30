@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName, G4ProcessType type)
- : G4VDiscreteProcess(processName,type),fMess(0)
+ : G4VDiscreteProcess(processName,type)
 {
   fMaxStep1 = fMaxStep2 = DBL_MAX;
   fApplyMaxStep2 = true;

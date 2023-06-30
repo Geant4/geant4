@@ -103,9 +103,9 @@ G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const
 inline
 G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
 {
-  for (auto i=fDaughters.cbegin(); i!=fDaughters.cend(); ++i)
+  for (const auto & daughter : fDaughters)
   {
-    if (**i==*p) return true;
+    if (*daughter==*p) return true;
   }
   return false;
 }
@@ -319,7 +319,7 @@ void G4LogicalVolume::Lock()
 inline
 G4bool G4LogicalVolume::operator == ( const G4LogicalVolume& lv) const
 {
-  return (this==&lv) ? true : false;
+  return this==&lv;
 }
 
 // ********************************************************************
