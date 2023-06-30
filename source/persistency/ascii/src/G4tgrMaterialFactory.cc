@@ -180,6 +180,61 @@ G4tgrMaterialFactory::AddMaterialMixture(const std::vector<G4String>& wl,
 }
 
 // --------------------------------------------------------------------
+G4tgrMaterialPropertiesTable*
+G4tgrMaterialFactory::AddMaterialPropertiesTable(
+                                        const std::vector<G4String>& wl)
+{
+#ifdef G4VERBOSE
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
+  {
+    G4cout << " G4tgrMaterialFactory::AddtgrMaterialPropertiesTable " 
+           << wl[1] << G4endl;
+  }
+#endif
+
+  //---------- Look if material properties table already exists
+  if(FindMaterialPropertiesTable(G4tgrUtils::GetString(wl[1])) != 0)
+  {
+    ErrorAlreadyExists("Material Properties Table ", wl);
+  }
+
+  G4tgrMaterialPropertiesTable* tgrmpt;
+  tgrmpt = new G4tgrMaterialPropertiesTable(wl);
+
+  //---------- register this G4tgrMaterialPropertiesTable
+  theG4tgrMaterialPropertiesTables[tgrmpt->GetName()] = tgrmpt;
+
+  return tgrmpt;
+}
+
+// --------------------------------------------------------------------
+G4tgrBorderSurface*
+G4tgrMaterialFactory::AddBorderSurface(const std::vector<G4String>& wl)
+{
+#ifdef G4VERBOSE
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
+  {
+    G4cout << " G4tgrMaterialFactory::AddtgrBorderSurface " 
+           << wl[1] << G4endl;
+  }
+#endif
+
+  //---------- Look if surface already exists
+  if(FindBorderSurface(G4tgrUtils::GetString(wl[1])) != 0)
+  {
+    ErrorAlreadyExists("Material Properties Table ", wl);
+  }
+
+  G4tgrBorderSurface* tgrbrdr;
+  tgrbrdr = new G4tgrBorderSurface(wl);
+
+  //---------- register this G4tgrBorderSurface
+  theG4tgrBorderSurfaces[tgrbrdr->GetName()] = tgrbrdr;
+
+  return tgrbrdr;
+}
+
+// --------------------------------------------------------------------
 G4tgrIsotope* G4tgrMaterialFactory::FindIsotope(const G4String& name) const
 {
 #ifdef G4VERBOSE
@@ -259,6 +314,50 @@ G4tgrMaterial* G4tgrMaterialFactory::FindMaterial(const G4String& name) const
 }
 
 // --------------------------------------------------------------------
+G4tgrMaterialPropertiesTable* G4tgrMaterialFactory::FindMaterialPropertiesTable(
+                                            const G4String& name) const
+{
+#ifdef G4VERBOSE
+  if(G4tgrMessenger::GetVerboseLevel() >= 3)
+  {
+    G4cout << " G4tgrMaterialFactory::FindMaterialPropertiesTable() - " << name << G4endl;
+  }
+#endif
+  G4mstgrmpt::const_iterator cite;
+  cite = theG4tgrMaterialPropertiesTables.find(name);
+  if(cite == theG4tgrMaterialPropertiesTables.cend())
+  {
+    return nullptr;
+  }
+  else
+  {
+    return (*cite).second;
+  }
+}
+
+// --------------------------------------------------------------------
+G4tgrBorderSurface* G4tgrMaterialFactory::FindBorderSurface(
+                                            const G4String& name) const
+{
+#ifdef G4VERBOSE
+  if(G4tgrMessenger::GetVerboseLevel() >= 3)
+  {
+    G4cout << " G4tgrMaterialFactory::FindBorderSurface() - " << name << G4endl;
+  }
+#endif
+  G4mstgrbrdr::const_iterator cite;
+  cite = theG4tgrBorderSurfaces.find(name);
+  if(cite == theG4tgrBorderSurfaces.cend())
+  {
+    return nullptr;
+  }
+  else
+  {
+    return (*cite).second;
+  }
+}
+
+// --------------------------------------------------------------------
 void G4tgrMaterialFactory::DumpIsotopeList() const
 {
   G4cout << " @@@@@@@@@@@@@@@@ DUMPING G4tgrIsotope's List " << G4endl;
@@ -290,6 +389,35 @@ void G4tgrMaterialFactory::DumpMaterialList() const
     G4tgrMaterial* mate = (*cite).second;
     G4cout << " MATE: " << mate->GetName() << " Type: " << mate->GetType()
            << " NoComponents= " << mate->GetNumberOfComponents() << G4endl;
+  }
+}
+
+// --------------------------------------------------------------------
+void G4tgrMaterialFactory::DumpMaterialPropertiesTableList() const
+{
+  G4cout << " @@@@@@@@@@@@@@@@ DUMPING G4tgrMaterialPropertiesTable's List " << G4endl;
+  for(auto cite = theG4tgrMaterialPropertiesTables.cbegin();
+           cite != theG4tgrMaterialPropertiesTables.cend(); ++cite)
+  {
+    G4tgrMaterialPropertiesTable* mpt = (*cite).second;
+    G4cout << " PROP: " << mpt->GetName()
+           << " Number Of Constants = " <<  mpt->GetNumberOfConstants() 
+           << " Number Of Properties = " << mpt->GetNumberOfProperties() << G4endl;
+  }
+}
+
+// --------------------------------------------------------------------
+void G4tgrMaterialFactory::DumpBorderSurfaceList() const
+{
+  G4cout << " @@@@@@@@@@@@@@@@ DUMPING G4tgrBorderSurface's List " << G4endl;
+  for(auto cite = theG4tgrBorderSurfaces.cbegin();
+           cite != theG4tgrBorderSurfaces.cend(); ++cite)
+  {
+    G4tgrBorderSurface* brdr = (*cite).second;
+    G4cout << " SURF: " << brdr->GetName()
+           << " First Volume = " <<  brdr->GetV1Name() 
+           << " Seccond Volume = " <<  brdr->GetV2Name() 
+           << G4endl;
   }
 }
 

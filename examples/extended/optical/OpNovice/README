@@ -85,7 +85,7 @@ Visualisation
 
    This example handles the program arguments in a new way.
    It can be run with the following optional optionaarguments:
-   $ OpNovice [-g gdmlfile] [-m macro ] [-u UIsession] [-t nThreads]
+   $ OpNovice [-gdml gdmlfile] [-tg tgfile] [-m macro ] [-u UIsession] [-t nThreads]
 
    The -t option is available only in multi-threading mode
    and it allows the user to override the Geant4 default number of
@@ -97,7 +97,11 @@ Visualisation
 
  - execute OpNovice in 'batch' mode from macro files using a gdml file
    to define the geometry
- 	$ OpNovice -g NoviceExample.gdml -m OpNovice.in
+ 	$ OpNovice -gdml ../gdml/NoviceExample.gdml -m OpNovice.in
+ 
+ - execute OpNovice in 'batch' mode from macro files using a tg file
+   to define the geometry
+    $ OpNovice -tg ../tg/NoviceExample.tg -m OpNovice.in
 	
  - execute OpNovice in 'interactive mode' with visualization
  	$ OpNovice
@@ -121,4 +125,9 @@ Macros
 gdml files
 ----------
 NoviceExample.gdml: example gdml file corresponding to
+OpNoviceDetectorConstruction
+
+textgeom files
+----------
+NoviceExample.tg: example textgeom file corresponding to
 OpNoviceDetectorConstruction

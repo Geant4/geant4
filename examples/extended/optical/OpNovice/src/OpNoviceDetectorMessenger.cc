@@ -27,6 +27,7 @@
 #include "OpNoviceDetectorMessenger.hh"
 #include "OpNoviceDetectorConstruction.hh"
 #include "OpNoviceGDMLDetectorConstruction.hh"
+#include "OpNoviceTGDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
@@ -87,16 +88,27 @@ void OpNoviceDetectorMessenger::SetNewValue(G4UIcommand* command,
     if(command == fDumpGdmlFileNameCmd)
       dc1->SetDumpGdmlFile(newValue);
   }
-  else
+  OpNoviceGDMLDetectorConstruction* dc2 =
+    dynamic_cast<OpNoviceGDMLDetectorConstruction*>(fOpNoviceDetCon);
+  if(dc2 != nullptr)
   {
-    OpNoviceGDMLDetectorConstruction* dc2 =
-      dynamic_cast<OpNoviceGDMLDetectorConstruction*>(fOpNoviceDetCon);
     if(command == fVerboseCmd)
       dc2->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
     if(command == fDumpGdmlCmd)
       dc2->SetDumpGdml(fDumpGdmlCmd->GetNewBoolValue(newValue));
     if(command == fDumpGdmlFileNameCmd)
       dc2->SetDumpGdmlFile(newValue);
+  }
+  OpNoviceTGDetectorConstruction* dc3 =
+    dynamic_cast<OpNoviceTGDetectorConstruction*>(fOpNoviceDetCon);
+  if(dc3 != nullptr)
+  {
+    if(command == fVerboseCmd)
+      dc3->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
+    if(command == fDumpGdmlCmd)
+      dc3->SetDumpGdml(fDumpGdmlCmd->GetNewBoolValue(newValue));
+    if(command == fDumpGdmlFileNameCmd)
+      dc3->SetDumpGdmlFile(newValue);
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -43,6 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNoviceDetectorConstruction.hh"
+#include "OpNoviceTGDetectorConstruction.hh"
 #ifdef GEANT4_USE_GDML
 #  include "OpNoviceGDMLDetectorConstruction.hh"
 #endif
@@ -63,11 +64,11 @@ namespace
   {
     G4cerr << " Usage: " << G4endl;
 #ifdef GEANT4_USE_GDML
-    G4cerr << " OpNovice [-g gdmlfile] [-m macro ] [-u UIsession] [-t "
+    G4cerr << " OpNovice [-gdml gdmlfile] [-tg tgfile] [-m macro ] [-u UIsession] [-t "
               "nThreads] [-r seed] "
            << G4endl;
 #else
-    G4cerr << " OpNovice  [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
+    G4cerr << " OpNovice  [-m macro ] [-tg tgfile] [-u UIsession] [-t nThreads] [-r seed] "
            << G4endl;
 #endif
     G4cerr << "   note: -t option is available only for multi-threaded mode."
@@ -87,6 +88,7 @@ int main(int argc, char** argv)
     return 1;
   }
   G4String gdmlfile = "";
+  G4String tgfile = "";
   G4String macro;
   G4String session;
 #ifdef G4MULTITHREADED
@@ -96,8 +98,10 @@ int main(int argc, char** argv)
   G4long myseed = 345354;
   for(G4int i = 1; i < argc; i = i + 2)
   {
-    if(G4String(argv[i]) == "-g")
+    if(G4String(argv[i]) == "-gdml")
       gdmlfile = argv[i + 1];
+    else if(G4String(argv[i]) == "-tg")
+      tgfile = argv[i + 1];
     else if(G4String(argv[i]) == "-m")
       macro = argv[i + 1];
     else if(G4String(argv[i]) == "-u")
@@ -147,6 +151,10 @@ int main(int argc, char** argv)
            << "built with gdml support." << G4endl;
     return 1;
 #endif
+  }
+  else if (tgfile != "")
+  {
+    runManager->SetUserInitialization(new OpNoviceTGDetectorConstruction(tgfile));
   }
   else
   {

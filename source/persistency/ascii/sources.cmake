@@ -23,6 +23,8 @@ geant4_add_module(G4geomtext
     G4tgbRotationMatrixMgr.hh
     G4tgbVolume.hh
     G4tgbVolumeMgr.hh
+    G4tgbMaterialPropertiesTable.hh
+    G4tgbBorderSurface.hh
     G4tgrElement.hh
     G4tgrElementFromIsotopes.hh
     G4tgrElementSimple.hh
@@ -52,6 +54,8 @@ geant4_add_module(G4geomtext
     G4tgrVolumeMgr.hh
     G4tgrSolidMultiUnion.hh
     G4tgrSolidScaled.hh
+    G4tgrMaterialPropertiesTable.hh
+    G4tgrBorderSurface.hh
   SOURCES
     G4tgbDetectorBuilder.cc
     G4tgbDetectorConstruction.cc
@@ -73,6 +77,8 @@ geant4_add_module(G4geomtext
     G4tgbRotationMatrixMgr.cc
     G4tgbVolume.cc
     G4tgbVolumeMgr.cc
+    G4tgbMaterialPropertiesTable.cc
+    G4tgbBorderSurface.cc
     G4tgrElement.cc
     G4tgrElementFromIsotopes.cc
     G4tgrElementSimple.cc
@@ -100,6 +106,8 @@ geant4_add_module(G4geomtext
     G4tgrVolumeAssembly.cc
     G4tgrVolumeDivision.cc
     G4tgrVolumeMgr.cc
+    G4tgrMaterialPropertiesTable.cc
+    G4tgrBorderSurface.cc
     G4tgrSolidMultiUnion.cc
     G4tgrSolidScaled.cc)
 

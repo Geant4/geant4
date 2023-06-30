@@ -98,6 +98,19 @@ void G4tgbGeometryDumper::DumpGeometry(const G4String& fname)
 
   G4VPhysicalVolume* pv = GetTopPhysVol();
   DumpPhysVol(pv);  // dump volume and recursively it will dump all hierarchy
+
+  G4LogicalBorderSurface* surf = nullptr;
+  G4int nsurf = G4LogicalBorderSurface::GetNumberOfBorderSurfaces();
+  if(nsurf)
+  {
+    const G4LogicalBorderSurfaceTable* btable =
+      G4LogicalBorderSurface::GetSurfaceTable();
+    for(auto pos = btable->cbegin(); pos != btable->cend(); ++pos)
+    {
+        surf = pos->second;
+        DumpLogicalBorderSurface(surf);
+    }
+  }
 }
 
 // --------------------------------------------------------------------
@@ -551,6 +564,33 @@ G4String G4tgbGeometryDumper::DumpMaterial(G4Material* mat)
   (*theFile) << ":MATE_STATE " << AddQuotes(mateName) << " " << stateStr
              << G4endl;
 
+  G4MaterialPropertiesTable *ptable = mat->GetMaterialPropertiesTable();
+  auto pvec = ptable->GetProperties();
+  auto cvec = ptable->GetConstProperties();
+
+  (*theFile) << ":PROP " << AddQuotes(mateName)  << G4endl;
+
+  for(size_t i = 0; i < pvec.size(); ++i)
+  {
+    if (pvec[i] != nullptr)
+    {
+      (*theFile) << ptable->GetMaterialPropertyNames()[i] << " " ;
+      for(size_t j = 0; j < pvec[i]->GetVectorLength(); ++j)
+        (*theFile) << pvec[i][j] << " " ;
+    }
+    (*theFile) << G4endl;
+  }
+
+  for(size_t i = 0; i < cvec.size(); ++i)
+  {
+    if (cvec[i].second == true)
+    {
+      (*theFile) << ptable->GetMaterialConstPropertyNames()[i]
+                 << " " << cvec[i].first << G4endl;
+    }
+  }
+
+
   theMaterials[mateName] = mat;
 
   return mateName;
@@ -616,6 +656,95 @@ void G4tgbGeometryDumper::DumpIsotope(G4Isotope* isot)
              << G4endl;
 
   theIsotopes[isotName] = isot;
+}
+
+#include "G4OpticalSurface.hh"
+// --------------------------------------------------------------------
+void G4tgbGeometryDumper::DumpLogicalBorderSurface(
+                                    G4LogicalBorderSurface* surf)
+{
+  G4String surfName = GetObjectName(surf, theLogicalBorderSurfaces);
+  if(theLogicalBorderSurfaces.find(surfName) !=
+                    theLogicalBorderSurfaces.cend())  // alredy dumped
+  {
+    return;
+  }
+
+  (*theFile) << ":SURF " << AddQuotes(surfName) <<
+        AddQuotes(surf->GetVolume1()->GetName()) << ":" <<
+        AddQuotes(G4UIcommand::ConvertToString(surf->GetVolume1()->GetCopyNo()))
+        << " " << AddQuotes(surf->GetVolume2()->GetName()) << ":" <<
+        AddQuotes(G4UIcommand::ConvertToString(surf->GetVolume1()->GetCopyNo())) 
+        << G4endl;
+
+  G4OpticalSurface *osurf = dynamic_cast<G4OpticalSurface*>(surf);
+
+  (*theFile) << "TYPE " << 
+      AddQuotes(G4UIcommand::ConvertToString(osurf->GetType())) << 
+      G4endl << "MODEL "  << 
+      AddQuotes(G4UIcommand::ConvertToString(osurf->GetModel())) << 
+      G4endl << "FINISH " << 
+      AddQuotes(G4UIcommand::ConvertToString(osurf->GetFinish())) <<
+      G4endl << "PROPERTY " << G4endl;
+
+  G4MaterialPropertiesTable* ptable = 
+                                osurf->GetMaterialPropertiesTable();
+
+  auto pvec = ptable->GetProperties();
+  for(size_t i = 0; i < pvec.size(); ++i)
+  {
+    if (pvec[i] != nullptr)
+    {
+      (*theFile) << ptable->GetMaterialPropertyNames()[i] << " " ;
+      for(size_t j = 0; j < pvec[i]->GetVectorLength(); ++j)
+        (*theFile) << pvec[i][j] << " " ;
+    }
+    (*theFile) << G4endl;
+  }
+
+  theLogicalBorderSurfaces[surfName] = surf;
+
+}
+
+// --------------------------------------------------------------------
+void G4tgbGeometryDumper::DumpLogicalSkinSurface(
+                                      G4LogicalSkinSurface* skin)
+{
+  G4String skinName = GetObjectName(skin, theLogicalSkinSurfaces);
+  if(theLogicalSkinSurfaces.find(skinName) != 
+                    theLogicalSkinSurfaces.cend())  // alredy dumped
+  {
+    return;
+  }
+
+  (*theFile) << ":SURF " << AddQuotes(skinName) << " skin " << " " <<
+        AddQuotes(skin->GetLogicalVolume()->GetName()) << G4endl ;
+
+  G4OpticalSurface *oskin = dynamic_cast<G4OpticalSurface*>(skin);
+
+  (*theFile) << "TYPE " << 
+      AddQuotes(G4UIcommand::ConvertToString(oskin->GetType())) << 
+      G4endl << "MODEL "  << 
+      AddQuotes(G4UIcommand::ConvertToString(oskin->GetModel())) << 
+      G4endl << "FINISH " << 
+      AddQuotes(G4UIcommand::ConvertToString(oskin->GetFinish())) <<
+      G4endl << "PROPERTY " << G4endl;
+
+  G4MaterialPropertiesTable* ptable = 
+                                oskin->GetMaterialPropertiesTable();
+
+  auto pvec = ptable->GetProperties();
+  for(size_t i = 0; i < pvec.size(); ++i)
+  {
+    if (pvec[i] != nullptr)
+    {
+      (*theFile) << ptable->GetMaterialPropertyNames()[i] << " " ;
+      for(size_t j = 0; j < pvec[i]->GetVectorLength(); ++j)
+        (*theFile) << pvec[i][j] << " " ;
+    }
+  }
+
+  theLogicalSkinSurfaces[skinName] = skin;
 }
 
 // --------------------------------------------------------------------
