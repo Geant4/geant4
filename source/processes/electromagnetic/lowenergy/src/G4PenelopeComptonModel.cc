@@ -335,10 +335,10 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  if ((a2*G4UniformRand()) < a1)
 	    tau = std::pow(taumin,G4UniformRand());
 	  else
-	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
+	    tau = std::min(std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0)) ,1.0-1e-12);
 	  //rejection function
 	  TST = (1.0+tau*(ek1+tau*(ek2+tau*eks)))/(eks*tau*(1.0+tau*tau));
-	}while ((G4UniformRand()> TST) && (tau==1.0));
+	}while (G4UniformRand()> TST);
 	epsilon=tau;
 	cosTheta = 1.0 - (1.0-tau)/(ek*tau);
 
@@ -390,12 +390,10 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
       G4double cdt1 = 0.;
       do
 	{
-    do{
 	  if ((G4UniformRand()*a2) < a1)
 	    tau = std::pow(taumin,G4UniformRand());
 	  else
-	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
-    } while (tau==1.0);
+	    tau = std::min(std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0)) ,1.0-1e-12);
 	  cdt1 = (1.0-tau)/(ek*tau);
 	  //Incoherent scattering function
 	  S = 0.;
