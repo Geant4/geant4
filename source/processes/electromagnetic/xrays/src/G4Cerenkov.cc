@@ -568,6 +568,8 @@ G4double G4Cerenkov::GetAverageNumberOfPhotons(
   // Calculate number of photons
   G4double NumPhotons = Rfact * charge / eplus * charge / eplus *
                         (dp - ge * BetaInverse * BetaInverse);
+  if(NumPhotons<0.0)
+    NumPhotons = 0.0
 
   return NumPhotons;
 }
