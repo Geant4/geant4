@@ -143,7 +143,8 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
   if(fIsInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   fIsInitialised = true;
-
+  taumax = 1.0;
+  taumax = std::nexttoward(taumax,0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -335,10 +336,11 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  if ((a2*G4UniformRand()) < a1)
 	    tau = std::pow(taumin,G4UniformRand());
 	  else
-	    tau = std::min(std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0)) ,1.0-1e-12);
+	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
 	  //rejection function
 	  TST = (1.0+tau*(ek1+tau*(ek2+tau*eks)))/(eks*tau*(1.0+tau*tau));
 	}while (G4UniformRand()> TST);
+  if (tau > taumax) tau = taumax;
 	epsilon=tau;
 	cosTheta = 1.0 - (1.0-tau)/(ek*tau);
 
@@ -392,30 +394,33 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	{
 	  if ((G4UniformRand()*a2) < a1)
 	    tau = std::pow(taumin,G4UniformRand());
-	  else
-	    tau = std::min(std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0)) ,1.0-1e-12);
-	  cdt1 = (1.0-tau)/(ek*tau);
+	  else 
+	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
+     
+    if (tau > taumax) tau = taumax;
+    cdt1 = (1.0-tau)/(ek*tau);
+
 	  //Incoherent scattering function
 	  S = 0.;
 	  for (size_t i=0;i<numberOfOscillators;i++)
 	    {
 	      ionEnergy = (*theTable)[i]->GetIonisationEnergy();
 	      if (photonEnergy0 > ionEnergy) //sum only on excitable levels
-		{
-		  aux = photonEnergy0*(photonEnergy0-ionEnergy)*cdt1;
-		  hartreeFunc = (*theTable)[i]->GetHartreeFactor();
-		  oscStren = (*theTable)[i]->GetOscillatorStrength();
-		  pzomc = hartreeFunc*(aux-electron_mass_c2*ionEnergy)/
-		    (electron_mass_c2*std::sqrt(2.0*aux+ionEnergy*ionEnergy));
-		  if (pzomc > 0)
-		    rn[i] = 1.0-0.5*G4Exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
-					     (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));
-		  else
-		    rn[i] = 0.5*G4Exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
-					 (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));
-		  S += oscStren*rn[i];
-		  pac[i] = S;
-		}
+          {
+            aux = photonEnergy0*(photonEnergy0-ionEnergy)*cdt1;
+            hartreeFunc = (*theTable)[i]->GetHartreeFactor();
+            oscStren = (*theTable)[i]->GetOscillatorStrength();
+            pzomc = hartreeFunc*(aux-electron_mass_c2*ionEnergy)/
+              (electron_mass_c2*std::sqrt(2.0*aux+ionEnergy*ionEnergy));
+            if (pzomc > 0)
+              rn[i] = 1.0-0.5*G4Exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
+                    (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));
+            else
+              rn[i] = 0.5*G4Exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
+                (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));
+            S += oscStren*rn[i];
+            pac[i] = S;
+          }
 	      else
 		pac[i] = S-1e-6;
 	    }

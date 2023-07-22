@@ -127,6 +127,7 @@ private:
 
   G4int fVerboseLevel;
   G4bool fIsInitialised;
+  G4double taumax; 
 };
 
 #endif
