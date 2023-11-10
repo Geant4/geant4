@@ -83,6 +83,14 @@ G4String G4UImessenger::ItoS(G4int i)
 }
 
 // --------------------------------------------------------------------
+G4String G4UImessenger::LtoS(G4long l)
+{
+  std::ostringstream os;
+  os << l;
+  return G4String(os.str());
+}
+
+// --------------------------------------------------------------------
 G4String G4UImessenger::DtoS(G4double a)
 {
   std::ostringstream os;

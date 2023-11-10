@@ -372,8 +372,7 @@ G4double G4TransportationWithMsc::AlongStepGetPhysicalInteractionLength(
             // 2) Call SampleScattering(), which *may* change it.
             const G4ThreeVector displacement =
               mscModel->SampleScattering(fTransportEndMomentumDir, minSafety);
-            // 3) Get the changed direction and inform G4Transportation.
-            fMomentumChanged         = true;
+            // 3) Get the changed direction.
             fTransportEndMomentumDir = *fParticleChangeForMSC->GetProposedMomentumDirection();
 
             const G4double r2 = displacement.mag2();
@@ -468,6 +467,12 @@ G4double G4TransportationWithMsc::AlongStepGetPhysicalInteractionLength(
         }
 
         fParticleChange.ProposeTrueStepLength(totalTruePathLength);
+
+        // Inform G4Transportation that the momentum might have changed due
+        // to scattering. We do this unconditionally to avoid the situation
+        // where the last step is done without MSC and G4Transportation reset
+        // the flag, for example when running without field.
+        fMomentumChanged = true;
 
         return totalGeometryStepLength;
       }

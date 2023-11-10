@@ -118,7 +118,10 @@ public:
           a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
-        to(_words[1],hdata.m_dimension);
+        if(!to(_words[1],hdata.m_dimension)) {
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
+          return false;
+        }
       } else if(_words[0]=="#annotation") {
         if(_words.size()<2) {
           a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
@@ -200,7 +203,10 @@ public:
           a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
-        to(_words[1],hdata.m_bin_number);
+        if(!to(_words[1],hdata.m_bin_number)) {
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
+          return false;
+        }
       } else if(_words[0]=="#cut_v") {
         if(_words.size()!=2) {
           a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;

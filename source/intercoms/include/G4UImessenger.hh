@@ -82,6 +82,7 @@ class G4UImessenger
   protected:
 
     G4String ItoS(G4int i);
+    G4String LtoS(G4long l);
     G4String DtoS(G4double a);
     G4String BtoS(G4bool b);
     G4int StoI(const G4String& s);

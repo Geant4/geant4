@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -542,7 +542,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=21.280000s Real=21.426749s Sys=0.000000s
+  User=21.170000s Real=21.365981s Sys=0.010000s
 ... write file : SolidTargetCyclotron.root - done
 ... close file : SolidTargetCyclotron.root - done
 G4 kernel has come to Quit state.
@@ -558,24 +558,24 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 11
+Total navigation history collections cleaned: 10
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.396 MB
+Pool ID '17G4DynamicParticle', size : 0.489 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00192 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.258 MB
-Pool ID '7G4Track', size : 0.792 MB
+Pool ID '7G4Track', size : 0.978 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Pool ID '10G4Fragment', size : 0.000961 MB
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 1.5 MB
+Dynamic pools deleted: 13 / Total memory freed: 1.7 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

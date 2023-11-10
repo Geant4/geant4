@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -107,7 +107,7 @@ OpWLS is created
 OpWLS2 is created 
 ### Birks coefficients used in run time
    LXe     0.126 mm/MeV     0.038052 g/cm^2/MeV  massFactor=  7.14643 effCharge= 2916
-   Polystyrene     0.126 mm/MeV     0.012978 g/cm^2/MeV  massFactor=  101.167 effCharge= 0.027027
+   Polystyrene     0.126 mm/MeV     0.012978 g/cm^2/MeV  massFactor=  504.5 effCharge= 18.5
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 /LXe/eventVerbose 0
@@ -1127,7 +1127,7 @@ LXeSteppingAction: No reallocation step after reflection!Something is wrong with
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.510000s Real=31.715511s Sys=0.000000s
+  User=34.450000s Real=34.680130s Sys=0.010000s
 
  ======================== run summary ======================
 The run was 100 events.

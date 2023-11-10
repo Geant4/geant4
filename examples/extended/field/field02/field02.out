@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -5942,7 +5942,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.040000s Real=0.048393s Sys=0.010000s
+  User=0.030000s Real=0.051183s Sys=0.010000s
 #
 /calor/setAbsMat Air
 /calor/setWorldMat Xe20CO2
@@ -7315,7 +7315,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.013170s Sys=0.000000s
+  User=0.020000s Real=0.014764s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

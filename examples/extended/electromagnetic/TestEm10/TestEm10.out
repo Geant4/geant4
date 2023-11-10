@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -305,10 +305,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.154
 9.283e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.62 s
+total time for build X-ray TR energy loss tables = 0.6 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 2.03 s
+total time for build X-ray TR angle for energy loss tables = 2.1 s
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -633,7 +633,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.250000s Real=0.251511s Sys=0.000000s
+  User=0.240000s Real=0.244192s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
  Mean energy deposit in absorber = 0.0469696 +-0.0185724  MeV 

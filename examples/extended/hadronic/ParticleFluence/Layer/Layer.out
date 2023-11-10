@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -940,7 +940,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.250000s Real=1.268155s Sys=0.010000s
+  User=1.240000s Real=1.274235s Sys=0.010000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 0
@@ -1151,7 +1151,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.000000s Real=6.065186s Sys=0.020000s
+  User=5.950000s Real=6.006787s Sys=0.010000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 1
@@ -1367,7 +1367,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.690000s Real=10.792871s Sys=0.020000s
+  User=10.490000s Real=10.600825s Sys=0.000000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 2
@@ -1588,7 +1588,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.560000s Real=3.612911s Sys=0.020000s
+  User=3.070000s Real=3.107870s Sys=0.020000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 3
@@ -1814,7 +1814,7 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=39.340000s Real=39.659110s Sys=0.020000s
+  User=37.620000s Real=37.915509s Sys=0.020000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 4
@@ -2045,7 +2045,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.190000s Real=40.543463s Sys=0.030000s
+  User=39.620000s Real=39.949473s Sys=0.010000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 5
@@ -2281,7 +2281,7 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=101.930000s Real=102.892019s Sys=0.080000s
+  User=104.120000s Real=105.106105s Sys=0.100000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 6
@@ -2522,7 +2522,7 @@ Index : 8     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=66.610000s Real=67.205487s Sys=0.050000s
+  User=65.070000s Real=65.636889s Sys=0.050000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 7
@@ -2768,7 +2768,7 @@ Index : 9     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=57.390000s Real=57.896878s Sys=0.030000s
+  User=54.560000s Real=55.005976s Sys=0.020000s
 
 
  ===============  Run::PrintInfo()  =============== 	 RunID = 8

@@ -10,7 +10,6 @@
 #======================================================================
 
 # ignore any hidden clang-format files
-*/.clang-format
 /format-original.txt
 /format-modified.txt
 

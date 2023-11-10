@@ -28,7 +28,7 @@
 // M Fischler	      - put/get to/from streams uses pairs of ulongs when
 //			+ storing doubles avoid problems with precision 
 //			4/14/05
-// M Fisculer	  - Modified use of shoot (mean) instead of 
+// M Fischler	  - Modified use of shoot (mean) instead of 
 //		    shoot(getLocalEngine(), mean) when fire(mean) is called.  
 //		    This flaw was causing bad "cross-talk" between modules
 //		    in CMS, where one used its own engine, and the other 
@@ -177,6 +177,12 @@ void RandPoissonQ::shootArray(const int size, long* vect, double m) {
      // Note: We could test for m > 100, and if it is, precompute a0, a1, a2, 
      // and sigma and call the appropriate form of poissonDeviateQuick.  
      // But since those are cached anyway, not much time would be saved.
+}
+
+void RandPoissonQ::shootArray(HepRandomEngine* anEngine, const int size,
+                             long* vect, double m1) {
+  for( long* v = vect; v != vect + size; ++v )
+    *v = shoot(anEngine,m1);
 }
 
 void RandPoissonQ::fireArray(const int size, long* vect, double m) {
@@ -545,7 +551,7 @@ long RandPoissonQ::poissonDeviateSmall (HepRandomEngine * e, double mean) {
 } // poissonDeviate()
 
 std::ostream & RandPoissonQ::put ( std::ostream & os ) const {
-  int pr=os.precision(20);
+  long pr=os.precision(20);
   std::vector<unsigned long> t(2);
   os << " " << name() << "\n";
   os << "Uvec" << "\n";

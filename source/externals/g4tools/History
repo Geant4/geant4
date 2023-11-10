@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-01-16 Guy Barrand (g4tools-V11-00-14)
+- tools/ccontour: intel-icx: fix compilation warnings about argument of type 'double[]' with mismatched bound.
+- tools/rcsv_histo: coverity: quiet coverity about some "Unchecked return value (CHECKED_RETURN)".
+- tools/version: pass to 6.1.1.
+
 ## 2022-11-25 Gabriele Cosmo (g4tools-V11-00-13)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1
   in files: spline, THistogram and zlib.

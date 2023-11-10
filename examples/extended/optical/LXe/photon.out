@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -91,7 +91,7 @@ Construction /LXeDet/scintSD
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 ### Birks coefficients used in run time
    LXe     0.126 mm/MeV     0.038052 g/cm^2/MeV  massFactor=  7.14643 effCharge= 2916
-   Polystyrene     0.126 mm/MeV     0.012978 g/cm^2/MeV  massFactor=  101.167 effCharge= 0.027027
+   Polystyrene     0.126 mm/MeV     0.012978 g/cm^2/MeV  massFactor=  504.5 effCharge= 18.5
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================

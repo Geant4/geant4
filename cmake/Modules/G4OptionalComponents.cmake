@@ -78,6 +78,8 @@ else()
       unset(EXPAT_FOUND)
       unset(EXPAT_INCLUDE_DIR CACHE)
       unset(EXPAT_LIBRARY CACHE)
+      unset(EXPAT_LIBRARY_RELEASE CACHE)
+      unset(EXPAT_LIBRARY_DEBUG CACHE)
       message(FATAL_ERROR
 "Detected system expat header and library:
 EXPAT_INCLUDE_DIR = ${__badexpat_include_dir}
@@ -88,7 +90,7 @@ Set the above CMake variables to point to an expat install of the required versi
 
     # Backward compatibility for sources.cmake using the variable
     set(EXPAT_LIBRARIES EXPAT::EXPAT)
-    geant4_save_package_variables(EXPAT EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
+    geant4_save_package_variables(EXPAT EXPAT_INCLUDE_DIR EXPAT_LIBRARY EXPAT_LIBRARY_RELEASE EXPAT_LIBRARY_DEBUG)
   else()
     set(EXPAT_FOUND TRUE)
     set(GEANT4_USE_BUILTIN_EXPAT TRUE)

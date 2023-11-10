@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -346,7 +346,7 @@ OpBoundary is created
 OpWLS is created 
 OpWLS2 is created 
 ### Birks coefficients used in run time
-   Water     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  85.0756 effCharge= 62.0606
+   Water     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  640.135 effCharge= 22
 #
 /gun/particle e+
 /gun/energy 500 keV
@@ -13814,7 +13814,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 102,   Parent ID = 51
-***********************************
+************************************
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
@@ -13828,7 +13828,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.600000s Real=1.616919s Sys=0.000000s
+  User=1.640000s Real=1.650065s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.

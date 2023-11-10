@@ -632,7 +632,7 @@ inline void ccontour::set_secondary_grid(int iCol, int iRow)
 	m_iRowSec=mx<int>(iRow,2);
 }
 
-inline void ccontour::set_limits(double pLimits[])
+inline void ccontour::set_limits(double pLimits[4])
 {
 	_ASSERT_(pLimits[0]<pLimits[1],"ccontour::set_limits");
 	_ASSERT_(pLimits[2]<pLimits[3],"ccontour::set_limits");
@@ -642,7 +642,7 @@ inline void ccontour::set_limits(double pLimits[])
 	}
 }
 
-inline void ccontour::get_limits(double pLimits[])
+inline void ccontour::get_limits(double pLimits[4])
 {
 	for (int i=0;i<4;i++)
 	{

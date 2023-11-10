@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -337,7 +337,7 @@ OpBoundary is created
 OpWLS is created 
 OpWLS2 is created 
 ### Birks coefficients used in run time
-   Water     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  85.0756 effCharge= 62.0606
+   Water     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  640.135 effCharge= 22
 #
 /gun/particle opticalphoton
 /gun/energy 3 eV
@@ -1422,7 +1422,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002209s Sys=0.000000s
+  User=0.000000s Real=0.001569s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: opticalphoton with energy 3 eV .
@@ -1462,7 +1462,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.220000s Real=0.222421s Sys=0.000000s
+  User=0.150000s Real=0.154549s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: opticalphoton with energy 3 eV .

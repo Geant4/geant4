@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -520,17 +520,17 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   2913 kByte
-    Total CPU time elapsed for geometry optimisation: 8.7 seconds
+    Total CPU time elapsed for geometry optimisation: 8.4 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      99.31         8.60         0.01         2914k VoxelStraight_logic
+      99.29         8.36         0.01         2914k VoxelStraight_logic
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00       2913k     20884    21735      54614         8.60    VoxelStraight_logic
+     100.00       2913k     20884    21735      54614         8.36    VoxelStraight_logic
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
@@ -754,7 +754,7 @@ ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=134.760000s Real=135.644230s Sys=0.090000s
+  User=136.480000s Real=137.402316s Sys=0.070000s
 
 ----> Histograms are saved
 Graphics systems deleted.

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -771,7 +771,7 @@ OpBoundary is created
 OpWLS is created 
 OpWLS2 is created 
 ### Birks coefficients used in run time
-   G4_BGO     0.126 mm/MeV     0.089838 g/cm^2/MeV  massFactor=  6.63951 effCharge= 1.56555
+   G4_BGO     0.126 mm/MeV     0.089838 g/cm^2/MeV  massFactor=  40.0239 effCharge= 1652.42
 /analysis/setFileName electron
 /analysis/h1/set 1 100 0 10
 /analysis/h1/set 2 100 0 10
@@ -1693,7 +1693,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.910000s Real=2.927339s Sys=0.000000s
+  User=3.120000s Real=3.133748s Sys=0.000000s
 
     Run Summary
 ---------------------------------

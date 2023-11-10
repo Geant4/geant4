@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-patch-02    (15-June-2023)
+ Geant4 version Name: geant4-11-01-patch-03    (10-November-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -174,7 +174,7 @@ G4NistElementBuilder: Build Element <Ti>  Z= 22  Aeff= 47.8667  with natural iso
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 ### Birks coefficients used in run time
-   Polystyrene     0.126 mm/MeV     0.01323 g/cm^2/MeV  massFactor=  101.167 effCharge= 0.027027
+   Polystyrene     0.126 mm/MeV     0.01323 g/cm^2/MeV  massFactor=  504.5 effCharge= 18.5
 /hits/verbose 2
 /process/optical/verbose 1
 /run/physicsModified
@@ -1332,7 +1332,7 @@ Arrival time:  39.151 ns Arrival position: (-8.89374 um , 509.083 um ) Exit posi
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=16.570000s Real=16.644103s Sys=0.010000s
+  User=16.170000s Real=16.243026s Sys=0.010000s
 
  ----> print histograms statistics for the entire run 
 
