@@ -46,7 +46,6 @@ extern "C" {
   void pygive(const char*, int);
   void pyrget(int*, int*);
   void pyrset(int*, int*);
-//  void initpydata();
 }
 
 void call_pygive(G4String s) { pygive(s.c_str(), s.length()); }
@@ -57,7 +56,6 @@ void call_pyrset(int a, int b) { pyrset(&a, &b); }
 HepMCG4PythiaInterface::HepMCG4PythiaInterface()
   : verbose(0), mpylist(0)
 {
-//	#define NEED_INITPYDATA
 #ifdef NEED_INITPYDATA
   initpydata();
   // Some platforms may require the initialization of pythia PYDATA block
