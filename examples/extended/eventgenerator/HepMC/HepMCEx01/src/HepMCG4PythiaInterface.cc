@@ -82,10 +82,7 @@ void HepMCG4PythiaInterface::CallPygive(G4String par)
 void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam,
                                         G4String target, G4double win)
 {
-	printf("OKammm \n");
-	std::cout<< frame<<beam<<target<< win<<strlen(frame)<<strlen(beam)<<strlen(target)<<std::endl;
   call_pyinit(frame.c_str(), beam.c_str(), target.c_str(), win);
-  printf("OKammm2222\n");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
